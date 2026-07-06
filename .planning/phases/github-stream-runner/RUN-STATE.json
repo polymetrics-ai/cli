@@ -1,0 +1,9 @@
+{
+  "issue": 36,
+  "branch": "feat/36-github-stream-runner",
+  "parent_issue": 44,
+  "status": "in_progress",
+  "model": "gpt-5.5",
+  "reasoning_effort": "xhigh",
+  "human_gate": "parent PR merge to main"
+}

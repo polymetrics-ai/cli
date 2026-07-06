@@ -845,6 +845,17 @@ func (a *App) resolveEndpoint(ctx context.Context, endpoint EndpointConfig) (con
 	return connector, runtime, nil
 }
 
+func (a *App) ResolveConnectorCredential(ctx context.Context, connectorName, credentialName string, overlay map[string]string) (connectors.Connector, connectors.RuntimeConfig, error) {
+	if strings.TrimSpace(credentialName) == "" {
+		return nil, connectors.RuntimeConfig{}, errors.New("missing --credential")
+	}
+	return a.resolveEndpoint(ctx, EndpointConfig{
+		Connector:  connectorName,
+		Credential: credentialName,
+		Config:     overlay,
+	})
+}
+
 func (a *App) resolveCredential(ctx context.Context, name string, overlay map[string]string) (CredentialMeta, connectors.RuntimeConfig, error) {
 	cred, ok := a.findCredential(name)
 	if !ok {
