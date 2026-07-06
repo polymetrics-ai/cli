@@ -25,6 +25,7 @@ Branch: `feat/37-github-operation-ledger`
   - `sensitive_reverse_etl`: 58
   - `admin_reverse_etl`: 94
   - `destructive_action`: 5
+  - `local_workflow`: 0
   - `duplicate`: 67
   - `deprecated`: 1
   - `disallowed`: 9

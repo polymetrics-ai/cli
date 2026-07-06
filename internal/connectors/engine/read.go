@@ -642,11 +642,11 @@ func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Value
 		return nil, err
 	}
 
-	if formattedLower != "" && stream.Incremental.RequestParam != "" {
-		q.Set(stream.Incremental.RequestParam, formattedLower)
-	}
 	for k, v := range req.Query {
 		q.Set(k, v)
+	}
+	if formattedLower != "" && stream.Incremental.RequestParam != "" {
+		q.Set(stream.Incremental.RequestParam, formattedLower)
 	}
 	return q, nil
 }

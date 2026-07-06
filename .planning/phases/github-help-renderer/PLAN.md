@@ -43,7 +43,7 @@ command dispatch.
 - `pnpm --filter cli-polymetrics-ai test -- connector-data`
 - `pnpm --filter cli-polymetrics-ai test`
 - `pnpm --filter cli-polymetrics-ai build`
-- `go run ./cmd/connectorgen validate internal/connectors/defs/github`
+- `go run ./cmd/connectorgen validate internal/connectors/defs`
 - `git diff --check`
 
 ## Human Gates

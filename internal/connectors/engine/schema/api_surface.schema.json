@@ -72,7 +72,7 @@
                 "type": "string",
                 "enum": ["low", "medium", "high", "critical"]
               },
-              "blocked_by_default": { "type": "boolean" },
+              "blocked_by_default": { "type": "boolean", "enum": [true] },
               "reason": { "type": "string" },
               "source_url": { "type": "string" },
               "notes": { "type": "string" },
