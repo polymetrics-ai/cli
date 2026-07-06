@@ -85,6 +85,15 @@ function connectorRecord(c: ConnectorMeta): SearchRecord {
     .map((action) => `${action.name} ${action.method} ${action.kind}`)
     .join(' ');
   const docs = c.docs.map((doc) => `${doc.title} ${doc.type} ${doc.url}`).join(' ');
+  const cliSurface = c.cliSurface
+    ? [
+        c.cliSurface.usage,
+        c.cliSurface.groups.map((group) => `${group.title} ${group.commands.join(' ')}`).join(' '),
+        c.cliSurface.commands
+          .map((command) => `${command.path} ${command.summary} ${command.intent} ${command.availability} ${command.stream} ${command.write}`)
+          .join(' '),
+      ].join(' ')
+    : '';
 
   return {
     title: `${c.name} connector`,
@@ -103,8 +112,9 @@ function connectorRecord(c: ConnectorMeta): SearchRecord {
       c.capabilityLabels.join(' '),
       streams,
       writeActions,
+      cliSurface,
     ].join(' '),
-    content: cleanText(`${c.description} ${streams} ${writeActions} ${docs} ${c.docsMd}`),
+    content: cleanText(`${c.description} ${streams} ${writeActions} ${cliSurface} ${docs} ${c.docsMd}`),
     priority: c.featured ? 8 : 4,
   };
 }

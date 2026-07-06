@@ -11,8 +11,23 @@
 
 ## Green Evidence
 
-Pending.
+- `go test ./internal/connectors/bundleregistry -run CLISurface`
+  - Result: passed.
+  - Evidence: GitHub connector manual now includes `COMMAND SURFACE`, usage, grouped commands,
+    ETL stream mappings, reverse ETL write mappings, local workflow exclusions, JSON flag, and
+    approval notes.
+- `pnpm --filter cli-polymetrics-ai test -- connector-data`
+  - Result: passed.
+  - Evidence: generated connector data route returns GitHub `cliSurface`, and the existing docs
+    smoke suite still passes.
 
 ## Refactor Evidence
 
-Pending.
+Broader targeted verification passed:
+
+- `go test ./internal/connectors/engine -run CLISurface`
+- `go test ./cmd/connectorgen -run CLISurface`
+- `go run ./cmd/connectorgen validate internal/connectors/defs`
+- `go test ./internal/connectors -run TestEveryRegisteredConnectorHasGuideManualAndSkill`
+- `pnpm --filter cli-polymetrics-ai build`
+- `git diff --check`

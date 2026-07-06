@@ -58,6 +58,24 @@ function connectorMarkdown(slug: string): string | null {
     lines.push('');
   }
 
+  if (c.cliSurface) {
+    lines.push('## Command Surface');
+    lines.push('');
+    lines.push(`Usage: \`${c.cliSurface.usage}\``);
+    lines.push('');
+    lines.push('| Command | Intent | Availability | Mapping |');
+    lines.push('|---|---|---|---|');
+    for (const command of c.cliSurface.commands) {
+      const mapping = command.stream
+        ? `stream:${command.stream}`
+        : command.write
+          ? `write:${command.write}`
+          : '-';
+      lines.push(`| \`${command.path}\` | ${command.intent || '-'} | ${command.availability || '-'} | ${mapping} |`);
+    }
+    lines.push('');
+  }
+
   if (c.docUrl) {
     lines.push('## Service API documentation');
     lines.push('');

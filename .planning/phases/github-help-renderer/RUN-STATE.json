@@ -4,7 +4,8 @@
   "parent_issue": 44,
   "branch": "feat/35-github-help-renderer",
   "base": "feat/44-github-cli-parity",
-  "status": "in_progress",
+  "status": "completed_with_warnings",
   "manual_gsd_fallback": true,
-  "human_gate": null
+  "human_gate": null,
+  "warning": "Implementation slice complete locally; stacked PR review coverage still pending after push."
 }
