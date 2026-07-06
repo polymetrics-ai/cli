@@ -1,0 +1,81 @@
+name: Agent implementation task
+description: Create an issue that can be used directly as an implementation prompt by any agent.
+title: "[Agent Task]: "
+labels:
+  - connector-cli
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: State the concrete outcome this PR should deliver.
+    validations:
+      required: true
+  - type: dropdown
+    id: task_type
+    attributes:
+      label: Task type
+      description: Select the closest task type from the agentic delivery skill matrix.
+      options:
+        - pr-guardrail
+        - operation-ledger
+        - cli-surface
+        - help-renderer
+        - direct-read
+        - graphql
+        - sensitive-admin
+        - cross-connector
+        - review
+    validations:
+      required: true
+  - type: textarea
+    id: required_context
+    attributes:
+      label: Required context
+      description: List files, issues, docs, and source URLs the agent must read first.
+      value: |
+        - AGENTS.md
+        - .agents/connector-cli-parity/issue-agent-contract.md
+        - .agents/connector-cli-parity/task-skill-matrix.yaml
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and non-goals
+      description: Define allowed files/behavior and what must stay out.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List observable requirements the PR must satisfy.
+    validations:
+      required: true
+  - type: textarea
+    id: tdd
+    attributes:
+      label: TDD plan
+      description: State red test evidence required before production code, or explain docs-only.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: Exact commands or checks the agent must run.
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Safety and hard stops
+      description: List auth, secret, destructive action, dependency, or quality gate constraints.
+      value: |
+        - Do not request, print, store, or invent secrets.
+        - Do not change auth scopes without human approval.
+        - Do not add dependencies without human approval.
+        - Do not weaken tests or quality gates.
+    validations:
+      required: true

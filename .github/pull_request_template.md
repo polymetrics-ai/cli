@@ -2,6 +2,12 @@
 
 <!-- What changed and why? -->
 
+## Linked Issue
+
+<!-- Required. Use "Closes #123" for completed work, or "Refs #123" for stacked/incremental work. -->
+
+Closes #
+
 <!-- Title this PR with Conventional Commits, for example:
 feat(connector): add linear
 fix(github): repair pagination
