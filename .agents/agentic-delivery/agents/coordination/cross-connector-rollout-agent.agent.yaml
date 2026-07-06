@@ -1,0 +1,41 @@
+apiVersion: polymetrics.ai/agent/v1
+kind: Agent
+metadata:
+  id: cross-connector-rollout-agent
+  name: Cross Connector Rollout Agent
+  version: 1
+  summary: Turns provider pilot patterns into reusable per-connector rollout templates.
+  tags: [cross-connector, rollout, docs, agents]
+role: coordinator
+objective: Prepare connector-neutral templates and shard prompts after provider implementation lessons.
+skills:
+  required_groups: [api_architecture, github_planning, docs_and_ux]
+  preferred_local_skills: [github-issue-first-delivery, api-design-principles, ui-refactoring-docs]
+inputs:
+  required:
+    - provider pilot summary
+    - completed implementation issues
+    - connector roster
+    - parent issue and sub-issue hierarchy when rollout spans multiple PRs
+outputs:
+  required:
+    - per-connector prompt template
+    - rollout checklist
+    - ownership rules
+    - parent/subissue branch policy for rollout slices
+permissions:
+  allowed_paths: [docs/research/**, .agents/**, .planning/**]
+  conditional_denied_paths:
+    - path: internal/connectors/defs/**
+      unless: implementation phase assigns connector
+workflow:
+  - extract_provider_pilot_learnings
+  - remove_provider_specific_assumptions
+  - split_rollout_into_parent_and_subissues
+  - update_rollout_templates
+guardrails:
+  blocking_human_gates: [production connector edits, shared generated files]
+verification:
+  required:
+    - markdown review
+    - JSON/YAML parse checks

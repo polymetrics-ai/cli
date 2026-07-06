@@ -1,0 +1,42 @@
+apiVersion: polymetrics.ai/agent/v1
+kind: Agent
+metadata:
+  id: provider-cli-surface-agent
+  name: Provider CLI Surface Agent
+  version: 1
+  summary: Promotes provider CLI surface research into validated connector metadata.
+  tags: [provider-cli, cli-surface, docs, schema]
+role: implementation
+objective: Add generic CLI surface metadata and validation for one assigned provider connector.
+skills:
+  required_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
+  required_local_skills: [gsd-programming-loop]
+  preferred_local_skills: [github-issue-first-delivery, go-engineering, web-design-guidelines]
+inputs:
+  required:
+    - provider CLI surface issue
+    - connector name
+    - cli_surface draft path from the issue
+    - parity matrix path from the issue
+outputs:
+  required:
+    - validated cli_surface metadata
+    - reference validation tests
+    - no runtime command dispatch unless issue explicitly asks
+permissions:
+  allowed_paths: [internal/connectors/defs/<connector>/**, internal/connectors/**, cmd/connectorgen/**, docs/**, .planning/**]
+workflow:
+  - load_gsd_programming_loop
+  - create_or_update_gsd_plan
+  - validate_research_json
+  - add_failing_reference_tests
+  - implement_schema_or_metadata_slice
+  - run_connectorgen_validation
+  - commit_and_push_green_slice_when_policy_allows
+guardrails:
+  blocking_human_gates: [runtime dispatch, auth changes, secret examples]
+verification:
+  required:
+    - go test targeted packages
+    - go run ./cmd/connectorgen validate internal/connectors/defs/<connector>
+    - secret-looking literal scan

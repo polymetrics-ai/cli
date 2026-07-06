@@ -1,0 +1,131 @@
+version: 1
+default_rules:
+  - Read AGENTS.md and .agents/agentic-delivery/contracts/issue-agent-contract.md before work.
+  - Load and follow gsd-programming-loop for implementation or behavior-changing work.
+  - Use test-first implementation for behavior changes.
+  - If local GSD scripts are unavailable, record the manual GSD loop fallback and keep TDD evidence.
+  - Plan before production edits and keep the GSD plan, TDD ledger, and verification checklist current.
+  - Commit and push coherent green slices to the active issue/PR branch when repo policy permits.
+  - Keep PR scope to one primary issue.
+  - Stop for human gates before auth, secrets, dependencies, destructive actions, deploys, or gate reductions.
+skills:
+  github_planning:
+    capabilities:
+      - issue-first GitHub planning
+      - milestones and projects
+      - parent issues and sub-issues
+      - stacked parent branch PR planning
+      - PR linkage
+    preferred_local_skills:
+      - github-issue-first-delivery
+      - gsd-programming-loop
+    required_for:
+      - github-project-setup
+      - issue-roadmap
+      - parent-roadmap
+      - stacked-pr
+      - pr-guardrail
+  go_tdd:
+    capabilities:
+      - idiomatic Go implementation
+      - red-green-refactor
+      - CLI and validation code
+    required_local_skills:
+      - gsd-programming-loop
+    preferred_local_skills:
+      - go-engineering
+    required_for:
+      - guardrail-go
+      - cli-runner
+      - validator
+      - protocol-engine
+  api_architecture:
+    capabilities:
+      - API taxonomy
+      - REST and GraphQL modeling
+      - safe execution models
+    preferred_local_skills:
+      - api-design-principles
+      - architecture-patterns
+      - go-engineering
+    required_for:
+      - operation-ledger
+      - direct-read
+      - graphql
+      - xml-envelope
+  security_review:
+    capabilities:
+      - secret handling
+      - destructive action gates
+      - approval boundaries
+    preferred_local_skills:
+      - go-engineering
+      - stride-analysis-patterns
+      - threat-mitigation-mapping
+    required_for:
+      - sensitive-admin
+      - raw-api
+      - reverse-etl
+  review_disposition:
+    capabilities:
+      - CodeRabbit automatic/manual review mode selection
+      - review comment triage
+      - disposition replies
+      - follow-up issue routing
+    preferred_local_skills:
+      - github-issue-first-delivery
+      - gsd-code-review
+      - go-engineering
+    required_for:
+      - coderabbit-review
+      - stacked-pr
+  docs_and_ux:
+    capabilities:
+      - help rendering
+      - website/docs presentation
+      - accessibility and information architecture
+    preferred_local_skills:
+      - web-design-guidelines
+      - frontend-design
+      - ui-refactoring-docs
+    required_for:
+      - help-renderer
+      - website-docs
+      - docs-preview
+task_types:
+  parent-roadmap:
+    required_skill_groups: [github_planning, review_disposition, docs_and_ux]
+    primary_agent: stacked-roadmap-coordinator
+  stacked-pr:
+    required_skill_groups: [github_planning, go_tdd, security_review, review_disposition]
+    primary_agent: issue-first-implementation-agent
+  pr-guardrail:
+    required_skill_groups: [github_planning, go_tdd, security_review]
+    primary_agent: issue-first-implementation-agent
+  operation-ledger:
+    required_skill_groups: [api_architecture, go_tdd, security_review]
+    primary_agent: operation-ledger-architect
+  cli-surface:
+    required_skill_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
+    primary_agent: provider-cli-surface-agent
+  help-renderer:
+    required_skill_groups: [go_tdd, docs_and_ux]
+    primary_agent: help-renderer-agent
+  direct-read:
+    required_skill_groups: [api_architecture, go_tdd, security_review]
+    primary_agent: direct-read-executor-agent
+  graphql:
+    required_skill_groups: [api_architecture, go_tdd, security_review]
+    primary_agent: graphql-engine-agent
+  sensitive-admin:
+    required_skill_groups: [api_architecture, go_tdd, security_review]
+    primary_agent: sensitive-admin-policy-agent
+  cross-connector:
+    required_skill_groups: [api_architecture, github_planning, docs_and_ux]
+    primary_agent: cross-connector-rollout-agent
+  review:
+    required_skill_groups: [api_architecture, security_review, go_tdd, review_disposition]
+    primary_agent: adversarial-review-agent
+  coderabbit-review:
+    required_skill_groups: [github_planning, security_review, go_tdd, review_disposition]
+    primary_agent: coderabbit-disposition-agent

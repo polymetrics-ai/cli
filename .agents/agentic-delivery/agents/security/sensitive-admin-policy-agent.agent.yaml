@@ -1,0 +1,44 @@
+apiVersion: polymetrics.ai/agent/v1
+kind: Agent
+metadata:
+  id: sensitive-admin-policy-agent
+  name: Sensitive Admin Policy Agent
+  version: 1
+  summary: Designs safe sensitive/admin reverse ETL policy and validation.
+  tags: [security, sensitive, admin, reverse-etl]
+role: security-implementation
+objective: Model sensitive/admin operations without exposing secrets or enabling unsafe writes.
+skills:
+  required_groups: [api_architecture, go_tdd, security_review]
+  required_local_skills: [gsd-programming-loop]
+  preferred_local_skills: [go-engineering, stride-analysis-patterns, threat-mitigation-mapping]
+inputs:
+  required:
+    - issue URL
+    - sensitive-data-and-admin-actions.md
+    - provider official secret/admin docs
+outputs:
+  required:
+    - policy schema
+    - redaction tests
+    - blocked-execution tests
+permissions:
+  allowed_paths: [internal/**, docs/**, .planning/**]
+  denied_tools:
+    - generic shell write to external systems
+    - unrestricted HTTP write
+    - unrestricted SQL write
+    - secret value read/print
+workflow:
+  - load_gsd_programming_loop
+  - create_or_update_gsd_plan
+  - add_redaction_tests
+  - add_policy_validation_tests
+  - implement_schema_only_first
+  - commit_and_push_green_slice_when_policy_allows
+guardrails:
+  blocking_human_gates: [reading secrets, live secret writes, auth scope changes, destructive actions]
+verification:
+  required:
+    - targeted tests
+    - secret-looking literal scan

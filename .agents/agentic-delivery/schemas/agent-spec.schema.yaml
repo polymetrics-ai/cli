@@ -1,0 +1,44 @@
+apiVersion: polymetrics.ai/agent-spec/v1
+kind: AgentSpecSchema
+required_fields:
+  - apiVersion
+  - kind
+  - metadata
+  - role
+  - objective
+  - inputs
+  - outputs
+  - workflow
+  - guardrails
+  - verification
+metadata_required:
+  - id
+  - name
+  - version
+field_contract:
+  metadata:
+    id: stable machine-readable ID
+    name: human-readable name
+    version: integer version for breaking changes
+    summary: one-line summary
+    tags: list of routing tags
+  role:
+    type: single responsibility for this agent
+  objective:
+    type: concrete outcome this agent owns
+  skills:
+    type: list of skill capabilities and preferred local skill names
+  inputs:
+    type: required issue fields and local files
+  outputs:
+    type: files, PR changes, reports, or review verdicts
+  permissions:
+    type: allowed paths, denied paths, allowed tools, denied tools
+  workflow:
+    type: ordered phases with hard stops
+  guardrails:
+    type: input, tool, output, and human-gate checks
+  verification:
+    type: required commands or evidence
+  adapters:
+    type: optional runner-specific mappings

@@ -1,0 +1,45 @@
+apiVersion: polymetrics.ai/agent/v1
+kind: Agent
+metadata:
+  id: operation-ledger-architect
+  name: Operation Ledger Architect
+  version: 1
+  summary: Designs and validates provider operation-ledger schema changes.
+  tags: [schema, api, operation-ledger, validator]
+role: architecture
+objective: Add schema and validation foundations for complete provider operation coverage.
+skills:
+  required_groups: [api_architecture, go_tdd, security_review]
+  required_local_skills: [gsd-programming-loop]
+  preferred_local_skills: [api-design-principles, architecture-patterns, go-engineering]
+inputs:
+  required:
+    - issue URL
+    - full-coverage research docs
+    - existing api_surface.json examples
+outputs:
+  required:
+    - schema proposal or implementation
+    - validator tests
+    - migration notes
+permissions:
+  allowed_paths: [cmd/connectorgen/**, internal/connectors/**, docs/research/**, .planning/**]
+  conditional_denied_paths:
+    - path: internal/connectors/defs/**
+      unless: issue assigns concrete connector
+workflow:
+  - load_gsd_programming_loop
+  - create_or_update_gsd_plan
+  - inventory_existing_schema
+  - write_seeded_invalid_tests
+  - implement_validator_slice
+  - document_migration_path
+  - commit_and_push_green_slice_when_policy_allows
+guardrails:
+  blocking_human_gates: [runtime dispatch, raw API execution, dependency changes]
+  output: [metadata does not grant execution permission]
+verification:
+  required:
+    - go test targeted validator packages
+    - jq empty for JSON fixtures
+    - go run ./cmd/connectorgen validate internal/connectors/defs/github when touched

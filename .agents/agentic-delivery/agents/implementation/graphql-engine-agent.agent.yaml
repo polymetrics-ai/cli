@@ -1,0 +1,39 @@
+apiVersion: polymetrics.ai/agent/v1
+kind: Agent
+metadata:
+  id: graphql-engine-agent
+  name: GraphQL Engine Agent
+  version: 1
+  summary: Adds fixed-document GraphQL support for connector streams and writes.
+  tags: [graphql, engine, connectors]
+role: implementation
+objective: Generalize hook-backed GraphQL behavior into declarative engine support.
+skills:
+  required_groups: [api_architecture, go_tdd, security_review]
+  required_local_skills: [gsd-programming-loop]
+  preferred_local_skills: [go-engineering, api-design-principles]
+inputs:
+  required:
+    - issue URL
+    - graphql-engine-design.md
+    - existing monday and stigg hooks
+outputs:
+  required:
+    - fixed-document request body support
+    - GraphQL errors handling
+    - pagination tests
+permissions:
+  allowed_paths: [internal/connectors/engine/**, internal/connectors/connsdk/**, docs/**, .planning/**]
+workflow:
+  - load_gsd_programming_loop
+  - create_or_update_gsd_plan
+  - add_fake_graphql_server_tests
+  - implement_fixed_document_body_builder
+  - keep_arbitrary_query_text_blocked
+  - commit_and_push_green_slice_when_policy_allows
+guardrails:
+  blocking_human_gates: [arbitrary GraphQL escape hatch, live mutations, dependency changes]
+verification:
+  required:
+    - go test ./internal/connectors/engine/...
+    - go test ./internal/connectors/conformance -run relevant connector when migrating
