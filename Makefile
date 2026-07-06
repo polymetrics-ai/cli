@@ -1,10 +1,11 @@
 INSTALL_DIR ?= $(HOME)/.local/bin
+VERIFY_JOBS ?= 2
 
 # go.mod requires Go 1.25 and pins a patched toolchain. Allow the go command to
 # fetch the matching toolchain when the ambient one is older.
 export GOTOOLCHAIN ?= auto
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check install uninstall smoke verify verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint connectorgen-validate
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint connectorgen-validate
 
 # Packages covered by `lint`: the declarative connector architecture packages.
 # Paths are filtered to existing directories so optional local trees do not
@@ -32,7 +33,9 @@ icons-generate:
 	@test -n "$$PM_ICON_REGISTRY_SOURCE" || (printf 'PM_ICON_REGISTRY_SOURCE is required\n' >&2; exit 1)
 	go run ./cmd/iconregistrygen --source "$$PM_ICON_REGISTRY_SOURCE"
 
-docs-check: build
+docs-check: build docs-check-no-build
+
+docs-check-no-build:
 	./pm docs validate --connectors-dir docs/connectors
 
 install: build
@@ -44,7 +47,9 @@ uninstall:
 	rm -f "$(INSTALL_DIR)/pm"
 	printf 'removed %s\n' "$(INSTALL_DIR)/pm"
 
-smoke: build
+smoke: build smoke-no-build
+
+smoke-no-build:
 	set -eu; \
 	SMOKE_DIR=$$(mktemp -d); \
 	export PM_SAMPLE_TOKEN=sample-token; \
@@ -71,6 +76,12 @@ connectorgen-validate:
 	go run ./cmd/connectorgen validate internal/connectors/defs
 
 verify: fmt tidy-check vet test build docs-check smoke lint connectorgen-validate
+
+# Opt-in local gate that overlaps independent read/build checks after the
+# mutating fmt/tidy steps. CI keeps using serial `verify` for stable logs.
+verify-parallel: fmt tidy-check
+	$(MAKE) -j$(VERIFY_JOBS) vet test build lint connectorgen-validate
+	$(MAKE) -j$(VERIFY_JOBS) docs-check-no-build smoke-no-build
 
 verify-duckdb:
 	CGO_ENABLED=1 go build -tags duckdb ./cmd/pm
