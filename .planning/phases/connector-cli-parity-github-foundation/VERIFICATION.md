@@ -49,6 +49,8 @@ issueguard: blocked
   auto-paused.
 - Root `AGENTS.md` now carries the same conditional CodeRabbit review rule, and `CLAUDE.md` imports
   `AGENTS.md` for Claude Code.
+- `gsd-programming-loop` is now a required local skill for implementation and behavior-changing
+  agents, with manual-GSD fallback recording only when local GSD scripts are unavailable.
 - Sub-PR merge without human approval applies only to parent-branch integration after automated
   gates pass; parent PR merge to `main` remains human-approved.
 - Live issue #44 was updated and GitHub reports #34-#42 as sub-issues.

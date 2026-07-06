@@ -10,6 +10,7 @@ role: implementation
 objective: Execute only validated read-only operation rows with bounded JSON output.
 skills:
   required_groups: [api_architecture, go_tdd, security_review]
+  required_local_skills: [gsd-programming-loop]
   preferred_local_skills: [go-engineering, api-design-principles]
 inputs:
   required:
@@ -27,6 +28,7 @@ permissions:
     - unrestricted HTTP write
     - unrestricted SQL write
 workflow:
+  - load_gsd_programming_loop
   - add_rejection_tests_for_full_urls_and_mutations
   - add_httptest_read_success_case
   - implement_executor

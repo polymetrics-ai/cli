@@ -10,6 +10,7 @@ role: implementation
 objective: Render connector command help from metadata with golden tests and accessible docs output.
 skills:
   required_groups: [go_tdd, docs_and_ux]
+  required_local_skills: [gsd-programming-loop]
   preferred_local_skills: [go-engineering, web-design-guidelines, frontend-design]
 inputs:
   required:
@@ -24,6 +25,7 @@ outputs:
 permissions:
   allowed_paths: [cmd/**, internal/**, docs/**, website/**, .planning/**]
 workflow:
+  - load_gsd_programming_loop
   - add_golden_red_test
   - implement_renderer
   - check_mobile_or_docs_rendering_if_website_changes

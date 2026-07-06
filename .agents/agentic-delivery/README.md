@@ -41,7 +41,8 @@ same schema and issue-to-PR contract.
   human approval only when all automated gates pass and no human gate is triggered.
 - Skills are declared by capability, with preferred local skill names when available.
 - Guardrails are explicit hard stops, not prose suggestions.
-- Production behavior changes require test-first evidence.
+- Production behavior changes require `gsd-programming-loop`; if local GSD scripts are unavailable,
+  agents must record a manual-GSD fallback and still provide test-first evidence.
 - CodeRabbit review is a post-implementation gate. Every actionable review item must receive a
   reasoned disposition before it is resolved. Follow-up fix commits should rely on automatic
   incremental review when active; manual `@coderabbitai review` is only a fallback for paused,

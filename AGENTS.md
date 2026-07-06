@@ -32,6 +32,10 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
 
 - For issue-to-PR work, read `.agents/agentic-delivery/contracts/issue-agent-contract.md` and keep
   the PR scoped to one primary issue.
+- For implementation or behavior-changing work, `gsd-programming-loop` is mandatory. Load it before
+  coding, follow its TDD/programming lifecycle, and record GSD/TDD evidence in the phase or PR
+  artifacts. If the local GSD scripts are unavailable, run the manual GSD loop and record that
+  fallback explicitly; do not skip test-first implementation.
 - PR bodies must use `Closes #N` for completed default-branch work or `Refs #N` for stacked or
   incremental work. PR titles must follow Conventional Commits.
 - After implementation and local verification, follow

@@ -10,6 +10,7 @@ role: architecture
 objective: Add schema and validation foundations for complete provider operation coverage.
 skills:
   required_groups: [api_architecture, go_tdd, security_review]
+  required_local_skills: [gsd-programming-loop]
   preferred_local_skills: [api-design-principles, architecture-patterns, go-engineering]
 inputs:
   required:
@@ -27,6 +28,7 @@ permissions:
     - path: internal/connectors/defs/**
       unless: issue assigns concrete connector
 workflow:
+  - load_gsd_programming_loop
   - inventory_existing_schema
   - write_seeded_invalid_tests
   - implement_validator_slice

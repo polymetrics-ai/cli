@@ -14,6 +14,7 @@ Adds the issue-first agentic delivery foundation for connector CLI parity:
 - parent issue, sub-issue, milestone roadmap, and stacked PR workflow for GitHub CLI feature parity
 - root `AGENTS.md` plus Claude Code `CLAUDE.md` guidance for the same issue-first and CodeRabbit
   follow-up review rules
+- mandatory `gsd-programming-loop` requirement for implementation and behavior-changing agents
 
 Closes #43
 

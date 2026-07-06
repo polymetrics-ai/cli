@@ -10,7 +10,8 @@ role: implementation
 objective: Implement the smallest tested change that satisfies one assigned GitHub issue.
 skills:
   required_groups: [github_planning, go_tdd, security_review]
-  preferred_local_skills: [github-issue-first-delivery, gsd-programming-loop, go-engineering]
+  required_local_skills: [gsd-programming-loop]
+  preferred_local_skills: [github-issue-first-delivery, go-engineering]
 inputs:
   required:
     - github_issue_url
@@ -46,6 +47,7 @@ workflow:
   - read_issue
   - read_required_context
   - load_required_skills
+  - load_gsd_programming_loop
   - write_red_test_for_behavior_change
   - implement_minimal_slice
   - run_targeted_tests

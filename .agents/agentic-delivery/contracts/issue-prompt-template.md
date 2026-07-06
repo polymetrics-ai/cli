@@ -17,6 +17,7 @@ For parent issues, sub-issues, and stacked PRs, follow:
 Task type: `<task-type-from-task-skill-matrix>`
 
 Required skills:
+- `gsd-programming-loop` for implementation or behavior-changing work
 - `<skill capability or local skill name>`
 
 Primary agent:
@@ -40,6 +41,8 @@ PR body must include one of:
 - `Refs #<issue-number>` when the PR is stacked or incremental
 
 Before merge:
+- confirm `gsd-programming-loop` was loaded and followed for implementation or behavior-changing
+  work, or record the manual-GSD fallback when local GSD scripts are unavailable
 - request CodeRabbit review after implementation
 - reply to every actionable CodeRabbit item with accepted, accepted_with_modification, declined,
   deferred, or needs_human

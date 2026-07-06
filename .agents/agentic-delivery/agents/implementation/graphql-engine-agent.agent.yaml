@@ -10,6 +10,7 @@ role: implementation
 objective: Generalize hook-backed GraphQL behavior into declarative engine support.
 skills:
   required_groups: [api_architecture, go_tdd, security_review]
+  required_local_skills: [gsd-programming-loop]
   preferred_local_skills: [go-engineering, api-design-principles]
 inputs:
   required:
@@ -24,6 +25,7 @@ outputs:
 permissions:
   allowed_paths: [internal/connectors/engine/**, internal/connectors/connsdk/**, docs/**, .planning/**]
 workflow:
+  - load_gsd_programming_loop
   - add_fake_graphql_server_tests
   - implement_fixed_document_body_builder
   - keep_arbitrary_query_text_blocked

@@ -31,6 +31,8 @@ specific agent vendor.
 - Convert pre-existing `.codex/agents` connector-migration TOML specs into `.agents/` YAML specs.
 - Update root agent instructions so Codex, Claude Code, and other agents share the same issue-first
   and CodeRabbit follow-up review rules.
+- Make `gsd-programming-loop` a mandatory skill for implementation and behavior-changing agent
+  work, with a recorded manual-GSD fallback only when local GSD scripts are unavailable.
 
 ## Non-goals
 
@@ -55,6 +57,7 @@ specific agent vendor.
 - GitHub CLI feature parity parent issue #44 has a saved roadmap and sub-issue hierarchy.
 - Root `AGENTS.md` and `CLAUDE.md` point agents at the shared issue-first and CodeRabbit review
   contracts.
+- Implementation and behavior-changing agents require `gsd-programming-loop` before coding.
 - `make verify` passes.
 
 ## TDD plan

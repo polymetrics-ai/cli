@@ -10,6 +10,7 @@ role: implementation
 objective: Add generic CLI surface metadata and validation for one assigned provider connector.
 skills:
   required_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
+  required_local_skills: [gsd-programming-loop]
   preferred_local_skills: [github-issue-first-delivery, go-engineering, web-design-guidelines]
 inputs:
   required:
@@ -25,6 +26,7 @@ outputs:
 permissions:
   allowed_paths: [internal/connectors/defs/<connector>/**, internal/connectors/**, cmd/connectorgen/**, docs/**, .planning/**]
 workflow:
+  - load_gsd_programming_loop
   - validate_research_json
   - add_failing_reference_tests
   - implement_schema_or_metadata_slice
