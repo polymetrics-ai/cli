@@ -131,6 +131,10 @@
               }
             }
           },
+          "output_policy": {
+            "type": "string",
+            "enum": ["github_contents_file_metadata", "github_contents_directory"]
+          },
           "risk": { "type": "string" },
           "approval": { "type": "string" },
           "notes": { "type": "string" }

@@ -212,6 +212,70 @@ func TestValidate_CLISurfaceImplementedDirectWriteIsBlocked(t *testing.T) {
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
+func TestValidate_CLISurfaceImplementedDirectReadWithOutputPolicyPasses(t *testing.T) {
+	report, err := validateDir(directReadCLISurfaceBundleFS(validDirectReadCLISurfaceJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for valid direct_read cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceImplementedDirectReadRequiresOutputPolicy(t *testing.T) {
+	cliSurface := strings.Replace(validDirectReadCLISurfaceJSON(), `
+				"output_policy": "github_contents_file_metadata",
+`, "", 1)
+	report, err := validateDir(directReadCLISurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceImplementedDirectReadRequiresOneEndpoint(t *testing.T) {
+	cliSurface := strings.Replace(
+		validDirectReadCLISurfaceJSON(),
+		`{ "method": "GET", "path": "/widgets/{id}" }`,
+		`{ "method": "GET", "path": "/widgets/{id}" }, { "method": "GET", "path": "/widgets" }`,
+		1,
+	)
+	report, err := validateDir(directReadCLISurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceMissingMapping)
+}
+
+func TestValidate_CLISurfaceImplementedDirectReadRequiresGETRelativeEndpoint(t *testing.T) {
+	tests := []struct {
+		name       string
+		apiSurface string
+		ref        string
+	}{
+		{
+			name:       "post",
+			apiSurface: strings.Replace(validOperationLedgerAPISurface(), `"method": "GET",`+"\n"+`				"path": "/widgets/{id}"`, `"method": "POST",`+"\n"+`				"path": "/widgets/{id}"`, 1),
+			ref:        `{ "method": "POST", "path": "/widgets/{id}" }`,
+		},
+		{
+			name:       "absolute",
+			apiSurface: strings.Replace(validOperationLedgerAPISurface(), `"path": "/widgets/{id}"`, `"path": "https://evil.example.test/widgets/{id}"`, 1),
+			ref:        `{ "method": "GET", "path": "https://evil.example.test/widgets/{id}" }`,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cliSurface := strings.Replace(validDirectReadCLISurfaceJSON(), `{ "method": "GET", "path": "/widgets/{id}" }`, tt.ref, 1)
+			report, err := validateDir(directReadCLISurfaceBundleFSWithAPI(cliSurface, tt.apiSurface))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+		})
+	}
+}
+
 func TestValidate_CLISurfaceRejectsCommandWithStreamAndWrite(t *testing.T) {
 	cliSurface := strings.Replace(
 		validCLISurfaceJSON(),
@@ -1046,6 +1110,40 @@ func validCLISurfaceJSON() string {
 			}
 		]
 	}`
+}
+
+func validDirectReadCLISurfaceJSON() string {
+	return `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget read",
+				"summary": "Read widget metadata",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"source_cli_path": "clis widget read",
+				"api_surface": [
+					{ "method": "GET", "path": "/widgets/{id}" }
+				],
+				"output_policy": "github_contents_file_metadata",
+				"flags": [
+					{ "name": "id", "type": "string", "maps_to": "path.id" }
+				],
+				"examples": ["pm cli-surface widget read --id w_1 --json"]
+			}
+		]
+	}`
+}
+
+func directReadCLISurfaceBundleFS(cliSurface string) fstest.MapFS {
+	return directReadCLISurfaceBundleFSWithAPI(cliSurface, validOperationLedgerAPISurface())
+}
+
+func directReadCLISurfaceBundleFSWithAPI(cliSurface, apiSurface string) fstest.MapFS {
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	return fsys
 }
 
 func operationLedgerBundleFS(apiSurface string) fstest.MapFS {

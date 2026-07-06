@@ -2789,7 +2789,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "reading file/directory contents requires a caller-chosen path with no enumerable parameter space (not a listable resource); the write side (create/update/delete file) is already covered by create_or_update_file/delete_file",
+        "reason": "reading file/directory contents requires a caller-chosen path with no enumerable parameter space; executable command mappings must declare an output policy that redacts file content and blocks sensitive paths",
         "source_url": "https://docs.github.com/en/rest",
         "notes": "legacy exclusion category: out_of_scope"
       }

@@ -228,6 +228,7 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 				APISurface: []connectors.CommandSurfaceEndpointRef{
 					{Method: "GET", Path: "/repos/{owner}/{repo}/contents/{path}"},
 				},
+				OutputPolicy: "github_contents_file_metadata",
 				Flags: []connectors.CommandSurfaceFlag{
 					{Name: "path", Type: "string", MapsTo: "path.path"},
 				},
@@ -258,6 +259,9 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	if connector.directReadReq.PathParams["path"] != "README.md" {
 		t.Fatalf("direct read path param = %q, want README.md", connector.directReadReq.PathParams["path"])
 	}
+	if connector.directReadReq.OutputPolicy != "github_contents_file_metadata" {
+		t.Fatalf("direct read output policy = %q, want github_contents_file_metadata", connector.directReadReq.OutputPolicy)
+	}
 }
 
 func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
@@ -286,6 +290,7 @@ func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 						Intent:       "direct_read",
 						Availability: "implemented",
 						APISurface:   []connectors.CommandSurfaceEndpointRef{tt.endpoint},
+						OutputPolicy: "github_contents_file_metadata",
 						Flags: []connectors.CommandSurfaceFlag{
 							{Name: "path", Type: "string", MapsTo: "path.path"},
 						},
@@ -307,5 +312,37 @@ func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 				t.Fatalf("Run error = %q, want to contain %q", err.Error(), tt.want)
 			}
 		})
+	}
+}
+
+func TestRunDirectReadRequiresOutputPolicy(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "repo read-file",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/repos/{owner}/{repo}/contents/{path}"},
+				},
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "path", Type: "string", MapsTo: "path.path"},
+				},
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"repo", "read-file"},
+		Flags: map[string][]string{"path": []string{"README.md"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for rejected direct-read command")
+		return nil
+	})
+	if err == nil {
+		t.Fatal("Run error = nil, want output policy rejection")
+	}
+	if !strings.Contains(err.Error(), "output_policy") {
+		t.Fatalf("Run error = %q, want output_policy", err.Error())
 	}
 }

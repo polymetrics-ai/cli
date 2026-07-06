@@ -46,6 +46,7 @@ type CommandSurfaceCommand struct {
 	Flags         []CommandSurfaceFlag
 	Examples      []string
 	APISurface    []CommandSurfaceEndpointRef
+	OutputPolicy  string
 	Risk          string
 	Approval      string
 	Notes         string

@@ -90,12 +90,13 @@ type ReadRequest struct {
 }
 
 type DirectReadRequest struct {
-	Method     string
-	Path       string
-	Config     RuntimeConfig
-	PathParams map[string]string
-	Query      map[string]string
-	MaxBytes   int
+	Method       string
+	Path         string
+	Config       RuntimeConfig
+	PathParams   map[string]string
+	Query        map[string]string
+	MaxBytes     int
+	OutputPolicy string
 }
 
 type DirectReadResult struct {

@@ -99,6 +99,11 @@ var surfaceOperationRisks = map[string]bool{
 	"critical": true,
 }
 
+var directReadOutputPolicies = map[string]bool{
+	"github_contents_file_metadata": true,
+	"github_contents_directory":     true,
+}
+
 var sourceRequiredOperationModels = map[string]bool{
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
@@ -760,13 +765,43 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 			}}
 		}
 	case "direct_read":
-		if len(cmd.APISurface) == 0 {
-			return []Finding{{
+		var findings []Finding
+		if len(cmd.APISurface) != 1 {
+			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceMissingMapping,
-				Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference api_surface", i, cmd.Path),
-			}}
+				Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference exactly one api_surface endpoint", i, cmd.Path),
+			})
+		}
+		for _, ep := range cmd.APISurface {
+			if strings.ToUpper(strings.TrimSpace(ep.Method)) != "GET" {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a GET api_surface endpoint, got %s", i, cmd.Path, strings.ToUpper(ep.Method)),
+				})
+			}
+			if isAbsoluteHTTPURL(ep.Path) {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a connector-relative api_surface endpoint", i, cmd.Path),
+				})
+			}
+		}
+		if !directReadOutputPolicies[cmd.OutputPolicy] {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented direct read command %d (%q) must declare a supported output_policy", i, cmd.Path),
+			})
+		}
+		if len(findings) > 0 {
+			return findings
 		}
 	default:
 		return []Finding{{
@@ -881,6 +916,11 @@ type cliSurfaceEndpointState struct {
 
 func surfaceEndpointKey(method, path string) string {
 	return strings.ToUpper(strings.TrimSpace(method)) + " " + strings.TrimSpace(path)
+}
+
+func isAbsoluteHTTPURL(raw string) bool {
+	lower := strings.ToLower(strings.TrimSpace(raw))
+	return strings.HasPrefix(lower, "http://") || strings.HasPrefix(lower, "https://")
 }
 
 // checkDocsHeadings enforces the fixed docs.md heading set (design §F.6).

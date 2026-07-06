@@ -583,11 +583,11 @@
     },
     {
       "path": "repo read-file",
-      "summary": "Read repository file contents",
+      "summary": "Read repository file metadata",
       "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "gh repo read-file",
-      "notes": "Executes the fixed GitHub repository contents read endpoint; arbitrary URLs and mutation methods remain blocked.",
+      "notes": "Executes the fixed GitHub repository contents read endpoint with file content and raw download URLs redacted.",
       "source_url": "https://docs.github.com/en/rest/repos/contents#get-repository-content",
       "flags": [
         {
@@ -609,6 +609,7 @@
           "path": "/repos/{owner}/{repo}/contents/{path}"
         }
       ],
+      "output_policy": "github_contents_file_metadata",
       "examples": [
         "pm github repo read-file --path README.md --json",
         "pm github repo read-file --path docs/guide.md --ref main --json"
@@ -620,7 +621,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "source_cli_path": "gh repo read-dir",
-      "notes": "Executes the fixed GitHub repository contents read endpoint; arbitrary URLs and mutation methods remain blocked.",
+      "notes": "Executes the fixed GitHub repository contents read endpoint for directory listings; file responses are rejected.",
       "source_url": "https://docs.github.com/en/rest/repos/contents#get-repository-content",
       "flags": [
         {
@@ -642,6 +643,7 @@
           "path": "/repos/{owner}/{repo}/contents/{path}"
         }
       ],
+      "output_policy": "github_contents_directory",
       "examples": [
         "pm github repo read-dir --path docs --json",
         "pm github repo read-dir --path src --ref main --json"

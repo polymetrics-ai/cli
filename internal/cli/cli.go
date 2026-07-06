@@ -643,6 +643,9 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if maxBytes <= 0 {
 		maxBytes = 1 << 20
 	}
+	if maxBytes > commandrunner.MaxDirectReadBytes {
+		maxBytes = commandrunner.MaxDirectReadBytes
+	}
 	connector, cfg, err := a.ResolveConnectorCredential(ctx, connectorName, credential, config)
 	if err != nil {
 		return err

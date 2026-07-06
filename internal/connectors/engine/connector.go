@@ -358,6 +358,7 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			Flags:         flags,
 			Examples:      append([]string(nil), cmd.Examples...),
 			APISurface:    commandSurfaceEndpointRefs(cmd.APISurface),
+			OutputPolicy:  cmd.OutputPolicy,
 			Risk:          cmd.Risk,
 			Approval:      cmd.Approval,
 			Notes:         cmd.Notes,

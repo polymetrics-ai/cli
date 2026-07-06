@@ -3,12 +3,15 @@ package commandrunner
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"sort"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/safety"
 )
+
+const MaxDirectReadBytes = 1 << 20
 
 type Request struct {
 	Path     []string
@@ -125,7 +128,7 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 	}
 	endpoint := cmd.APISurface[0]
 	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
-	if method != "GET" {
+	if method != http.MethodGet {
 		return Result{}, &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      cmd.Path,
@@ -143,21 +146,34 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 			Reason:       "direct_read commands must not reference an absolute URL",
 		}
 	}
+	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
+		return Result{}, &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "direct_read commands require an explicit supported output_policy",
+		}
+	}
 	pathParams, query, err := directReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return Result{}, err
 	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
-		maxBytes = 1 << 20
+		maxBytes = MaxDirectReadBytes
+	}
+	if maxBytes > MaxDirectReadBytes {
+		maxBytes = MaxDirectReadBytes
 	}
 	direct, err := reader.DirectRead(ctx, connectors.DirectReadRequest{
-		Method:     method,
-		Path:       endpoint.Path,
-		Config:     req.Config,
-		PathParams: pathParams,
-		Query:      query,
-		MaxBytes:   maxBytes,
+		Method:       method,
+		Path:         endpoint.Path,
+		Config:       req.Config,
+		PathParams:   pathParams,
+		Query:        query,
+		MaxBytes:     maxBytes,
+		OutputPolicy: cmd.OutputPolicy,
 	})
 	if err != nil {
 		return Result{}, err
@@ -167,6 +183,15 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Command:    cmd.Path,
 		DirectRead: &direct,
 	}, nil
+}
+
+func isSupportedDirectReadOutputPolicy(policy string) bool {
+	switch policy {
+	case "github_contents_file_metadata", "github_contents_directory":
+		return true
+	default:
+		return false
+	}
 }
 
 func commandPath(path []string) string {

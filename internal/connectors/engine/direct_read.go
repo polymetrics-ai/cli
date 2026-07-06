@@ -18,8 +18,10 @@ import (
 )
 
 const (
-	defaultDirectReadMaxBytes = 1 << 20
-	defaultDirectReadTimeout  = 30 * time.Second
+	defaultDirectReadMaxBytes                  = 1 << 20
+	defaultDirectReadTimeout                   = 30 * time.Second
+	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
+	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -46,6 +48,9 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	if err := validateDirectReadOutputPolicy(req.OutputPolicy, req.PathParams); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 
 	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
 	defer cancel()
@@ -56,7 +61,8 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		return connectors.DirectReadResult{}, err
 	}
 
-	resp, err := rt.Requester.Do(ctx, method, resolvedPath, query, nil)
+	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
+	resp, err := rt.Requester.DoLimited(ctx, method, resolvedPath, query, nil, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		msg := safety.RedactErrorText(err.Error())
@@ -69,10 +75,6 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read %s %s: %s", method, req.Path, msg)
 	}
 
-	maxBytes := req.MaxBytes
-	if maxBytes <= 0 {
-		maxBytes = defaultDirectReadMaxBytes
-	}
 	if len(resp.Body) > maxBytes {
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read response too large: %d bytes exceeds limit %d", len(resp.Body), maxBytes)
 	}
@@ -83,6 +85,10 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	if err := dec.Decode(&body); err != nil {
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read response is not JSON: %w", err)
 	}
+	body, err = applyDirectReadOutputPolicy(req.OutputPolicy, body)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	return connectors.DirectReadResult{
 		Connector: b.Name,
 		Method:    method,
@@ -90,6 +96,104 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		Status:    resp.Status,
 		Body:      body,
 	}, nil
+}
+
+func clampDirectReadMaxBytes(maxBytes int) int {
+	if maxBytes <= 0 || maxBytes > defaultDirectReadMaxBytes {
+		return defaultDirectReadMaxBytes
+	}
+	return maxBytes
+}
+
+func validateDirectReadOutputPolicy(policy string, pathParams map[string]string) error {
+	switch policy {
+	case directReadPolicyGitHubContentsFileMetadata, directReadPolicyGitHubContentsDirectory:
+		if err := rejectSensitiveRepositoryPath(pathParams["path"]); err != nil {
+			return err
+		}
+		return nil
+	default:
+		return fmt.Errorf("direct read output policy %q is not supported", policy)
+	}
+}
+
+func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
+	switch policy {
+	case directReadPolicyGitHubContentsFileMetadata:
+		obj, ok := body.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("direct read output policy %q requires a file metadata object", policy)
+		}
+		if typ, _ := obj["type"].(string); typ == "dir" {
+			return nil, fmt.Errorf("direct read output policy %q received a directory response", policy)
+		}
+		return redactGitHubContentsObject(obj), nil
+	case directReadPolicyGitHubContentsDirectory:
+		items, ok := body.([]any)
+		if !ok {
+			return nil, fmt.Errorf("direct read output policy %q requires a directory listing array", policy)
+		}
+		out := make([]any, 0, len(items))
+		for _, item := range items {
+			if obj, ok := item.(map[string]any); ok {
+				out = append(out, redactGitHubContentsObject(obj))
+				continue
+			}
+			out = append(out, item)
+		}
+		return out, nil
+	default:
+		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
+	}
+}
+
+func redactGitHubContentsObject(in map[string]any) map[string]any {
+	out := make(map[string]any, len(in)+2)
+	for k, v := range in {
+		switch k {
+		case "content":
+			out["content_redacted"] = true
+		case "download_url":
+			if v != nil {
+				out["download_url_redacted"] = true
+			}
+		default:
+			out[k] = v
+		}
+	}
+	return out
+}
+
+func rejectSensitiveRepositoryPath(value string) error {
+	if strings.TrimSpace(value) == "" {
+		return nil
+	}
+	clean := stdpath.Clean(value)
+	for _, part := range strings.Split(clean, "/") {
+		lower := strings.ToLower(part)
+		if isSensitiveRepositoryPathPart(lower) {
+			return fmt.Errorf("repository path %q is blocked by direct read output policy", value)
+		}
+	}
+	return nil
+}
+
+func isSensitiveRepositoryPathPart(part string) bool {
+	switch part {
+	case ".env", ".npmrc", ".pypirc", ".netrc", ".pgpass", ".ssh", ".gnupg",
+		"id_rsa", "id_dsa", "id_ecdsa", "id_ed25519",
+		"credentials", "credentials.json", "secrets.json", "secret.json":
+		return true
+	}
+	if strings.HasPrefix(part, ".env.") {
+		return true
+	}
+	for _, suffix := range []string{".pem", ".key", ".p12", ".pfx"} {
+		if strings.HasSuffix(part, suffix) {
+			return true
+		}
+	}
+	return false
 }
 
 func requireDirectReadEndpoint(b Bundle, method, endpointPath string) error {

@@ -483,6 +483,7 @@ type CLICommand struct {
 	Flags         []CLIFlag               `json:"flags,omitempty"`
 	Examples      []string                `json:"examples,omitempty"`
 	APISurface    []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
+	OutputPolicy  string                  `json:"output_policy,omitempty"`
 	Risk          string                  `json:"risk,omitempty"`
 	Approval      string                  `json:"approval,omitempty"`
 	Notes         string                  `json:"notes,omitempty"`

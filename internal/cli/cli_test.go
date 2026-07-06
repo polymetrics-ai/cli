@@ -453,7 +453,7 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 			t.Fatalf("method = %s, want GET", r.Method)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"name":"README.md","type":"file","encoding":"base64","content":"SGVsbG8="}`))
+		_, _ = w.Write([]byte(`{"name":"README.md","type":"file","encoding":"base64","content":"SGVsbG8=","download_url":"https://raw.example.test/README.md"}`))
 	}))
 	t.Cleanup(srv.Close)
 
@@ -497,6 +497,15 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	}
 	if env.Response["name"] != "README.md" || env.Response["type"] != "file" {
 		t.Fatalf("response = %+v, want README file metadata", env.Response)
+	}
+	if _, ok := env.Response["content"]; ok {
+		t.Fatalf("response leaked content: %+v", env.Response)
+	}
+	if _, ok := env.Response["download_url"]; ok {
+		t.Fatalf("response leaked download_url: %+v", env.Response)
+	}
+	if env.Response["content_redacted"] != true || env.Response["download_url_redacted"] != true {
+		t.Fatalf("response redaction markers = %+v, want content and download_url redacted", env.Response)
 	}
 }
 
