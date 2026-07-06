@@ -8,8 +8,8 @@ import {
   CONNECTOR_CATALOG_COUNT,
   CONNECTOR_CAPABILITY_COUNTS,
   CONNECTOR_CATEGORY_COUNTS,
-  type ConnectorMeta,
 } from '@/lib/connectors.catalog.generated';
+import type { ConnectorMeta } from '@/lib/connectors.types';
 import { Badge, releaseVariant } from '@/components/ui/badge';
 import { ConnectorIcon } from '@/components/docs/connector/connector-icon';
 import { Button } from '@/components/ui/button';

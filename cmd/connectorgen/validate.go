@@ -15,24 +15,27 @@ import (
 // constants (lowercase, package-private) so tests can assert on them without
 // string literals scattered across the corpus.
 const (
-	ruleMissingFile             = "missing_file"
-	ruleMetaSchema              = "meta_schema"
-	ruleInterpolationUnresolved = "interpolation_unresolved"
-	ruleSchemaRefMissing        = "schema_ref_missing"
-	rulePrimaryKeyMissing       = "primary_key_missing"
-	ruleCursorFieldMissing      = "cursor_field_missing"
-	ruleWritePathFields         = "write_path_fields"
-	ruleSurfaceCoverage         = "surface_coverage"
-	ruleSurfaceUnknownTarget    = "surface_unknown_target"
-	ruleSurfaceIncomplete       = "surface_incomplete"
-	ruleSurfaceCategory         = "surface_category"
-	ruleSurfaceFailFirstRun     = "surface_fail_first_run"
-	ruleNameRegex               = "name_regex"
-	ruleSecretLiteral           = "secret_literal"
-	ruleDocsHeading             = "docs_heading"
-	ruleStartDateFreeFormString = "start_date_free_form_string"
-	ruleConformanceSkipReason   = "conformance_skip_reason"
-	ruleDefaultTypeMismatch     = "default_type_mismatch"
+	ruleMissingFile              = "missing_file"
+	ruleMetaSchema               = "meta_schema"
+	ruleInterpolationUnresolved  = "interpolation_unresolved"
+	ruleSchemaRefMissing         = "schema_ref_missing"
+	rulePrimaryKeyMissing        = "primary_key_missing"
+	ruleCursorFieldMissing       = "cursor_field_missing"
+	ruleWritePathFields          = "write_path_fields"
+	ruleSurfaceCoverage          = "surface_coverage"
+	ruleSurfaceUnknownTarget     = "surface_unknown_target"
+	ruleSurfaceIncomplete        = "surface_incomplete"
+	ruleSurfaceCategory          = "surface_category"
+	ruleSurfaceFailFirstRun      = "surface_fail_first_run"
+	ruleCLISurfaceUnknownTarget  = "cli_surface_unknown_target"
+	ruleCLISurfaceMissingMapping = "cli_surface_missing_mapping"
+	ruleCLISurfaceSafety         = "cli_surface_safety"
+	ruleNameRegex                = "name_regex"
+	ruleSecretLiteral            = "secret_literal"
+	ruleDocsHeading              = "docs_heading"
+	ruleStartDateFreeFormString  = "start_date_free_form_string"
+	ruleConformanceSkipReason    = "conformance_skip_reason"
+	ruleDefaultTypeMismatch      = "default_type_mismatch"
 )
 
 // dateShapedParamFormats are the incremental.param_format values whose
@@ -96,7 +99,7 @@ var requiredDocHeadings = []string{
 // auth-flavored key (api_key/access_token/secret/password), or a
 // recognizable vendor secret prefix (e.g. Stripe's sk_live_/sk_test_).
 // Fixtures must only ever carry synthetic data (THREAT-MODEL §4).
-var secretLiteralPattern = regexp.MustCompile(`(?i)(bearer\s+[a-z0-9_\-\.]{16,}|(api[_-]?key|access[_-]?token|secret|password)["' ]*[:=]\s*["']?[a-z0-9_\-\.]{16,}|\bsk_(live|test)_[a-z0-9]{10,}\b)`)
+var secretLiteralPattern = regexp.MustCompile(`(?i)(bearer\s+[a-z0-9_\-\.]{16,}|(api[_-]?key|access[_-]?token|secret|password)["' ]*[:=]\s*["']?[a-z0-9_\-\.]{16,}|\bsk_(live|test)_[a-z0-9]{10,}\b|\bgh[pousr]_[a-z0-9_]{20,}\b|\bgithub_pat_[a-z0-9_]{20,}\b)`)
 
 // Finding is one validate defect: which connector/file/rule it belongs to and
 // a human-readable message.
@@ -197,8 +200,10 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkPrimaryKeysAndCursors(b)...)
 	findings = append(findings, checkWritePathFields(b)...)
 	findings = append(findings, checkAPISurface(b)...)
+	findings = append(findings, checkCLISurface(b)...)
 	findings = append(findings, checkDocsHeadings(b)...)
 	findings = append(findings, checkFixtureSecrets(b)...)
+	findings = append(findings, checkCLISurfaceSecrets(fsys, b)...)
 	findings = append(findings, checkConformanceSkipReason(b)...)
 	findings = append(findings, checkDefaultTypeMismatch(b)...)
 	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
@@ -234,6 +239,8 @@ func loadErrorFinding(name string, err error) Finding {
 		file = "writes.json"
 	case strings.Contains(msg, "api_surface.json"):
 		file = "api_surface.json"
+	case strings.Contains(msg, "cli_surface.json"):
+		file = "cli_surface.json"
 	}
 	return Finding{Connector: name, File: file, Rule: rule, Message: msg}
 }
@@ -568,6 +575,148 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	return findings
 }
 
+// checkCLISurface validates optional docs-only connector command metadata.
+// It deliberately validates references without enabling any command dispatch.
+func checkCLISurface(b engine.Bundle) []Finding {
+	if b.CLISurface == nil {
+		return nil
+	}
+
+	streams := map[string]bool{}
+	for _, s := range b.Streams {
+		streams[s.Name] = true
+	}
+	writes := map[string]bool{}
+	for _, w := range b.Writes {
+		writes[w.Name] = true
+	}
+	endpoints := map[string]cliSurfaceEndpointState{}
+	if b.Surface != nil {
+		for _, ep := range b.Surface.Endpoints {
+			endpoints[surfaceEndpointKey(ep.Method, ep.Path)] = cliSurfaceEndpointState{
+				coveredBy: ep.CoveredBy,
+				excluded:  ep.Excluded != nil,
+			}
+		}
+	}
+
+	var findings []Finding
+	for i, cmd := range b.CLISurface.Commands {
+		if cmd.Stream != "" && !streams[cmd.Stream] {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceUnknownTarget,
+				Message:   fmt.Sprintf("command %d (%q) references unknown stream %q", i, cmd.Path, cmd.Stream),
+			})
+		}
+		if cmd.Write != "" && !writes[cmd.Write] {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceUnknownTarget,
+				Message:   fmt.Sprintf("command %d (%q) references unknown write action %q", i, cmd.Path, cmd.Write),
+			})
+		}
+		if cmd.Availability == "implemented" {
+			switch cmd.Intent {
+			case "etl":
+				if cmd.Stream == "" {
+					findings = append(findings, Finding{
+						Connector: b.Name,
+						File:      "cli_surface.json",
+						Rule:      ruleCLISurfaceMissingMapping,
+						Message:   fmt.Sprintf("implemented ETL command %d (%q) must reference stream", i, cmd.Path),
+					})
+				}
+			case "reverse_etl":
+				if cmd.Write == "" {
+					findings = append(findings, Finding{
+						Connector: b.Name,
+						File:      "cli_surface.json",
+						Rule:      ruleCLISurfaceMissingMapping,
+						Message:   fmt.Sprintf("implemented reverse ETL command %d (%q) must reference write action", i, cmd.Path),
+					})
+				}
+			default:
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented command %d (%q) has unsupported executable intent %q", i, cmd.Path, cmd.Intent),
+				})
+			}
+		}
+		if (cmd.Availability == "implemented" || cmd.Availability == "partial") && cmd.Intent == "reverse_etl" {
+			if strings.TrimSpace(cmd.Risk) == "" {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("reverse ETL command %d (%q) must declare risk text", i, cmd.Path),
+				})
+			}
+			if strings.TrimSpace(cmd.Approval) == "" {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("reverse ETL command %d (%q) must declare approval text", i, cmd.Path),
+				})
+			}
+		}
+		if b.Surface != nil {
+			for _, ep := range cmd.APISurface {
+				state, ok := endpoints[surfaceEndpointKey(ep.Method, ep.Path)]
+				if !ok {
+					findings = append(findings, Finding{
+						Connector: b.Name,
+						File:      "cli_surface.json",
+						Rule:      ruleCLISurfaceUnknownTarget,
+						Message:   fmt.Sprintf("command %d (%q) references unknown api_surface endpoint %s %s", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
+					})
+					continue
+				}
+				if state.excluded || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
+					findings = append(findings, Finding{
+						Connector: b.Name,
+						File:      "cli_surface.json",
+						Rule:      ruleCLISurfaceSafety,
+						Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s that is not covered by a stream or write action", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
+					})
+					continue
+				}
+				if cmd.Stream != "" && state.coveredBy.Stream != cmd.Stream {
+					findings = append(findings, Finding{
+						Connector: b.Name,
+						File:      "cli_surface.json",
+						Rule:      ruleCLISurfaceSafety,
+						Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by stream %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Stream, cmd.Stream),
+					})
+				}
+				if cmd.Write != "" && state.coveredBy.Write != cmd.Write {
+					findings = append(findings, Finding{
+						Connector: b.Name,
+						File:      "cli_surface.json",
+						Rule:      ruleCLISurfaceSafety,
+						Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by write %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Write, cmd.Write),
+					})
+				}
+			}
+		}
+	}
+	return findings
+}
+
+type cliSurfaceEndpointState struct {
+	coveredBy *engine.SurfaceCoverage
+	excluded  bool
+}
+
+func surfaceEndpointKey(method, path string) string {
+	return strings.ToUpper(strings.TrimSpace(method)) + " " + strings.TrimSpace(path)
+}
+
 // checkDocsHeadings enforces the fixed docs.md heading set (design §F.6).
 // Headings are matched as Markdown "# "/"## " lines by exact (trimmed) text,
 // so heading LEVEL is not enforced, only presence and text.
@@ -619,6 +768,28 @@ func checkFixtureSecrets(b engine.Bundle) []Finding {
 		return nil
 	})
 	return findings
+}
+
+func checkCLISurfaceSecrets(fsys fs.FS, b engine.Bundle) []Finding {
+	sub, err := fs.Sub(fsys, b.Name)
+	if err != nil || !fsFileExists(sub, "cli_surface.json") {
+		return nil
+	}
+	raw, err := fs.ReadFile(sub, "cli_surface.json")
+	if err != nil || !secretLiteralPattern.Match(raw) {
+		return nil
+	}
+	return []Finding{{
+		Connector: b.Name,
+		File:      "cli_surface.json",
+		Rule:      ruleSecretLiteral,
+		Message:   "cli_surface.json contains a secret-shaped literal",
+	}}
+}
+
+func fsFileExists(fsys fs.FS, name string) bool {
+	info, err := fs.Stat(fsys, name)
+	return err == nil && !info.IsDir()
 }
 
 // checkConformanceSkipReason enforces R3's skip-marker contract (docs/

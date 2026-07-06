@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { ConnectorMeta } from '@/lib/connectors.catalog.generated';
+import type { ConnectorMeta } from '@/lib/connectors.types';
 import {
   Badge,
   releaseVariant,

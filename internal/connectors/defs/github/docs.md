@@ -2,6 +2,12 @@
 
 GitHub reads 33 stream(s), and writes through 67 action(s).
 
+The connector now declares a JSON-first command surface in `cli_surface.json`. This surface is a
+docs and validation contract for gh-inspired GitHub commands; it does not add runtime dispatch by
+itself. Commands mapped to existing streams are ETL reads, commands mapped to existing write actions
+remain reverse ETL writes, and unsupported local workflow commands such as clone, checkout, browser,
+completion, alias, extension, and local config are labeled separately.
+
 Readable streams: `repository`, `issues`, `pull_requests`, `branches`, `commits`, `tags`,
 `releases`, `labels`, `milestones`, `issue_comments`, `pull_request_review_comments`,
 `collaborators`, `contributors`, `stargazers`, `subscribers`, `workflows`, `workflow_runs`,
@@ -490,6 +496,17 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 
 - Batch defaults: read_page_size=100.
 - API coverage includes 33 stream-backed endpoint group(s), 67 write-backed endpoint group(s).
+- GitHub CLI parity is intentionally staged. The current metadata covers selected `gh` command
+  families modeled in this slice and maps implemented commands to current stream/write names, but
+  connector command dispatch is a later phase.
+- GitHub Projects v2, discussions, gist, codespaces, organization-wide views, and several status or
+  search commands require GraphQL or mixed REST/GraphQL coverage that is not modeled by this REST
+  bundle yet.
+- Secret and variable write commands are not exposed as reverse ETL actions until encryption,
+  redaction, scope, and approval semantics are modeled explicitly.
+- Raw `gh api` and `gh api graphql` style escape hatches are classified as unsafe unless constrained
+  to connector auth, connector base URLs, allowlisted methods, mutation approval, and secret
+  redaction.
 - Other documented endpoints are not exposed by this connector where they are classified as
   binary_payload=10, deprecated=1, destructive_admin=5, duplicate_of=67, non_data_endpoint=9,
   out_of_scope=143, requires_elevated_scope=168.

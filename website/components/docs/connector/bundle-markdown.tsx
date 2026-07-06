@@ -11,7 +11,7 @@ import {
   ShieldCheck,
   Terminal,
 } from 'lucide-react';
-import type { ConnectorMeta } from '@/lib/connectors.catalog.generated';
+import type { ConnectorMeta } from '@/lib/connectors.types';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Table, TBody, TD, TH, THead, TR } from '@/components/ui/table';

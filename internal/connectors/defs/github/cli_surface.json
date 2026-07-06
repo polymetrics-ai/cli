@@ -1,0 +1,1408 @@
+{
+  "tagline": "Work with GitHub repositories from the command line.",
+  "usage": "pm github <command> <subcommand> [flags]",
+  "source_cli": {
+    "name": "gh",
+    "docs": "https://cli.github.com/manual/gh",
+    "reference": "https://cli.github.com/manual/gh_help_reference",
+    "source": "https://github.com/cli/cli"
+  },
+  "groups": [
+    {
+      "id": "core",
+      "title": "Core Commands",
+      "commands": ["issue", "pr", "repo", "release"]
+    },
+    {
+      "id": "actions",
+      "title": "GitHub Actions Commands",
+      "commands": ["workflow", "run", "cache"]
+    },
+    {
+      "id": "collaboration",
+      "title": "Collaboration Commands",
+      "commands": ["label", "ruleset", "org", "project", "discussion"]
+    },
+    {
+      "id": "security",
+      "title": "Security And Configuration Commands",
+      "commands": ["secret", "variable", "gpg-key", "ssh-key", "attestation"]
+    },
+    {
+      "id": "local",
+      "title": "Local Workflow Commands",
+      "commands": ["auth", "config", "browse", "alias", "extension", "completion"]
+    },
+    {
+      "id": "additional",
+      "title": "Additional Commands",
+      "commands": ["api", "search", "gist", "codespace", "status", "copilot", "skill"]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved GitHub connector credential and repository scope.",
+      "maps_to": "connection"
+    }
+  ],
+  "commands": [
+    {
+      "path": "issue list",
+      "summary": "List issues",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issues",
+      "source_cli_path": "gh issue list",
+      "flags": [
+        {
+          "name": "state",
+          "type": "enum",
+          "values": ["open", "closed", "all"],
+          "summary": "Filter by issue state.",
+          "maps_to": "query.state"
+        }
+      ],
+      "examples": ["pm github issue list --state open --json"],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues"
+        }
+      ]
+    },
+    {
+      "path": "issue view",
+      "summary": "View issue details",
+      "intent": "etl",
+      "availability": "partial",
+      "stream": "issues",
+      "source_cli_path": "gh issue view",
+      "notes": "The connector exposes issue records as an ETL stream; single issue lookup and gh-style field selection are planned for a later direct-read slice."
+    },
+    {
+      "path": "issue create",
+      "summary": "Create an issue",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_issue",
+      "source_cli_path": "gh issue create",
+      "risk": "Creates a visible issue in the configured repository.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "examples": ["pm github issue create --json"],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues"
+        }
+      ]
+    },
+    {
+      "path": "issue edit",
+      "summary": "Edit an issue",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_issue",
+      "source_cli_path": "gh issue edit",
+      "risk": "Mutates title, body, labels, assignees, milestone, or state on an existing issue.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}"
+        }
+      ]
+    },
+    {
+      "path": "issue close",
+      "summary": "Close an issue",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "close_issue",
+      "source_cli_path": "gh issue close",
+      "risk": "Closes an existing issue.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+    },
+    {
+      "path": "issue reopen",
+      "summary": "Reopen an issue",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_issue",
+      "source_cli_path": "gh issue reopen",
+      "risk": "Reopens an existing issue by setting state through the general update action.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+    },
+    {
+      "path": "issue comment",
+      "summary": "Comment on an issue",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "comment_issue",
+      "source_cli_path": "gh issue comment",
+      "risk": "Adds a visible issue comment.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/comments"
+        }
+      ]
+    },
+    {
+      "path": "issue lock",
+      "summary": "Lock issue conversation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "lock_issue",
+      "source_cli_path": "gh issue lock",
+      "risk": "Locks issue conversation for repository users.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/lock"
+        }
+      ]
+    },
+    {
+      "path": "issue unlock",
+      "summary": "Unlock issue conversation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unlock_issue",
+      "source_cli_path": "gh issue unlock",
+      "risk": "Unlocks issue conversation.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/lock"
+        }
+      ]
+    },
+    {
+      "path": "issue delete",
+      "summary": "Delete an issue",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh issue delete",
+      "notes": "Issue deletion is not exposed as a connector write; destructive or non-REST issue management must be reviewed separately."
+    },
+    {
+      "path": "issue develop",
+      "summary": "Manage development branches for an issue",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh issue develop",
+      "notes": "Depends on local git branch workflow and checkout state."
+    },
+    {
+      "path": "issue status",
+      "summary": "Show relevant issues",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh issue status",
+      "notes": "Requires viewer-centric queries that are not modeled by the repository-scoped stream set yet."
+    },
+    {
+      "path": "issue pin",
+      "summary": "Pin an issue",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh issue pin",
+      "notes": "GitHub issue pinning is not modeled in the current REST-backed connector surface."
+    },
+    {
+      "path": "issue unpin",
+      "summary": "Unpin an issue",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh issue unpin",
+      "notes": "GitHub issue unpinning is not modeled in the current REST-backed connector surface."
+    },
+    {
+      "path": "issue transfer",
+      "summary": "Transfer an issue",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh issue transfer",
+      "notes": "Cross-repository transfer is a high-impact workflow and is not exposed by the repository-scoped connector."
+    },
+    {
+      "path": "pr list",
+      "summary": "List pull requests",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pull_requests",
+      "source_cli_path": "gh pr list",
+      "examples": ["pm github pr list --json"],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls"
+        }
+      ]
+    },
+    {
+      "path": "pr view",
+      "summary": "View pull request details",
+      "intent": "etl",
+      "availability": "partial",
+      "stream": "pull_requests",
+      "source_cli_path": "gh pr view",
+      "notes": "The connector exposes PR records as an ETL stream; single PR lookup and gh-style field selection are planned for a direct-read slice."
+    },
+    {
+      "path": "pr create",
+      "summary": "Create a pull request",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_pull_request",
+      "source_cli_path": "gh pr create",
+      "risk": "Creates a visible pull request and may request reviewers.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pulls"
+        }
+      ]
+    },
+    {
+      "path": "pr edit",
+      "summary": "Edit a pull request",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_pull_request",
+      "source_cli_path": "gh pr edit",
+      "risk": "Mutates an existing pull request.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}"
+        }
+      ]
+    },
+    {
+      "path": "pr close",
+      "summary": "Close a pull request",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "close_pull_request",
+      "source_cli_path": "gh pr close",
+      "risk": "Closes an existing pull request.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+    },
+    {
+      "path": "pr reopen",
+      "summary": "Reopen a pull request",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_pull_request",
+      "source_cli_path": "gh pr reopen",
+      "risk": "Reopens an existing pull request through the general update action.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+    },
+    {
+      "path": "pr comment",
+      "summary": "Comment on a pull request",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "comment_issue",
+      "source_cli_path": "gh pr comment",
+      "risk": "Adds a visible conversation comment because pull request conversations use issue comments.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+    },
+    {
+      "path": "pr merge",
+      "summary": "Merge a pull request",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "merge_pull_request",
+      "source_cli_path": "gh pr merge",
+      "risk": "Merges code into the pull request base branch.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge"
+        }
+      ]
+    },
+    {
+      "path": "pr review",
+      "summary": "Add a pull request review",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_pull_request_review",
+      "source_cli_path": "gh pr review",
+      "risk": "Adds a visible pull request review.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews"
+        }
+      ]
+    },
+    {
+      "path": "pr checks",
+      "summary": "Show pull request checks",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh pr checks",
+      "notes": "Requires check-run/status aggregation not modeled by the current repository streams."
+    },
+    {
+      "path": "pr diff",
+      "summary": "Show pull request diff",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh pr diff",
+      "notes": "Diff output is a patch/binary-like representation rather than a JSON ETL stream."
+    },
+    {
+      "path": "pr checkout",
+      "summary": "Check out a pull request locally",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh pr checkout",
+      "notes": "Depends on local git checkout state."
+    },
+    {
+      "path": "pr ready",
+      "summary": "Mark a draft pull request ready",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh pr ready",
+      "notes": "Not modeled by the current REST write actions."
+    },
+    {
+      "path": "pr update-branch",
+      "summary": "Update a pull request branch",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_pull_request_branch",
+      "source_cli_path": "gh pr update-branch",
+      "risk": "Updates a pull request branch from its base branch.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/update-branch"
+        }
+      ]
+    },
+    {
+      "path": "pr status",
+      "summary": "Show relevant pull requests",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh pr status",
+      "notes": "Requires viewer-centric and branch-aware filtering not modeled by repository streams yet."
+    },
+    {
+      "path": "pr lock",
+      "summary": "Lock pull request conversation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "lock_issue",
+      "source_cli_path": "gh pr lock",
+      "risk": "Locks the pull request conversation through the issue lock endpoint.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+    },
+    {
+      "path": "pr unlock",
+      "summary": "Unlock pull request conversation",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "unlock_issue",
+      "source_cli_path": "gh pr unlock",
+      "risk": "Unlocks the pull request conversation through the issue unlock endpoint.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+    },
+    {
+      "path": "pr revert",
+      "summary": "Revert a pull request",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh pr revert",
+      "notes": "Creates code changes and pull requests; not exposed by the repository connector write surface."
+    },
+    {
+      "path": "repo view",
+      "summary": "View repository metadata",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "repository",
+      "source_cli_path": "gh repo view",
+      "examples": ["pm github repo view --json"],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}"
+        }
+      ]
+    },
+    {
+      "path": "repo list",
+      "summary": "List repositories for an owner",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh repo list",
+      "notes": "The current connector is scoped to one configured repository."
+    },
+    {
+      "path": "repo create",
+      "summary": "Create a repository",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh repo create",
+      "notes": "Repository creation is outside the repository-scoped connector and requires explicit product policy before modeling."
+    },
+    {
+      "path": "repo delete",
+      "summary": "Delete a repository",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh repo delete",
+      "notes": "Repository deletion is classified as destructive admin and is not exposed as a connector write."
+    },
+    {
+      "path": "repo archive",
+      "summary": "Archive a repository",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh repo archive",
+      "notes": "Destructive or admin repository lifecycle changes are not exposed by this slice."
+    },
+    {
+      "path": "repo unarchive",
+      "summary": "Unarchive a repository",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh repo unarchive",
+      "notes": "Admin repository lifecycle changes require explicit policy before modeling."
+    },
+    {
+      "path": "repo fork",
+      "summary": "Fork a repository",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_fork",
+      "source_cli_path": "gh repo fork",
+      "risk": "Creates a fork of the configured repository.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/forks"
+        }
+      ]
+    },
+    {
+      "path": "repo clone",
+      "summary": "Clone a repository locally",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh repo clone",
+      "notes": "Depends on local git and filesystem state."
+    },
+    {
+      "path": "repo sync",
+      "summary": "Sync a local repository",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh repo sync",
+      "notes": "Depends on local git state."
+    },
+    {
+      "path": "repo set-default",
+      "summary": "Set the default local repository",
+      "intent": "config",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh repo set-default",
+      "notes": "Local gh configuration is outside connector metadata."
+    },
+    {
+      "path": "repo read-file",
+      "summary": "Read repository file contents",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh repo read-file",
+      "notes": "Read-only file contents are useful direct-read candidates but are not ETL streams yet."
+    },
+    {
+      "path": "repo read-dir",
+      "summary": "Read repository directory contents",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh repo read-dir",
+      "notes": "Directory contents are useful direct-read candidates but are not ETL streams yet."
+    },
+    {
+      "path": "repo autolink list",
+      "summary": "List repository autolinks",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "autolinks",
+      "source_cli_path": "gh repo autolink list",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/autolinks"
+        }
+      ]
+    },
+    {
+      "path": "repo autolink create",
+      "summary": "Create a repository autolink",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh repo autolink create",
+      "notes": "Autolink writes are not modeled by the current write set."
+    },
+    {
+      "path": "repo autolink delete",
+      "summary": "Delete a repository autolink",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh repo autolink delete",
+      "notes": "Autolink writes are not modeled by the current write set."
+    },
+    {
+      "path": "repo deploy-key list",
+      "summary": "List deploy keys",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deploy_keys",
+      "source_cli_path": "gh repo deploy-key list",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/keys"
+        }
+      ]
+    },
+    {
+      "path": "repo deploy-key add",
+      "summary": "Add a deploy key",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_deploy_key",
+      "source_cli_path": "gh repo deploy-key add",
+      "risk": "Adds a deploy key to the repository.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/keys"
+        }
+      ]
+    },
+    {
+      "path": "repo deploy-key delete",
+      "summary": "Delete a deploy key",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_deploy_key",
+      "source_cli_path": "gh repo deploy-key delete",
+      "risk": "Deletes a deploy key from the repository.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/keys/{key_id}"
+        }
+      ]
+    },
+    {
+      "path": "repo license list",
+      "summary": "List license templates",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh repo license list",
+      "notes": "Global license template APIs are not repository-scoped connector streams."
+    },
+    {
+      "path": "repo gitignore list",
+      "summary": "List gitignore templates",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh repo gitignore list",
+      "notes": "Global gitignore template APIs are not repository-scoped connector streams."
+    },
+    {
+      "path": "release list",
+      "summary": "List releases",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "releases",
+      "source_cli_path": "gh release list",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/releases"
+        }
+      ]
+    },
+    {
+      "path": "release view",
+      "summary": "View a release",
+      "intent": "etl",
+      "availability": "partial",
+      "stream": "releases",
+      "source_cli_path": "gh release view",
+      "notes": "Release records are available as an ETL stream; single-release lookup is planned for direct reads."
+    },
+    {
+      "path": "release create",
+      "summary": "Create a release",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_release",
+      "source_cli_path": "gh release create",
+      "risk": "Creates a visible release.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/releases"
+        }
+      ]
+    },
+    {
+      "path": "release edit",
+      "summary": "Edit a release",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_release",
+      "source_cli_path": "gh release edit",
+      "risk": "Mutates an existing release.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}"
+        }
+      ]
+    },
+    {
+      "path": "release delete",
+      "summary": "Delete a release",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_release",
+      "source_cli_path": "gh release delete",
+      "risk": "Deletes an existing release.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}"
+        }
+      ]
+    },
+    {
+      "path": "release upload",
+      "summary": "Upload release assets",
+      "intent": "direct_write",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh release upload",
+      "notes": "Depends on local files and binary upload semantics."
+    },
+    {
+      "path": "release download",
+      "summary": "Download release assets",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh release download",
+      "notes": "Downloads binary assets to the local filesystem."
+    },
+    {
+      "path": "release delete-asset",
+      "summary": "Delete a release asset",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_release_asset",
+      "source_cli_path": "gh release delete-asset",
+      "risk": "Deletes an existing release asset.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}"
+        }
+      ]
+    },
+    {
+      "path": "release verify",
+      "summary": "Verify release assets",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh release verify",
+      "notes": "Depends on local artifact files and signature verification behavior."
+    },
+    {
+      "path": "workflow list",
+      "summary": "List workflows",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflows",
+      "source_cli_path": "gh workflow list",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/workflows"
+        }
+      ]
+    },
+    {
+      "path": "workflow view",
+      "summary": "View workflow details",
+      "intent": "etl",
+      "availability": "partial",
+      "stream": "workflows",
+      "source_cli_path": "gh workflow view",
+      "notes": "Workflow records are available as a stream; single workflow lookup is planned for direct reads."
+    },
+    {
+      "path": "workflow run",
+      "summary": "Dispatch a workflow",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "dispatch_workflow",
+      "source_cli_path": "gh workflow run",
+      "risk": "Triggers a GitHub Actions workflow run.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches"
+        }
+      ]
+    },
+    {
+      "path": "workflow enable",
+      "summary": "Enable a workflow",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh workflow enable",
+      "notes": "Workflow enablement is not modeled by the current write set."
+    },
+    {
+      "path": "workflow disable",
+      "summary": "Disable a workflow",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh workflow disable",
+      "notes": "Workflow disablement is not modeled by the current write set."
+    },
+    {
+      "path": "run list",
+      "summary": "List workflow runs",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflow_runs",
+      "source_cli_path": "gh run list",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs"
+        }
+      ]
+    },
+    {
+      "path": "run view",
+      "summary": "View workflow run details",
+      "intent": "etl",
+      "availability": "partial",
+      "stream": "workflow_runs",
+      "source_cli_path": "gh run view",
+      "notes": "Workflow run records are available as a stream; log and job expansion are not modeled yet."
+    },
+    {
+      "path": "run rerun",
+      "summary": "Rerun a workflow run",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "rerun_workflow_run",
+      "source_cli_path": "gh run rerun",
+      "risk": "Reruns a GitHub Actions workflow run.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun"
+        }
+      ]
+    },
+    {
+      "path": "run cancel",
+      "summary": "Cancel a workflow run",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_workflow_run",
+      "source_cli_path": "gh run cancel",
+      "risk": "Cancels a GitHub Actions workflow run.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/cancel"
+        }
+      ]
+    },
+    {
+      "path": "run delete",
+      "summary": "Delete a workflow run",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workflow_run",
+      "source_cli_path": "gh run delete",
+      "risk": "Deletes workflow run data.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}"
+        }
+      ]
+    },
+    {
+      "path": "run download",
+      "summary": "Download workflow artifacts",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh run download",
+      "notes": "Downloads artifacts to the local filesystem; artifact metadata is available through the workflow_artifacts stream."
+    },
+    {
+      "path": "run watch",
+      "summary": "Watch a workflow run",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh run watch",
+      "notes": "Interactive watch behavior is outside connector command metadata."
+    },
+    {
+      "path": "cache list",
+      "summary": "List GitHub Actions caches",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh cache list",
+      "notes": "Actions cache endpoints are tracked but excluded from the current repository connector surface."
+    },
+    {
+      "path": "cache delete",
+      "summary": "Delete GitHub Actions caches",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh cache delete",
+      "notes": "Cache deletion is not exposed by the connector write surface."
+    },
+    {
+      "path": "label list",
+      "summary": "List labels",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "labels",
+      "source_cli_path": "gh label list",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/labels"
+        }
+      ]
+    },
+    {
+      "path": "label create",
+      "summary": "Create a label",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_label",
+      "source_cli_path": "gh label create",
+      "risk": "Creates a repository label.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/labels"
+        }
+      ]
+    },
+    {
+      "path": "label edit",
+      "summary": "Edit a label",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_label",
+      "source_cli_path": "gh label edit",
+      "risk": "Mutates a repository label.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/repos/{owner}/{repo}/labels/{name}"
+        }
+      ]
+    },
+    {
+      "path": "label delete",
+      "summary": "Delete a label",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_label",
+      "source_cli_path": "gh label delete",
+      "risk": "Deletes a repository label.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/labels/{name}"
+        }
+      ]
+    },
+    {
+      "path": "label clone",
+      "summary": "Clone labels between repositories",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh label clone",
+      "notes": "Cross-repository copy is outside the configured repository connector scope."
+    },
+    {
+      "path": "ruleset list",
+      "summary": "List repository rulesets",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "repo_rulesets",
+      "source_cli_path": "gh ruleset list",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/rulesets"
+        }
+      ]
+    },
+    {
+      "path": "ruleset view",
+      "summary": "View repository ruleset details",
+      "intent": "etl",
+      "availability": "partial",
+      "stream": "repo_rulesets",
+      "source_cli_path": "gh ruleset view",
+      "notes": "Rulesets are available as a stream; single ruleset detail is planned for direct reads."
+    },
+    {
+      "path": "ruleset check",
+      "summary": "Check rules that apply to a branch",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh ruleset check",
+      "notes": "Requires a constrained direct-read operation with branch input."
+    },
+    {
+      "path": "repo ruleset create",
+      "summary": "Create a repository ruleset",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_repo_ruleset",
+      "risk": "Creates repository rules that can affect contribution workflows.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Connector-native write action; the current gh ruleset surface documents check, list, and view, but not create.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repos/{owner}/{repo}/rulesets"
+        }
+      ]
+    },
+    {
+      "path": "repo ruleset update",
+      "summary": "Update a repository ruleset",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_repo_ruleset",
+      "risk": "Updates repository rules that can affect contribution workflows.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Connector-native write action; the current gh ruleset surface documents check, list, and view, but not update.",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}"
+        }
+      ]
+    },
+    {
+      "path": "repo ruleset delete",
+      "summary": "Delete a repository ruleset",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_repo_ruleset",
+      "risk": "Deletes repository rules that can affect contribution workflows.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Connector-native write action; the current gh ruleset surface documents check, list, and view, but not delete.",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}"
+        }
+      ]
+    },
+    {
+      "path": "secret list",
+      "summary": "List repository secrets",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh secret list",
+      "notes": "Secret metadata endpoints require elevated scopes and are explicitly excluded from the current connector surface."
+    },
+    {
+      "path": "secret set",
+      "summary": "Create or update a secret",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh secret set",
+      "notes": "Secret writes require encryption and strict scope policy; not exposed as connector writes."
+    },
+    {
+      "path": "secret delete",
+      "summary": "Delete a secret",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh secret delete",
+      "notes": "Secret deletion is not exposed as a connector write."
+    },
+    {
+      "path": "variable list",
+      "summary": "List repository variables",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh variable list",
+      "notes": "Actions variable endpoints require elevated scopes and are excluded from the current connector surface."
+    },
+    {
+      "path": "variable get",
+      "summary": "Get a repository variable",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh variable get",
+      "notes": "Actions variable endpoints require elevated scopes and are excluded from the current connector surface."
+    },
+    {
+      "path": "variable set",
+      "summary": "Create or update a repository variable",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh variable set",
+      "notes": "Actions variable writes are not modeled by the current write set."
+    },
+    {
+      "path": "variable delete",
+      "summary": "Delete a repository variable",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh variable delete",
+      "notes": "Actions variable deletion is not modeled by the current write set."
+    },
+    {
+      "path": "project list",
+      "summary": "List projects",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh project list",
+      "notes": "Projects v2 is GraphQL-centered and is assigned to the GraphQL/project slices."
+    },
+    {
+      "path": "project create",
+      "summary": "Create a project",
+      "intent": "direct_write",
+      "availability": "planned",
+      "source_cli_path": "gh project create",
+      "notes": "Requires fixed GraphQL operations and explicit project policy."
+    },
+    {
+      "path": "project item-list",
+      "summary": "List project items",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh project item-list",
+      "notes": "Requires declarative GraphQL support."
+    },
+    {
+      "path": "discussion list",
+      "summary": "List discussions",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh discussion list",
+      "notes": "Discussions coverage requires GraphQL support."
+    },
+    {
+      "path": "discussion view",
+      "summary": "View a discussion",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh discussion view",
+      "notes": "Discussions coverage requires GraphQL support."
+    },
+    {
+      "path": "discussion create",
+      "summary": "Create a discussion",
+      "intent": "direct_write",
+      "availability": "planned",
+      "source_cli_path": "gh discussion create",
+      "notes": "Requires fixed GraphQL mutations and approval policy."
+    },
+    {
+      "path": "org list",
+      "summary": "List organizations for the authenticated user",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh org list",
+      "notes": "Viewer/org-scoped APIs are outside the configured repository connector."
+    },
+    {
+      "path": "search repos",
+      "summary": "Search repositories",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh search repos",
+      "notes": "Search APIs are useful direct-read candidates but not stream-backed in this connector yet."
+    },
+    {
+      "path": "search issues",
+      "summary": "Search issues",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh search issues",
+      "notes": "Search APIs are useful direct-read candidates but not stream-backed in this connector yet."
+    },
+    {
+      "path": "search prs",
+      "summary": "Search pull requests",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh search prs",
+      "notes": "Search APIs are useful direct-read candidates but not stream-backed in this connector yet."
+    },
+    {
+      "path": "search code",
+      "summary": "Search code",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh search code",
+      "notes": "Search APIs are useful direct-read candidates but need pagination/rate-limit policy."
+    },
+    {
+      "path": "search commits",
+      "summary": "Search commits",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh search commits",
+      "notes": "Search APIs are useful direct-read candidates but not stream-backed in this connector yet."
+    },
+    {
+      "path": "gist list",
+      "summary": "List gists",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh gist list",
+      "notes": "Gists are account-scoped, not repository-scoped."
+    },
+    {
+      "path": "gist create",
+      "summary": "Create a gist",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh gist create",
+      "notes": "Gist writes are outside the repository connector scope."
+    },
+    {
+      "path": "codespace list",
+      "summary": "List codespaces",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh codespace list",
+      "notes": "Codespaces endpoints are tracked but excluded from the current connector surface."
+    },
+    {
+      "path": "codespace create",
+      "summary": "Create a codespace",
+      "intent": "direct_write",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh codespace create",
+      "notes": "Codespaces creation is outside the connector write surface."
+    },
+    {
+      "path": "codespace ssh",
+      "summary": "SSH into a codespace",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh codespace ssh",
+      "notes": "Requires local SSH and interactive terminal behavior."
+    },
+    {
+      "path": "auth login",
+      "summary": "Authenticate gh",
+      "intent": "auth",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh auth login",
+      "notes": "Polymetrics uses its own credential vault and does not manage gh sessions."
+    },
+    {
+      "path": "auth status",
+      "summary": "View gh authentication status",
+      "intent": "auth",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh auth status",
+      "notes": "Polymetrics credential inspection is separate from gh session management."
+    },
+    {
+      "path": "auth token",
+      "summary": "Print gh token",
+      "intent": "auth",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh auth token",
+      "notes": "Commands must never print stored secret values."
+    },
+    {
+      "path": "config get",
+      "summary": "Read gh local config",
+      "intent": "config",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh config get",
+      "notes": "Local gh configuration is outside connector metadata."
+    },
+    {
+      "path": "config set",
+      "summary": "Write gh local config",
+      "intent": "config",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh config set",
+      "notes": "Local gh configuration is outside connector metadata."
+    },
+    {
+      "path": "browse",
+      "summary": "Open GitHub in a browser",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh browse",
+      "notes": "Browser-opening behavior is local workflow, not connector API behavior."
+    },
+    {
+      "path": "alias list",
+      "summary": "List gh aliases",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh alias list",
+      "notes": "gh alias management is local configuration."
+    },
+    {
+      "path": "extension list",
+      "summary": "List gh extensions",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh extension list",
+      "notes": "Extension installation and execution are local gh workflows."
+    },
+    {
+      "path": "completion",
+      "summary": "Generate shell completion",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh completion",
+      "notes": "Completion generation belongs to pm CLI shell integration, not connector metadata."
+    },
+    {
+      "path": "api",
+      "summary": "Make an authenticated GitHub API request",
+      "intent": "raw_api",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "gh api",
+      "notes": "Unrestricted raw API escape hatches are explicitly disallowed; any future raw API must be constrained and separately approved."
+    },
+    {
+      "path": "status",
+      "summary": "Print GitHub status",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "gh status",
+      "notes": "Viewer-centric dashboard data is not modeled by the repository connector yet."
+    },
+    {
+      "path": "gpg-key list",
+      "summary": "List GPG keys",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh gpg-key list",
+      "notes": "Account key APIs are outside repository-scoped connector metadata."
+    },
+    {
+      "path": "ssh-key list",
+      "summary": "List SSH keys",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh ssh-key list",
+      "notes": "Account key APIs are outside repository-scoped connector metadata."
+    },
+    {
+      "path": "attestation verify",
+      "summary": "Verify artifact attestations",
+      "intent": "direct_read",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh attestation verify",
+      "notes": "Attestation verification depends on local artifact files."
+    },
+    {
+      "path": "copilot",
+      "summary": "Use GitHub Copilot CLI",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "gh copilot",
+      "notes": "Copilot CLI behavior is not a GitHub connector API surface."
+    },
+    {
+      "path": "skill list",
+      "summary": "List GitHub Skills",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh skill list",
+      "notes": "GitHub Skills are not modeled by the repository connector surface."
+    },
+    {
+      "path": "agent-task list",
+      "summary": "List GitHub agent tasks",
+      "intent": "direct_read",
+      "availability": "unsupported_api",
+      "source_cli_path": "gh agent-task list",
+      "notes": "Agent task APIs are not modeled by the repository connector surface."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "authentication",
+      "summary": "Use pm credentials for public, token, or GitHub App repository access. Never print stored tokens."
+    },
+    {
+      "name": "execution-model",
+      "summary": "ETL commands map to streams. Reverse ETL commands map to approved write actions and keep plan, preview, approval, execute."
+    },
+    {
+      "name": "local-workflows",
+      "summary": "Commands that depend on local git, browser, shell completion, extensions, or gh config are documented but not connector-dispatched."
+    },
+    {
+      "name": "known-gaps",
+      "summary": "Projects, Discussions, Search, direct reads, and sensitive/admin surfaces are planned follow-up slices."
+    }
+  ]
+}

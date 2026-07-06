@@ -1,6 +1,7 @@
-// Generates website/lib/connectors.catalog.generated.ts from
-// website/data/connectors.generated.json. The JSON data is generated from
-// internal/connectors/defs/<name>/ bundles by gen-connector-bundles.mjs.
+// Generates website/lib/connectors.catalog.generated.ts and the large JSON
+// payload it imports from website/data/connectors.generated.json. The source
+// JSON data is generated from internal/connectors/defs/<name>/ bundles by
+// gen-connector-bundles.mjs.
 //
 // Run: node scripts/gen-connector-catalog.mjs   (or: npm run gen:catalog)
 
@@ -11,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA = resolve(__dirname, '../data/connectors.generated.json');
 const OUT = resolve(__dirname, '../lib/connectors.catalog.generated.ts');
+const JSON_OUT = resolve(__dirname, '../lib/connectors.catalog.data.generated.json');
 
 const FEATURED = new Set([
   'GitHub', 'Stripe', 'Postgres', 'MySQL', 'MongoDB', 'Snowflake', 'BigQuery',
@@ -149,48 +151,28 @@ const banner =
   `// Source: website/data/connectors.generated.json\n` +
   `// Run \`npm run gen:catalog\` to regenerate.\n\n`;
 
-const types =
-  `export type ConnectorCapabilities = {\n` +
-  `  check: boolean;\n  read: boolean;\n  write: boolean;\n` +
-  `  query: boolean;\n  cdc: boolean;\n  dynamicSchema: boolean;\n};\n\n` +
-  `export type ConnectorConfigField = {\n` +
-  `  name: string;\n  type: string;\n  description: string;\n  required: boolean;\n  secret: boolean;\n};\n\n` +
-  `export type ConnectorStream = {\n` +
-  `  name: string;\n  primaryKey: string[];\n  cursor: string;\n  incremental: boolean;\n};\n\n` +
-  `export type ConnectorWriteAction = {\n` +
-  `  name: string;\n  method: string;\n  kind: string;\n};\n\n` +
-  `export type ConnectorDocLink = { title: string; type: string; url: string };\n\n` +
-  `export type ConnectorIconMeta = {\n` +
-  `  id: string; path: string; publicPath: string; source: string;\n` +
-  `  reviewStatus: string; reviewUrl: string;\n` +
-  `};\n\n` +
-  `export type ConnectorMeta = {\n` +
-  `  slug: string;\n  name: string;\n  description: string;\n  category: string;\n` +
-  `  categoryLabel: string;\n  releaseStage: string;\n  status: 'available';\n` +
-  `  capabilities: ConnectorCapabilities;\n  capabilityLabels: string[];\n` +
-  `  streams: ConnectorStream[];\n  writeActions: ConnectorWriteAction[];\n` +
-  `  docsMd: string;\n  docs: ConnectorDocLink[];\n  docUrl: string;\n  appDocUrl: string;\n` +
-  `  icon: ConnectorIconMeta | null;\n  featured: boolean;\n};\n\n`;
-
 const body =
   banner +
-  types +
-  `export const CONNECTOR_CATALOG: ConnectorMeta[] = ${JSON.stringify(all, null, 0)};\n\n` +
+  `import catalogData from './connectors.catalog.data.generated.json';\n` +
+  `import type { ConnectorCapabilities, ConnectorMeta } from './connectors.types';\n\n` +
+  `export const CONNECTOR_CATALOG = catalogData as ConnectorMeta[];\n\n` +
   `export const CONNECTOR_CATALOG_COUNT = ${all.length};\n\n` +
-  `export const CONNECTOR_CATEGORY_COUNTS: Record<string, number> = ${JSON.stringify(categoryCounts)};\n\n` +
-  `export const CONNECTOR_RELEASE_STAGE_COUNTS: Record<string, number> = ${JSON.stringify(releaseStageCounts)};\n\n` +
-  `export const CONNECTOR_CAPABILITY_COUNTS: Record<keyof ConnectorCapabilities, number> = ${JSON.stringify(capabilityCounts)};\n\n` +
+  `export const CONNECTOR_CATEGORY_COUNTS = ${JSON.stringify(categoryCounts)} as Record<string, number>;\n\n` +
+  `export const CONNECTOR_RELEASE_STAGE_COUNTS = ${JSON.stringify(releaseStageCounts)} as Record<string, number>;\n\n` +
+  `export const CONNECTOR_CAPABILITY_COUNTS = ${JSON.stringify(capabilityCounts)} as Record<keyof ConnectorCapabilities, number>;\n\n` +
   `const BY_SLUG: Record<string, ConnectorMeta> = Object.fromEntries(\n` +
   `  CONNECTOR_CATALOG.map((c) => [c.slug, c]),\n);\n\n` +
   `export function connectorBySlug(slug: string): ConnectorMeta | undefined {\n` +
   `  return BY_SLUG[slug];\n}\n`;
 
 mkdirSync(dirname(OUT), { recursive: true });
+writeFileSync(JSON_OUT, `${JSON.stringify(all, null, 0)}\n`, 'utf8');
 writeFileSync(OUT, body, 'utf8');
 
 console.log(
-  `Wrote ${all.length} connectors to lib/connectors.catalog.generated.ts ` +
-    `(${(body.length / 1024).toFixed(0)} KB).\n` +
+  `Wrote ${all.length} connectors to lib/connectors.catalog.generated.ts and ` +
+    `lib/connectors.catalog.data.generated.json ` +
+    `(${((body.length + JSON.stringify(all, null, 0).length) / 1024).toFixed(0)} KB).\n` +
     `Categories: ${JSON.stringify(categoryCounts)}\n` +
     `Capabilities: ${JSON.stringify(capabilityCounts)}\n` +
     `Featured: ${all.filter((c) => c.featured).length}`,

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { AlertTriangle, Check, Clipboard, Terminal } from 'lucide-react';
-import type { ConnectorMeta } from '@/lib/connectors.catalog.generated';
+import type { ConnectorMeta } from '@/lib/connectors.types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
