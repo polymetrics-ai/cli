@@ -59,7 +59,7 @@ workflow:
   - run_issue_verification
   - commit_and_push_green_slice_after_green_gates
   - prepare_pr_with_issue_link
-  - request_coderabbit_full_review
+  - wait_for_automatic_coderabbit_review_or_record_fallback
   - confirm_coderabbit_review_was_not_only_skipped
   - route_non_main_base_review_to_parent_pr_when_needed
   - disposition_coderabbit_findings

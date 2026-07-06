@@ -47,7 +47,8 @@ integration, CodeRabbit coverage, and final human approval.
    - `contracts/parent-issue-roadmap-template.md`
 3. Add short source-of-truth pointers in `AGENTS.md` and `CLAUDE.md`.
 4. Validate YAML and whitespace.
-5. Commit, push, open PR with `Closes #50`, then request CodeRabbit full review.
+5. Commit, push, open PR with `Closes #50`, then wait for automatic CodeRabbit review because the
+   PR targets `main` and is not draft. Manual review commands are fallback-only.
 
 ## Human Gates
 

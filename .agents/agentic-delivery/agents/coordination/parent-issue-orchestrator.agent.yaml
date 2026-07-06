@@ -53,7 +53,7 @@ workflow:
   - receive_worker_handoffs
   - verify_sub_pr_scope_checks_and_review_route
   - merge_or_block_sub_prs_to_parent_branch
-  - request_or_observe_parent_pr_coderabbit_coverage
+  - observe_parent_pr_coderabbit_coverage_or_record_fallback
   - dispatch_coderabbit_disposition_work
   - update_orchestration_state
   - run_final_parent_verification

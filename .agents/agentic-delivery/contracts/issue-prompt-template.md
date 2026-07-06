@@ -58,7 +58,8 @@ Before merge:
   production edits
 - commit and push coherent green slices to the active issue/PR branch after local green gates;
   never push to `main`
-- request CodeRabbit review after implementation
+- observe automatic CodeRabbit review after implementation when the PR is non-draft and targets
+  `main`; do not post manual review commands unless the documented fallback conditions apply
 - confirm CodeRabbit actually reviewed the relevant commits, or record the parent PR fallback route
   for stacked sub-PRs
 - reply to every actionable CodeRabbit item with accepted, accepted_with_modification, declined,

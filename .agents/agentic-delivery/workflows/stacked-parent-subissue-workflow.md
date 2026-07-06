@@ -78,21 +78,22 @@ keywords for PRs targeting the default branch.
 5. Follow the issue-to-PR contract and test-first loop.
 6. Open the sub-PR against the parent branch with `Refs #<sub-issue>` and `Refs #<parent-issue>`.
 7. Run targeted verification and broader issue verification.
-8. Run the CodeRabbit review loop and reply to every actionable finding with a disposition. For
-   fix commits, wait for automatic incremental review when active and use manual review commands
-   only under the conditions in `workflows/coderabbit-review-loop.md`.
+8. Run the CodeRabbit review loop and reply to every actionable finding with a disposition. Use
+   automatic review whenever the PR is non-draft and targets a reviewed base branch. Use manual
+   review commands only under the fallback conditions in `workflows/coderabbit-review-loop.md`.
 9. Commit and push green sub-issue slices to the sub-issue branch after local green gates. Never
    push to `main`; stop only when a human gate is triggered.
 10. If CodeRabbit skips the sub-PR because the base branch is not `main`, record that skip as a
     review-routing event, not as approval. The sub-PR may be integrated into the parent branch only
-    when the parent PR exists and the orchestrator immediately requests or observes CodeRabbit
-    review on the parent PR commit range that includes the sub-issue.
+    when the parent PR exists and the orchestrator observes CodeRabbit review, or records an
+    allowed fallback route, on the parent PR commit range that includes the sub-issue.
 11. Merge the sub-PR into the parent branch without human approval only if every automated gate is
     green, CodeRabbit coverage is satisfied through the sub-PR or parent-PR fallback, and no human
     gate is triggered.
-12. After merging a sub-PR into the parent branch, push the parent branch, update the parent PR's
-    integrated-subissue list, and request `@coderabbitai full review` on the parent PR when the
-    previous parent review does not cover the new integrated commit range.
+12. After merging a sub-PR into the parent branch, push the parent branch and update the parent
+    PR's integrated-subissue list. If the parent PR is non-draft and targets `main`, wait for
+    automatic CodeRabbit review. If the parent PR is draft or automatic review is skipped, record
+    coverage as pending or use the fallback rules in `workflows/coderabbit-review-loop.md`.
 13. Comment on the sub-issue with the merged sub-PR, commit, verification, CodeRabbit coverage
     route, and parent PR status.
 14. Leave the sub-issue open until the parent PR lands on `main`, unless the coordinator explicitly
@@ -103,8 +104,8 @@ keywords for PRs targeting the default branch.
 1. Keep the parent PR draft while sub-issues are still landing into the parent branch.
 2. Rebase or merge `main` into the parent branch at planned checkpoints.
 3. After all required sub-issues are integrated, run full verification from the parent issue.
-4. Request CodeRabbit full review on the parent PR when it is created and again after each
-   integrated sub-issue batch that was not reviewed on its own stacked sub-PR.
+4. Observe automatic CodeRabbit review on the parent PR after each integrated sub-issue batch when
+   the parent PR is non-draft and targets `main`. Manual review commands are fallback-only.
 5. Resolve all automated review comments using the CodeRabbit review loop.
 6. Mark the parent PR ready for human review.
 7. Human approval is required before merging the parent PR into `main`.

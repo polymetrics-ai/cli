@@ -28,4 +28,5 @@ Follow-up:
 - Create or reference a follow-up issue for valid work that is outside the current PR.
 - Ensure accepted fix commits are reviewed. Prefer automatic CodeRabbit incremental review when it
   is active; request manual `@coderabbitai review` only for new unreviewed commits when automatic
-  review is paused, disabled, skipped, or due after a rate-limit or auto-pause window.
+  review is paused, disabled, skipped, or due after a rate-limit or auto-pause window. Do not post
+  `@coderabbitai full review` for a normal non-draft PR targeting the default branch.

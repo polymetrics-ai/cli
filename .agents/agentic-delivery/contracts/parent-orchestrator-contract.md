@@ -60,8 +60,8 @@ Use these states in the parent issue, parent PR, or durable state ledger:
 - `sub_pr_reviewed`: CodeRabbit coverage exists on the sub-PR, or an explicit fallback is planned.
 - `provisionally_integrated`: sub-PR merged into parent branch, but parent PR review coverage is
   still pending.
-- `parent_review_pending`: parent PR review was requested or automatic review is running for an
-  integrated batch.
+- `parent_review_pending`: automatic parent PR review is running, coverage is waiting for the
+  parent PR to leave draft, or an allowed fallback review route is recorded for an integrated batch.
 - `parent_review_clean`: integrated batch has no unresolved actionable CodeRabbit findings.
 - `final_verification`: all sub-issues are integrated and full parent verification is running.
 - `ready_for_human`: parent PR is ready, but merge to `main` still needs human approval.
@@ -95,8 +95,8 @@ A sub-PR may merge into the parent branch only when:
 - no human gate is triggered
 
 If CodeRabbit skips a non-`main` sub-PR, merge into the parent branch is only provisional. The
-orchestrator must request or observe parent PR review for the integrated commit range before marking
-that sub-issue review-complete.
+orchestrator must observe automatic parent PR review, or record an allowed fallback route, for the
+integrated commit range before marking that sub-issue review-complete.
 
 The parent PR into `main` always requires human approval.
 

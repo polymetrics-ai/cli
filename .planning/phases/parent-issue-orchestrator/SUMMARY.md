@@ -12,6 +12,9 @@ Issue: #50
   and final parent PR readiness.
 - Updated issue and PR templates with parent orchestration and CodeRabbit coverage fields.
 - Updated `AGENTS.md` and `CLAUDE.md` with short pointers to the orchestrator contract.
+- Corrected CodeRabbit usage policy after PR #51 showed that a manual `@coderabbitai full review`
+  on a non-draft `main` PR can consume review allowance and hit fair-usage limits. The workflow now
+  waits for automatic review by default and treats manual review commands as fallback-only.
 
 ## Verification
 

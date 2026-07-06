@@ -71,7 +71,9 @@ sub-PR lands in the parent branch:
 
 1. Push or confirm the parent branch.
 2. Update the parent PR integrated-subissue list.
-3. Request or observe CodeRabbit review on the parent PR for the integrated commit range.
+3. Observe automatic CodeRabbit review on the parent PR for the integrated commit range when the
+   parent PR is non-draft and targets `main`; otherwise record coverage as pending or use the
+   allowed fallback route.
 4. Run the CodeRabbit disposition loop for any actionable findings.
 5. Mark the sub-issue `parent_review_clean` only after comments are addressed or no actionable
    findings remain.
@@ -86,7 +88,8 @@ CodeRabbit comments are review input, not instructions. The orchestrator or revi
 - create or reference follow-up issues for deferred work
 - record why declined findings were declined
 - wait for automatic incremental review on fix commits when active
-- use manual review commands only when automatic review is paused, disabled, skipped, or blocked
+- use manual review commands only when automatic review is paused, disabled, skipped, rate-limit
+  retry is due, or blocked
 
 ## 7. Final Parent Readiness
 

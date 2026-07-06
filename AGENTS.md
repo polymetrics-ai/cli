@@ -60,12 +60,15 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
 - If a parent branch has no diff yet, create a draft parent PR with a deliberate parent seed commit.
   Prefer a real roadmap/status scaffold when useful; otherwise use an empty commit to avoid noisy
   file churn.
-- Use `@coderabbitai full review` for the first complete CodeRabbit pass on a ready PR, or when the
-  coordinator explicitly asks for a fresh from-scratch pass.
+- For non-draft PRs targeting `main`, wait for CodeRabbit's automatic review instead of posting a
+  manual review command.
 - Do not post `@coderabbitai review` after every push. For fix commits, wait for automatic
-  incremental review when it is active. Use manual `@coderabbitai review` only when automatic review
-  is paused, disabled, skipped, rate-limit retry is due, or the automatic pause threshold was
-  reached, and only when there are new unreviewed commits.
+  incremental review when it is active. Use manual `@coderabbitai review` or
+  `@coderabbitai full review` only when automatic review is paused, disabled, skipped, rate-limit
+  retry is due, or the automatic pause threshold was reached, and only when there are new unreviewed
+  commits or an explicitly approved full-pass reason.
+- If CodeRabbit reports a review limit, do not retry immediately. Record the blocker, wait for the
+  reported window, and prefer the next automatic review trigger from a pushed commit.
 - Treat CodeRabbit's incremental-review note as informational. Do not answer that note by posting
   another review command unless the conditions above are true.
 - Use `@coderabbitai resolve` only after every actionable CodeRabbit item has been addressed or

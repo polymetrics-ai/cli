@@ -36,3 +36,7 @@ Result: passed.
 
 `scripts/programming-loop.mjs` is not present in this clone, so this phase used the manual GSD
 fallback described in `PLAN.md`.
+
+CodeRabbit usage policy was corrected after the first PR comment showed a review-limit warning from
+an unnecessary manual `@coderabbitai full review` command. Future non-draft PRs targeting `main`
+should wait for automatic CodeRabbit review.

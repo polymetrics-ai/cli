@@ -61,9 +61,10 @@ the `.agents/` YAML and Markdown contracts instead of copying policy.
   current, and commit/push coherent green slices to the active issue/PR branch after local green
   gates.
 - CodeRabbit review is a post-implementation gate. Every actionable review item must receive a
-  reasoned disposition before it is resolved. Follow-up fix commits should rely on automatic
-  incremental review when active; manual `@coderabbitai review` is only a fallback for paused,
-  disabled, skipped, rate-limited, or auto-paused review states.
+  reasoned disposition before it is resolved. Non-draft PRs targeting `main` should rely on
+  automatic review. Follow-up fix commits should rely on automatic incremental review when active;
+  manual review commands are only a fallback for paused, disabled, skipped, rate-limited, or
+  auto-paused review states.
 - A skipped CodeRabbit review is not approval. For sub-PRs whose base is not `main`, the
   orchestrator must record sub-PR review coverage or route the integrated commit range through the
   parent PR review fallback.
