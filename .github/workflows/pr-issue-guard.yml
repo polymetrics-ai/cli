@@ -11,6 +11,7 @@ permissions:
 jobs:
   require-linked-issue:
     runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' && !startsWith(github.head_ref, 'dependabot/') && !startsWith(github.head_ref, 'release-please--branches--') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
