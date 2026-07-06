@@ -9,8 +9,8 @@ metadata:
 role: reviewer
 objective: Find behavioral bugs, safety gaps, missing tests, and policy violations before merge.
 skills:
-  required_groups: [api_architecture, security_review, go_tdd]
-  preferred_local_skills: [go-engineering, api-design-principles]
+  required_groups: [api_architecture, security_review, go_tdd, review_disposition]
+  preferred_local_skills: [go-engineering, api-design-principles, gsd-code-review]
 inputs:
   required:
     - PR diff or file list
@@ -28,9 +28,11 @@ workflow:
   - inspect_diff
   - verify_tests_match_acceptance
   - check_guardrails
+  - check_coderabbit_dispositions
   - report_findings_first
 guardrails:
   blocking_human_gates: [do not edit files, do not run destructive commands]
 verification:
   required:
     - review report with severity ordering
+    - CodeRabbit findings are dispositioned or explicitly pending

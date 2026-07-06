@@ -11,6 +11,8 @@
   - `.github/ISSUE_TEMPLATE/agent_task.yml`
 - Added agent-neutral delivery contracts under `.agents/agentic-delivery/`, including a generic
   issue-to-PR contract, task skill matrix, YAML agent spec guidance, and prompt template.
+- Added a CodeRabbit post-implementation review loop, disposition reply template, source-backed
+  guidance, and a dedicated CodeRabbit disposition agent.
 - Added YAML agent definitions grouped by functional area and type under `.agents/`.
 - Converted the pre-existing `.codex/agents` Pass B expander and connector reviewer TOML files into
   `.agents/connector-migration/` YAML specs and removed the obsolete TOML files.
@@ -19,6 +21,8 @@
 - Updated live issue #43 to use the `.agents/agentic-delivery/` and `.agents/connector-migration/`
   acceptance criteria.
 - Linked the PR slice to live issue #43.
+- Requested CodeRabbit review on PR #47 and recorded that currently visible CodeRabbit comments are
+  informational only.
 
 ## Out Of Scope
 

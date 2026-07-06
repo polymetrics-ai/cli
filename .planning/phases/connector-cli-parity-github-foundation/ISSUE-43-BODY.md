@@ -18,6 +18,8 @@ specific agent vendor.
 - Add YAML agent best practices and an agent spec contract.
 - Add reusable YAML agents for implementation, review, operation ledger, CLI surface, help
   renderer, direct-read, GraphQL, sensitive/admin, and rollout tasks.
+- Add a CodeRabbit review-disposition workflow so automated review findings are answered with
+  accepted, accepted_with_modification, declined, deferred, or needs_human before resolution.
 - Add a GitHub issue form for agent implementation tasks.
 - Add a PR guard that requires Conventional Commit titles and explicit issue references.
 - Keep agent contracts and role specs under `.agents/`, grouped by functional area and agent type.
@@ -39,6 +41,8 @@ specific agent vendor.
 - YAML agent definitions parse successfully.
 - PR template and CI guard require issue linkage.
 - Guard tests pass and reject ambiguous references such as `Related to #123`.
+- CodeRabbit review loop is documented as a post-implementation gate.
+- Every actionable CodeRabbit finding must receive a reasoned disposition reply before resolve.
 - `make verify` passes.
 
 ## TDD plan
@@ -69,6 +73,7 @@ make verify
 ## Agent execution contract
 
 - Contract: `.agents/agentic-delivery/contracts/issue-agent-contract.md`
+- CodeRabbit loop: `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
 - Task type: `pr-guardrail`
 - Primary agent: `.agents/agentic-delivery/agents/implementation/issue-first-implementation-agent.agent.yaml`
-- Required skill groups: `github_planning`, `go_tdd`, `security_review`
+- Required skill groups: `github_planning`, `go_tdd`, `security_review`, `review_disposition`

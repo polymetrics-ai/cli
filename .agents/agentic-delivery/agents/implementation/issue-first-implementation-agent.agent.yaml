@@ -17,12 +17,14 @@ inputs:
     - issue body with acceptance criteria
     - AGENTS.md
     - .agents/agentic-delivery/contracts/issue-agent-contract.md
+    - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
 outputs:
   required:
     - code or docs changes scoped to the issue
     - TDD evidence
     - verification summary
     - PR body containing Closes or Refs issue number
+    - CodeRabbit disposition summary before merge
 permissions:
   allowed_paths:
     - cmd/**
@@ -48,6 +50,9 @@ workflow:
   - refactor
   - run_issue_verification
   - prepare_pr_with_issue_link
+  - request_coderabbit_full_review
+  - disposition_coderabbit_findings
+  - request_coderabbit_incremental_review_after_fixes
 guardrails:
   input:
     - issue must include acceptance criteria and verification
@@ -60,11 +65,13 @@ guardrails:
   output:
     - no secrets in artifacts
     - PR body must reference issue
+    - every actionable CodeRabbit finding must be answered before resolve
 verification:
   required:
     - targeted tests for changed packages
     - broader command from issue
     - git diff --check
+    - CodeRabbit review loop completed or explicitly pending
 adapters:
   codex:
     note: Convert this YAML to a thread prompt plus local tool execution.

@@ -8,6 +8,9 @@ Add this section to implementation issues.
 Follow the generic issue-to-PR contract:
 `.agents/agentic-delivery/contracts/issue-agent-contract.md`
 
+Follow the post-implementation CodeRabbit review loop:
+`.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
+
 Task type: `<task-type-from-task-skill-matrix>`
 
 Required skills:
@@ -24,4 +27,11 @@ Hard stops:
 
 PR body must include:
 `Closes #<issue-number>`
+
+Before merge:
+- request CodeRabbit review after implementation
+- reply to every actionable CodeRabbit item with accepted, accepted_with_modification, declined,
+  deferred, or needs_human
+- rerun verification after accepted fixes
+- request incremental CodeRabbit review until no actionable findings remain
 ```

@@ -13,7 +13,12 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 
 - `contracts/issue-agent-contract.md`: generic contract every implementation agent must follow.
 - `contracts/issue-prompt-template.md`: issue section template that points at the generic contract.
+- `contracts/code-review-disposition-template.md`: required reply format for automated review
+  findings.
 - `matrices/task-skill-matrix.yaml`: required skills and capabilities by task type.
+- `workflows/coderabbit-review-loop.md`: post-implementation CodeRabbit review and disposition
+  loop.
+- `references/coderabbit-review-best-practices.md`: source-backed CodeRabbit review practices.
 - `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
 - `agents/<type>/*.agent.yaml`: reusable role definitions grouped by agent type.
@@ -29,5 +34,7 @@ same schema and issue-to-PR contract.
 - Skills are declared by capability, with preferred local skill names when available.
 - Guardrails are explicit hard stops, not prose suggestions.
 - Production behavior changes require test-first evidence.
+- CodeRabbit review is a post-implementation gate. Every actionable review item must receive a
+  reasoned disposition before it is resolved.
 - Secrets, auth scope changes, destructive actions, dependencies, and quality-gate reductions are
   human-gated.

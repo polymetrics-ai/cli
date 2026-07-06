@@ -26,6 +26,7 @@ body:
         - sensitive-admin
         - cross-connector
         - review
+        - coderabbit-review
     validations:
       required: true
   - type: textarea
@@ -36,6 +37,7 @@ body:
       value: |
         - AGENTS.md
         - .agents/agentic-delivery/contracts/issue-agent-contract.md
+        - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
         - .agents/agentic-delivery/matrices/task-skill-matrix.yaml
     validations:
       required: true

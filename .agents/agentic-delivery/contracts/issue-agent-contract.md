@@ -33,6 +33,11 @@ before implementation.
 8. Run targeted tests, then broader verification from the issue.
 9. Update phase or research artifacts when the issue asks for durable memory.
 10. Open a PR with a Conventional Commit title and `Closes #N` or `Refs #N` in the body.
+11. After implementation and local verification, run the CodeRabbit review loop in
+    `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`.
+12. Reply to every actionable CodeRabbit item with the disposition template before resolving it.
+13. Request incremental CodeRabbit review after accepted fixes, then ping the human coordinator only
+    after no actionable CodeRabbit findings remain.
 
 ## Hard stops
 
@@ -58,3 +63,4 @@ Every implementation PR must include:
 - verification commands and results
 - safety notes for auth, secrets, writes, or data movement
 - follow-up issues for work intentionally deferred
+- CodeRabbit disposition summary, including accepted, declined, deferred, and human-gated findings

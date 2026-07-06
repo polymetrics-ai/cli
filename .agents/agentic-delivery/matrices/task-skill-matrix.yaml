@@ -57,6 +57,18 @@ skills:
       - sensitive-admin
       - raw-api
       - reverse-etl
+  review_disposition:
+    capabilities:
+      - CodeRabbit review command usage
+      - review comment triage
+      - disposition replies
+      - follow-up issue routing
+    preferred_local_skills:
+      - github-issue-first-delivery
+      - gsd-code-review
+      - go-engineering
+    required_for:
+      - coderabbit-review
   docs_and_ux:
     capabilities:
       - help rendering
@@ -96,5 +108,8 @@ task_types:
     required_skill_groups: [api_architecture, github_planning, docs_and_ux]
     primary_agent: cross-connector-rollout-agent
   review:
-    required_skill_groups: [api_architecture, security_review, go_tdd]
+    required_skill_groups: [api_architecture, security_review, go_tdd, review_disposition]
     primary_agent: adversarial-review-agent
+  coderabbit-review:
+    required_skill_groups: [github_planning, security_review, go_tdd, review_disposition]
+    primary_agent: coderabbit-disposition-agent
