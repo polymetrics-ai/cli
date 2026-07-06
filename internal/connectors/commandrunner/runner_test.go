@@ -10,8 +10,9 @@ import (
 )
 
 type fakeConnector struct {
-	surface *connectors.CommandSurface
-	readReq connectors.ReadRequest
+	surface       *connectors.CommandSurface
+	readReq       connectors.ReadRequest
+	directReadReq connectors.DirectReadRequest
 }
 
 func (f *fakeConnector) Name() string { return "github" }
@@ -25,6 +26,19 @@ func (f *fakeConnector) Catalog(context.Context, connectors.RuntimeConfig) (conn
 func (f *fakeConnector) Read(_ context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	f.readReq = req
 	return emit(connectors.Record{"number": 101, "state": req.Query["state"]})
+}
+func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
+	f.directReadReq = req
+	return connectors.DirectReadResult{
+		Connector: "github",
+		Method:    req.Method,
+		Path:      "/repos/octo/hello/contents/README.md",
+		Status:    200,
+		Body: map[string]any{
+			"name": "README.md",
+			"type": "file",
+		},
+	}, nil
 }
 func (f *fakeConnector) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
 	return connectors.WriteResult{}, errors.New("write should not be called")
@@ -196,6 +210,98 @@ func TestRunRejectsUnknownFlagAndInvalidEnum(t *testing.T) {
 			})
 			if err == nil {
 				t.Fatal("Run error = nil, want validation error")
+			}
+			if !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Run error = %q, want to contain %q", err.Error(), tt.want)
+			}
+		})
+	}
+}
+
+func TestRunImplementedDirectReadCommand(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "repo read-file",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/repos/{owner}/{repo}/contents/{path}"},
+				},
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "path", Type: "string", MapsTo: "path.path"},
+				},
+			},
+		},
+	}}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:  []string{"repo", "read-file"},
+		Flags: map[string][]string{"path": []string{"README.md"}},
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"owner": "octo",
+			"repo":  "hello",
+		}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("DirectRead = nil, want result")
+	}
+	if connector.directReadReq.Method != "GET" {
+		t.Fatalf("direct read method = %q, want GET", connector.directReadReq.Method)
+	}
+	if connector.directReadReq.PathParams["path"] != "README.md" {
+		t.Fatalf("direct read path param = %q, want README.md", connector.directReadReq.PathParams["path"])
+	}
+}
+
+func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
+	tests := []struct {
+		name     string
+		endpoint connectors.CommandSurfaceEndpointRef
+		want     string
+	}{
+		{
+			name:     "mutation method",
+			endpoint: connectors.CommandSurfaceEndpointRef{Method: "POST", Path: "/repos/{owner}/{repo}/contents/{path}"},
+			want:     "GET",
+		},
+		{
+			name:     "absolute url",
+			endpoint: connectors.CommandSurfaceEndpointRef{Method: "GET", Path: "https://evil.example.test/repos/{owner}/{repo}"},
+			want:     "absolute URL",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{
+				Commands: []connectors.CommandSurfaceCommand{
+					{
+						Path:         "repo read-file",
+						Intent:       "direct_read",
+						Availability: "implemented",
+						APISurface:   []connectors.CommandSurfaceEndpointRef{tt.endpoint},
+						Flags: []connectors.CommandSurfaceFlag{
+							{Name: "path", Type: "string", MapsTo: "path.path"},
+						},
+					},
+				},
+			}}
+
+			_, err := Run(context.Background(), connector, Request{
+				Path:  []string{"repo", "read-file"},
+				Flags: map[string][]string{"path": []string{"README.md"}},
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for rejected direct-read command")
+				return nil
+			})
+			if err == nil {
+				t.Fatal("Run error = nil, want rejection")
 			}
 			if !strings.Contains(err.Error(), tt.want) {
 				t.Fatalf("Run error = %q, want to contain %q", err.Error(), tt.want)
