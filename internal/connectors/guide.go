@@ -38,10 +38,16 @@ type GuideProvider interface {
 
 func GuideOf(c Connector) ConnectorGuide {
 	manifest := ManifestOf(c)
+	var guide ConnectorGuide
 	if provider, ok := c.(GuideProvider); ok {
-		return guideWithIcon(provider.Guide(), manifest)
+		guide = provider.Guide()
+	} else {
+		guide = guideFromManifest(manifest)
 	}
-	return guideWithIcon(guideFromManifest(manifest), manifest)
+	if provider, ok := c.(CommandSurfaceProvider); ok {
+		guide = guideWithCommandSurface(guide, provider.CommandSurface())
+	}
+	return guideWithIcon(guide, manifest)
 }
 
 func guideWithIcon(guide ConnectorGuide, manifest Manifest) ConnectorGuide {
@@ -52,6 +58,167 @@ func guideWithIcon(guide ConnectorGuide, manifest Manifest) ConnectorGuide {
 	}
 	guide.Sections = append([]GuideSection{iconSection(manifest)}, guide.Sections...)
 	return guide
+}
+
+func guideWithCommandSurface(guide ConnectorGuide, surface *CommandSurface) ConnectorGuide {
+	if surface == nil || strings.TrimSpace(surface.Usage) == "" {
+		return guide
+	}
+	for _, section := range guide.Sections {
+		if strings.EqualFold(section.Title, "command surface") {
+			return guide
+		}
+	}
+	guide.Sections = append(guide.Sections, commandSurfaceSection(surface))
+	return guide
+}
+
+func commandSurfaceSection(surface *CommandSurface) GuideSection {
+	lines := []string{}
+	if surface.Tagline != "" {
+		lines = append(lines, surface.Tagline)
+	}
+	lines = append(lines, "Usage: "+surface.Usage)
+	if surface.SourceCLI != nil && surface.SourceCLI.Name != "" {
+		source := "Source CLI: " + surface.SourceCLI.Name
+		if surface.SourceCLI.Reference != "" {
+			source += " (" + surface.SourceCLI.Reference + ")"
+		} else if surface.SourceCLI.Docs != "" {
+			source += " (" + surface.SourceCLI.Docs + ")"
+		}
+		lines = append(lines, source)
+	}
+	if len(surface.GlobalFlags) > 0 {
+		lines = append(lines, "Global flags:")
+		for _, flag := range surface.GlobalFlags {
+			lines = append(lines, "  "+renderCommandSurfaceFlag(flag))
+		}
+	}
+
+	commandsByPrefix := map[string][]CommandSurfaceCommand{}
+	for _, cmd := range surface.Commands {
+		prefix := commandPrefix(cmd.Path)
+		commandsByPrefix[prefix] = append(commandsByPrefix[prefix], cmd)
+	}
+	rendered := map[string]bool{}
+	for _, group := range surface.Groups {
+		if len(group.Commands) == 0 {
+			continue
+		}
+		title := valueOrDefault(group.Title, titleCase(group.ID))
+		lines = append(lines, title)
+		for _, prefix := range group.Commands {
+			for _, cmd := range commandsByPrefix[prefix] {
+				lines = append(lines, "  "+renderCommandSurfaceCommand(cmd))
+				rendered[cmd.Path] = true
+			}
+		}
+	}
+
+	var extra []CommandSurfaceCommand
+	for _, cmd := range surface.Commands {
+		if !rendered[cmd.Path] {
+			extra = append(extra, cmd)
+		}
+	}
+	if len(extra) > 0 {
+		lines = append(lines, "Other Commands")
+		for _, cmd := range extra {
+			lines = append(lines, "  "+renderCommandSurfaceCommand(cmd))
+		}
+	}
+
+	if len(surface.HelpTopics) > 0 {
+		lines = append(lines, "Help topics:")
+		for _, topic := range surface.HelpTopics {
+			if topic.Name == "" {
+				continue
+			}
+			line := topic.Name
+			if topic.Summary != "" {
+				line += " - " + topic.Summary
+			}
+			lines = append(lines, "  "+line)
+		}
+	}
+	return GuideSection{Title: "Command Surface", Lines: lines}
+}
+
+func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
+	name := "--" + strings.TrimLeft(flag.Name, "-")
+	parts := []string{name}
+	if flag.Type != "" {
+		parts[0] += " (" + flag.Type + ")"
+	}
+	if flag.Summary != "" {
+		parts = append(parts, flag.Summary)
+	}
+	if len(flag.Values) > 0 {
+		parts = append(parts, "values="+strings.Join(flag.Values, "|"))
+	}
+	if flag.MapsTo != "" {
+		parts = append(parts, "maps_to="+flag.MapsTo)
+	}
+	return strings.Join(parts, ": ")
+}
+
+func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
+	line := cmd.Path
+	if cmd.Summary != "" {
+		line += " - " + cmd.Summary
+	}
+	meta := []string{}
+	if cmd.Intent != "" {
+		meta = append(meta, "intent="+cmd.Intent)
+	}
+	if cmd.Availability != "" {
+		meta = append(meta, "availability="+cmd.Availability)
+	}
+	if cmd.Stream != "" {
+		meta = append(meta, "stream="+cmd.Stream)
+	}
+	if cmd.Write != "" {
+		meta = append(meta, "write="+cmd.Write)
+	}
+	if cmd.Availability == "unsupported_local" || cmd.Intent == "local_workflow" {
+		meta = append(meta, "unsupported local workflow")
+	}
+	if len(meta) > 0 {
+		line += " [" + strings.Join(meta, " ") + "]"
+	}
+	if cmd.Approval != "" {
+		line += "; approval: " + normalizeCommandSurfaceSentence(cmd.Approval)
+	}
+	if cmd.Risk != "" {
+		line += "; risk: " + cmd.Risk
+	}
+	if cmd.Notes != "" {
+		line += "; notes: " + cmd.Notes
+	}
+	if len(cmd.Flags) > 0 {
+		flags := make([]string, 0, len(cmd.Flags))
+		for _, flag := range cmd.Flags {
+			flags = append(flags, "--"+strings.TrimLeft(flag.Name, "-"))
+		}
+		line += "; flags: " + strings.Join(flags, ", ")
+	}
+	return line
+}
+
+func commandPrefix(path string) string {
+	fields := strings.Fields(path)
+	if len(fields) == 0 {
+		return ""
+	}
+	return fields[0]
+}
+
+func normalizeCommandSurfaceSentence(value string) string {
+	value = strings.TrimSpace(value)
+	if strings.HasPrefix(value, "Reverse ETL ") {
+		return "reverse ETL " + strings.TrimPrefix(value, "Reverse ETL ")
+	}
+	return value
 }
 
 func RenderConnectorManual(c Connector) string {

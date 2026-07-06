@@ -52,6 +52,38 @@ describe('connector data route', () => {
     expect(json.docsMd).toContain('management_token');
   });
 
+  it('returns GitHub CLI surface metadata for docs rendering', async () => {
+    const { response, json } = await connectorData('github');
+
+    expect(response.status).toBe(200);
+    expect(json.cliSurface).toMatchObject({
+      usage: 'pm github <command> <subcommand> [flags]',
+      globalFlags: expect.arrayContaining([
+        expect.objectContaining({ name: 'json', type: 'boolean' }),
+      ]),
+      groups: expect.arrayContaining([
+        expect.objectContaining({
+          title: 'Core Commands',
+          commands: expect.arrayContaining(['issue', 'pr', 'repo', 'release']),
+        }),
+      ]),
+      commands: expect.arrayContaining([
+        expect.objectContaining({
+          path: 'issue list',
+          intent: 'etl',
+          availability: 'implemented',
+          stream: 'issues',
+        }),
+        expect.objectContaining({
+          path: 'issue create',
+          intent: 'reverse_etl',
+          availability: 'implemented',
+          write: 'create_issue',
+        }),
+      ]),
+    });
+  });
+
   it('returns a 404 JSON payload for unknown connectors', async () => {
     const { response, json } = await connectorData('missing-connector');
 

@@ -75,6 +75,69 @@ function capabilityLabels(capabilities) {
     .map(([, label]) => label);
 }
 
+function mapFlags(flags) {
+  return (Array.isArray(flags) ? flags : [])
+    .map((flag) => ({
+      name: trim(flag.name),
+      type: trim(flag.type),
+      summary: trim(flag.summary),
+      values: Array.isArray(flag.values) ? flag.values.filter((value) => trim(value)).map((value) => trim(value)) : [],
+      mapsTo: trim(flag.maps_to),
+    }))
+    .filter((flag) => flag.name);
+}
+
+function mapCLISurface(surface) {
+  if (!surface || typeof surface !== 'object') return null;
+  const commands = (Array.isArray(surface.commands) ? surface.commands : [])
+    .map((command) => ({
+      path: trim(command.path),
+      summary: trim(command.summary),
+      intent: trim(command.intent),
+      availability: trim(command.availability),
+      stream: trim(command.stream),
+      write: trim(command.write),
+      sourceCliPath: trim(command.source_cli_path),
+      sourceUrl: trim(command.source_url),
+      flags: mapFlags(command.flags),
+      examples: Array.isArray(command.examples) ? command.examples.filter((example) => trim(example)).map((example) => trim(example)) : [],
+      risk: trim(command.risk),
+      approval: trim(command.approval),
+      notes: trim(command.notes),
+    }))
+    .filter((command) => command.path);
+
+  if (!trim(surface.usage) && commands.length === 0) return null;
+
+  return {
+    tagline: trim(surface.tagline),
+    usage: trim(surface.usage),
+    sourceCli: surface.source_cli
+      ? {
+          name: trim(surface.source_cli.name),
+          docs: trim(surface.source_cli.docs),
+          reference: trim(surface.source_cli.reference),
+          source: trim(surface.source_cli.source),
+        }
+      : null,
+    groups: (Array.isArray(surface.groups) ? surface.groups : [])
+      .map((group) => ({
+        id: trim(group.id),
+        title: trim(group.title),
+        commands: Array.isArray(group.commands) ? group.commands.filter((command) => trim(command)).map((command) => trim(command)) : [],
+      }))
+      .filter((group) => group.id || group.title || group.commands.length > 0),
+    globalFlags: mapFlags(surface.global_flags),
+    commands,
+    helpTopics: (Array.isArray(surface.help_topics) ? surface.help_topics : [])
+      .map((topic) => ({
+        name: trim(topic.name),
+        summary: trim(topic.summary),
+      }))
+      .filter((topic) => topic.name),
+  };
+}
+
 function mapConnector(item) {
   const capabilities = mapCapabilities(item.capabilities);
   const streams = (Array.isArray(item.streams) ? item.streams : [])
@@ -112,6 +175,7 @@ function mapConnector(item) {
     capabilityLabels: capabilityLabels(capabilities),
     streams,
     writeActions,
+    cliSurface: mapCLISurface(item.cli_surface),
     docsMd: trim(item.docs_md),
     docs: docsUrl ? [{ title: 'Service API documentation', type: 'api_reference', url: docsUrl }] : [],
     docUrl: docsUrl,

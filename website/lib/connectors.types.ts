@@ -34,6 +34,58 @@ export type ConnectorDocLink = {
   url: string;
 };
 
+export type ConnectorCliFlag = {
+  name: string;
+  type: string;
+  summary: string;
+  values: string[];
+  mapsTo: string;
+};
+
+export type ConnectorCliSource = {
+  name: string;
+  docs: string;
+  reference: string;
+  source: string;
+};
+
+export type ConnectorCliGroup = {
+  id: string;
+  title: string;
+  commands: string[];
+};
+
+export type ConnectorCliCommand = {
+  path: string;
+  summary: string;
+  intent: string;
+  availability: string;
+  stream: string;
+  write: string;
+  sourceCliPath: string;
+  sourceUrl: string;
+  flags: ConnectorCliFlag[];
+  examples: string[];
+  risk: string;
+  approval: string;
+  notes: string;
+};
+
+export type ConnectorCliHelpTopic = {
+  name: string;
+  summary: string;
+};
+
+export type ConnectorCliSurface = {
+  tagline: string;
+  usage: string;
+  sourceCli: ConnectorCliSource | null;
+  groups: ConnectorCliGroup[];
+  globalFlags: ConnectorCliFlag[];
+  commands: ConnectorCliCommand[];
+  helpTopics: ConnectorCliHelpTopic[];
+};
+
 export type ConnectorIconMeta = {
   id: string;
   path: string;
@@ -55,6 +107,7 @@ export type ConnectorMeta = {
   capabilityLabels: string[];
   streams: ConnectorStream[];
   writeActions: ConnectorWriteAction[];
+  cliSurface: ConnectorCliSurface | null;
   docsMd: string;
   docs: ConnectorDocLink[];
   docUrl: string;
