@@ -12,6 +12,8 @@ Adds the issue-first agentic delivery foundation for connector CLI parity:
 - migration of pre-existing `.codex/agents` TOML specs into `.agents/connector-migration/`
 - CodeRabbit review-disposition workflow, reply template, source-backed guidance, and review agent
 - parent issue, sub-issue, milestone roadmap, and stacked PR workflow for GitHub CLI feature parity
+- root `AGENTS.md` plus Claude Code `CLAUDE.md` guidance for the same issue-first and CodeRabbit
+  follow-up review rules
 
 Closes #43
 
@@ -22,6 +24,7 @@ go test ./internal/coordination/issueguard
 go test ./cmd/prissueguard ./internal/coordination/issueguard
 find .agents .github/ISSUE_TEMPLATE .github/workflows -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 | xargs -0 ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f) }'
 jq empty .planning/phases/connector-cli-parity-github-foundation/GITHUB-CLI-PARITY-ISSUE-HIERARCHY.json
+test -f CLAUDE.md
 git diff --check
 make verify
 ```

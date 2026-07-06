@@ -29,6 +29,8 @@ specific agent vendor.
 - Add a PR guard that requires Conventional Commit titles and explicit issue references.
 - Keep agent contracts and role specs under `.agents/`, grouped by functional area and agent type.
 - Convert pre-existing `.codex/agents` connector-migration TOML specs into `.agents/` YAML specs.
+- Update root agent instructions so Codex, Claude Code, and other agents share the same issue-first
+  and CodeRabbit follow-up review rules.
 
 ## Non-goals
 
@@ -51,6 +53,8 @@ specific agent vendor.
 - Every actionable CodeRabbit finding must receive a reasoned disposition reply before resolve.
 - Parent issue and stacked sub-PR workflow is documented and wired into reusable agents.
 - GitHub CLI feature parity parent issue #44 has a saved roadmap and sub-issue hierarchy.
+- Root `AGENTS.md` and `CLAUDE.md` point agents at the shared issue-first and CodeRabbit review
+  contracts.
 - `make verify` passes.
 
 ## TDD plan

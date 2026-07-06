@@ -8,6 +8,7 @@ go run ./cmd/prissueguard --title 'feat(github): add cli surface metadata' --bod
 go test ./cmd/prissueguard ./internal/coordination/issueguard
 find .agents .github/ISSUE_TEMPLATE .github/workflows -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 | xargs -0 ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f); puts f }'
 jq empty .planning/phases/connector-cli-parity-github-foundation/GITHUB-CLI-PARITY-ISSUE-HIERARCHY.json
+test -f CLAUDE.md
 git diff --check
 make verify
 gh api repos/polymetrics-ai/cli/issues/47/comments --paginate
@@ -46,6 +47,8 @@ issueguard: blocked
   wait for automatic incremental review when active, and request manual review only for new
   unreviewed commits when automatic review is paused, disabled, skipped, rate-limit retry is due, or
   auto-paused.
+- Root `AGENTS.md` now carries the same conditional CodeRabbit review rule, and `CLAUDE.md` imports
+  `AGENTS.md` for Claude Code.
 - Sub-PR merge without human approval applies only to parent-branch integration after automated
   gates pass; parent PR merge to `main` remains human-approved.
 - Live issue #44 was updated and GitHub reports #34-#42 as sub-issues.

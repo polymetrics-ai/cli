@@ -29,6 +29,8 @@
 - Updated the CodeRabbit workflow after observing the incremental-review note so agents wait for
   automatic incremental review when active and only request manual review for new unreviewed commits
   when automatic review is paused, disabled, skipped, rate-limit retry is due, or auto-paused.
+- Updated root `AGENTS.md` and added `CLAUDE.md` so Codex, Claude Code, and other agents share the
+  same issue-first and CodeRabbit review rules without duplicating the full workflow.
 - Updated GitHub CLI feature parity planning so issue #44 is the parent roadmap and issues #34-#42
   are the sub-issue implementation slices.
 - Updated live issue #44 and attached issues #34-#42 as GitHub sub-issues through the REST API.
