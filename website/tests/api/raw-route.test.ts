@@ -31,7 +31,7 @@ describe('raw Markdown API', () => {
   });
 
   it('returns synthetic connector Markdown', async () => {
-    const { response, text } = await rawMarkdown(['connectors', 'source-100ms']);
+    const { response, text } = await rawMarkdown(['connectors', '100ms']);
 
     expect(response.status).toBe(200);
     expect(text).toContain('# 100ms connector');

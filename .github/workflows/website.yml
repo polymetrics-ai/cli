@@ -59,6 +59,7 @@ jobs:
         run: |
           pnpm run gen:website-data
           changed="$(git status --short -- \
+            lib/connectors.catalog.data.generated.json \
             lib/connectors.catalog.generated.ts \
             lib/connectors.generated.ts \
             lib/connectors.enrichment.generated.ts \
