@@ -15,9 +15,15 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `contracts/issue-prompt-template.md`: issue section template that points at the generic contract.
 - `contracts/code-review-disposition-template.md`: required reply format for automated review
   findings.
+- `contracts/parent-issue-roadmap-template.md`: parent issue format for epic-sized work with
+  sub-issues and stacked PRs.
 - `matrices/task-skill-matrix.yaml`: required skills and capabilities by task type.
 - `workflows/coderabbit-review-loop.md`: post-implementation CodeRabbit review and disposition
   loop.
+- `workflows/stacked-parent-subissue-workflow.md`: parent branch and sub-PR workflow for large
+  issue hierarchies.
+- `references/issue-roadmap-best-practices.md`: source-backed GitHub and Atlassian planning
+  guidance.
 - `references/coderabbit-review-best-practices.md`: source-backed CodeRabbit review practices.
 - `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
@@ -31,6 +37,8 @@ same schema and issue-to-PR contract.
 
 - Agent definitions are declarative YAML, but runtime-specific adapters stay optional.
 - Issues remain the unit of work. PRs must reference issues.
+- Large goals use parent issues with sub-issues. Sub-PRs may merge into a parent branch without
+  human approval only when all automated gates pass and no human gate is triggered.
 - Skills are declared by capability, with preferred local skill names when available.
 - Guardrails are explicit hard stops, not prose suggestions.
 - Production behavior changes require test-first evidence.
@@ -38,3 +46,4 @@ same schema and issue-to-PR contract.
   reasoned disposition before it is resolved.
 - Secrets, auth scope changes, destructive actions, dependencies, and quality-gate reductions are
   human-gated.
+- Parent PRs into `main` are always human-gated.

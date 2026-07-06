@@ -20,6 +20,8 @@ specific agent vendor.
   renderer, direct-read, GraphQL, sensitive/admin, and rollout tasks.
 - Add a CodeRabbit review-disposition workflow so automated review findings are answered with
   accepted, accepted_with_modification, declined, deferred, or needs_human before resolution.
+- Add parent issue, sub-issue, and stacked parent-branch PR workflow rules for large implementation
+  efforts such as GitHub CLI feature parity.
 - Add a GitHub issue form for agent implementation tasks.
 - Add a PR guard that requires Conventional Commit titles and explicit issue references.
 - Keep agent contracts and role specs under `.agents/`, grouped by functional area and agent type.
@@ -43,6 +45,8 @@ specific agent vendor.
 - Guard tests pass and reject ambiguous references such as `Related to #123`.
 - CodeRabbit review loop is documented as a post-implementation gate.
 - Every actionable CodeRabbit finding must receive a reasoned disposition reply before resolve.
+- Parent issue and stacked sub-PR workflow is documented and wired into reusable agents.
+- GitHub CLI feature parity parent issue #44 has a saved roadmap and sub-issue hierarchy.
 - `make verify` passes.
 
 ## TDD plan
@@ -74,6 +78,7 @@ make verify
 
 - Contract: `.agents/agentic-delivery/contracts/issue-agent-contract.md`
 - CodeRabbit loop: `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
+- Stacked PR loop: `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
 - Task type: `pr-guardrail`
 - Primary agent: `.agents/agentic-delivery/agents/implementation/issue-first-implementation-agent.agent.yaml`
 - Required skill groups: `github_planning`, `go_tdd`, `security_review`, `review_disposition`

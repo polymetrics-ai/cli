@@ -9,6 +9,8 @@ skills:
     capabilities:
       - issue-first GitHub planning
       - milestones and projects
+      - parent issues and sub-issues
+      - stacked parent branch PR planning
       - PR linkage
     preferred_local_skills:
       - github-issue-first-delivery
@@ -16,6 +18,8 @@ skills:
     required_for:
       - github-project-setup
       - issue-roadmap
+      - parent-roadmap
+      - stacked-pr
       - pr-guardrail
   go_tdd:
     capabilities:
@@ -69,6 +73,7 @@ skills:
       - go-engineering
     required_for:
       - coderabbit-review
+      - stacked-pr
   docs_and_ux:
     capabilities:
       - help rendering
@@ -83,6 +88,12 @@ skills:
       - website-docs
       - docs-preview
 task_types:
+  parent-roadmap:
+    required_skill_groups: [github_planning, review_disposition, docs_and_ux]
+    primary_agent: stacked-roadmap-coordinator
+  stacked-pr:
+    required_skill_groups: [github_planning, go_tdd, security_review, review_disposition]
+    primary_agent: issue-first-implementation-agent
   pr-guardrail:
     required_skill_groups: [github_planning, go_tdd, security_review]
     primary_agent: issue-first-implementation-agent

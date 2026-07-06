@@ -11,6 +11,7 @@ Adds the issue-first agentic delivery foundation for connector CLI parity:
 - isolated `.agents/` layout for agent conventions and role specs, grouped by function and type
 - migration of pre-existing `.codex/agents` TOML specs into `.agents/connector-migration/`
 - CodeRabbit review-disposition workflow, reply template, source-backed guidance, and review agent
+- parent issue, sub-issue, milestone roadmap, and stacked PR workflow for GitHub CLI feature parity
 
 Closes #43
 
@@ -20,6 +21,7 @@ Closes #43
 go test ./internal/coordination/issueguard
 go test ./cmd/prissueguard ./internal/coordination/issueguard
 find .agents .github/ISSUE_TEMPLATE .github/workflows -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 | xargs -0 ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f) }'
+jq empty .planning/phases/connector-cli-parity-github-foundation/GITHUB-CLI-PARITY-ISSUE-HIERARCHY.json
 git diff --check
 make verify
 ```
@@ -50,8 +52,18 @@ After the PR exists:
   stop, run-state wording, and verification-log consistency.
 - Declined findings: none.
 - Deferred findings: none.
-- Follow-up incremental review will be requested after the fix commit is pushed. If CodeRabbit is
-  rate-limited, the review request remains pending until the next available review window.
+- Follow-up incremental review was requested after the fix commit, and CodeRabbit resolved the
+  addressed comments.
+- A new incremental CodeRabbit review will be requested after this roadmap workflow commit is
+  pushed.
+
+## Parent/sub-issue roadmap status
+
+- Issue #44 is the GitHub CLI feature parity parent issue.
+- Issues #34-#42 are attached as GitHub sub-issues for the GitHub pilot.
+- Parent branch: `feat/44-github-cli-parity`.
+- Sub-PRs target the parent branch and use `Refs #<sub-issue>` plus `Refs #44`.
+- Parent PR targets `main`, includes closing keywords, and remains human-gated.
 
 ## Checklist
 

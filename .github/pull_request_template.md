@@ -8,6 +8,16 @@
 
 Closes #
 
+## Stacked PR
+
+<!-- Fill this when the PR targets a parent branch instead of main. Use Refs, not Closes, for
+sub-PRs into parent branches. Parent PRs into main remain human-gated. -->
+
+- Parent issue:
+- Parent branch:
+- PR base branch:
+- Sub-issue:
+
 <!-- Title this PR with Conventional Commits, for example:
 feat(connector): add linear
 fix(github): repair pagination
@@ -34,6 +44,7 @@ plus the reason and evidence. -->
 - [ ] `make verify` passes locally, or the skipped checks are explained
 - [ ] CodeRabbit review requested after implementation, or documented why unavailable
 - [ ] Every actionable CodeRabbit finding has a reasoned disposition reply
+- [ ] Sub-PR merge into parent branch is allowed by the stacked workflow, or this PR targets `main`
 - [ ] Branch name follows `<type>/<description>` such as `feat/new-connector` or `fix/api-pagination`
 - [ ] PR title follows Conventional Commits
 - [ ] No credentials, tokens, private URLs, or customer data included

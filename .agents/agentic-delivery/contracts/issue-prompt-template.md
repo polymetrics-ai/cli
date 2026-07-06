@@ -11,6 +11,9 @@ Follow the generic issue-to-PR contract:
 Follow the post-implementation CodeRabbit review loop:
 `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
 
+For parent issues, sub-issues, and stacked PRs, follow:
+`.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
+
 Task type: `<task-type-from-task-skill-matrix>`
 
 Required skills:
@@ -18,6 +21,13 @@ Required skills:
 
 Primary agent:
 `.agents/<functional-area>/agents/<type>/<agent>.agent.yaml`
+
+Parent issue:
+- `<parent issue URL or "None">`
+
+Branch policy:
+- parent branch: `<type>/<parent-issue>-<slug>` or `None`
+- PR base: `main` for parent PRs, parent branch for sub-PRs
 
 Hard stops:
 - Do not change auth scopes.
@@ -35,4 +45,7 @@ Before merge:
   deferred, or needs_human
 - rerun verification after accepted fixes
 - request incremental CodeRabbit review until no actionable findings remain
+- merge sub-PRs into parent branches only when all automated gates pass and no human gate is
+  triggered
+- require human approval before merging parent PRs into `main`
 ```

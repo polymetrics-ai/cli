@@ -18,6 +18,8 @@ body:
       description: Select the closest task type from the agentic delivery skill matrix.
       options:
         - pr-guardrail
+        - parent-roadmap
+        - stacked-pr
         - operation-ledger
         - cli-surface
         - help-renderer
@@ -38,6 +40,7 @@ body:
         - AGENTS.md
         - .agents/agentic-delivery/contracts/issue-agent-contract.md
         - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
+        - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
         - .agents/agentic-delivery/matrices/task-skill-matrix.yaml
     validations:
       required: true

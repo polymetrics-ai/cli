@@ -28,11 +28,15 @@ before implementation.
 3. Confirm the issue maps to one primary PR. Split the issue if it is too large.
 4. Load the skills required by `task-skill-matrix.yaml` for the issue task type.
 5. Start a branch that includes the issue number when practical.
+   - If the issue is a sub-issue in a parent roadmap, branch from the parent branch.
+   - If the issue is a parent issue, branch from `main` and keep the parent PR human-gated.
 6. For behavior changes, write or update a failing test before production code.
 7. Implement the smallest slice that satisfies the issue.
 8. Run targeted tests, then broader verification from the issue.
 9. Update phase or research artifacts when the issue asks for durable memory.
 10. Open a PR with a Conventional Commit title and `Closes #N` or `Refs #N` in the body.
+    - Use `Refs #N` for sub-PRs that target a parent branch.
+    - Use `Closes #N` only for PRs that target the default branch and complete the issue.
 11. After implementation and local verification, run the CodeRabbit review loop in
     `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`.
 12. Reply to every actionable CodeRabbit item with the disposition template before resolving it.
@@ -52,6 +56,14 @@ Stop and ask for human approval before:
 - weakening tests or quality gates
 - exposing generic shell, generic HTTP write, generic SQL write, or unrestricted raw API tools
 - executing reverse ETL without plan, preview, approval, execute
+- merging a parent PR into `main`
+
+## Parent/subissue work
+
+Use `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md` when the issue belongs
+to a parent roadmap. A sub-PR may be merged into the parent branch without human approval only after
+all automated checks pass, CodeRabbit comments are resolved, and no human gate is triggered. The
+parent PR into `main` always requires human approval.
 
 ## Output requirements
 

@@ -1,0 +1,62 @@
+apiVersion: polymetrics.ai/agent/v1
+kind: Agent
+metadata:
+  id: stacked-roadmap-coordinator
+  name: Stacked Roadmap Coordinator
+  version: 1
+  summary: Plans parent issues, sub-issues, parent branches, and stacked sub-PR integration.
+  tags: [github, roadmap, sub-issues, stacked-pr, coordination]
+role: coordinator
+objective: Convert one large delivery goal into a parent issue, sub-issues, milestones, and stacked PR policy.
+skills:
+  required_groups: [github_planning, review_disposition, docs_and_ux]
+  preferred_local_skills: [github-issue-first-delivery, gsd-plan-phase, gsd-code-review]
+inputs:
+  required:
+    - parent objective
+    - source research or product brief
+    - AGENTS.md
+    - .agents/agentic-delivery/references/issue-roadmap-best-practices.md
+    - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
+outputs:
+  required:
+    - parent issue body
+    - sub-issue roster
+    - milestone mapping
+    - branch and PR plan
+    - human gate summary
+permissions:
+  allowed_paths:
+    - .agents/**
+    - .planning/**
+    - .github/**
+  denied_tools:
+    - gh auth refresh without human approval
+    - secret reads or secret printing
+    - destructive external actions
+    - unrestricted HTTP write
+workflow:
+  - read_sources_and_repo_rules
+  - define_parent_issue
+  - split_into_subissues
+  - map_milestones_dependencies_and_branches
+  - create_or_update_local_issue_bodies
+  - create_or_update_live_issues_when_authorized
+  - record_project_scope_blockers
+guardrails:
+  input:
+    - do not create duplicate parent issues when an existing parent can be updated
+  blocking_human_gates:
+    - project scope refresh
+    - new repository automation that merges to main
+    - branch protection changes
+    - dependency additions
+    - secrets
+  output:
+    - sub-PR auto-merge policy must exclude human-gated changes
+    - parent PR merge to main must require human approval
+verification:
+  required:
+    - markdown review
+    - YAML parse checks
+    - issue body references current agent contracts
