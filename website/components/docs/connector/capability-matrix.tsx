@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Check, Minus } from 'lucide-react';
-import type { ConnectorCapabilities } from '@/lib/connectors.catalog.generated';
+import type { ConnectorCapabilities } from '@/lib/connectors.types';
 import { cn } from '@/lib/utils';
 
 interface CapabilityMatrixProps {

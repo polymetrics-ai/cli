@@ -1,0 +1,92 @@
+---
+title: GitHub CLI Surface
+description: GitHub connector command parity, safety labels, and the staged path from gh-inspired metadata to executable pm commands.
+---
+
+The GitHub connector now has a JSON-first command surface contract at
+`internal/connectors/defs/github/cli_surface.json`. It uses the current
+[GitHub CLI manual](https://cli.github.com/manual/gh), the
+[GitHub CLI full reference](https://cli.github.com/manual/gh_help_reference), the
+[GitHub REST API docs](https://docs.github.com/en/rest), and the
+[GitHub GraphQL docs](https://docs.github.com/en/graphql) as source material.
+
+This is metadata first. It tells `pm` and future docs renderers which GitHub commands are ETL reads,
+which are approval-gated reverse ETL writes, which require GraphQL or new API coverage, and which
+are local workflow features that should not become connector API commands.
+
+## Current surface
+
+| Metric | Value |
+|---|---:|
+| Declared command entries | 128 |
+| Implemented command entries | 39 |
+| Partial command entries | 11 |
+| Planned command entries | 18 |
+| Unsupported API entries | 27 |
+| Unsupported local workflow entries | 21 |
+| Unsafe or disallowed entries | 12 |
+| GitHub read streams | 33 |
+| GitHub write actions | 67 |
+| Tracked REST endpoints | 503 |
+| Covered REST endpoints | 100 |
+| Excluded REST endpoints | 403 |
+
+## Execution model
+
+| Intent | Current count | Runtime rule |
+|---|---:|---|
+| `etl` | 16 | Reads map to existing streams or planned stream/direct-read coverage. |
+| `reverse_etl` | 34 | Writes must stay plan, preview, approval, execute. |
+| `direct_read` | 32 | Candidates for constrained read commands that do not naturally fit streams. |
+| `direct_write` | 25 | Blocked unless a safe reverse-ETL execution model is designed. |
+| `local_workflow` | 14 | Browser, git, shell, extension, completion, or local config behavior. |
+| `auth` | 3 | Credential lifecycle commands; never print token material. |
+| `config` | 3 | Local config behavior, not connector data extraction. |
+| `raw_api` | 1 | Must remain constrained and approval-gated before any implementation. |
+
+<Callout type="warn">
+  The command surface does not expose a generic shell, unrestricted HTTP write, unrestricted SQL
+  write, or raw GraphQL mutation escape hatch. Raw API-style commands need connector-scoped auth,
+  connector-scoped hosts, method risk labels, mutation approval, and secret redaction before they can
+  move beyond metadata.
+</Callout>
+
+## Connector Capabilities Behind Modeled Commands
+
+| Family | Backing capability |
+|---|---|
+| `issue` | Issues stream plus issue create, edit, close, comment, lock, unlock, labels, and assignees writes. |
+| `pr` | Pull request stream plus create, edit, close, merge, review, reviewer, update-branch, lock, and unlock writes. |
+| `repo` | Repository, branches, commits, tags, deploy keys, autolinks, languages, collaborators, forks, and rulesets streams or writes. |
+| `release` | Release stream plus create, edit, delete, asset update, and asset delete writes. |
+| `workflow` and `run` | Workflow and run streams plus dispatch, rerun, cancel, and delete actions. |
+| `label` | Label stream plus create, edit, and delete writes. |
+| Related connector data | Milestones and security alerts are available as streams or writes, but they are not modeled as first-class gh command entries in this slice. |
+
+## Known gaps
+
+| Gap | Reason |
+|---|---|
+| Projects v2 | GitHub CLI uses GraphQL-heavy project operations; the current connector bundle is REST-first. |
+| Discussions, gists, codespaces, org-wide views | Useful API-backed surfaces, but not yet modeled by this repository-scoped connector bundle. |
+| Search and status | Require query-shaped direct reads and often combine REST with GraphQL. |
+| Secrets and variables | Sensitive writes need explicit encryption, redaction, scope, and approval semantics. |
+| Local workflow commands | `clone`, `checkout`, `browse`, `alias`, `extension`, `completion`, and local config should stay outside connector API dispatch. |
+| Raw API and GraphQL | Must be constrained before use; an unrestricted `gh api` clone would violate connector safety rules. |
+
+## Roadmap
+
+1. Validate optional `cli_surface.json` metadata and reject broken stream, write, endpoint, or
+   secret-looking references.
+2. Render connector help from the metadata without adding runtime command dispatch.
+3. Add a generic safe executor for commands mapped to existing streams and write actions.
+4. Add thin aliases such as `pm github issue list` only after the generic executor exists.
+5. Add GraphQL and direct-read foundations for Projects v2, discussions, search, status, and other
+   gh parity gaps.
+
+## Agent notes
+
+Agents should treat the issue as the implementation prompt, read the shared contract in
+`.agents/agentic-delivery/`, plan with the GSD programming loop before production edits, and record
+red-green-refactor evidence for every slice. CodeRabbit review is the post-implementation gate; each
+review item needs a reasoned disposition before the PR is ready for human approval.

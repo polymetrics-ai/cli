@@ -18,6 +18,7 @@ skills:
   - api_architecture
   - go_tdd
   - docs_and_ux
+  - review_disposition
   required_local_skills:
   - gsd-programming-loop
   - golang-how-to
@@ -28,6 +29,7 @@ skills:
   preferred_local_skills:
   - github-issue-first-delivery
   - go-engineering
+  - gsd-code-review
   - web-design-guidelines
   - golang-security
   - frontend-design
@@ -42,6 +44,7 @@ inputs:
   - connector name
   - cli_surface draft path from the issue
   - parity matrix path from the issue
+  - parent PR URL when the issue is part of a stacked roadmap
 outputs:
   required:
   - validated cli_surface metadata
@@ -54,6 +57,7 @@ permissions:
   - internal/connectors/**
   - cmd/connectorgen/**
   - docs/**
+  - website/**
   - .planning/**
 workflow:
 - load_gsd_pi_adapter
@@ -67,11 +71,18 @@ workflow:
 - implement_schema_or_metadata_slice
 - run_connectorgen_validation
 - commit_and_push_green_slice_when_policy_allows
+- request_or_confirm_coderabbit_review
+- disposition_coderabbit_findings
+- confirm_review_records_or_parent_pr_fallback
 guardrails:
   blocking_human_gates:
   - runtime dispatch
   - auth changes
   - secret examples
+  - missing_parent_pr_for_stacked_work
+  output:
+  - skipped CodeRabbit status is not review completion
+  - actionable CodeRabbit findings are fixed, deferred, declined, or escalated with reasons
 verification:
   required:
   - go test targeted packages
@@ -79,10 +90,7 @@ verification:
   - pm help connectors or affected command help, or explicit runtime-dispatch not-applicable note
   - docs/cli and website parity grep or explicit not-applicable note
   - secret-looking literal scan
+  - CodeRabbit coverage on the sub-PR or parent PR, or a recorded human-approved blocker
 adapters:
   pi:
-    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
-      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
-      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
-      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
-      and keep runtime-backed services optional unless explicitly in scope.
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md and keep runtime-backed services optional unless explicitly in scope.
