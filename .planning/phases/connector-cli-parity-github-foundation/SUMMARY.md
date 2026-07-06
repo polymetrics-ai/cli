@@ -26,6 +26,6 @@ See `VERIFICATION.md`.
 
 ## PR status
 
-Draft PR title: `feat(agentic): add issue-first delivery system`.
+PR title: `feat(agentic): add issue-first delivery system`.
 
 PR body is recorded in `PR-BODY.md` and includes `Closes #43`.

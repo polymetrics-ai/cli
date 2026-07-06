@@ -24,7 +24,7 @@ make verify
 
 ## Copilot review loop
 
-After the branch is pushed and the draft PR exists:
+After the PR exists:
 
 1. Request GitHub Copilot review from the PR UI, or comment `@copilot review` if enabled for the
    repository.
@@ -32,7 +32,7 @@ After the branch is pushed and the draft PR exists:
 3. Rerun targeted checks and `make verify`.
 4. Request another Copilot review.
 5. Repeat until Copilot has no actionable findings.
-6. Ping the human coordinator for approval before marking the PR ready.
+6. Ping the human coordinator for approval before merge.
 
 ## Checklist
 
