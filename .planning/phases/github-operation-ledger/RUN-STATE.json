@@ -2,7 +2,7 @@
   "issue": 37,
   "branch": "feat/37-github-operation-ledger",
   "parent_issue": 44,
-  "status": "in_progress",
+  "status": "completed",
   "model": "gpt-5.5",
   "reasoning_effort": "xhigh",
   "human_gate": "parent PR merge to main"

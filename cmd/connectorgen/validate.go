@@ -26,6 +26,7 @@ const (
 	ruleSurfaceUnknownTarget     = "surface_unknown_target"
 	ruleSurfaceIncomplete        = "surface_incomplete"
 	ruleSurfaceCategory          = "surface_category"
+	ruleSurfaceOperation         = "surface_operation"
 	ruleSurfaceFailFirstRun      = "surface_fail_first_run"
 	ruleCLISurfaceUnknownTarget  = "cli_surface_unknown_target"
 	ruleCLISurfaceMissingMapping = "cli_surface_missing_mapping"
@@ -73,6 +74,36 @@ var surfaceCategories = map[string]bool{
 	"non_data_endpoint":       true,
 	"duplicate_of":            true,
 	"out_of_scope":            true,
+}
+
+var surfaceOperationModels = map[string]bool{
+	"direct_read":           true,
+	"binary_read":           true,
+	"sensitive_reverse_etl": true,
+	"admin_reverse_etl":     true,
+	"destructive_action":    true,
+	"local_workflow":        true,
+	"duplicate":             true,
+	"deprecated":            true,
+	"disallowed":            true,
+}
+
+var surfaceOperationStatuses = map[string]bool{
+	"blocked": true,
+}
+
+var surfaceOperationRisks = map[string]bool{
+	"low":      true,
+	"medium":   true,
+	"high":     true,
+	"critical": true,
+}
+
+var sourceRequiredOperationModels = map[string]bool{
+	"sensitive_reverse_etl": true,
+	"admin_reverse_etl":     true,
+	"destructive_action":    true,
+	"disallowed":            true,
 }
 
 // mutationMethods are the HTTP verbs api_surface rule 4 treats as write
@@ -458,13 +489,16 @@ func checkWritePathFields(b engine.Bundle) []Finding {
 }
 
 // checkAPISurface enforces design §E.1 rules 1-4:
-//  1. every endpoint has exactly one of covered_by/excluded.
+//  1. every endpoint has exactly one executable covered_by row or an explicit
+//     blocked non-executable classifier. Legacy surfaces use excluded;
+//     operation-ledger surfaces use operation.
 //  2. covered_by.stream/covered_by.write resolves to a declared stream/action,
 //     and every declared stream/action appears in the surface.
 //  3. excluded.category is from the closed vocabulary (defense-in-depth; the
-//     loader's meta-schema enum already enforces this at load time).
+//     loader's meta-schema enum already enforces this at load time), and
+//     operation rows use the closed operation vocabulary.
 //  4. capabilities.write/read == false is only legal when the surface has
-//     zero non-excluded mutation/GET endpoints respectively.
+//     zero executable mutation/GET endpoints respectively.
 func checkAPISurface(b engine.Bundle) []Finding {
 	if b.Surface == nil {
 		return []Finding{{
@@ -489,21 +523,41 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	coveredWrites := map[string]bool{}
 	hasNonExcludedGET := false
 	hasNonExcludedMutation := false
+	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
 		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "")
 		hasExcluded := ep.Excluded != nil
+		hasOperation := ep.Operation != nil
+
+		if ledgerMode && hasExcluded {
+			findings = append(findings, Finding{
+				Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceOperation,
+				Message: fmt.Sprintf("endpoint %d (%s %s) uses legacy excluded in operation_ledger_version mode", i, ep.Method, ep.Path),
+			})
+		}
+		if !ledgerMode && hasOperation {
+			findings = append(findings, Finding{
+				Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceOperation,
+				Message: fmt.Sprintf("endpoint %d (%s %s) uses operation without operation_ledger_version", i, ep.Method, ep.Path),
+			})
+		}
 
 		switch {
-		case hasCovered && hasExcluded:
+		case hasCovered && (hasExcluded || hasOperation):
 			findings = append(findings, Finding{
 				Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-				Message: fmt.Sprintf("endpoint %d (%s %s) has both covered_by and excluded", i, ep.Method, ep.Path),
+				Message: fmt.Sprintf("endpoint %d (%s %s) has covered_by plus another classifier", i, ep.Method, ep.Path),
 			})
-		case !hasCovered && !hasExcluded:
+		case !hasCovered && !hasExcluded && !hasOperation:
 			findings = append(findings, Finding{
 				Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-				Message: fmt.Sprintf("endpoint %d (%s %s) has neither covered_by nor excluded", i, ep.Method, ep.Path),
+				Message: fmt.Sprintf("endpoint %d (%s %s) has no classifier", i, ep.Method, ep.Path),
+			})
+		case ledgerMode && hasOperation && hasExcluded:
+			findings = append(findings, Finding{
+				Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
+				Message: fmt.Sprintf("endpoint %d (%s %s) has both operation and excluded", i, ep.Method, ep.Path),
 			})
 		case hasCovered:
 			if ep.CoveredBy.Stream != "" {
@@ -539,6 +593,8 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					Message: fmt.Sprintf("endpoint %d (%s %s) excluded.category %q is not in the closed vocabulary", i, ep.Method, ep.Path, ep.Excluded.Category),
 				})
 			}
+		case hasOperation:
+			findings = append(findings, checkAPISurfaceOperation(b, i, ep)...)
 		}
 	}
 
@@ -572,6 +628,48 @@ func checkAPISurface(b engine.Bundle) []Finding {
 		})
 	}
 
+	return findings
+}
+
+func checkAPISurfaceOperation(b engine.Bundle, i int, ep engine.SurfaceEndpoint) []Finding {
+	op := ep.Operation
+	if op == nil {
+		return nil
+	}
+
+	var findings []Finding
+	add := func(message string) {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "api_surface.json",
+			Rule:      ruleSurfaceOperation,
+			Message:   fmt.Sprintf("endpoint %d (%s %s) %s", i, ep.Method, ep.Path, message),
+		})
+	}
+
+	if !surfaceOperationModels[op.Model] {
+		add(fmt.Sprintf("operation.model %q is not in the closed vocabulary", op.Model))
+	}
+	if !surfaceOperationStatuses[op.Status] {
+		add(fmt.Sprintf("operation.status %q is not in the closed vocabulary", op.Status))
+	}
+	if !surfaceOperationRisks[op.Risk] {
+		add(fmt.Sprintf("operation.risk %q is not in the closed vocabulary", op.Risk))
+	}
+	if !op.BlockedByDefault {
+		add("operation.blocked_by_default must be true")
+	}
+	if strings.TrimSpace(op.Reason) == "" {
+		add("operation.reason is required")
+	}
+	if op.Model == "duplicate" && strings.TrimSpace(op.DuplicateOf) == "" {
+		add("operation.duplicate_of is required for duplicate rows")
+	}
+	if sourceRequiredOperationModels[op.Model] &&
+		strings.TrimSpace(op.SourceURL) == "" &&
+		strings.TrimSpace(op.Notes) == "" {
+		add("operation.source_url or operation.notes is required for sensitive/admin/destructive/disallowed rows")
+	}
 	return findings
 }
 
