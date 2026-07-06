@@ -227,6 +227,124 @@ func TestValidate_CLISurfaceRejectsCommandWithStreamAndWrite(t *testing.T) {
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
+func TestValidate_APISurfaceOperationLedgerValidRowsPassCleanly(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(validOperationLedgerAPISurface()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for valid operation ledger, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_APISurfaceOperationLedgerRejectsLegacyExclusion(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "GET", "path": "/widgets/export", "excluded": { "category": "out_of_scope", "reason": "legacy exclusion" } }
+		]
+	}`))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceOperation)
+}
+
+func TestValidate_APISurfaceOperationLedgerRejectsDualClassification(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{
+				"method": "GET",
+				"path": "/widgets/{id}",
+				"covered_by": { "stream": "widgets" },
+				"operation": {
+					"model": "direct_read",
+					"status": "blocked",
+					"risk": "low",
+					"blocked_by_default": true,
+					"reason": "dual classified row"
+				}
+			}
+		]
+	}`))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceCoverage)
+}
+
+func TestValidate_APISurfaceOperationLedgerRejectsUnblockedOperation(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(strings.Replace(
+		validOperationLedgerAPISurface(),
+		`"blocked_by_default": true`,
+		`"blocked_by_default": false`,
+		1,
+	)))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceOperation)
+}
+
+func TestValidate_APISurfaceOperationLedgerRequiresReason(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(strings.Replace(
+		validOperationLedgerAPISurface(),
+		`"reason": "point lookup candidate, not yet modeled as a stream"`,
+		`"reason": ""`,
+		1,
+	)))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceOperation)
+}
+
+func TestValidate_APISurfaceOperationLedgerRequiresDuplicateTarget(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(strings.Replace(
+		validOperationLedgerAPISurface(),
+		`"model": "direct_read"`,
+		`"model": "duplicate"`,
+		1,
+	)))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceOperation)
+}
+
+func TestValidate_APISurfaceOperationLedgerRequiresSourceOrNotesForSensitiveRows(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{
+				"method": "POST",
+				"path": "/org/widgets",
+				"operation": {
+					"model": "admin_reverse_etl",
+					"status": "blocked",
+					"risk": "high",
+					"blocked_by_default": true,
+					"reason": "requires organization administration scope"
+				}
+			}
+		]
+	}`))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceOperation)
+}
+
 // TestValidate_EmptyTreeIsFine mirrors the loader contract: an empty defs/
 // tree (no bundle directories) passes with a zero connector count, so wave0's
 // bundle-less internal/connectors/defs/ tree does not fail CI.
@@ -925,6 +1043,35 @@ func validCLISurfaceJSON() string {
 				"risk": "creates a widget",
 				"approval": "reverse ETL writes require plan, preview, approval, execute",
 				"examples": ["pm cli-surface widget create --json"]
+			}
+		]
+	}`
+}
+
+func operationLedgerBundleFS(apiSurface string) fstest.MapFS {
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	return fsys
+}
+
+func validOperationLedgerAPISurface() string {
+	return `{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{
+				"method": "GET",
+				"path": "/widgets/{id}",
+				"operation": {
+					"model": "direct_read",
+					"status": "blocked",
+					"risk": "low",
+					"blocked_by_default": true,
+					"reason": "point lookup candidate, not yet modeled as a stream",
+					"source_url": "https://example.invalid/rest/widgets"
+				}
 			}
 		]
 	}`

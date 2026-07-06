@@ -943,6 +943,50 @@ func TestBundleLoadRejectsUnknownAPISurfaceEndpointKey(t *testing.T) {
 	}
 }
 
+func TestBundleLoadAPISurfaceOperationLedger(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{
+				"method": "GET",
+				"path": "/widgets/{id}",
+				"operation": {
+					"model": "direct_read",
+					"status": "blocked",
+					"risk": "low",
+					"blocked_by_default": true,
+					"reason": "point lookup candidate, not yet modeled as a stream",
+					"source_url": "https://example.invalid/rest/widgets"
+				}
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Surface.OperationLedgerVersion != 1 {
+		t.Fatalf("OperationLedgerVersion = %d, want 1", b.Surface.OperationLedgerVersion)
+	}
+	if len(b.Surface.Endpoints) != 2 {
+		t.Fatalf("endpoints = %d, want 2", len(b.Surface.Endpoints))
+	}
+	op := b.Surface.Endpoints[1].Operation
+	if op == nil {
+		t.Fatalf("Operation = nil, want operation metadata")
+	}
+	if op.Model != "direct_read" || op.Status != "blocked" || op.Risk != "low" {
+		t.Fatalf("Operation = %+v, want direct_read/blocked/low", op)
+	}
+	if !op.BlockedByDefault {
+		t.Fatalf("BlockedByDefault = false, want true")
+	}
+}
+
 func TestBundleLoadRejectsUnknownMetadataTopLevelKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(`{
