@@ -35,9 +35,9 @@ Evidence:
 - Invalid PR title/body smoke check failed as expected.
 - Full `go test ./...` passed.
 
-## Copilot Review Follow-Up
+## Automated Review Follow-Up
 
-Added regression coverage after Copilot review:
+Added regression coverage after automated PR review:
 
 - reject Conventional Commit scopes accepted by the older loose local regex but rejected by the
   repository `pr-title` workflow

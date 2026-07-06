@@ -14,7 +14,7 @@
 - Added YAML agent definitions grouped by functional area and type under `.agents/`.
 - Converted the pre-existing `.codex/agents` Pass B expander and connector reviewer TOML files into
   `.agents/connector-migration/` YAML specs and removed the obsolete TOML files.
-- Tightened the PR guard after Copilot review so its title regex matches the repository
+- Tightened the PR guard after automated PR review so its title regex matches the repository
   `pr-title` workflow and ambiguous issue relationships do not pass.
 - Updated live issue #43 to use the `.agents/agentic-delivery/` and `.agents/connector-migration/`
   acceptance criteria.

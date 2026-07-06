@@ -23,16 +23,15 @@ git diff --check
 make verify
 ```
 
-## Copilot review loop
+## CodeRabbit review loop
 
 After the PR exists:
 
-1. Request GitHub Copilot review from the PR UI, or comment `@copilot review` if enabled for the
-   repository.
-2. Address every Copilot finding with a new commit.
+1. Request a complete CodeRabbit pass with `@coderabbitai full review`.
+2. Address every CodeRabbit finding with a new commit.
 3. Rerun targeted checks and `make verify`.
-4. Request another Copilot review.
-5. Repeat until Copilot has no actionable findings.
+4. Request an incremental CodeRabbit pass with `@coderabbitai review`.
+5. Repeat until CodeRabbit has no actionable findings.
 6. Ping the human coordinator for approval before merge.
 
 ## Checklist
