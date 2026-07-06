@@ -21,8 +21,9 @@
 - Updated live issue #43 to use the `.agents/agentic-delivery/` and `.agents/connector-migration/`
   acceptance criteria.
 - Linked the PR slice to live issue #43.
-- Requested CodeRabbit review on PR #47 and recorded that currently visible CodeRabbit comments are
-  informational only.
+- Requested CodeRabbit review on PR #47.
+- Accepted and fixed all 7 CodeRabbit findings from the full review, including CLI exit-code test
+  coverage and agent permission hardening.
 
 ## Out Of Scope
 

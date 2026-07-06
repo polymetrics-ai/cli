@@ -43,18 +43,22 @@ After the PR exists:
 ## CodeRabbit disposition status
 
 - Initial full review requested on PR #47.
-- Current visible CodeRabbit comments are informational review-trigger and processing comments.
-- Actionable findings: none visible yet through the GitHub issue-comment, review, or inline-review
-  APIs.
-- Follow-up review will be requested after this workflow update is pushed.
+- Full review produced 7 actionable findings.
+- Disposition: all 7 findings were accepted as valid, in-scope fixes.
+- Fixed areas: PR guard CLI exit-code test coverage, explicit agent denied-tools, structured
+  conditional denied paths, `Closes`/`Refs` prompt wording, connector-migration quality-gate hard
+  stop, run-state wording, and verification-log consistency.
+- Declined findings: none.
+- Deferred findings: none.
+- Follow-up incremental review will be requested after the fix commit is pushed. If CodeRabbit is
+  rate-limited, the review request remains pending until the next available review window.
 
 ## Checklist
 
 - [x] Tests or docs updated for behavior changes
 - [x] `make verify` passes locally
 - [x] CodeRabbit review requested after implementation
-- [x] No actionable CodeRabbit findings are currently visible; future findings must receive a
-  reasoned disposition reply before resolve
+- [x] Every actionable CodeRabbit finding has a reasoned disposition reply or summary
 - [x] Branch name follows `<type>/<description>`
 - [x] PR title follows Conventional Commits
 - [x] No credentials, tokens, private URLs, or customer data included

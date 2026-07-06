@@ -33,9 +33,11 @@ permissions:
     - .github/**
     - .agents/**
     - .planning/**
-  denied_paths:
-    - go.mod unless issue explicitly approves dependencies
-    - go.sum unless issue explicitly approves dependencies
+  conditional_denied_paths:
+    - path: go.mod
+      unless: issue explicitly approves dependencies
+    - path: go.sum
+      unless: issue explicitly approves dependencies
   denied_tools:
     - generic shell write to external systems
     - unrestricted HTTP write

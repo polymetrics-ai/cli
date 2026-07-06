@@ -25,8 +25,9 @@ Hard stops:
 - Do not weaken tests or quality gates.
 - Do not expand scope beyond this issue.
 
-PR body must include:
-`Closes #<issue-number>`
+PR body must include one of:
+- `Closes #<issue-number>` when the PR completes the issue
+- `Refs #<issue-number>` when the PR is stacked or incremental
 
 Before merge:
 - request CodeRabbit review after implementation

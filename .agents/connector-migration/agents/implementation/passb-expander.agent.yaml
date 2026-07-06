@@ -62,6 +62,7 @@ guardrails:
     - auth scope changes
     - secrets
     - destructive external actions
+    - quality gate reductions
   output:
     - no Pass B placeholder exclusions remain for reviewed endpoints
     - no secret-looking literals in fixtures or docs

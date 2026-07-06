@@ -22,6 +22,10 @@ outputs:
     - constrained executor implementation
 permissions:
   allowed_paths: [internal/connectors/**, cmd/**, docs/**, .planning/**]
+  denied_tools:
+    - generic shell write to external systems
+    - unrestricted HTTP write
+    - unrestricted SQL write
 workflow:
   - add_rejection_tests_for_full_urls_and_mutations
   - add_httptest_read_success_case

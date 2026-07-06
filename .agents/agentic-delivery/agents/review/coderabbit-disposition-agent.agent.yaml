@@ -29,9 +29,11 @@ permissions:
   allowed_paths:
     - current PR changed files only
     - .planning/**
-  denied_paths:
-    - go.mod unless the linked issue explicitly approves dependencies
-    - go.sum unless the linked issue explicitly approves dependencies
+  conditional_denied_paths:
+    - path: go.mod
+      unless: linked issue explicitly approves dependencies
+    - path: go.sum
+      unless: linked issue explicitly approves dependencies
   allowed_tools:
     - GitHub PR comment reads
     - GitHub review comment replies

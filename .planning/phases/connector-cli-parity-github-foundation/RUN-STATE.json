@@ -2,7 +2,7 @@
   "phase": "connector-cli-parity-github-foundation",
   "status": "completed",
   "notes": [
-    "Manual GSD loop in progress because scripts/programming-loop.mjs and scripts/tdd-gate.mjs are not present in this worktree.",
+    "Manual GSD loop was used because scripts/programming-loop.mjs and scripts/tdd-gate.mjs are not present in this worktree.",
     "This PR is scoped to issue #43 and does not include the broader connector CLI research package.",
     "Agent contracts are isolated under .agents/agentic-delivery and role specs are grouped by functional area and type under .agents.",
     "CodeRabbit review disposition is now part of the post-implementation workflow.",

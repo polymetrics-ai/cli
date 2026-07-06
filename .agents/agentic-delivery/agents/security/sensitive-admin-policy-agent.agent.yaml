@@ -23,6 +23,11 @@ outputs:
     - blocked-execution tests
 permissions:
   allowed_paths: [internal/**, docs/**, .planning/**]
+  denied_tools:
+    - generic shell write to external systems
+    - unrestricted HTTP write
+    - unrestricted SQL write
+    - secret value read/print
 workflow:
   - add_redaction_tests
   - add_policy_validation_tests

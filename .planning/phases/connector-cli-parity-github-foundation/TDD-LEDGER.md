@@ -55,6 +55,26 @@ Evidence:
 - Targeted guard tests passed.
 - `make verify` passed after the guard changes.
 
+## CodeRabbit Review Follow-Up
+
+Added CLI exit-code coverage after CodeRabbit review:
+
+- valid PR input returns exit code `0`
+- invalid PR title/body returns exit code `1`
+- unreadable body file returns exit code `2`
+
+Command:
+
+```bash
+go test ./cmd/prissueguard ./internal/coordination/issueguard
+```
+
+Evidence:
+
+- Targeted guard tests passed.
+- YAML parsing, JSON parsing, PR body guard, and diff whitespace checks passed after the review
+  fixes.
+
 ## Harness gap
 
 The GSD skill references `scripts/programming-loop.mjs` and `scripts/tdd-gate.mjs`, but this
