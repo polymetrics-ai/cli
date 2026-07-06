@@ -42,7 +42,7 @@ type writeContext struct {
 	tag     string
 	runID8  string
 
-planID        string
+	planID        string
 	approvalToken string
 
 	// selfTest is true when no curated WritePairing exists for the

@@ -426,7 +426,7 @@ func TestParityAmazonSellerPartner_TokenEndpointFailureSurfacesAsAuthError(t *te
 	}
 }
 
-// --- write parity: both sides reject writes (read-only connector) ---
+// --- write parity: legacy remains read-only; bundle declares Pass B writes ---
 
 func TestParityAmazonSellerPartner_WriteUnsupportedOnBothSides(t *testing.T) {
 	bundle := loadBundle(t)
@@ -438,13 +438,13 @@ func TestParityAmazonSellerPartner_WriteUnsupportedOnBothSides(t *testing.T) {
 
 	eng := engine.New(bundle, engine.HooksFor("amazon-seller-partner"))
 	if _, err := eng.Write(context.Background(), connectors.WriteRequest{}, nil); err == nil {
-		t.Fatal("engine Write succeeded, want an error (bundle declares capabilities.write: false, no writes.json)")
+		t.Fatal("engine Write succeeded with no action, want an error")
 	}
-	if bundle.Metadata.Capabilities.Write {
-		t.Fatal("bundle metadata.capabilities.write = true, want false (amazon-seller-partner is read-only)")
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true (Pass B write actions are modeled)")
 	}
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (read-only, no writes.json)", bundle.Writes)
+	if len(bundle.Writes) == 0 {
+		t.Fatal("bundle write actions = 0, want Pass B write actions")
 	}
 }
 
@@ -463,12 +463,12 @@ func TestParityAmazonSellerPartner_ManifestSurface(t *testing.T) {
 
 	wantStreams := streamSurface(legacyCatalog.Streams)
 	gotStreams := streamSurface(engManifest.Streams)
-	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("stream surface = %+v, want %+v (legacy Catalog())", gotStreams, wantStreams)
+	if missing := missingStreamSurface(gotStreams, wantStreams); len(missing) != 0 {
+		t.Fatalf("engine manifest missing legacy stream surface entries %+v; got %+v", missing, gotStreams)
 	}
 
-	if len(engManifest.WriteActions) != 0 {
-		t.Fatalf("engine write actions = %v, want none (amazon-seller-partner is read-only)", engManifest.WriteActions)
+	if len(engManifest.WriteActions) == 0 {
+		t.Fatal("engine write actions = 0, want Pass B write actions")
 	}
 }
 
@@ -486,6 +486,34 @@ func streamSurface(streams []connectors.Stream) []streamSurfaceEntry {
 	return out
 }
 
+func missingStreamSurface(got, want []streamSurfaceEntry) []streamSurfaceEntry {
+	byName := make(map[string]streamSurfaceEntry, len(got))
+	for _, s := range got {
+		byName[s.Name] = s
+	}
+	var missing []streamSurfaceEntry
+	for _, s := range want {
+		if gotS, ok := byName[s.Name]; !ok || !reflect.DeepEqual(gotS.PrimaryKey, s.PrimaryKey) {
+			missing = append(missing, s)
+		}
+	}
+	return missing
+}
+
+func missingStrings(got, want []string) []string {
+	seen := make(map[string]bool, len(got))
+	for _, s := range got {
+		seen[s] = true
+	}
+	var missing []string
+	for _, s := range want {
+		if !seen[s] {
+			missing = append(missing, s)
+		}
+	}
+	return missing
+}
+
 // --- bundle load smoke guard ---
 
 func TestParityAmazonSellerPartner_BundleLoadsAndValidates(t *testing.T) {
@@ -497,18 +525,22 @@ func TestParityAmazonSellerPartner_BundleLoadsAndValidates(t *testing.T) {
 		gotStreams = append(gotStreams, s.Name)
 	}
 	sort.Strings(gotStreams)
-	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("bundle streams = %v, want %v", gotStreams, wantStreams)
+	if missing := missingStrings(gotStreams, wantStreams); len(missing) != 0 {
+		t.Fatalf("bundle streams missing legacy streams %v; got %v", missing, gotStreams)
 	}
 
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (read-only, no writes.json)", bundle.Writes)
+	if len(bundle.Writes) == 0 {
+		t.Fatal("bundle write actions = 0, want Pass B write actions")
 	}
-	if bundle.Metadata.Capabilities.Write {
-		t.Fatal("bundle metadata.capabilities.write = true, want false (amazon-seller-partner has no mutation API)")
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true")
+	}
+	legacyStreamSet := map[string]bool{}
+	for _, name := range wantStreams {
+		legacyStreamSet[name] = true
 	}
 	for _, s := range bundle.Streams {
-		if s.Incremental == nil {
+		if legacyStreamSet[s.Name] && s.Incremental == nil {
 			t.Errorf("stream %q declares no incremental block, want one (legacy publishes a CursorFields hint and applies it via LastUpdatedAfter/startDateTime/FinancialEventGroupStartedAfter)", s.Name)
 		}
 	}

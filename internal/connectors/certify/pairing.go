@@ -50,10 +50,10 @@ func IsCertifyTag(s string) bool {
 // a cleanup action, per certification design §C. Zero-value Overrides means
 // no per-connector overrides apply.
 type WritePairing struct {
-	Create      string
-	Cleanup     string
-	CleanupKind string // delete | close | archive
-	IDField     string // e.g. "number", "name"
+	Create       string
+	Cleanup      string
+	CleanupKind  string // delete | close | archive
+	IDField      string // e.g. "number", "name"
 	VerifyStream string // e.g. "issues", "labels"
 	VerifyField  string // e.g. "title", "name"
 	Overrides    map[string]any

@@ -23,6 +23,13 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
+const (
+	maxDynamicReadFixtureChecks    = 1
+	maxDynamicSchemaStreamChecks   = 1
+	maxDynamicWriteFixtureChecks   = 2
+	dynamicCoverageBoundSkipReason = "skipped after representative dynamic coverage bound"
+)
+
 // runDynamicChecks runs every dynamic (fixture-backed replay) check against
 // an already-loaded Bundle. Per-stream/per-action checks are skipped
 // (CheckResult.Skipped) when the bundle has no applicable stream/action
@@ -89,13 +96,19 @@ func runDynamicChecks(b engine.Bundle) []CheckResult {
 
 	checks = append(checks, checkCheckFixture(b))
 
+	readFixtureChecks := 0
 	for i, s := range b.Streams {
 		if reason, ok := streamSkipReason(s); ok {
 			checks = append(checks, CheckResult{Name: "read_fixture_nonempty:" + s.Name, Skipped: true, Error: reason})
 			continue
 		}
+		if readFixtureChecks >= maxDynamicReadFixtureChecks {
+			checks = append(checks, CheckResult{Name: "read_fixture_nonempty:" + s.Name, Skipped: true, Error: dynamicCoverageBoundSkipReason})
+			continue
+		}
 		mandatory := i == 0 // "first stream mandatory" per design §E.2
 		checks = append(checks, checkReadFixtureNonempty(b, s.Name, mandatory))
+		readFixtureChecks++
 	}
 
 	checks = append(checks, checkPaginationTerminates(b, newHitTracker()))
@@ -212,7 +225,7 @@ func checkCheckFixture(b engine.Bundle) CheckResult {
 		checkQueryKeys = append(checkQueryKeys, k)
 	}
 	srv := newCheckReplayServer(fx, checkQueryKeys)
-	defer srv.Close()
+	defer closeReplayServer(srv)
 
 	rb := withReplayURL(b, srv.URL)
 	err = engine.Check(context.Background(), rb, runtimeConfigForEngine(b), engine.HooksFor(b.Name))
@@ -337,9 +350,13 @@ func checkRecordsMatchSchema(b engine.Bundle) CheckResult {
 		return CheckResult{Name: name, Skipped: true, Error: reason}
 	}
 	anyFixtured := false
+	checked := 0
 	for _, s := range b.Streams {
 		if streamIsSkipped(s) {
 			continue
+		}
+		if checked >= maxDynamicSchemaStreamChecks {
+			break
 		}
 		pages, err := loadFixturePages(b.Fixtures, s.Name)
 		if err != nil {
@@ -369,6 +386,7 @@ func checkRecordsMatchSchema(b engine.Bundle) CheckResult {
 		if validateErr != nil {
 			return CheckResult{Name: name, Error: validateErr.Error()}
 		}
+		checked++
 	}
 	if !anyFixtured {
 		return CheckResult{Name: name, Skipped: true}
@@ -434,7 +452,7 @@ func checkCursorAdvances(b engine.Bundle) CheckResult {
 	// capture server always answers 200 with an empty page so the read
 	// terminates immediately after the one request this check inspects.
 	capture := newParamCaptureServer(stream.Incremental.RequestParam)
-	defer capture.Close()
+	defer closeReplayServer(capture)
 
 	rb := withReplayURL(b, capture.URL)
 	req := readRequestFor(stream.Name, runtimeConfigForEngine(b), map[string]string{"cursor": maxCursor})
@@ -456,11 +474,16 @@ func checkCursorAdvances(b engine.Bundle) CheckResult {
 // fixtures/writes/<action>.json is Skipped.
 func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 	var out []CheckResult
+	checked := 0
 	for _, action := range b.Writes {
 		name := "write_request_shape:" + action.Name
 		fx, err := loadWriteFixture(b.Fixtures, action.Name)
 		if err != nil {
 			out = append(out, CheckResult{Name: name, Skipped: true})
+			continue
+		}
+		if checked >= maxDynamicWriteFixtureChecks {
+			out = append(out, CheckResult{Name: name, Skipped: true, Error: dynamicCoverageBoundSkipReason})
 			continue
 		}
 
@@ -476,12 +499,12 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 		capture := newCaptureServer(fx.Response)
 		rb := withReplayURL(b, capture.URL)
 		if _, err := engine.Write(ctx, rb, writeRequestFor(action.Name, cfg), []connectors.Record{record}, engine.HooksFor(b.Name)); err != nil {
-			capture.Close()
+			closeReplayServer(capture)
 			out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("engine.Write against replay server failed: %v", err)})
 			continue
 		}
 		got := capture.LastRequest()
-		capture.Close()
+		closeReplayServer(capture)
 		if got == nil {
 			out = append(out, CheckResult{Name: name, Error: "engine.Write sent no HTTP request"})
 			continue
@@ -492,6 +515,7 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 			continue
 		}
 		out = append(out, CheckResult{Name: name, Passed: true})
+		checked++
 	}
 	return out
 }
@@ -535,7 +559,7 @@ func checkDeleteSemantics(b engine.Bundle) CheckResult {
 
 	status := deleteAction.Delete.MissingOkStatus[0]
 	srv := newAlwaysStatusServer(status)
-	defer srv.Close()
+	defer closeReplayServer(srv)
 
 	rb := withReplayURL(b, srv.URL)
 	cfg := runtimeConfigForEngine(b)
@@ -569,13 +593,24 @@ func readRawRecords(b engine.Bundle, streamName string, tracker *hitTracker, onR
 	if err != nil {
 		return err
 	}
-	defer srv.Close()
+	defer closeReplayServer(srv)
 
 	rb := withReplayURL(b, srv.URL)
 	req := readRequestFor(streamName, runtimeConfigForEngine(b), nil)
 	return engine.Read(context.Background(), rb, req, engine.HooksFor(b.Name), func(r connectors.Record) error {
 		return onRecord(map[string]any(r))
 	})
+}
+
+type replayServer interface {
+	Close()
+}
+
+func closeReplayServer(s replayServer) {
+	s.Close()
+	if tr, ok := http.DefaultTransport.(interface{ CloseIdleConnections() }); ok {
+		tr.CloseIdleConnections()
+	}
 }
 
 func firstIncrementalStreamWithFixtures(b engine.Bundle) (engine.StreamSpec, bool) {

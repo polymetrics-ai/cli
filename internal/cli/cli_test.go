@@ -146,7 +146,7 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 		"declarative JSON bundles",
 		"write=true/false",
 		"REVERSE ETL WRITE ACTIONS",
-		"218 writable connectors out of 547",
+		"223 writable connectors out of 547",
 		"GITHUB AUTHENTICATION",
 		"public",
 		"token",

@@ -41,7 +41,6 @@ func newRuntimeConfig(baseURL string, cfgExtra map[string]string, secrets map[st
 	return connectors.RuntimeConfig{Config: cfg, Secrets: secrets}
 }
 
-
 func TestAuthenticatorGithubApp_MintsInstallationTokenAndSetsBearer(t *testing.T) {
 	pemKey := testPrivateKeyPEM(t)
 	const wantToken = "ghs_installation_fixture_token"

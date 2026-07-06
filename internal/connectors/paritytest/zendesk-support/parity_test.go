@@ -538,20 +538,23 @@ func TestParityZendesk_BundleLoadsAndValidates(t *testing.T) {
 	bundle := loadZendeskBundle(t)
 
 	wantStreams := map[string]bool{"tickets": true, "users": true, "organizations": true, "groups": true, "satisfaction_ratings": true}
-	if len(bundle.Streams) != len(wantStreams) {
-		t.Fatalf("bundle streams = %d, want %d", len(bundle.Streams), len(wantStreams))
-	}
+	seen := map[string]bool{}
 	for _, s := range bundle.Streams {
-		if !wantStreams[s.Name] {
-			t.Fatalf("unexpected bundle stream %q", s.Name)
+		if wantStreams[s.Name] {
+			seen[s.Name] = true
+		}
+	}
+	for name := range wantStreams {
+		if !seen[name] {
+			t.Fatalf("bundle streams missing legacy stream %q; got %d streams", name, len(bundle.Streams))
 		}
 	}
 
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (zendesk-support is read-only, no writes.json)", bundle.Writes)
+	if len(bundle.Writes) == 0 {
+		t.Fatal("bundle write actions = 0, want Pass B write actions")
 	}
-	if bundle.Metadata.Capabilities.Write {
-		t.Fatal("bundle metadata.capabilities.write = true, want false (zendesk-support has no allow-listed write actions)")
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true")
 	}
 	if len(bundle.HTTP.Auth) != 2 {
 		t.Fatalf("bundle auth candidates = %d, want 2 (OAuth bearer + Basic api-token, when-gated)", len(bundle.HTTP.Auth))

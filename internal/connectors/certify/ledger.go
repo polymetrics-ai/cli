@@ -28,10 +28,10 @@ const ledgerFileName = "certify-ledger.jsonl"
 // RecordCleaned) carries only Tag and CleanedAt — LoadLedger folds the two
 // together per-tag via LedgerEntries.StatusFor.
 type LedgerEntry struct {
-	Action     string    `json:"action,omitempty"`
-	Tag        string    `json:"tag"`
-	Connector  string    `json:"connector,omitempty"`
-	EntityHint string    `json:"entity_hint,omitempty"`
+	Action     string `json:"action,omitempty"`
+	Tag        string `json:"tag"`
+	Connector  string `json:"connector,omitempty"`
+	EntityHint string `json:"entity_hint,omitempty"`
 	// PlannedAt/CleanedAt use "omitzero" (not "omitempty": time.Time is a
 	// struct, so encoding/json's omitempty never treats it as empty) so a
 	// planned-only entry never serializes a spurious zero-value

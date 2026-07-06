@@ -277,7 +277,7 @@ func TestParityVitally_NonSuccessStatusErrorsOnBothSides(t *testing.T) {
 	}
 }
 
-// --- capabilities / write-unsupported parity ---
+// --- capabilities / write parity ---
 
 func TestParityVitally_WriteUnsupportedOnBothSides(t *testing.T) {
 	bundle := loadVitallyBundle(t)
@@ -291,28 +291,31 @@ func TestParityVitally_WriteUnsupportedOnBothSides(t *testing.T) {
 	}
 
 	eng := engine.New(bundle, nil)
-	if _, err := eng.Write(context.Background(), connectors.WriteRequest{}, nil); err != connectors.ErrUnsupportedOperation {
-		t.Fatalf("engine Write error = %v, want ErrUnsupportedOperation", err)
+	if _, err := eng.Write(context.Background(), connectors.WriteRequest{}, nil); err == nil {
+		t.Fatal("engine Write succeeded with no action, want an error")
 	}
-	if eng.Metadata().Capabilities.Write {
-		t.Fatal("engine capabilities.write = true, want false (bundle metadata.json capabilities.write must be false, no writes.json)")
+	if !eng.Metadata().Capabilities.Write {
+		t.Fatal("engine capabilities.write = false, want true (Pass B write actions are modeled)")
 	}
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (vitally is read-only, no writes.json)", bundle.Writes)
+	if len(bundle.Writes) == 0 {
+		t.Fatal("bundle write actions = 0, want Pass B write actions")
 	}
 }
 
 // --- bundle load / manifest surface smoke guard ---
 
-func TestParityVitally_BundleLoadsWithSingleAccountsStream(t *testing.T) {
+func TestParityVitally_BundleLoadsWithAccountsStream(t *testing.T) {
 	bundle := loadVitallyBundle(t)
 
-	if len(bundle.Streams) != 1 || bundle.Streams[0].Name != "accounts" {
-		names := make([]string, 0, len(bundle.Streams))
-		for _, s := range bundle.Streams {
-			names = append(names, s.Name)
+	hasAccounts := false
+	for _, s := range bundle.Streams {
+		if s.Name == "accounts" {
+			hasAccounts = true
+			break
 		}
-		t.Fatalf("bundle streams = %v, want exactly [accounts]", names)
+	}
+	if !hasAccounts {
+		t.Fatalf("bundle streams = %v, want accounts included", bundle.Streams)
 	}
 
 	legacy := vitally.New()

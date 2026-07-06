@@ -247,8 +247,14 @@ func TestParitySerpstat_CheckSucceedsAgainstLiveServer(t *testing.T) {
 func TestParitySerpstat_BundleLoadsAndValidates(t *testing.T) {
 	bundle := loadSerpstatBundle(t)
 
-	if len(bundle.Streams) != 2 {
-		t.Fatalf("bundle streams = %v, want 2 (domain_keywords, domain_competitors)", bundle.Streams)
+	wantStreams := map[string]bool{"domain_keywords": true, "domain_competitors": true, "domain_urls": true}
+	if len(bundle.Streams) != len(wantStreams) {
+		t.Fatalf("bundle streams = %v, want %d (%v)", bundle.Streams, len(wantStreams), wantStreams)
+	}
+	for _, s := range bundle.Streams {
+		if !wantStreams[s.Name] {
+			t.Fatalf("unexpected bundle stream %q", s.Name)
+		}
 	}
 	if len(bundle.Writes) != 0 {
 		t.Fatalf("bundle write actions = %v, want none (serpstat is read-only)", bundle.Writes)

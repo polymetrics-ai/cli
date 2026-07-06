@@ -276,7 +276,7 @@ func TestParityTwilio_BasicAuthHeaderParity(t *testing.T) {
 	}
 }
 
-// --- write parity: both sides reject writes (read-only connector) ---
+// --- write parity: legacy remains read-only; bundle declares Pass B writes ---
 
 func TestParityTwilio_WriteUnsupportedOnBothSides(t *testing.T) {
 	bundle := loadBundle(t)
@@ -288,13 +288,13 @@ func TestParityTwilio_WriteUnsupportedOnBothSides(t *testing.T) {
 
 	eng := engine.New(bundle, engine.HooksFor(bundleName))
 	if _, err := eng.Write(context.Background(), connectors.WriteRequest{}, nil); err == nil {
-		t.Fatal("engine Write succeeded, want an error (twilio bundle declares capabilities.write: false, no writes.json)")
+		t.Fatal("engine Write succeeded with no action, want an error")
 	}
-	if bundle.Metadata.Capabilities.Write {
-		t.Fatal("bundle metadata.capabilities.write = true, want false (twilio is read-only)")
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true (Pass B write actions are modeled)")
 	}
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (twilio is read-only, no writes.json)", bundle.Writes)
+	if len(bundle.Writes) == 0 {
+		t.Fatal("bundle write actions = 0, want Pass B write actions")
 	}
 }
 
@@ -313,12 +313,12 @@ func TestParityTwilio_ManifestSurface(t *testing.T) {
 
 	wantStreams := manifestStreamSurface(legacyCatalog.Streams)
 	gotStreams := manifestStreamSurface(engManifest.Streams)
-	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("stream surface = %+v, want %+v (legacy Catalog())", gotStreams, wantStreams)
+	if missing := missingTwilioStreamSurface(gotStreams, wantStreams); len(missing) != 0 {
+		t.Fatalf("engine manifest missing legacy stream surface entries %+v; got %+v", missing, gotStreams)
 	}
 
-	if len(engManifest.WriteActions) != 0 {
-		t.Fatalf("engine write actions = %v, want none (twilio is read-only)", engManifest.WriteActions)
+	if len(engManifest.WriteActions) == 0 {
+		t.Fatal("engine write actions = 0, want Pass B write actions")
 	}
 }
 
@@ -336,6 +336,34 @@ func manifestStreamSurface(streams []connectors.Stream) []streamSurface {
 	return out
 }
 
+func missingTwilioStreamSurface(got, want []streamSurface) []streamSurface {
+	byName := make(map[string]streamSurface, len(got))
+	for _, s := range got {
+		byName[s.Name] = s
+	}
+	var missing []streamSurface
+	for _, s := range want {
+		if gotS, ok := byName[s.Name]; !ok || !reflect.DeepEqual(gotS.PrimaryKey, s.PrimaryKey) {
+			missing = append(missing, s)
+		}
+	}
+	return missing
+}
+
+func missingStrings(got, want []string) []string {
+	seen := make(map[string]bool, len(got))
+	for _, s := range got {
+		seen[s] = true
+	}
+	var missing []string
+	for _, s := range want {
+		if !seen[s] {
+			missing = append(missing, s)
+		}
+	}
+	return missing
+}
+
 // --- bundle load smoke guard ---
 
 func TestParityTwilio_BundleLoadsAndValidates(t *testing.T) {
@@ -347,15 +375,15 @@ func TestParityTwilio_BundleLoadsAndValidates(t *testing.T) {
 		gotStreams = append(gotStreams, s.Name)
 	}
 	sort.Strings(gotStreams)
-	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("bundle streams = %v, want %v", gotStreams, wantStreams)
+	if missing := missingStrings(gotStreams, wantStreams); len(missing) != 0 {
+		t.Fatalf("bundle streams missing legacy streams %v; got %v", missing, gotStreams)
 	}
 
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (twilio is read-only, no writes.json)", bundle.Writes)
+	if len(bundle.Writes) == 0 {
+		t.Fatal("bundle write actions = 0, want Pass B write actions")
 	}
-	if bundle.Metadata.Capabilities.Write {
-		t.Fatal("bundle metadata.capabilities.write = true, want false (twilio has no mutation API this bundle implements)")
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true")
 	}
 	for _, s := range bundle.Streams {
 		if s.Incremental != nil {

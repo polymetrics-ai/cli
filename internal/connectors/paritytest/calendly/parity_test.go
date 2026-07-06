@@ -724,8 +724,8 @@ func TestParityCalendly_ManifestSurface(t *testing.T) {
 
 	wantStreams := manifestStreamSurface(legacyCatalog.Streams)
 	gotStreams := manifestStreamSurface(engManifest.Streams)
-	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("stream surface (name+cursor fields) = %+v, want %+v (legacy Catalog)", gotStreams, wantStreams)
+	if missing := missingCalendlyStreamSurface(gotStreams, wantStreams); len(missing) != 0 {
+		t.Fatalf("engine manifest missing legacy stream surface entries %+v; got %+v", missing, gotStreams)
 	}
 
 	legacyByName := make(map[string][]string, len(legacyCatalog.Streams))
@@ -733,11 +733,15 @@ func TestParityCalendly_ManifestSurface(t *testing.T) {
 		legacyByName[s.Name] = s.PrimaryKey
 	}
 	for _, s := range engManifest.Streams {
-		if len(s.PrimaryKey) == 0 {
-			t.Fatalf("engine stream %q missing primary key", s.Name)
+		wantPK, ok := legacyByName[s.Name]
+		if !ok {
+			continue
 		}
-		if !reflect.DeepEqual(s.PrimaryKey, legacyByName[s.Name]) {
-			t.Fatalf("engine stream %q primary key = %v, want %v (legacy)", s.Name, s.PrimaryKey, legacyByName[s.Name])
+		if len(s.PrimaryKey) == 0 {
+			t.Fatalf("engine legacy stream %q missing primary key", s.Name)
+		}
+		if !reflect.DeepEqual(s.PrimaryKey, wantPK) {
+			t.Fatalf("engine legacy stream %q primary key = %v, want %v", s.Name, s.PrimaryKey, wantPK)
 		}
 	}
 }
@@ -758,9 +762,37 @@ func manifestStreamSurface(streams []connectors.Stream) []streamSurface {
 	return out
 }
 
+func missingCalendlyStreamSurface(got, want []streamSurface) []streamSurface {
+	byName := make(map[string]streamSurface, len(got))
+	for _, s := range got {
+		byName[s.Name] = s
+	}
+	var missing []streamSurface
+	for _, s := range want {
+		if gotS, ok := byName[s.Name]; !ok || !reflect.DeepEqual(gotS.CursorFields, s.CursorFields) {
+			missing = append(missing, s)
+		}
+	}
+	return missing
+}
+
+func missingStrings(got, want []string) []string {
+	seen := make(map[string]bool, len(got))
+	for _, s := range got {
+		seen[s] = true
+	}
+	var missing []string
+	for _, s := range want {
+		if !seen[s] {
+			missing = append(missing, s)
+		}
+	}
+	return missing
+}
+
 // TestParityCalendly_BundleLoadsAndValidates is a fast-failing smoke guard:
-// the bundle must load via engine.LoadAll(defs.FS) and declare exactly the 5
-// legacy streams by name, read-only (no writes.json).
+// the bundle must load via engine.LoadAll(defs.FS), keep the 5 legacy streams
+// by name, and declare the Pass B write actions.
 func TestParityCalendly_BundleLoadsAndValidates(t *testing.T) {
 	bundle := loadCalendlyBundle(t)
 
@@ -770,15 +802,15 @@ func TestParityCalendly_BundleLoadsAndValidates(t *testing.T) {
 		gotStreams = append(gotStreams, s.Name)
 	}
 	sort.Strings(gotStreams)
-	if !reflect.DeepEqual(gotStreams, wantStreams) {
-		t.Fatalf("bundle streams = %v, want %v", gotStreams, wantStreams)
+	if missing := missingStrings(gotStreams, wantStreams); len(missing) != 0 {
+		t.Fatalf("bundle streams missing legacy streams %v; got %v", missing, gotStreams)
 	}
 
-	if len(bundle.Writes) != 0 {
-		t.Fatalf("bundle write actions = %v, want none (calendly is read-only)", bundle.Writes)
+	if len(bundle.Writes) == 0 {
+		t.Fatal("bundle write actions = 0, want Pass B write actions")
 	}
-	if bundle.Metadata.Capabilities.Write {
-		t.Fatal("bundle metadata.capabilities.write = true, want false (calendly is read-only)")
+	if !bundle.Metadata.Capabilities.Write {
+		t.Fatal("bundle metadata.capabilities.write = false, want true")
 	}
 }
 
@@ -793,7 +825,7 @@ func TestParityCalendly_BundleLoadsAndValidates(t *testing.T) {
 func TestParityCalendly_SpecHasNoDeadConfigKeys(t *testing.T) {
 	bundle := loadCalendlyBundle(t)
 
-	wantKeys := []string{"api_key", "base_url", "organization_uri", "page_size", "start_date"}
+	wantKeys := []string{"api_key", "base_url", "organization_uri", "page_size", "routing_form_uri", "start_date", "user_uri"}
 	gotKeys := append([]string{}, bundle.Spec.Properties()...)
 	sort.Strings(gotKeys)
 	if !reflect.DeepEqual(gotKeys, wantKeys) {

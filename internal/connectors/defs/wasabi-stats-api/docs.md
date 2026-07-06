@@ -35,8 +35,6 @@ Wasabi's newer documented standalone utilization endpoints under `/v1/standalone
 return different envelopes and PascalCase field names. They are documented in `api_surface.json` as
 not wired into these legacy stream names because substituting them would change emitted records.
 
-<<<<<<< HEAD
-=======
 ## Known limits
 
 The newer standalone utilization endpoints are intentionally not substituted for the legacy
@@ -44,7 +42,6 @@ endpoints in this bundle. They may be useful in a future additive connector vers
 named streams, but they are not byte-for-byte compatible with legacy `bucket_stats` and
 `account_stats` records.
 
->>>>>>> fidfix-2d
 ## Write actions & risks
 
 None. Legacy returns `ErrUnsupportedOperation`, and the stats surface is read-only.
