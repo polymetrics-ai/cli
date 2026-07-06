@@ -33,11 +33,11 @@ test.describe('docs UI smoke', () => {
       'location',
     );
 
-    await page.goto('/docs/connectors/source-100ms');
+    await page.goto('/docs/connectors/100ms');
     const connectorToc = page.getByRole('navigation', { name: 'On this page' });
     await expect(connectorToc).toBeVisible();
     await expect(page.locator('[data-site-toc]')).toHaveCount(1);
-    await expect(connectorToc.getByRole('link', { name: 'Configuration' })).toBeVisible();
+    await expect(connectorToc.getByRole('link', { name: 'Status' })).toBeVisible();
   });
 
   test('uses one shared right TOC on the homepage and stays light only', async ({ page }) => {
@@ -98,24 +98,28 @@ test.describe('docs UI smoke', () => {
     await page.getByLabel('Search connectors').fill('100ms');
     await expect(page.getByRole('link', { name: /100ms/ })).toBeVisible();
 
-    await page.goto('/docs/connectors/source-100ms');
+    await page.goto('/docs/connectors/100ms');
     await expect(page.getByRole('heading', { level: 1, name: '100ms' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'data.json' })).toHaveAttribute(
+    await expect(page.getByRole('link', { name: 'data.json', exact: true })).toHaveAttribute(
       'href',
-      '/docs/connectors/source-100ms/data.json',
+      '/docs/connectors/100ms/data.json',
     );
 
-    const response = await page.request.get('/docs/connectors/source-100ms/data.json');
+    const response = await page.request.get('/docs/connectors/100ms/data.json');
     expect(response.ok()).toBe(true);
     expect(response.headers()['content-type']).toMatch(/application\/json/);
 
     const payload = await response.json();
     expect(payload).toMatchObject({
-      slug: 'source-100ms',
+      slug: '100ms',
       name: '100ms',
-      enrichment: expect.any(Object),
+      category: 'api',
+      capabilities: expect.objectContaining({
+        read: true,
+        write: true,
+      }),
     });
-    expect(payload).not.toHaveProperty('docUrl');
+    expect(payload.docsMd).toContain('management_token');
   });
 
   test('opens docs search and returns docs plus connector results', async ({ page }) => {
