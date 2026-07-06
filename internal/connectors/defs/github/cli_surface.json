@@ -644,7 +644,7 @@
       ],
       "examples": [
         "pm github repo read-dir --path docs --json",
-        "pm github repo read-dir --path . --ref main --json"
+        "pm github repo read-dir --path src --ref main --json"
       ]
     },
     {

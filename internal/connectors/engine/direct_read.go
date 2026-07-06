@@ -47,14 +47,14 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		return connectors.DirectReadResult{}, err
 	}
 
+	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
+	defer cancel()
+
 	cfg := materializeConfigDefaults(b, req.Config)
 	rt, err := newRuntime(ctx, b, cfg, h)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-
-	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
-	defer cancel()
 
 	resp, err := rt.Requester.Do(ctx, method, resolvedPath, query, nil)
 	if err != nil {
