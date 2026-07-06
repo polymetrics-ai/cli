@@ -53,6 +53,7 @@ field_contract:
       - status
       - head_sha
       - reviewed_range
+      - coverage_route
       - fallback_route
       - disposition_url
     primary_route_values: [coderabbit_auto, coderabbit_auto_incremental, coderabbit_manual_fallback, copilot_backup, human, blocked]

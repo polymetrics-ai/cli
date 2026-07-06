@@ -41,8 +41,8 @@ Result: <pass | fail | blocked>
 
 - Primary route: <coderabbit_auto | coderabbit_auto_incremental | coderabbit_manual_fallback | copilot_backup | human>
 - Fallback route: <copilot_backup | human | none>
-- Review route: <sub_pr | parent_pr_fallback | copilot_backup | blocked>
-- Review status: <pending | clean | comments_addressed | skipped | blocked>
+- Coverage route: <sub_pr | parent_pr_fallback | copilot_backup | blocked>
+- Coverage status: <pending | clean | comments_addressed | skipped | blocked>
 - Review URL:
 - Disposition summary:
 - Unresolved findings:
