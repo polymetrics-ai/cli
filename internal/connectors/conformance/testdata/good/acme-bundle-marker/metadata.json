@@ -5,5 +5,5 @@
   "integration_type": "api",
   "release_stage": "ga",
   "capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false },
-  "conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by internal/connectors/paritytest/acme-bundle-marker (self-test marker: every stream's fixture is deliberately unreplayable via the declarative path, to prove the marker -- not the fixture -- is why dynamic checks do not fail)" }
+  "conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by archived parity evidence for acme-bundle-marker (self-test marker: every stream's fixture is deliberately unreplayable via the declarative path, to prove the marker -- not the fixture -- is why dynamic checks do not fail)" }
 }

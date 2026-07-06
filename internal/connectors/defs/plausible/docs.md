@@ -1,83 +1,83 @@
 # Overview
 
-Plausible is a wave2 fan-out migration of `internal/connectors/plausible` (the hand-written
-connector it replaces). It reads Plausible Analytics sites and stats reports (aggregate, timeseries,
-and property breakdowns) through the Plausible Stats API. This bundle is read-only, matching legacy
-exactly; the legacy package stays registered and unchanged until wave6's registry flip.
+Reads Plausible Analytics sites and stats reports through the Stats API.
+
+Readable streams: `sites`, `aggregate`, `timeseries`, `breakdown`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://plausible.io/docs/stats-api.
 
 ## Auth setup
 
-Provide `api_token` as a secret; it is sent as a Bearer token (`Authorization: Bearer <api_token>`)
-and never logged.
+Connection fields:
+
+- `api_token` (required, secret, string); Plausible Analytics API token, sent as a Bearer token.
+  Never logged.
+- `base_url` (optional, string); default `https://plausible.io/api/v1`; format `uri`; Plausible API
+  base URL override for self-hosted instances, tests, or proxies.
+- `compare` (optional, string); Optional Plausible comparison period for the stats streams.
+- `date` (optional, string); Optional date (or date range, for period=custom) for the stats streams.
+- `filters` (optional, string); Optional Plausible filter expression for the stats streams.
+- `metrics` (optional, string); Optional comma-separated metrics override for the stats streams
+  (e.g. visitors,pageviews).
+- `mode` (optional, string).
+- `period` (optional, string); default `30d`; Plausible reporting period (e.g. 30d, 7d, month,
+  custom) for the stats streams.
+- `property` (optional, string); default `event:page`; Breakdown dimension for the breakdown stream
+  (e.g. event:page, visit:source, visit:country).
+- `site_id` (optional, string); Plausible site domain (site id); required for the aggregate,
+  timeseries, and breakdown stats streams.
+
+Secret fields are redacted in logs and write previews: `api_token`.
+
+Default configuration values: `base_url=https://plausible.io/api/v1`, `period=30d`,
+`property=event:page`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/sites`.
 
 ## Streams notes
 
-- `sites` (`GET /sites`, records at `sites`) — lists sites available to the token. Real Plausible
-  site objects have only a `domain` field (no separate `site_id`); `site_id` is a `computed_fields`
-  rename from `domain`, matching legacy's `first(item, "site_id", "domain")`/
-  `first(item, "domain", "site_id")` mutual fallback, which in practice always resolves both sides
-  from the same `domain` key since Plausible's wire shape never emits a distinct `site_id`. Not
-  paginated (matches legacy's `endpoint.paginated: false` for this stream — a single request only,
-  even though Plausible's real `/sites` response includes `meta.after`/`before` cursor fields
-  legacy's own `sites` stream never reads).
-- `aggregate` (`GET /stats/aggregate`, records at `results`) — requires config `site_id`. Real
-  Plausible wire shape wraps every metric in a `{"value": N}` object (confirmed against Plausible's
-  published example response), so each metric's `computed_fields` entry reaches one level deeper
-  (`{{ record.visitors.value }}`) than `timeseries`/`breakdown` — matching legacy's `metricValue`
-  helper, which unwraps a `{value: ...}` object when present. `results` is a single JSON object, not
-  an array; the engine's `RecordsAt` wraps a lone object as one record, identical to legacy's own
-  `emitRecords`/`connsdk.RecordsAt` call.
-- `timeseries` (`GET /stats/timeseries`, records at `results`) — requires config `site_id`. Metrics
-  are bare (unwrapped) scalars on this endpoint (confirmed against Plausible's published example and
-  legacy's own unit test fixture), so each metric's `computed_fields` entry is a plain
-  `{{ record.<metric> }}` reference with no `.value` unwrap.
-- `breakdown` (`GET /stats/breakdown`, records at `results`) — requires config `site_id` and
-  `property`; the only paginated stream (matches legacy's `endpoint.paginated: true`).
+Default pagination: single request; no pagination.
 
-All three stats streams send `site_id`, `period` (default `30d`, matching legacy's
-`valueOrDefault(cfg.Config["period"], "30d")`), and the optional `date`/`metrics`/`filters`/
-`compare` query params (each declared with `omit_when_absent: true` — sent only when configured,
-matching legacy's `for _, key := range [...] { if v := cfg.Config[key]; v != "" { q.Set(key, v) } }`
-loop). `breakdown` additionally sends `property` (default `event:page`, matching legacy's
-`valueOrDefault(cfg.Config["property"], "event:page")`).
+Pagination by stream: none: `sites`, `aggregate`, `timeseries`; page_number: `breakdown`.
 
-Pagination (`breakdown` only) is page-number-based (`pagination.type: page_number`,
-`page_param: page`, `size_param: limit`, `start_page: 1`, `page_size: 100`, matching legacy's
-`defaultPageSize`) — the engine stops when a page returns fewer records than `page_size`, identical
-to legacy's own `count < pageSize` stop condition.
-
-Legacy never sends an incremental filter parameter for any stream (there is no cursor-based
-`request_param`; Plausible's `date`/`period` are report-scoping inputs, not sync cursors), so no
-`incremental` block is declared here — every stream is full-refresh only, matching legacy's actual
-(non-incremental) read behavior.
+- `sites`: GET `/sites` - records path `sites`; computed output fields `site_id`.
+- `aggregate`: GET `/stats/aggregate` - records path `results`; query `compare` from template `{{
+  config.compare }}`, omitted when absent; `date` from template `{{ config.date }}`, omitted when
+  absent; `filters` from template `{{ config.filters }}`, omitted when absent; `metrics` from
+  template `{{ config.metrics }}`, omitted when absent; `period`=`{{ config.period }}`;
+  `site_id`=`{{ config.site_id }}`; computed output fields `bounce_rate`, `events`, `pageviews`,
+  `site_id`, `visit_duration`, `visitors`, `visits`.
+- `timeseries`: GET `/stats/timeseries` - records path `results`; query `compare` from template `{{
+  config.compare }}`, omitted when absent; `date` from template `{{ config.date }}`, omitted when
+  absent; `filters` from template `{{ config.filters }}`, omitted when absent; `metrics` from
+  template `{{ config.metrics }}`, omitted when absent; `period`=`{{ config.period }}`;
+  `site_id`=`{{ config.site_id }}`; computed output fields `bounce_rate`, `events`, `pageviews`,
+  `site_id`, `visit_duration`, `visitors`, `visits`.
+- `breakdown`: GET `/stats/breakdown` - records path `results`; query `compare` from template `{{
+  config.compare }}`, omitted when absent; `date` from template `{{ config.date }}`, omitted when
+  absent; `filters` from template `{{ config.filters }}`, omitted when absent; `metrics` from
+  template `{{ config.metrics }}`, omitted when absent; `period`=`{{ config.period }}`;
+  `property`=`{{ config.property }}`; `site_id`=`{{ config.site_id }}`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100; computed output fields
+  `bounce_rate`, `events`, `pageviews`, `property_value`, `site_id`, `visit_duration`, `visitors`,
+  `visits`.
 
 ## Write actions & risks
 
-None. Plausible is `capabilities.write: false`; no `writes.json` is shipped, matching legacy's
-`Write` always returning `connectors.ErrUnsupportedOperation`.
+This connector is read-only. Read behavior: external Plausible Analytics API read of site analytics
+data.
 
 ## Known limits
 
-- **`breakdown`'s `property_value` field only supports the default `property=event:page` dimension**
-  (projected from the raw `page` field). Plausible's real API names the breakdown dimension field
-  after whichever `property` was requested (`event:page` -> `page`, `visit:source` -> `source`,
-  `visit:country` -> `country`, etc. — confirmed against Plausible's published API docs); legacy's
-  own `breakdownRecord` defensively tries ten possible dimension field names
-  (`first(item, "page", "source", "referrer", "utm_campaign", "country", "region", "city",
-  "browser", "os", "device")`) to cover whichever one the caller configured. The engine's
-  `computed_fields` dialect has no mechanism to select a template BASED ON another config value's
-  runtime value (a template is a fixed string chosen at bundle-authoring time, not itself
-  parameterized by `config.property`), so this bundle implements only the single, most common
-  dimension (`event:page`, legacy's own default) and treats every other `property` value as out of
-  scope rather than silently mis-projecting. This is the identical shape to searxng's documented
-  subreddit-narrowing deviation (`docs/migration/conventions.md` §5 item 7) — the base/default case
-  is implemented at full parity, a config-driven variant case is not, and is documented here rather
-  than silently wrong.
-- The full Plausible API surface (goals-scoped breakdowns, realtime visitor counts, funnels, CSV
-  export, site provisioning/management) is out of scope for this wave; see `api_surface.json`'s
-  `api_surface.json` concrete exclusion entries.
-- `page_size`/`max_pages` config overrides from legacy (`intConfig` reading `config.page_size`/
-  `config.max_pages`) have no runtime-config-driven equivalent in this engine dialect
-  (`PaginationSpec.PageSize`/`MaxPages` are bundle-fixed values, never read from `RuntimeConfig`) —
-  they are therefore not declared in `spec.json` at all (a declared-but-unwireable key is worse than
-  an absent one, per the F6 dead-config rule) rather than accepted but silently ignored.
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, out_of_scope=3.

@@ -12,20 +12,52 @@ SYNOPSIS
 DESCRIPTION
   Reads RepairShopr customers, tickets, invoices, estimates, and assets through the REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  created_after
+  query
+  updated_after
+  api_token (secret)
+
+ETL STREAMS
+  customers:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), email(), id(), name(), phone(), stream(), updated_at()
+  tickets:
+    primary key: id
+    cursor: updated_at
+    fields: customer_id(), id(), number(), status(), stream(), subject(), updated_at()
+  invoices:
+    primary key: id
+    cursor: updated_at
+    fields: customer_id(), id(), number(), status(), stream(), total(), updated_at()
+  estimates:
+    primary key: id
+    cursor: updated_at
+    fields: customer_id(), id(), number(), status(), stream(), total(), updated_at()
+  assets:
+    primary key: id
+    cursor: updated_at
+    fields: customer_id(), id(), name(), serial_number(), stream(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external RepairShopr API read of customer and shop-management data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

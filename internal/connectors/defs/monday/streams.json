@@ -25,7 +25,7 @@
       "records": { "path": "data.boards" },
       "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
       "schema": "schemas/boards.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/monday and internal/connectors/hooks/monday/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by archived parity evidence for monday and internal/connectors/hooks/monday/hooks_test.go" }
     },
     {
       "name": "items",
@@ -34,7 +34,7 @@
       "records": { "path": "data.next_items_page.items" },
       "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
       "schema": "schemas/items.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body next_items_page cursor pagination); hook-covered, proven live by internal/connectors/paritytest/monday and internal/connectors/hooks/monday/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body next_items_page cursor pagination); hook-covered, proven live by archived parity evidence for monday and internal/connectors/hooks/monday/hooks_test.go" }
     },
     {
       "name": "users",
@@ -42,7 +42,7 @@
       "path": "",
       "records": { "path": "data.users" },
       "schema": "schemas/users.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/monday and internal/connectors/hooks/monday/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by archived parity evidence for monday and internal/connectors/hooks/monday/hooks_test.go" }
     },
     {
       "name": "teams",
@@ -50,7 +50,7 @@
       "path": "",
       "records": { "path": "data.teams" },
       "schema": "schemas/teams.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/monday and internal/connectors/hooks/monday/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by archived parity evidence for monday and internal/connectors/hooks/monday/hooks_test.go" }
     },
     {
       "name": "tags",
@@ -58,7 +58,7 @@
       "path": "",
       "records": { "path": "data.tags" },
       "schema": "schemas/tags.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/monday and internal/connectors/hooks/monday/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST + in-body page-number pagination); hook-covered, proven live by archived parity evidence for monday and internal/connectors/hooks/monday/hooks_test.go" }
     }
   ]
 }

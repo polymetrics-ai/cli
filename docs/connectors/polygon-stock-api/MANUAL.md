@@ -10,22 +10,55 @@ SYNOPSIS
   pm credentials add <name> --connector polygon-stock-api [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Polygon.io stock tickers, dividends, and splits through reference endpoints.
+  Reads Polygon.io stock tickers, dividends, and splits through the Polygon.io reference REST API.
+
+ICON
+  asset: icons/polygon.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://polygon.io/docs/stocks/getting-started
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  active
+  base_url
+  ex_dividend_date
+  execution_date
+  locale
+  market
+  mode
+  order
+  page_size
+  sort
+  ticker
+  type
+  api_key (secret)
+
+ETL STREAMS
+  tickers:
+    primary key: ticker
+    fields: active(), currency_name(), locale(), market(), name(), primary_exchange(), ticker()
+  dividends:
+    primary key: id
+    cursor: ex_dividend_date
+    fields: cash_amount(), currency(), ex_dividend_date(), id(), ticker()
+  splits:
+    primary key: id
+    cursor: execution_date
+    fields: execution_date(), id(), split_from(), split_to(), ticker()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Polygon.io API read of stock reference data (tickers, dividends, splits)
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

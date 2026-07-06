@@ -12,20 +12,50 @@ SYNOPSIS
 DESCRIPTION
   Reads Revolut Merchant orders, customers, settlements, and payment links through the REST API.
 
+ICON
+  asset: icons/revolut.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developer.revolut.com/docs/guides/merchant/reference/api
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  customer_id
+  from_created_date
+  state
+  to_created_date
+  api_key (secret)
+
+ETL STREAMS
+  orders:
+    primary key: id
+    cursor: created_at
+    fields: amount(), created_at(), currency(), id(), state(), stream()
+  customers:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), email(), full_name(), id(), stream()
+  settlements:
+    primary key: id
+    cursor: created_at
+    fields: amount(), created_at(), currency(), id(), stream()
+  payment_links:
+    primary key: id
+    cursor: created_at
+    fields: amount(), created_at(), currency(), id(), state(), stream()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Revolut Merchant API read of order, customer, settlement, and payment-link data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

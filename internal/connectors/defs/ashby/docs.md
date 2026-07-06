@@ -1,20 +1,57 @@
 # Overview
 
-Ashby is a Tier-2 quarantine migration of `internal/connectors/ashby`. The bundle mirrors the legacy catalog stream names, primary keys, cursor fields, and field list; the runtime read/check behavior is owned by `internal/connectors/hooks/ashby` during the pre-cutover period.
+Reads Ashby applicant-tracking data - candidates, jobs, applications, and users - through the Ashby
+REST API.
+
+Readable streams: `candidates`, `jobs`, `applications`, `users`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developers.ashbyhq.com/.
 
 ## Auth setup
 
-Use the same configuration and secret names accepted by the legacy `ashby` connector. Secret-shaped fields are marked with `x-secret` in `spec.json`; the hook delegates to the legacy connector so credential handling remains unchanged and secret values are never logged by the bundle.
+Connection fields:
+
+- `api_key` (required, secret, string); The Ashby API Key, see <a
+  href=\"https://developers.ashbyhq.com/reference/authentication\">doc</a> here.
+- `base_url` (optional, string).
+- `mode` (optional, string).
+- `start_date` (required, string); UTC date and time in the format 2017-01-25T00:00:00Z. Any data
+  before this date will not be replicated.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks use a connector-managed request.
 
 ## Streams notes
 
-The declared streams are static shadows used for schema, catalog, and surface validation. The Tier-2 hook handles reads and checks by calling the legacy connector, preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The declarative paths under `/__legacy_hook/` are not live API endpoints.
+Default pagination: single request; no pagination.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `candidates`: GET connector-managed request path - records path `data`; incremental cursor
+  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `jobs`: GET connector-managed request path - records path `data`; incremental cursor `updatedAt`;
+  formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
+- `applications`: GET connector-managed request path - records path `data`; incremental cursor
+  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `users`: GET connector-managed request path - records path `data`; incremental cursor `updatedAt`;
+  formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
 
 ## Write actions & risks
 
-None. This migration preserves the legacy read-only surface and does not add reverse-ETL actions.
+This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- This is a quarantine bridge: hook code currently depends on `internal/connectors/ashby` staying present until the wave 6 cutover replaces or absorbs the delegated behavior.
-- Dynamic conformance replay is skipped because the declarative shadow path does not model the connector-specific auth, request body, pagination, or record explosion that caused quarantine; hook unit tests and legacy connector tests are the behavioral proof for this bridge.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Client-side incremental filtering is used for: `candidates`, `jobs`, `applications`, `users`.

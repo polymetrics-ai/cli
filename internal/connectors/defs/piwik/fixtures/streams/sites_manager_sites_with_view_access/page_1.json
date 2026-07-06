@@ -19,9 +19,9 @@
         "main_url": "https://fixture1.example.com"
       },
       {
-        "idsite": "2",
+        "idSite": "2",
         "name": "Fixture Site Two",
-        "main_url": "https://fixture2.example.com"
+        "mainUrl": "https://fixture2.example.com"
       }
     ]
   }

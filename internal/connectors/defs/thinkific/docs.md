@@ -1,139 +1,214 @@
 # Overview
 
-Thinkific is a wave2 fan-out declarative-HTTP migration of `internal/connectors/thinkific` (the
-hand-written legacy connector this bundle migrates; the legacy package stays registered and
-unchanged until wave6's registry flip), since Pass B expanded to the full documented Thinkific
-Admin API v1 surface (`https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml`):
-courses, users, enrollments, collections (categories), products, orders, coupons, promotions,
-groups, instructors, course reviews, custom profile field definitions, site scripts, and product
-publish requests, plus the write actions the dialect can express for each. `capabilities.write` is
-now `true`.
+Reads and writes Thinkific courses, users, enrollments, products, orders, and site administration
+resources through the Thinkific Admin API.
+
+Readable streams: `courses`, `users`, `enrollments`, `collections`, `products`, `orders`, `coupons`,
+`promotions`, `groups`, `instructors`, `course_reviews`, `custom_profile_field_definitions`,
+`site_scripts`, `product_publish_requests`.
+
+Write actions: `create_user`, `update_user`, `delete_user`, `create_enrollment`,
+`update_enrollment`, `create_coupon`, `update_coupon`, `delete_coupon`, `create_collection`,
+`update_collection`, `delete_collection`, `add_products_to_collection`,
+`remove_products_from_collection`, `create_group`, `delete_group`, `add_user_to_groups`,
+`create_instructor`, `update_instructor`, `delete_instructor`, `create_promotion`,
+`update_promotion`, `delete_promotion`, `create_site_script`, `update_site_script`,
+`delete_site_script`, `create_course_review`, `approve_product_publish_request`,
+`deny_product_publish_request`.
+
+Service API documentation: https://developers.thinkific.com/.
 
 ## Auth setup
 
-Provide a Thinkific API key via the `api_key` secret and the site subdomain via the `subdomain`
-config value; both are sent as static request headers (`X-Auth-API-Key`/`X-Auth-Subdomain`,
-`streams.json` `base.headers`), matching legacy's `connsdk.Requester.DefaultHeaders` construction
-(`thinkific.go:110`: `{"X-Auth-API-Key": key, "X-Auth-Subdomain": subdomain}`) and the published
-OpenAPI spec's `ApiKey`/`ApiKeySubdomain` security scheme pair. `base.auth` declares
-`[{"mode": "none"}]` since Thinkific's auth is header-only, not a bearer/basic/api-key-* mode the
-dialect's `auth` block otherwise expresses. `api_key` is never logged (`x-secret: true`). `base_url`
-defaults to `https://api.thinkific.com` and may be overridden for tests/proxies. The published spec
-also documents an `OAuthAccessToken` alternative (bearer-token OAuth app installs); this bundle
-models only the static API-key/subdomain header pair, matching legacy's own auth shape — OAuth app
-installation is a distinct, more complex credential-provisioning flow out of scope for this pass.
+Connection fields:
+
+- `api_key` (required, secret, string); Thinkific API key, sent as the X-Auth-API-Key header. Never
+  logged.
+- `base_url` (optional, string); default `https://api.thinkific.com`; format `uri`; Thinkific API
+  base URL override for tests or proxies.
+- `subdomain` (required, string); Thinkific site subdomain, sent as the X-Auth-Subdomain header
+  (e.g. 'academy' for academy.thinkific.com).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.thinkific.com`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/api/public/v1/courses`.
 
 ## Streams notes
 
-13 streams, all `GET`, all under `/api/public/v1`, all records at the `items` envelope key, primary
-key `["id"]` (Thinkific's real wire type — a JSON integer, not a string — for every stream's `id`
-field, matching each stream's fixture and never widened to a string union):
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 100.
 
-- `courses` — the original legacy-parity stream. Every emitted field (`id`, `name`, `slug`,
-  `created_at`) matches the raw API's own field names exactly — no `computed_fields` rename
-  needed, plain schema projection reproduces legacy's inline record construction
-  (`thinkific.go:86`) field-for-field.
-- `users`, `enrollments`, `collections`, `products`, `orders`, `coupons`, `promotions`, `groups`,
-  `instructors`, `course_reviews`, `custom_profile_field_definitions`, `site_scripts`,
-  `product_publish_requests` — new Pass B streams, each a plain `GET .../items`-enveloped list
-  matching the published OpenAPI response schema field-for-field (e.g. `enrollments`' `user_id`/
-  `course_id`/`percentage_completed`/`completed`/`expired` fields, `orders`' `amount_cents`/
-  `amount_dollars`/`status`, `site_scripts`' `page_scopes`/`location`/`load_method`/`category`).
-  `collections` (the OpenAPI spec's own name for what Thinkific's UI calls "Categories") declares
-  `created_at`/`default`/`product_ids` per its documented required-field set.
-  `product_publish_requests`' schema declares `id` as its primary key even though the published
-  OpenAPI response component (`GetProductPublishResponse`) mistakenly `$ref`s `PromotionResponse`
-  rather than a dedicated response schema — the sibling by-id/approve/deny endpoints
-  (`/product_publish_requests/{id}[/approve|/deny]`) all document `id` as an integer path
-  parameter, confirming it is the real identifier despite the response-schema documentation bug;
-  this is a documented interpretation, not a guess without supporting evidence.
-
-Pagination is shared by every stream via `base.pagination` (`pagination.type: page_number`,
-`page_param: page`, `size_param: limit`, `page_size: 100`) — matches legacy's hand-rolled loop
-(`thinkific.go:72-93`) and the published spec's own `page`/`limit` query parameters (documented
-identically on every list endpoint), stopping when a page returns fewer records than the configured
-size.
+- `courses`: GET `/api/public/v1/courses` - records path `items`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `users`: GET `/api/public/v1/users` - records path `items`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 100.
+- `enrollments`: GET `/api/public/v1/enrollments` - records path `items`; page-number pagination;
+  page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `collections`: GET `/api/public/v1/collections` - records path `items`; page-number pagination;
+  page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `products`: GET `/api/public/v1/products` - records path `items`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `orders`: GET `/api/public/v1/orders` - records path `items`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `coupons`: GET `/api/public/v1/coupons` - records path `items`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `promotions`: GET `/api/public/v1/promotions` - records path `items`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `groups`: GET `/api/public/v1/groups` - records path `items`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `instructors`: GET `/api/public/v1/instructors` - records path `items`; page-number pagination;
+  page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `course_reviews`: GET `/api/public/v1/course_reviews` - records path `items`; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `custom_profile_field_definitions`: GET `/api/public/v1/custom_profile_field_definitions` -
+  records path `items`; page-number pagination; page parameter `page`; size parameter `limit`;
+  starts at 1; page size 100.
+- `site_scripts`: GET `/api/public/v1/site_scripts` - records path `items`; page-number pagination;
+  page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `product_publish_requests`: GET `/api/public/v1/product_publish_requests` - records path `items`;
+  page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100.
 
 ## Write actions & risks
 
-28 write actions, all under `/api/public/v1`, `body_type: "json"` unless noted:
+Overall write risk: external Thinkific Admin API mutations covering
+user/enrollment/coupon/promotion/group/instructor/collection/course-review lifecycle and site-script
+injection; site_scripts writes inject arbitrary HTML/JS site-wide and are marked
+destructive/confirm-gated, delete_user is destructive/confirm-gated.
 
-- **Users**: `create_user` (POST `/users`), `update_user` (PUT `/users/{id}`), `delete_user`
-  (DELETE `/users/{id}`, destructive/confirm-gated — permanently removes the account and its course
-  access).
-- **Enrollments**: `create_enrollment` (POST `/enrollments`, grants course access),
-  `update_enrollment` (PUT `/enrollments/{id}`, can extend or revoke the access window via
-  `activated_at`/`expiry_date`).
-- **Coupons**: `create_coupon`, `update_coupon`, `delete_coupon` (standard create/update/delete
-  against `/coupons[/{id}]`; deleting an in-use code breaks checkout for anyone holding it).
-- **Collections (Categories)**: `create_collection`, `update_collection`, `delete_collection`
-  against `/collections[/{id}]`, plus `add_products_to_collection` (POST
-  `/collection_memberships/{collection_id}`, `body_fields: ["product_ids"]`) and
-  `remove_products_from_collection` (DELETE `/collection_memberships/{collection_id}`, same
-  `body_fields` restriction — a DELETE-with-body action, `delete.missing_ok_status: [404]`).
-- **Groups**: `create_group`, `delete_group` against `/groups[/{id}]` (no PUT/update endpoint is
-  published for groups — name is set only at creation), and `add_user_to_groups` (POST
-  `/group_users`, a `kind: custom` action since it neither creates nor updates a single addressable
-  resource but rather attaches an existing user to one or more existing groups by name).
-- **Instructors**: `create_instructor`, `update_instructor`, `delete_instructor` against
-  `/instructors[/{id}]` — deleting an instructor removes their attribution from every course
-  crediting them.
-- **Promotions**: `create_promotion`, `update_promotion`, `delete_promotion` against
-  `/promotions[/{id}]` — directly changes checkout pricing for the targeted products; `update`/
-  `delete` are flagged accordingly in `risk`.
-- **Site Scripts**: `create_site_script`, `update_site_script` (both destructive/confirm-gated —
-  they inject arbitrary third-party HTML/JavaScript site-wide into every scoped page) and
-  `delete_site_script` against `/site_scripts[/{id}]`.
-- **Course Reviews**: `create_course_review` (POST `/course_reviews`) — an approved review is
-  publicly visible on the course landing page immediately.
-- **Product Publish Requests**: `approve_product_publish_request` (POST
-  `/product_publish_requests/{id}/approve`) and `deny_product_publish_request` (POST
-  `/product_publish_requests/{id}/deny`), both `kind: custom` action-trigger writes carrying the
-  documented `ProductPublishRequestBody` (`user_id` required, `response_text`/
-  `notify_requester` optional) — approving makes a course publicly purchasable.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-`metadata.json` now declares `capabilities.write: true`; `risk.approval` names exactly which
-actions require approval (`site_scripts` create/update, `delete_user`) versus which are low-risk
-additive/idempotent mutations.
+- `create_user`: POST `/api/public/v1/users` - kind `create`; body type `json`; required record
+  fields `email`, `first_name`, `last_name`; accepted fields `bio`, `company`, `email`,
+  `external_id`, `first_name`, `headline`, `last_name`, `password`, `roles`, `send_welcome_email`;
+  risk: creates a new Thinkific user account; low-risk additive external mutation, no approval
+  required.
+- `update_user`: PUT `/api/public/v1/users/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`; accepted fields `bio`, `company`, `email`, `first_name`,
+  `headline`, `id`, `last_name`, `password`, `roles`; risk: mutates an existing user's profile,
+  email, password, or role assignment; a role change can grant or revoke site-admin/course-admin
+  access.
+- `delete_user`: DELETE `/api/public/v1/users/{{ record.id }}` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; confirmation `destructive`; risk: permanently deletes a Thinkific user
+  account and revokes their access to every enrolled course; destructive, approval required.
+- `create_enrollment`: POST `/api/public/v1/enrollments` - kind `create`; body type `json`; accepted
+  fields `activated_at`, `course_id`, `expiry_date`, `user_id`; risk: grants a user access to a
+  course; low-risk additive external mutation, no approval required.
+- `update_enrollment`: PUT `/api/public/v1/enrollments/{{ record.id }}` - kind `update`; body type
+  `json`; path fields `id`; required record fields `id`; accepted fields `activated_at`,
+  `expiry_date`, `id`; risk: changes an enrollment's activation or expiry date, which can extend or
+  revoke a user's access window to a course.
+- `create_coupon`: POST `/api/public/v1/coupons` - kind `create`; body type `json`; required record
+  fields `code`; accepted fields `code`, `note`, `quantity`; risk: creates a discount coupon code
+  redeemable at checkout; low-risk additive external mutation, no approval required.
+- `update_coupon`: PUT `/api/public/v1/coupons/{{ record.id }}` - kind `update`; body type `json`;
+  path fields `id`; required record fields `id`, `code`; accepted fields `code`, `id`, `note`,
+  `quantity`, `quantity_used`; risk: mutates an existing coupon's code, quantity, or usage counter;
+  can change a customer-facing discount code that has already been shared.
+- `delete_coupon`: DELETE `/api/public/v1/coupons/{{ record.id }}` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: permanently deletes a coupon; any customer relying on
+  the code at checkout will see it rejected.
+- `create_collection`: POST `/api/public/v1/collections` - kind `create`; body type `json`; required
+  record fields `name`, `description`, `slug`; accepted fields `description`, `name`, `slug`; risk:
+  creates a new course category (Collection); low-risk additive external mutation, no approval
+  required.
+- `update_collection`: PUT `/api/public/v1/collections/{{ record.id }}` - kind `update`; body type
+  `json`; path fields `id`; required record fields `id`; accepted fields `description`, `id`,
+  `name`, `slug`; risk: renames or re-slugs an existing category, which changes its public
+  landing-page URL.
+- `delete_collection`: DELETE `/api/public/v1/collections/{{ record.id }}` - kind `delete`; body
+  type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: permanently deletes a course category; any public page
+  linking to it will 404.
+- `add_products_to_collection`: POST `/api/public/v1/collection_memberships/{{ record.collection_id
+  }}` - kind `custom`; body type `json`; path fields `collection_id`; body fields `product_ids`;
+  required record fields `collection_id`, `product_ids`; accepted fields `collection_id`,
+  `product_ids`; risk: adds one or more products (courses/bundles) to a public category, changing
+  what appears on that category's landing page.
+- `remove_products_from_collection`: DELETE `/api/public/v1/collection_memberships/{{
+  record.collection_id }}` - kind `delete`; body type `json`; path fields `collection_id`; body
+  fields `product_ids`; required record fields `collection_id`, `product_ids`; accepted fields
+  `collection_id`, `product_ids`; missing records treated as success for status `404`; risk: removes
+  one or more products from a public category, which can hide previously-listed courses from that
+  category's landing page.
+- `create_group`: POST `/api/public/v1/groups` - kind `create`; body type `json`; required record
+  fields `name`; accepted fields `name`; risk: creates a new Group (used for bulk
+  enrollment/organization management); low-risk additive external mutation, no approval required.
+- `delete_group`: DELETE `/api/public/v1/groups/{{ record.id }}` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: permanently deletes a Group; members lose any group-scoped
+  access/reporting association.
+- `add_user_to_groups`: POST `/api/public/v1/group_users` - kind `custom`; body type `json`;
+  required record fields `group_names`, `user_id`; accepted fields `group_names`, `user_id`; risk:
+  adds a user to one or more existing Groups by name; low-risk additive external mutation, no
+  approval required.
+- `create_instructor`: POST `/api/public/v1/instructors` - kind `create`; body type `json`; required
+  record fields `first_name`, `last_name`, `slug`; accepted fields `bio`, `email`, `first_name`,
+  `last_name`, `slug`, `title`, `user_id`; risk: creates a new public Instructor profile; low-risk
+  additive external mutation, no approval required.
+- `update_instructor`: PUT `/api/public/v1/instructors/{{ record.id }}` - kind `update`; body type
+  `json`; path fields `id`; required record fields `id`, `first_name`, `last_name`, `slug`; accepted
+  fields `bio`, `email`, `first_name`, `id`, `last_name`, `slug`, `title`; risk: mutates a public
+  Instructor profile's name, bio, or slug, changing what's shown on every course page that credits
+  them.
+- `delete_instructor`: DELETE `/api/public/v1/instructors/{{ record.id }}` - kind `delete`; body
+  type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: permanently deletes an Instructor profile; any course
+  crediting them loses that attribution.
+- `create_promotion`: POST `/api/public/v1/promotions` - kind `create`; body type `json`; required
+  record fields `name`, `discount_type`, `amount`; accepted fields `amount`, `coupon_ids`,
+  `description`, `discount_type`, `duration`, `expires_at`, `name`, `product_ids`, `starts_at`;
+  risk: creates a discount promotion applied automatically at checkout for the targeted products;
+  low-risk additive external mutation, no approval required.
+- `update_promotion`: PUT `/api/public/v1/promotions/{{ record.id }}` - kind `update`; body type
+  `json`; path fields `id`; required record fields `id`, `name`, `discount_type`, `amount`; accepted
+  fields `amount`, `coupon_ids`, `description`, `discount_type`, `duration`, `expires_at`, `id`,
+  `name`, `product_ids`, `starts_at`; risk: mutates an active discount promotion's amount, type, or
+  eligible products, directly changing checkout pricing.
+- `delete_promotion`: DELETE `/api/public/v1/promotions/{{ record.id }}` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: permanently deletes an active discount promotion;
+  checkout pricing reverts to full price immediately.
+- `create_site_script`: POST `/api/public/v1/site_scripts` - kind `create`; body type `json`;
+  required record fields `name`, `description`, `page_scopes`, `category`; accepted fields
+  `category`, `content`, `description`, `load_method`, `location`, `name`, `page_scopes`, `src`;
+  confirmation `destructive`; risk: injects arbitrary third-party HTML/JavaScript into every scoped
+  page of the public site; high-risk external mutation (site-wide script injection), approval
+  required.
+- `update_site_script`: PUT `/api/public/v1/site_scripts/{{ record.id }}` - kind `update`; body type
+  `json`; path fields `id`; required record fields `id`, `name`, `description`, `page_scopes`,
+  `category`; accepted fields `category`, `content`, `description`, `id`, `load_method`, `location`,
+  `name`, `page_scopes`, `src`; confirmation `destructive`; risk: changes the injected third-party
+  HTML/JavaScript payload site-wide; high-risk external mutation, approval required.
+- `delete_site_script`: DELETE `/api/public/v1/site_scripts/{{ record.id }}` - kind `delete`; body
+  type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: removes an injected site script from every scoped page
+  immediately.
+- `create_course_review`: POST `/api/public/v1/course_reviews` - kind `create`; body type `json`;
+  required record fields `approved`, `rating`, `review_text`, `title`, `user_id`; accepted fields
+  `approved`, `course_id`, `rating`, `review_text`, `title`, `user_id`; risk: creates a course
+  review that, once approved, is publicly visible on the course landing page; low-risk additive
+  external mutation, no approval required.
+- `approve_product_publish_request`: POST `/api/public/v1/product_publish_requests/{{ record.id
+  }}/approve` - kind `custom`; body type `json`; path fields `id`; required record fields `id`,
+  `user_id`; accepted fields `id`, `notify_requester`, `response_text`, `user_id`; risk: approves a
+  pending course-publish request, making the course publicly visible/purchasable; approval required.
+- `deny_product_publish_request`: POST `/api/public/v1/product_publish_requests/{{ record.id
+  }}/deny` - kind `custom`; body type `json`; path fields `id`; required record fields `id`,
+  `user_id`; accepted fields `id`, `notify_requester`, `response_text`, `user_id`; risk: denies a
+  pending course-publish request, blocking the course from going live.
 
 ## Known limits
 
-- Detail-by-id endpoints (`/courses/{id}`, `/users/{id}`, `/enrollments/{id}`, `/collections/{id}`,
-  `/products/{id}`, `/orders/{id}`, `/coupons/{id}`, `/course_reviews/{id}`, `/instructors/{id}`,
-  `/groups/{id}`, `/promotions/{id}`, `/site_scripts/{id}`, `/product_publish_requests/{id}`) are
-  not modeled as separate streams — each returns the identical record shape its corresponding list
-  stream already emits; see `api_surface.json`'s `duplicate_of` exclusions.
-- **Bundles are not modeled at all.** Thinkific's own API exposes only `/bundles/{id}` and its
-  sub-resources (`/bundles/{id}/courses`, `/bundles/{id}/enrollments`); there is no `GET /bundles`
-  list endpoint anywhere in the published spec, so there is no discovery path to obtain a bundle id
-  without an id already in hand from an external source. See `api_surface.json`'s
-  `requires_elevated_scope` exclusions.
-- **Chapters and Contents are not modeled.** Both are detail-only (`/chapters/{id}`,
-  `/chapters/{id}/contents`, `/contents/{id}`) with no top-level list endpoint; the only path to
-  discover a chapter id is a course's own `chapter_ids` array, which would require sub-resource
-  fan-out over every course — out of scope for this pass (`requires_elevated_scope`).
-- **Group-analyst assignment sub-resources are not modeled** (`/groups/{group_id}/analysts`,
-  `/group_analysts/{user_id}/groups`, and their mutations) — a narrower group-membership-management
-  variant with no top-level discovery endpoint of its own; `add_user_to_groups` already covers the
-  common "attach a user to groups" case.
-- **External Orders (manual/off-platform sale recording) are not modeled** — `/external_orders`
-  and its `/transactions/purchase`/`/transactions/refund` sub-endpoints are a distinct bookkeeping
-  workflow for recording sales made outside Thinkific checkout, with no corresponding read stream
-  to round-trip against; out of scope for this pass.
-- **`page_size` is not runtime-configurable.** Legacy exposes a config-driven `page_size` override
-  (`thinkific.go:124-130`, `pageSize(cfg, 100)`, any positive integer, defaulting to 100 when unset
-  or invalid). The engine's `page_number` paginator constructor reads `PaginationSpec.PageSize` as
-  a static bundle-level integer from `streams.json`, not a config-templated field, so there is no
-  mechanism to make it runtime-configurable from `config.page_size` without inventing Go. This
-  bundle hardcodes `page_size: 100`, legacy's own default, matching every input that does not
-  explicitly override the page size (the common case); an operator who previously set a
-  smaller/larger `page_size` config value loses that override here. `page_size` is not declared in
-  `spec.json` at all (F6, REVIEW.md: a declared-but-unwireable key is worse than an absent one).
-  This applies identically to every stream in this bundle (shared `base.pagination`).
-- No incremental cursor is modeled on any stream. Legacy's catalog declares `created_at` as a
-  `CursorFields` hint but the `Read` loop never actually filters by it (no incremental request
-  param is ever sent) — this bundle matches that exact behavior on `courses`:
-  `schemas/courses.json` declares `x-cursor-field: created_at` for catalog-hint parity, but no
-  `incremental` block is declared, so every sync is full-refresh, exactly like legacy. New Pass B
-  streams do not declare cursor metadata, since neither legacy nor the published OpenAPI spec
-  documents a server-side updated-since filter parameter on those list endpoints.
+- Batch defaults: read_page_size=100.
+- API coverage includes 14 stream-backed endpoint group(s), 28 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=17, non_data_endpoint=1, out_of_scope=3, requires_elevated_scope=14.

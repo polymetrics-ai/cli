@@ -453,7 +453,7 @@ const streamsWithStreamConformanceMarker = `{
 			"path": "/widgets",
 			"records": { "path": "data" },
 			"schema": "schemas/widgets.json",
-			"conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by internal/connectors/paritytest/acme" }
+			"conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by archived parity evidence for acme" }
 		}
 	]
 }`

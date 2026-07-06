@@ -1,65 +1,82 @@
 # Overview
 
-Rocketlane is a wave2 fan-out declarative-HTTP migration. It reads Rocketlane projects, tasks,
-customers, users, and time entries through the Rocketlane REST API
-(`GET https://api.rocketlane.com/api/1.0/...`). This bundle is migrated from
-`internal/connectors/rocketlane` (the hand-written connector it replaces at capability parity); the
-legacy package stays registered and unchanged until wave6's registry flip.
+Reads Rocketlane projects, tasks, customers, users, and time entries through the REST API.
+
+Readable streams: `projects`, `tasks`, `customers`, `users`, `time_entries`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://apidocs.rocketlane.com/.
 
 ## Auth setup
 
-Provide a Rocketlane API key via the `api_key` secret; it is sent as the `api-key` header
-(`api_key_header`, no prefix) and is never logged, matching legacy's
-`connsdk.APIKeyHeader("api-key", key, "")` (`rocketlane.go:172`). `base_url` defaults to
-`https://api.rocketlane.com/api/1.0` and may be overridden for tests/proxies, matching legacy's own
-`defaultBaseURL` fallback.
+Connection fields:
+
+- `api_key` (required, secret, string); Rocketlane API key, sent as the api-key header. Never
+  logged.
+- `base_url` (optional, string); default `https://api.rocketlane.com/api/1.0`; format `uri`;
+  Rocketlane API base URL override for tests or proxies.
+- `created_after` (optional, string); Optional RFC3339 lower-bound filter passed through as the
+  'created_after' parameter.
+- `mode` (optional, string).
+- `project_id` (optional, string); Optional project id filter passed through as the 'projectId'
+  parameter.
+- `status` (optional, string); Optional status filter passed through as the 'status' parameter.
+- `updated_after` (optional, string); Optional RFC3339 lower-bound filter passed through as the
+  'updated_after' parameter.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.rocketlane.com/api/1.0`.
+
+Authentication behavior:
+
+- API key authentication in `api-key` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/projects`.
 
 ## Streams notes
 
-All 5 streams share the same shape: `GET` against a Rocketlane list endpoint, records at `data`
-(`projects`, `tasks`, `customers`, `users`, `time-entries` — the last with a hyphen in its path,
-matching legacy's `endpoints["time_entries"].path = "time-entries"`); every stream declares
-`"projection": "passthrough"` since legacy's `mapRecord` (`rocketlane.go:191-201`) copies every raw
-API field into the emitted record unfiltered before adding `id`/`stream`, so this bundle matches
-that rather than silently dropping any raw field the schema doesn't declare. Pagination is 1-based
-page-number (`pagination.type: page_number`, `page_param: page`, `size_param: pageSize`,
-`start_page: 1`), matching legacy's `connsdk.PageNumberPaginator{PageParam: "page", SizeParam:
-"pageSize", StartPage: 1}` short-page-stop semantics exactly. `streams.json`'s
-`pagination.page_size: 100` matches legacy's real default (`rocketlane.go:19`, `defaultPageSize =
-100`) exactly — `page_size` is a static bundle-authored JSON int with no config-driven override on
-either side (see Known limits). The `projects` stream's committed 2-page conformance fixture
-(`fixtures/streams/projects/{page_1,page_2}.json`, 100 records then 1) proves pagination
-termination at this same page size, per `docs/migration/conventions.md`'s 2-page-fixture rule.
+Default pagination: page-number pagination; page parameter `page`; size parameter `pageSize`; starts
+at 1; page size 100.
 
-Legacy's four optional config passthrough filters (`updated_after`, `created_after`, `projectId`,
-`status`, `rocketlane.go:88-91`) are wired per-stream to the endpoints legacy sent them on:
-`updated_after`/`created_after` on every stream, `status` on `projects`/`tasks`/`users`, and
-`project_id` (sent as `projectId`) on `tasks`/`time_entries` — each `omit_when_absent` so an
-unconfigured filter is left off entirely rather than sent empty, matching legacy's own
-`strings.TrimSpace(...) != ""` guard.
-
-None of Rocketlane's list endpoints expose a server-side incremental filter parameter that legacy's
-read path actually wires up — legacy's own streams declare `CursorFields: []string{"updated_at"}`
-for catalog-metadata purposes only, with no `incremental` read-path implementation at all (the
-`updated_after`/`created_after` passthrough filters are caller-supplied one-shot query params, not
-an engine-driven persisted-cursor incremental loop). This bundle matches that exactly: every
-stream's schema declares `x-cursor-field: updated_at` (metadata parity with legacy's catalog
-declaration) but no stream declares an `incremental` block — every managed read is full refresh,
-with `updated_after`/`created_after` available as manual one-shot filters via `spec.json` config.
+- `projects`: GET `/projects` - records path `data`; query `created_after` from template `{{
+  config.created_after }}`, omitted when absent; `status` from template `{{ config.status }}`,
+  omitted when absent; `updated_after` from template `{{ config.updated_after }}`, omitted when
+  absent; page-number pagination; page parameter `page`; size parameter `pageSize`; starts at 1;
+  page size 100; computed output fields `stream`; emits passthrough records.
+- `tasks`: GET `/tasks` - records path `data`; query `created_after` from template `{{
+  config.created_after }}`, omitted when absent; `projectId` from template `{{ config.project_id
+  }}`, omitted when absent; `status` from template `{{ config.status }}`, omitted when absent;
+  `updated_after` from template `{{ config.updated_after }}`, omitted when absent; page-number
+  pagination; page parameter `page`; size parameter `pageSize`; starts at 1; page size 100; computed
+  output fields `stream`; emits passthrough records.
+- `customers`: GET `/customers` - records path `data`; query `created_after` from template `{{
+  config.created_after }}`, omitted when absent; `updated_after` from template `{{
+  config.updated_after }}`, omitted when absent; page-number pagination; page parameter `page`; size
+  parameter `pageSize`; starts at 1; page size 100; computed output fields `stream`; emits
+  passthrough records.
+- `users`: GET `/users` - records path `data`; query `created_after` from template `{{
+  config.created_after }}`, omitted when absent; `status` from template `{{ config.status }}`,
+  omitted when absent; `updated_after` from template `{{ config.updated_after }}`, omitted when
+  absent; page-number pagination; page parameter `page`; size parameter `pageSize`; starts at 1;
+  page size 100; computed output fields `stream`; emits passthrough records.
+- `time_entries`: GET `/time-entries` - records path `data`; query `created_after` from template `{{
+  config.created_after }}`, omitted when absent; `projectId` from template `{{ config.project_id
+  }}`, omitted when absent; `updated_after` from template `{{ config.updated_after }}`, omitted when
+  absent; page-number pagination; page parameter `page`; size parameter `pageSize`; starts at 1;
+  page size 100; computed output fields `stream`; emits passthrough records.
 
 ## Write actions & risks
 
-None. Rocketlane's endpoints are read-only in this bundle (legacy: `Write` returns
-`connectors.ErrUnsupportedOperation`); `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+This connector is read-only. Read behavior: external Rocketlane API read of project, task, customer,
+and time-entry data.
 
 ## Known limits
 
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes `page_size` (1-200,
-  default 100) and `max_pages` (0/all/unlimited = unbounded) as config-driven overrides
-  (`rocketlane.go:249-255`). The engine's `page_number` paginator's `PaginationSpec.PageSize` is a
-  static JSON number fixed at bundle-author time, not a `config.*`-templated value, and there is no
-  `MaxPages`-equivalent config knob wired to a per-stream override either. This bundle sends a fixed
-  page size (`pageSize=100`, matching legacy's real default exactly; unbounded pages) with no config
-  override; `page_size`/`max_pages` are not declared in `spec.json` at all (F6, REVIEW.md: a
-  declared-but-unwireable config key is worse than an absent one).
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=5.

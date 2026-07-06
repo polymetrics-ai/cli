@@ -27,19 +27,6 @@
         "null"
       ]
     },
-    "email": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "status": {
-      "type": [
-        "string",
-        "integer",
-        "null"
-      ]
-    },
     "updated_at": {
       "type": [
         "string",

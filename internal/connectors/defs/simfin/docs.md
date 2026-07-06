@@ -1,27 +1,145 @@
 # Overview
 
-SimFin is a read-only declarative HTTP connector for the SimFin REST API v3. Pass B expands the legacy companies, statements, and markets streams with the current ReadMe-documented company general data, financial statement, price, share, filing-index, changed-company, and database-change endpoints. The legacy Go package remains the record-shape authority until the registry cutover.
+Reads SimFin company, financial statement, price, share, filing, and database-change data through
+the SimFin REST API.
+
+Readable streams: `companies`, `statements`, `markets`, `company_general_compact`,
+`company_general_verbose`, `company_statements_compact`, `company_statements_verbose`,
+`company_prices_compact`, `company_prices_verbose`, `common_shares_outstanding`,
+`weighted_shares_outstanding`, `filings_by_company`, `filings`, `changed_companies`,
+`data_change_log`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://simfin.readme.io/reference/getting-started-1.
 
 ## Auth setup
 
-Provide the SimFin API key via the `api_key` secret. The legacy connector sends it as the `api-key` query parameter, and this bundle preserves that behavior. Current SimFin ReadMe v3 docs show the same key in an Authorization header, so the bundle also sends a matching header for the newer endpoints without exposing the secret in fixtures or docs. `base_url` defaults to `https://backend.simfin.com`.
+Connection fields:
+
+- `api_key` (required, secret, string); SimFin API key.
+- `as_reported` (optional, string); Optional boolean string for endpoints that accept the asreported
+  flag.
+- `base_url` (optional, string); default `https://backend.simfin.com`; format `uri`; SimFin API base
+  URL override for tests or proxies.
+- `company_ids` (optional, string); Optional comma-separated SimFin company IDs for company-scoped
+  v3 endpoints.
+- `end_date` (optional, string); Optional end date filter for endpoints that accept end/end-date.
+- `filing_company_id` (optional, string); Optional SimFin ID for the filings-by-company endpoint.
+- `filing_company_ticker` (optional, string); Optional ticker for the filings-by-company endpoint.
+- `fiscal_years` (optional, string); Optional comma-separated fiscal years.
+- `include_details` (optional, string); Optional boolean string for the compact statements details
+  flag.
+- `include_ratios` (optional, string); Optional boolean string for price endpoints that can include
+  ratios and derived metrics.
+- `include_ttm` (optional, string); Optional boolean string for endpoints that accept the ttm flag.
+- `periods` (optional, string); Optional comma-separated fiscal periods such as Q1,Q2,Q3,Q4,FY.
+- `start_date` (optional, string); Optional start date filter for endpoints that accept
+  start/start-date.
+- `statements` (optional, string); Optional comma-separated statement set for statement endpoints,
+  for example PL,BS,CF,DERIVED. Defaults to all documented statement families when absent.
+- `tickers` (optional, string); Optional comma-separated ticker symbols for company-scoped v3
+  endpoints.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://backend.simfin.com`.
+
+Authentication behavior:
+
+- API key authentication in query parameter `api-key` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/api/v3/companies/list` with query `limit`=`1`; `page`=`1`.
 
 ## Streams notes
 
-The legacy streams `companies`, `statements`, and `markets` keep the legacy `data` envelope, one-based `page`/`limit` pagination, primary key `id`, and `computed_fields` matching `simfinRecord`'s fallback order: `id|simId|companyId`, `name|companyName`, and `updated_at|fiscalPeriod`. Those choices preserve the records emitted by `internal/connectors/simfin`.
+Default pagination: single request; no pagination.
 
-The added ReadMe v3 streams are `company_general_compact`, `company_general_verbose`, `company_statements_compact`, `company_statements_verbose`, `company_prices_compact`, `company_prices_verbose`, `common_shares_outstanding`, `weighted_shares_outstanding`, `filings_by_company`, `filings`, `changed_companies`, and `data_change_log`. SimFin's current OpenAPI blocks do not publish concrete response schemas for most of these endpoints, so these streams use `projection: passthrough` with permissive schemas and recorded synthetic fixtures. The compact endpoints retain their nested compact payloads instead of flattening `columns`/`data` arrays, because the engine has no documented columnar response flattener.
+Pagination by stream: none: `company_general_compact`, `company_general_verbose`,
+`company_statements_compact`, `company_statements_verbose`, `company_prices_compact`,
+`company_prices_verbose`, `common_shares_outstanding`, `weighted_shares_outstanding`,
+`filings_by_company`, `changed_companies`; page_number: `companies`, `statements`, `markets`,
+`filings`, `data_change_log`.
 
-Optional filters in `spec.json` are wired only where the docs publish matching query parameters. `statements` defaults to all documented statement families when callers do not provide it. `filings` uses documented zero-based `page`/`per-page` pagination, and `data_change_log` uses documented zero-based `pageNumber`/`itemsPerPage` pagination.
+- `companies`: GET `/api/v3/companies/list` - records path `data`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100; computed output fields `id`,
+  `name`, `updated_at`.
+- `statements`: GET `/api/v3/statements/list` - records path `data`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100; computed output fields `id`,
+  `name`, `updated_at`.
+- `markets`: GET `/api/v3/markets/list` - records path `data`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100; computed output fields `id`,
+  `name`, `updated_at`.
+- `company_general_compact`: GET `/api/v3/companies/general/compact` - records path `.`; query `id`
+  from template `{{ config.company_ids }}`, omitted when absent; `ticker` from template `{{
+  config.tickers }}`, omitted when absent; emits passthrough records.
+- `company_general_verbose`: GET `/api/v3/companies/general/verbose` - records path `.`; query `id`
+  from template `{{ config.company_ids }}`, omitted when absent; `ticker` from template `{{
+  config.tickers }}`, omitted when absent; emits passthrough records.
+- `company_statements_compact`: GET `/api/v3/companies/statements/compact` - records path `.`; query
+  `asreported` from template `{{ config.as_reported }}`, omitted when absent; `details` from
+  template `{{ config.include_details }}`, omitted when absent; `end` from template `{{
+  config.end_date }}`, omitted when absent; `fyear` from template `{{ config.fiscal_years }}`,
+  omitted when absent; `id` from template `{{ config.company_ids }}`, omitted when absent; `period`
+  from template `{{ config.periods }}`, omitted when absent; `start` from template `{{
+  config.start_date }}`, omitted when absent; `statements` from template `{{ config.statements }}`,
+  default `PL,BS,CF,DERIVED`; `ticker` from template `{{ config.tickers }}`, omitted when absent;
+  `ttm` from template `{{ config.include_ttm }}`, omitted when absent; emits passthrough records.
+- `company_statements_verbose`: GET `/api/v3/companies/statements/verbose` - records path `.`; query
+  `asreported` from template `{{ config.as_reported }}`, omitted when absent; `end` from template
+  `{{ config.end_date }}`, omitted when absent; `fyear` from template `{{ config.fiscal_years }}`,
+  omitted when absent; `id` from template `{{ config.company_ids }}`, omitted when absent; `period`
+  from template `{{ config.periods }}`, omitted when absent; `start` from template `{{
+  config.start_date }}`, omitted when absent; `statements` from template `{{ config.statements }}`,
+  default `PL,BS,CF,DERIVED`; `ticker` from template `{{ config.tickers }}`, omitted when absent;
+  `ttm` from template `{{ config.include_ttm }}`, omitted when absent; emits passthrough records.
+- `company_prices_compact`: GET `/api/v3/companies/prices/compact` - records path `.`; query
+  `asreported` from template `{{ config.as_reported }}`, omitted when absent; `end` from template
+  `{{ config.end_date }}`, omitted when absent; `id` from template `{{ config.company_ids }}`,
+  omitted when absent; `ratios` from template `{{ config.include_ratios }}`, omitted when absent;
+  `start` from template `{{ config.start_date }}`, omitted when absent; `ticker` from template `{{
+  config.tickers }}`, omitted when absent; emits passthrough records.
+- `company_prices_verbose`: GET `/api/v3/companies/prices/verbose` - records path `.`; query
+  `asreported` from template `{{ config.as_reported }}`, omitted when absent; `end` from template
+  `{{ config.end_date }}`, omitted when absent; `id` from template `{{ config.company_ids }}`,
+  omitted when absent; `ratios` from template `{{ config.include_ratios }}`, omitted when absent;
+  `start` from template `{{ config.start_date }}`, omitted when absent; `ticker` from template `{{
+  config.tickers }}`, omitted when absent; emits passthrough records.
+- `common_shares_outstanding`: GET `/api/v3/companies/common-shares-outstanding` - records path `.`;
+  query `end` from template `{{ config.end_date }}`, omitted when absent; `id` from template `{{
+  config.company_ids }}`, omitted when absent; `start` from template `{{ config.start_date }}`,
+  omitted when absent; `ticker` from template `{{ config.tickers }}`, omitted when absent; emits
+  passthrough records.
+- `weighted_shares_outstanding`: GET `/api/v3/companies/weighted-shares-outstanding` - records path
+  `.`; query `end` from template `{{ config.end_date }}`, omitted when absent; `fyear` from template
+  `{{ config.fiscal_years }}`, omitted when absent; `id` from template `{{ config.company_ids }}`,
+  omitted when absent; `period` from template `{{ config.periods }}`, omitted when absent; `start`
+  from template `{{ config.start_date }}`, omitted when absent; `ticker` from template `{{
+  config.tickers }}`, omitted when absent; `ttm` from template `{{ config.include_ttm }}`, omitted
+  when absent; emits passthrough records.
+- `filings_by_company`: GET `/api/v3/filings/by-company` - records path `.`; query `id` from
+  template `{{ config.filing_company_id }}`, omitted when absent; `ticker` from template `{{
+  config.filing_company_ticker }}`, omitted when absent; emits passthrough records.
+- `filings`: GET `/api/v3/filings/list` - records path `data`; query `end-date` from template `{{
+  config.end_date }}`, omitted when absent; `start-date` from template `{{ config.start_date }}`,
+  omitted when absent; page-number pagination; page parameter `page`; size parameter `per-page`;
+  starts at 0; page size 100; emits passthrough records.
+- `changed_companies`: GET `/api/v3/companies/changed-companies` - records path `.`; query `start`
+  from template `{{ config.start_date }}`, omitted when absent; emits passthrough records.
+- `data_change_log`: GET `/api/v3/companies/data-change-log` - records path `data`; page-number
+  pagination; page parameter `pageNumber`; size parameter `itemsPerPage`; starts at 0; page size
+  100; emits passthrough records.
 
 ## Write actions & risks
 
-None. SimFin's documented v3 surface in this bundle is read-only, `capabilities.write` is false, and the connector ships no `writes.json`.
+This connector is read-only. Read behavior: external SimFin API read of company, statement, price,
+share, filing, and change-log data.
 
 ## Known limits
 
-- The historical `https://simfin.com/api/v3/documentation/` URL now redirects to a 404; the reviewed official docs source is `https://simfin.readme.io/llms.txt` and its linked v3 API reference pages.
-- Current SimFin OpenAPI pages mostly omit field-level response schemas. New Pass B streams therefore use passthrough schemas and fixtures that preserve documented envelope families rather than guessing a closed column set.
-- Compact company, statement, and price endpoints are exposed as one record per top-level company payload. The nested compact `columns`/`data` arrays are not expanded into one row per measurement because that would require a columnar-response mapper not present in the declarative engine.
-- `GET /api/v3/filings/get-report/{filingType}/{filingIdentifier}` is excluded as `binary_payload` because it returns the raw filing document as HTML/PDF or encoded file content, not a JSON data stream.
-- Legacy `page_size` and `max_pages` config overrides remain unwired for the legacy streams because the engine pagination block is static. The bundle keeps the legacy default page size of 100 and documents the narrowing here instead of declaring dead config.
+- Batch defaults: read_page_size=100.
+- API coverage includes 15 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=1.

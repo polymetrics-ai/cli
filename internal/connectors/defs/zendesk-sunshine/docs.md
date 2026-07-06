@@ -1,56 +1,83 @@
 # Overview
 
-Zendesk Sunshine's custom objects API lets a Zendesk account model arbitrary custom objects and
-relationships between them. This bundle reads object types, objects, and relationships
-(`GET {base_url}/objects/types`, `/objects/records`, `/relationships/records`). It migrates
-`internal/connectors/zendesk-sunshine` (the hand-written legacy connector) to a declarative Tier-1
-bundle at capability parity; the legacy package stays registered and unchanged until wave6's
-registry flip.
+Zendesk Sunshine reads 4 stream(s), and writes through 7 action(s).
+
+Readable streams: `object_types`, `relationship_types`, `objects`, `relationships`.
+
+Write actions: `create_object_record`, `upsert_object_record_by_external_id`,
+`delete_object_record`, `delete_object_type`, `create_relationship_record`,
+`delete_relationship_record`, `delete_relationship_type`.
+
+Service API documentation:
+https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/.
 
 ## Auth setup
 
-Requires `email` (config) and `api_token` (secret), combined into HTTP Basic auth as
-`{email}/token` / `api_token` — the same "email/token" Zendesk API-token convention as
-`zendesk-support` (`zendesk_sunshine.go:119`'s `connsdk.Basic(email+"/token", token)`). `base_url`
-is required explicitly by this bundle (see Known limits for why the legacy subdomain-derivation
-shortcut is not modeled).
+Connection fields:
+
+- `api_token` (required, secret, string); Zendesk API token, used as the Basic auth password
+  alongside '{email}/token' as the username.
+- `base_url` (required, string); format `uri`; Your Zendesk Sunshine API base URL (e.g.
+  https://yoursubdomain.zendesk.com/api/sunshine). No derived default: must be provided explicitly
+  (see docs.md Known limits).
+- `email` (required, string); Zendesk agent email address, combined with api_token for HTTP Basic
+  auth as '{email}/token'.
+- `object_type` (optional, string).
+- `relationship_type` (optional, string); Same 400-without-a-filter caveat as object_type, see
+  docs.md Known limits.
+
+Secret fields are redacted in logs and write previews: `api_token`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `config.email`, `secrets.api_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/objects/types`.
 
 ## Streams notes
 
-All three streams (`object_types`, `objects`, `relationships`) are single-page GET reads with no
-pagination and no incremental support — legacy performs one unconditional request per stream and
-emits every record from the response's top-level `data` array; this bundle does the same
-(`records.path: "data"`, no `pagination` block declared).
+Default pagination: single request; no pagination.
 
-`object_types`' raw API record carries its identifier under the field name `key`, not `id`; a
-`computed_fields` rename (`"id": "{{ record.key }}"`) maps it to the schema's `id` property,
-matching legacy's `mapObjectType` output field name exactly. `objects` and `relationships` compute
-`id` as `{{ coalesce record.id record.key }}`, reproducing legacy's `first(item["id"], item["key"])`
-fallback (first present, non-null value) field-for-field; only the `id`-present case occurs on the
-documented Sunshine wire shape, but the coalesce keeps the `key`-fallback parity legacy emits.
+- `object_types`: GET `/objects/types` - records path `data`; computed output fields `id`.
+- `relationship_types`: GET `/relationships/types` - records path `data`; computed output fields
+  `id`.
+- `objects`: GET `/objects/records` - records path `data`; query `type` from template `{{
+  config.object_type }}`, omitted when absent; computed output fields `id`.
+- `relationships`: GET `/relationships/records` - records path `data`; query `type` from template
+  `{{ config.relationship_type }}`, omitted when absent; computed output fields `id`.
 
 ## Write actions & risks
 
-None. `capabilities.write` is `false` and this bundle ships no `writes.json`, matching legacy's
-`Write` returning `connectors.ErrUnsupportedOperation` unconditionally.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_object_record`: POST `/objects/records` - kind `create`; body type `json`; required record
+  fields `data`; accepted fields `data`.
+- `upsert_object_record_by_external_id`: PUT `/objects/records` - kind `upsert`; body type `json`;
+  required record fields `data`; accepted fields `data`; risk: creates a new record with the given
+  external_id if none exists, or overwrites the attributes object of the existing record with that
+  external_id and type -- an overwrite, not a merge: any attribute omitted from this call's
+  attributes is cleared on an existing record.
+- `delete_object_record`: DELETE `/objects/records/{{ record.id }}` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`.
+- `delete_object_type`: DELETE `/objects/types/{{ record.key }}` - kind `delete`; body type `none`;
+  path fields `key`; required record fields `key`; accepted fields `key`; missing records treated as
+  success for status `404`; risk: Standard Zendesk object types (users, tickets, organizations)
+  cannot be deleted this way and the API rejects the request.
+- `create_relationship_record`: POST `/relationships/records` - kind `create`; body type `json`;
+  required record fields `data`; accepted fields `data`.
+- `delete_relationship_record`: DELETE `/relationships/records/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing
+  records treated as success for status `404`; risk: permanently removes a relationship record
+  between two object records; irreversible, does not affect either underlying record.
+- `delete_relationship_type`: DELETE `/relationships/types/{{ record.key }}` - kind `delete`; body
+  type `none`; path fields `key`; required record fields `key`; accepted fields `key`; missing
+  records treated as success for status `404`.
 
 ## Known limits
 
-- **`base_url` subdomain-derivation shortcut is not modeled.** Legacy derives `base_url` as:
-  an explicit `base_url` config value, else (when `subdomain` is set)
-  `https://{subdomain}.zendesk.com/api/sunshine`, else a hardcoded
-  `https://example.zendesk.com/api/sunshine` default (`zendesk_sunshine.go:157-164`). The engine's
-  `spec.json` `"default"` materialization mechanism only fills in a FIXED literal when a key is
-  absent — it has no support for a default derived from another config key's value (the same
-  documented limitation as sentry's hostname-derived URL / chargebee's site-derived URL, per
-  `docs/migration/conventions.md` §3). This bundle therefore requires `base_url` explicitly and does
-  not declare `subdomain` in `spec.json` at all (an undeclared-and-unwireable key would be dead
-  config, per the "declared config must be consumed" rule) — a documented config-surface narrowing,
-  not a silent behavior change: any caller that previously relied on subdomain-only configuration
-  must now supply the full `base_url`.
-- **`objects`/`relationships` emit only `id`, `type`, and (`attributes` | `source`+`target`).**
-  Legacy's `mapObject`/`mapRelationship` project exactly those fields and drop the raw API's
-  `external_id`/`type_version`/`created_at`/`updated_at` (objects) and `created_at`/`updated_at`
-  (relationships); this bundle's schemas declare only the legacy-emitted properties so schema-mode
-  projection matches legacy's emitted record DATA exactly, rather than widening the record with
-  raw fields legacy deliberately dropped.
+- API coverage includes 4 stream-backed endpoint group(s), 7 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  deprecated=3, duplicate_of=3, out_of_scope=3.

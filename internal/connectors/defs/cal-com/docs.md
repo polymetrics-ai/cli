@@ -1,95 +1,118 @@
 # Overview
 
-Cal.com is a wave2 fan-out declarative-HTTP migration, expanded to full documented API-surface
-coverage in Pass B. It reads Cal.com bookings, event types, availability schedules, webhooks, and
-the authenticated user's profile, and creates/updates/cancels/deletes them, through the Cal.com v2
-REST API (`https://api.cal.com/v2/...`). This bundle targets capability parity with
-`internal/connectors/cal-com` (the hand-written connector it migrates, Go package `calcom`, which was
-read-only); the legacy package stays registered and unchanged until wave6's registry flip. Pass B
-research verified this bundle against Cal.com's real published OpenAPI 3.0 spec (121 method+path
-endpoints across 82 paths, `docs/api-reference/v2/openapi.json` in `github.com/calcom/cal.com`); see
-`api_surface.json` for the full endpoint-by-endpoint disposition.
+Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manages bookings/event
+types/schedules/webhooks through the Cal.com v2 REST API.
+
+Readable streams: `bookings`, `schedules`, `event_types`, `webhooks`, `my_profile`.
+
+Write actions: `create_booking`, `cancel_booking`, `confirm_booking`, `decline_booking`,
+`reschedule_booking`, `create_event_type`, `update_event_type`, `delete_event_type`,
+`create_schedule`, `update_schedule`, `delete_schedule`, `create_webhook`, `delete_webhook`.
+
+Service API documentation: https://cal.com/docs/api-reference/introduction.
 
 ## Auth setup
 
-Provide a Cal.com API key via the `api_key` secret; it is sent as a Bearer token (`Authorization:
-Bearer <api_key>`), matching legacy's `connsdk.Bearer(token)` (`cal_com.go:282`), and is never
-logged. Every request also sends a `cal-api-version` header, resolved from the `api_version` config
-value (default `2024-08-13`, matching legacy's `defaultAPIVersion` constant). `spec.json`'s
-`"default"` materializes this value into `RuntimeConfig.Config` before header resolution runs, so
-the header is always present. `base_url` defaults to `https://api.cal.com` and may be overridden for
-tests/proxies.
+Connection fields:
+
+- `api_key` (required, secret, string); Cal.com API key. Sent as a Bearer token (Authorization:
+  Bearer <api_key>). Never logged.
+- `api_version` (optional, string); default `2024-08-13`; Value sent as the cal-api-version header
+  on every request.
+- `base_url` (optional, string); default `https://api.cal.com`; format `uri`; Cal.com API base URL
+  override for tests or proxies.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `api_version=2024-08-13`, `base_url=https://api.cal.com`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/v2/me`.
 
 ## Streams notes
 
-- `bookings` (`GET /v2/bookings`) and `schedules` (`GET /v2/schedules`) both use Cal.com's offset
-  (`skip`/`take`) pagination (`pagination.type: offset_limit`, `limit_param: take`, `offset_param:
-  skip`) — records live at `data`, and a page shorter than `take` stops pagination; `page_size` is
-  `100` (see Known limits for why it is not runtime-configurable).
-- `event_types` (`GET /v2/event-types`) keeps the legacy field projection (`id`, `slug`, `title`,
-  `description`, `length`, `hidden`, `position`), but exact legacy extraction from
-  `data.eventTypeGroups[].eventTypes[]` is deferred; see Known limits.
-- `webhooks` (`GET /v2/webhooks`) is new in Pass B: the account's registered webhook subscriptions,
-  same `data`+offset/limit pagination shape.
-- `my_profile` (`GET /v2/me`) is not paginated (`pagination.type: none`); its `data` envelope is a
-  single object rather than an array, which `records.path: "data"` handles identically to an array
-  of one.
+Default pagination: offset/limit pagination; offset parameter `skip`; limit parameter `take`; page
+size 100.
 
-None of the 5 streams expose an incremental cursor field in Cal.com's v2 API — this bundle declares
-no `incremental` block for any of them, so reads are full refresh, matching legacy's original 3
-streams and extending the same (accurate) pattern to the 2 new ones.
+Pagination by stream: none: `my_profile`; offset_limit: `bookings`, `schedules`, `event_types`,
+`webhooks`.
+
+- `bookings`: GET `/v2/bookings` - records path `data`; offset/limit pagination; offset parameter
+  `skip`; limit parameter `take`; page size 100.
+- `schedules`: GET `/v2/schedules` - records path `data`; offset/limit pagination; offset parameter
+  `skip`; limit parameter `take`; page size 100.
+- `event_types`: GET `/v2/event-types` - records path `data`; offset/limit pagination; offset
+  parameter `skip`; limit parameter `take`; page size 100.
+- `webhooks`: GET `/v2/webhooks` - records path `data`; offset/limit pagination; offset parameter
+  `skip`; limit parameter `take`; page size 100.
+- `my_profile`: GET `/v2/me` - records path `data`.
 
 ## Write actions & risks
 
-This bundle adds write support beyond legacy (which was read-only); `capabilities.write` is now
-`true` and `writes.json` declares 13 actions, grouped by resource:
+Overall write risk: external mutation of live scheduling data:
+creates/cancels/confirms/declines/reschedules real bookings (notifying attendees),
+creates/updates/deletes event types and availability schedules (changes public booking
+availability), and creates/deletes webhook subscriptions.
 
-- **Bookings**: `create_booking` (`POST /v2/bookings`, nested `attendee` object, JSON body),
-  `cancel_booking`/`confirm_booking`/`decline_booking`/`reschedule_booking` (`POST
-  /v2/bookings/{{ record.uid }}/{cancel,confirm,decline,reschedule}`, `path_fields: ["uid"]`).
-  `confirm_booking` sends no request body (`body_type: none`) — Cal.com's confirm endpoint takes
-  none. **Risk: these mutate real scheduled meetings and trigger attendee-facing notifications
-  (cancellation/confirmation/reschedule emails); approval required for all 5.**
-- **Event types**: `create_event_type`/`update_event_type`/`delete_event_type`
-  (`POST`/`PATCH`/`DELETE /v2/event-types[/{{ record.id }}]`). **Risk: changes what is publicly
-  bookable on the account; `delete_event_type` breaks any existing public booking link for that
-  event type; approval required.**
-- **Schedules**: `create_schedule`/`update_schedule`/`delete_schedule`
-  (`POST`/`PATCH`/`DELETE /v2/schedules[/{{ record.id }}]`). **Risk: directly changes real
-  availability windows that determine when the account can be booked; approval required.**
-- **Webhooks**: `create_webhook` (`POST /v2/webhooks`, requires `subscriberUrl`/`triggers`/`active`
-  per `CreateWebhookInputDto`)/`delete_webhook` (`DELETE /v2/webhooks/{{ record.id }}`). An in-place
-  `update_webhook` (`PATCH /v2/webhooks/{webhookId}`) is documented but not implemented in this wave
-  (see `api_surface.json`) — create+delete cover the common lifecycle. **Risk: a new webhook
-  subscription receives live booking-event payloads at an operator-supplied URL; approval required.**
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_booking`: POST `/v2/bookings` - kind `create`; body type `json`; required record fields
+  `start`, `eventTypeId`, `attendee`; accepted fields `attendee`, `bookingFieldsResponses`,
+  `eventTypeId`, `guests`, `start`; risk: external mutation; books a real meeting slot on the target
+  event type and notifies attendees; approval required.
+- `cancel_booking`: POST `/v2/bookings/{{ record.uid }}/cancel` - kind `update`; body type `json`;
+  path fields `uid`; required record fields `uid`; accepted fields `cancelSubsequentBookings`,
+  `cancellationReason`, `uid`; risk: external mutation; cancels a real booking and notifies
+  attendees; approval required.
+- `confirm_booking`: POST `/v2/bookings/{{ record.uid }}/confirm` - kind `update`; body type `none`;
+  path fields `uid`; required record fields `uid`; accepted fields `uid`; risk: external mutation;
+  confirms a booking pending host approval, notifying the attendee; approval required.
+- `decline_booking`: POST `/v2/bookings/{{ record.uid }}/decline` - kind `update`; body type `json`;
+  path fields `uid`; required record fields `uid`; accepted fields `reason`, `uid`; risk: external
+  mutation; declines a booking pending host approval, notifying the attendee; approval required.
+- `reschedule_booking`: POST `/v2/bookings/{{ record.uid }}/reschedule` - kind `update`; body type
+  `json`; path fields `uid`; required record fields `uid`, `start`; accepted fields `rescheduledBy`,
+  `reschedulingReason`, `start`, `uid`; risk: external mutation; moves a real booking to a new time
+  and notifies attendees; approval required.
+- `create_event_type`: POST `/v2/event-types` - kind `create`; body type `json`; required record
+  fields `title`, `slug`, `lengthInMinutes`; accepted fields `description`, `hidden`,
+  `lengthInMinutes`, `scheduleId`, `slug`, `title`; risk: external mutation; creates a new
+  publicly-bookable event type; approval required.
+- `update_event_type`: PATCH `/v2/event-types/{{ record.id }}` - kind `update`; body type `json`;
+  path fields `id`; required record fields `id`; accepted fields `description`, `hidden`, `id`,
+  `lengthInMinutes`, `scheduleId`, `slug`, `title`; risk: external mutation; changes the public
+  scheduling configuration of an existing event type; approval required.
+- `delete_event_type`: DELETE `/v2/event-types/{{ record.id }}` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; risk: destructive;
+  permanently deletes an event type, breaking any existing public booking links; approval required.
+- `create_schedule`: POST `/v2/schedules` - kind `create`; body type `json`; required record fields
+  `name`, `timeZone`, `isDefault`; accepted fields `availability`, `isDefault`, `name`, `overrides`,
+  `timeZone`; risk: external mutation; creates a new availability schedule, which can be attached to
+  event types and change public availability; approval required.
+- `update_schedule`: PATCH `/v2/schedules/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`; accepted fields `availability`, `id`, `isDefault`,
+  `name`, `overrides`, `timeZone`; risk: external mutation; changes a real availability schedule's
+  hours/timezone, directly affecting public bookable slots; approval required.
+- `delete_schedule`: DELETE `/v2/schedules/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; risk: destructive; permanently
+  deletes an availability schedule; approval required.
+- `create_webhook`: POST `/v2/webhooks` - kind `create`; body type `json`; required record fields
+  `subscriberUrl`, `triggers`, `active`; accepted fields `active`, `payloadTemplate`,
+  `subscriberUrl`, `triggers`; risk: external mutation; registers a new webhook endpoint that will
+  receive live booking event payloads; approval required.
+- `delete_webhook`: DELETE `/v2/webhooks/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; risk: destructive; permanently
+  deletes a webhook subscription; approval required.
 
 ## Known limits
 
-- **`event_types` exact legacy extraction is deferred.** Legacy flattens a two-level nested envelope:
-  `data.eventTypeGroups[].eventTypes[]`. The declarative extractor can select one object or one
-  array via dotted `records.path`, but it cannot flatten arrays nested inside each selected array
-  element. The schema now uses the legacy emitted field names, but the exact legacy extraction needs
-  a nested-array-flatten dialect feature or a stream hook.
-- **A single shared `cal-api-version` header, not a per-stream one.** The engine's
-  `HTTPBase.Headers` (`streams.json`'s `base.headers`) applies identically to every stream in a
-  bundle; there is no per-`StreamSpec` header override. The default value remains the legacy
-  `2024-08-13` constant so unset config follows the Go implementation.
-- **`page_size`/`max_pages` are not runtime-configurable.** The engine's `offset_limit` paginator's
-  `PageSize` is a static bundle-authored int (not templated), and there is no `MaxPages`-equivalent
-  config-driven knob either; `max_pages` is unbounded. `page_size` is fixed at `100` to match
-  legacy's own default; conformance fixtures for `bookings`/`schedules`/`event_types`/`webhooks` are
-  each a single short page, so `pagination_terminates` observes exactly one request per stream.
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
-  when `config.mode == "fixture"`) stamps extra fields (`connector`, `fixture`) onto every
-  fixture-mode record (`cal_com.go:226-262`); none are part of the live record shape. This bundle's
-  schemas and fixtures target the live path only.
-- **Additional current-API fields are intentionally not projected on legacy streams.** The legacy
-  mapper emitted field-built records, so the schemas for `bookings`, `event_types`, `schedules`, and
-  `my_profile` only list those legacy fields. Current API fields such as booking attendees/hosts or
-  profile organization metadata are dropped to preserve parity.
-- The full platform/reseller surface (OAuth clients + their managed users/webhooks), connected
-  calendar-provider account wiring (Google/Outlook/ICS), conferencing-app account wiring
-  (Zoom/Google Meet), Stripe Connect, phone/email verification, and ephemeral slot reservations are
-  out of scope — see `api_surface.json`'s per-endpoint `excluded` categories and reasons (mostly
-  `requires_elevated_scope`: they need a calendar/conferencing/Stripe/platform OAuth grant this
-  bundle's single `api_key` credential does not hold).
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s), 13 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=2, destructive_admin=5, duplicate_of=12, non_data_endpoint=12, out_of_scope=18,
+  requires_elevated_scope=54.

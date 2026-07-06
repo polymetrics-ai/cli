@@ -1,24 +1,58 @@
 # Overview
 
-FreeAgent is a Tier-2 quarantine migration of `internal/connectors/free-agent-connector`. The bundle mirrors the legacy catalog stream names, primary keys, cursor fields, and field list; the runtime read/check behavior is owned by `internal/connectors/hooks/free-agent-connector` during the pre-cutover period.
+Reads FreeAgent contacts, invoices, bills, projects, and tasks through the FreeAgent v2 REST API
+using OAuth2 refresh-token authentication.
+
+Readable streams: `contacts`, `invoices`, `bills`, `projects`, `tasks`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://dev.freeagent.com/.
 
 ## Auth setup
 
-Use the same configuration and secret names accepted by the legacy `free-agent-connector` connector. Secret-shaped fields are marked with `x-secret` in `spec.json`; the hook delegates to the legacy connector so credential handling remains unchanged and secret values are never logged by the bundle.
+Connection fields:
+
+- `base_url` (optional, string).
+- `client_id` (required, secret, string).
+- `client_refresh_token_2` (required, secret, string).
+- `client_secret` (required, secret, string).
+- `mode` (optional, string).
+- `payroll_year` (optional, string).
+- `updated_since` (optional, string).
+
+Secret fields are redacted in logs and write previews: `client_id`, `client_refresh_token_2`,
+`client_secret`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks use a connector-managed request.
 
 ## Streams notes
 
-The declared streams are static shadows used for schema, catalog, and surface validation. Their
-incremental blocks mirror legacy's server-side `updated_since` request parameter; they do not claim
-client-side filtering. The Tier-2 hook handles reads and checks by calling the legacy connector,
-preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The
-declarative paths under `/__legacy_hook/` are not live API endpoints.
+Default pagination: single request; no pagination.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `contacts`: GET connector-managed request path - records path `data`; incremental cursor
+  `updated_at`; sent as `updated_since`; formatted as `rfc3339`.
+- `invoices`: GET connector-managed request path - records path `data`; incremental cursor
+  `updated_at`; sent as `updated_since`; formatted as `rfc3339`.
+- `bills`: GET connector-managed request path - records path `data`; incremental cursor
+  `updated_at`; sent as `updated_since`; formatted as `rfc3339`.
+- `projects`: GET connector-managed request path - records path `data`; incremental cursor
+  `updated_at`; sent as `updated_since`; formatted as `rfc3339`.
+- `tasks`: GET connector-managed request path - records path `data`; incremental cursor
+  `updated_at`; sent as `updated_since`; formatted as `rfc3339`.
 
 ## Write actions & risks
 
-None. This migration preserves the legacy read-only surface and does not add reverse-ETL actions.
+This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- This is a quarantine bridge: hook code currently depends on `internal/connectors/free-agent-connector` staying present until the wave 6 cutover replaces or absorbs the delegated behavior.
-- Dynamic conformance replay is skipped because the declarative shadow path does not model the connector-specific auth, request body, pagination, or record explosion that caused quarantine; hook unit tests and legacy connector tests are the behavioral proof for this bridge.
+- API coverage includes 5 stream-backed endpoint group(s).

@@ -1,107 +1,62 @@
 # Overview
 
-Workday is a wave2 fan-out declarative-HTTP migration. It reads Workday tenant data — workers,
-organizations, and positions — through a conservative subset of the Workday tenant REST API
-(`GET {base_url}/ccx/api/v1/{tenant}/...`). This bundle is engine-vs-legacy parity-tested against
-`internal/connectors/workday` (the hand-written connector it migrates); the legacy package stays
-registered and unchanged until wave6's registry flip.
+Reads Workday tenant data (workers, organizations, positions) through conservative Workday API
+endpoints. Read-only.
 
-**Pass B full-surface expansion status: BLOCKED (`DOCS_UNREACHABLE`).** This bundle's real API
-documentation is not publicly reachable — see Known limits for the full writeup. The 3
-legacy-parity streams below were re-verified against the only available source of truth (the
-legacy Go implementation) and are unchanged; no new streams or writes were added this pass.
+Readable streams: `workers`, `organizations`, `positions`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://community.workday.com/sites/default/files/file-hosting/restapi/.
 
 ## Auth setup
 
-Provide Workday tenant credentials via the `username` and `password` secrets; both are required
-(legacy hard-errors when either is empty: `"workday connector requires secrets username and
-password"`, `workday.go:170-172`) and are sent via HTTP Basic auth
-(`connsdk.Basic(username, password)`), matching this bundle's unconditional `auth: [{"mode":
-"basic", ...}]` (no `when` gate — both are `required` in `spec.json`, so the engine's own
-config-validation rejects a request before auth would ever be attempted with a missing secret).
-Never logged.
+Connection fields:
 
-`tenant` (config, required) is substituted as a path segment into every stream's resource URL
-(`ccx/api/v1/{{ config.tenant }}/workers`, matching legacy's `resolveResource`'s `{tenant}`
-placeholder substitution). The engine's `InterpolatePath` urlencodes the resolved value by default
-and rejects path-traversal segments, matching legacy's own tenant validation (`tenant == "" ||
-strings.ContainsAny(tenant, "/?#")` is rejected) with an equivalent, not byte-identical, error
-classification (conventions.md §5 precedent: config-validation parity is bucketed by reason, not
-exact string match).
+- `base_url` (optional, string); default `https://wd2-impl-services1.workday.com`; format `uri`;
+  Workday API base URL override for a tenant's actual Workday instance, tests, or proxies.
+- `password` (required, secret, string); Workday tenant API password, sent via HTTP Basic auth.
+  Never logged.
+- `tenant` (required, string); Workday tenant name, substituted as a path segment into every
+  stream's resource URL (e.g. ccx/api/v1/<tenant>/workers).
+- `username` (required, secret, string); Workday tenant API username, sent via HTTP Basic auth.
+  Never logged.
 
-`base_url` defaults to `https://wd2-impl-services1.workday.com` (legacy's own
-`defaultBaseURL`) and may be overridden per-tenant or for tests/proxies.
+Secret fields are redacted in logs and write previews: `password`, `username`.
+
+Default configuration values: `base_url=https://wd2-impl-services1.workday.com`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.username`, `secrets.password`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/ccx/api/v1/{{ config.tenant }}/workers` with query `limit`=`1`.
 
 ## Streams notes
 
-All 3 streams (`workers`, `organizations`, `positions`) are `GET` list endpoints returning records
-under a top-level `data` key (`records.path: "data"`, matching legacy's `recordsPath: "data"`).
-Pagination is `page_number` (`page_param: page`, `size_param: limit`, matching legacy's
-`connsdk.PageNumberPaginator{PageParam: "page", SizeParam: "limit", StartPage: 1}`), stopping on a
-short page; `page_size` defaults to 100 (legacy's `defaultPageSize`) and `max_pages` defaults to 1
-(legacy's own default when `max_pages` is unset).
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 100; maximum 1 page(s).
 
-Every stream declares `x-cursor-field: updated_at` for catalog/sync-mode-classification parity with
-legacy's `CursorFields: []string{"updated_at"}` (`workday.go:57,64,71`) — but, matching legacy
-exactly, **no `incremental` block is declared and no request actually filters or advances by this
-field**: legacy's `Read` never references `req.State` or sends any date-range query parameter at
-all (verified: no `State` reference anywhere in `workday.go`). Every read is a full-refresh
-page-through of the entire collection, identical on both sides.
-
-All 3 streams declare `projection: "passthrough"` (§8 rule 1): legacy's `Read` calls
-`connsdk.Harvest(...)` with an emit callback of `func(rec connsdk.Record) error { return
-emit(connectors.Record(rec)) }` (`workday.go:141-143`) — `Harvest` extracts each page's records via
-`RecordsAt` and hands them straight to that callback with no field-building anywhere in between.
-Schema-mode projection would silently drop any real Workday tenant-API field beyond the handful
-this bundle's schemas document (`id`/`name`/`updated_at` for `workers`, etc.); `passthrough`
-reproduces legacy's verbatim emission exactly. This bundle's fixtures only exercise the
-already-documented fields, so no schema widening was needed for fixture parity.
+- `workers`: GET `/ccx/api/v1/{{ config.tenant }}/workers` - records path `data`; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; maximum 1
+  page(s); emits passthrough records.
+- `organizations`: GET `/ccx/api/v1/{{ config.tenant }}/organizations` - records path `data`;
+  page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100;
+  maximum 1 page(s); emits passthrough records.
+- `positions`: GET `/ccx/api/v1/{{ config.tenant }}/positions` - records path `data`; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; maximum 1
+  page(s); emits passthrough records.
 
 ## Write actions & risks
 
-None. Legacy `Write` always returns `connectors.ErrUnsupportedOperation`; `capabilities.write` is
-`false` and this bundle ships no `writes.json`.
+This connector is read-only. Read behavior: external Workday tenant API read of worker,
+organization, and position data (HR/PII-adjacent).
 
 ## Known limits
 
-- **`DOCS_UNREACHABLE`: Workday's real REST API reference is not publicly accessible.** This
-  bundle's `metadata.json.docs_url` previously pointed at
-  `https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html`, which
-  resolves to the Workday Web Services (WWS) directory — a completely different, SOAP-based product
-  (WSDL/XSD-described) from the REST `ccx/api/v1` interface this bundle and the legacy connector
-  actually call. That was a pre-existing metadata error, now corrected to point at the real REST API
-  directory (`https://community.workday.com/sites/default/files/file-hosting/restapi/`). However,
-  the real REST API directory is a JavaScript single-page app whose per-service OpenAPI 2.0 specs
-  (`staffing_v1_*_oas2.json`, `common_v1_*_oas2.json`, and similar — the services that would document
-  the full `workers`/`organizations`/`positions` field shapes and any sibling endpoints) are fetched
-  client-side from a path that returns HTTP 404 to an unauthenticated request, and the equivalent
-  `community.workday.com/rest/reference` landing page requires HTTP Basic auth (verified live:
-  `401` with `WWW-Authenticate: Basic realm="Sling (Development)"`), gated behind a Workday
-  customer/partner login this migration agent does not have. Third-party "Workday REST API
-  reference" pages found via web search (e.g. `workday.rest`) were checked and found to be
-  low-confidence, apparently auto-generated aggregator content that materially conflicts with the
-  legacy connector's own verified base path (inventing a `/ccx/service/customreport2/{tenant}` base
-  URL, for example) — not a trustworthy source to expand a real integration's surface from. Per
-  `docs/migration/conventions.md` §6, this is a `DOCS_UNREACHABLE` blocker: no version of "read the
-  real docs and add every practical endpoint" is possible for Workday without an actual tenant/
-  partner login, which is out of scope for this migration pass. The 3 existing streams
-  (`workers`/`organizations`/`positions`) remain the full, honest coverage this bundle can respectably
-  claim; no additional streams, writes, or field-shape changes were guessed at or invented.
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config-driven
-  overrides (`boundedInt`/`readMaxPages`, `workday.go:213-241`, bounded 1-500 for `page_size`). The
-  engine's `page_number` paginator's `PageSize`/`MaxPages` fields are plain integers with no
-  template/config-driven override mechanism, so neither can be wired to a `spec.json` config value;
-  both are fixed in `streams.json`'s `base.pagination` block instead (`page_size: 100`, `max_pages:
-  1`, both matching legacy's own defaults). Neither key is declared in `spec.json` (F6, REVIEW.md).
-- **Legacy's fixture-mode-only fields (`connector`, `stream`, `fixture`) are not modeled.**
-  Legacy's `readFixture` path (only reached when `config.mode == "fixture"`) stamps these 3 extra
-  marker fields onto every fixture-mode record (`workday.go:151`). This bundle's schemas and
-  fixtures target the live path only; the engine's own conformance/fixture-replay harness provides
-  the credential-free test affordance this bundle needs.
-- **Single-page fixtures only, matching `max_pages: 1`'s real, always-enforced behavior.** Since
-  `page_size`/`max_pages` cannot be config-driven (previous bullet), `max_pages: 1` is a hard,
-  unconfigurable cap in this bundle exactly as it is in legacy's own unset-`max_pages` default —
-  every stream genuinely only ever fetches one page in practice, so a second fixture page would
-  describe a request the connector never issues. This bundle ships single-page fixtures for every
-  stream (the identical precedent set by `defs/searxng`'s own `max_pages: 1` streams), rather than
-  a misleading 2-page fixture that `pagination_terminates` could never actually reach.
+- Batch defaults: read_page_size=100.
+- API coverage includes 3 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=1, requires_elevated_scope=1.

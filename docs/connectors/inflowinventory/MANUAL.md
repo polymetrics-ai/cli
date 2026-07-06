@@ -12,20 +12,49 @@ SYNOPSIS
 DESCRIPTION
   Reads inFlow Inventory products, customers, vendors, sales orders, and categories through the inFlow cloud REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  companyid
+  mode
+  page_size
+  api_key (secret)
+
+ETL STREAMS
+  products:
+    primary key: productId
+    cursor: lastModifiedDateTime
+    fields: categoryId(), description(), isActive(), isManufacturable(), itemType(), lastModifiedDateTime(), name(), productId(), sku(), timestamp(), trackSerials()
+  customers:
+    primary key: customerId
+    fields: contactName(), customerId(), email(), fax(), isActive(), name(), phone(), pricingSchemeId(), remarks(), taxingSchemeId(), timestamp()
+  vendors:
+    primary key: vendorId
+    fields: contactName(), currencyId(), email(), fax(), isActive(), leadTimeDays(), name(), phone(), taxingSchemeId(), timestamp(), vendorId()
+  sales_orders:
+    primary key: salesOrderId
+    fields: amountPaid(), balance(), contactName(), currencyId(), customerId(), dueDate(), email(), inventoryStatus(), invoicedDate(), isCancelled(), isCompleted(), isInvoiced(), isQuote(), salesOrderId()
+  categories:
+    primary key: categoryId
+    fields: categoryId(), isDefault(), name(), parentCategoryId(), timestamp()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external inFlow Inventory API read of products, customers, vendors, sales orders, and categories
+  approval: none; read-only source
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

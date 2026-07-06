@@ -1,106 +1,97 @@
 # Overview
 
-Smaily is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to the full documented
-Smaily PHP API surface. It reads Smaily campaigns, segments, contacts, templates, automations,
-and organization users, and writes subscriber/segment upserts, campaign-recipient unsubscribes,
-individual message sends, and automation-workflow triggers, through the Smaily PHP API
-(`https://<subdomain>.sendsmaily.net/api/*.php`, documented at `https://smaily.com/help/api/`).
-This bundle migrates `internal/connectors/smaily` (the hand-written connector); the legacy
-package stays registered and unchanged until wave6's registry flip.
+Reads Smaily campaigns, segments, contacts, templates, automations, and organization users;
+creates/updates subscribers and segments, unsubscribes recipients, sends messages, and triggers
+automation workflows.
+
+Readable streams: `campaigns`, `segments`, `subscribers`, `templates`, `automations`,
+`segment_rules`, `segment_subscribers`, `ab_tests`, `organization_users`.
+
+Write actions: `create_or_update_subscriber`, `create_or_update_segment`, `unsubscribe_recipient`,
+`send_message`, `trigger_automation_workflow`, `launch_ab_test`.
+
+Service API documentation: https://smaily.com/help/api/.
 
 ## Auth setup
 
-Provide `api_username` (config) and `api_password` (secret); they are sent as HTTP Basic auth
-credentials (`basic` auth mode), matching legacy's `connsdk.Basic(user, pass)` (`smaily.go:144`).
-`base_url` is required directly by this bundle (see Known limits for why legacy's
-`api_subdomain`-derived default is not modeled).
+Connection fields:
+
+- `api_password` (required, secret, string); Smaily API password, sent as the HTTP Basic auth
+  password. Never logged.
+- `api_username` (required, string); Smaily API username, sent as the HTTP Basic auth username.
+- `base_url` (required, string); format `uri`; Your Smaily account's API base URL (e.g.
+  https://<subdomain>.sendsmaily.net).
+- `segment_id` (optional, string); Optional Smaily segment id used to scope the segment_subscribers
+  stream to one segment's members (sent as the list query parameter on GET api/contact.php). When
+  unset, segment_subscribers reads the account's full contact list unfiltered.
+
+Secret fields are redacted in logs and write previews: `api_password`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `config.api_username`, `secrets.api_password`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `api/campaign.php`.
 
 ## Streams notes
 
-The 5 legacy-parity streams (`campaigns`, `segments`, `subscribers`, `templates`,
-`automations`) hit their own `GET api/<resource>.php` endpoint, matching legacy's
-`streamEndpoints` map exactly (`campaign.php`, `segment.php`, `contact.php`, `template.php`,
-`autoresponder.php`). Records are extracted from the response body's top-level array
-(`records.path: ""`, root-array shape), matching legacy's `recordsPath: ""` for every stream and
-`connsdk.RecordsAt`'s empty-path == body-root semantics. None of these 5 streams paginate in
-legacy (a single `r.Do` call per read, no loop, and no query parameters at all) —
-`pagination.type: none` is declared, one request per read, no query. Every stream declares
-`projection: "passthrough"`: legacy's `readRecords` emits each decoded record verbatim
-(`emit(connectors.Record(rec))`, `smaily.go:112`, no field-building or `mapRecord` step), so this
-bundle emits every raw field the API returns rather than narrowing to the `id`/`name`/
-`created_at` triple `streams()`'s catalog happens to declare — schema-mode projection on a
-verbatim-emitting legacy would silently drop real API fields (`conventions.md` §8 rule 1). The
-`id`/`name`/`created_at` properties in `schemas/*.json` remain the documented, guaranteed-present
-fields; they are a floor, not a ceiling, on what a record contains.
+Default pagination: single request; no pagination.
 
-The Pass-B-added `organization_users` stream (`GET api/organizations/users.php`) has no legacy
-equivalent — its shape is authored directly from Smaily's own API documentation. Unlike the 5
-legacy streams, it genuinely paginates server-side (`page`/`limit` query params, confirmed by
-Smaily's own docs example `?page=0&limit=250`): `pagination.type: page_number` with
-`start_page: 0` (Smaily's pagination is 0-indexed, confirmed by the documented example) and a
-small `page_size: 2` (an authoring choice for readable fixtures, not a documented API default —
-any positive `limit` value is accepted by the live API).
+Pagination by stream: none: `campaigns`, `segments`, `subscribers`, `templates`, `automations`,
+`segment_rules`, `segment_subscribers`, `ab_tests`; page_number: `organization_users`.
 
-Three more Pass-B streams round out the full documented surface, none with a legacy equivalent:
-`segment_rules` (`GET api/list.php`) is Smaily's own documented "list segments"/"list segment
-rules" read, returning `id`/`name`/`filter_type`/`subscribers_count`/`filter_data` — declared as a
-separate stream from the legacy-parity `segments` stream (see Known limits for why `segments`
-itself keeps calling `api/segment.php`, a path this review could not confirm still exists in
-Smaily's current docs). `segment_subscribers` (`GET api/contact.php`, optionally scoped by the new
-`config.segment_id` via the `list` query parameter, `omit_when_absent`) is Smaily's documented
-"list subscribers of a segment" read — same underlying path as `subscribers`, but declared as its
-own stream since its real (email-keyed) record shape and the `list` scoping parameter are
-independently documented and meaningfully different in intent from the unscoped contact list.
-`ab_tests` (`GET api/split.php`) lists A/B tests; the same path is used by the new
-`launch_ab_test` write below (GET list vs POST launch, mirroring the `campaigns` GET/POST split
-this API already establishes).
+- `campaigns`: GET `api/campaign.php` - records at response root; emits passthrough records.
+- `segments`: GET `api/segment.php` - records at response root; emits passthrough records.
+- `subscribers`: GET `api/contact.php` - records at response root; emits passthrough records.
+- `templates`: GET `api/template.php` - records at response root; emits passthrough records.
+- `automations`: GET `api/autoresponder.php` - records at response root; emits passthrough records.
+- `segment_rules`: GET `api/list.php` - records at response root; emits passthrough records.
+- `segment_subscribers`: GET `api/contact.php` - records at response root; query `list` from
+  template `{{ config.segment_id }}`, omitted when absent; emits passthrough records.
+- `ab_tests`: GET `api/split.php` - records at response root; emits passthrough records.
+- `organization_users`: GET `api/organizations/users.php` - records at response root; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 0; page size 2; emits
+  passthrough records.
 
 ## Write actions & risks
 
-Legacy's own connector is read-only, but Pass B full-surface expansion adds 5
-dialect-expressible mutations Smaily documents (`api_surface.json`), each requiring approval:
+Overall write risk: creates/updates subscribers and segments, unsubscribes a recipient from a
+campaign, sends an individually-templated outbound email, and triggers an automation workflow for
+real subscribers.
 
-- **`create_or_update_subscriber`** (`POST api/contact.php`, `upsert`): creates or updates a
-  subscriber matched by `email`; Smaily's own docs note this endpoint does NOT trigger automation
-  workflows (use `trigger_automation_workflow` for that).
-- **`create_or_update_segment`** (`POST api/list.php`, `upsert`): creates a new segment, or
-  overwrites an existing one's filter definition when `id` is set. `filter_data` is an array of
-  `[field, [operator, value]]` tuples per Smaily's own filter-condition grammar (e.g.
-  `[["gender", ["Equal", "women"]]]`) — the dialect declares it as a bare `"type": "array"` with
-  no further structural validation (draft-07 has no tuple-shaped array schema in this dialect's
-  subset), so malformed filter tuples are rejected by the live API, not client-side.
-- **`unsubscribe_recipient`** (`POST api/unsubscribe.php`, `update`): unsubscribes a recipient
-  from a specific campaign; Smaily's docs note the benefit over a generic global unsubscribe is
-  that it is reflected in that campaign's own statistics.
-- **`send_message`** (`POST api/message/send.php`, `create`): sends a single, individually
-  templated outbound email using an automation workflow's template, WITHOUT triggering the
-  workflow itself (filters/delays do not apply — contrast with `trigger_automation_workflow`
-  below). Risk: a genuine outbound-email side effect to real recipients.
-- **`trigger_automation_workflow`** (`POST api/autoresponder.php`, `custom`): opts in
-  subscribers and triggers a "form submitted"-style automation workflow for them. Risk: the
-  highest-impact write in this bundle — subscriber data is updated BEFORE the workflow's messages
-  send, and the update itself may cascade into other workflow-driven scheduled sends; Smaily's own
-  docs explicitly warn this is a reactive operation, not suited for single individually-crafted
-  messages (use `send_message` for that case instead).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_or_update_subscriber`: POST `api/contact.php` - kind `upsert`; body type `json`; required
+  record fields `email`; accepted fields `email`, `is_deleted`, `is_unsubscribed`, `name`; risk:
+  external mutation; creates or updates a subscriber (matched by email) on the connected Smaily
+  account; does not trigger automation workflows; approval required.
+- `create_or_update_segment`: POST `api/list.php` - kind `upsert`; body type `json`; required record
+  fields `name`, `filter_type`, `filter_data`; accepted fields `filter_data`, `filter_type`, `id`,
+  `name`; risk: external mutation; creates a new segment or, when id is set, overwrites an existing
+  segment's filter definition on the connected Smaily account; approval required.
+- `unsubscribe_recipient`: POST `api/unsubscribe.php` - kind `update`; body type `json`; required
+  record fields `email`, `campaign_id`; accepted fields `campaign_id`, `email`; risk: external
+  mutation; unsubscribes a recipient from a specific campaign (reflected in that campaign's
+  statistics); approval required.
+- `send_message`: POST `api/message/send.php` - kind `create`; body type `json`; required record
+  fields `autoresponder_id`, `to`; accepted fields `attachments`, `autoresponder_id`, `context`,
+  `to`; risk: external mutation; sends a real, individually-templated outbound email to real
+  recipients using an automation workflow's template (without triggering the workflow itself);
+  approval required.
+- `trigger_automation_workflow`: POST `api/autoresponder.php` - kind `custom`; body type `json`;
+  required record fields `autoresponder`, `addresses`; accepted fields `addresses`, `autoresponder`;
+  risk: external mutation; opts in subscribers and triggers a 'form submitted' automation workflow
+  for them, updating subscriber data before any scheduled messages send; approval required.
+- `launch_ab_test`: POST `api/split.php` - kind `create`; body type `json`; required record fields
+  `splits`, `list`, `size`, `win_at`; accepted fields `condition`, `list`, `save_as_draft`, `size`,
+  `splits`, `win_at`; risk: external mutation; creates and, unless save_as_draft is set, immediately
+  launches a real A/B test campaign send to a percentage of a real subscriber list, with the winning
+  variant auto-sent to the remainder at win_at; approval required.
 
 ## Known limits
 
-- **`api_subdomain`-derived `base_url` is not modeled; `base_url` is required directly instead.**
-  Legacy derives `https://<api_subdomain>.sendsmaily.net` from a separate `api_subdomain` config
-  value when `base_url` is unset (`smaily.go:151-158`), including a subdomain-label safety check
-  (`strings.ContainsAny(subdomain, "/:@")`). The engine's `spec.json` `"default"` materialization
-  mechanism (`docs/migration/conventions.md` §3) only fills a FIXED literal default, not a
-  value derived from another config key at read time — there is no declarative base-URL-
-  construction template in this dialect. Per convention, this bundle narrows the config surface:
-  `base_url` is a required spec property with no default, and `api_subdomain` is not declared at
-  all (a declared-but-unwireable config key is worse than an absent one, per the searxng/bitly
-  precedent). An operator who previously configured only `api_subdomain` must now supply the full
-  `https://<subdomain>.sendsmaily.net` URL as `base_url`; this is a documented config-surface
-  narrowing, not a data-shape change — every record emitted for a given account is identical
-  either way once `base_url` resolves to the same origin.
-- **Write request/response body shapes are sourced from Smaily's own public API documentation**
-  (`https://smaily.com/help/api/{subscribers-2,segments,campaigns-3,messages,automations-2}/...`),
-  not from legacy Go (which has no write path at all — `capabilities.write` was `false` prior to
-  this Pass B expansion). Field names (`email`/`name`/`filter_type`/`filter_data`/`campaign_id`/
-  `autoresponder_id`/`to`/`context`/`attachments`/`autoresponder`/`addresses`) are the documented
-  parameter names taken directly from Smaily's published curl/request examples.
+- API coverage includes 9 stream-backed endpoint group(s), 6 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, duplicate_of=2, out_of_scope=4.

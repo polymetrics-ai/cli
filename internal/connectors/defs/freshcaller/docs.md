@@ -1,66 +1,61 @@
 # Overview
 
-Freshcaller is a declarative-HTTP bundle migrated from `internal/connectors/freshcaller` (the
-hand-written legacy connector, which stays registered and unchanged until wave6's registry flip).
-It reads Freshcaller calls, agents, teams, and phone numbers through the Freshcaller REST API v1.
-Legacy is a plain connsdk-based HTTP connector (single token-header auth, page-number pagination,
-no writes, no auth/stream hooks needed) — a pure Tier-1 declarative bundle fully expresses it; no
-Tier-2 hook or Tier-3 native package is warranted. It is read-only in both legacy and this bundle
-(`capabilities.write: false`, no `writes.json`).
+Reads Freshcaller calls, agents, teams, and phone numbers through the Freshcaller REST API.
+
+Readable streams: `calls`, `agents`, `teams`, `numbers`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developers.freshcaller.com/api/.
 
 ## Auth setup
 
-Legacy authenticates with a single API key, sent as the `Authorization` header in the form
-`Token token=<api_key>` (`connsdk.APIKeyHeader("Authorization", token, "Token token=")`,
-`freshcaller.go:172`). This bundle's `base.auth` reproduces the identical header shape via
-`api_key_header` mode with `prefix: "Token token="`:
+Connection fields:
 
-```json
-{ "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "Token token=" }
-```
+- `api_key` (required, secret, string); Freshcaller API key, sent as the Authorization header in the
+  form 'Token token=<api_key>'. Never logged.
+- `base_url` (optional, string); default `https://api.freshcaller.com/api/v1`; format `uri`;
+  Freshcaller API base URL override for tests or proxies.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`.
 
-`base_url` defaults to `https://api.freshcaller.com/api/v1`, matching legacy's `defaultBaseURL`
-constant exactly.
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.freshcaller.com/api/v1`, `max_pages=0`,
+`page_size=100`.
+
+Authentication behavior:
+
+- API key authentication in `Authorization` with prefix `Token token=` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `calls` with query `page`=`1`; `page_size`=`1`.
 
 ## Streams notes
 
-All 4 streams (`calls`, `agents`, `teams`, `numbers`) share the identical shape: a flat
-`GET <resource>` request, `records.path` naming the resource's own top-level array key
-(matching legacy's `streamEndpoints[...].recordsPath`, which is always identical to the resource
-name), and `page`/`page_size` page-number pagination with a short-page stop — matching legacy's
-`harvest`, which advances `page` until a page returns fewer than `pageSize` records. `page_size`
-defaults to 100 and is bounded 1-100 in `spec.json`, matching legacy's
-`defaultPageSize`/`maxPageSize` constants (`freshcaller.go:21-22`); `max_pages` defaults to
-unbounded (`0`), matching legacy's `maxPages` config parsing (`0`/`all`/`unlimited` all mean
-unbounded).
+Default pagination: page-number pagination; page parameter `page`; size parameter `page_size`;
+starts at 1; page size 100.
 
-`calls` is the only stream with a cursor field (`x-cursor-field: call_time`, matching legacy's
-`CursorFields: []string{"call_time"}`); no `incremental` block is declared since legacy never
-actually filters `calls` requests by `call_time` server-side (it is catalog metadata only in
-`streams()`, not a wired request-param filter) — matching the auth0/users precedent for the
-identical "catalog cursor field with no wired incremental filter" shape.
-
-Field mapping is a direct 1:1 projection of legacy's `mapRecord` functions:
-
-- `calls`: `id`, `direction`, `status`, `call_time`, `duration`, `agent_id`, `phone_number`
-  (`callRecord`, `streams.go:27-29`).
-- `agents`: `id`, `name`, `email`, `status` (`agentRecord`, `streams.go:31-33`).
-- `teams`: `id`, `name` (`teamRecord`, `streams.go:35-37`).
-- `numbers`: `id`, `phone_number`, `name` (`numberRecord`, `streams.go:39-41`).
-
-No `computed_fields` renames are needed — every schema field name matches the raw API field name
-verbatim.
+- `calls`: GET `calls` - records path `calls`; page-number pagination; page parameter `page`; size
+  parameter `page_size`; starts at 1; page size 100.
+- `agents`: GET `agents` - records path `agents`; page-number pagination; page parameter `page`;
+  size parameter `page_size`; starts at 1; page size 100.
+- `teams`: GET `teams` - records path `teams`; page-number pagination; page parameter `page`; size
+  parameter `page_size`; starts at 1; page size 100.
+- `numbers`: GET `numbers` - records path `numbers`; page-number pagination; page parameter `page`;
+  size parameter `page_size`; starts at 1; page size 100.
 
 ## Write actions & risks
 
-None. Freshcaller is a read-only source in this bundle, matching legacy
-(`Capabilities: connectors.Capabilities{..., Write: false}`, `freshcaller.go:47`).
+This connector is read-only. Read behavior: external Freshcaller API read of call, agent, team, and
+phone number data.
 
 ## Known limits
 
-- Only the 4 legacy-parity streams are implemented; the broader Freshcaller API surface (call
-  metrics, IVR/call routing configuration, business calendars, webhooks) is out of scope for this
-  wave — see `api_surface.json`'s `excluded` entries.
-- `calls`'s `call_time` cursor field is catalog metadata only (no server-side incremental filter),
-  matching legacy exactly — not a deviation, since legacy itself never wires it into a request
-  parameter.
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, out_of_scope=3.

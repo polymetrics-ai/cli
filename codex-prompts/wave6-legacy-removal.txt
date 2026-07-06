@@ -1,0 +1,32 @@
+You are executing Wave 6 sub-phase 2 of the Polymetrics connector-architecture-v2 program: REGISTRY FLIP + NAMING CLEAN BREAK + LEGACY DELETION. GSD Universal Programming Loop discipline: strict TDD where new code is written, commit each stage (and each batch inside stage 3) so progress is never lost, deterministic gates between stages. cwd = repo root (connector-architecture-rewrite, branch connector-architecture-v2). Do NOT push. Do NOT add any Go dependency (go.mod is frozen — human gate). The user has explicitly approved legacy deletion.
+
+CONTEXT (verified before you start):
+- Branch is GREEN: go build ./..., connectorgen validate (547, 0 findings), paritytest, engine tests, conformance all pass.
+- The runtime registry is still LEGACY: internal/connectors/registryset/registry_gen.go wires 559 per-connector Go packages via connectors.RegisterFactory. The 547 declarative bundles (internal/connectors/defs/<name>/) are loaded by engine.LoadAll for conformance but are NOT the default registry.
+- Native tier exists: internal/connectors/native/{amazon-sqs,bing-ads,dynamodb,faker,postgres,tally-prime} + nativeset. These are KEEPERS (Tier 3), not legacy.
+- 149 files under internal/connectors/hooks/*/ import legacy connector packages (delegation). These block deletion until decoupled.
+- Design doc: docs/architecture/connector-architecture-v2-design.md; conventions: docs/migration/conventions.md.
+
+STAGE 1 — REGISTRY FLIP (bundles become THE registry)
+1. Rework the registry (internal/connectors/connectors.go + engine) so the default registry = engine.LoadAll(defs.FS) producing one engine-backed connector per bundle, hooks attached from the hookset, PLUS Tier-3 natives via nativeset's RegisterFactory. Legacy per-connector factories must no longer be registered (stop importing registryset from the runtime path; leave the legacy packages compiling for now).
+2. Sync-mode derivation, catalog view (Registry.CatalogEntries()), and capability flags must come from bundle metadata — never from catalog_data.json.
+3. CLI must work off the new registry: pm connectors list/inspect, etl check/read paths resolve bare names via bundles.
+GATE 1: go build ./... && go test ./... green; `go run ./cmd/pm connectors list --json | head` (or the repo's smoke equivalent) shows the 547 bundle connectors + natives, bare names only. Commit "feat(registry): flip default registry to declarative bundles (wave6)".
+
+STAGE 2 — NAMING CLEAN BREAK
+Delete: internal/connectors/slug.go (BareName/Direction machinery), catalog_data.json + its embed + legacy catalog types (ConnectorDefinition, ImplementationStatus, RuntimeCapabilities, PMConnectorName), native_catalog_connector.go, native_port.go, the v1 native_conformance.go (conformance v2 package replaces it), Go-struct manifests in manifest.go (keep only what the engine/Definition path needs), CatalogAliasConnector, RegisterNativeLive/NewLiveRegistry split. CLI: bare names only; any source-*/destination-* input fails with a clear migration error; direction filters become --capability read|write|cdc|query. Old docs/policy: delete docs/connectors/NATIVE_IMPLEMENTATION_STATUS_POLICY.md ladder references. Snapshot dropped Airbyte-only catalog entries into docs/connectors/UNPORTED.md before deleting catalog_data.json.
+GATE 2: build + full test green; grep -r "source-\|destination-" over internal/ cmd/ returns only the migration-error message and UNPORTED.md. Commit "feat(naming): clean break — bare names, catalog from bundles (wave6)".
+
+STAGE 3 — HOOKS DECOUPLING (the long pole; batch + commit each batch)
+List blockers: grep -rl 'polymetrics.ai/internal/connectors/[a-z0-9-]*"' internal/connectors/hooks/ (about 75 hook packages). For EACH hook package that imports a legacy connector package:
+- Inline the legacy logic the hook actually uses into the hook package (keep the ~300-line soft cap; copy helper functions, do not re-export legacy packages). The hook must produce byte-identical records/requests — its existing hook tests and the connector's conformance fixtures are the proof.
+- If the logic genuinely cannot fit a hook (a full protocol), promote that connector to the native tier (internal/connectors/native/<name>/ with the component split) instead — but expect this to be rare; report each promotion.
+Work in batches of ~10 hook packages; after each batch: go test ./internal/connectors/hooks/... + go test ./internal/connectors/conformance -run '<affected>' -count=1 -parallel 2 green, then commit "refactor(hooks): decouple <names> from legacy (wave6)". Self-resuming: re-run the grep to find what remains; when the grep returns nothing, stage 3 is done.
+
+STAGE 4 — LEGACY DELETION
+1. Confirm zero remaining imports of legacy packages: grep -r 'polymetrics.ai/internal/connectors/<any legacy name>' across internal/ cmd/ (script it: for each legacy dir name, grep the import path). paritytest imports legacy by design — delete internal/connectors/paritytest/ entirely (its purpose — proving bundle==legacy before deletion — is fulfilled; conformance v2 is the ongoing guard).
+2. Delete all 559 legacy connector packages: every internal/connectors/<name>/ directory EXCEPT defs/, engine/, hooks/, native/, conformance/, connsdk/, certifications/, and any shared non-connector .go files at internal/connectors/ top level that the new architecture still uses. Also delete internal/connectors/_quarantine/, cmd/registrygen/, internal/connectors/registryset/, and fix cmd/inventorygen (delete it or point it at defs).
+3. Sweep stale references: docs, Makefile targets, .golangci exclusions.
+GATE 4 (FINAL): go build ./... && go vet ./... && go test ./... -count=1 green; go run ./cmd/connectorgen validate internal/connectors/defs (547, 0 findings); go test ./internal/connectors/conformance -count=1 -parallel 2 (0 failures — if one random connector flakes, re-run it in isolation to confirm port-storm flake, not regression); the CLI smoke from Gate 1 still passes. Commit "feat!: remove legacy connector implementations — declarative architecture only (wave6)". Expect roughly -300k lines.
+
+REPORT at the end: registry flip summary, everything deleted in stage 2, hook packages decoupled (+ any native promotions), legacy dirs deleted count, final gate outputs, and any connector whose behavior you could not preserve byte-identically (there should be none — if there is one, keep its legacy package, keep it registered via a temporary explicit factory, and flag it loudly instead of faking it).

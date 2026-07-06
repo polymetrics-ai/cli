@@ -1,154 +1,218 @@
 # Overview
 
-SurveySparrow is a Tier-1 declarative-HTTP connector reading and managing SurveySparrow surveys,
-contacts, responses, questions, channels, contact lists/properties, reminders, reputation
-platforms/reviews, survey folders, ticket fields, tickets, teams, roles, variables, webhooks,
-users, templates, email themes, and expressions through the SurveySparrow API v3
-(`https://api.surveysparrow.com/v3/...`). This bundle was Pass-B full-surface expanded against the
-real documented API: `https://developers.surveysparrow.com/rest-apis/` is a Docusaurus +
-`docusaurus-openapi-docs` site whose category and per-endpoint pages are server-rendered (unlike
-several other migrated connectors' JS-only doc SPAs) — all 113 documented method+path endpoints
-were crawled directly from their individual reference pages (method badge + path +
-request/response schema, e.g. `https://developers.surveysparrow.com/rest-apis/get-v-3-surveys-id`)
-— see `api_surface.json` for the per-endpoint disposition. It originally targeted capability parity
-with `internal/connectors/survey-sparrow` (the hand-written `surveysparrow` package it migrates);
-the legacy package stays registered and unchanged until wave6's registry flip.
+Reads and manages SurveySparrow surveys, contacts, responses, questions, channels, contact
+lists/properties, reminders, reputation platforms/reviews, survey folders, ticket fields, tickets,
+teams, roles, variables, webhooks, users, templates, email themes, and expressions through the
+SurveySparrow API.
+
+Readable streams: `surveys`, `contacts`, `responses`, `questions`, `channels`, `contact_lists`,
+`contact_properties`, `reminders`, `reputation_platforms`, `reputation_app_platforms`,
+`reputation_reviews`, `survey_folders`, `ticket_fields`, `tickets`, `teams`, `roles`, `variables`,
+`webhooks`, `users`, `templates`, `email_themes`, `expressions`.
+
+Write actions: `create_survey`, `update_survey`, `create_contact`, `update_contact`,
+`delete_contact`, `create_question`, `update_question`, `delete_question`, `create_contact_list`,
+`update_contact_list`, `delete_contact_list`, `create_contact_property`, `update_contact_property`,
+`delete_contact_property`, `create_survey_folder`, `update_survey_folder`, `delete_survey_folder`,
+`create_team`, `create_ticket`, `update_ticket`, `delete_ticket`, `create_webhook`,
+`update_webhook`, `delete_webhook`, `create_user`, `update_user`, `delete_user`, `create_reminder`,
+`delete_reminder`, `create_variable`, `delete_variable`, `create_channel`, `delete_channel`.
+
+Service API documentation: https://developers.surveysparrow.com/.
 
 ## Auth setup
 
-Provide a SurveySparrow access token via the `access_token` secret; it is sent as a Bearer token
-(`Authorization: Bearer <access_token>`) and is never logged, matching legacy's
-`connsdk.Bearer(token)` (`survey_sparrow.go:119`) and the real API's documented Bearer auth scheme.
-`base_url` defaults to `https://api.surveysparrow.com/v3` and may be overridden for tests/proxies.
+Connection fields:
+
+- `access_token` (required, secret, string); SurveySparrow access token, sent as a Bearer token
+  (Authorization: Bearer <access_token>). Never logged.
+- `base_url` (optional, string); default `https://api.surveysparrow.com/v3`; format `uri`;
+  SurveySparrow API base URL override for tests or proxies.
+- `survey_id` (optional, string); SurveySparrow survey ID that the 'questions' stream is scoped to
+  (required for that stream; sent as the required survey_id query parameter on GET /v3/questions per
+  the real documented API -- NOT a path segment). Not required for any other stream.
+
+Secret fields are redacted in logs and write previews: `access_token`.
+
+Default configuration values: `base_url=https://api.surveysparrow.com/v3`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.access_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/surveys` with query `limit`=`1`.
 
 ## Streams notes
 
-22 GET list streams, all sharing the real API's pagination shape (`page`/`limit` query params,
-`data` array, `has_next_page` boolean in the response — this bundle's `page_number` paginator relies
-only on the short-page stop signal, matching legacy exactly; `has_next_page` is not consulted by
-either side).
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 100.
 
-- `surveys`, `contacts`, `responses`, `questions` — the original 4 legacy-parity streams. Their
-  schemas intentionally retain only the fields the legacy `copyRecord(...)` mappers emitted:
-  `id`/`name`/`survey_type`, `id`/`email`/`name`, `id`/`completed_time`/`survey_id`, and
-  `id`/`question`/`survey_id`. The real API returns additional fields, but widening these four
-  schemas would emit fields legacy always dropped.
-- `channels`, `contact_lists`, `contact_properties`, `reminders`, `reputation_platforms`,
-  `reputation_app_platforms`, `reputation_reviews`, `survey_folders`, `ticket_fields`, `tickets`,
-  `teams`, `roles`, `variables`, `webhooks`, `users`, `templates`, `email_themes`, `expressions` —
-  18 new Pass-B streams covering the rest of the API's clean top-level catalog resources.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-**`questions` path CORRECTED (real correctness bug found and fixed, not merely a deviation)**: the
-pre-Pass-B bundle (and the legacy Go connector it was ported from) declared `questions`' path as
-`/surveys/{{ config.survey_id }}/questions` — a nested, survey-scoped REST path. **The real
-documented API has no such endpoint.** The actual endpoint is `GET /v3/questions` with `survey_id`
-as a **required query parameter**, confirmed directly from
-`https://developers.surveysparrow.com/rest-apis/get-v-3-questions`'s query-parameters section
-(`survey_id number required — Id of Survey`, alongside `page`/`limit`/`tag_name`/
-`language_label`). This means the legacy connector's `questions` stream has likely never worked
-against the live SurveySparrow API (a request to `/surveys/{id}/questions` would 404, since that
-path was never real). This bundle now declares `"path": "/questions"` with `"query": {"survey_id":
-"{{ config.survey_id }}"}` — a plain (non-optional-object) query template, so an absent
-`config.survey_id` still hard-errors exactly as the old path-template did, preserving the
-required-for-this-stream behavior; only the WIRE SHAPE (query param vs. path segment) changed, to
-match the real API instead of a never-real assumed one.
-
-`responses` declares `incremental.cursor_field: completed_time`, matching legacy's own
-`CursorFields: []string{"completed_time"}` declaration and the real API's documented
-`completed_time` field (a `date` type in the OpenAPI schema); neither this bundle nor legacy sends a
-server-side lower-bound filter or performs client-side filtering for this stream (legacy's `Read`
-performs no incremental filtering at all, and the real `/responses` endpoint documents no
-`updated_after`-style filter param) — this bundle matches that exactly (no `request_param`/
-`client_filtered` declared). No other stream declares a cursor field, matching legacy and the
-absence of any documented equivalent filter elsewhere.
-
-**Per-resource `limit` maximums confirmed to differ from legacy's single global bound.** Legacy
-declared one `maxPageSize = 500` constant shared by every stream. The real API documents a DIFFERENT
-per-resource maximum for the `limit` query parameter on nearly every list endpoint (confirmed by
-inspecting each endpoint's query-parameters section):
-
-| Resource | real `limit` max | this bundle's `page_size` |
-|---|---|---|
-| `contacts` | 50 | 50 (stream-level override) |
-| `users` | 50 | 50 (stream-level override) |
-| `reputation_app_platforms` | 50 | 50 (stream-level override) |
-| `reputation_reviews` | 50 | 50 (stream-level override) |
-| `audit_logs` | 500 | not implemented (see Known limits) |
-| `responses`/`targets` | 200 | 100 (base default; within range) |
-| everything else confirmed | 100 | 100 (base default) |
-
-`streams.json`'s `base.pagination.page_size: 100` is the safe default for every resource whose real
-max is ≥ 100; the four resources whose real max is 50 declare a stream-level `pagination` override
-(`page_size: 50`) so a full-page read never sends a `limit` value the real API would reject/clamp.
-This is a genuine correctness fix, not merely documentation: legacy's `page_size` config bound
-(1-500) would have permitted an operator to configure e.g. `page_size=200` for `contacts`, which the
-real API caps at 50 — this bundle's per-stream `page_size` is a fixed bundle value (matching the
-"not runtime-configurable" limitation already true of the pre-Pass-B bundle, see Known limits) so
-this specific over-limit risk cannot occur here regardless.
+- `surveys`: GET `/surveys` - records path `data`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 100.
+- `contacts`: GET `/contacts` - records path `data`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 50.
+- `responses`: GET `/responses` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 100; incremental cursor `completed_time`;
+  formatted as `rfc3339`.
+- `questions`: GET `/questions` - records path `data`; query `survey_id`=`{{ config.survey_id }}`;
+  page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `channels`: GET `/channels` - records path `data`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 100.
+- `contact_lists`: GET `/contact_lists` - records path `data`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `contact_properties`: GET `/contact_properties` - records path `data`; page-number pagination;
+  page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `reminders`: GET `/reminders` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 100.
+- `reputation_platforms`: GET `/reputation/platforms` - records path `data`; page-number pagination;
+  page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `reputation_app_platforms`: GET `/reputation/app_platforms` - records path `data`; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 50.
+- `reputation_reviews`: GET `/reputation/reviews` - records path `data`; page-number pagination;
+  page parameter `page`; size parameter `limit`; starts at 1; page size 50.
+- `survey_folders`: GET `/survey_folders` - records path `data`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `ticket_fields`: GET `/ticket_fields` - records path `data`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `tickets`: GET `/tickets` - records path `data`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 100.
+- `teams`: GET `/teams` - records path `data`; page-number pagination; page parameter `page`; size
+  parameter `limit`; starts at 1; page size 100.
+- `roles`: GET `/roles` - records path `data`; page-number pagination; page parameter `page`; size
+  parameter `limit`; starts at 1; page size 100.
+- `variables`: GET `/variables` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 100.
+- `webhooks`: GET `/webhooks` - records path `data`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 100.
+- `users`: GET `/users` - records path `data`; page-number pagination; page parameter `page`; size
+  parameter `limit`; starts at 1; page size 50.
+- `templates`: GET `/templates` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 100.
+- `email_themes`: GET `/email_themes` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 100.
+- `expressions`: GET `/expressions` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 100.
 
 ## Write actions & risks
 
-33 write actions across 12 resources (27 named actions; some act on distinct real endpoints under
-the same conceptual CRUD verb), every one a plain single-record JSON-body CRUD mutation the engine's
-declarative dialect expresses directly (`body_type: json`, `path_fields` naming the record's id
-field for update/delete):
+Overall write risk: external mutation of SurveySparrow surveys, contacts, questions, contact
+lists/properties, survey folders, teams, tickets, webhooks, users, reminders, variables, and
+channels, including irreversible deletes and live-user-account creation/deletion.
 
-- **Surveys**: `create_survey`, `update_survey` (PATCH partial update; no delete endpoint exists in
-  the real API for surveys at all).
-- **Contacts**: `create_contact`, `update_contact` (PUT full-replace), `delete_contact`.
-- **Questions**: `create_question`, `update_question` (path param is `question_id`, not `id`),
-  `delete_question`.
-- **Contact lists**: `create_contact_list`, `update_contact_list`, `delete_contact_list`.
-- **Contact properties**: `create_contact_property`, `update_contact_property`,
-  `delete_contact_property`.
-- **Survey folders**: `create_survey_folder`, `update_survey_folder`, `delete_survey_folder`.
-- **Teams**: `create_team` only (no update/delete endpoints exist in the real API for teams).
-- **Tickets**: `create_ticket`, `update_ticket`, `delete_ticket`.
-- **Webhooks**: `create_webhook`, `update_webhook`, `delete_webhook`.
-- **Users**: `create_user`, `update_user`, `delete_user`.
-- **Reminders**: `create_reminder`, `delete_reminder` (no update endpoint exists in the real API for
-  reminders).
-- **Variables**: `create_variable`, `delete_variable` (path param is `variable_id`, not `id`; no
-  update endpoint exists in the real API for variables).
-- **Channels**: `create_channel`, `delete_channel` (update excluded — see Known limits).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-All 33 mutations are flagged `risk: "external mutation; approval required"` (or a stronger
-irreversibility/live-credential note for deletes and user creation); `capabilities.write` is now
-`true`.
+- `create_survey`: POST `/surveys` - kind `create`; body type `json`; required record fields `name`,
+  `survey_type`; accepted fields `description`, `name`, `survey_folder_id`, `survey_type`,
+  `theme_id`, `visibility`; risk: external mutation; approval required.
+- `update_survey`: PATCH `/surveys/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `description`, `id`, `name`, `theme_id`; risk:
+  external mutation; approval required.
+- `create_contact`: POST `/contacts` - kind `create`; body type `json`; accepted fields
+  `contact_type`, `email`, `full_name`, `job_title`, `mobile`, `phone`, `referenceId`, `unique_id`;
+  risk: external mutation; approval required.
+- `update_contact`: PUT `/contacts/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `email`, `full_name`, `id`, `job_title`,
+  `mobile`, `phone`; risk: external mutation; approval required.
+- `delete_contact`: DELETE `/contacts/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: irreversible external deletion; approval required.
+- `create_question`: POST `/questions` - kind `create`; body type `json`; required record fields
+  `survey_id`, `text`, `type`; accepted fields `description`, `multiple_answers`, `required`,
+  `section_id`, `survey_id`, `text`, `type`; risk: external mutation; approval required.
+- `update_question`: PUT `/questions/{{ record.question_id }}` - kind `update`; body type `json`;
+  path fields `question_id`; required record fields `question_id`, `survey_id`; accepted fields
+  `description`, `question_id`, `required`, `survey_id`, `text`; risk: external mutation; approval
+  required.
+- `delete_question`: DELETE `/questions/{{ record.question_id }}` - kind `delete`; body type `none`;
+  path fields `question_id`; required record fields `question_id`; accepted fields `question_id`;
+  missing records treated as success for status `404`; risk: irreversible external deletion;
+  approval required.
+- `create_contact_list`: POST `/contact_lists` - kind `create`; body type `json`; required record
+  fields `name`; accepted fields `description`, `name`; risk: external mutation; approval required.
+- `update_contact_list`: PATCH `/contact_lists/{{ record.id }}` - kind `update`; body type `json`;
+  path fields `id`; required record fields `id`; accepted fields `description`, `id`, `name`; risk:
+  external mutation; approval required.
+- `delete_contact_list`: DELETE `/contact_lists/{{ record.id }}` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: irreversible external deletion; approval required.
+- `create_contact_property`: POST `/contact_properties` - kind `create`; body type `json`; required
+  record fields `type`, `label`; accepted fields `contact_property_group_id`, `description`,
+  `label`, `type`; risk: external mutation; approval required.
+- `update_contact_property`: PATCH `/contact_properties/{{ record.id }}` - kind `update`; body type
+  `json`; path fields `id`; required record fields `id`; accepted fields `description`, `id`,
+  `label`; risk: external mutation; approval required.
+- `delete_contact_property`: DELETE `/contact_properties/{{ record.id }}` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: irreversible external deletion; approval required.
+- `create_survey_folder`: POST `/survey_folders` - kind `create`; body type `json`; required record
+  fields `name`; accepted fields `name`, `parent_survey_folder_id`, `visibility`; risk: external
+  mutation; approval required.
+- `update_survey_folder`: PATCH `/survey_folders/{{ record.id }}` - kind `update`; body type `json`;
+  path fields `id`; required record fields `id`; accepted fields `id`, `name`, `visibility`; risk:
+  external mutation; approval required.
+- `delete_survey_folder`: DELETE `/survey_folders/{{ record.id }}` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: irreversible external deletion; approval required.
+- `create_team`: POST `/teams` - kind `create`; body type `json`; required record fields `name`;
+  accepted fields `enable_round_robin`, `name`, `type`; risk: external mutation; approval required.
+- `create_ticket`: POST `/tickets` - kind `create`; body type `json`; required record fields
+  `subject`, `priority`, `status`; accepted fields `assignee_id`, `description`, `email`,
+  `priority`, `requester_id`, `status`, `subject`, `team_id`; risk: external mutation; approval
+  required.
+- `update_ticket`: PUT `/tickets/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `assignee_id`, `id`, `priority`, `status`,
+  `team_id`; risk: external mutation; approval required.
+- `delete_ticket`: DELETE `/tickets/{{ record.id }}` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; missing records treated as success for
+  status `404`; risk: irreversible external deletion; approval required.
+- `create_webhook`: POST `/webhooks` - kind `create`; body type `json`; required record fields
+  `url`, `survey_id`, `http_method`; accepted fields `description`, `event_type`, `http_method`,
+  `name`, `object_type`, `survey_id`, `url`; risk: external mutation; approval required.
+- `update_webhook`: PUT `/webhooks/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `http_method`, `id`, `name`, `url`; risk:
+  external mutation; approval required.
+- `delete_webhook`: DELETE `/webhooks/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: irreversible external deletion; approval required.
+- `create_user`: POST `/users` - kind `create`; body type `json`; required record fields `name`,
+  `email`, `role_id`; accepted fields `email`, `name`, `role_id`; risk: external mutation creating a
+  live user account with console access; approval required.
+- `update_user`: PATCH `/users/{{ record.id }}` - kind `update`; body type `json`; path fields `id`;
+  required record fields `id`; accepted fields `id`, `name`, `role_id`; risk: external mutation;
+  approval required.
+- `delete_user`: DELETE `/users/{{ record.id }}` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; missing records treated as success for
+  status `404`; risk: irreversible external deletion of a user account; approval required.
+- `create_reminder`: POST `/reminders` - kind `create`; body type `json`; required record fields
+  `channel_id`, `survey_id`, `frequency`, `type`, `interval`, `embed_first_question`,
+  `custom_footer`; accepted fields `body`, `channel_id`, `custom_footer`, `embed_first_question`,
+  `frequency`, `interval`, `subject`, `survey_id`, `type`; risk: external mutation; approval
+  required.
+- `delete_reminder`: DELETE `/reminders/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: irreversible external deletion; approval required.
+- `create_variable`: POST `/variables` - kind `create`; body type `json`; required record fields
+  `survey_id`, `label`, `name`, `type`; accepted fields `description`, `label`, `name`, `survey_id`,
+  `type`; risk: external mutation; approval required.
+- `delete_variable`: DELETE `/variables/{{ record.variable_id }}` - kind `delete`; body type `none`;
+  path fields `variable_id`; required record fields `variable_id`; accepted fields `variable_id`;
+  missing records treated as success for status `404`; risk: irreversible external deletion;
+  approval required.
+- `create_channel`: POST `/channels` - kind `create`; body type `json`; required record fields
+  `type`; accepted fields `email`, `mobile`, `mode`, `type`; risk: external mutation; approval
+  required.
+- `delete_channel`: DELETE `/channels/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: irreversible external deletion; approval required.
 
 ## Known limits
 
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config-driven
-  overrides (`survey_sparrow.go`'s `pageSize`/`maxPages`, bounded 1-500 / a non-negative integer or
-  `all`/`unlimited`). The engine's `page_number` paginator has no config-driven page-size or
-  max-pages knob (`PaginationSpec.PageSize`/`MaxPages` are static bundle JSON, never templated), so
-  this bundle uses a fixed bundle value per stream (see the per-resource `limit` maximum table
-  above) and does not declare `page_size`/`max_pages` in `spec.json` at all (a declared-but-
-  unwireable config key is worse than an absent one, per `docs/migration/conventions.md` F6).
-  Pagination is unbounded by default (reads every page until a short page), matching legacy's own
-  default of `maxPages=0` (unbounded) when `max_pages` is unset.
-- **`audit_logs`, `targets`, and `languages` are NOT implemented as streams.** `audit_logs`' real
-  response schema documents its records array (`list`, not `data`) as a bare `string[]` rather than
-  a structured object type — confirmed on both the list and single-record GET reference pages —
-  fabricating a structured schema for a genuinely unconfirmed shape would be guessing, not
-  documenting. `targets`' response nests a plain `string[]` of labels at `data.targets`, not
-  structured per-record data. `languages`' reference page renders no field list at all. See
-  `api_surface.json`'s `out_of_scope` entries for each.
-- **No `update_channel`/`create_response` actions.** `PUT /channels/{id}`'s only documented body
-  field re-parents the channel to a different `survey_id` — a broad-blast-radius action on
-  already-collected response attribution, excluded as `destructive_admin`. Response creation is a
-  multi-step stateful workflow (`POST /responses/new` → `PUT /responses/{id}/update` per-question →
-  `PUT /responses/{id}/complete`), not a single-record CRUD shape; correctly modeling it needs a
-  compound multi-request `WriteHook` (Tier-2), which this connector does not have and this pass may
-  not add a new hook package for — excluded rather than mis-modeled as a single incomplete POST.
-- **Batch/async endpoints are out of scope.** `contacts/batch`, `responses/batch`, `tickets/batch`,
-  `variables/batch` (bulk multi-record creation) and their `.../status/{token}` job-polling
-  companions are excluded — this dialect's write model is single-record CRUD, not
-  submit-a-job-and-poll.
-- **Translation, localization, Employee 360, NPS/metrics, and reports are out of scope** — see
-  `api_surface.json`'s `out_of_scope` entries; none are top-level catalog CRUD resources this
-  connector's stream/write model targets.
-- **Ticket comments and survey sections are sub-resources of an already-covered parent, not their
-  own stream/write pair** — see `api_surface.json`'s entries.
-- Full API-surface disposition (every one of the 113 documented SurveySparrow API v3 method+path
-  pairs) is recorded in `api_surface.json`.
+- Batch defaults: read_page_size=100.
+- API coverage includes 22 stream-backed endpoint group(s), 33 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=3, duplicate_of=13, out_of_scope=42.

@@ -131,10 +131,13 @@ func setupGithubSyncModeApp(t *testing.T, mode string) (*App, string, func([]map
 		Name:      "github-local",
 		Connector: "github",
 		Config: map[string]string{
-			"repository": "acme/widgets",
-			"base_url":   server.URL,
-			"max_pages":  "1",
+			"owner":     "acme",
+			"repo":      "widgets",
+			"auth_type": "token",
+			"base_url":  server.URL,
+			"max_pages": "1",
 		},
+		Secrets: map[string]string{"token": "secret-token"},
 	}); err != nil {
 		t.Fatal(err)
 	}

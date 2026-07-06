@@ -54,8 +54,8 @@ type Metadata struct {
 // exercise). Reason is required whenever SkipDynamic is true
 // (connectorgen validate's ruleConformanceSkipReason enforces this); it must
 // name the authoritative substitute that actually proves the skipped
-// behavior (e.g. "hook-covered; proven live by
-// internal/connectors/paritytest/<name>"), never just assert the skip.
+// behavior (e.g. "hook-covered; proven live by hook/native tests or archived
+// pre-deletion parity evidence"), never just assert the skip.
 type ConformanceMarker struct {
 	SkipDynamic bool   `json:"skip_dynamic,omitempty"`
 	Reason      string `json:"reason,omitempty"`

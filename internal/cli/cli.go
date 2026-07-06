@@ -13,7 +13,7 @@ import (
 	"polymetrics.ai/internal/agentmode"
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/connectors/registryset"
+	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
@@ -164,12 +164,15 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 	case "list":
 		flags := parseFlags(args[1:])
 		if flags.first("all") != "" {
-			defs := connectors.ConnectorCatalog()
+			defs, err := connectorCatalogEntries(registry, flags)
+			if err != nil {
+				return err
+			}
 			if jsonOut {
-				return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "summary": connectors.ConnectorCatalogCounts(defs), "connectors": defs})
+				return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "connectors": defs})
 			}
 			for _, item := range defs {
-				fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\t%s\n", item.Slug, item.Type, item.ImplementationStatus, item.RuntimeKind, item.DocumentationURL)
+				fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
 			}
 			return nil
 		}
@@ -183,20 +186,17 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 		return nil
 	case "catalog":
 		flags := parseFlags(args[1:])
-		filter, err := connectorCatalogFilter(flags)
+		defs, err := connectorCatalogEntries(registry, flags)
 		if err != nil {
 			return err
 		}
-		defs := connectors.FilterConnectorCatalog(connectors.ConnectorCatalog(), filter)
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "summary": connectors.ConnectorCatalogCounts(defs), "connectors": defs})
+			return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "connectors": defs})
 		}
 		for _, item := range defs {
-			fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\t%s\n", item.Slug, item.Type, item.ImplementationStatus, item.RuntimeKind, item.DocumentationURL)
+			fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
 		}
 		return nil
-	case "port-plan":
-		return runConnectorPortPlan(args[1:], stdout, jsonOut)
 	case "inspect", "help", "man", "docs":
 		if len(args) < 2 {
 			return errUsage
@@ -204,22 +204,14 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 		if err := safety.ValidateIdentifier(args[1], "connector"); err != nil {
 			return validationErrorf("%v", err)
 		}
-		// Prefer a live, registered connector: its manifest is more authoritative
-		// than the catalog stub. Accepts bare names ("github") and legacy slugs
-		// ("source-github") since both are registered. Fall back to the catalog
-		// definition for connectors that are not yet natively ported.
+		if err := connectors.RejectLegacyConnectorName(args[1]); err != nil {
+			return err
+		}
 		if c, ok := registry.Get(args[1]); ok {
 			if jsonOut {
 				return writeJSON(stdout, envelope{"kind": "Connector", "connector": connectors.MetadataWithIcon(c.Metadata()), "manifest": connectors.ManifestOf(c)})
 			}
 			fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
-			return nil
-		}
-		if def, found := connectors.ConnectorDefinitionBySlug(args[1]); found {
-			if jsonOut {
-				return writeJSON(stdout, envelope{"kind": "ConnectorDefinition", "connector": def})
-			}
-			fmt.Fprint(stdout, connectors.RenderConnectorDefinitionManual(def))
 			return nil
 		}
 		return fmt.Errorf("connector %q not found", args[1])
@@ -228,48 +220,51 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 	}
 }
 
-func runConnectorPortPlan(args []string, stdout io.Writer, jsonOut bool) error {
-	flags := parseFlags(args)
-	positionals := flags.values["_"]
-	if flags.first("all") != "" {
-		plans := connectors.NativePortPlans(connectors.ConnectorCatalog())
-		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "NativePortPlanList", "count": len(plans), "summary": connectors.NativePortPlanCounts(plans), "plans": plans})
+func connectorCatalogEntries(registry *connectors.Registry, flags parsedFlags) ([]connectors.Definition, error) {
+	if flags.first("type") != "" {
+		return nil, validationErrorf("legacy --type source|destination was removed; use --capability read|write|cdc|query")
+	}
+	capability := strings.TrimSpace(strings.ToLower(flags.first("capability")))
+	switch capability {
+	case "", "read", "write", "cdc", "query":
+	default:
+		return nil, validationErrorf("invalid --capability %q, want read|write|cdc|query", capability)
+	}
+	stage := strings.TrimSpace(flags.first("stage"))
+	defs := registry.CatalogEntries()
+	out := make([]connectors.Definition, 0, len(defs))
+	for _, def := range defs {
+		if stage != "" && def.ReleaseStage != stage {
+			continue
 		}
-		for _, plan := range plans {
-			fmt.Fprintf(stdout, "%s\t%s\t%s\twave_%d\t%s\n", plan.Slug, plan.Type, plan.Family, plan.PriorityWave, plan.ImplementationStatus)
+		if !definitionHasCapability(registry, def, capability) {
+			continue
 		}
-		return nil
+		out = append(out, def)
 	}
-	if len(positionals) != 1 {
-		return errUsage
-	}
-	if err := safety.ValidateIdentifier(positionals[0], "connector"); err != nil {
-		return validationErrorf("%v", err)
-	}
-	plan, ok := connectors.NativePortPlanBySlug(positionals[0])
-	if !ok {
-		return fmt.Errorf("connector %q not found", positionals[0])
-	}
-	if jsonOut {
-		return writeJSON(stdout, envelope{"kind": "NativePortPlan", "plan": plan})
-	}
-	fmt.Fprint(stdout, connectors.RenderNativePortPlanManual(plan))
-	return nil
+	return out, nil
 }
 
-func connectorCatalogFilter(flags parsedFlags) (connectors.ConnectorCatalogFilter, error) {
-	filter := connectors.ConnectorCatalogFilter{Stage: flags.first("stage")}
-	switch value := flags.first("type"); value {
+func definitionHasCapability(registry *connectors.Registry, def connectors.Definition, capability string) bool {
+	switch capability {
 	case "":
-	case string(connectors.ConnectorTypeSource):
-		filter.Type = connectors.ConnectorTypeSource
-	case string(connectors.ConnectorTypeDestination):
-		filter.Type = connectors.ConnectorTypeDestination
+		return true
+	case "read":
+		return def.Capabilities.Read
+	case "write":
+		return def.Capabilities.Write
+	case "query":
+		return def.Capabilities.Query
+	case "cdc":
+		connector, ok := registry.Get(def.Name)
+		if !ok {
+			return false
+		}
+		_, ok = connector.(connectors.CDCReader)
+		return ok
 	default:
-		return filter, validationErrorf("invalid --type %q, want source or destination", value)
+		return false
 	}
-	return filter, nil
 }
 
 func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
@@ -291,6 +286,9 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		}
 		if err := safety.ValidateIdentifier(connector, "connector"); err != nil {
 			return validationErrorf("%v", err)
+		}
+		if err := connectors.RejectLegacyConnectorName(connector); err != nil {
+			return err
 		}
 		secrets := map[string]string{}
 		for _, spec := range flags.values["from-env"] {
@@ -598,6 +596,9 @@ func directConnector(a *app.App, args []string) (connectors.Connector, connector
 	}
 	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
 		return nil, connectors.RuntimeConfig{}, validationErrorf("%v", err)
+	}
+	if err := connectors.RejectLegacyConnectorName(name); err != nil {
+		return nil, connectors.RuntimeConfig{}, err
 	}
 	connector, ok := a.Registry().Get(name)
 	if !ok {
@@ -983,5 +984,5 @@ func validateCredentialConfig(a *app.App, connector string, config map[string]st
 }
 
 func appRegistry() *connectors.Registry {
-	return registryset.New()
+	return bundleregistry.New()
 }

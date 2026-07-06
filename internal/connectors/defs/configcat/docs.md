@@ -1,161 +1,194 @@
 # Overview
 
-ConfigCat is a feature flag management platform. This bundle reads and writes ConfigCat data
-through the ConfigCat Public Management API (`https://api.configcat.com`): the 5 legacy-parity
-streams (organizations, products, configs, environments, tags) plus, as of this Pass B
-full-surface expansion, 22 additional read streams (config/environment/setting/segment/webhook/
-permission-group/integration/proxy-profile detail lookups, deleted settings, SDK keys,
-config+environment setting values, segments/webhooks/permission-groups/audit-logs product-scoped
-lists, members, stale flags, the authenticated user's own profile, and a tag detail lookup) and 12
-write actions (create/update/delete for configs, environments, feature flags/settings, and tags).
-It migrates `internal/connectors/configcat` (the hand-written legacy connector, which stays
-registered and unchanged until wave6's registry flip) at parity for the original 5 streams; every
-Pass B addition is new coverage with no legacy counterpart to match, verified directly against
-ConfigCat's published OpenAPI 3.0 spec (`https://api.configcat.com/docs/v1/swagger.json`, linked
-from the `docs_url` above).
+Reads and writes ConfigCat feature-flag platform data: organizations, products, configs,
+environments, settings/feature flags, deleted settings, SDK keys, segments, webhooks, permission
+groups, integrations, proxy profiles, members, audit logs, stale flags, tags, and the authenticated
+user's own profile through the ConfigCat Public Management API.
 
-This bundle was UNBLOCKED from `docs/migration/quarantine.json` once the engine gained the
-`stream.fan_out` dialect (S4 engine mini-wave item 2) — legacy's `readNested` first lists
-`/v1/products`, then issues one request per product id (`/v1/products/{id}/configs` etc.),
-stamping `product_id` onto every nested record, which the pre-increment declarative dialect had
-no mechanism to express short of a Tier-2 `StreamHook`.
+Readable streams: `organizations`, `products`, `configs`, `environments`, `tags`, `config`,
+`environment`, `settings`, `setting`, `deleted_settings`, `sdk_keys`, `config_setting_values`,
+`segments`, `segment`, `webhooks`, `webhook`, `permission_groups`, `permission_group`,
+`integrations`, `integration`, `proxy_profiles`, `proxy_profile`, `members`, `audit_logs`,
+`stale_flags`, `me`, `tag`.
+
+Write actions: `create_config`, `update_config`, `delete_config`, `create_environment`,
+`update_environment`, `delete_environment`, `create_flag`, `update_flag`, `delete_flag`,
+`create_tag`, `update_tag`, `delete_tag`.
+
+Service API documentation: https://api.configcat.com/docs/.
 
 ## Auth setup
 
-Provide a ConfigCat Public Management API password via the `password` secret; it is used only for
-HTTP Basic auth and is never logged. The Basic auth username is resolved with the same precedence
-as legacy's `configcatUsername`: the (non-secret) `username` config value if set, else a
-defensively-checked `username` secret if set, else an empty username — expressed as three ordered
-`basic` auth candidates gated by `when` (first-match-wins, matching legacy's own
-config-then-secrets fallback order exactly). `base_url` defaults to
-`https://api.configcat.com` and may be overridden for tests/proxies.
+Connection fields:
+
+- `audit_log_config_id` (optional, string); Optional configId query filter for the audit_logs
+  stream.
+- `audit_log_environment_id` (optional, string); Optional environmentId query filter for the
+  audit_logs stream.
+- `base_url` (optional, string); default `https://api.configcat.com`; format `uri`; ConfigCat API
+  base URL override for tests or proxies.
+- `config_id` (optional, string); ConfigCat config id; required for the config, settings,
+  deleted_settings, and setting/sdk_keys/config_setting_values detail streams (the latter two also
+  require environment_id).
+- `environment_id` (optional, string); ConfigCat environment id; required for the environment,
+  sdk_keys, and config_setting_values detail streams.
+- `integration_id` (optional, string); ConfigCat integration id; required for the integration detail
+  stream.
+- `mode` (optional, string).
+- `organization_id` (optional, string); ConfigCat organization id; required for the proxy_profiles
+  and members streams.
+- `password` (required, secret, string); ConfigCat Public Management API Basic auth password. Used
+  only for Basic auth; never logged.
+- `permission_group_id` (optional, string); ConfigCat permission group id; required for the
+  permission_group detail stream.
+- `product_id` (optional, string); ConfigCat product id; required for the integrations and
+  stale_flags detail streams (the
+  configs/environments/tags/segments/webhooks/permission_groups/audit_logs streams instead fan out
+  across every product automatically).
+- `proxy_profile_id` (optional, string); ConfigCat proxy profile id; required for the proxy_profile
+  detail stream.
+- `segment_id` (optional, string); ConfigCat segment id; required for the segment detail stream.
+- `setting_id` (optional, string); ConfigCat setting (feature flag) id; required for the setting
+  detail stream.
+- `tag_id` (optional, string); ConfigCat tag id; required for the tag detail stream.
+- `username` (optional, string); ConfigCat Public Management API Basic auth username (not secret).
+- `webhook_id` (optional, string); ConfigCat webhook id; required for the webhook detail stream.
+
+Secret fields are redacted in logs and write previews: `password`.
+
+Default configuration values: `base_url=https://api.configcat.com`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `config.username`, `secrets.password` when `{{ config.username
+  }}`.
+- HTTP Basic authentication using `secrets.username`, `secrets.password` when `{{ secrets.username
+  }}`.
+- HTTP Basic authentication using `secrets.password`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/v1/organizations`.
 
 ## Streams notes
 
-`organizations` (`GET /v1/organizations`) and `products` (`GET /v1/products`) are flat, top-level
-JSON array endpoints (`records.path: ""`), matching legacy's `readList` exactly; ConfigCat's
-Public Management API paginates neither (legacy declares no pagination for either), so this
-bundle declares no `pagination` block (`type: none`, the default).
+Default pagination: single request; no pagination.
 
-`configs`, `environments`, and `tags` are nested-under-product resources: legacy's `readNested`
-first lists every accessible product (`GET /v1/products`), then reads the sub-resource once per
-product id, stamping `product_id` onto every record. This bundle reproduces that exact pattern
-with `stream.fan_out`: `ids_from.request` issues a preliminary `GET /v1/products` listing
-(the SAME endpoint the `products` stream itself reads, extracting `productId` off each record);
-`into.path_var` makes the resolved product id referenceable in the stream's own `path` as
-`{{ fanout.id }}` (e.g. `/v1/products/{{ fanout.id }}/configs`); `stamp_field: product_id` writes
-the current product id onto every emitted record of that stream, after projection/computed_fields
-— exactly matching legacy's `readList`'s conditional `rec["product_id"] = productID` stamp (the
-stamped id and legacy's own nested-`product.productId`-derived fallback are always the same value
-for records returned under that product's own endpoint, so the two approaches are behaviorally
-identical for every record legacy itself would emit).
-
-Every stream's `product_id`/`organization_id` cross-reference field is a renamed camelCase→snake_case
-copy of the raw API field (`{{ record.organizationId }}`, `{{ record.product.productId }}`, etc.),
-matching legacy's per-stream `mapRecord` functions field-for-field.
-
-None of the 5 streams exposes a legacy-recognized incremental cursor field — ConfigCat's Public
-Management API surfaces configuration metadata, not an event stream; legacy's own catalog
-publishes no `CursorFields` for any stream. All 5 streams are full-refresh only.
-
-`check` issues a single bounded `GET /v1/organizations`, mirroring legacy's `Check` implementation
-exactly (a bounded read of the organizations list confirms auth and connectivity without
-mutating anything).
-
-### Pass B streams (22 new)
-
-Config-driven detail lookups (one request each, no fan_out): `config` (`GET /v1/configs/
-{config_id}`), `environment` (`GET /v1/environments/{environment_id}`), `settings`
-(`GET /v1/configs/{config_id}/settings`, records at `""`), `setting` (`GET /v1/settings/
-{setting_id}`), `deleted_settings` (`GET /v1/configs/{config_id}/deleted-settings`), `sdk_keys`
-(`GET /v1/configs/{config_id}/environments/{environment_id}`, a single-object `{primary,
-secondary}` response), `config_setting_values` (`GET /v1/configs/{config_id}/environments/
-{environment_id}/values`), `segment` (`GET /v1/segments/{segment_id}`), `webhook`
-(`GET /v1/webhooks/{webhook_id}`), `permission_group` (`GET /v1/permissions/
-{permission_group_id}`), `integration` (`GET /v1/integrations/{integration_id}`, distinct from the
-product-scoped `integrations` list, whose real response envelope is `{"integrations": [...]}` —
-`records.path: "integrations"`), `proxy_profile` (`GET /v1/proxy-profiles/{proxy_profile_id}`),
-`stale_flags` (`GET /v1/products/{product_id}/staleflags` — a single nested aggregate object per
-product, `{productId, name, configs: [...], environments: [...]}` describing WHICH configs/
-settings are stale per environment, not a flat list of stale-flag records; modeled as a
-single-object stream, matching the API's own real shape rather than forcing a flat-list fiction),
-`me` (`GET /v1/me`, the authenticated user's own `{email, fullName}`), `tag` (`GET /v1/tags/
-{tag_id}`).
-
-Product-scoped lists reusing the exact same `fan_out` pattern as `configs`/`environments`/`tags`
-(preliminary `GET /v1/products` listing, `into.path_var`, `stamp_field: product_id`): `segments`
-(`GET /v1/products/{{ fanout.id }}/segments`), `webhooks` (`.../webhooks`), `permission_groups`
-(`.../permissions`), `audit_logs` (`.../auditlogs`, plus optional `configId`/`environmentId`
-query filters via `config.audit_log_config_id`/`audit_log_environment_id`, both
-`omit_when_absent`).
-
-Organization-scoped, config-driven (not fanned out — ConfigCat's real API scopes these to a
-single organization the caller names, not "every accessible organization"): `proxy_profiles`
-(`GET /v1/organizations/{organization_id}/proxy-profiles`, records at `profiles`), `members`
-(`GET /v1/organizations/{organization_id}/members`).
-
-Product-scoped, config-driven (not fanned out — a per-product detail lookup, not a list to
-enumerate across every product): `integrations` (`GET /v1/products/{product_id}/integrations`,
-records at `integrations`; `product_id` is required for this stream even though the SAME
-resource family's `segments`/`webhooks`/`permission_groups` streams fan out automatically, because
-`integrations` returns one aggregate object per product, not naturally one-record-per-item without
-already knowing which product to ask about — matching `stale_flags`' identical config-driven
-per-product shape).
+- `organizations`: GET `/v1/organizations` - records at response root; computed output fields
+  `organization_id`.
+- `products`: GET `/v1/products` - records at response root; computed output fields
+  `approve_required`, `organization_id`, `product_id`, `reason_required`.
+- `configs`: GET `/v1/products/{{ fanout.id }}/configs` - records at response root; computed output
+  fields `config_id`, `evaluation_version`; fan-out; ids from request `/v1/products`; id field
+  `productId`; id inserted into the request path; stamps `product_id`.
+- `environments`: GET `/v1/products/{{ fanout.id }}/environments` - records at response root;
+  computed output fields `approve_required`, `environment_id`, `reason_required`; fan-out; ids from
+  request `/v1/products`; id field `productId`; id inserted into the request path; stamps
+  `product_id`.
+- `tags`: GET `/v1/products/{{ fanout.id }}/tags` - records at response root; computed output fields
+  `tag_id`; fan-out; ids from request `/v1/products`; id field `productId`; id inserted into the
+  request path; stamps `product_id`.
+- `config`: GET `/v1/configs/{{ config.config_id }}` - records at response root.
+- `environment`: GET `/v1/environments/{{ config.environment_id }}` - records at response root.
+- `settings`: GET `/v1/configs/{{ config.config_id }}/settings` - records at response root.
+- `setting`: GET `/v1/settings/{{ config.setting_id }}` - records at response root.
+- `deleted_settings`: GET `/v1/configs/{{ config.config_id }}/deleted-settings` - records at
+  response root.
+- `sdk_keys`: GET `/v1/configs/{{ config.config_id }}/environments/{{ config.environment_id }}` -
+  records at response root.
+- `config_setting_values`: GET `/v1/configs/{{ config.config_id }}/environments/{{
+  config.environment_id }}/values` - records at response root.
+- `segments`: GET `/v1/products/{{ fanout.id }}/segments` - records at response root; computed
+  output fields `segment_id`; fan-out; ids from request `/v1/products`; id field `productId`; id
+  inserted into the request path; stamps `product_id`.
+- `segment`: GET `/v1/segments/{{ config.segment_id }}` - records at response root.
+- `webhooks`: GET `/v1/products/{{ fanout.id }}/webhooks` - records at response root; fan-out; ids
+  from request `/v1/products`; id field `productId`; id inserted into the request path; stamps
+  `product_id`.
+- `webhook`: GET `/v1/webhooks/{{ config.webhook_id }}` - records at response root.
+- `permission_groups`: GET `/v1/products/{{ fanout.id }}/permissions` - records at response root;
+  fan-out; ids from request `/v1/products`; id field `productId`; id inserted into the request path;
+  stamps `product_id`.
+- `permission_group`: GET `/v1/permissions/{{ config.permission_group_id }}` - records at response
+  root.
+- `integrations`: GET `/v1/products/{{ config.product_id }}/integrations` - records path
+  `integrations`.
+- `integration`: GET `/v1/integrations/{{ config.integration_id }}` - records at response root.
+- `proxy_profiles`: GET `/v1/organizations/{{ config.organization_id }}/proxy-profiles` - records
+  path `profiles`.
+- `proxy_profile`: GET `/v1/proxy-profiles/{{ config.proxy_profile_id }}` - records at response
+  root.
+- `members`: GET `/v1/organizations/{{ config.organization_id }}/members` - records at response
+  root.
+- `audit_logs`: GET `/v1/products/{{ fanout.id }}/auditlogs` - records at response root; query
+  `configId` from template `{{ config.audit_log_config_id }}`, omitted when absent; `environmentId`
+  from template `{{ config.audit_log_environment_id }}`, omitted when absent; fan-out; ids from
+  request `/v1/products`; id field `productId`; id inserted into the request path; stamps
+  `product_id`.
+- `stale_flags`: GET `/v1/products/{{ config.product_id }}/staleflags` - records at response root.
+- `me`: GET `/v1/me` - records at response root.
+- `tag`: GET `/v1/tags/{{ config.tag_id }}` - records at response root.
 
 ## Write actions & risks
 
-12 actions across 4 resource families (`capabilities.write` is now `true`;
-`metadata.json`'s `risk.write` summarizes the shared external-mutation exposure):
+Overall write risk: external mutation of ConfigCat configs, environments, feature flags/settings,
+and tags (create/update/delete); does not change a feature flag's evaluated VALUE in any environment
+(see docs.md).
 
-- **Configs** (`create_config`/`update_config`/`delete_config`): `create_config` requires `name`
-  and posts to the configured `config.product_id`; `update_config`/`delete_config` path-template
-  `{{ record.configId }}`. `delete_config` declares `delete.missing_ok_status: [404]` (idempotent
-  delete) and cascades to every setting/flag defined in that config on the real API.
-- **Environments** (`create_environment`/`update_environment`/`delete_environment`): same shape as
-  configs, one level down; `delete_environment` cascades to every flag VALUE scoped to that
-  environment (not the flag definitions themselves, which live at the config level).
-- **Feature flags / settings** (`create_flag`/`update_flag`/`delete_flag`): `create_flag` requires
-  `key`+`name`+`settingType` (`boolean`/`string`/`int`/`double`, ConfigCat's own `SettingType`
-  enum) and posts to the configured `config.config_id`. `update_flag`/`delete_flag` mutate
-  **METADATA ONLY** (name/hint/tags/order) — ConfigCat draws a hard line in its own API surface
-  between a flag's metadata (modeled here, a `PUT /v1/settings/{settingId}` call) and its VALUE
-  (the per-environment targeting rules/rollout percentages actually served to SDKs, at a
-  completely different endpoint family, `/v1/settings/{settingKeyOrId}/value` and friends) — this
-  bundle deliberately does NOT model flag-value mutation (see Known limits); `update_flag` can
-  never change what a running application observes when it evaluates the flag.
-- **Tags** (`create_tag`/`update_tag`/`delete_tag`): `create_tag` requires `name`, posts to the
-  configured `config.product_id`; `delete_tag` untags every flag that referenced it (ConfigCat's
-  own cascade behavior, not a bundle-side side effect).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_config`: POST `/v1/products/{{ config.product_id }}/configs` - kind `create`; body type
+  `json`; required record fields `name`; accepted fields `description`, `evaluationVersion`, `name`,
+  `order`; risk: creates a new ConfigCat config within the configured product; low risk, no data
+  destruction.
+- `update_config`: PUT `/v1/configs/{{ record.configId }}` - kind `update`; body type `json`; path
+  fields `configId`; required record fields `configId`; accepted fields `configId`, `description`,
+  `name`, `order`; risk: renames/reorders an existing ConfigCat config; may affect SDK-visible
+  dashboard organization.
+- `delete_config`: DELETE `/v1/configs/{{ record.configId }}` - kind `delete`; body type `none`;
+  path fields `configId`; required record fields `configId`; accepted fields `configId`; missing
+  records treated as success for status `404`; risk: permanently deletes a ConfigCat config and
+  every feature flag/setting defined in it; destructive, external mutation; approval required.
+- `create_environment`: POST `/v1/products/{{ config.product_id }}/environments` - kind `create`;
+  body type `json`; required record fields `name`; accepted fields `color`, `description`, `name`,
+  `order`; risk: creates a new ConfigCat environment within the configured product; low risk, no
+  data destruction.
+- `update_environment`: PUT `/v1/environments/{{ record.environmentId }}` - kind `update`; body type
+  `json`; path fields `environmentId`; required record fields `environmentId`; accepted fields
+  `color`, `description`, `environmentId`, `name`, `order`; risk: renames/recolors an existing
+  ConfigCat environment; may affect dashboard organization visible to other users.
+- `delete_environment`: DELETE `/v1/environments/{{ record.environmentId }}` - kind `delete`; body
+  type `none`; path fields `environmentId`; required record fields `environmentId`; accepted fields
+  `environmentId`; missing records treated as success for status `404`; risk: permanently deletes a
+  ConfigCat environment and every feature flag value/SDK key scoped to it; destructive, external
+  mutation; approval required.
+- `create_flag`: POST `/v1/configs/{{ config.config_id }}/settings` - kind `create`; body type
+  `json`; required record fields `key`, `name`, `settingType`; accepted fields `hint`, `isJson`,
+  `key`, `name`, `order`, `settingType`, `tags`; risk: creates a new ConfigCat feature flag/setting
+  within the configured config; low risk, no data destruction.
+- `update_flag`: PUT `/v1/settings/{{ record.settingId }}` - kind `update`; body type `json`; path
+  fields `settingId`; required record fields `settingId`, `name`; accepted fields `hint`, `name`,
+  `order`, `settingId`, `tags`; risk: replaces an existing ConfigCat feature flag/setting's metadata
+  (name/hint/tags); does not itself change the flag's evaluated VALUE in any environment.
+- `delete_flag`: DELETE `/v1/settings/{{ record.settingId }}` - kind `delete`; body type `none`;
+  path fields `settingId`; required record fields `settingId`; accepted fields `settingId`; missing
+  records treated as success for status `404`; risk: permanently deletes a ConfigCat feature
+  flag/setting and its values in every environment; destructive, external mutation; approval
+  required.
+- `create_tag`: POST `/v1/products/{{ config.product_id }}/tags` - kind `create`; body type `json`;
+  required record fields `name`; accepted fields `color`, `name`; risk: creates a new ConfigCat tag
+  within the configured product; low risk, no data destruction.
+- `update_tag`: PUT `/v1/tags/{{ record.tagId }}` - kind `update`; body type `json`; path fields
+  `tagId`; required record fields `tagId`; accepted fields `color`, `name`, `tagId`; risk:
+  renames/recolors an existing ConfigCat tag; affects every feature flag tagged with it.
+- `delete_tag`: DELETE `/v1/tags/{{ record.tagId }}` - kind `delete`; body type `none`; path fields
+  `tagId`; required record fields `tagId`; accepted fields `tagId`; missing records treated as
+  success for status `404`; risk: permanently deletes a ConfigCat tag and untags every feature flag
+  that used it; destructive, external mutation; approval required.
 
 ## Known limits
 
-- **Flag VALUE mutation is deliberately NOT modeled** — the single largest exclusion category in
-  `api_surface.json` (`/v1/settings/{settingKeyOrId}/value` and its `/v1/environments/
-  {environmentId}/settings/{settingId}/value` alias, both v1 and v2, plus the bulk
-  `/v1/configs/{configId}/environments/{environmentId}/values` POST): ConfigCat's real targeting-
-  rule body is a complex, JSON-Patch-shaped structure (percentage rollout rules, user-targeting
-  comparators, a running `version`/optimistic-concurrency counter) that a flat `record_schema`
-  write action cannot safely represent without risking silent corruption of live flag evaluation
-  logic for applications currently reading that flag — this is a genuinely different risk profile
-  from metadata mutation (renaming a flag can't break a live app; replacing its targeting rules
-  incorrectly can). `update_flag`/`create_flag`/`delete_flag` in this bundle touch ONLY metadata.
-- **Segment mutation (update/delete/create) is deliberately NOT modeled**, for the identical
-  live-behavior-safety reason as flag values: a segment's comparison-rule definition is referenced
-  by the targeting rules of every flag that uses it, so mutating one changes evaluation behavior
-  for every referencing flag across every environment simultaneously.
-- Organization/product-admin-only surfaces (member/invitation management, permission-group
-  mutation, integration/webhook/Jira wiring, Proxy-profile deployment configuration, code-reference
-  upload) are excluded as `requires_elevated_scope`/`out_of_scope` — see `api_surface.json` for the
-  specific reason on each excluded endpoint.
-- `configs`/`environments`/`tags`/`segments`/`webhooks`/`permission_groups`/`audit_logs` all fan
-  out across every accessible product; a workspace with many products issues one request per
-  product per stream per sync, matching legacy's own `readNested` cost profile exactly for the
-  original 3 fan_out streams, extended consistently to the 4 new ones (no new request-count
-  regression introduced by this migration).
-- `fixtures/streams/{configs,environments,tags,segments,webhooks,permission_groups,audit_logs}/
-  page_1.json` each record the preliminary `/v1/products` listing; `page_2.json` (and `page_3.json`
-  for the original 3) record the per-product sub-resource response, exercising the fan-out path
-  under `conformance`'s replay harness end to end (mirrors `cisco-meraki`'s identical fan-out
-  fixture shape). Every other Pass B stream is a single-request config-driven detail lookup with
-  exactly one fixture page (no pagination declared anywhere in this bundle — ConfigCat's Public
-  Management API paginates none of its list endpoints this bundle covers).
+- Batch defaults: read_page_size=0.
+- API coverage includes 27 stream-backed endpoint group(s), 12 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, duplicate_of=19, out_of_scope=27, requires_elevated_scope=21.

@@ -26,7 +26,7 @@ const SidebarInner = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElem
     <nav
       ref={ref}
       data-slot="sidebar-inner"
-      className={cn('flex min-h-0 min-w-0 w-full flex-1 flex-col bg-surface-1', className)}
+      className={cn('flex min-h-0 flex-1 flex-col bg-surface-1', className)}
       {...props}
     />
   ),
@@ -50,7 +50,7 @@ const SidebarContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTM
     <div
       ref={ref}
       data-slot="sidebar-content"
-      className={cn('min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden p-2', className)}
+      className={cn('min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-2', className)}
       {...props}
     />
   ),
@@ -74,7 +74,7 @@ const SidebarGroup = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
     <section
       ref={ref}
       data-slot="sidebar-group"
-      className={cn('sidebar-reveal min-w-0 border border-line-structure bg-surface-bg', className)}
+      className={cn('sidebar-reveal border border-line-structure bg-surface-bg', className)}
       {...props}
     />
   ),
@@ -119,7 +119,7 @@ SidebarGroupContent.displayName = 'SidebarGroupContent';
 
 const SidebarMenu = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} data-slot="sidebar-menu" className={cn('flex min-w-0 flex-col gap-1', className)} {...props} />
+    <div ref={ref} data-slot="sidebar-menu" className={cn('flex flex-col gap-1', className)} {...props} />
   ),
 );
 SidebarMenu.displayName = 'SidebarMenu';

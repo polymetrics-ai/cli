@@ -12,20 +12,45 @@ SYNOPSIS
 DESCRIPTION
   Reads SendGrid Marketing Campaigns lists, segments, and contacts, plus suppression bounces, through the SendGrid v3 REST API. Read-only.
 
+ICON
+  asset: icons/sendgrid.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.sendgrid.com/api-reference/how-to-use-the-sendgrid-v3-api/authentication
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  api_key (secret)
+
+ETL STREAMS
+  lists:
+    primary key: id
+    fields: contact_count(), id(), name()
+  segments:
+    primary key: id
+    cursor: updated_at
+    fields: contacts_count(), created_at(), id(), name(), query_version(), sample_updated_at(), updated_at()
+  contacts:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), email(), first_name(), id(), last_name(), phone_number(), updated_at()
+  suppression_bounces:
+    primary key: email
+    cursor: created
+    fields: created(), email(), reason(), status()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external SendGrid API read of marketing list, segment, contact, and suppression-bounce data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

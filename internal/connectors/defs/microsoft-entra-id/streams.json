@@ -41,7 +41,7 @@
       "schema": "schemas/users.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
+        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
       }
     },
     {
@@ -51,7 +51,7 @@
       "schema": "schemas/groups.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
+        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
       }
     },
     {
@@ -61,7 +61,7 @@
       "schema": "schemas/applications.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
+        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
       }
     },
     {
@@ -71,7 +71,7 @@
       "schema": "schemas/serviceprincipals.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
+        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
       }
     },
     {
@@ -81,7 +81,7 @@
       "schema": "schemas/directoryroles.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
+        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
       }
     }
   ]

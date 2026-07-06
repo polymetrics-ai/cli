@@ -1,63 +1,76 @@
 # Overview
 
-Merge (https://merge.dev) is a unified API that normalizes data across many third-party platforms
-into common-model objects. This bundle reads the Merge ATS (Applicant Tracking System) Common
-Model v1 category: candidates, applications, jobs, offers, departments, and users. Migrated from
-`internal/connectors/merge` (read-only there and here; `Capabilities.Write` is false).
+Reads Merge ATS common-model objects (candidates, applications, jobs, offers, departments, users)
+through the Merge unified REST API.
+
+Readable streams: `candidates`, `applications`, `jobs`, `offers`, `departments`, `users`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.merge.dev/api-reference/.
 
 ## Auth setup
 
-Merge uses dual-token auth. Provide an account-wide API token via the `api_token` secret (sent as
-`Authorization: Bearer <api_token>`) and a per-linked-account token via the `account_token` secret
-(sent as a static `X-Account-Token` header selecting which connected end-customer account to read).
-Both are required — legacy hard-errors `Check`/`Read` when either is absent, matching this bundle's
-`spec.json` `required: ["api_token", "account_token"]`. Neither is ever logged.
+Connection fields:
+
+- `account_token` (required, secret, string); Merge per-linked-account token selecting which
+  connected end-customer account to read, sent as the X-Account-Token header. Never logged.
+- `api_token` (required, secret, string); Merge account-wide API token, sent as Bearer auth
+  (Authorization: Bearer <api_token>). Never logged.
+- `base_url` (optional, string); default `https://api.merge.dev/api/ats/v1`; format `uri`; Merge ATS
+  Common Model v1 API base URL. Override for other Merge categories (hris, accounting, ...) or test
+  servers.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-100).
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; only objects modified at
+  or after this time are read on a fresh sync (no persisted cursor yet).
+
+Secret fields are redacted in logs and write previews: `account_token`, `api_token`.
+
+Default configuration values: `base_url=https://api.merge.dev/api/ats/v1`, `page_size=100`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/candidates`.
 
 ## Streams notes
 
-All 6 streams (`candidates`, `applications`, `jobs`, `offers`, `departments`, `users`) share the
-identical shape: `GET <resource>` against the Merge ATS base URL, records at `results`, primary key
-`["id"]`, incremental cursor field `modified_at`. Pagination follows Merge's `next`/`previous`
-cursor convention (`pagination.type: cursor` with `token_path: "next"`, `cursor_param: "cursor"`;
-no `stop_path` needed since Merge's own stop signal is simply an absent/null `next` token, matching
-the paginator's default stop-on-empty-token behavior with no separate boolean flag to gate on).
-`page_size` is sent as the static literal `100` (legacy's `mergeDefaultPageSize`/`mergeMaxPageSize`
-are both 100); `spec.json`'s `page_size` property is informational only (documents the same default
-and legacy's accepted 1-100 range) rather than templated into the query, matching stripe's golden
-`limit` pattern (`docs/migration/conventions.md` ledger item 3) — a config-templated page-size
-param would receive conformance's synthetic non-numeric placeholder value during dynamic checks
-instead of a real page size, so a static literal is used to guarantee both parity with legacy's
-default behavior and safe conformance replay. Incremental reads send `modified_after` as an RFC3339
-value (`param_format: rfc3339`), computed either from the sync's persisted cursor or, on a fresh
-sync, from the `start_date` config value — identical to legacy's `incrementalLowerBound`.
+Default pagination: cursor pagination; cursor parameter `cursor`; next token from `next`.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `candidates`: GET `/candidates` - records path `results`; query `page_size`=`100`; cursor
+  pagination; cursor parameter `cursor`; next token from `next`; incremental cursor `modified_at`;
+  sent as `modified_after`; formatted as `rfc3339`; initial lower bound from `start_date`.
+- `applications`: GET `/applications` - records path `results`; query `page_size`=`100`; cursor
+  pagination; cursor parameter `cursor`; next token from `next`; incremental cursor `modified_at`;
+  sent as `modified_after`; formatted as `rfc3339`; initial lower bound from `start_date`.
+- `jobs`: GET `/jobs` - records path `results`; query `page_size`=`100`; cursor pagination; cursor
+  parameter `cursor`; next token from `next`; incremental cursor `modified_at`; sent as
+  `modified_after`; formatted as `rfc3339`; initial lower bound from `start_date`.
+- `offers`: GET `/offers` - records path `results`; query `page_size`=`100`; cursor pagination;
+  cursor parameter `cursor`; next token from `next`; incremental cursor `modified_at`; sent as
+  `modified_after`; formatted as `rfc3339`; initial lower bound from `start_date`.
+- `departments`: GET `/departments` - records path `results`; query `page_size`=`100`; cursor
+  pagination; cursor parameter `cursor`; next token from `next`; incremental cursor `modified_at`;
+  sent as `modified_after`; formatted as `rfc3339`; initial lower bound from `start_date`.
+- `users`: GET `/users` - records path `results`; query `page_size`=`100`; cursor pagination; cursor
+  parameter `cursor`; next token from `next`; incremental cursor `modified_at`; sent as
+  `modified_after`; formatted as `rfc3339`; initial lower bound from `start_date`.
 
 ## Write actions & risks
 
-Not applicable — Merge is read-only in this bundle (`capabilities.write: false`, no `writes.json`),
-matching legacy's `Write` returning an error wrapping `connectors.ErrUnsupportedOperation`
-unconditionally ("merge connector is read-only").
+This connector is read-only. Read behavior: external Merge unified API read of ATS candidate and
+hiring data.
 
 ## Known limits
 
-- **`base_url` narrows to the ATS category only**: legacy's `base_url` config can point at any
-  Merge product category (HRIS, Accounting, CRM, Ticketing, File Storage) by overriding the default
-  ATS v1 base; this bundle's stream set (candidates/applications/jobs/offers/departments/users) is
-  ATS-specific and would not resolve against another category's endpoints. `base_url` remains
-  overridable (e.g. for a test server pointed at the identical ATS shape) but pointing it at a
-  non-ATS Merge category is out of scope — a full multi-category migration is Pass B.
-- **`max_pages` config dropped**: legacy accepts a runtime `max_pages` config value (0/`all`/
-  `unlimited` for unbounded, else a positive integer hard cap). The engine's
-  `PaginationSpec.MaxPages` is a fixed integer baked into the bundle, not a per-request templated
-  value, so there is no mechanism to wire a runtime config value into it. Since legacy's own default
-  is unbounded (`max_pages` unset) and declaring a fixed cap here would silently change accepted
-  behavior for any caller relying on an unbounded sync, `max_pages` is left undeclared (no cap
-  enforced, matching legacy's default) rather than kept as dead, unwireable config (F6,
-  `docs/migration/conventions.md`).
-- Only the 6 legacy-parity ATS Common Model streams are implemented; the wider Merge ATS surface
-  (scorecards, interviews, EEOCs, tags) and any write actions are out of scope for this wave — see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}`
-  entries.
-- A 2-page fixture is provided for `candidates` (proving the cursor paginator consumes each page
-  exactly once and terminates on a null `next`); the remaining 5 streams ship single-page fixtures,
-  matching the stripe golden's precedent of providing one full 2-page proof per bundle rather than
-  per stream.
+- Batch defaults: read_page_size=100.
+- API coverage includes 6 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  non_data_endpoint=1, out_of_scope=5.

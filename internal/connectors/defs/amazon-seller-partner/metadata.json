@@ -24,6 +24,6 @@
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by internal/connectors/paritytest/amazon-seller-partner for LWA refresh_token-grant auth and legacy read parity. Dynamic fixture replay cannot exercise custom LWA auth or write auth because the synthetic token URL is not a real LWA endpoint, so conformance skips auth-dependent read/write replay checks."
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by archived parity evidence for amazon-seller-partner for LWA refresh_token-grant auth and legacy read parity. Dynamic fixture replay cannot exercise custom LWA auth or write auth because the synthetic token URL is not a real LWA endpoint, so conformance skips auth-dependent read/write replay checks."
   }
 }

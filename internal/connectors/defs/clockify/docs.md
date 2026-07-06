@@ -1,112 +1,140 @@
 # Overview
 
-Clockify is a wave2 fan-out declarative-HTTP migration, expanded to the full documented Clockify
-API v1 surface in Pass B. It reads Clockify workspaces, clients, projects, tags, users, the current
-user, custom fields, user groups, holidays, expense categories, time-off policies, per-project
-tasks, and per-user time entries; it writes clients, projects, tags, and tasks (create/update/
-delete) through the Clockify REST API v1 (`https://api.clockify.me/api/v1/...`). This bundle
-targets capability parity with `internal/connectors/clockify` (the hand-written connector it
-migrates) for its original 5 streams; the legacy package stays registered and unchanged until
-wave6's registry flip. The Pass B streams/writes (`current_user`, `custom_fields`, `user_groups`,
-`holidays`, `expense_categories`, `time_off_policies`, `tasks`, `time_entries`, and every
-`writes.json` action) are new coverage beyond legacy's own scope — legacy never implemented them —
-so there is no parity constraint on their record shape; schemas are derived directly from
-Clockify's published OpenAPI spec (`https://docs.clockify.me/openapi.json`).
+Reads Clockify workspaces, clients, projects, tags, users, tasks, time entries, custom fields, user
+groups, holidays, expense categories, and time-off policies, and writes clients/projects/tags/tasks
+through the Clockify REST API v1.
+
+Readable streams: `workspaces`, `clients`, `projects`, `tags`, `users`, `current_user`,
+`custom_fields`, `user_groups`, `holidays`, `expense_categories`, `time_off_policies`, `tasks`,
+`time_entries`.
+
+Write actions: `create_client`, `update_client`, `delete_client`, `create_project`,
+`update_project`, `delete_project`, `create_tag`, `update_tag`, `delete_tag`, `create_task`,
+`update_task`, `delete_task`.
+
+Service API documentation: https://docs.clockify.me/.
 
 ## Auth setup
 
-Provide a Clockify API key via the `api_key` secret; it is sent as the `X-Api-Key` header
-(`api_key_header` auth mode), matching legacy's `connsdk.APIKeyHeader("X-Api-Key", secret, "")`
-(`clockify.go:202`). It is never logged. `base_url` defaults to `https://api.clockify.me/api` and
-may be overridden for tests/proxies (legacy's own `clockifyBaseURL` validates scheme+host the same
-way; the engine's base-URL resolution has no equivalent runtime validation, but every
-conformance fixture only ever points at an httptest server, so this is not exercised differently
-on either side).
+Connection fields:
+
+- `api_key` (required, secret, string); Clockify API key, sent as the X-Api-Key header. Used only
+  for auth; never logged.
+- `base_url` (optional, string); default `https://api.clockify.me/api`; format `uri`; Clockify API
+  base URL override for tests or proxies.
+- `workspace_id` (optional, string); Clockify workspace id; required for the
+  clients/projects/tags/users streams, which are scoped under /v1/workspaces/{workspace_id}/.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.clockify.me/api`.
+
+Authentication behavior:
+
+- API key authentication in `X-Api-Key` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/v1/workspaces`.
 
 ## Streams notes
 
-`workspaces` reads the top-level, unscoped `/v1/workspaces` endpoint. `clients`, `projects`,
-`tags`, and `users` are scoped under `/v1/workspaces/{{ config.workspace_id }}/<resource>` — an
-absent `workspace_id` hard-errors on both sides (legacy: `"clockify connector requires config
-workspace_id for this stream"`; engine: an unresolved `config.workspace_id` path-template key —
-same failure classification, different literal text, per conventions.md §5's precedent for
-config-validation parity).
+Default pagination: page-number pagination; page parameter `page`; size parameter `page-size`;
+starts at 1; page size 50.
 
-All five list endpoints return a bare top-level JSON array (no envelope), so every stream declares
-`records.path: "."` (the dotted-path root selector). Pagination is 1-indexed page-number
-(`pagination.type: page_number`, `page_param: page`, `size_param: page-size`) with `page_size: 50`
-matching legacy's `clockifyDefaultPageSize`; a page returning fewer than 50 records is the last
-page, matching `connsdk.PageNumberPaginator`'s exact stop rule legacy itself uses
-(`clockify.go:136-141`).
+Pagination by stream: none: `current_user`, `custom_fields`, `user_groups`, `expense_categories`;
+page_number: `workspaces`, `clients`, `projects`, `tags`, `users`, `holidays`, `time_off_policies`,
+`tasks`, `time_entries`.
 
-None of Clockify's five list endpoints expose an incremental cursor field (legacy's own
-`clockifyStreams` comment: "Clockify list endpoints do not expose an updated-at cursor field, so
-these streams are full-refresh (no cursor)") — this bundle declares no `incremental` block for any
-stream, matching legacy exactly. None of the Pass B streams below expose one either (Clockify's own
-API has no `updatedAt` query filter on any of these list endpoints).
-
-**Pass B streams**: `current_user` (`GET /v1/user`, single-object, `pagination.type: none`) and
-`custom_fields`/`user_groups` (`pagination.type: none` — Clockify does not paginate these two
-endpoints at all) read directly. `holidays`, `expense_categories` (records at the `categories` key,
-not root), and `time_off_policies` are ordinary workspace-scoped list streams using the shared base
-pagination. `tasks` and `time_entries` are genuine sub-resource fan-outs (`stream.fan_out`,
-conventions.md §3): `tasks` lists every project id from `GET
-/v1/workspaces/{{ config.workspace_id }}/projects` (reusing the `projects` stream's own request
-shape as the id source, `id_field: id`), then reads `GET .../projects/{{ fanout.id }}/tasks` once
-per project, stamping the project id onto `projectId` (a no-op stamp — Clockify's own task response
-already carries `projectId` — included for defense-in-depth per the dialect's stated pattern).
-`time_entries` mirrors this exactly over `users`: lists every user id from `GET
-/v1/workspaces/{{ config.workspace_id }}/users`, then reads `GET
-.../user/{{ fanout.id }}/time-entries` once per user, stamping `userId`. Neither fan-out passes a
-`start`/`end` date-range query filter (both optional per Clockify's docs) — every time entry ever
-recorded for that user is read on every sync; a future increment could add a `stream.Query`
-opt-in-optional `start`/`end` pair templated against `config.*` if operators need date-bounded
-syncs, but no such config property is wired today (declaring one with no template consuming it
-would itself be dead config, per conventions.md's `default_type_mismatch`-adjacent "don't declare
-what nothing wires" rule).
+- `workspaces`: GET `/v1/workspaces` - records path `.`; page-number pagination; page parameter
+  `page`; size parameter `page-size`; starts at 1; page size 50.
+- `clients`: GET `/v1/workspaces/{{ config.workspace_id }}/clients` - records path `.`; page-number
+  pagination; page parameter `page`; size parameter `page-size`; starts at 1; page size 50.
+- `projects`: GET `/v1/workspaces/{{ config.workspace_id }}/projects` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `page-size`; starts at 1; page size
+  50.
+- `tags`: GET `/v1/workspaces/{{ config.workspace_id }}/tags` - records path `.`; page-number
+  pagination; page parameter `page`; size parameter `page-size`; starts at 1; page size 50.
+- `users`: GET `/v1/workspaces/{{ config.workspace_id }}/users` - records path `.`; page-number
+  pagination; page parameter `page`; size parameter `page-size`; starts at 1; page size 50.
+- `current_user`: GET `/v1/user` - records path `.`.
+- `custom_fields`: GET `/v1/workspaces/{{ config.workspace_id }}/custom-fields` - records path `.`.
+- `user_groups`: GET `/v1/workspaces/{{ config.workspace_id }}/user-groups` - records path `.`.
+- `holidays`: GET `/v1/workspaces/{{ config.workspace_id }}/holidays` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `page-size`; starts at 1; page size
+  50.
+- `expense_categories`: GET `/v1/workspaces/{{ config.workspace_id }}/expenses/categories` - records
+  path `categories`.
+- `time_off_policies`: GET `/v1/workspaces/{{ config.workspace_id }}/time-off/policies` - records
+  path `.`; page-number pagination; page parameter `page`; size parameter `page-size`; starts at 1;
+  page size 50.
+- `tasks`: GET `/v1/workspaces/{{ config.workspace_id }}/projects/{{ fanout.id }}/tasks` - records
+  path `.`; page-number pagination; page parameter `page`; size parameter `page-size`; starts at 1;
+  page size 50; fan-out; ids from request `/v1/workspaces/{{ config.workspace_id }}/projects`;
+  id-list records path `.`; id field `id`; id inserted into the request path; stamps `projectId`.
+- `time_entries`: GET `/v1/workspaces/{{ config.workspace_id }}/user/{{ fanout.id }}/time-entries` -
+  records path `.`; page-number pagination; page parameter `page`; size parameter `page-size`;
+  starts at 1; page size 50; fan-out; ids from request `/v1/workspaces/{{ config.workspace_id
+  }}/users`; id-list records path `.`; id field `id`; id inserted into the request path; stamps
+  `userId`.
 
 ## Write actions & risks
 
-`create_client`/`update_client`/`delete_client`, `create_project`/`update_project`/`delete_project`,
-`create_tag`/`update_tag`/`delete_tag`, and `create_task`/`update_task`/`delete_task` are new Pass B
-writes (legacy never implemented any Clockify write path — legacy's `Write` always returns
-`connectors.ErrUnsupportedOperation`, and this bundle now supersedes that for these 4 resources).
-Every action is a live external mutation against the real Clockify workspace; `risk` on each action
-requires approval. `update_task`/`delete_task` both require `path_fields: ["projectId", "id"]`
-since Clockify's task URLs are nested under their owning project
-(`/projects/{projectId}/tasks/{taskId}`) — a record missing either field fails write validation
-before any request is issued. `capabilities.write` is now `true`.
+Overall write risk: external mutation; creates/updates/deletes live Clockify clients, projects,
+tags, and tasks.
 
-Time entries, custom fields, user groups, holidays, expense categories, and time-off policies have
-no write action in this bundle: time-entry writes accept a polymorphic body (plain/lump-sum/
-lump-sum-service variants select different required fields on the SAME endpoint) with no single
-dialect-expressible `record_schema` shape decided yet (see `api_surface.json`'s exclusion reasons);
-the remaining resources (custom fields, user groups, holidays, expense categories, time-off
-policies) are workspace-configuration objects with no demonstrated write demand — see
-`api_surface.json` for the itemized reason on every excluded endpoint.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_client`: POST `/v1/workspaces/{{ config.workspace_id }}/clients` - kind `create`; body
+  type `json`; required record fields `name`; accepted fields `address`, `email`, `name`, `note`;
+  risk: external mutation; creates a live Clockify client; approval required.
+- `update_client`: PUT `/v1/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}` - kind
+  `update`; body type `json`; path fields `id`; required record fields `id`, `name`; accepted fields
+  `address`, `archived`, `ccEmails`, `currencyId`, `email`, `id`, `name`, `note`; risk: external
+  mutation; overwrites a live Clockify client's fields; approval required.
+- `delete_client`: DELETE `/v1/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}` - kind
+  `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  risk: external mutation; irreversibly deletes a live Clockify client; approval required.
+- `create_project`: POST `/v1/workspaces/{{ config.workspace_id }}/projects` - kind `create`; body
+  type `json`; required record fields `name`; accepted fields `billable`, `clientId`, `color`,
+  `estimate`, `isPublic`, `name`, `note`; risk: external mutation; creates a live Clockify project;
+  approval required.
+- `update_project`: PUT `/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}` - kind
+  `update`; body type `json`; path fields `id`; required record fields `id`, `name`; accepted fields
+  `archived`, `billable`, `clientId`, `color`, `id`, `isPublic`, `name`, `note`; risk: external
+  mutation; overwrites a live Clockify project's fields; approval required.
+- `delete_project`: DELETE `/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}` -
+  kind `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields
+  `id`; risk: external mutation; irreversibly deletes a live Clockify project; approval required.
+- `create_tag`: POST `/v1/workspaces/{{ config.workspace_id }}/tags` - kind `create`; body type
+  `json`; required record fields `name`; accepted fields `name`; risk: external mutation; creates a
+  live Clockify tag; approval required.
+- `update_tag`: PUT `/v1/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}` - kind `update`;
+  body type `json`; path fields `id`; required record fields `id`, `name`; accepted fields
+  `archived`, `id`, `name`; risk: external mutation; overwrites a live Clockify tag's fields;
+  approval required.
+- `delete_tag`: DELETE `/v1/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}` - kind
+  `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  risk: external mutation; irreversibly deletes a live Clockify tag; approval required.
+- `create_task`: POST `/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.projectId
+  }}/tasks` - kind `create`; body type `json`; path fields `projectId`; required record fields
+  `projectId`, `name`; accepted fields `assigneeId`, `assigneeIds`, `budgetEstimate`, `estimate`,
+  `name`, `projectId`, `status`; risk: external mutation; creates a live Clockify task on a project;
+  approval required.
+- `update_task`: PUT `/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.projectId
+  }}/tasks/{{ record.id }}` - kind `update`; body type `json`; path fields `projectId`, `id`;
+  required record fields `projectId`, `id`, `name`; accepted fields `assigneeId`, `assigneeIds`,
+  `billable`, `estimate`, `id`, `name`, `projectId`, `status`; risk: external mutation; overwrites a
+  live Clockify task's fields; approval required.
+- `delete_task`: DELETE `/v1/workspaces/{{ config.workspace_id }}/projects/{{ record.projectId
+  }}/tasks/{{ record.id }}` - kind `delete`; body type `none`; path fields `projectId`, `id`;
+  required record fields `projectId`, `id`; accepted fields `id`, `projectId`; risk: external
+  mutation; irreversibly deletes a live Clockify task; approval required.
 
 ## Known limits
 
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config-driven
-  overrides (`clockifyPageSize`/`clockifyMaxPages`, `clockify.go:252-280`). The engine's
-  `page_number` paginator's `PageSize`/`MaxPages` fields are plain JSON values in `streams.json`,
-  not templated against `config.*` — there is no mechanism in this dialect to wire a runtime
-  config value into either field. This bundle ships legacy's own default (`page_size: 50`,
-  `max_pages` unbounded) as a static value; an operator can no longer override the page size or
-  cap request count per sync. This mirrors the identical, already-accepted limitation documented
-  for `bitly`'s `next_url` paginator and other wave1 goldens (conventions.md's fixture-rules
-  section references this pattern).
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
-  when `config.mode == "fixture"`, a credential-free conformance-harness affordance,
-  `clockify.go:154-185`) stamps a broader, cross-stream synthetic record shape (e.g. every fixture
-  record carries `workspaceId`, `clientId`, `duration`, etc. regardless of stream) that does not
-  match any single stream's real live-API record shape. This bundle's schemas and fixtures target
-  the live per-stream record shape only; the engine's own conformance/fixture-replay harness
-  provides the credential-free test affordance this bundle needs, so no fixture-mode equivalent is
-  needed here.
-- **`api_url` alternate config-key name is not modeled.** Legacy's `clockifyBaseURL` also accepts
-  `config.api_url` as a fallback name for the base URL override (`clockify.go:233-235`); this
-  bundle declares only `base_url` (spec.json's single, canonical property name) since the engine's
-  `spec.json` "default" materialization mechanism has no analogous "try this key, then that key"
-  fallback chain. An operator relying on the `api_url` config key name specifically would need to
-  rename it to `base_url`.
+- Batch defaults: read_page_size=50.
+- API coverage includes 13 stream-backed endpoint group(s), 12 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=4, destructive_admin=13, duplicate_of=12, non_data_endpoint=5, out_of_scope=90,
+  requires_elevated_scope=19.

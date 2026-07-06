@@ -12,20 +12,50 @@ SYNOPSIS
 DESCRIPTION
   Reads Katana MRP (Cloud Inventory) products, materials, variants, sales orders, and customers through the Katana REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  api_key (secret)
+
+ETL STREAMS
+  products:
+    primary key: id
+    cursor: updated_at
+    fields: additional_info(), category_name(), created_at(), default_supplier_id(), id(), is_producible(), is_purchasable(), is_sellable(), name(), uom(), updated_at()
+  materials:
+    primary key: id
+    cursor: updated_at
+    fields: additional_info(), category_name(), created_at(), default_supplier_id(), id(), is_sellable(), name(), uom(), updated_at()
+  variants:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), id(), material_id(), product_id(), purchase_price(), sales_price(), sku(), type(), updated_at()
+  sales_orders:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), currency(), customer_id(), delivery_date(), id(), order_created_date(), order_no(), status(), total(), total_in_base_currency(), updated_at()
+  customers:
+    primary key: id
+    cursor: updated_at
+    fields: category(), created_at(), currency(), email(), id(), name(), phone(), reference_id(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Katana MRP API read of inventory, sales, and customer data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

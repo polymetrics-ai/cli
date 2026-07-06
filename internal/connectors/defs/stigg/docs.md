@@ -1,171 +1,57 @@
 # Overview
 
-Stigg exposes ALL of its data through a single GraphQL endpoint (`POST /graphql`) whose request
-body carries a GraphQL query string and whose response wraps records under a top-level `data`
-object. This is a Tier-2 `StreamHook` migration (quarantine.json's original `ENGINE_GAP` finding):
-`internal/connectors/engine/bundle.go`'s `StreamSpec.Body` field exists but
-`internal/connectors/engine/read.go`'s declarative read path never sends a body (`read.go`'s
-`readOneSequence` always issues `rt.Requester.Do(ctx, method, reqPath, query, nil)` — the body
-argument is hard-coded `nil`), so a POST-body GraphQL read cannot be expressed in `streams.json`
-alone. `internal/connectors/hooks/stigg/hooks.go` implements `StreamHook`, porting
-`internal/connectors/stigg/stigg.go`'s GraphQL query construction and `data.<field>` record
-extraction verbatim. This bundle is engine-vs-legacy parity-tested against
-`internal/connectors/stigg` (the hand-written connector it migrates); the legacy package stays
-registered and unchanged until wave6's registry flip.
+Reads Stigg products, plans, customers, and subscriptions through the Stigg GraphQL-over-HTTP API.
+Read-only.
+
+Readable streams: `products`, `plans`, `customers`, `subscriptions`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.stigg.io/reference/api-overview.
 
 ## Auth setup
 
-Stigg authenticates via a single `api_key` secret sent as a standard **`Authorization: Bearer
-<api_key>`** header on every GraphQL POST — matching legacy's `requester()`
-(`stigg.go:108-118`: `connsdk.Bearer(key)`). This bundle wires the identical shape
-**declaratively, with no AuthHook needed at all**: `streams.json`'s `base.auth` declares a single
-`bearer` candidate (`{"mode":"bearer","token":"{{ secrets.api_key }}"}`). Auth is intentionally NOT
-part of `hooks/stigg/hooks.go` — the engine's `connsdk.Requester` (built by `engine.newRuntime`
-before any hook runs) already sets the `Authorization: Bearer <api_key>` header on every request
-the hook issues via `rt.Requester.Do`, so the hook only needs to build the GraphQL query and POST
-it; it never touches auth itself. This is why stigg needed only a `StreamHook`, not the `AuthHook`
-interface, despite being filed as a Tier-2 connector in `quarantine.json`.
+Connection fields:
+
+- `api_key` (required, secret, string); Stigg server API key, sent as a Bearer token on every
+  GraphQL POST request. Never logged.
+- `base_url` (optional, string); default `https://api.stigg.io`; format `uri`; Stigg
+  GraphQL-over-HTTP base URL override for tests or proxies.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.stigg.io`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults. A `base_url` override
+must parse as a valid http(s) URL with a non-empty host; malformed values fail closed.
+
+Connection checks call POST `/graphql`.
 
 ## Streams notes
 
-Legacy defines 4 streams, each a distinct GraphQL root query field on the same `POST /graphql`
-endpoint (`stigg.go`'s `streamEndpoints` map): `products`, `plans`, `customers`, `subscriptions`.
-None of the 4 streams paginate — every query fetches the full result set in one request (legacy's
-`Read`, `stigg.go:66-102`, issues exactly one `r.Do` call per stream, no loop, no cursor/page
-argument in any query text). `hooks/stigg/hooks.go`'s `ReadStream` ports each stream's exact query
-text and `data.<field>` record-extraction path verbatim:
+Reads are GraphQL POSTs with the query sent in the request body. Every read fetches the full
+result set in a single request; streams are not incremental and there is no pagination.
 
-- `products`: `query PolymetricsProducts { products { id refId displayName status } }` at
-  `data.products`.
-- `plans`: `query PolymetricsPlans { plans { id refId displayName status } }` at `data.plans`.
-- `customers`: `query PolymetricsCustomers { customers { id refId displayName status } }` at
-  `data.customers`.
-- `subscriptions`: `query PolymetricsSubscriptions { subscriptions { id refId customerId status }
-  }` at `data.subscriptions`.
+If the GraphQL response contains a non-empty `errors` array, the stream yields zero records
+rather than failing hard.
 
-Every record is projected to EXACTLY the fields legacy's `copyRecord` helper selects (`id`, `refId`,
-`displayName`, `status` for products/plans/customers; `id`, `refId`, `customerId`, `status` for
-subscriptions) — legacy discards every other field the raw GraphQL response might carry, matching
-this bundle's schema-mode projection (no `computed_fields` renames needed since Stigg's GraphQL
-field names are already the exact record keys legacy publishes, camelCase and all — unlike a REST
-API this is not renamed to snake_case, since the schema is defined as literal field-for-field parity
-with legacy's own `copyRecord` output, not a stylistic normalization).
-
-Neither stream is incremental: legacy's `Read` never consults `req.State`/a cursor at all (grep
-confirms no state read anywhere in `stigg.go`) — every read is a full re-fetch, matching this
-bundle's schemas declaring no `x-cursor-field` and `streams.json` declaring no `incremental` block
-on any stream.
-
-**Deliberately NOT ported**: legacy's `Read` has no GraphQL-errors-in-HTTP-200 handling at all
-(unlike monday's connector, which explicitly checks a top-level `errors` array even on a 200
-response) — `stigg.go:85-92` decodes `resp.Body` directly at `endpoint.recordsPath` regardless of
-whether the response also carries a GraphQL `errors` envelope. `hooks/stigg/hooks.go`'s `execute`
-mirrors this exactly: it does NOT inspect the response for a GraphQL `errors` array, matching
-legacy's behavior byte-for-byte (an error-shaped response with an empty/absent `data.<field>`
-produces zero records, not a hard failure — see "Known limits").
-
-### Declarative path (`streams.json`) vs. the live StreamHook path
-
-`streams.json` still declares complete stream/schema metadata for all 4 streams — this is what
-backs the catalog/manifest surface regardless of which path a read actually takes. Because
-`hooks/stigg/hooks.go`'s `StreamHook.ReadStream` recognizes and handles all 4 stream names
-unconditionally (`handled=true`), the declarative fallback in `streams.json` is **never exercised
-by production traffic** — `engine.Read` only falls through to it when the `StreamHook` returns
-`handled=false` (an unrecognized stream name) or no hooks are registered at all. Every stream
-carries an explicit `"conformance": {"skip_dynamic": true, "reason": "..."}` marker
-(conventions.md §4/§6): `internal/connectors/conformance/dynamic.go` honors this by Skipping every
-dynamic fixture-replay check for these streams, since a declarative GET-shaped replay can never
-faithfully exercise a GraphQL POST `StreamHook`. The authoritative substitute these markers name is
-`internal/connectors/paritytest/stigg/parity_test.go` (drives the real, hook-dispatched connector
-via `engine.HooksFor("stigg")`) and `hooks/stigg/hooks_test.go` — both assert stigg's real GraphQL
-wire format (query text, `data.<field>` extraction, record mapping) byte-for-byte against legacy.
-`fixtures/streams/<stream>/page_1.json` is retained purely as documentation of the real record
-shape each stream emits (and to satisfy `fixtures_present`'s static "first stream ships a fixture"
-requirement), not as a load-bearing replay contract.
+- `products`: POST `/graphql` - records path `data.products`.
+- `plans`: POST `/graphql` - records path `data.plans`.
+- `customers`: POST `/graphql` - records path `data.customers`.
+- `subscriptions`: POST `/graphql` - records path `data.subscriptions`.
 
 ## Write actions & risks
 
-None. Stigg is a read-only source connector (`capabilities.write: false`, no `writes.json`),
-matching legacy's `Write` returning `connectors.ErrUnsupportedOperation` unconditionally.
+This connector is read-only. Read behavior: external Stigg GraphQL API read of
+product/plan/customer/subscription entitlement metadata.
 
 ## Known limits
 
-- **`StreamSpec.Body` is unwired (ENGINE_GAP, documented, non-blocking; same gap monday's and
-  serpstat's bundles already ledger).** The engine's declarative read path never sends a request
-  body, so a POST-body GraphQL read cannot be expressed in `streams.json` alone.
-  `hooks/stigg/hooks.go`'s `StreamHook` implements the real GraphQL POST entirely within the
-  sanctioned Tier-2 hook seam, reusing `rt.Requester` (the engine's already-built HTTP client/
-  auth/base-URL plumbing, including the `Authorization: Bearer` header).
-- **The declarative `streams.json` path is never live-dispatched** (see "Declarative path" above)
-  — every stream carries a `conformance.skip_dynamic` marker naming
-  `paritytest/stigg`/`hooks/stigg/hooks_test.go` as the authoritative substitute.
-- **No incremental filtering, matching legacy exactly.** No stream declares
-  `x-cursor-field`/`incremental` — legacy never filters or advances reads by any cursor; every read
-  is a full, unpaginated re-fetch.
-- **No GraphQL-errors-in-HTTP-200 detection, matching legacy exactly.** Unlike monday's connector,
-  neither legacy's `stigg.go` nor this bundle's `StreamHook` inspects the response body for a
-  top-level GraphQL `errors` array — a query that Stigg answers with `errors` (and an empty/absent
-  `data.<field>`) is treated the same way on both sides: zero records emitted, no error surfaced.
-  This is intentional parity with legacy's exact (arguably under-defensive) behavior, not an
-  oversight; hardening this is Pass B scope if ever revisited, tracked here so it is not silently
-  reintroduced as a "fix" that would diverge from legacy.
-- **Legacy's `mode: fixture` credential-free affordance is NOT part of this bundle.** Legacy's
-  `readFixture`/`fixtureMode` (`stigg.go:145-163`) emit synthetic records (stamping extra
-  `connector`/`fixture` marker fields not present on any live record) without any network call when
-  `config.mode == "fixture"` — a legacy-only testing convenience. Parity is asserted against
-  legacy's LIVE (httptest-driven) read path only, matching the wave1-pilot convention (monday's
-  docs.md carries the identical note). The `connector`/`fixture` marker fields are therefore
-  correctly absent from this bundle's schemas.
-- **`base_url` validation is stricter than a bare string default, matching legacy's own
-  `baseURL()` helper** (`stigg.go:120-136`): must parse as a URL with an `http`/`https` scheme and a
-  non-empty host; both legacy and `hooks/stigg/hooks.go` fail closed identically on a malformed
-  override.
-
-### Pass B full-surface research findings (2026-07-03)
-
-Full-surface expansion research was attempted against Stigg's real, live GraphQL schema (not just
-the legacy Go connector's assumed shape). Findings, and why no new streams/writes were added this
-pass:
-
-- **`docs.stigg.io`'s GraphQL API reference and the "exporting data / schema" page are
-  client-side-rendered SPAs** with no crawlable static content (both fetched empty or
-  near-empty via `curl`) — `DOCS_UNREACHABLE`-flavored for automated research, though the site is
-  reachable to a human browser/JS-executing client.
-- **Live GraphQL introspection against `https://api.stigg.io/graphql` requires an authenticated API
-  key** (`{"errors":[{"message":"GraphQL introspection not authorized: use api key for
-  authentication", ...}]}`) — no credential was available to this research pass, and minting one
-  is out of scope for a non-interactive migration agent.
-- **npm registry access was unavailable in this environment** (network-restricted sandbox), so the
-  published `@stigg/js-client-sdk`/server-SDK packages' generated TypeScript types (which would
-  otherwise be an authoritative secondary source for exact field/argument names) could not be
-  inspected either.
-- **Web-search-derived secondary evidence suggests `coupons` (and plausibly `customers`,
-  `products`, `plans`, `subscriptions` too) are real Relay-style paginated GraphQL connections**
-  (`query { coupons(filter: ..., sorting: ..., paging: ...) { edges { node { ...CouponFragment } }
-  } }`), NOT the bare unpaginated array shape
-  (`query { products { id refId displayName status } }`) `hooks/stigg/hooks.go` currently sends and
-  `stigg.go` (legacy) has always sent. This is corroborating evidence for a real, un-filed
-  `ENGINE_GAP`/parity risk in the EXISTING 4 streams (legacy may have always been reading a
-  possibly-paginated/filtered response shape as if it were a flat array — if `products`/`plans`/
-  `customers`/`subscriptions` are actually connections, `data.products` would be an `edges`-wrapped
-  object, not an array, and `connsdk.RecordsAt(resp.Body, "data.products")` would silently return
-  zero records against the live API today). **This was NOT changed or "fixed" this pass**: the
-  evidence is secondary (web-search summaries, not primary schema/introspection access), and
-  guessing at a corrected query shape without authoritative confirmation risks introducing a
-  DIFFERENT, unverified bug in place of a possibly-already-broken-but-parity-locked one. Flagging
-  for a follow-up pass with real Stigg API credentials (to run introspection) or access to the
-  `@stigg/*` npm package's generated types, rather than silently guessing.
-- **No new streams were added** for `coupons`, `addOns`/`addons`, `entitlements`,
-  `promotionalEntitlements`, or any other Stigg resource beyond the original 4, for the same
-  reason: without confirmed exact root-field names, argument shapes, and response-connection
-  structure, a fabricated GraphQL query string is a hard runtime error against the live API, not a
-  soft degradation — worse than declaring the gap and leaving the surface honestly incomplete.
-  `api_surface.json`'s exclusion entries for these resources are `DOCS_UNREACHABLE`-reasoned
-  (`out_of_scope` category, `docs.stigg.io` unreachable to automated research + no introspection
-  credential), not `out_of_scope` in the "we chose not to" sense.
-- **No write actions were added.** Stigg's GraphQL API almost certainly exposes mutations
-  (`provisionCustomer`, `reportUsage`, coupon/subscription mutations per the legacy `api_surface.json`
-  placeholder note), but with the same lack of confirmed exact mutation names/argument shapes, and
-  because `hooks/stigg/hooks.go` would need a `WriteHook` addition (a 2nd hook interface on an
-  existing hook package — permitted within caps per conventions.md §1's Tier-2 table, but only with
-  confirmed real mutation shapes, which this pass could not obtain) — deferred, not implemented.
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=5.

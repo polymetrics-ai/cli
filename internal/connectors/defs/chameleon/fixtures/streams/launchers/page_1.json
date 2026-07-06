@@ -12,13 +12,10 @@
       "launchers": [
         {
           "id": "l_fixture_1",
-          "name": "Fixture Launcher 1",
-          "title": "Help",
-          "description": "Help menu",
-          "preset": "icon",
-          "segment_ids": [],
-          "tag_ids": [],
-          "published_at": "2026-01-02T00:00:00Z",
+          "title": "Fixture Launcher 1",
+          "type": "launcher",
+          "state": "published",
+          "is_live": true,
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-02T00:00:00Z"
         }

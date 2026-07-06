@@ -95,25 +95,26 @@ func MetadataWithIcon(meta Metadata) Metadata {
 	}
 	if icon, ok := ConnectorIconFor(meta.Name); ok {
 		meta.Icon = &icon
+	} else {
+		icon := fallbackConnectorIcon(meta.Name)
+		meta.Icon = &icon
 	}
 	return meta
+}
+
+func fallbackConnectorIcon(name string) ConnectorIcon {
+	return ConnectorIcon{
+		ID:           "pm-" + name,
+		Path:         "icons/pm-sample.svg",
+		Source:       IconSourcePolymetrics,
+		ReviewStatus: IconReviewPolymetrics,
+		ReviewURL:    "https://github.com/polymetrics-ai/cli",
+	}
 }
 
 func manifestWithIcon(manifest Manifest) Manifest {
 	manifest.Metadata = MetadataWithIcon(manifest.Metadata)
 	return manifest
-}
-
-func definitionWithIcon(def ConnectorDefinition) ConnectorDefinition {
-	if def.Icon != nil {
-		icon := *def.Icon
-		def.Icon = &icon
-		return def
-	}
-	if icon, ok := ConnectorIconFor(def.Slug); ok {
-		def.Icon = &icon
-	}
-	return def
 }
 
 func connectorIconRegistry() (map[string]ConnectorIcon, error) {
@@ -137,12 +138,12 @@ func connectorIconRegistry() (map[string]ConnectorIcon, error) {
 	return connectorIcons.by, connectorIcons.err
 }
 
-func ValidateConnectorIcons(connectorsDir string, defs []ConnectorDefinition, metas []Metadata) error {
+func ValidateConnectorIcons(connectorsDir string, defs []Definition, metas []Metadata) error {
 	for _, def := range defs {
 		if def.Icon == nil {
-			return fmt.Errorf("connector icon %s: missing icon registry entry", def.Slug)
+			return fmt.Errorf("connector icon %s: missing icon registry entry", def.Name)
 		}
-		if err := ValidateConnectorIcon(connectorsDir, def.Slug, *def.Icon); err != nil {
+		if err := ValidateConnectorIcon(connectorsDir, def.Name, *def.Icon); err != nil {
 			return err
 		}
 	}

@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads Shortcut stories, epics, projects, and iterations through the Shortcut REST API.
 
+ICON
+  asset: icons/shortcut.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developer.shortcut.com/api/rest/v3
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  page_size
+  api_token (secret)
+
+ETL STREAMS
+  stories:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), state(), updated_at()
+  epics:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), state(), updated_at()
+  projects:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), state(), updated_at()
+  iterations:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), state(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Shortcut API read of story, epic, project, and iteration data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

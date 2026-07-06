@@ -12,20 +12,39 @@ SYNOPSIS
 DESCRIPTION
   Reads Wasabi account and bucket storage statistics from the Wasabi Stats API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  start_date
+  api_key (secret)
+
+ETL STREAMS
+  bucket_stats:
+    primary key: id
+    cursor: date
+    fields: bucket(), date(), id(), storage_bytes()
+  account_stats:
+    primary key: id
+    cursor: date
+    fields: date(), id(), object_count(), storage_bytes()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Wasabi Stats API read of account/bucket storage usage metrics
+  approval: none; read-only, no reverse-ETL write surface
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

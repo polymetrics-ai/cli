@@ -1,127 +1,208 @@
 # Overview
 
-Elastic Email is a wave2 fan-out declarative-HTTP migration, expanded to the full documented API
-surface in Pass B (2026-07-04). It reads contacts, campaigns, lists, segments, templates, domains,
-suppressions (all/bounces/complaints/unsubscribes), webhooks, files, inbound routes, sub-accounts,
-and campaign/channel statistics through the Elastic Email v4 REST API (`{{ config.base_url }}/...`),
-and writes contact/list/segment/template/campaign/webhook/domain/inbound-route lifecycle mutations.
-This bundle originated as a migration from `internal/connectors/elasticemail` (the hand-written
-connector it replaces, which stays registered and unchanged until wave6's registry flip);
-`capabilities.write` is now `true` following the Pass B write-surface expansion — this is a
-capability WIDENING beyond legacy's read-only `Write` stub, not a parity port, since Elastic Email's
-real API genuinely exposes these mutation endpoints and legacy never called them.
+Reads and writes Elastic Email contacts, campaigns, lists, segments, templates, webhooks, domains,
+inbound routes, suppressions, and account statistics through the Elastic Email v4 REST API.
+
+Readable streams: `contacts`, `campaigns`, `lists`, `segments`, `templates`, `domains`,
+`suppressions`, `suppressions_bounces`, `suppressions_complaints`, `suppressions_unsubscribes`,
+`webhooks`, `files`, `inbound_routes`, `sub_accounts`, `statistics_campaigns`,
+`statistics_channels`.
+
+Write actions: `create_contact`, `update_contact`, `delete_contact`, `create_list`, `update_list`,
+`delete_list`, `add_list_contacts`, `create_segment`, `update_segment`, `delete_segment`,
+`create_template`, `update_template`, `delete_template`, `create_campaign`, `update_campaign`,
+`pause_campaign`, `delete_campaign`, `create_webhook`, `update_webhook`, `delete_webhook`,
+`create_domain`, `delete_domain`, `create_inbound_route`, `update_inbound_route`,
+`delete_inbound_route`.
+
+Service API documentation: https://elasticemail.com/developers/api-documentation/.
 
 ## Auth setup
 
-Provide an Elastic Email API key via the `api_key` secret; it is sent as the
-`X-ElasticEmail-ApiKey` header with no prefix (`mode: api_key_header`, empty `prefix`), matching
-legacy's `connsdk.APIKeyHeader("X-ElasticEmail-ApiKey", secret, "")`. `base_url` defaults to
-`https://api.elasticemail.com/v4` and may be overridden for test proxies.
+Connection fields:
+
+- `api_key` (optional, secret, string); Elastic Email API key, sent as the X-ElasticEmail-ApiKey
+  header. Never logged.
+- `base_url` (optional, string); default `https://api.elasticemail.com/v4`; format `uri`; Elastic
+  Email v4 API base URL. Defaults to the production endpoint; override for test proxies.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.elasticemail.com/v4`.
+
+Authentication behavior:
+
+- API key authentication in `X-ElasticEmail-ApiKey` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/lists`.
 
 ## Streams notes
 
-All 5 streams share the identical shape: `GET`, records at the response root (`records.path: ""`
-— every Elastic Email v4 list endpoint returns a top-level JSON array, matching
-`connsdk.RecordsAt(resp.Body, "")`'s root-array selection and legacy's own `RecordsAt(resp.Body,
-"")` call), and `offset_limit` pagination (`limit`/`offset` query params). Primary keys match each
-stream's natural identifier rather than a synthetic id, exactly as legacy's own catalog declares:
-`Email` for `contacts`, `ListName` for `lists`, `Name` for `campaigns`/`segments`/`templates`.
-`contacts` declares a bare `incremental.cursor_field: "DateUpdated"` (no `request_param`) and its
-schema's `x-cursor-field` names the same field, matching legacy's `Catalog()` `CursorFields:
-[]string{"DateUpdated"}` hint for the `contacts` stream — legacy's own `Read` never filters on it
-(Elastic Email v4 list endpoints have no request-side time-range filter parameter its own
-connector code ever sends), so per `docs/migration/conventions.md`'s incremental-declaration truth
-table (bare `cursor_field` iff legacy publishes `CursorFields`; `request_param` iff legacy sends a
-server-side filter) this is a bare declaration only, not a `request_param`. `campaigns`/`lists`/
-`segments`/`templates` declare no `CursorFields` in legacy and correspondingly have no
-`incremental` block or `x-cursor-field`.
+Default pagination: offset/limit pagination; offset parameter `offset`; limit parameter `limit`;
+page size 100.
 
-`contacts`' schema includes `Activity`/`Consent`/`CustomFields` (nested objects legacy's
-`contactRecord` mapper emits) even though legacy's separate `contactFields()` catalog-description
-function omits them — the schema is a projection of what `mapRecord` actually emits (the
-authoritative behavior per `docs/migration/conventions.md`'s schema-as-projection rule), not of
-the narrower `Fields` catalog list, which is descriptive metadata only and does not gate what
-`Read` returns.
+Pagination by stream: none: `domains`, `inbound_routes`; offset_limit: `contacts`, `campaigns`,
+`lists`, `segments`, `templates`, `suppressions`, `suppressions_bounces`, `suppressions_complaints`,
+`suppressions_unsubscribes`, `webhooks`, `files`, `sub_accounts`, `statistics_campaigns`,
+`statistics_channels`.
 
-**Pass B new streams** (all `GET`, root-array records, `offset_limit` pagination unless noted):
-`domains` (`GET /domains`, `pagination: none` — the real endpoint accepts no `limit`/`offset` query
-params at all, matching `DomainsGet`'s documented zero-parameter shape), `suppressions` /
-`suppressions_bounces` / `suppressions_complaints` / `suppressions_unsubscribes` (4 distinct
-endpoints returning the same `Suppression` record shape for different suppression categories),
-`webhooks` (`GET /webhook`, singular path segment per the real API), `files`, `inbound_routes`
-(`GET /inboundroute`, `pagination: none` — no `limit`/`offset` params documented), `sub_accounts`,
-`statistics_campaigns` (`GET /statistics/campaigns`) and `statistics_channels` (`GET
-/statistics/channels`, same `ChannelLogStatusSummary` record shape as `statistics_campaigns`). None
-of these declare an `incremental` block — the real API documents no server-side date-range filter
-parameter for any of them (mirroring the existing `campaigns`/`lists`/`segments`/`templates`
-streams' own full-refresh-only shape).
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `contacts`: GET `/contacts` - records at response root; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100; incremental cursor `DateUpdated`; formatted as
+  `rfc3339`.
+- `campaigns`: GET `/campaigns` - records at response root; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 100.
+- `lists`: GET `/lists` - records at response root; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100.
+- `segments`: GET `/segments` - records at response root; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100.
+- `templates`: GET `/templates` - records at response root; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 100.
+- `domains`: GET `/domains` - records at response root.
+- `suppressions`: GET `/suppressions` - records at response root; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 100.
+- `suppressions_bounces`: GET `/suppressions/bounces` - records at response root; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 100.
+- `suppressions_complaints`: GET `/suppressions/complaints` - records at response root; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 100.
+- `suppressions_unsubscribes`: GET `/suppressions/unsubscribes` - records at response root;
+  offset/limit pagination; offset parameter `offset`; limit parameter `limit`; page size 100.
+- `webhooks`: GET `/webhook` - records at response root; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100.
+- `files`: GET `/files` - records at response root; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100.
+- `inbound_routes`: GET `/inboundroute` - records at response root.
+- `sub_accounts`: GET `/subaccounts` - records at response root; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 100.
+- `statistics_campaigns`: GET `/statistics/campaigns` - records at response root; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 100.
+- `statistics_channels`: GET `/statistics/channels` - records at response root; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 100.
 
 ## Write actions & risks
 
-Pass B added `capabilities.write: true` and 22 actions across 8 resources — see `writes.json` for
-the full `record_schema`/`risk` text per action. Summary by resource:
+Overall write risk: external Elastic Email API mutations covering
+contact/list/segment/template/campaign/webhook/domain/inbound-route lifecycle management;
+create_campaign and pause_campaign can affect a live email send to real recipients, and
+webhook/inbound-route writes register caller-controlled external destinations for live event/mail
+forwarding.
 
-- **contacts**: `create_contact` (`POST /contacts`), `update_contact` (`PUT /contacts/{Email}`),
-  `delete_contact` (`DELETE /contacts/{Email}`, idempotent on 404).
-- **lists**: `create_list`, `update_list` (`PUT /lists/{ListName}`, body restricted to
-  `NewListName`/`AllowUnsubscribe` — the real `ListUpdatePayload` shape, distinct from the create
-  payload), `delete_list`, `add_list_contacts` (`POST /lists/{ListName}/contacts`).
-- **segments**: `create_segment`, `update_segment`, `delete_segment`.
-- **templates**: `create_template`, `update_template`, `delete_template`.
-- **campaigns**: `create_campaign` (requires `Name` + `Recipients`; flagged **higher-risk** — a
-  campaign create/update can schedule a live send to real recipients depending on `Options`, this
-  is not a preview-only action), `update_campaign`, `pause_campaign` (`PUT
-  /campaigns/{Name}/pause`), `delete_campaign`.
-- **webhooks**: `create_webhook`, `update_webhook` (path-keyed on `WebhookID`, the real API's
-  identifier — NOT `Name`), `delete_webhook`. Flagged **higher-risk**: registers/repoints a
-  caller-controlled external URL that receives live send-event data.
-- **domains**: `create_domain`, `delete_domain`. Update/verification-trigger endpoints are excluded
-  (`requires_elevated_scope` — see `api_surface.json`) since they depend on externally-configured
-  DNS state this connector cannot validate.
-- **inbound_routes**: `create_inbound_route`, `update_inbound_route`, `delete_inbound_route`
-  (path-keyed on `PublicId`). Flagged **higher-risk**: registers/repoints a caller-controlled
-  external address/URL that receives forwarded inbound mail.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Every write action's `path_fields` names the real API's own path-parameter identifier (`Email` for
-contacts, `ListName`/`Name` for lists/segments/templates/campaigns, `WebhookID` for webhooks,
-`PublicId` for inbound routes, `Domain` for domains) — these are natural business keys, not
-synthetic ids, matching how each resource's own list-stream schema names its `x-primary-key`.
+- `create_contact`: POST `/contacts` - kind `create`; body type `json`; required record fields
+  `Email`; accepted fields `Consent`, `CustomFields`, `Email`, `FirstName`, `LastName`, `Status`;
+  risk: adds a new contact to the account's overall recipient list; low-risk external mutation, no
+  approval required.
+- `update_contact`: PUT `/contacts/{{ record.Email }}` - kind `update`; body type `json`; path
+  fields `Email`; required record fields `Email`; accepted fields `Consent`, `CustomFields`,
+  `Email`, `FirstName`, `LastName`, `Status`; risk: mutates an existing contact's
+  status/name/custom-field data; a Status change (e.g. to Unsubscribed) changes future campaign
+  eligibility for this recipient.
+- `delete_contact`: DELETE `/contacts/{{ record.Email }}` - kind `delete`; body type `none`; path
+  fields `Email`; required record fields `Email`; accepted fields `Email`; missing records treated
+  as success for status `404`; risk: permanently removes a contact and its activity/consent history
+  from the account.
+- `create_list`: POST `/lists` - kind `create`; body type `json`; required record fields `ListName`;
+  accepted fields `AllowUnsubscribe`, `Emails`, `ListName`; risk: creates a new contact list,
+  optionally seeding it from existing contact emails; low-risk external mutation, no approval
+  required.
+- `update_list`: PUT `/lists/{{ record.ListName }}` - kind `update`; body type `json`; path fields
+  `ListName`; body fields `NewListName`, `AllowUnsubscribe`; required record fields `ListName`;
+  accepted fields `AllowUnsubscribe`, `ListName`, `NewListName`; risk: renames an existing list or
+  changes its unsubscribe-allowed setting; a rename changes the identifier campaigns/segments
+  reference this list by.
+- `delete_list`: DELETE `/lists/{{ record.ListName }}` - kind `delete`; body type `none`; path
+  fields `ListName`; required record fields `ListName`; accepted fields `ListName`; missing records
+  treated as success for status `404`; risk: permanently removes a contact list; any campaign still
+  targeting this list by name will fail to resolve its recipients.
+- `add_list_contacts`: POST `/lists/{{ record.ListName }}/contacts` - kind `create`; body type
+  `json`; path fields `ListName`; body fields `Emails`, `Status`; required record fields `ListName`,
+  `Emails`; accepted fields `Emails`, `ListName`, `Status`; risk: adds existing contacts to a list,
+  making them eligible recipients for any campaign targeting that list.
+- `create_segment`: POST `/segments` - kind `create`; body type `json`; required record fields
+  `Name`, `Rule`; accepted fields `Name`, `Rule`; risk: creates a new dynamic contact segment from a
+  SQL-like rule; low-risk external mutation, no approval required.
+- `update_segment`: PUT `/segments/{{ record.Name }}` - kind `update`; body type `json`; path fields
+  `Name`; required record fields `Name`, `Rule`; accepted fields `Name`, `Rule`; risk: changes the
+  membership rule of an existing segment; immediately changes which contacts any campaign targeting
+  this segment will reach.
+- `delete_segment`: DELETE `/segments/{{ record.Name }}` - kind `delete`; body type `none`; path
+  fields `Name`; required record fields `Name`; accepted fields `Name`; missing records treated as
+  success for status `404`; risk: permanently removes a segment; any campaign still targeting this
+  segment by name will fail to resolve its recipients.
+- `create_template`: POST `/templates` - kind `create`; body type `json`; required record fields
+  `Name`; accepted fields `Body`, `Name`, `Subject`, `TemplateScope`; risk: creates a new email
+  template; low-risk external mutation, no approval required.
+- `update_template`: PUT `/templates/{{ record.Name }}` - kind `update`; body type `json`; path
+  fields `Name`; required record fields `Name`; accepted fields `Body`, `Name`, `Subject`,
+  `TemplateScope`; risk: overwrites the subject/body of an existing template; any campaign
+  referencing this template by name sends the new content on its next send.
+- `delete_template`: DELETE `/templates/{{ record.Name }}` - kind `delete`; body type `none`; path
+  fields `Name`; required record fields `Name`; accepted fields `Name`; missing records treated as
+  success for status `404`; risk: permanently removes a template; any campaign still referencing
+  this template by name will fail to build its content.
+- `create_campaign`: POST `/campaigns` - kind `create`; body type `json`; required record fields
+  `Name`, `Recipients`; accepted fields `Content`, `Name`, `Options`, `Recipients`; risk: creates a
+  new campaign targeting the given lists/segments; depending on Options this may schedule a live
+  send to real recipients, not a preview-only action.
+- `update_campaign`: PUT `/campaigns/{{ record.Name }}` - kind `update`; body type `json`; path
+  fields `Name`; required record fields `Name`; accepted fields `Content`, `Name`, `Options`,
+  `Recipients`; risk: mutates an existing campaign's content, recipients, or send options; a
+  campaign already in progress may not accept every field change.
+- `pause_campaign`: PUT `/campaigns/{{ record.Name }}/pause` - kind `update`; body type `none`; path
+  fields `Name`; required record fields `Name`; accepted fields `Name`; risk: pauses an in-progress
+  campaign send; recipients not yet reached will not receive the email until the campaign is
+  resumed.
+- `delete_campaign`: DELETE `/campaigns/{{ record.Name }}` - kind `delete`; body type `none`; path
+  fields `Name`; required record fields `Name`; accepted fields `Name`; missing records treated as
+  success for status `404`; risk: permanently removes a campaign; if it has not finished sending,
+  any remaining scheduled deliveries are cancelled.
+- `create_webhook`: POST `/webhook` - kind `create`; body type `json`; required record fields
+  `Name`, `URL`; accepted fields `Name`, `NotificationForAbuseReport`, `NotificationForClicked`,
+  `NotificationForError`, `NotificationForOpened`, `NotificationForSent`,
+  `NotificationForUnsubscribed`, `NotifyOncePerEmail`, `URL`; risk: registers a new outbound webhook
+  that will POST live event data (sent/opened/clicked/bounced) to an external URL of the caller's
+  choosing; verify the target endpoint before enabling.
+- `update_webhook`: PUT `/webhook/{{ record.WebhookID }}` - kind `update`; body type `json`; path
+  fields `WebhookID`; required record fields `WebhookID`; accepted fields
+  `NotificationForAbuseReport`, `NotificationForClicked`, `NotificationForError`,
+  `NotificationForOpened`, `NotificationForSent`, `NotificationForUnsubscribed`,
+  `NotifyOncePerEmail`, `URL`, `WebhookID`; risk: mutates an existing webhook's target URL or event
+  subscriptions; a changed URL redirects future event deliveries to a different endpoint.
+- `delete_webhook`: DELETE `/webhook/{{ record.WebhookID }}` - kind `delete`; body type `none`; path
+  fields `WebhookID`; required record fields `WebhookID`; accepted fields `WebhookID`; missing
+  records treated as success for status `404`; risk: permanently removes a webhook subscription;
+  event delivery to its target URL stops immediately.
+- `create_domain`: POST `/domains` - kind `create`; body type `json`; required record fields
+  `Domain`; accepted fields `Domain`, `SetAsDefault`; risk: registers a new sending domain pending
+  DNS verification; low-risk external mutation, no approval required.
+- `delete_domain`: DELETE `/domains/{{ record.Domain }}` - kind `delete`; body type `none`; path
+  fields `Domain`; required record fields `Domain`; accepted fields `Domain`; missing records
+  treated as success for status `404`; risk: permanently removes a verified sending domain; any
+  campaign configured to send from this domain will fail until reconfigured.
+- `create_inbound_route`: POST `/inboundroute` - kind `create`; body type `json`; required record
+  fields `Name`, `Filter`, `FilterType`, `ActionType`; accepted fields `ActionType`, `EmailAddress`,
+  `Filter`, `FilterType`, `HttpAddress`, `Name`; risk: creates a new inbound-mail routing rule that
+  forwards matching inbound email to an external address or webhook URL of the caller's choosing.
+- `update_inbound_route`: PUT `/inboundroute/{{ record.PublicId }}` - kind `update`; body type
+  `json`; path fields `PublicId`; required record fields `PublicId`; accepted fields `ActionType`,
+  `EmailAddress`, `Filter`, `FilterType`, `HttpAddress`, `Name`, `PublicId`; risk: mutates an
+  existing inbound route's match filter or forwarding destination; redirects future matching inbound
+  mail to a different address/URL.
+- `delete_inbound_route`: DELETE `/inboundroute/{{ record.PublicId }}` - kind `delete`; body type
+  `none`; path fields `PublicId`; required record fields `PublicId`; accepted fields `PublicId`;
+  missing records treated as success for status `404`; risk: permanently removes an inbound-mail
+  routing rule; matching inbound mail is no longer forwarded once removed.
 
 ## Known limits
 
-- **`page_size`/`max_pages` config overrides are not modeled.** Legacy accepts optional
-  `page_size` (1-1000, default 100) and `max_pages` (default unlimited, `all`/`unlimited`/`0`
-  synonyms) config keys read at request time (`elasticEmailPageSize`/`elasticEmailMaxPages`). The
-  engine's `PaginationSpec.PageSize`/`MaxPages` fields are plain fixed JSON integers baked into
-  `streams.json` — there is no templating/config-driven override mechanism for them.
-  `base.pagination.page_size` is set to legacy's real production default, `100`
-  (`elasticEmailDefaultPageSize`) — this is the actual value every paginated live stream sends;
-  it is not a fixture convenience. The required two-page `contacts` conformance fixture therefore
-  records a full 100-row first page and a short second page, matching legacy's request cadence.
-  No `max_pages` cap is declared (unbounded, matching legacy's own default). Neither key is
-  declared in `spec.json` (F6, `docs/migration/conventions.md`: dead, unwireable config is worse
-  than absent config).
-- **`base_url` scheme/host validation is enforced by legacy in Go** with dedicated error messages
-  (`elasticEmailBaseURL`); the engine has no equivalent declarative URL-shape validator, so a
-  malformed `base_url` here surfaces as a generic request-construction/connection error rather
-  than legacy's specific `"config base_url must use http or https"`/`"must include a host"`
-  messages. This never changes behavior for any valid `base_url`.
-- **Pass B full-surface review (2026-07-04).** `api_surface.json` now enumerates the entire
-  documented Elastic Email v4 REST surface (~85 endpoints across 16 resource groups). Deliberately
-  excluded, never modeled: `security/apikeys` and `security/smtp` credential management (the create
-  response returns the raw secret key/password material itself — routing that through this
-  connector's record/fixture paths is a credential-exfiltration risk, not merely out-of-scope
-  breadth); every asynchronous export/import job endpoint (contacts/events/suppressions bulk
-  import/export — kickoff-and-poll shapes, not synchronous record reads/writes); the raw/
-  transactional email-send endpoints and the email-verification subsystem (both independent
-  features outside contact/campaign/list data management); and any endpoint whose request or
-  response body is binary/multipart (`binary_payload` — file upload/download, verification file
-  upload). See `api_surface.json`'s per-endpoint `excluded.reason` for the specific justification
-  behind every other omitted endpoint (mostly `duplicate_of` single-object detail lookups already
-  covered by their list stream, and a handful of `requires_elevated_scope` account-administration
-  writes — sub-account provisioning/credit adjustment, domain DNS re-verification).
-- **`update_list`'s real request body is asymmetric with its create payload**: the API's
-  `ListUpdatePayload` accepts `NewListName`/`AllowUnsubscribe` only (no `Emails` field, unlike
-  `ListPayload`'s create-time seed list) — `update_list`'s `body_fields` is restricted accordingly
-  so a caller-supplied `Emails` value on an update record is silently dropped from the request
-  body rather than sent to a field the real endpoint does not accept.
+- Batch defaults: read_page_size=100.
+- API coverage includes 16 stream-backed endpoint group(s), 25 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=5, destructive_admin=3, duplicate_of=17, non_data_endpoint=3, out_of_scope=26,
+  requires_elevated_scope=17.

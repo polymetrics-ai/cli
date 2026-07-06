@@ -12,20 +12,54 @@ SYNOPSIS
 DESCRIPTION
   Reads Rocketlane projects, tasks, customers, users, and time entries through the REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  created_after
+  mode
+  project_id
+  status
+  updated_after
+  api_key (secret)
+
+ETL STREAMS
+  projects:
+    primary key: id
+    cursor: updated_at
+    fields: customer_id(), id(), name(), status(), stream(), updated_at()
+  tasks:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), project_id(), status(), stream(), updated_at()
+  customers:
+    primary key: id
+    cursor: updated_at
+    fields: domain(), id(), name(), stream(), updated_at()
+  users:
+    primary key: id
+    cursor: updated_at
+    fields: email(), id(), name(), status(), stream(), updated_at()
+  time_entries:
+    primary key: id
+    cursor: updated_at
+    fields: id(), minutes(), project_id(), stream(), task_id(), updated_at(), user_id()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Rocketlane API read of project, task, customer, and time-entry data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

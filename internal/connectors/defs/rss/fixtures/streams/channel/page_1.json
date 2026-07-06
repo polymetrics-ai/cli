@@ -2,6 +2,6 @@
   "request": { "method": "GET", "path": "/" },
   "response": {
     "status": 200,
-    "body": { "note": "rss's real channel reads decode an RSS/XML <channel> body, not JSON; this fixture documents the PROJECTED record shape only (id/title/link/description/updated_at) and is never replayed (metadata.json's bundle-level conformance.skip_dynamic marker skips every dynamic check for this bundle). See internal/connectors/hooks/rss/hooks_test.go and internal/connectors/paritytest/rss/parity_test.go for the real XML-based read coverage.", "example_projected_record": { "id": "https://example.test", "title": "Fixture Feed", "link": "https://example.test", "description": "A fixture RSS channel", "updated_at": "Mon, 02 Jan 2006 15:04:05 MST" } }
+    "body": { "note": "rss's real channel reads decode an RSS/XML <channel> body, not JSON; this fixture documents the PROJECTED record shape only (id/title/link/description/updated_at) and is never replayed (metadata.json's bundle-level conformance.skip_dynamic marker skips every dynamic check for this bundle). See internal/connectors/hooks/rss/hooks_test.go and archived parity evidence for rss for the real XML-based read coverage.", "example_projected_record": { "id": "https://example.test", "title": "Fixture Feed", "link": "https://example.test", "description": "A fixture RSS channel", "updated_at": "Mon, 02 Jan 2006 15:04:05 MST" } }
   }
 }

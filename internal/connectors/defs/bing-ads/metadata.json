@@ -22,6 +22,6 @@
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "Tier-3 native package (internal/connectors/native/bing-ads): Check/Catalog/Read are hand-written Go, never routed through engine.Check/engine.Read, so this bundle's streams.json/spec.json exist only to keep identity/spec/docs/schema uniform with every other connector -- conformance's dynamic (fixture-replay) checks exercise the DECLARATIVE engine read path, which this connector never uses. Proven live by internal/connectors/native/bing-ads's own unit tests and internal/connectors/paritytest/bing-ads."
+    "reason": "Tier-3 native package (internal/connectors/native/bing-ads): Check/Catalog/Read are hand-written Go, never routed through engine.Check/engine.Read, so this bundle's streams.json/spec.json exist only to keep identity/spec/docs/schema uniform with every other connector -- conformance's dynamic (fixture-replay) checks exercise the DECLARATIVE engine read path, which this connector never uses. Proven live by internal/connectors/native/bing-ads's own unit tests and archived parity evidence for bing-ads."
   }
 }

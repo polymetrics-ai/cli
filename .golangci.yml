@@ -1,14 +1,8 @@
 version: "2"
 
-# Scope note (wave0-engine-harness T/B-18): this config enables a minimal,
-# non-weakened linter set. It is intentionally applied by the Makefile `lint`
-# target to the NEW wave0 connector-engine packages only
-# (internal/connectors/{engine,defs,hooks,native,conformance,certify}/...,
-# cmd/{connectorgen,inventorygen}/...), not repo-wide — the legacy
-# ~560-connector tree already fails the default linter set alone (see
-# .planning/phases/wave0-engine-harness/traces/waveD-b18-ledger.md). Scoping
-# the invocation path keeps these six linters at full strength instead of
-# disabling/loosening them to accommodate legacy code.
+# Scope note: this config enables a minimal, non-weakened linter set. The
+# Makefile `lint` target applies it to the declarative connector architecture
+# packages.
 
 run:
   timeout: 5m
@@ -26,4 +20,3 @@ linters:
     generated: strict
     paths:
       - '(^|/)[^/]+_gen\.go$'
-      - '(^|/)_quarantine(/|$)'

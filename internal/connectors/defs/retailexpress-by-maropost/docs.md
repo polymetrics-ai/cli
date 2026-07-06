@@ -1,84 +1,92 @@
 # Overview
 
-Retail Express by Maropost is a wave2 fan-out declarative-HTTP migration. It reads Retail Express
-products, customers, orders, stock levels, and stores through the Maropost API
-(`GET https://<account>.retailexpress.com.au/api/v2/...`). This bundle targets capability parity
-with `internal/connectors/retailexpress-by-maropost` (the hand-written connector it migrates); the
-legacy package stays registered and unchanged until wave6's registry flip.
+Reads Retail Express products, customers, orders, stock levels, and stores through the Maropost API.
+Read-only.
+
+Readable streams: `products`, `customers`, `orders`, `stock_levels`, `stores`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://retailexpress.atlassian.net/wiki/spaces/APIDOC/overview.
 
 ## Auth setup
 
-This bundle accepts either of two credential shapes, matching legacy's own first-match-wins
-precedence exactly: an `access_token` secret (sent as a Bearer token) takes priority when
-configured; `api_key` (sent as the `X-API-Key` header via `api_key_header` auth mode) is used only
-when `access_token` is not configured. The candidate order in `streams.json`'s `base.auth`
-(`bearer` first, `api_key_header` second, each gated by its own `when: {{ secrets.* }}` presence
-check) reproduces legacy's `authenticator` function: `if token := secret(cfg, "access_token"); token
-!= "" { return Bearer(token) }; if key := secret(cfg, "api_key"); key != "" { return
-APIKeyHeader(...) }`. Neither secret is ever logged.
+Connection fields:
+
+- `access_token` (optional, secret, string); OAuth-style access token, sent as a Bearer token. Never
+  logged.
+- `api_key` (optional, secret, string); API key, sent as the X-API-Key header. Used only when
+  access_token is not configured. Never logged.
+- `base_url` (required, string); format `uri`; Retail Express account base URL, e.g.
+  https://<account>.retailexpress.com.au/api/v2.
+- `created_after` (optional, string); Optional created-after filter applied to every stream's
+  request.
+- `status` (optional, string); Optional status filter applied to every stream's request.
+- `store_id` (optional, string); Optional store ID filter applied to every stream's request.
+- `updated_after` (optional, string).
+
+Secret fields are redacted in logs and write previews: `access_token`, `api_key`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.access_token` when `{{ secrets.access_token }}`.
+- API key authentication in `X-API-Key` using `secrets.api_key` when `{{ secrets.api_key }}`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/products` with query `limit`=`1`; `page`=`1`.
 
 ## Streams notes
 
-All five streams (`products`, `customers`, `orders`, `stock_levels`, `stores`) return records at
-`data`. Pagination is `page_number` (`page`/`limit`, static `page_size: 100` matching legacy's
-`defaultPageSize`) with the identical short-page stop rule legacy's own
-`connsdk.PageNumberPaginator` implements — an exact parity match, not an approximation.
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 100.
 
-Legacy applies four optional config-driven filters (`updated_after`, `created_after`, `store_id`,
-`status`) uniformly to every stream's request. This bundle reproduces that exact behavior via the
-opt-in optional-query dialect (`query.<param>.omit_when_absent: true`) declared identically on each
-of the five streams' own `query` block (`HTTPBase` has no `query` field in the engine dialect, so
-the shared filter set is duplicated per-stream rather than declared once at the base level).
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-Every stream stamps a static-literal `stream` marker field (`"products"`/`"customers"`/`"orders"`/
-`"stock_levels"`/`"stores"`) via `computed_fields`, matching legacy's own `out["stream"] = stream`
-line in `mapRecord`. `products`/`customers`/`orders`/`stock_levels` publish `updated_at` as
-`x-cursor-field` (matching legacy's own `CursorFields` declarations), but Retail Express's list
-endpoints expose no server-side incremental filter parameter and legacy's own `harvest` never
-applies one — every read is a full paginated sweep, matching legacy's true read behavior (no
-`request_param`/`start_config_key`/`client_filtered` declared). `stores` has no cursor field,
-matching legacy.
+- `products`: GET `/products` - records path `data`; query `created_after` from template `{{
+  config.created_after }}`, omitted when absent; `status` from template `{{ config.status }}`,
+  omitted when absent; `store_id` from template `{{ config.store_id }}`, omitted when absent;
+  `updated_after` from template `{{ config.updated_after }}`, omitted when absent; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; incremental
+  cursor `updated_at`; formatted as `rfc3339`; computed output fields `stream`; emits passthrough
+  records.
+- `customers`: GET `/customers` - records path `data`; query `created_after` from template `{{
+  config.created_after }}`, omitted when absent; `status` from template `{{ config.status }}`,
+  omitted when absent; `store_id` from template `{{ config.store_id }}`, omitted when absent;
+  `updated_after` from template `{{ config.updated_after }}`, omitted when absent; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; incremental
+  cursor `updated_at`; formatted as `rfc3339`; computed output fields `stream`; emits passthrough
+  records.
+- `orders`: GET `/orders` - records path `data`; query `created_after` from template `{{
+  config.created_after }}`, omitted when absent; `status` from template `{{ config.status }}`,
+  omitted when absent; `store_id` from template `{{ config.store_id }}`, omitted when absent;
+  `updated_after` from template `{{ config.updated_after }}`, omitted when absent; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; incremental
+  cursor `updated_at`; formatted as `rfc3339`; computed output fields `stream`; emits passthrough
+  records.
+- `stock_levels`: GET `/stock-levels` - records path `data`; query `created_after` from template `{{
+  config.created_after }}`, omitted when absent; `status` from template `{{ config.status }}`,
+  omitted when absent; `store_id` from template `{{ config.store_id }}`, omitted when absent;
+  `updated_after` from template `{{ config.updated_after }}`, omitted when absent; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; incremental
+  cursor `updated_at`; formatted as `rfc3339`; computed output fields `stream`; emits passthrough
+  records.
+- `stores`: GET `/stores` - records path `data`; query `created_after` from template `{{
+  config.created_after }}`, omitted when absent; `status` from template `{{ config.status }}`,
+  omitted when absent; `store_id` from template `{{ config.store_id }}`, omitted when absent;
+  `updated_after` from template `{{ config.updated_after }}`, omitted when absent; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; computed
+  output fields `stream`; emits passthrough records.
 
 ## Write actions & risks
 
-None. `capabilities.write` is `false` and this bundle ships no `writes.json`, matching legacy's
-`Write` returning `connectors.ErrUnsupportedOperation`.
+This connector is read-only. Read behavior: external Retail Express by Maropost API read of product,
+customer, order, and stock data.
 
 ## Known limits
 
-- **Legacy's `account`-alias base URL derivation is not modeled; `base_url` is required instead.**
-  Legacy accepts either a full `base_url` or a bare `account` config key, deriving
-  `https://<account>.retailexpress.com.au/api/v2` from the latter
-  (`"https://" + url.PathEscape(account) + ".retailexpress.com.au/api/v2"`). The engine's
-  `spec.json` `"default"` materialization mechanism only supports a FIXED literal default, not one
-  derived from another config value's own value (per `docs/migration/conventions.md` §3's
-  spec-default-materialization note) — so per that section's guidance, this bundle requires
-  `base_url` directly and drops the `account`-alias derivation rather than inventing ad hoc Go for
-  it. An operator previously using the bare `account` key must supply the fully-formed
-  `https://<account>.retailexpress.com.au/api/v2` URL as `base_url` instead; the resolved effective
-  base URL behavior once configured is identical.
-- **Legacy's `id` fallback chain is narrowed to the raw `id` field only.** Legacy synthesizes a
-  missing `id` from `first(out, "id", "uuid", "sku", "code", "order_number")` when the raw record
-  has no `id` field at all. The `computed_fields` dialect has no OR-fallback primitive across
-  multiple record paths, so this bundle relies on schema projection copying `id` directly when
-  present. Documented scope narrowing (identical narrowing class as this wave's reply-io bundle).
-- **Legacy's multi-candidate records-path search is narrowed to a single fixed path (`data`).**
-  Legacy's `recordsAt` helper falls through `data`/`items`/`records`/`results`/root array if the
-  declared path yields no records; this bundle declares only `data` (legacy's own per-endpoint
-  `streamEndpoint.recordsPath` value for every stream), matching legacy's actual configured
-  behavior exactly since every endpoint entry in legacy's `endpoints` map sets `recordsPath: "data"`
-  — the fallback chain is defensive dead code for this connector's specific endpoint
-  configuration, not an active behavior difference.
-- **`page_size`/`max_pages` config overrides are not modeled.** Legacy exposes `page_size` (1-500,
-  default 100) and `max_pages` (0/all/unlimited or a positive integer cap) as config-driven
-  overrides. The engine's `page_number` paginator has no config-driven page-size or
-  request-count-cap knob (mirrors this wave's aha/referralhero/rentcast/reply-io precedent);
-  `page_size`/`max_pages` are therefore not declared in `spec.json`, and this bundle sends Retail
-  Express's own default (`limit=100`) as a static pagination-block value.
-- Full Retail Express API surface (purchase orders, suppliers, gift cards, loyalty, webhooks) is
-  out of scope for this wave; see `api_surface.json`'s `excluded` entries.
-- `docs_url` (`retailexpress.atlassian.net/wiki/...`) returned HTTP 401 (authentication-gated
-  Confluence space) when fetched during this migration; legacy's own Go source
-  (`internal/connectors/retailexpress-by-maropost/retailexpress_by_maropost.go`) was used as ground
-  truth for every endpoint path, auth mode, and record shape instead, per this migration's
-  legacy-over-docs precedence rule.
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, out_of_scope=1.

@@ -1,112 +1,138 @@
 # Overview
 
-Phyllo is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to the full documented
-Phyllo v1 REST surface. It reads Phyllo users, accounts, profiles, social contents/comments/content
-groups, audience demographics, social-platform and e-commerce income (transactions/payouts/
-balances), work platforms, and webhooks, and writes user/webhook lifecycle and account-config
-mutations, through `https://api.getphyllo.com/v1/...`. The source of truth for Pass B's endpoint
-inventory is the official Phyllo Postman collection (`getphyllo/phyllo-postman`,
-"Phyllo APIs.postman_collection.json") since Phyllo's own docs.getphyllo.com reference is a
-JS-rendered Stoplight SPA with no static export reachable outside a browser (the same "JS-backed"
-constraint the pre-Pass-B bundle's own comment noted). This bundle is engine-vs-legacy
-parity-tested against `internal/connectors/phyllo` (the hand-written connector it migrates) for its
-original 4 streams; the legacy package stays registered and unchanged until wave6's registry flip.
+Reads Phyllo users, accounts, profiles, social content/comments, audience, and income data, and
+writes user/webhook/account-config mutations using Basic-auth REST endpoints.
+
+Readable streams: `users`, `accounts`, `profiles`, `social_contents`, `work_platforms`, `audience`,
+`social_content_groups`, `social_comments`, `social_income_transactions`, `social_income_payouts`,
+`commerce_income_transactions`, `commerce_income_payouts`, `commerce_income_balances`, `webhooks`.
+
+Write actions: `create_user`, `update_account`, `disconnect_account`, `create_webhook`,
+`update_webhook`, `delete_webhook`.
+
+Service API documentation: https://docs.getphyllo.com/.
 
 ## Auth setup
 
-Provide a Phyllo `client_id` and `client_secret` secret pair; they are sent as HTTP Basic auth
-(`Authorization: Basic base64(client_id:client_secret)`) and are never logged, matching legacy's
-`connsdk.Basic(id, secretValue)` (`phyllo.go:127`). `base_url` defaults to the production host
-`https://api.getphyllo.com` and may be set explicitly to
-`https://api.sandbox.getphyllo.com`/`https://api.staging.getphyllo.com` to target a non-production
-environment, or overridden entirely for tests/proxies.
+Connection fields:
+
+- `base_url` (optional, string); default `https://api.getphyllo.com`; format `uri`; Phyllo API base
+  URL. Defaults to the production host; set explicitly to https://api.sandbox.getphyllo.com or
+  https://api.staging.getphyllo.com to target a non-production environment.
+- `client_id` (required, secret, string); Phyllo client ID, sent as the HTTP Basic auth username.
+  Never logged.
+- `client_secret` (required, secret, string); Phyllo client secret, sent as the HTTP Basic auth
+  password. Never logged.
+- `mode` (optional, string).
+- `phyllo_account_id` (optional, string); Optional Phyllo account id filter. When set, scopes the
+  profiles/social_contents/audience/social_content_groups/social_comments/social_income_transactions/social_income_payouts/commerce_income_transactions/commerce_income_payouts/commerce_income_balances
+  streams to that account; omitted from the request entirely when unset.
+- `phyllo_user_id` (optional, string); Optional Phyllo user id filter, scoping the accounts and
+  profiles streams to that user; omitted from the request entirely when unset.
+- `phyllo_work_platform_id` (optional, string); Optional Phyllo work-platform id filter, scoping the
+  accounts and profiles streams to that platform (e.g. YouTube, Instagram); omitted from the request
+  entirely when unset.
+
+Secret fields are redacted in logs and write previews: `client_id`, `client_secret`.
+
+Default configuration values: `base_url=https://api.getphyllo.com`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.client_id`, `secrets.client_secret`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/v1/users`.
 
 ## Streams notes
 
-All 13 streams share the same base shape: `GET` against a Phyllo v1 list endpoint, records at the
-top-level `data` key, `"projection": "passthrough"` (every raw field survives; `schemas/*.json`
-properties document the field set, they are not an allow-list — matching legacy's verbatim-emit
-`Read` for the original 4 streams, and the identical passthrough shape every other Phyllo list
-endpoint uses). Pagination is offset+limit (`pagination.type: offset_limit`, `limit_param: limit`,
-`offset_param: offset`, `page_size: 50`), stopping on a short page. This matches legacy's default
-page size; legacy's runtime `page_size`/`max_pages` knobs are not declared here because the current
-pagination dialect only supports fixed bundle-authored integers. None of Phyllo's list endpoints
-document a server-side incremental filter parameter, so no stream declares an `incremental` block
-(full-refresh reads only, matching every stream's real capability).
+Default pagination: offset/limit pagination; offset parameter `offset`; limit parameter `limit`;
+page size 50.
 
-**Original 4 (legacy-parity) streams**: `users`, `accounts`, `profiles`, `social_contents` — primary
-key `["id"]`, unchanged from the wave2 bundle. Legacy's `Read` passes `connsdk.Harvest` a callback
-that emits every record verbatim (`func(rec connsdk.Record) error { return emit(connectors.Record(rec)) }`,
-`phyllo.go:86`); `commonFields()` (`phyllo.go:104-106`) only documents legacy's `Catalog` metadata,
-never gating what `Read` emits.
-
-**9 new Pass B streams**: `work_platforms` (`/v1/work-platforms`, the platform catalog — YouTube,
-Instagram, TikTok, etc. — that every account/profile is scoped to), `audience` (`/v1/audience`,
-demographic breakdown for a connected account, primary key `["account_id"]` since it is one
-demographic snapshot per account rather than an id-per-item collection), `social_content_groups`
-(`/v1/social/content-groups`, playlist/series-style groupings of content items), `social_comments`
-(`/v1/social/comments`, comments on social content items), `social_income_transactions` /
-`social_income_payouts` (`/v1/social/income/{transactions,payouts}`, creator-platform earnings),
-`commerce_income_transactions` / `commerce_income_payouts` / `commerce_income_balances`
-(`/v1/commerce/income/{transactions,payouts,balances}`, e-commerce-platform earnings), and
-`webhooks` (`/v1/webhooks`, registered event subscriptions). `accounts`/`profiles` accept optional
-`user_id`/`work_platform_id` config filters (`phyllo_user_id`/`phyllo_work_platform_id`,
-`omit_when_absent`); every account-scoped stream (`profiles`, `social_contents`, `audience`,
-`social_content_groups`, `social_comments`, and all 5 income streams) accepts an optional
-`phyllo_account_id` filter the same way — Phyllo's docs mark `account_id` as effectively required
-for a meaningful result on several of these, but the engine has no per-param required-query
-enforcement mechanism (conventions.md §3's `stream.Query` dialect is opt-in tolerance only, never a
-hard requirement layer), so this bundle exposes it as an optional filter rather than inventing
-client-side validation the dialect doesn't support; omitting it returns Phyllo's own
-account-unscoped default result set.
+- `users`: GET `/v1/users` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 50; emits passthrough records.
+- `accounts`: GET `/v1/accounts` - records path `data`; query `user_id` from template `{{
+  config.phyllo_user_id }}`, omitted when absent; `work_platform_id` from template `{{
+  config.phyllo_work_platform_id }}`, omitted when absent; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 50; emits passthrough records.
+- `profiles`: GET `/v1/profiles` - records path `data`; query `account_id` from template `{{
+  config.phyllo_account_id }}`, omitted when absent; `user_id` from template `{{
+  config.phyllo_user_id }}`, omitted when absent; `work_platform_id` from template `{{
+  config.phyllo_work_platform_id }}`, omitted when absent; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 50; emits passthrough records.
+- `social_contents`: GET `/v1/social/contents` - records path `data`; query `account_id` from
+  template `{{ config.phyllo_account_id }}`, omitted when absent; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 50; emits passthrough records.
+- `work_platforms`: GET `/v1/work-platforms` - records path `data`; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 50; emits passthrough records.
+- `audience`: GET `/v1/audience` - records path `data`; query `account_id` from template `{{
+  config.phyllo_account_id }}`, omitted when absent; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 50; emits passthrough records.
+- `social_content_groups`: GET `/v1/social/content-groups` - records path `data`; query `account_id`
+  from template `{{ config.phyllo_account_id }}`, omitted when absent; offset/limit pagination;
+  offset parameter `offset`; limit parameter `limit`; page size 50; emits passthrough records.
+- `social_comments`: GET `/v1/social/comments` - records path `data`; query `account_id` from
+  template `{{ config.phyllo_account_id }}`, omitted when absent; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 50; emits passthrough records.
+- `social_income_transactions`: GET `/v1/social/income/transactions` - records path `data`; query
+  `account_id` from template `{{ config.phyllo_account_id }}`, omitted when absent; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 50; emits passthrough
+  records.
+- `social_income_payouts`: GET `/v1/social/income/payouts` - records path `data`; query `account_id`
+  from template `{{ config.phyllo_account_id }}`, omitted when absent; offset/limit pagination;
+  offset parameter `offset`; limit parameter `limit`; page size 50; emits passthrough records.
+- `commerce_income_transactions`: GET `/v1/commerce/income/transactions` - records path `data`;
+  query `account_id` from template `{{ config.phyllo_account_id }}`, omitted when absent;
+  offset/limit pagination; offset parameter `offset`; limit parameter `limit`; page size 50; emits
+  passthrough records.
+- `commerce_income_payouts`: GET `/v1/commerce/income/payouts` - records path `data`; query
+  `account_id` from template `{{ config.phyllo_account_id }}`, omitted when absent; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 50; emits passthrough
+  records.
+- `commerce_income_balances`: GET `/v1/commerce/income/balances` - records path `data`; query
+  `account_id` from template `{{ config.phyllo_account_id }}`, omitted when absent; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 50; emits passthrough
+  records.
+- `webhooks`: GET `/v1/webhooks` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 50; emits passthrough records.
 
 ## Write actions & risks
 
-Six write actions, all newly added in Pass B (legacy `phyllo.Write` always returned
-`connectors.ErrUnsupportedOperation`; this bundle now sets `capabilities.write: true`):
+Overall write risk: creates Phyllo users and webhooks, updates account monitoring configuration and
+webhook subscriptions, and disconnects linked creator accounts.
 
-- **`create_user`** (`POST /v1/users`) — creates a new Phyllo end-user record (`name` +
-  caller-assigned `external_id`) that every subsequent Connect/account/profile flow anchors to.
-  Low risk, no approval required.
-- **`create_webhook`** (`POST /v1/webhooks`) — registers a new webhook subscription (`url` +
-  `events[]`). Low risk, no approval required.
-- **`update_account`** (`PATCH /v1/accounts/{id}`) — changes an account's identity/engagement/
-  income monitoring configuration; `body_fields: ["data"]` restricts the JSON body to Phyllo's own
-  `{"data": {...}}` envelope shape (the API's PATCH body is a single nested `data` object, not a
-  flat field set). Approval required.
-- **`update_webhook`** (`PUT /v1/webhooks/{id}`) — replaces a webhook's `url`/`events[]`. Approval
-  required.
-- **`disconnect_account`** (`POST /v1/accounts/{id}/disconnect`) — permanently revokes Phyllo's
-  connection to the linked creator platform account; `body_type: none`, no body. Destructive,
-  approval required (`confirm: destructive`).
-- **`delete_webhook`** (`DELETE /v1/webhooks/{id}`) — removes a webhook subscription;
-  `delete.missing_ok_status: [404]` (idempotent delete). Destructive, approval required
-  (`confirm: destructive`).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_user`: POST `/v1/users` - kind `create`; body type `json`; required record fields `name`,
+  `external_id`; accepted fields `external_id`, `name`; risk: creates a new Phyllo end-user record
+  that every subsequent Connect/account/profile flow is anchored to; low-risk external mutation, no
+  destructive side effect, no approval required.
+- `update_account`: PATCH `/v1/accounts/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; body fields `data`; required record fields `id`, `data`; accepted fields `data`,
+  `id`; risk: changes an account's identity/engagement/income monitoring configuration (e.g.
+  STANDARD vs EXTENSIVE data collection level), affecting what data Phyllo collects going forward;
+  external mutation, approval required.
+- `disconnect_account`: POST `/v1/accounts/{{ record.id }}/disconnect` - kind `update`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; confirmation
+  `destructive`; risk: revokes Phyllo's connection to the creator's linked social/creator platform
+  account, permanently stopping all future data collection for it; destructive external mutation,
+  approval required.
+- `create_webhook`: POST `/v1/webhooks` - kind `create`; body type `json`; required record fields
+  `url`, `events`; accepted fields `events`, `url`; risk: registers a new webhook endpoint that will
+  receive Phyllo event notifications; low-risk external mutation, no approval required.
+- `update_webhook`: PUT `/v1/webhooks/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`, `url`, `events`; accepted fields `events`, `id`, `url`;
+  risk: changes an existing webhook's target URL and/or subscribed event set, redirecting future
+  event delivery; external mutation, approval required.
+- `delete_webhook`: DELETE `/v1/webhooks/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; confirmation `destructive`; risk: permanently removes a webhook subscription,
+  stopping all future event delivery to it; destructive external mutation, approval required.
 
 ## Known limits
 
-- **`environment`-based base-URL derivation is dropped; `base_url` must be set explicitly for
-  non-production hosts.** Legacy derives the effective base URL from a separate `environment`
-  config value (`"api.sandbox"` -> `https://api.sandbox.getphyllo.com`, `"api.staging"` ->
-  `https://api.staging.getphyllo.com`, anything else -> the production default) only when
-  `base_url` itself is unset (`phyllo.go:129-142`). The engine's `spec.json` `"default"`
-  materialization mechanism (conventions.md §3) fills in a FIXED literal for a genuinely-absent
-  key; it cannot express "the default value is a function of ANOTHER config key's value" (the same
-  documented limitation as sentry's hostname-derived URL and chargebee's site-derived URL,
-  conventions.md §3's `spec.json "default"` section). This bundle therefore requires the caller to
-  set `base_url` directly to the desired sandbox/staging/production host — a documented
-  config-surface narrowing, not a silent behavior change: every legacy-accepted final base URL
-  (production default, sandbox, staging, or a raw override) remains reachable, just via one
-  config key (`base_url`) instead of two (`base_url` OR `environment`). `environment` is not
-  declared in this bundle's `spec.json` (F6, REVIEW.md: a declared-but-unwireable config key is
-  worse than an absent one).
-- **Async refresh/fetch-historic/search endpoints are out of scope.** Every `/refresh`,
-  `/fetch-historic`, and `/search` endpoint across profiles/social-contents/social-content-groups/
-  social-income/commerce-income triggers an out-of-band job whose result is delivered later via
-  webhook, or is a request-body-driven bulk-id lookup rather than a paginated list read — neither
-  shape is a synchronous "read this stream" or "mutate this one record" operation this dialect
-  models; see `api_surface.json`'s `out_of_scope` entries for the per-endpoint reasoning.
-- **`sdk-tokens` and `webhooks/send` are non-data endpoints**, not covered as streams or writes
-  (session-token issuance and mock-webhook-delivery testing respectively; see `api_surface.json`).
-- Every single-object detail GET (`/v1/{resource}/{id}`) is `duplicate_of` its sibling list
-  stream's per-item record shape and is not separately modeled — see `api_surface.json`.
+- Batch defaults: read_page_size=50.
+- API coverage includes 14 stream-backed endpoint group(s), 6 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=13, non_data_endpoint=2, out_of_scope=22.

@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads Interzoid data-matching lookups: company-name, individual-name, and street-address similarity keys, plus organization-name standardization, via the Interzoid REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  address
+  address_match_algorithm
+  base_url
+  company
+  company_match_algorithm
+  fullname
+  org
+  api_key (secret)
+
+ETL STREAMS
+  company_name_matching:
+    primary key: SimKey
+    fields: Code(), Credits(), SimKey(), query_company()
+  individual_name_matching:
+    primary key: SimKey
+    fields: Code(), Credits(), SimKey(), query_fullname()
+  street_address_matching:
+    primary key: SimKey
+    fields: Code(), Credits(), SimKey(), query_address()
+  standardize_company_names:
+    primary key: Standard
+    fields: Code(), Credits(), Standard(), query_org()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Interzoid API single-lookup read; each read spends an API credit
+  approval: none; read-only data-matching lookup API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

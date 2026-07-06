@@ -1,63 +1,69 @@
 # Overview
 
-Interzoid is a wave2 fan-out declarative-HTTP migration. It is an AI-powered data-quality /
-data-matching API: each stream is a single lookup endpoint that, given an input value (a company
-name, person name, street address, or organization name), returns one JSON object containing a
-similarity key (`SimKey`) or a standardized value (`Standard`) plus a remaining credit count. This
-bundle is engine-vs-legacy parity-tested against `internal/connectors/interzoid` (the hand-written
-connector it migrates); the legacy package stays registered and unchanged until wave6's registry
-flip.
+Reads Interzoid data-matching lookups: company-name, individual-name, and street-address similarity
+keys, plus organization-name standardization, via the Interzoid REST API.
+
+Readable streams: `company_name_matching`, `individual_name_matching`, `street_address_matching`,
+`standardize_company_names`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.interzoid.com/entries/interzoid-core-apis.
 
 ## Auth setup
 
-Provide an Interzoid license key via the `api_key` secret; it is injected as the `license` query
-parameter on every request (`api_key_query` auth mode, `param: license`) and is never logged,
-matching legacy's `connsdk.APIKeyQuery("license", secret)`. `base_url` defaults to
-`https://api.interzoid.com` and may be overridden for tests/proxies.
+Connection fields:
+
+- `address` (optional, string); Street address input for the street_address_matching stream
+  (getaddressmatchadvanced). Required to read that stream.
+- `address_match_algorithm` (optional, string); Optional matching algorithm override for the
+  street_address_matching stream.
+- `api_key` (required, secret, string); Interzoid license key. Sent as the `license` query parameter
+  on every request; never logged.
+- `base_url` (optional, string); default `https://api.interzoid.com`; format `uri`; Interzoid API
+  base URL override for tests or proxies.
+- `company` (optional, string); Company name input for the company_name_matching stream
+  (getcompanymatchadvanced). Required to read that stream.
+- `company_match_algorithm` (optional, string); Optional matching algorithm override for the
+  company_name_matching stream.
+- `fullname` (optional, string); Full name input for the individual_name_matching stream
+  (getfullnamematch). Required to read that stream.
+- `org` (optional, string); Organization name input for the standardize_company_names stream
+  (getorgstandard). Required to read that stream.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.interzoid.com`.
+
+Authentication behavior:
+
+- API key authentication in query parameter `license` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
 
 ## Streams notes
 
-Each of the 4 streams hits one fixed Interzoid lookup endpoint and returns a single JSON object at
-the response root (no array, no pagination) — `records: {"path": "", "single_object": true}` maps
-that single object to one emitted record per read, matching legacy's `RecordsAt(resp.Body, "")`
-one-element-result behavior exactly.
+Default pagination: single request; no pagination.
 
-- `company_name_matching` (`GET /getcompanymatchadvanced`): requires `config.company`; optional
-  `config.company_match_algorithm` is sent as `algorithm` only when set
-  (`omit_when_absent: true`, matching legacy's `buildInputs`' `required: false` skip-when-empty
-  behavior for that input).
-- `individual_name_matching` (`GET /getfullnamematch`): requires `config.fullname`.
-- `street_address_matching` (`GET /getaddressmatchadvanced`): requires `config.address`; optional
-  `config.address_match_algorithm` is sent as `algorithm` only when set, same as above.
-- `standardize_company_names` (`GET /getorgstandard`): requires `config.org`.
-
-Each stream's `computed_fields` echoes its own input value back onto the record under
-`query_<name>` (e.g. `query_company`) via `config.*` in `computed_fields` — the sanctioned
-Tier-1 mechanism for stamping a config-scoped value onto every emitted record — matching legacy's
-`echo` map / `simKeyRecord`/`standardRecord` mappers exactly. A required input that is absent hard
-errors when the query template's `{{ config.<key> }}` reference fails to resolve, matching
-legacy's `"interzoid stream requires config %q"` per-endpoint required-input check — same failure
-classification (an absent required lookup input), different literal error text.
-
-There is no incremental cursor and no pagination for any stream, matching legacy: every Interzoid
-lookup is a one-shot, single-record GET.
+- `company_name_matching`: GET `/getcompanymatchadvanced` - single-object response; records at
+  response root; query `algorithm` from template `{{ config.company_match_algorithm }}`, omitted
+  when absent; `company`=`{{ config.company }}`; computed output fields `query_company`.
+- `individual_name_matching`: GET `/getfullnamematch` - single-object response; records at response
+  root; query `fullname`=`{{ config.fullname }}`; computed output fields `query_fullname`.
+- `street_address_matching`: GET `/getaddressmatchadvanced` - single-object response; records at
+  response root; query `address`=`{{ config.address }}`; `algorithm` from template `{{
+  config.address_match_algorithm }}`, omitted when absent; computed output fields `query_address`.
+- `standardize_company_names`: GET `/getorgstandard` - single-object response; records at response
+  root; query `org`=`{{ config.org }}`; computed output fields `query_org`.
 
 ## Write actions & risks
 
-None. Interzoid is a read-only data-matching API with no reverse-ETL surface; `capabilities.write`
-is `false` and this bundle ships no `writes.json`, matching legacy's `Write` returning
-`connectors.ErrUnsupportedOperation`.
+This connector is read-only. Read behavior: external Interzoid API single-lookup read; each read
+spends an API credit.
 
 ## Known limits
 
-- **No declarative `check` request.** Legacy's `Check()` never issues a live lookup (each lookup
-  spends an Interzoid API credit); it only validates that `api_key` and a well-formed `base_url`
-  are present. This bundle declares no `streams.json` `base.check` block at all, so the engine's
-  `Check()` performs the identical no-network-call validation (auth/URL resolution only, via
-  `newRuntime`) without spending a credit — the closest-fidelity port available, rather than
-  inventing a live check request legacy deliberately avoids.
-  `conformance`'s `check_fixture` check gracefully Skips for a bundle with no declared `check`
-  (there is nothing to exercise), which is the expected, honest outcome here.
-- Only the 4 core lookup endpoints are migrated; Interzoid's broader API catalog (email
-  validation, geocoding, currency conversion) is out of scope for wave2 — see `api_surface.json`'s
-  `api_surface.json` concrete exclusion entries.
+- Batch defaults: read_page_size=1.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=3.

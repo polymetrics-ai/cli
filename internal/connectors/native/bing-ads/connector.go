@@ -41,7 +41,7 @@
 // live Microsoft Advertising credentials: in fixture mode Check succeeds
 // and Read emits canned per-stream records (cataloger.go).
 //
-// NO init()/RegisterFactory/RegisterNativeLive call exists in this package
+// NO init()/RegisterFactory call exists in this package
 // in wave0 (enforced by a grep-guard test, bing_ads_test.go
 // TestNoInitRegistration, mirroring native/postgres's identical guard) — the
 // registration flip that wires native/bing-ads into the production registry

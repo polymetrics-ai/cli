@@ -1,130 +1,140 @@
 # Overview
 
-Sage HR is a Pass B full-surface-expansion declarative-HTTP migration. It reads employees, teams,
-time off (requests, policies, KIT days, out-of-office, individual allowance reports), terminated
-employees, termination reasons, positions, recruitment positions and per-position applicants, and
-onboarding/offboarding/document task categories, and writes employee/leave/task lifecycle
-mutations, through the Sage HR API. This bundle targets capability parity with
-`internal/connectors/sage-hr` (the hand-written connector it migrates, package `sagehr`) as a
-**superset**: legacy's original 3 read streams are preserved and corrected (see "Envelope shape
-correction" below), and 11 new read streams plus 10 write actions are added against the full
-documented Sage HR v1.0 OpenAPI surface. The legacy package stays registered and unchanged until
-wave6's registry flip.
+Reads Sage HR employees, teams, time off, recruitment, and onboarding/offboarding data, and writes
+employee/leave/task lifecycle mutations, through the Sage HR API.
 
-Real API docs (`developers.sage.hr`, `apidoc.sage.hr`, `sagehr.docs.apiary.io`) all return a
-Cloudflare bot-challenge 403/502 to automated fetches (both `curl` and the migration harness's
-WebFetch tool). The full Sage HR v1.0 OpenAPI spec (47 documented paths) was instead obtained from
-its GitHub mirror (`https://raw.githubusercontent.com/api-evangelist/sage-hr/main/openapi/sage-hr-openapi.yml`,
-fetched 2026-07-03) — every stream/write/schema/field below is derived from that spec's real
-request/response examples, not guessed.
+Readable streams: `employees`, `teams`, `timeoff_requests`, `terminated_employees`, `positions`,
+`termination_reasons`, `leave_policies`, `out_of_office_today`, `individual_allowances`,
+`recruitment_positions`, `recruitment_applicants`, `onboarding_categories`,
+`offboarding_categories`, `document_categories`.
+
+Write actions: `create_employee`, `update_employee`, `update_employee_custom_field`,
+`terminate_employee`, `create_timeoff_request`, `create_kit_day`, `update_kit_day_status`,
+`update_leave_policy_kit_days`, `create_onboarding_task`, `create_offboarding_task`.
+
+Service API documentation: https://developers.sage.hr/.
 
 ## Auth setup
 
-Provide a Sage HR API key via the `api_key` secret; it is sent as the `X-Auth-Token` request header
-(`api_key_header` auth mode), never logged, matching legacy's
-`connsdk.APIKeyHeader("X-Auth-Token", token, "")` (`sage_hr.go:143`). `base_url` defaults to
-`https://api.sage.hr/v1`, matching legacy's own in-code default; the real OpenAPI spec's server
-block addresses tenants at `https://<subdomain>.sage.hr/api` (a per-tenant subdomain, not a fixed
-host) — `base_url` is the mechanism for pointing at a real tenant, tests, or a proxy.
+Connection fields:
+
+- `api_key` (required, secret, string); Sage HR API key, sent as the X-Auth-Token request header.
+  Never logged.
+- `base_url` (optional, string); default `https://api.sage.hr/v1`; format `uri`; Sage HR API base
+  URL override for tests or proxies.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.sage.hr/v1`.
+
+Authentication behavior:
+
+- API key authentication in `X-Auth-Token` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/employees`.
 
 ## Streams notes
 
-**Envelope shape correction (from legacy's untested assumption to the real, documented wire
-shape):** legacy's `employees`/`teams`/`timeoff_requests` streams can read a `data` envelope or a
-bare top-level array (`recordsAtAny(resp.Body, "data", "")`) and then emit each raw object
-unchanged. The real Sage HR OpenAPI spec's response examples for these list endpoints show the
-`{"data": [...], "meta": {...}}` envelope, so this bundle uses `records.path: "data"` and
-`projection: "passthrough"` for the same emitted record objects. The three legacy streams remain
-single-response reads, matching legacy's lack of pagination. `timeoff_requests`'s real path is also
-corrected from legacy's invented `/timeoff/requests` (which does not exist in the documented API)
-to the real `/leave-management/requests`.
+Default pagination: single request; no pagination.
 
-**All streams declare `"projection": "passthrough"`** (conventions.md §8 rule 1): legacy's `Read`
-performs zero field mapping (`recordsAtAny` + a direct `connectors.Record(rec)` cast, no
-renaming/filtering), so schema-mode projection would silently drop real API fields; every stream
-here follows the same passthrough precedent for parity and honesty about actual emitted shape.
+Pagination by stream: none: `employees`, `teams`, `timeoff_requests`, `leave_policies`,
+`out_of_office_today`, `onboarding_categories`, `offboarding_categories`, `document_categories`;
+page_number: `terminated_employees`, `positions`, `termination_reasons`, `individual_allowances`,
+`recruitment_positions`, `recruitment_applicants`.
 
-New streams added this pass (all `GET`, `page_number` pagination where the endpoint supports it,
-`records.path: "data"`):
-
-- `terminated_employees` (`/terminated-employees`), `positions` (`/positions`),
-  `termination_reasons` (`/termination-reasons`) — simple paginated lists.
-- `leave_policies` (`/leave-management/policies`), `out_of_office_today`
-  (`/leave-management/out-of-office-today`) — unpaginated lists (the real API's response examples
-  for these two endpoints carry no `meta` pagination block at all).
-- `individual_allowances` (`/leave-management/reports/individual-allowances`) — paginated,
-  `size_param: "per_page"` (this endpoint's real query parameters include `per_page` alongside
-  `page`, unlike the other list endpoints).
-- `recruitment_positions` (`/recruitment/positions`) — paginated, `size_param: "per_page"`.
-- `recruitment_applicants` (`/recruitment/positions/{id}/applicants`) — a **`fan_out` stream**
-  (conventions.md §3): there is no top-level endpoint to list applicants across all positions, so
-  this stream fans out over every id returned by `recruitment_positions`'s own list request
-  (`fan_out.ids_from.request`), issuing one paginated applicants sub-request per position and
-  stamping `position_id` onto every emitted applicant record.
-- `onboarding_categories`, `offboarding_categories`, `document_categories` — small unpaginated
-  category lists.
-
-None of the 14 streams declare an `incremental` block, matching legacy's `Catalog` (no
-`CursorFields`) and the real API's documented query parameters (no updated-since filter is
-published for any of these list endpoints; `leave-management/requests`'s `from`/`to` params are a
-date-range window, not an incremental cursor, and are not wired here to avoid silently narrowing a
-default full-history sync).
+- `employees`: GET `/employees` - records path `data`; emits passthrough records.
+- `teams`: GET `/teams` - records path `data`; emits passthrough records.
+- `timeoff_requests`: GET `/leave-management/requests` - records path `data`; emits passthrough
+  records.
+- `terminated_employees`: GET `/terminated-employees` - records path `data`; page-number pagination;
+  page parameter `page`; no page-size parameter; starts at 1; page size 2; emits passthrough
+  records.
+- `positions`: GET `/positions` - records path `data`; page-number pagination; page parameter
+  `page`; no page-size parameter; starts at 1; page size 2; emits passthrough records.
+- `termination_reasons`: GET `/termination-reasons` - records path `data`; page-number pagination;
+  page parameter `page`; no page-size parameter; starts at 1; page size 2; emits passthrough
+  records.
+- `leave_policies`: GET `/leave-management/policies` - records path `data`; emits passthrough
+  records.
+- `out_of_office_today`: GET `/leave-management/out-of-office-today` - records path `data`; emits
+  passthrough records.
+- `individual_allowances`: GET `/leave-management/reports/individual-allowances` - records path
+  `data`; page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1;
+  page size 2; emits passthrough records.
+- `recruitment_positions`: GET `/recruitment/positions` - records path `data`; page-number
+  pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size 2; emits
+  passthrough records.
+- `recruitment_applicants`: GET `/recruitment/positions/{{ fanout.id }}/applicants` - records path
+  `data`; page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1;
+  page size 2; fan-out; ids from request `/recruitment/positions`; id-list records path `data`; id
+  field `id`; id inserted into the request path; stamps `position_id`; emits passthrough records.
+- `onboarding_categories`: GET `/onboarding/categories` - records path `data`; emits passthrough
+  records.
+- `offboarding_categories`: GET `/offboarding/categories` - records path `data`; emits passthrough
+  records.
+- `document_categories`: GET `/documents/categories` - records path `data`; emits passthrough
+  records.
 
 ## Write actions & risks
 
-`capabilities.write` is now `true` (10 actions added; legacy shipped none):
+Overall write risk: external Sage HR mutations: employee create/update/termination, custom-field
+update, time off/KIT-day requests and approvals, leave policy KIT-day configuration,
+onboarding/offboarding task creation.
 
-- `create_employee` (`POST /employees`, form body) — creates a new employee; may trigger a welcome
-  email (`send_email`). Approval required.
-- `update_employee` (`PUT /employees/{id}`, JSON body) — updates org placement (team/position/
-  location), reporting line (`leader_id`), and leave-type eligibility. Approval required.
-- `update_employee_custom_field` (`PUT /employees/{id}/custom-fields/{custom_field_id}`, form body)
-  — updates one custom-field value for one employee. Approval required.
-- `terminate_employee` (`POST /employees/{id}/terminations`, form body) — **destructive/
-  irreversible**: ends an employee's active record in Sage HR. Approval required.
-- `create_timeoff_request` (`POST /leave-management/requests`, form body) — creates a new time off
-  request against an employee's leave balance. Approval required.
-- `create_kit_day` (`POST /leave-management/kit-days`, form body) — creates a Keeping-In-Touch day
-  entry. Approval required.
-- `update_kit_day_status` (`PATCH /leave-management/kit-days/{id}`, form body) — approves, declines,
-  or cancels a KIT day. Approval required.
-- `update_leave_policy_kit_days` (`PATCH /leave-management/policies/{id}`, form body) — changes a
-  company-wide leave policy's KIT-day configuration. Approval required.
-- `create_onboarding_task` / `create_offboarding_task` (`POST /onboarding/tasks` /
-  `POST /offboarding/tasks`, form body) — creates a task template for the employee
-  onboarding/offboarding lifecycle. Approval required.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_employee`: POST `/employees` - kind `create`; body type `form`; required record fields
+  `email`, `first_name`, `last_name`; accepted fields `email`, `first_name`, `last_name`,
+  `send_email`, `work_start_date`; risk: creates a new employee record and may email the new hire
+  (send_email); external mutation, approval required.
+- `update_employee`: PUT `/employees/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `approver_ids`, `employee_number`,
+  `first_name`, `id`, `last_name`, `leader_id`, `location_id`, `position_id`,
+  `selected_leave_types`, `team_id`, `work_start_date`; risk: external mutation updating an employee
+  record (org placement, leave types, reporting line); approval required.
+- `update_employee_custom_field`: PUT `/employees/{{ record.employee_id }}/custom-fields/{{
+  record.custom_field_id }}` - kind `update`; body type `form`; path fields `employee_id`,
+  `custom_field_id`; required record fields `employee_id`, `custom_field_id`, `value`; accepted
+  fields `custom_field_id`, `employee_id`, `value`; risk: external mutation of an employee custom
+  field; approval required.
+- `terminate_employee`: POST `/employees/{{ record.employee_id }}/terminations` - kind `create`;
+  body type `form`; path fields `employee_id`; required record fields `employee_id`, `date`,
+  `termination_reason_id`; accepted fields `comments`, `date`, `employee_id`,
+  `termination_reason_id`; risk: destructive/irreversible: terminates an employee's record in Sage
+  HR; external mutation, approval required.
+- `create_timeoff_request`: POST `/leave-management/requests` - kind `create`; body type `form`;
+  required record fields `employee_id`, `time_off_policy_id`, `type`, `part_of_day`; accepted fields
+  `date`, `date_from`, `date_to`, `details`, `employee_id`, `hours`, `part_of_day`, `time_from`,
+  `time_off_policy_id`, `time_to`, `type`; risk: creates a new time off request against an
+  employee's leave balance; external mutation, approval required.
+- `create_kit_day`: POST `/leave-management/kit-days` - kind `create`; body type `form`; required
+  record fields `employee_id`, `policy_id`; accepted fields `date`, `date_from`, `date_to`,
+  `employee_id`, `policy_id`; risk: creates a Keeping-In-Touch day entry against an employee's leave
+  policy; external mutation, approval required.
+- `update_kit_day_status`: PATCH `/leave-management/kit-days/{{ record.id }}` - kind `update`; body
+  type `form`; path fields `id`; required record fields `id`, `status`; accepted fields `id`,
+  `status`; risk: approves, declines, or cancels a KIT day request; external mutation, approval
+  required.
+- `update_leave_policy_kit_days`: PATCH `/leave-management/policies/{{ record.id }}` - kind
+  `update`; body type `form`; path fields `id`; required record fields `id`, `kit_days_enabled`,
+  `kit_days_quantity`; accepted fields `id`, `kit_days_enabled`, `kit_days_quantity`; risk: changes
+  a company-wide leave policy's KIT-day configuration; external mutation, approval required.
+- `create_onboarding_task`: POST `/onboarding/tasks` - kind `create`; body type `form`; required
+  record fields `title`, `boarding_task_template_category_id`, `due_in`; accepted fields
+  `add_after`, `assignee_id`, `boarding_task_template_category_id`, `default_assignee_type`,
+  `description`, `due_in`, `require_attachment`, `title`; risk: creates a new onboarding task
+  template; external mutation, approval required.
+- `create_offboarding_task`: POST `/offboarding/tasks` - kind `create`; body type `form`; required
+  record fields `title`, `boarding_task_template_category_id`, `due_in`; accepted fields
+  `assignee_id`, `boarding_task_template_category_id`, `default_assignee_type`, `description`,
+  `due_in`, `require_attachment`, `title`; risk: creates a new offboarding task template; external
+  mutation, approval required.
 
 ## Known limits
 
-- **Multipart/file-upload endpoints are excluded (dialect limitation, not an oversight).**
-  `POST /documents` (employee/company document upload) and
-  `POST /recruitment/positions/{id}/applicants` (applicant creation with an optional resume
-  attachment) both require a `multipart/form-data` body; the engine's write dialect's `body_type`
-  (`json`/`form`/`none` over a fixed field set) has no multipart/binary support. See
-  `api_surface.json`'s `binary_payload` entries.
-- **`POST /timesheets/clock-in` is excluded.** Its request body is a dynamic date-string-keyed
-  nested object (`clocked_time: {"YYYY/MM/DD": {employee_id: [{clock_in, clock_out}, ...]}}`) — an
-  arbitrary caller-supplied key structure the dialect's fixed-field body construction cannot
-  express.
-- **The entire Vikarina payroll-bridge integration surface (10 `POST /vikarina/*` endpoints) is
-  excluded as out of scope.** These transfer Sage HR data INTO a third-party payroll product
-  (Vikarina); they are not Sage HR data resources in their own right.
-- **`GET /leave-management/kit-days` is excluded.** It requires BOTH a `policy_id` and an
-  `employee_id` as required query filters, with no discovery/listing endpoint for either dimension
-  independent of the other — not a syncable top-level collection without externally-supplied ids
-  already in hand.
-- **Several per-employee/per-applicant sub-resources are excluded as Pass B breadth-vs-cost
-  triage**: `GET /employees/{id}/compensations`, `GET /employees/{id}/custom-fields`,
-  `GET /employees/{id}/leave-management/balances`, and `GET /recruitment/applicants/{id}/actions`
-  would each require a fan_out read issuing one request per employee/applicant id for a
-  low-cardinality, rarely-changing field set; not implemented this pass.
-- **Performance goal-progress endpoints (4 `/performance/goals/quarterly-progress/*` paths) are
-  excluded as `non_data_endpoint`.** Each returns a single org-wide aggregate/rollup snapshot with
-  no per-record identity, not a syncable object stream.
-- **No incremental filtering is modeled for any stream**, matching legacy's `Catalog` (no declared
-  `CursorFields`) and the real API's lack of a documented updated-since filter parameter on any of
-  these list endpoints.
-- Legacy's root-array fallback for the original three streams cannot be expressed alongside the
-  documented `data` envelope in the current `records.path` dialect. The bundle follows the real
-  documented envelope; passthrough projection preserves the emitted record data for that wire
-  shape.
+- Batch defaults: read_page_size=50.
+- API coverage includes 14 stream-backed endpoint group(s), 10 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=3, duplicate_of=4, non_data_endpoint=4, out_of_scope=16, requires_elevated_scope=2.

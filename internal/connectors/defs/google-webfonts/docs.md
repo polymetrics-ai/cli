@@ -1,55 +1,97 @@
 # Overview
 
-Reads Google Web Fonts families through the Google Fonts Developer API's single list resource,
-`GET {base_url}/webfonts` (default `https://www.googleapis.com/webfonts/v1`). Migrated from
-`internal/connectors/google-webfonts` (legacy hand-written connector, read-only). The published
-streams are five different sorted views of the same underlying list, distinguished only by the
-`sort` query parameter — `webfonts` (API default order, no `sort` sent), `popular_fonts`
-(`sort=popularity`), `trending_fonts` (`sort=trending`), `newest_fonts` (`sort=date`), and
-`alpha_fonts` (`sort=alpha`), matching legacy's `streamEndpoints` routing table exactly.
+Reads Google Web Fonts families (default, popular, trending, newest, and alphabetical views) through
+the Google Fonts Developer API. Read-only.
+
+Readable streams: `webfonts`, `popular_fonts`, `trending_fonts`, `newest_fonts`, `alpha_fonts`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developers.google.com/fonts/docs/developer_api.
 
 ## Auth setup
 
-`api_key` (a Google API key) is a required secret, sent as the `key` query parameter via
-`base.auth`'s `api_key_query` mode. Legacy hard-errors (`requester`) when the secret is unset;
-this bundle's `spec.json` marks `api_key` required, matching that behavior — there is no
-credential-free fallback for this connector (unlike searxng's optional Bearer proxy).
+Connection fields:
+
+- `alt` (optional, string); Optional passthrough: alternate response representation (API-standard
+  `alt` query parameter, e.g. json).
+- `api_key` (required, secret, string).
+- `base_url` (optional, string); default `https://www.googleapis.com/webfonts/v1`; format `uri`;
+  Google Fonts Developer API base URL.
+- `capability` (optional, string); Optional passthrough filter: restrict results to families
+  supporting this comma-separated list of capabilities (e.g. WOFF2, VF).
+- `category` (optional, string); Optional passthrough filter: restrict results to this
+  comma-separated list of font categories (e.g. serif, sans-serif).
+- `family` (optional, string); Optional passthrough filter: restrict results to a comma-separated
+  list of font family names.
+- `pretty_print` (optional, string); Optional passthrough: API-standard `prettyPrint` query
+  parameter (sent verbatim as prettyPrint).
+- `subset` (optional, string); Optional passthrough filter: restrict results to families supporting
+  this comma-separated list of subsets.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://www.googleapis.com/webfonts/v1`.
+
+Authentication behavior:
+
+- API key authentication in query parameter `key` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/webfonts`.
 
 ## Streams notes
 
-All five streams hit the identical `GET /webfonts` endpoint; only the `sort` query parameter (or
-its absence, for the default `webfonts` stream) differs, mirroring legacy's `streamEndpoints` table
-in `google-webfonts/streams.go`. Records are extracted from the top-level `items` array. Primary
-key is `family` (the API has no numeric id — Google Fonts families are uniquely named); the cursor
-field is `lastModified` (kept as the API's own camelCase key, unrenamed, matching legacy's
-`fontRecord` which passes it through verbatim rather than renaming it).
+Default pagination: cursor pagination; cursor parameter `pageToken`; next token from
+`nextPageToken`; maximum 100 page(s).
 
-Legacy's optional passthrough filters (`family`, `subset`, `category`, `capability`, plus the
-API-standard `alt`/`prettyPrint` params) are wired via the `stream.Query` optional-query dialect
-(`omit_when_absent: true` on each): each is sent only when configured, omitted entirely otherwise —
-matching legacy's `optionalQuery` helper which only sets a query key when the corresponding config
-value is non-empty.
-
-Pagination is modeled as `cursor` (`cursor_param: pageToken`, `token_path: nextPageToken`,
-`max_pages: 100`), matching legacy's `harvest` loop: the Google Fonts Developer API does not
-document real pagination (the full font list is typically returned in one response), but legacy's
-loop nonetheless honors an optional `nextPageToken` in the response body (echoed back as
-`pageToken`) so the connector keeps working if Google ever adds paging, bounded by
-`maxPagesCap = 100`. This bundle reproduces the identical shape and bound. No `stop_path` is
-declared — an absent/empty `nextPageToken` is legacy's own (and the engine's default) stop signal.
+- `webfonts`: GET `/webfonts` - records path `items`; query `alt` from template `{{ config.alt }}`,
+  omitted when absent; `capability` from template `{{ config.capability }}`, omitted when absent;
+  `category` from template `{{ config.category }}`, omitted when absent; `family` from template `{{
+  config.family }}`, omitted when absent; `prettyPrint` from template `{{ config.pretty_print }}`,
+  omitted when absent; `subset` from template `{{ config.subset }}`, omitted when absent; cursor
+  pagination; cursor parameter `pageToken`; next token from `nextPageToken`; maximum 100 page(s);
+  computed output fields `subset_count`, `variant_count`.
+- `popular_fonts`: GET `/webfonts` - records path `items`; query `alt` from template `{{ config.alt
+  }}`, omitted when absent; `capability` from template `{{ config.capability }}`, omitted when
+  absent; `category` from template `{{ config.category }}`, omitted when absent; `family` from
+  template `{{ config.family }}`, omitted when absent; `prettyPrint` from template `{{
+  config.pretty_print }}`, omitted when absent; `sort`=`popularity`; `subset` from template `{{
+  config.subset }}`, omitted when absent; cursor pagination; cursor parameter `pageToken`; next
+  token from `nextPageToken`; maximum 100 page(s); computed output fields `subset_count`,
+  `variant_count`.
+- `trending_fonts`: GET `/webfonts` - records path `items`; query `alt` from template `{{ config.alt
+  }}`, omitted when absent; `capability` from template `{{ config.capability }}`, omitted when
+  absent; `category` from template `{{ config.category }}`, omitted when absent; `family` from
+  template `{{ config.family }}`, omitted when absent; `prettyPrint` from template `{{
+  config.pretty_print }}`, omitted when absent; `sort`=`trending`; `subset` from template `{{
+  config.subset }}`, omitted when absent; cursor pagination; cursor parameter `pageToken`; next
+  token from `nextPageToken`; maximum 100 page(s); computed output fields `subset_count`,
+  `variant_count`.
+- `newest_fonts`: GET `/webfonts` - records path `items`; query `alt` from template `{{ config.alt
+  }}`, omitted when absent; `capability` from template `{{ config.capability }}`, omitted when
+  absent; `category` from template `{{ config.category }}`, omitted when absent; `family` from
+  template `{{ config.family }}`, omitted when absent; `prettyPrint` from template `{{
+  config.pretty_print }}`, omitted when absent; `sort`=`date`; `subset` from template `{{
+  config.subset }}`, omitted when absent; cursor pagination; cursor parameter `pageToken`; next
+  token from `nextPageToken`; maximum 100 page(s); computed output fields `subset_count`,
+  `variant_count`.
+- `alpha_fonts`: GET `/webfonts` - records path `items`; query `alt` from template `{{ config.alt
+  }}`, omitted when absent; `capability` from template `{{ config.capability }}`, omitted when
+  absent; `category` from template `{{ config.category }}`, omitted when absent; `family` from
+  template `{{ config.family }}`, omitted when absent; `prettyPrint` from template `{{
+  config.pretty_print }}`, omitted when absent; `sort`=`alpha`; `subset` from template `{{
+  config.subset }}`, omitted when absent; cursor pagination; cursor parameter `pageToken`; next
+  token from `nextPageToken`; maximum 100 page(s); computed output fields `subset_count`,
+  `variant_count`.
 
 ## Write actions & risks
 
-None. The Google Fonts Developer API is read-only; `capabilities.write` is `false` and this bundle
-ships no `writes.json`.
+This connector is read-only. Read behavior: external Google Fonts Developer API read of public font
+metadata.
 
 ## Known limits
 
-- Legacy's derived `variant_count` and `subset_count` integer fields are modeled with
-  `computed_fields` using the engine's typed `length` filter, matching the in-code `lenOf` helper
-  for the documented Google Fonts wire shape where `variants` and `subsets` are arrays.
-- **Real-world pagination is unobserved.** The Google Fonts Developer API does not document a
-  `nextPageToken` response field in its public reference; legacy's tolerance for one appears to be
-  defensive/future-proofing rather than an exercised behavior. This bundle's 2-page fixture proves
-  the engine's `cursor`/`token_path` paginator mechanically terminates correctly on a synthetic
-  `nextPageToken`, matching legacy's identical (also unobserved-in-practice) tolerance.
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s).

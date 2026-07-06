@@ -1,76 +1,108 @@
 # Overview
 
-MailerSend is a read-only declarative-HTTP connector that reads the legacy email activity, domains,
-messages, and recipients streams plus additional documented MailerSend API collections: templates,
-scheduled messages, sender identities, inbound routes, account users, invites, tokens, webhooks, and
-the four email analytics views. Requests use the MailerSend REST API
-(`https://api.mailersend.com/v1`). This bundle migrates `internal/connectors/mailersend` (the
-hand-written legacy connector, which stays registered and unchanged until wave6's registry flip) to
-a Tier-1 defs bundle. MailerSend's mutating endpoints send transactional email or alter account
-configuration rather than perform safe reverse-ETL upserts, so the connector remains read-only.
+Reads MailerSend email activity, analytics, domains, messages, recipients, templates, scheduled
+messages, sender identities, inbound routes, users, invites, tokens, and webhooks through the
+MailerSend REST API.
+
+Readable streams: `activity`, `domains`, `messages`, `recipients`, `templates`,
+`scheduled_messages`, `sender_identities`, `inbound_routes`, `account_users`, `invites`, `tokens`,
+`webhooks`, `analytics_by_date`, `analytics_country`, `analytics_user_agents`,
+`analytics_reading_environment`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developers.mailersend.com/.
 
 ## Auth setup
 
-Provide a MailerSend API token via the `api_token` secret; it is used only for Bearer auth
-(`Authorization: Bearer <api_token>`) and is never logged.
+Connection fields:
+
+- `api_token` (required, secret, string); MailerSend API token. Used only for Bearer auth; never
+  logged.
+- `base_url` (optional, string); default `https://api.mailersend.com/v1`; format `uri`; MailerSend
+  API base URL override for tests or proxies.
+- `date_from` (optional, string); Unix-seconds lower bound for the activity stream's required date
+  window. Falls back to start_date when unset.
+- `date_to` (optional, string); Unix-seconds upper bound for the activity stream's required date
+  window.
+- `domain_id` (optional, string); MailerSend domain id. Required by the activity stream
+  (path-scoped); optionally filters the messages stream when set.
+- `mode` (optional, string).
+- `start_date` (optional, string); format `date-time`; Fallback for date_from when date_from itself
+  is unset (activity stream only).
+
+Secret fields are redacted in logs and write previews: `api_token`.
+
+Default configuration values: `base_url=https://api.mailersend.com/v1`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/domains` with query `limit`=`10`.
 
 ## Streams notes
 
-Paginated collection streams share MailerSend's `{data:[...]}` envelope and `page_number`
-pagination (`page_param: page`, `size_param: limit`, `start_page: 1`, `page_size: 25`) — matching
-legacy's `connsdk.PageNumberPaginator{PageParam:"page", SizeParam:"limit", StartPage:1,
-PageSize:pageSize}` short-page stop rule exactly for the original streams and matching the
-documented page/limit shape for the added collection streams.
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 25.
 
-- `domains` (`GET /domains`) and `recipients` (`GET /recipients`) take no extra config.
-- `messages` (`GET /messages`) optionally filters by `domain_id` when set (`omit_when_absent: true`
-  — sent only when `domain_id` is configured, matching legacy's `if domain := ...; domain != ""`
-  guard).
-- `templates` optionally filters by `domain_id`; `webhooks` requires `domain_id`, matching
-  MailerSend's documented webhook list parameters.
-- `activity` (`GET /activity/{domain_id}`) requires `domain_id` (templated into the path, urlencoded
-  by default like every path segment) and the `date_from`/`date_to` unix-seconds query window
-  (both hard-required — an absent value is a hard interpolation error, matching legacy's explicit
-  `errors.New("mailersend activity stream requires config domain_id")` /
-  `"... requires config date_from and date_to"`).
-- `analytics_by_date`, `analytics_country`, `analytics_user_agents`, and
-  `analytics_reading_environment` require the same `date_from`/`date_to` unix-seconds window and
-  read `data.stats` without pagination.
+Pagination by stream: none: `analytics_by_date`, `analytics_country`, `analytics_user_agents`,
+`analytics_reading_environment`; page_number: `activity`, `domains`, `messages`, `recipients`,
+`templates`, `scheduled_messages`, `sender_identities`, `inbound_routes`, `account_users`,
+`invites`, `tokens`, `webhooks`.
 
-None of the streams declares an `incremental` block: legacy's `InitialState` always seeds an empty
-cursor and `Read` never applies any cursor-based filter (server-side or client-side) to any request.
-Declaring an `incremental`/`client_filtered` block here would introduce new record-dropping behavior
-legacy never had, so this bundle omits it and keeps `x-cursor-field` values purely as documented
-dedup-capable field names.
+- `activity`: GET `/activity/{{ config.domain_id }}` - records path `data`; query `date_from`=`{{
+  config.date_from }}`; `date_to`=`{{ config.date_to }}`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 25.
+- `domains`: GET `/domains` - records path `data`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 25.
+- `messages`: GET `/messages` - records path `data`; query `domain_id` from template `{{
+  config.domain_id }}`, omitted when absent; page-number pagination; page parameter `page`; size
+  parameter `limit`; starts at 1; page size 25.
+- `recipients`: GET `/recipients` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 25.
+- `templates`: GET `/templates` - records path `data`; query `domain_id` from template `{{
+  config.domain_id }}`, omitted when absent; page-number pagination; page parameter `page`; size
+  parameter `limit`; starts at 1; page size 25.
+- `scheduled_messages`: GET `/message-schedules` - records path `data`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 25.
+- `sender_identities`: GET `/identities` - records path `data`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 25.
+- `inbound_routes`: GET `/inbound` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 25.
+- `account_users`: GET `/users` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 25.
+- `invites`: GET `/invites` - records path `data`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 25.
+- `tokens`: GET `/token` - records path `data`; page-number pagination; page parameter `page`; size
+  parameter `limit`; starts at 1; page size 25.
+- `webhooks`: GET `/webhooks` - records path `data`; query `domain_id`=`{{ config.domain_id }}`;
+  page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 25.
+- `analytics_by_date`: GET `/analytics/date` - records path `data.stats`; query `date_from`=`{{
+  config.date_from }}`; `date_to`=`{{ config.date_to }}`; `domain_id` from template `{{
+  config.domain_id }}`, omitted when absent.
+- `analytics_country`: GET `/analytics/country` - records path `data.stats`; query `date_from`=`{{
+  config.date_from }}`; `date_to`=`{{ config.date_to }}`; `domain_id` from template `{{
+  config.domain_id }}`, omitted when absent.
+- `analytics_user_agents`: GET `/analytics/ua-name` - records path `data.stats`; query
+  `date_from`=`{{ config.date_from }}`; `date_to`=`{{ config.date_to }}`; `domain_id` from template
+  `{{ config.domain_id }}`, omitted when absent.
+- `analytics_reading_environment`: GET `/analytics/ua-type` - records path `data.stats`; query
+  `date_from`=`{{ config.date_from }}`; `date_to`=`{{ config.date_to }}`; `domain_id` from template
+  `{{ config.domain_id }}`, omitted when absent.
 
 ## Write actions & risks
 
-None. MailerSend's mutating endpoints send transactional email, verify addresses, manage users and
-tokens, change sending domains/routes/templates/webhooks, or delete scheduled messages;
-`capabilities.write` is `false` and no `writes.json` is shipped, matching legacy's unsupported
-`Write`.
+This connector is read-only. Read behavior: external MailerSend API read of email activity,
+analytics, domain, message, recipient, template, schedule, identity, inbound-route, account-user,
+token, invite, and webhook data.
 
 ## Known limits
 
-- Legacy's `activity` stream accepts an optional `event` config (a CSV string split and sent as
-  REPEATED `event[]` query params, one per listed event type) to filter which activity event types
-  are returned. The engine's `stream.Query` dialect maps one JSON key to exactly one template-resolved
-  string value — it has no repeated-key/array query param mechanism — so this optional filter cannot
-  be expressed declaratively. It is out of scope here (a scope-narrowing, not a data-shape
-  divergence: omitting the filter returns the full unfiltered activity set rather than a
-  event-type-scoped subset, never a WRONG record shape for any record it does emit).
-- Legacy's `date_from` also falls back to the `start_date` config alias when `date_from` itself is
-  unset (`firstNonEmpty(cfg.Config["date_from"], cfg.Config["start_date"])`). The engine's
-  `stream.Query` `default` dialect only supplies a FIXED literal fallback, not a second
-  config-key reference, so this bundle requires `date_from` directly and does not implement the
-  `start_date` alias for the activity stream specifically (the `start_date` property remains
-  declared and documented as that fallback's intent, but is not wired for `activity`).
-- Legacy's config-driven `page_size`/`max_pages` overrides have no declarative equivalent (the
-  engine's `PaginationSpec.PageSize`/`MaxPages` are fixed values in `streams.json`, not
-  runtime-config-driven); pagination is fixed at `limit=25` (legacy's own default) with unbounded
-  pages.
-- Detail endpoints that require a template, identity, inbound route, message, webhook, token, user,
-  invite, domain, recipient, verification, or SMS object ID are excluded as ID-scoped lookups rather
-  than global streams.
-- SMS and email-verification resources are excluded because this connector's legacy/source contract
-  is the Email API/account surface and those resources use separate scopes and operational risk.
+- Batch defaults: read_page_size=25.
+- API coverage includes 16 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, duplicate_of=1, non_data_endpoint=1, out_of_scope=2,
+  requires_elevated_scope=4.

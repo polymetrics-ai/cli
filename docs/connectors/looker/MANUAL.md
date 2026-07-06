@@ -12,20 +12,50 @@ SYNOPSIS
 DESCRIPTION
   Reads Looker users, groups, folders, looks, and dashboards through the Looker API 4.0.
 
+ICON
+  asset: icons/looker.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://cloud.google.com/looker/docs/reference/looker-api/latest
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  token_url
+  access_token (secret)
+  client_id (secret)
+  client_secret (secret)
+
+ETL STREAMS
+  users:
+    primary key: id
+    fields: display_name(), email(), id()
+  groups:
+    primary key: id
+    fields: id(), name()
+  folders:
+    primary key: id
+    fields: id(), name()
+  looks:
+    primary key: id
+    fields: folder_id(), id(), title()
+  dashboards:
+    primary key: id
+    fields: folder_id(), id(), title()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Looker API read of users, groups, folders, looks, and dashboards
+  approval: none; read-only source connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

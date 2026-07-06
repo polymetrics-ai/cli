@@ -10,22 +10,57 @@ SYNOPSIS
   pm credentials add <name> --connector weatherstack [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads current, historical, and forecast weather data from Weatherstack.
+  Reads current, historical, forecast, marine, and location-autocomplete weather data from Weatherstack. Read-only.
+
+ICON
+  asset: icons/weatherstack.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://weatherstack.com/documentation
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  autocomplete_query
+  base_url
+  forecast_days
+  historical_date
+  language
+  latitude
+  longitude
+  mode
+  query
+  units
+  access_key (secret)
+
+ETL STREAMS
+  current:
+    primary key: id
+    fields: current(), id(), location()
+  historical:
+    primary key: id
+    fields: historical(), id(), location()
+  forecast:
+    primary key: id
+    fields: forecast(), id(), location()
+  marine:
+    primary key: id
+    fields: current(), id(), location()
+  autocomplete:
+    primary key: name, region, country, lat, lon
+    fields: country(), lat(), lon(), name(), region(), timezone_id(), utc_offset()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Weatherstack API read of public weather data
+  approval: none; read-only public weather data connector
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

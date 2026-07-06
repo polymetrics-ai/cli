@@ -12,20 +12,46 @@ SYNOPSIS
 DESCRIPTION
   Reads Huntr organization members, candidates, activities, notes, and actions through the Huntr REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  page_size
+  api_key (secret)
+
+ETL STREAMS
+  members:
+    primary key: id
+    fields: boardIds(), createdAt(), email(), familyName(), fullName(), givenName(), id(), isActive(), lastSeenAt()
+  candidates:
+    primary key: id
+    fields: email(), firstName(), id(), lastName(), memberId()
+  activities:
+    primary key: id
+    fields: activityCategory(), completed(), completedAt(), createdAt(), id(), startAt(), title()
+  notes:
+    primary key: id
+    fields: htmlText(), id(), memberId(), text()
+  actions:
+    primary key: id
+    fields: actionType(), activityId(), candidateId(), createdAt(), date(), id(), memberId()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Huntr organization API read of member, candidate, activity, note, and action data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

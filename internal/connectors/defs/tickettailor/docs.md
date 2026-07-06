@@ -1,145 +1,219 @@
 # Overview
 
-Ticket Tailor is a wave2 fan-out declarative-HTTP migration, since Pass B expanded to the full
-documented Ticket Tailor REST API v1 surface (published OpenAPI spec at
-`https://app.tickettailor-stitching.com/openapi.yml`, linked from
-`https://developers.tickettailor.com/`). It reads and writes events, orders, issued tickets, event
-series, holds, discounts, membership types, issued memberships, products, stores, vouchers,
-checkout forms/elements, and a box-office overview (`https://api.tickettailor.com/v1/<resource>`).
-This bundle is capability-parity migrated from `internal/connectors/tickettailor` (the hand-written
-connector it migrates); the legacy package stays registered and unchanged until wave6's registry
-flip. `capabilities.write` is now `true`.
+Reads and writes events, orders, issued tickets, event series, holds, discounts, memberships,
+products, stores, and vouchers through the Ticket Tailor API.
 
-**Important discovery — pagination was fixed, not just extended (see `api_surface.json`'s `scope`
-note for the full account):** the real Ticket Tailor API's actual pagination convention for every
-list endpoint — including the 3 original streams — is cursor-based (`starting_after`/
-`ending_before`/`limit`, a `data[]`/`links{next,previous}` envelope), not the `page`/`limit`
-page-number convention the legacy connector and the original wave2 bundle both used. `page` is not
-a documented query parameter on any Ticket Tailor list endpoint; sending it would have been
-silently ignored, and the real cursor param (`starting_after`) was never sent at all, meaning the
-original bundle would never have advanced past page 1 against the live API. This was a genuine
-functional defect carried over from the legacy Go connector (`tickettailor.go:87`, itself never
-verified against production), not a deliberately documented parity decision — nothing in this
-bundle's prior `docs.md` called it out as an intentional deviation. It is fixed in this pass for
-all 3 original streams plus every new stream.
+Readable streams: `events`, `orders`, `issued_tickets`, `event_series`, `holds`, `discounts`,
+`membership_types`, `issued_memberships`, `products`, `stores`, `vouchers`, `checkout_forms`,
+`voucher_codes`, `checkout_form_elements`, `event_series_overrides`,
+`event_series_waitlist_signups`, `overview`.
+
+Write actions: `create_event_series`, `update_event_series`, `delete_event_series`,
+`change_event_series_status`, `create_discount`, `update_discount`, `delete_discount`,
+`delete_hold`, `create_check_in`, `create_issued_ticket`, `void_issued_ticket`, `update_order`,
+`confirm_order_payment_received`, `create_membership_type`, `delete_membership_type`,
+`create_issued_membership`, `update_issued_membership`, `void_issued_membership`, `create_voucher`,
+`update_voucher`, `delete_voucher`, `void_voucher_code`, `create_product`, `update_product`,
+`delete_product`.
+
+Service API documentation: https://developers.tickettailor.com/.
 
 ## Auth setup
 
-Provide a Ticket Tailor API key via the `api_key` secret; it is sent as the username of HTTP
-Basic auth with an empty password (`Authorization: Basic base64(<api_key>:)`), matching legacy's
-`connsdk.Basic(key, "")` (`tickettailor.go:107`) and the published OpenAPI spec's own `BasicAuth`
-security scheme (`"Use base64 encoded api key created in Ticket Tailor dashboard"`) exactly, and is
-never logged. `base_url` defaults to `https://api.tickettailor.com/v1`, matching legacy's
-`defaultBaseURL` fallback and the spec's own default server.
+Connection fields:
+
+- `api_key` (required, secret, string); Ticket Tailor API key, sent as the username of HTTP Basic
+  auth with an empty password (Authorization: Basic base64(<api_key>:)). Never logged.
+- `base_url` (optional, string); default `https://api.tickettailor.com/v1`; format `uri`; Ticket
+  Tailor API base URL override for tests or proxies.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.tickettailor.com/v1`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/events` with query `limit`=`1`.
 
 ## Streams notes
 
-All 17 streams share `next_url` pagination (`base.pagination`: `type: next_url`, `next_url_path:
-links.next`, `allow_cross_host: true`) reading the real, documented `links.next` field — a
-same-host RELATIVE path+query string per Ticket Tailor's own documented example (e.g.
-`/v1/events?starting_after=ev_123`), not an absolute URL. `allow_cross_host: true` is required
-purely because a host-less relative value fails the engine's origin-check guard exactly like a
-genuinely cross-host URL would (`checkOrigin`'s `u.Host == ""` branch); there is no actual
-cross-host risk here since the value is always same-origin by construction. `base.query`'s static
-`limit` param sends `100` on the FIRST request of each stream's sequence; subsequent pages replay
-whatever query the server's own `links.next` value encodes (Ticket Tailor's own pagination
-contract, not something this bundle controls). Per conventions.md's sanctioned `next_url`
-single-page-fixture exception (a static fixture cannot embed the correct absolute replay-server URL
-for a second page), every stream ships exactly one fixture page; `pagination_terminates` exercises
-`events` (the bundle's first declared stream) — a single fixture page is sufficient to prove one
-consumed request terminates cleanly, matching the sanctioned pattern's own reasoning.
+Default pagination: follows a next-page URL from the response body; URL path `links.next`;
+cross-host next URLs are allowed.
 
-**Legacy-parity streams (field shape unchanged, only pagination fixed):** `events`, `orders`,
-`issued_tickets` — same `GET /<resource>`, `data` envelope, `"projection": "passthrough"` (legacy's
-`connsdk.Harvest` callback emits every raw field verbatim, `tickettailor.go:88` — no `mapRecord`-
-style filtering step; default `"schema"` projection mode would silently drop every real Ticket
-Tailor field not named in each stream's declared schema properties, an undocumented silent
-data-shape change relative to legacy's raw passthrough), primary key `["id"]`.
+Pagination by stream: next_url: `events`, `orders`, `issued_tickets`, `event_series`, `holds`,
+`discounts`, `membership_types`, `issued_memberships`, `products`, `stores`, `vouchers`,
+`checkout_forms`, `voucher_codes`, `checkout_form_elements`, `event_series_overrides`,
+`event_series_waitlist_signups`; none: `overview`.
 
-**New Pass B streams (14):**
-
-- `event_series`, `holds`, `discounts`, `membership_types`, `issued_memberships`, `products`,
-  `stores`, `vouchers`, `checkout_forms` — plain top-level `GET /<resource>` list streams, same
-  `data` envelope and `next_url` pagination shape, `"projection": "passthrough"` (matching the
-  original 3 streams' own reasoning: the live API returns considerably more per-object detail than
-  any hand-picked field list would capture), primary key `["id"]`.
-- `voucher_codes` (`GET /vouchers/{voucher_id}/codes`), `checkout_form_elements` (`GET
-  /checkout_forms/{checkout_form_id}/elements`), `event_series_overrides` (`GET
-  /event_series/{event_series_id}/overrides`), `event_series_waitlist_signups` (`GET
-  /event_series/{event_series_id}/waitlist_signups`) — all `fan_out` streams (`ids_from.request`
-  over their respective parent list endpoint, `into: {path_var: ...}`, `stamp_field: ...`) since
-  each is only reachable per-parent-id with no top-level list endpoint of its own — the sanctioned
-  dialect mechanism for exactly this shape (conventions.md §3 "Sub-resource fan-out"). None of the 4
-  has a globally-unique per-record id on its own (`voucher_codes`' own `id` is only unique within
-  one voucher's codes, etc.); `[<parent>_id, id]` is each one's genuine composite primary key,
-  matching this migration's ip2whois `[domain, role]` composite-key precedent (conventions.md
-  ledger item 11).
-- `overview` (`GET /overview`) — a single-object box-office statistics stream
-  (`records: {"path": ".", "single_object": true}`, `pagination.type: none`). The documented
-  `Overview` schema has no natural per-record identifier at all (it is a single aggregate, not a
-  list); `computed_fields: {"id": "overview"}` stamps the sanctioned static-literal constant as the
-  primary key (a template with no `{{ }}` markers passes through verbatim, conventions.md §3), the
-  same mechanism searxng's `stream` marker field uses.
+- `events`: GET `/events` - records path `data`; query `limit`=`100`; follows a next-page URL from
+  the response body; URL path `links.next`; cross-host next URLs are allowed; emits passthrough
+  records.
+- `orders`: GET `/orders` - records path `data`; query `limit`=`100`; follows a next-page URL from
+  the response body; URL path `links.next`; cross-host next URLs are allowed; emits passthrough
+  records.
+- `issued_tickets`: GET `/issued_tickets` - records path `data`; query `limit`=`100`; follows a
+  next-page URL from the response body; URL path `links.next`; cross-host next URLs are allowed;
+  emits passthrough records.
+- `event_series`: GET `/event_series` - records path `data`; query `limit`=`100`; follows a
+  next-page URL from the response body; URL path `links.next`; cross-host next URLs are allowed;
+  emits passthrough records.
+- `holds`: GET `/holds` - records path `data`; query `limit`=`100`; follows a next-page URL from the
+  response body; URL path `links.next`; cross-host next URLs are allowed; emits passthrough records.
+- `discounts`: GET `/discounts` - records path `data`; query `limit`=`100`; follows a next-page URL
+  from the response body; URL path `links.next`; cross-host next URLs are allowed; emits passthrough
+  records.
+- `membership_types`: GET `/membership_types` - records path `data`; query `limit`=`100`; follows a
+  next-page URL from the response body; URL path `links.next`; cross-host next URLs are allowed;
+  emits passthrough records.
+- `issued_memberships`: GET `/issued_memberships` - records path `data`; query `limit`=`100`;
+  follows a next-page URL from the response body; URL path `links.next`; cross-host next URLs are
+  allowed; emits passthrough records.
+- `products`: GET `/products` - records path `data`; query `limit`=`100`; follows a next-page URL
+  from the response body; URL path `links.next`; cross-host next URLs are allowed; emits passthrough
+  records.
+- `stores`: GET `/stores` - records path `data`; query `limit`=`100`; follows a next-page URL from
+  the response body; URL path `links.next`; cross-host next URLs are allowed; emits passthrough
+  records.
+- `vouchers`: GET `/vouchers` - records path `data`; query `limit`=`100`; follows a next-page URL
+  from the response body; URL path `links.next`; cross-host next URLs are allowed; emits passthrough
+  records.
+- `checkout_forms`: GET `/checkout_forms` - records path `data`; query `limit`=`100`; follows a
+  next-page URL from the response body; URL path `links.next`; cross-host next URLs are allowed;
+  emits passthrough records.
+- `voucher_codes`: GET `/vouchers/{{ fanout.id }}/codes` - records path `data`; query `limit`=`100`;
+  follows a next-page URL from the response body; URL path `links.next`; cross-host next URLs are
+  allowed; fan-out; ids from request `/vouchers`; id-list records path `data`; id field `id`; id
+  inserted into the request path; stamps `voucher_id`; emits passthrough records.
+- `checkout_form_elements`: GET `/checkout_forms/{{ fanout.id }}/elements` - records path `data`;
+  query `limit`=`100`; follows a next-page URL from the response body; URL path `links.next`;
+  cross-host next URLs are allowed; fan-out; ids from request `/checkout_forms`; id-list records
+  path `data`; id field `id`; id inserted into the request path; stamps `checkout_form_id`; emits
+  passthrough records.
+- `event_series_overrides`: GET `/event_series/{{ fanout.id }}/overrides` - records path `data`;
+  query `limit`=`100`; follows a next-page URL from the response body; URL path `links.next`;
+  cross-host next URLs are allowed; fan-out; ids from request `/event_series`; id-list records path
+  `data`; id field `id`; id inserted into the request path; stamps `event_series_id`; emits
+  passthrough records.
+- `event_series_waitlist_signups`: GET `/event_series/{{ fanout.id }}/waitlist_signups` - records
+  path `data`; query `limit`=`100`; follows a next-page URL from the response body; URL path
+  `links.next`; cross-host next URLs are allowed; fan-out; ids from request `/event_series`; id-list
+  records path `data`; id field `id`; id inserted into the request path; stamps `event_series_id`;
+  emits passthrough records.
+- `overview`: GET `/overview` - single-object response; records path `.`; computed output fields
+  `id`; emits passthrough records.
 
 ## Write actions & risks
 
-25 write actions, `body_type: "form"` throughout (matching the published spec's own
-`application/x-www-form-urlencoded` request bodies) unless noted:
+Overall write risk: external Ticket Tailor API mutations covering event
+series/hold/discount/membership/voucher/product lifecycle, ticket issuance/voiding/check-in, and
+order payment confirmation; delete_event_series is destructive/confirm-gated.
 
-- **Event series**: `create_event_series`, `update_event_series` against
-  `/event_series[/{id}]`, `delete_event_series` (destructive/confirm-gated — permanently deletes
-  every occurrence within it), and `change_event_series_status` (POST `.../status`,
-  `body_fields: ["status"]` — setting `draft`/`sales_closed` immediately stops public ticket sales).
-- **Discounts**: `create_discount`, `update_discount`, `delete_discount` against
-  `/discounts[/{id}]`.
-- **Holds**: `delete_hold` only (DELETE `/holds/{id}`, path-only, no body) — see Known limits for
-  why `create_hold`/`update_hold` are NOT implemented despite being documented.
-- **Check-ins & tickets**: `create_check_in` (POST `/check_ins`), `create_issued_ticket` (POST
-  `/issued_tickets`, issues a ticket directly bypassing checkout), `void_issued_ticket` (POST
-  `.../void`).
-- **Orders**: `update_order` (buyer contact/address fields) and
-  `confirm_order_payment_received` (marks an offline/manual-payment order as paid).
-- **Memberships**: `create_membership_type`, `delete_membership_type` against
-  `/membership_types[/{id}]`; `create_issued_membership`, `update_issued_membership`,
-  `void_issued_membership` against `/issued_memberships[/{id}][/void]`.
-- **Vouchers**: `create_voucher`, `update_voucher`, `delete_voucher` against `/vouchers[/{id}]`,
-  and `void_voucher_code` (POST `/vouchers/{voucher_id}/codes/{id}/void`, path-only, no body).
-- **Products**: `create_product`, `update_product`, `delete_product` against `/products[/{id}]`.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-`metadata.json` now declares `capabilities.write: true`; `risk.approval` names
-`delete_event_series` as the sole action requiring approval.
+- `create_event_series`: POST `/event_series` - kind `create`; body type `form`; required record
+  fields `name`; accepted fields `access_code`, `country`, `currency`, `description`, `name`,
+  `postal_code`, `venue`; risk: creates a new event series (a recurring/template event definition);
+  low-risk additive external mutation, no approval required.
+- `update_event_series`: POST `/event_series/{{ record.id }}` - kind `update`; body type `form`;
+  path fields `id`; required record fields `id`; accepted fields `call_to_action`, `currency`,
+  `description`, `id`, `name`; risk: mutates an existing event series' public-facing
+  name/description/currency.
+- `delete_event_series`: DELETE `/event_series/{{ record.id }}` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; confirmation `destructive`; risk: permanently deletes an event series
+  and every event occurrence within it; destructive, approval required.
+- `change_event_series_status`: POST `/event_series/{{ record.id }}/status` - kind `update`; body
+  type `form`; path fields `id`; body fields `status`; required record fields `id`, `status`;
+  accepted fields `id`, `status`; risk: changes an event series' publication status; setting to
+  draft/sales_closed immediately stops further public ticket sales.
+- `create_discount`: POST `/discounts` - kind `create`; body type `form`; required record fields
+  `name`, `code`, `type`; accepted fields `code`, `expires`, `max_redemptions`, `name`, `price`,
+  `price_percent`, `type`; risk: creates a discount code redeemable at checkout; low-risk additive
+  external mutation, no approval required.
+- `update_discount`: POST `/discounts/{{ record.id }}` - kind `update`; body type `form`; path
+  fields `id`; required record fields `id`; accepted fields `code`, `id`, `max_redemptions`, `name`;
+  risk: mutates an existing discount code's name, code, or usage limit; changing the code
+  invalidates any already-shared link using the old code.
+- `delete_discount`: DELETE `/discounts/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: permanently deletes a discount code; any customer relying on the code at
+  checkout will see it rejected.
+- `delete_hold`: DELETE `/holds/{{ record.id }}` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; missing records treated as success for
+  status `404`; risk: releases a hold, returning its reserved tickets to public sale immediately.
+- `create_check_in`: POST `/check_ins` - kind `create`; body type `form`; required record fields
+  `issued_ticket_id`, `quantity`; accepted fields `check_in_at`, `issued_ticket_id`,
+  `local_unique_id`, `quantity`; risk: checks an attendee's issued ticket in (or out, when quantity
+  is -1) at the door; low-risk operational mutation, no approval required.
+- `create_issued_ticket`: POST `/issued_tickets` - kind `create`; body type `form`; required record
+  fields `full_name`; accepted fields `email`, `event_id`, `full_name`, `hold_id`, `send_email`,
+  `ticket_type_id`; risk: issues a new ticket directly (bypassing checkout), consuming inventory
+  from either a ticket type or an existing hold; low-risk additive external mutation, no approval
+  required.
+- `void_issued_ticket`: POST `/issued_tickets/{{ record.id }}/void` - kind `update`; body type
+  `form`; path fields `id`; required record fields `id`; accepted fields `id`, `void_to_hold`; risk:
+  voids an issued ticket, invalidating it for entry; optionally returns its inventory to a hold
+  rather than public sale.
+- `update_order`: POST `/orders/{{ record.id }}` - kind `update`; body type `form`; path fields
+  `id`; required record fields `id`; accepted fields `address_1`, `email`, `first_name`, `id`,
+  `last_name`, `phone`, `postal_code`; risk: mutates an existing order's buyer contact/address
+  details.
+- `confirm_order_payment_received`: POST `/orders/{{ record.id }}/confirm-payment-received` - kind
+  `update`; body type `form`; path fields `id`; required record fields `id`; accepted fields `id`,
+  `transaction_id`; risk: marks an order (typically an offline/manual payment method) as paid,
+  releasing its tickets from pending status.
+- `create_membership_type`: POST `/membership_types` - kind `create`; body type `form`; required
+  record fields `name`, `valid_from_type`, `valid_to_type`; accepted fields `max_redemptions`,
+  `name`, `photo_required`, `valid_from_type`, `valid_to_type`; risk: creates a new membership type
+  template; low-risk additive external mutation, no approval required.
+- `delete_membership_type`: DELETE `/membership_types/{{ record.id }}` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: permanently deletes a membership type; any issued
+  membership referencing it is orphaned.
+- `create_issued_membership`: POST `/issued_memberships` - kind `create`; body type `form`; required
+  record fields `membership_type_id`, `first_name`, `last_name`, `email`; accepted fields `email`,
+  `first_name`, `last_name`, `membership_type_id`, `valid_from_date`, `valid_to_date`; risk: issues
+  a new membership directly to a member; low-risk additive external mutation, no approval required.
+- `update_issued_membership`: POST `/issued_memberships/{{ record.id }}` - kind `update`; body type
+  `form`; path fields `id`; required record fields `id`; accepted fields `email`, `first_name`,
+  `id`, `last_name`, `valid_to_date`; risk: mutates an existing issued membership's holder details
+  or validity window.
+- `void_issued_membership`: POST `/issued_memberships/{{ record.id }}/void` - kind `update`; body
+  type `none`; path fields `id`; required record fields `id`; accepted fields `id`; risk: voids an
+  issued membership, invalidating it immediately for entry/redemption.
+- `create_voucher`: POST `/vouchers` - kind `create`; body type `form`; required record fields
+  `name`, `value`; accepted fields `codes`, `expiry`, `name`, `usable_on_any_event`, `value`,
+  `voucher_type`; risk: creates a new voucher and its redeemable codes; low-risk additive external
+  mutation, no approval required.
+- `update_voucher`: POST `/vouchers/{{ record.id }}` - kind `update`; body type `form`; path fields
+  `id`; required record fields `id`; accepted fields `expiry`, `id`, `name`, `value`; risk: mutates
+  an existing voucher's value or expiry, directly changing what every un-redeemed code is worth.
+- `delete_voucher`: DELETE `/vouchers/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: permanently deletes a voucher and every un-redeemed code issued under it.
+- `void_voucher_code`: POST `/vouchers/{{ record.voucher_id }}/codes/{{ record.id }}/void` - kind
+  `update`; body type `none`; path fields `voucher_id`, `id`; required record fields `voucher_id`,
+  `id`; accepted fields `id`, `voucher_id`; risk: voids a single voucher code, invalidating it for
+  redemption immediately.
+- `create_product`: POST `/products` - kind `create`; body type `form`; required record fields
+  `name`, `price`; accepted fields `booking_fee`, `currency`, `description`, `name`, `price`; risk:
+  creates a new sellable add-on product; low-risk additive external mutation, no approval required.
+- `update_product`: POST `/products/{{ record.id }}` - kind `update`; body type `form`; path fields
+  `id`; required record fields `id`; accepted fields `description`, `id`, `name`, `price`; risk:
+  mutates an existing product's name, price, or description, directly changing checkout pricing for
+  it.
+- `delete_product`: DELETE `/products/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: permanently deletes a sellable product; it becomes unavailable at checkout
+  immediately.
 
 ## Known limits
 
-- **`create_hold`/`update_hold` are intentionally NOT implemented (`ENGINE_GAP`, documented in
-  `api_surface.json`).** The documented request body's required `ticket_type_id` field is a JSON
-  object (`additionalProperties`, e.g. `{tt_1: 1, tt_2: 5}`) sent inside an
-  `application/x-www-form-urlencoded` body. This dialect's form-body construction
-  (`engine/write.go`'s `buildForm`/`stringifyAny`) can only stringify a nested object value as a
-  single JSON-string-valued form field (`ticket_type_id=%7B%22tt_1%22%3A1%7D`) — it has no
-  mechanism to emit the bracket-notation (`ticket_type_id[tt_1]=1`) or repeated-key encoding a
-  nested object inside a form body typically requires, and there is no way to verify which encoding
-  Ticket Tailor's real endpoint actually expects without a live test. Guessing would silently risk
-  sending a request the real API rejects or misinterprets, so this is documented as a genuine gap
-  rather than shipped unverified; `delete_hold` (path-only, no body) is unaffected and implemented
-  normally.
-- **Pagination was fixed for the 3 original streams, a behavior change from the prior bundle
-  revision** (see Overview's "Important discovery" note and `api_surface.json`'s `scope` note for
-  the full account): `page_number` (`page`/`limit`) never matched Ticket Tailor's real documented
-  API at all, so no caller could have been genuinely relying on the old shape working beyond a
-  single page against the live service — the fix is a correctness repair, not a parity-breaking
-  scope choice, and no `parity_deviations[]` entry applies since there was no working prior
-  behavior for a real caller to diverge from.
-- Deep event-series sub-resource CONFIGURATION mutations (ticket types, ticket groups, bundles,
-  schedule overrides, single-occurrence create/update/delete, single checkout-form-element update,
-  single-store update) are excluded as Pass B breadth-vs-cost triage, matching bitly's precedent for
-  narrower nested-configuration sub-resources — see `api_surface.json`'s `out_of_scope` exclusions
-  for the complete, endpoint-by-endpoint list and reasoning.
-- `check_ins` (the raw check-in event log, as opposed to the `create_check_in` write) and
-  `issued_membership_redemptions` are not modeled as read streams/writes respectively — see
-  `api_surface.json`'s exclusions.
-- No incremental cursor is modeled on any stream (matching the original bundle's own behavior):
-  every sync is full-refresh. The published spec documents rich `created_at`/`updated_at`
-  greater-than/less-than filter parameters on several endpoints that could drive a genuine
-  server-side incremental filter in a future increment; this bundle does not wire them (a scope
-  choice, not a blocker).
+- Batch defaults: read_page_size=100.
+- API coverage includes 17 stream-backed endpoint group(s), 25 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=13, non_data_endpoint=2, out_of_scope=23.

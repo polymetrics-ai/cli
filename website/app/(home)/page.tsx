@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import {
   ArrowRight, GitBranch as Github, Download, Database, ArrowLeftRight,
-  Plug, Bot, Lock, RefreshCw, Newspaper, Clock,
+  Plug, Bot, Lock, RefreshCw,
 } from 'lucide-react';
 import { useState, useCallback, type MouseEvent } from 'react';
 import { HomeSection } from '@/components/home/home-section';
@@ -19,7 +19,6 @@ import { FaqAccordion } from '@/components/home/faq-accordion';
 import { ConnectorMarquee } from '@/components/home/connector-marquee';
 import { SiteFooter } from '@/components/home/site-footer';
 import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.generated';
-import { BLOG_SUMMARIES, blogUrl } from '@/lib/blog-summaries';
 
 
 /* ── Tool cards ───────────────────────────────────────────────────────── */
@@ -77,8 +76,6 @@ const toolsRow2: Tool[] = [
     href: '/docs/connectors',
   },
 ];
-
-const latestBlogPosts = BLOG_SUMMARIES.slice(0, 3);
 
 function ToolCard({ tool, large = false }: { tool: Tool; large?: boolean }) {
   const Icon = tool.icon;
@@ -157,12 +154,12 @@ export default function HomePage() {
               className="flex flex-col items-center gap-1 md:gap-2 text-center font-medium leading-[105%] relative"
             >
               <span className="flex flex-wrap justify-center gap-x-2 gap-y-1">
-                <TextHighlight highlightClassName="mix-blend-multiply">One</TextHighlight>
-                <span>CLI</span>
+                <TextHighlight highlightClassName="mix-blend-multiply">Extract,</TextHighlight>
+                <TextHighlight highlightClassName="mix-blend-multiply">query,</TextHighlight>
               </span>
               <span className="flex flex-wrap justify-center gap-x-2 gap-y-1">
-                <span>to rule</span>
-                <TextHighlight highlightClassName="mix-blend-multiply">them all.</TextHighlight>
+                <TextHighlight highlightClassName="mix-blend-multiply">act</TextHighlight>
+                <span>– repeat.</span>
               </span>
             </Heading>
 
@@ -174,7 +171,7 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3 justify-center items-center relative">
               <Link
                 href="/docs/quickstart"
-                className="btn-shine inline-flex items-center gap-2 border border-emerald-900 bg-emerald-800 px-5 py-2.5 font-square text-[14px] font-semibold text-white transition-opacity hover:opacity-90"
+                className="btn-shine inline-flex items-center gap-2 border border-emerald-900 bg-emerald-800 px-5 py-2.5 text-[14px] font-medium text-white transition-opacity hover:opacity-90"
               >
                 Get started <ArrowRight size={14} />
               </Link>
@@ -182,7 +179,7 @@ export default function HomePage() {
                 href="https://github.com/polymetrics-ai/cli"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-sm border border-line-structure bg-surface-bg px-5 py-2.5 font-square text-[14px] font-semibold text-text-secondary transition-colors hover:bg-surface-1"
+                className="inline-flex items-center gap-2 rounded-sm border border-line-structure bg-surface-bg px-5 py-2.5 text-[14px] font-medium text-text-secondary transition-colors hover:bg-surface-1"
               >
                 <Github size={14} /> View on GitHub
               </a>
@@ -235,7 +232,7 @@ export default function HomePage() {
               <Heading className="text-left">
                 <TextHighlight className="pr-1.5">Extract</TextHighlight>
                 → query → act.<br />
-                <span className="font-square text-text-tertiary">Repeat.</span>
+                <span className="text-text-tertiary font-analog">Repeat.</span>
               </Heading>
               <Text className="text-left">
                 Every data problem is a loop. Pull data from a connector, shape it with SQL, run approved actions, and repeat. pm makes this loop a single binary invocation.
@@ -246,7 +243,7 @@ export default function HomePage() {
               <div className="flex gap-3 flex-wrap">
                 <Link
                   href="/docs/quickstart"
-                  className="inline-flex items-center gap-1.5 border-b border-line-structure pb-0.5 font-square text-[14px] font-semibold text-text-secondary transition-colors hover:border-text-primary"
+                  className="inline-flex items-center gap-1.5 text-[14px] text-text-secondary border-b border-line-structure hover:border-text-primary transition-colors pb-0.5"
                 >
                   60-second quickstart <ArrowRight size={12} />
                 </Link>
@@ -300,51 +297,6 @@ export default function HomePage() {
           <ConnectorMarquee />
         </HomeSection>
 
-        {/* ── Blog ───────────────────────────────────────────────────── */}
-        <HomeSection id="blog" pattern="p012" className="pt-[120px]">
-          <div className="flex flex-col gap-4 mb-8">
-            <Heading>
-              Notes from the{' '}
-              <TextHighlight>data loop.</TextHighlight>
-            </Heading>
-            <Text className="max-w-[48ch]">
-              Product and engineering essays on local-first ETL, embedded DuckDB SQL, reverse ETL, connector design, and agent-native automation.
-            </Text>
-          </div>
-
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
-            {latestBlogPosts.map((post) => (
-              <Link key={post.slug} href={blogUrl(post.slug)} className="block h-full group">
-                <CornerBox
-                  hoverStripes
-                  className="flex h-full flex-col gap-4 p-5 transition-colors group-hover:bg-surface-1"
-                >
-                  <div className="flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-widest text-text-disabled">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Newspaper className="h-3 w-3 text-line-cta" aria-hidden="true" />
-                      {post.category}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5">
-                      <Clock className="h-3 w-3 text-line-cta" aria-hidden="true" />
-                      {post.readingTime}
-                    </span>
-                  </div>
-                  <h3 className="font-square text-[20px] font-semibold leading-[1.15] text-text-primary">
-                    {post.title}
-                  </h3>
-                  <Text size="s" className="text-left text-text-tertiary">
-                    {post.description}
-                  </Text>
-                  <span className="mt-auto inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-text-secondary opacity-0 transition-opacity group-hover:opacity-100">
-                    Read
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                  </span>
-                </CornerBox>
-              </Link>
-            ))}
-          </div>
-        </HomeSection>
-
         {/* ── Why pm? FAQ ────────────────────────────────────────────── */}
         <HomeSection id="why" pattern="p013" className="pt-[120px]">
           <div className="flex flex-col gap-4 mb-8">
@@ -378,7 +330,7 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3 justify-center relative">
               <Link
                 href="/docs/quickstart"
-                className="btn-shine inline-flex items-center gap-2 border border-emerald-900 bg-emerald-800 px-5 py-2.5 font-square text-[14px] font-semibold text-white transition-opacity hover:opacity-90"
+                className="btn-shine inline-flex items-center gap-2 border border-emerald-900 bg-emerald-800 px-5 py-2.5 text-[14px] font-medium text-white transition-opacity hover:opacity-90"
               >
                 Read the docs <ArrowRight size={14} />
               </Link>
@@ -386,7 +338,7 @@ export default function HomePage() {
                 href="https://github.com/polymetrics-ai/cli"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-sm border border-line-structure bg-surface-bg px-5 py-2.5 font-square text-[14px] font-semibold text-text-secondary transition-colors hover:bg-surface-1"
+                className="inline-flex items-center gap-2 rounded-sm border border-line-structure bg-surface-bg px-5 py-2.5 text-[14px] font-medium text-text-secondary transition-colors hover:bg-surface-1"
               >
                 <Github size={14} /> Star on GitHub
               </a>

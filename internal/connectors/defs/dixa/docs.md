@@ -1,20 +1,60 @@
 # Overview
 
-Dixa is a Tier-2 quarantine migration of `internal/connectors/dixa`. The bundle mirrors the legacy catalog stream names, primary keys, cursor fields, and field list; the runtime read/check behavior is owned by `internal/connectors/hooks/dixa` during the pre-cutover period.
+Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa
+conversation_export API.
+
+Readable streams: `conversations`, `conversation_queue`, `conversation_rating`,
+`conversation_assignment`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.dixa.io/openapi/.
 
 ## Auth setup
 
-Use the same configuration and secret names accepted by the legacy `dixa` connector. Secret-shaped fields are marked with `x-secret` in `spec.json`; the hook delegates to the legacy connector so credential handling remains unchanged and secret values are never logged by the bundle.
+Connection fields:
+
+- `api_token` (required, secret, string); Dixa API token.
+- `base_url` (optional, string).
+- `batch_size` (optional, string); Number of days to batch into one request. Max 31.
+- `mode` (optional, string).
+- `start_date` (required, string); The connector pulls records updated from this date onwards.
+
+Secret fields are redacted in logs and write previews: `api_token`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks use a connector-managed request.
 
 ## Streams notes
 
-The declared streams are static shadows used for schema, catalog, and surface validation. The Tier-2 hook handles reads and checks by calling the legacy connector, preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The declarative paths under `/__legacy_hook/` are not live API endpoints.
+Default pagination: single request; no pagination.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `conversations`: GET connector-managed request path - records path `data`; incremental cursor
+  `updated_at`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `conversation_queue`: GET connector-managed request path - records path `data`; incremental cursor
+  `updated_at`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `conversation_rating`: GET connector-managed request path - records path `data`; incremental
+  cursor `updated_at`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `conversation_assignment`: GET connector-managed request path - records path `data`; incremental
+  cursor `updated_at`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
 
 ## Write actions & risks
 
-None. This migration preserves the legacy read-only surface and does not add reverse-ETL actions.
+This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- This is a quarantine bridge: hook code currently depends on `internal/connectors/dixa` staying present until the wave 6 cutover replaces or absorbs the delegated behavior.
-- Dynamic conformance replay is skipped because the declarative shadow path does not model the connector-specific auth, request body, pagination, or record explosion that caused quarantine; hook unit tests and legacy connector tests are the behavioral proof for this bridge.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Client-side incremental filtering is used for: `conversations`, `conversation_queue`,
+  `conversation_rating`, `conversation_assignment`.

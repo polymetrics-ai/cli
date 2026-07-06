@@ -52,7 +52,7 @@
       "schema": "schemas/users.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination the declarative next_url_path dotted-path parser cannot address -- see docs.md's Streams notes); hook-covered, proven live by internal/connectors/paritytest/microsoft-teams (TestParityMicrosoftTeams_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-teams/hooks_test.go."
+        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination the declarative next_url_path dotted-path parser cannot address -- see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for microsoft-teams (TestParityMicrosoftTeams_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-teams/hooks_test.go."
       }
     },
     {
@@ -64,7 +64,7 @@
       "schema": "schemas/groups.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination the declarative next_url_path dotted-path parser cannot address -- see docs.md's Streams notes); hook-covered, proven live by internal/connectors/paritytest/microsoft-teams (TestParityMicrosoftTeams_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-teams/hooks_test.go."
+        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination the declarative next_url_path dotted-path parser cannot address -- see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for microsoft-teams (TestParityMicrosoftTeams_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-teams/hooks_test.go."
       }
     },
     {
@@ -76,7 +76,7 @@
       "schema": "schemas/channels.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination the declarative next_url_path dotted-path parser cannot address -- see docs.md's Streams notes); hook-covered, proven live by internal/connectors/paritytest/microsoft-teams (TestParityMicrosoftTeams_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-teams/hooks_test.go."
+        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination the declarative next_url_path dotted-path parser cannot address -- see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for microsoft-teams (TestParityMicrosoftTeams_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-teams/hooks_test.go."
       }
     },
     {
@@ -92,7 +92,7 @@
       "schema": "schemas/team_device_usage_report.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination the declarative next_url_path dotted-path parser cannot address -- see docs.md's Streams notes); hook-covered, proven live by internal/connectors/paritytest/microsoft-teams (TestParityMicrosoftTeams_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-teams/hooks_test.go."
+        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination the declarative next_url_path dotted-path parser cannot address -- see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for microsoft-teams (TestParityMicrosoftTeams_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-teams/hooks_test.go."
       }
     }
   ]

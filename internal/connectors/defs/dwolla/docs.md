@@ -1,145 +1,151 @@
 # Overview
 
-Dwolla is a payments platform exposing a HAL+JSON REST API. This bundle reads Dwolla customers,
-events, exchange partners, and business classifications, and writes customer/funding-source/
-transfer/webhook-subscription/beneficial-owner lifecycle mutations, through `https://api.dwolla.com`
-using OAuth2 client-credentials auth. It was originally migrated from `internal/connectors/dwolla`
-(the hand-written connector this bundle replaces at capability parity; the legacy package stays
-registered and unchanged until wave6's registry flip) and was expanded in Pass B to the full
-documented JSON-body API surface (researched against developers.dwolla.com and the official Go/
-Kotlin SDKs' request/response structs, since legacy itself shipped zero writes to migrate).
+Reads Dwolla customers, events, exchange partners, and business classifications, and writes
+customer/funding-source/transfer/webhook-subscription/beneficial-owner lifecycle mutations, via the
+Dwolla HAL+JSON REST API using OAuth2 client-credentials.
+
+Readable streams: `customers`, `events`, `exchange_partners`, `business_classifications`.
+
+Write actions: `create_customer`, `update_customer`, `create_funding_source`,
+`update_funding_source`, `remove_funding_source`, `initiate_micro_deposits`,
+`verify_micro_deposits`, `cancel_transfer`, `create_webhook_subscription`,
+`update_webhook_subscription`, `delete_webhook_subscription`, `create_beneficial_owner`,
+`update_beneficial_owner`, `remove_beneficial_owner`, `certify_beneficial_ownership`.
+
+Service API documentation: https://developers.dwolla.com/api-reference.
 
 ## Auth setup
 
-Provide `client_id` and `client_secret` secrets; the engine's declarative
-`oauth2_client_credentials` auth mode mints and caches a Bearer token via the OAuth2
-client-credentials grant against `{{ config.base_url }}/token` (Dwolla hosts the token endpoint at
-`/token` on the same host as the API, matching legacy's `dwollaTokenURL` derivation), refreshing
-automatically before expiry — matching legacy's `connsdk.OAuth2ClientCredentials`. Both secrets
-flow only into the token exchange and are never logged. Every request also sends
-`Accept: application/vnd.dwolla.v1.hal+json` (Dwolla's HAL media type, matching legacy's
-`dwollaHALAccept`).
+Connection fields:
 
-Set `base_url` to `https://api-sandbox.dwolla.com` for Dwolla's sandbox environment, or leave unset
-for production (`https://api.dwolla.com`, the default). See Known limits for the narrowed
-`environment` config surface.
+- `base_url` (optional, string); default `https://api.dwolla.com`; format `uri`; Dwolla API base URL
+  override; defaults to production. Set to https://api-sandbox.dwolla.com for sandbox, or a test
+  proxy URL.
+- `client_id` (required, secret, string); Dwolla OAuth2 client-credentials client ID. Used only for
+  the token exchange; never logged.
+- `client_secret` (required, secret, string); Dwolla OAuth2 client-credentials client secret. Used
+  only for the token exchange; never logged.
+
+Secret fields are redacted in logs and write previews: `client_id`, `client_secret`.
+
+Default configuration values: `base_url=https://api.dwolla.com`.
+
+Authentication behavior:
+
+- OAuth 2.0 client credentials authentication using `config.base_url`, `secrets.client_id`,
+  `secrets.client_secret`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/customers`.
 
 ## Streams notes
 
-Four top-level list streams, all sharing Dwolla's HAL pagination shape: records live under
-`_embedded.<key>` and the next page is an absolute URL at `_links.next.href`
-(`pagination.type: next_url`, `next_url_path: "_links.next.href"`), matching legacy's `harvest`
-loop exactly. The initial request for every stream sends `limit=25` (legacy's
-`dwollaDefaultPageSize`).
+Default pagination: follows a next-page URL from the response body; URL path `_links.next.href`;
+next URLs stay on the configured API host.
 
-- `customers` (`GET /customers`, records at `_embedded.customers`).
-- `events` (`GET /events`, records at `_embedded.events`).
-- `exchange_partners` (`GET /exchange-partners`, records at `_embedded.exchange-partners` — the
-  HAL embed key uses a hyphen, matching legacy's `embedKey: "exchange-partners"`; dotted-path
-  extraction splits only on `.`, so the hyphenated segment is unaffected).
-- `business_classifications` (`GET /business-classifications`, records at
-  `_embedded.business-classifications`; reference data with no `created` timestamp, matching
-  legacy's own catalog which omits `CursorFields` for this stream).
-
-Every other stream's primary key is `["id"]` and incremental cursor field is `created`, matching
-legacy's uniform catalog — but no stream declares an `incremental` block: Dwolla's list endpoints
-accept no server-side `updated_since`-style filter parameter, matching legacy's own `InitialState`
-(always an empty cursor; `start_date` config accepted by legacy's own comment but never actually
-consumed as a request filter either).
+- `customers`: GET `/customers` - records path `_embedded.customers`; query `limit`=`25`; follows a
+  next-page URL from the response body; URL path `_links.next.href`; next URLs stay on the
+  configured API host.
+- `events`: GET `/events` - records path `_embedded.events`; query `limit`=`25`; follows a next-page
+  URL from the response body; URL path `_links.next.href`; next URLs stay on the configured API
+  host.
+- `exchange_partners`: GET `/exchange-partners` - records path `_embedded.exchange-partners`; query
+  `limit`=`25`; follows a next-page URL from the response body; URL path `_links.next.href`; next
+  URLs stay on the configured API host.
+- `business_classifications`: GET `/business-classifications` - records path
+  `_embedded.business-classifications`; query `limit`=`25`; follows a next-page URL from the
+  response body; URL path `_links.next.href`; next URLs stay on the configured API host.
 
 ## Write actions & risks
 
-`capabilities.write: true` as of Pass B. Legacy was entirely read-only ("Dwolla is an upstream
-source with no reverse-ETL surface"), but the full documented API also exposes a substantial
-JSON-body-only lifecycle-mutation surface that does not require any file upload. Real money
-movement (`POST /transfers`, `POST /mass-payments`) is deliberately **excluded**, not migrated —
-see Known limits. 15 actions:
+Overall write risk: external mutation of Dwolla customers, funding sources, transfers (cancel only,
+never create/send), webhook subscriptions, and beneficial owners; several actions are
+destructive/not reversible (remove_funding_source, cancel_transfer, delete_webhook_subscription,
+remove_beneficial_owner) and beneficial-owner actions carry SSN/PII; approval required.
 
-- `create_customer` / `update_customer` (`POST /customers`, `POST /customers/{id}`) — creates or
-  updates a personal/business/receive-only/unverified customer; Dwolla's own identity-verification
-  rules apply per `type`. `update_customer` can also deactivate/reactivate a customer via `status`.
-- `create_funding_source` (`POST /customers/{id}/funding-sources`) — attaches a bank-account
-  funding source, either unverified (`routingNumber`/`accountNumber`, needing later micro-deposit
-  verification) or pre-verified (`plaidToken`/`onDemandAuthorizationId`).
-- `update_funding_source` (`POST /funding-sources/{id}`) — renames it or replaces its unverified
-  routing/account numbers.
-- `remove_funding_source` (`POST /funding-sources/{id}` with `{"removed": true}`,
-  `confirm: destructive`) — Dwolla has no hard delete for funding sources; this soft-removes it so
-  it can no longer send/receive transfers. **Not reversible.**
-- `initiate_micro_deposits` / `verify_micro_deposits` (`POST /funding-sources/{id}/
-  {initiate,verify}-micro-deposits`) — the two-step micro-deposit bank-account verification flow;
-  Dwolla locks the funding source after repeated failed verify attempts.
-- `cancel_transfer` (`POST /transfers/{id}` with `{"status": "cancelled"}`,
-  `confirm: destructive`) — cancels a still-**pending** transfer before it clears; only succeeds
-  while pending, and is **not reversible**. Distinct from initiating a transfer, which remains
-  excluded.
-- `create_webhook_subscription` / `update_webhook_subscription` / `delete_webhook_subscription`
-  (`POST /webhook-subscriptions`, `POST /webhook-subscriptions/{id}` with `{"paused": bool}`,
-  `DELETE /webhook-subscriptions/{id}`) — registers, pauses/resumes, or permanently deletes
-  (`confirm: destructive`, **not reversible**) a webhook subscription. Dwolla caps active
-  subscriptions at 10 (Sandbox) / 5 (Production).
-- `create_beneficial_owner` / `update_beneficial_owner` / `remove_beneficial_owner`
-  (`POST /customers/{id}/beneficial-owners`, `POST /beneficial-owners/{id}`,
-  `DELETE /beneficial-owners/{id}`) — manages a business-verified customer's 25%+ equity holders;
-  create/update carry SSN/date-of-birth/address PII submitted to Dwolla for identity verification.
-  `remove_beneficial_owner` is `confirm: destructive` and **not reversible**.
-- `certify_beneficial_ownership` (`POST /customers/{id}/beneficial-ownership` with
-  `{"status": "certified"}`) — the Account Admin's attestation that all beneficial-owner
-  information is accurate; required before a business customer can transact.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Every action's `record_schema` requires only fields the real Dwolla API itself requires (verified
-against `github.com/kolanos/dwolla-v2-go`'s request structs and developers.dwolla.com); path-only
-`initiate_micro_deposits`/`delete_webhook_subscription`/`remove_beneficial_owner` use `body_type`
-`"none"` since Dwolla accepts no body for these, and `remove_funding_source`/`cancel_transfer`/
-`update_webhook_subscription`/`certify_beneficial_ownership` use `body_fields` to send only the
-fixed status-transition field Dwolla expects, not an arbitrary record dump.
+- `create_customer`: POST `/customers` - kind `create`; body type `json`; required record fields
+  `firstName`, `lastName`, `email`; accepted fields `address1`, `address2`,
+  `businessClassification`, `businessName`, `businessType`, `city`, `correlationId`, `dateOfBirth`,
+  `doingBusinessAs`, `ein`, `email`, `firstName`, `ipAddress`, `lastName`, `phone`, `postalCode`,
+  `ssn`, `state`, and 2 more; risk: external mutation; creates a new Dwolla customer (personal,
+  business, receive-only, or unverified), subject to Dwolla's identity-verification rules for the
+  requested type.
+- `update_customer`: POST `/customers/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`; accepted fields `address1`, `address2`, `businessName`,
+  `city`, `doingBusinessAs`, `email`, `firstName`, `id`, `ipAddress`, `lastName`, `phone`,
+  `postalCode`, `state`, `status`, `website`; risk: external mutation; updates a customer's profile
+  fields, or its status (e.g. deactivating/reactivating the customer, which blocks/restores its
+  ability to transact).
+- `create_funding_source`: POST `/customers/{{ record.customer_id }}/funding-sources` - kind
+  `create`; body type `json`; path fields `customer_id`; required record fields `customer_id`,
+  `name`; accepted fields `accountNumber`, `bankAccountType`, `customer_id`, `name`,
+  `onDemandAuthorizationId`, `plaidToken`, `routingNumber`; risk: external mutation; attaches a new
+  bank-account funding source to a customer, either as unverified (routingNumber/accountNumber,
+  requiring later micro-deposit verification) or pre-verified via an open-banking
+  plaidToken/onDemandAuthorizationId.
+- `update_funding_source`: POST `/funding-sources/{{ record.id }}` - kind `update`; body type
+  `json`; path fields `id`; required record fields `id`; accepted fields `accountNumber`,
+  `bankAccountType`, `id`, `name`, `routingNumber`; risk: external mutation; renames a funding
+  source or replaces its unverified bank-account routing/account numbers.
+- `remove_funding_source`: POST `/funding-sources/{{ record.id }}` - kind `delete`; body type
+  `json`; path fields `id`; body fields `removed`; required record fields `id`, `removed`; accepted
+  fields `id`, `removed`; confirmation `destructive`; risk: destructive external mutation; Dwolla
+  has no hard-delete for funding sources, this soft-removes it (POST {removed:true}) so it can no
+  longer send/receive transfers; not reversible via the API.
+- `initiate_micro_deposits`: POST `/funding-sources/{{ record.id }}/initiate-micro-deposits` - kind
+  `custom`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  risk: external mutation; sends two small trial-deposit ACH transactions to an unverified
+  bank-account funding source, the first step of micro-deposit verification.
+- `verify_micro_deposits`: POST `/funding-sources/{{ record.id }}/verify-micro-deposits` - kind
+  `custom`; body type `json`; path fields `id`; body fields `amount1`, `amount2`; required record
+  fields `id`, `amount1`, `amount2`; accepted fields `amount1`, `amount2`, `id`; risk: external
+  mutation; verifies a funding source's micro-deposit amounts, completing bank-account verification;
+  Dwolla locks the funding source after repeated failed attempts.
+- `cancel_transfer`: POST `/transfers/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; body fields `status`; required record fields `id`, `status`; accepted fields `id`,
+  `status`; confirmation `destructive`; risk: external mutation; cancels a still-pending transfer
+  before it clears, this action is not reversible and only succeeds while the transfer's status is
+  pending.
+- `create_webhook_subscription`: POST `/webhook-subscriptions` - kind `create`; body type `json`;
+  required record fields `url`, `secret`; accepted fields `secret`, `url`; risk: external mutation;
+  registers a new webhook subscription; Dwolla enforces a maximum of 10 active subscriptions in
+  Sandbox and 5 in Production.
+- `update_webhook_subscription`: POST `/webhook-subscriptions/{{ record.id }}` - kind `update`; body
+  type `json`; path fields `id`; body fields `paused`; required record fields `id`, `paused`;
+  accepted fields `id`, `paused`; risk: external mutation; pauses or resumes webhook delivery for a
+  subscription (Dwolla still generates the events while paused, it just withholds delivery).
+- `delete_webhook_subscription`: DELETE `/webhook-subscriptions/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  confirmation `destructive`; risk: destructive external mutation; permanently deletes a webhook
+  subscription and stops all future event delivery to it; not reversible.
+- `create_beneficial_owner`: POST `/customers/{{ record.customer_id }}/beneficial-owners` - kind
+  `create`; body type `json`; path fields `customer_id`; required record fields `customer_id`,
+  `firstName`, `lastName`, `dateOfBirth`, `ssn`, `address`; accepted fields `address`,
+  `customer_id`, `dateOfBirth`, `firstName`, `lastName`, `ssn`; risk: external mutation; registers a
+  beneficial owner (25%+ equity holder) for a business verified customer; submits sensitive PII
+  (SSN, date of birth, address) to Dwolla for identity verification.
+- `update_beneficial_owner`: POST `/beneficial-owners/{{ record.id }}` - kind `update`; body type
+  `json`; path fields `id`; required record fields `id`; accepted fields `address`, `dateOfBirth`,
+  `firstName`, `id`, `lastName`, `ssn`; risk: external mutation; updates a beneficial owner's
+  identity/PII fields, which resets its verification status pending re-review.
+- `remove_beneficial_owner`: DELETE `/beneficial-owners/{{ record.id }}` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; confirmation
+  `destructive`; risk: destructive external mutation; permanently removes a beneficial owner from a
+  business verified customer; not reversible and may affect the customer's beneficial-ownership
+  certification status.
+- `certify_beneficial_ownership`: POST `/customers/{{ record.customer_id }}/beneficial-ownership` -
+  kind `custom`; body type `json`; path fields `customer_id`; body fields `status`; required record
+  fields `customer_id`, `status`; accepted fields `customer_id`, `status`; risk: external mutation;
+  the Account Admin attests that a business customer's beneficial-owner information is accurate and
+  complete, which is required before the customer can transact.
 
 ## Known limits
 
-- **Real money movement is out of scope, deliberately, not a gap**: `POST /transfers` (initiate a
-  transfer) and `POST /mass-payments` (initiate up to 5,000 transfers in one batch) are excluded as
-  `destructive_admin` — see `api_surface.json`. `cancel_transfer` is covered because cancelling a
-  still-pending transfer prevents money from moving, the opposite risk profile.
-- **Multipart/file-upload endpoints are out of scope** — the engine's write dialect supports only
-  `json`/`form`(url-encoded)/`none` body types, never `multipart/form-data`. Identity-verification
-  document upload (`POST /customers/{id}/documents`, `POST /beneficial-owners/{id}/documents`)
-  requires an actual file payload and cannot be expressed.
-- The **Dwolla Balance-tier Labels feature** (`/customers/{id}/labels`, a fund-reservation ledger)
-  is a distinct, plan-gated sub-product legacy never touched; excluded as `requires_elevated_scope`.
-- On-demand-authorizations, IAV tokens, funding-source tokens, and KBA question/answer sessions are
-  all short-lived session credentials or identity-verification-flow steps tightly coupled to a
-  specific customer-onboarding sequence, not independent syncable records or mutations; excluded as
-  `non_data_endpoint`.
-- **Dynamic (fixture-replay) conformance checks are marked `skip_dynamic` at the bundle level**
-  (`metadata.json`'s `conformance` block), covering both reads and the Pass B write actions.
-  `oauth2_client_credentials` auth's `token_url` is derived from `{{ config.base_url }}/token`;
-  conformance's `withReplayURL` only overrides `b.HTTP.URL` (the base request URL used for
-  stream/check/write paths), never `RuntimeConfig.Config["base_url"]` itself, so the `token_url`
-  template still resolves to the synthetic non-secret value
-  (`"synthetic-conformance-value/token"`), an unreachable non-URL — the OAuth token exchange fails
-  before any declarative stream/check/write request is ever issued, so every auth-resolving dynamic
-  check (including `write_request_shape`/`delete_semantics`) would otherwise fail identically and
-  uninformatively. Static checks (spec/schema validity, `interpolations_resolve`, docs/fixtures
-  presence, secret redaction, `surface_complete`, `write_schemas_valid`) still run and pass. This
-  bundle has no Tier-2 `AuthHook` (auth is fully declarative `oauth2_client_credentials`), so there
-  is no `paritytest/dwolla` package for this wave; the read/pagination/schema-projection shape and
-  every Pass B write action's method/path/body construction are proven by structural review against
-  the real Dwolla API (`github.com/kolanos/dwolla-v2-go`'s request/response structs,
-  developers.dwolla.com) instead of a legacy Go write path to compare against (legacy shipped zero
-  writes). Matches `clazar`'s and `sendpulse`'s identical documented precedent for the read side,
-  and `gmail`'s precedent for combining a bundle-level skip marker with a non-empty `writes.json`.
-- Legacy accepted an `environment` config value (`api`/`api-sandbox`) as an alternative to an
-  explicit `base_url` override, deriving the production/sandbox host from it. The engine's
-  `spec.json` `"default"` materialization only supports a fixed literal default, not one derived
-  from another config value at read/check time — the same limitation `docs/migration/
-  conventions.md` documents for sentry's `hostname`-derived base URL. This bundle narrows the
-  config surface to `base_url` only (defaulting to production); a caller who needs the sandbox
-  host sets `base_url` to `https://api-sandbox.dwolla.com` directly instead of `environment:
-  api-sandbox`. This narrows accepted CONFIGURATION surface only, never emitted record data.
-- `funding-sources`/`beneficial-owners`/`transfers` per-customer-scoped list READS remain out of
-  scope (they require a per-customer partition the top-level list streams do not need); the
-  corresponding WRITE actions above are still fully covered since a write's target id comes from
-  the caller's own record, not from this connector's own read side. See `api_surface.json`'s
-  `excluded` entries for the complete accounting.
-- `metadata.json` declares no `rate_limit` block: legacy enforces no client-side rate limiting for
-  Dwolla, so none is added here either (matches legacy's real, lack-of, throttling behavior).
+- Batch defaults: read_page_size=25.
+- API coverage includes 4 stream-backed endpoint group(s), 15 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=2, destructive_admin=2, duplicate_of=12, non_data_endpoint=7, out_of_scope=16,
+  requires_elevated_scope=2.

@@ -10,22 +10,42 @@ SYNOPSIS
   pm credentials add <name> --connector appsflyer [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads AppsFlyer raw-data CSV export reports. Read-only.
+  Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through the AppsFlyer Pull API. Read-only.
+
+ICON
+  asset: icons/appsflyer.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://dev.appsflyer.com/hc/reference
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  app_id
+  base_url
+  end_date
+  mode
+  start_date
+  timezone
+  api_token (secret)
+
+ETL STREAMS
+  installs_report:
+    fields: appsflyer_id(), campaign(), event_time(), media_source()
+  in_app_events_report:
+    fields: appsflyer_id(), campaign(), event_time(), media_source()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external AppsFlyer API read of raw installs/in-app-event export reports
+  approval: none; read-only, no writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

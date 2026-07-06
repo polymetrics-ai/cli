@@ -6,16 +6,10 @@ export GOTOOLCHAIN ?= auto
 
 .PHONY: fmt vet tidy-check test build icons-generate docs-check install uninstall smoke verify verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint connectorgen-validate
 
-# Packages covered by `lint`: the new declarative connector-engine tree only
-# (internal/connectors/{engine,defs,hooks,native,conformance,certify}/...,
-# cmd/{connectorgen,inventorygen}/...), not the whole repo. The legacy
-# ~560-connector tree predates this gate and is not yet lint-clean; scoping
-# the invocation keeps the enabled linters at full strength instead of
-# loosening .golangci.yml to accommodate legacy code (see
-# .planning/phases/wave0-engine-harness/traces/waveD-b18-ledger.md). Paths
-# are filtered to existing directories so a not-yet-landed wave (e.g.
-# conformance/) doesn't hard-fail golangci-lint's arg parsing.
-LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify cmd/connectorgen cmd/inventorygen
+# Packages covered by `lint`: the declarative connector architecture packages.
+# Paths are filtered to existing directories so optional local trees do not
+# hard-fail golangci-lint's arg parsing.
+LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify cmd/connectorgen
 LINT_PKGS := $(foreach d,$(LINT_CANDIDATE_DIRS),$(if $(wildcard $(d)),./$(d)/...))
 
 fmt:

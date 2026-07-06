@@ -1,20 +1,55 @@
 # Overview
 
-Feishu / Lark is a Tier-2 quarantine migration of `internal/connectors/feishu`. The bundle mirrors the legacy catalog stream names, primary keys, cursor fields, and field list; the runtime read/check behavior is owned by `internal/connectors/hooks/feishu` during the pre-cutover period.
+Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open Platform REST API
+using a tenant_access_token exchange.
+
+Readable streams: `records`, `tables`, `fields`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation:
+https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-overview.
 
 ## Auth setup
 
-Use the same configuration and secret names accepted by the legacy `feishu` connector. Secret-shaped fields are marked with `x-secret` in `spec.json`; the hook delegates to the legacy connector so credential handling remains unchanged and secret values are never logged by the bundle.
+Connection fields:
+
+- `app_id` (required, secret, string); The unique identifier for your application. Found in the
+  Feishu/Lark Developer Console under "Credentials & Basic Info".
+- `app_secret` (required, secret, string); The secret key used to verify your application's
+  identity. Found alongside the App ID.
+- `app_token` (required, secret, string); The unique identifier of the Bitable (Base). Found in the
+  URL: /base/{app_token}.
+- `base_url` (optional, string).
+- `lark_host` (required, string); Base URL of the Feishu/Lark Open Platform. Use
+  https://open.feishu.cn for Feishu (China mainland) accounts and https://open.larksuite.com for
+  Lark (international) accounts.
+- `mode` (optional, string).
+- `page_size` (optional, string); Number of records per request. Max: 500. Default: 100.
+- `table_id` (required, string); The unique identifier of the table. Found in the URL query
+  parameter table={table_id}.
+
+Secret fields are redacted in logs and write previews: `app_id`, `app_secret`, `app_token`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks use a connector-managed request.
 
 ## Streams notes
 
-The declared streams are static shadows used for schema, catalog, and surface validation. The Tier-2 hook handles reads and checks by calling the legacy connector, preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The declarative paths under `/__legacy_hook/` are not live API endpoints.
+Default pagination: single request; no pagination.
+
+- `records`: GET connector-managed request path - records path `data`.
+- `tables`: GET connector-managed request path - records path `data`.
+- `fields`: GET connector-managed request path - records path `data`.
 
 ## Write actions & risks
 
-None. This migration preserves the legacy read-only surface and does not add reverse-ETL actions.
+This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- This is a quarantine bridge: hook code currently depends on `internal/connectors/feishu` staying present until the wave 6 cutover replaces or absorbs the delegated behavior.
-- Dynamic conformance replay is skipped because the declarative shadow path does not model the connector-specific auth, request body, pagination, or record explosion that caused quarantine; hook unit tests and legacy connector tests are the behavioral proof for this bridge.
+- API coverage includes 3 stream-backed endpoint group(s).

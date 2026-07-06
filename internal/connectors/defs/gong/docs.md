@@ -1,71 +1,70 @@
 # Overview
 
-Gong is a read-only declarative-HTTP connector migrated from `internal/connectors/gong` (the
-hand-written legacy connector, which remains registered and unchanged until wave6's registry
-flip). It reads Gong users, calls, and scorecard definitions through the Gong REST API
-(`https://api.gong.io/v2`).
+Reads Gong users, calls, and scorecards through the Gong REST API (read-only).
+
+Readable streams: `users`, `calls`, `scorecards`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://us-66463.app.gong.io/settings/api/documentation.
 
 ## Auth setup
 
-Provide a Gong-generated access key via the `access_key` secret and its paired access key secret
-via the `access_key_secret` secret. Both flow only into HTTP Basic auth
-(`Authorization: Basic base64(access_key:access_key_secret)`) and are never logged. Gong also
-offers OAuth2, but legacy only implements Basic auth with a generated access key pair, so this
-bundle matches that exact scope.
+Connection fields:
+
+- `access_key` (required, secret, string); Gong generated access key. Used for HTTP Basic auth;
+  never logged.
+- `access_key_secret` (required, secret, string); Gong generated access key secret. Used for HTTP
+  Basic auth; never logged.
+- `base_url` (optional, string); default `https://api.gong.io/v2`; format `uri`; Gong API base URL
+  override for tests or proxies.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-100).
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; only objects
+  created/started at or after this time are read.
+
+Secret fields are redacted in logs and write previews: `access_key`, `access_key_secret`.
+
+Default configuration values: `base_url=https://api.gong.io/v2`, `max_pages=0`, `page_size=100`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.access_key`, `secrets.access_key_secret`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/users` with query `limit`=`1`.
 
 ## Streams notes
 
-- `users` (`GET /users`, records at `users`), `calls` (`GET /calls`, records at `calls`), and
-  `scorecards` (`GET /settings/scorecards`, records at `scorecards`) all share the same Gong
-  cursor-pagination shape: the next-page token is read from the response body at `records.cursor`
-  and sent back as the `cursor` query parameter (`pagination.type: cursor` with
-  `token_path: records.cursor`, no `stop_path` declared). This matches legacy's `harvest` exactly:
-  legacy stops when `records.cursor` is absent or empty, which is precisely the engine's default
-  stop-on-empty-token behavior for the `token_path` cursor variant — Gong's own listing responses
-  omit the `records` envelope entirely on the final page, and a missing/absent path resolves to an
-  empty string via `StringAt`, so no separate `stop_path` boolean is needed.
-- Every stream sends `limit={{ config.page_size }}` (legacy's `gongPageSize`, default 100, capped
-  at Gong's own 100-per-page maximum).
-- All three streams apply Gong's `fromDateTime` lower-bound filter identically to legacy's
-  `incrementalLowerBound`: the filter is populated from the sync's persisted cursor if present,
-  else from the RFC3339 `start_date` config value, and is omitted entirely on a from-scratch sync
-  with no `start_date` set (`incremental.request_param: fromDateTime` + `start_config_key:
-  start_date`, sent only when the lower bound resolves — see `buildInitialQuery` in
-  `internal/connectors/engine/read.go`). Legacy's Catalog metadata inconsistently left `users` and
-  `scorecards` with a nil `CursorFields` despite applying the identical `fromDateTime` filter
-  read-side; this bundle declares `incremental.cursor_field` (`created` for `users`, `started` for
-  `calls`, `updated` for `scorecards`) uniformly across all three so the same request-time filter
-  behavior is available through the standard incremental sync path rather than only being reachable
-  via a manually-injected `start_date`. This only ADDS the `incremental_append` sync-mode
-  capability for `users`/`scorecards` on top of legacy's full-refresh-only catalog entry; it never
-  changes what data is emitted for any read legacy itself would perform (the same `fromDateTime`
-  filter value flows to the same query parameter either way).
-- Field renames snake_case Gong's camelCase wire shape, via `computed_fields`:
-  `email_address`/`first_name`/`last_name`/`phone_number`/`manager_id` (users),
-  `is_private` (calls). The `scorecards` stream is emitted verbatim (legacy `gongScorecardRecord`
-  passes `scorecardId`/`scorecardName`/`workspaceId` through unchanged, and the catalog primary key
-  is `scorecardId`), so it needs no `computed_fields` rename. Every other field name matches the raw
-  API key verbatim and needs no rename.
+Default pagination: cursor pagination; cursor parameter `cursor`; next token from `records.cursor`.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `users`: GET `/users` - records path `users`; query `limit`=`{{ config.page_size }}`; cursor
+  pagination; cursor parameter `cursor`; next token from `records.cursor`; incremental cursor
+  `created`; sent as `fromDateTime`; formatted as `rfc3339`; initial lower bound from `start_date`;
+  computed output fields `email_address`, `first_name`, `last_name`, `manager_id`, `phone_number`.
+- `calls`: GET `/calls` - records path `calls`; query `limit`=`{{ config.page_size }}`; cursor
+  pagination; cursor parameter `cursor`; next token from `records.cursor`; incremental cursor
+  `started`; sent as `fromDateTime`; formatted as `rfc3339`; initial lower bound from `start_date`;
+  computed output fields `is_private`.
+- `scorecards`: GET `/settings/scorecards` - records path `scorecards`; query `limit`=`{{
+  config.page_size }}`; cursor pagination; cursor parameter `cursor`; next token from
+  `records.cursor`; incremental cursor `updated`; sent as `fromDateTime`; formatted as `rfc3339`;
+  initial lower bound from `start_date`.
 
 ## Write actions & risks
 
-None. Gong is a read-only source in both legacy and this bundle (`capabilities.write: false`, no
-`writes.json`).
+This connector is read-only. Read behavior: external Gong API read of call, user, and scorecard
+data.
 
 ## Known limits
 
-- Only the 3 legacy-parity streams (`users`, `calls`, `scorecards`) are implemented; the broader
-  Gong surface (call transcripts, extensive call stats, interaction/activity trackers, workspaces,
-  library folders, webhooks) is out of scope for this wave — see `api_surface.json`'s
-  `api_surface.json` concrete exclusion entries.
-  Gong's transcript and extensive-call-detail endpoints in particular require a
-  request-time list of call IDs (a sub-resource fan-out shape, not a plain list endpoint) and were
-  never implemented by legacy either.
-- `calls`/`scorecards` fixtures ship a single real-wire-shape page (`fixtures/streams/{calls,
-  scorecards}/page_1.json`); the required 2-page pagination-termination fixture lives on `users`
-  (`fixtures/streams/users/{page_1,page_2}.json`), which is sufficient to exercise the shared
-  base-level cursor paginator (`conformance`'s `pagination_terminates` check only needs one
-  eligible stream).
-- No client-side rate limiting is declared (`streams.json`'s `base.rate_limit` is absent) because
-  legacy enforces none either; this bundle intentionally does not introduce new throttling behavior
-  under the guise of migration.
+- Batch defaults: read_page_size=100.
+- API coverage includes 3 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=7.

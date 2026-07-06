@@ -1,124 +1,140 @@
 # Overview
 
-Brevo (formerly Sendinblue) is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to
-the full practical read/write surface. It reads Brevo contacts, email campaigns, contact lists,
-contact segments, senders, sender domains, CRM companies, CRM deals, and webhooks through the
-Brevo REST API v3 (`https://api.brevo.com/v3/...`), and writes contact/list/sender/company/deal/
-webhook lifecycle mutations. This bundle originally migrated `internal/connectors/brevo` (the
-hand-written connector, read-only); the legacy package stays registered and unchanged until
-wave6's registry flip.
+Reads and writes Brevo (formerly Sendinblue) contacts, email campaigns, contact lists, segments,
+senders, sender domains, CRM companies/deals, and webhooks through the Brevo REST API.
+
+Readable streams: `contacts`, `email_campaigns`, `contacts_lists`, `senders`, `senders_domains`,
+`contacts_segments`, `companies`, `crm_deals`, `webhooks`.
+
+Write actions: `create_contact`, `update_contact`, `delete_contact`, `create_contacts_list`,
+`create_sender`, `update_sender`, `delete_sender`, `create_company`, `update_company`,
+`create_deal`, `update_deal`, `create_webhook`, `update_webhook`, `delete_webhook`.
+
+Service API documentation: https://developers.brevo.com/reference.
 
 ## Auth setup
 
-Provide a Brevo API key via the `api_key` secret; it is sent as the `api-key` header
-(`api_key_header` auth mode, matching legacy's `connsdk.APIKeyHeader("api-key", secret, "")`) and
-is never logged. `base_url` defaults to `https://api.brevo.com/v3` and may be overridden for
-tests/proxies.
+Connection fields:
+
+- `api_key` (required, secret, string); Brevo API key. Sent as the api-key header; never logged.
+- `base_url` (optional, string); default `https://api.brevo.com/v3`; format `uri`; Brevo API base
+  URL override for tests or proxies.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-1000) for paginated endpoints.
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; only contacts/campaigns
+  modified at or after this time are read (sent as modifiedSince).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.brevo.com/v3`, `max_pages=0`, `page_size=100`.
+
+Authentication behavior:
+
+- API key authentication in `api-key` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/account`.
 
 ## Streams notes
 
-`contacts` and `email_campaigns` (Brevo's `/emailCampaigns` endpoint; stream renamed to snake_case
-per this repo's naming convention, §2) share the same shape: `GET` list endpoints paginated with Brevo's
-offset/limit convention (`pagination.type: offset_limit`, `limit_param: limit`, `offset_param:
-offset`, `page_size: 100` — matches legacy's `brevoDefaultPageSize`); records live at `contacts`/
-`campaigns` respectively (legacy's `recordsPath`). Both support Brevo's `modifiedSince` incremental
-filter (`incremental.request_param: modifiedSince`, `param_format: rfc3339` — sent verbatim as the
-persisted cursor or, on a fresh sync, the RFC3339 `start_date` config value, identical to legacy's
-`incrementalLowerBound`). `contacts_lists` (`GET /contacts/lists`, records at `lists`) is also
-offset/limit paginated but has no incremental filter, matching legacy (`supportsModifiedSince:
-false`). `senders` (`GET /senders`, records at `senders`) is a single-request, non-paginated
-endpoint (legacy's `paginated: false`) — no `pagination` block is declared for it, matching the
-engine's `none` default.
+Default pagination: single request; no pagination.
 
-**Pass B additions.** `senders_domains` (`GET /senders/domains`, records at `domains`) is
-single-request, non-paginated, no incremental filter. `contacts_segments` (`GET
-/contacts/segments`, records at `segments`) is offset/limit paginated like `contacts_lists`, no
-incremental filter (Brevo's segments endpoint has no `modifiedSince`-equivalent). `webhooks` (`GET
-/webhooks`, records at `webhooks`) is single-request, non-paginated; its schema declares
-`x-cursor-field: modifiedAt` (a genuinely sortable field present on every record) but the stream
-itself has no `incremental` block since Brevo's `/webhooks` GET accepts no server-side
-modified-since filter (§8 rule 2: no server-side filter → no `incremental` block, keep
-`x-cursor-field` in the schema only). `companies` (`GET /companies`, records at `items`) is
-Brevo's one `page`-numbered (not offset/limit) list endpoint in this bundle
-(`pagination.type: page_number`, `page_param: page`, `size_param: limit`, `start_page: 1`) and
-supports `modifiedSince`; its cursor value lives at the nested `attributes.last_updated_at` path,
-which the engine's `incremental.cursor_field`/`x-cursor-field` machinery requires to be a
-TOP-LEVEL schema property (flat `raw[cursorField]` map lookup, both
-`conformance`'s `checkCursorAdvances` and the client-filtered read path) — a `computed_fields`
-entry (`"last_updated_at": "{{ record.attributes.last_updated_at }}"`) lifts it to a top-level
-field via typed bare-reference extraction before projection, exactly matching the "cursor field
-must be a top-level schema property" convention. `crm_deals` (`GET /crm/deals`, records at
-`items`) is offset/limit paginated and supports `modifiedSince`; its cursor value similarly lives
-at the nested `attributes.last_updated_date` path and is lifted the same way
-(`computed_fields.last_updated_date`).
+Pagination by stream: none: `senders`, `senders_domains`, `webhooks`; offset_limit: `contacts`,
+`email_campaigns`, `contacts_lists`, `contacts_segments`, `crm_deals`; page_number: `companies`.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `contacts`: GET `/contacts` - records path `contacts`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100; incremental cursor `modifiedAt`; sent as
+  `modifiedSince`; formatted as `rfc3339`; initial lower bound from `start_date`.
+- `email_campaigns`: GET `/emailCampaigns` - records path `campaigns`; offset/limit pagination;
+  offset parameter `offset`; limit parameter `limit`; page size 100; incremental cursor
+  `modifiedAt`; sent as `modifiedSince`; formatted as `rfc3339`; initial lower bound from
+  `start_date`.
+- `contacts_lists`: GET `/contacts/lists` - records path `lists`; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 100.
+- `senders`: GET `/senders` - records path `senders`.
+- `senders_domains`: GET `/senders/domains` - records path `domains`.
+- `contacts_segments`: GET `/contacts/segments` - records path `segments`; offset/limit pagination;
+  offset parameter `offset`; limit parameter `limit`; page size 100.
+- `companies`: GET `/companies` - records path `items`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 100; incremental cursor `last_updated_at`;
+  sent as `modifiedSince`; formatted as `rfc3339`; initial lower bound from `start_date`; computed
+  output fields `last_updated_at`.
+- `crm_deals`: GET `/crm/deals` - records path `items`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100; incremental cursor `last_updated_date`; sent as
+  `modifiedSince`; formatted as `rfc3339`; initial lower bound from `start_date`; computed output
+  fields `last_updated_date`.
+- `webhooks`: GET `/webhooks` - records path `webhooks`.
 
 ## Write actions & risks
 
-Fourteen write actions, none present in legacy (legacy shipped `capabilities.write: false`):
+Overall write risk: external mutation of contacts, contact lists, senders, CRM companies/deals, and
+webhooks; webhook writes register live event delivery to a caller-chosen URL.
 
-- **`create_contact`** / **`update_contact`** / **`delete_contact`** — contact lifecycle.
-  `update_contact` mutates attributes, list membership (`listIds`/`unlinkListIds`), or blacklist
-  status — changing `emailBlacklisted`/`smsBlacklisted` affects real send eligibility immediately.
-  `delete_contact` is irreversible (removes engagement history too); `delete.missing_ok_status:
-  [404]` treats an already-absent contact as a successful idempotent delete.
-- **`create_contacts_list`** — creates a new list under an existing folder (no update/delete
-  endpoint exists in the API for lists; see `api_surface.json`'s `duplicate_of`/`destructive_admin`
-  entries for why those are excluded rather than modeled).
-- **`create_sender`** / **`update_sender`** / **`delete_sender`** — sender identity lifecycle.
-  `create_sender` triggers a real verification email to the target address; `update_sender`
-  affects every campaign that references the sender going forward; `delete_sender` is irreversible.
-- **`create_company`** / **`update_company`** — CRM company lifecycle (no delete write modeled;
-  `DELETE /companies/{id}` is `requires_elevated_scope`-excluded pending admin-role review, per
-  `api_surface.json`).
-- **`create_deal`** / **`update_deal`** — CRM deal lifecycle (same delete-exclusion reasoning as
-  companies).
-- **`create_webhook`** / **`update_webhook`** / **`delete_webhook`** — webhook subscription
-  lifecycle. Creating or updating a webhook's `url`/`events` registers/redirects live event
-  delivery (opens/clicks/bounces/unsubscribes/list-additions) to an external endpoint of the
-  caller's choosing — review the target before enabling, per `metadata.json`'s `risk.write`.
-  `delete_webhook` is irreversible; `delete.missing_ok_status: [404]` treats an already-absent
-  webhook as a successful idempotent delete.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Every action's per-record `risk` string in `writes.json` is the authoritative, reviewable summary;
-`metadata.json`'s `risk.write`/`risk.approval` roll these up for the connector as a whole.
+- `create_contact`: POST `/contacts` - kind `create`; body type `json`; accepted fields
+  `attributes`, `email`, `emailBlacklisted`, `ext_id`, `listIds`, `smsBlacklisted`, `updateEnabled`;
+  risk: creates a new marketing contact; low-risk external mutation, no approval required.
+- `update_contact`: PUT `/contacts/{{ record.identifier }}` - kind `update`; body type `json`; path
+  fields `identifier`; required record fields `identifier`; accepted fields `attributes`,
+  `emailBlacklisted`, `ext_id`, `identifier`, `listIds`, `smsBlacklisted`, `unlinkListIds`; risk:
+  mutates an existing contact's attributes, list membership, or blacklist status; changing
+  emailBlacklisted/smsBlacklisted affects real send eligibility.
+- `delete_contact`: DELETE `/contacts/{{ record.identifier }}` - kind `delete`; body type `none`;
+  path fields `identifier`; required record fields `identifier`; accepted fields `identifier`;
+  missing records treated as success for status `404`; risk: permanently removes a contact and its
+  engagement history; irreversible.
+- `create_contacts_list`: POST `/contacts/lists` - kind `create`; body type `json`; required record
+  fields `name`, `folderId`; accepted fields `folderId`, `name`; risk: creates a new contact list
+  under an existing folder; low-risk external mutation, no approval required.
+- `create_sender`: POST `/senders` - kind `create`; body type `json`; required record fields `name`,
+  `email`; accepted fields `email`, `ips`, `name`; risk: registers a new verified-sending identity;
+  Brevo emails a verification link to the address before it can send.
+- `update_sender`: PUT `/senders/{{ record.senderId }}` - kind `update`; body type `json`; path
+  fields `senderId`; required record fields `senderId`; accepted fields `email`, `ips`, `name`,
+  `senderId`; risk: mutates an existing sender's from-name, email, or dedicated-IP pool; affects all
+  campaigns using this sender going forward.
+- `delete_sender`: DELETE `/senders/{{ record.senderId }}` - kind `delete`; body type `none`; path
+  fields `senderId`; required record fields `senderId`; accepted fields `senderId`; missing records
+  treated as success for status `404`; risk: permanently removes a sending identity; any scheduled
+  campaign still referencing it will fail to send.
+- `create_company`: POST `/companies` - kind `create`; body type `json`; required record fields
+  `name`; accepted fields `attributes`, `countryCode`, `linkedContactsIds`, `linkedDealsIds`,
+  `name`; risk: creates a new CRM company record; low-risk external mutation, no approval required.
+- `update_company`: PATCH `/companies/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`; accepted fields `attributes`, `countryCode`, `id`,
+  `linkedContactsIds`, `linkedDealsIds`, `name`; risk: mutates an existing CRM company's name,
+  attributes, or linked contact/deal set.
+- `create_deal`: POST `/crm/deals` - kind `create`; body type `json`; required record fields `name`;
+  accepted fields `attributes`, `linkedCompaniesIds`, `linkedContactsIds`, `name`; risk: creates a
+  new CRM deal record; low-risk external mutation, no approval required.
+- `update_deal`: PATCH `/crm/deals/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `attributes`, `id`, `linkedCompaniesIds`,
+  `linkedContactsIds`; risk: mutates an existing CRM deal's stage, amount, or linked contact/company
+  set.
+- `create_webhook`: POST `/webhooks` - kind `create`; body type `json`; required record fields
+  `url`, `events`; accepted fields `description`, `events`, `type`, `url`; risk: registers live
+  event delivery (opens/clicks/bounces/unsubscribes) to an external endpoint of the caller's
+  choosing; review the target before enabling, per metadata.json risk.write.
+- `update_webhook`: PUT `/webhooks/{{ record.webhookId }}` - kind `update`; body type `json`; path
+  fields `webhookId`; required record fields `webhookId`; accepted fields `description`, `events`,
+  `url`, `webhookId`; risk: re-points an already-registered webhook's delivery URL or event set;
+  redirects live event delivery immediately.
+- `delete_webhook`: DELETE `/webhooks/{{ record.webhookId }}` - kind `delete`; body type `none`;
+  path fields `webhookId`; required record fields `webhookId`; accepted fields `webhookId`; missing
+  records treated as success for status `404`; risk: permanently removes a webhook subscription;
+  irreversible.
 
 ## Known limits
 
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes `page_size` (1-1000,
-  default 100) and `max_pages` (0/all/unlimited or a positive integer) as config-driven overrides
-  read fresh on every `Read` call (`brevoPageSize`/`brevoMaxPages`). The engine's `offset_limit`
-  paginator reads its page size only from `pagination.page_size` (a fixed literal baked into
-  `streams.json`, sourced once at bundle-load time), with no `config.*`-templated override
-  mechanism — matching the exact limitation documented in this repo's `bitly` bundle for its
-  `next_url` paginator. This bundle declares `page_size: 100` to match legacy's real default
-  exactly; a caller cannot raise or lower it at read time as legacy allowed. `spec.json` still
-  declares `page_size`/`max_pages` for documentation continuity with legacy's config surface, but
-  neither is wired into any template (F6-adjacent: these are the same "legacy had this knob, the
-  engine's chosen pagination type cannot express it" shape as bitly's `page_size`, not silently
-  dropped dead config).
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
-  when `config.mode == "fixture"`, a credential-free conformance-harness affordance) stamps a
-  `previous_cursor` field onto fixture-mode records when a prior cursor is set. This bundle's
-  schemas and parity target the live wire shape only; the engine's own conformance/fixture-replay
-  harness supersedes legacy's in-code fixture-mode path.
-- The `contacts` stream's 2-page conformance fixture (`fixtures/streams/contacts/{page_1,
-  page_2}.json`) uses a full 100-record page 1 (matching the real `page_size: 100`) followed by a
-  1-record short page 2, so pagination truly terminates on Brevo's own short-page signal rather than
-  an artificially-lowered page size — this keeps the fixture's wire shape identical to a real
-  production page count instead of trading fixture verbosity for behavioral accuracy. The
-  Pass B `contacts_segments`/`companies`/`crm_deals` 2-page fixtures follow the identical
-  full-page/short-page pattern.
-- **No write action deletes a CRM company or deal.** `DELETE /companies/{id}` and
-  `DELETE /crm/deals/{id}` both exist in Brevo's API but are excluded (`api_surface.json`,
-  `requires_elevated_scope`) rather than modeled as `delete_company`/`delete_deal` write actions —
-  irreversible CRM-record deletion is gated behind the CRM admin/owner role in Brevo's own
-  permission model, and this pass draws the write-surface line at create/update for CRM objects
-  pending a dedicated elevated-scope review. Contact, sender, and webhook deletes ARE modeled
-  (`delete_contact`/`delete_sender`/`delete_webhook`) since those are ordinary account-level
-  mutations with no equivalent elevated-role gate in Brevo's docs.
-- **No write action creates a webhook filtered by `channel`/scoped update beyond url/description/
-  events.** Brevo's `updateWebhook` body accepts the same field set as `createWebhook` minus
-  `type` (immutable after creation); `update_webhook`'s `record_schema` reflects this — a record
-  attempting to change `type` post-creation is simply ignored by the body-construction rule (not
-  included in the allow-checked field set), matching the API's own immutability, not silently
-  dropped data.
+- Batch defaults: read_page_size=100.
+- API coverage includes 9 stream-backed endpoint group(s), 14 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=4, destructive_admin=8, duplicate_of=21, non_data_endpoint=7, out_of_scope=183,
+  requires_elevated_scope=32.

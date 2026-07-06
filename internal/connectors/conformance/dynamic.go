@@ -17,17 +17,11 @@ import (
 	"path"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
-)
-
-const (
-	maxDynamicReadFixtureChecks    = 1
-	maxDynamicSchemaStreamChecks   = 1
-	maxDynamicWriteFixtureChecks   = 2
-	dynamicCoverageBoundSkipReason = "skipped after representative dynamic coverage bound"
 )
 
 // runDynamicChecks runs every dynamic (fixture-backed replay) check against
@@ -74,8 +68,8 @@ const (
 // behavior is hook-only" to "describe which dynamic behavior (read OR
 // write) is hook-only" — still narrowly a description of what's
 // auth-blocked, never a blanket exemption from every conformance guarantee
-// (paritytest/<name> remains the authoritative correctness bar either way,
-// per conventions.md §4's skip-marker rule).
+// (the marker must name hook/native tests or archived pre-deletion parity
+// evidence as its substitute proof).
 func runDynamicChecks(b engine.Bundle) []CheckResult {
 	var checks []CheckResult
 
@@ -96,24 +90,21 @@ func runDynamicChecks(b engine.Bundle) []CheckResult {
 
 	checks = append(checks, checkCheckFixture(b))
 
-	readFixtureChecks := 0
+	readReplay := newReusableStreamReplayServer()
+	defer readReplay.Close()
+
 	for i, s := range b.Streams {
 		if reason, ok := streamSkipReason(s); ok {
 			checks = append(checks, CheckResult{Name: "read_fixture_nonempty:" + s.Name, Skipped: true, Error: reason})
 			continue
 		}
-		if readFixtureChecks >= maxDynamicReadFixtureChecks {
-			checks = append(checks, CheckResult{Name: "read_fixture_nonempty:" + s.Name, Skipped: true, Error: dynamicCoverageBoundSkipReason})
-			continue
-		}
 		mandatory := i == 0 // "first stream mandatory" per design §E.2
-		checks = append(checks, checkReadFixtureNonempty(b, s.Name, mandatory))
-		readFixtureChecks++
+		checks = append(checks, checkReadFixtureNonemptyWithReplay(b, s.Name, mandatory, readReplay))
 	}
 
-	checks = append(checks, checkPaginationTerminates(b, newHitTracker()))
-	checks = append(checks, checkRecordsMatchSchema(b))
-	checks = append(checks, checkCursorAdvances(b))
+	checks = append(checks, checkPaginationTerminatesWithReplay(b, newHitTracker(), readReplay))
+	checks = append(checks, checkRecordsMatchSchemaWithReplay(b, readReplay))
+	checks = append(checks, checkCursorAdvancesWithReplay(b, readReplay))
 	checks = append(checks, checkWriteRequestShape(b)...)
 	checks = append(checks, checkDeleteSemantics(b))
 
@@ -225,7 +216,7 @@ func checkCheckFixture(b engine.Bundle) CheckResult {
 		checkQueryKeys = append(checkQueryKeys, k)
 	}
 	srv := newCheckReplayServer(fx, checkQueryKeys)
-	defer closeReplayServer(srv)
+	defer srv.Close()
 
 	rb := withReplayURL(b, srv.URL)
 	err = engine.Check(context.Background(), rb, runtimeConfigForEngine(b), engine.HooksFor(b.Name))
@@ -238,6 +229,12 @@ func checkCheckFixture(b engine.Bundle) CheckResult {
 // fixture pages is Skipped rather than failed — only the first stream is
 // required to ship fixtures (design §E.2 / checkFixturesPresent).
 func checkReadFixtureNonempty(b engine.Bundle, streamName string, mandatory bool) CheckResult {
+	readReplay := newReusableStreamReplayServer()
+	defer readReplay.Close()
+	return checkReadFixtureNonemptyWithReplay(b, streamName, mandatory, readReplay)
+}
+
+func checkReadFixtureNonemptyWithReplay(b engine.Bundle, streamName string, mandatory bool, readReplay *reusableStreamReplayServer) CheckResult {
 	name := "read_fixture_nonempty:" + streamName
 	pages, err := loadFixturePages(b.Fixtures, streamName)
 	if err != nil {
@@ -251,7 +248,7 @@ func checkReadFixtureNonempty(b engine.Bundle, streamName string, mandatory bool
 	}
 
 	count := 0
-	err = readRawRecords(b, streamName, nil, func(map[string]any) error {
+	err = readRawRecordsWithReplay(b, streamName, nil, readReplay, func(map[string]any) error {
 		count++
 		return nil
 	})
@@ -274,6 +271,12 @@ func checkReadFixtureNonempty(b engine.Bundle, streamName string, mandatory bool
 // has zero fixtures, is Skipped; a bundle whose ONLY stream(s) carry a
 // skip_dynamic marker Skips with that marker's reason instead (R3).
 func checkPaginationTerminates(b engine.Bundle, tracker *hitTracker) CheckResult {
+	readReplay := newReusableStreamReplayServer()
+	defer readReplay.Close()
+	return checkPaginationTerminatesWithReplay(b, tracker, readReplay)
+}
+
+func checkPaginationTerminatesWithReplay(b engine.Bundle, tracker *hitTracker, readReplay *reusableStreamReplayServer) CheckResult {
 	const name = "pagination_terminates"
 	if len(b.Streams) == 0 {
 		return CheckResult{Name: name, Skipped: true}
@@ -294,7 +297,7 @@ func checkPaginationTerminates(b engine.Bundle, tracker *hitTracker) CheckResult
 		return CheckResult{Name: name, Skipped: true}
 	}
 
-	if err := readRawRecords(b, stream, tracker, func(map[string]any) error { return nil }); err != nil {
+	if err := readRawRecordsWithReplay(b, stream, tracker, readReplay, func(map[string]any) error { return nil }); err != nil {
 		return CheckResult{Name: name, Error: fmt.Sprintf("read did not terminate cleanly: %v", err)}
 	}
 
@@ -345,18 +348,20 @@ func firstStreamSkipReasonIfAllExcluded(streams []engine.StreamSpec) (reason str
 // bundle whose ONLY stream(s) carry a skip_dynamic marker Skips with that
 // marker's reason instead (R3).
 func checkRecordsMatchSchema(b engine.Bundle) CheckResult {
+	readReplay := newReusableStreamReplayServer()
+	defer readReplay.Close()
+	return checkRecordsMatchSchemaWithReplay(b, readReplay)
+}
+
+func checkRecordsMatchSchemaWithReplay(b engine.Bundle, readReplay *reusableStreamReplayServer) CheckResult {
 	const name = "records_match_schema"
 	if reason, ok := firstStreamSkipReasonIfAllExcluded(b.Streams); ok {
 		return CheckResult{Name: name, Skipped: true, Error: reason}
 	}
 	anyFixtured := false
-	checked := 0
 	for _, s := range b.Streams {
 		if streamIsSkipped(s) {
 			continue
-		}
-		if checked >= maxDynamicSchemaStreamChecks {
-			break
 		}
 		pages, err := loadFixturePages(b.Fixtures, s.Name)
 		if err != nil {
@@ -372,7 +377,7 @@ func checkRecordsMatchSchema(b engine.Bundle) CheckResult {
 		}
 
 		var validateErr error
-		err = readRawRecords(b, s.Name, nil, func(raw map[string]any) error {
+		err = readRawRecordsWithReplay(b, s.Name, nil, readReplay, func(raw map[string]any) error {
 			if validateErr == nil {
 				if verr := sch.Validate(raw); verr != nil {
 					validateErr = fmt.Errorf("stream %q: record failed schema validation: %w", s.Name, verr)
@@ -386,7 +391,6 @@ func checkRecordsMatchSchema(b engine.Bundle) CheckResult {
 		if validateErr != nil {
 			return CheckResult{Name: name, Error: validateErr.Error()}
 		}
-		checked++
 	}
 	if !anyFixtured {
 		return CheckResult{Name: name, Skipped: true}
@@ -403,6 +407,12 @@ func checkRecordsMatchSchema(b engine.Bundle) CheckResult {
 // incremental+fixtured candidate(s) carry a skip_dynamic marker Skips with
 // that marker's reason instead (R3).
 func checkCursorAdvances(b engine.Bundle) CheckResult {
+	readReplay := newReusableStreamReplayServer()
+	defer readReplay.Close()
+	return checkCursorAdvancesWithReplay(b, readReplay)
+}
+
+func checkCursorAdvancesWithReplay(b engine.Bundle, readReplay *reusableStreamReplayServer) CheckResult {
 	const name = "cursor_advances"
 	if reason, ok := incrementalStreamSkipReasonIfOnlyCandidatesExcluded(b); ok {
 		return CheckResult{Name: name, Skipped: true, Error: reason}
@@ -415,7 +425,7 @@ func checkCursorAdvances(b engine.Bundle) CheckResult {
 	sch := b.Schemas[stream.Name]
 	var maxCursor string
 	var maxCursorNumeric bool // true once maxCursor holds a numeric-cursor value, so comparisons stay numeric-aware
-	err := readRawRecords(b, stream.Name, nil, func(raw map[string]any) error {
+	err := readRawRecordsWithReplay(b, stream.Name, nil, readReplay, func(raw map[string]any) error {
 		if sch != nil && sch.CursorField != "" {
 			if v, ok := raw[sch.CursorField]; ok {
 				if s, numeric, ok := cursorValueString(v); ok {
@@ -452,7 +462,7 @@ func checkCursorAdvances(b engine.Bundle) CheckResult {
 	// capture server always answers 200 with an empty page so the read
 	// terminates immediately after the one request this check inspects.
 	capture := newParamCaptureServer(stream.Incremental.RequestParam)
-	defer closeReplayServer(capture)
+	defer capture.Close()
 
 	rb := withReplayURL(b, capture.URL)
 	req := readRequestFor(stream.Name, runtimeConfigForEngine(b), map[string]string{"cursor": maxCursor})
@@ -474,16 +484,14 @@ func checkCursorAdvances(b engine.Bundle) CheckResult {
 // fixtures/writes/<action>.json is Skipped.
 func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 	var out []CheckResult
-	checked := 0
+	capture := newCaptureServer(nil)
+	defer capture.Close()
+
 	for _, action := range b.Writes {
 		name := "write_request_shape:" + action.Name
 		fx, err := loadWriteFixture(b.Fixtures, action.Name)
 		if err != nil {
 			out = append(out, CheckResult{Name: name, Skipped: true})
-			continue
-		}
-		if checked >= maxDynamicWriteFixtureChecks {
-			out = append(out, CheckResult{Name: name, Skipped: true, Error: dynamicCoverageBoundSkipReason})
 			continue
 		}
 
@@ -496,15 +504,13 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 			continue
 		}
 
-		capture := newCaptureServer(fx.Response)
+		capture.Reset(fx.Response)
 		rb := withReplayURL(b, capture.URL)
 		if _, err := engine.Write(ctx, rb, writeRequestFor(action.Name, cfg), []connectors.Record{record}, engine.HooksFor(b.Name)); err != nil {
-			closeReplayServer(capture)
 			out = append(out, CheckResult{Name: name, Error: fmt.Sprintf("engine.Write against replay server failed: %v", err)})
 			continue
 		}
 		got := capture.LastRequest()
-		closeReplayServer(capture)
 		if got == nil {
 			out = append(out, CheckResult{Name: name, Error: "engine.Write sent no HTTP request"})
 			continue
@@ -515,7 +521,6 @@ func checkWriteRequestShape(b engine.Bundle) []CheckResult {
 			continue
 		}
 		out = append(out, CheckResult{Name: name, Passed: true})
-		checked++
 	}
 	return out
 }
@@ -559,7 +564,7 @@ func checkDeleteSemantics(b engine.Bundle) CheckResult {
 
 	status := deleteAction.Delete.MissingOkStatus[0]
 	srv := newAlwaysStatusServer(status)
-	defer closeReplayServer(srv)
+	defer srv.Close()
 
 	rb := withReplayURL(b, srv.URL)
 	cfg := runtimeConfigForEngine(b)
@@ -589,28 +594,24 @@ func checkResultFromErr(name string, err error) CheckResult {
 // be nil), point a bundle copy at it, and run the real engine, invoking
 // onRecord for every emitted record.
 func readRawRecords(b engine.Bundle, streamName string, tracker *hitTracker, onRecord func(map[string]any) error) error {
-	srv, err := newStreamReplayServer(b.Fixtures, streamName, tracker)
+	readReplay := newReusableStreamReplayServer()
+	defer readReplay.Close()
+	return readRawRecordsWithReplay(b, streamName, tracker, readReplay, onRecord)
+}
+
+func readRawRecordsWithReplay(b engine.Bundle, streamName string, tracker *hitTracker, readReplay *reusableStreamReplayServer, onRecord func(map[string]any) error) error {
+	pages, err := loadFixturePages(b.Fixtures, streamName)
 	if err != nil {
 		return err
 	}
-	defer closeReplayServer(srv)
+	readReplay.reset(streamName, pages, tracker)
+	defer readReplay.reset("", nil, nil)
 
-	rb := withReplayURL(b, srv.URL)
+	rb := withReplayURL(b, readReplay.URL)
 	req := readRequestFor(streamName, runtimeConfigForEngine(b), nil)
 	return engine.Read(context.Background(), rb, req, engine.HooksFor(b.Name), func(r connectors.Record) error {
 		return onRecord(map[string]any(r))
 	})
-}
-
-type replayServer interface {
-	Close()
-}
-
-func closeReplayServer(s replayServer) {
-	s.Close()
-	if tr, ok := http.DefaultTransport.(interface{ CloseIdleConnections() }); ok {
-		tr.CloseIdleConnections()
-	}
 }
 
 func firstIncrementalStreamWithFixtures(b engine.Bundle) (engine.StreamSpec, bool) {
@@ -864,6 +865,8 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 // query/decoded JSON body) for write_request_shape's assertions.
 type captureServer struct {
 	*httptest.Server
+	mu   sync.Mutex
+	resp *fixtureResponse
 	last *capturedRequest
 }
 
@@ -878,13 +881,17 @@ type captureServer struct {
 // unchanged byte-for-byte, so every write fixture that never needed a
 // custom response is unaffected.
 func newCaptureServer(resp *fixtureResponse) *captureServer {
-	cs := &captureServer{}
+	cs := &captureServer{resp: resp}
 	cs.Server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var body map[string]any
 		dec := json.NewDecoder(r.Body)
 		dec.UseNumber()
 		_ = dec.Decode(&body) // a body-less request (e.g. DELETE) decodes to nil, not an error worth surfacing
+
+		cs.mu.Lock()
 		cs.last = &capturedRequest{Method: r.Method, Path: r.URL.Path, Query: r.URL.Query(), Body: body}
+		resp := cs.resp
+		cs.mu.Unlock()
 
 		status := http.StatusOK
 		respBody := []byte("{}")
@@ -903,7 +910,18 @@ func newCaptureServer(resp *fixtureResponse) *captureServer {
 	return cs
 }
 
-func (cs *captureServer) LastRequest() *capturedRequest { return cs.last }
+func (cs *captureServer) Reset(resp *fixtureResponse) {
+	cs.mu.Lock()
+	defer cs.mu.Unlock()
+	cs.resp = resp
+	cs.last = nil
+}
+
+func (cs *captureServer) LastRequest() *capturedRequest {
+	cs.mu.Lock()
+	defer cs.mu.Unlock()
+	return cs.last
+}
 
 // newAlwaysStatusServer returns an httptest.Server that answers every
 // request with the given HTTP status and an empty JSON body — used by

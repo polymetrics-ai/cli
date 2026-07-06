@@ -10,22 +10,54 @@ SYNOPSIS
   pm credentials add <name> --connector openweather [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads current weather, hourly and daily forecasts, and government alerts for one or more geographic locations from the OpenWeather One Call API 3.0.
+  Reads current weather, hourly and daily forecasts, and government alerts for a configured geographic location from the OpenWeather One Call API 3.0.
+
+ICON
+  asset: icons/openweather.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://openweathermap.org/api
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  lang
+  lat
+  lon
+  mode
+  units
+  appid (secret)
+
+ETL STREAMS
+  current:
+    primary key: lat, lon, dt
+    cursor: dt
+    fields: clouds(), dew_point(), dt(), feels_like(), humidity(), lat(), lon(), pressure(), sunrise(), sunset(), temp(), timezone(), uvi(), visibility(), weather(), wind_deg(), wind_gust(), wind_speed()
+  hourly:
+    primary key: lat, lon, dt
+    cursor: dt
+    fields: clouds(), dew_point(), dt(), feels_like(), humidity(), lat(), lon(), pop(), pressure(), temp(), timezone(), uvi(), visibility(), weather(), wind_deg(), wind_gust(), wind_speed()
+  daily:
+    primary key: lat, lon, dt
+    cursor: dt
+    fields: dt(), humidity(), lat(), lon(), pop(), pressure(), summary(), sunrise(), sunset(), temp_day(), temp_max(), temp_min(), timezone(), uvi(), weather(), wind_deg(), wind_speed()
+  alerts:
+    primary key: lat, lon, start, event
+    cursor: start
+    fields: description(), end(), event(), lat(), lon(), sender_name(), start(), tags(), timezone()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external OpenWeather API read of public weather forecast data
+  approval: none; read-only public weather API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

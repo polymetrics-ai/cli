@@ -10,22 +10,69 @@ SYNOPSIS
   pm credentials add <name> --connector youtube-data [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads channels, videos, and playlists through the YouTube Data API.
+  Reads channels, videos, playlists, playlist items, comment threads, search results, video categories, and i18n region/language reference data through the YouTube Data API.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  channel_ids
+  ids
+  mode
+  playlist_ids
+  region_code
+  search_query
+  video_ids
+  api_key (secret)
+
+ETL STREAMS
+  channels:
+    primary key: id
+    fields: id(), title(), view_count()
+  videos:
+    primary key: id
+    fields: id(), published_at(), title()
+  playlists:
+    primary key: id
+    fields: id(), published_at(), title()
+  playlist_items:
+    primary key: id
+    cursor: published_at
+    fields: id(), playlist_id(), published_at(), title(), video_id()
+  comment_threads:
+    primary key: id
+    cursor: published_at
+    fields: id(), published_at(), text(), video_id()
+  search:
+    primary key: id
+    cursor: published_at
+    fields: id(), published_at(), title()
+  video_categories:
+    primary key: id
+    fields: id(), title()
+  i18n_regions:
+    primary key: id
+    fields: id(), name()
+  i18n_languages:
+    primary key: id
+    fields: id(), name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external YouTube Data API read of public channel, video, playlist, playlist item, comment, search result, and reference data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

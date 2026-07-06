@@ -10,22 +10,46 @@ SYNOPSIS
   pm credentials add <name> --connector elasticsearch [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Elasticsearch index metadata and documents through the REST API.
+  Reads Elasticsearch index metadata and documents through the REST API. Read-only.
+
+ICON
+  asset: icons/elasticsearch.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  endpoint
+  index
+  max_pages
+  mode
+  page_size
+  username
+  api_key_id (secret)
+  api_key_secret (secret)
+  password (secret)
+
+ETL STREAMS
+  indices:
+    primary key: index
+    fields: docs.count(), index()
+  documents:
+    primary key: id
+    fields: id()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Elasticsearch cluster read of index metadata and documents
+  approval: none; read-only cluster access
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

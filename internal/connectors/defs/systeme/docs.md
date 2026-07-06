@@ -1,117 +1,118 @@
 # Overview
 
-Systeme is a Tier-1 declarative-HTTP connector for the Systeme.io public API
-(`https://api.systeme.io/api`). This is a Pass B full-surface expansion: 6 read streams
-(`contacts`, `tags`, `contact_fields`, `funnels`, `funnel_steps`, `webhooks`) and 14 write actions.
+Reads Systeme.io contacts, tags, contact fields, funnels, and funnel steps, and writes
+contact/tag/contact-field/funnel lifecycle mutations and contact-tag assignment, through the
+Systeme.io public API.
 
-**Research method and its limits** (recorded honestly per `docs/migration/conventions.md` §1's
-`api_surface.json` depth requirement): Systeme.io's public API has **no publicly fetchable
-OpenAPI/Swagger document**. Its official reference (`developer.systeme.io/reference/api`) is a
-ReadMe.io-hosted site whose per-endpoint detail renders client-side from a private, authenticated
-project session (`dash.readme.com/api/v1/api-specification` requires an API key this review does
-not have); no public Postman collection or third-party mirror exists either. Every endpoint in this
-bundle and in `api_surface.json` was therefore independently confirmed **live** against
-`https://api.systeme.io/api` via unauthenticated `OPTIONS` requests: the server's `Allow` response
-header names exactly which HTTP methods it accepts at that path today (a live, current, and
-verifiable source of truth, cross-checked against Systeme.io's own help-center article "How to use
-systeme.io's public API", `help.systeme.io/article/2329`, last updated 2026-06-05). Where the live
-probe and the help article disagreed (newsletters, subscriptions), the live probe's result governs
-and the discrepancy is documented in `api_surface.json` as `requires_elevated_scope` (no confirmable
-live path) rather than silently guessed at.
+Readable streams: `contacts`, `tags`, `contact_fields`, `funnels`, `funnel_steps`, `webhooks`.
 
-**Tier justification**: a plain declarative-HTTP bundle. Auth is a single static header, pagination
-is the engine's `page_number` type throughout, and the one sub-resource stream (`funnel_steps`) is
-an ordinary single-level `fan_out` over `funnels` — nothing needs a Go hook.
+Write actions: `create_contact`, `update_contact`, `delete_contact`, `create_tag`, `update_tag`,
+`delete_tag`, `add_contact_tag`, `remove_contact_tag`, `create_contact_field`,
+`update_contact_field`, `delete_contact_field`, `create_funnel`, `create_funnel_step`,
+`create_webhook`.
+
+Service API documentation: https://developer.systeme.io/reference/api.
 
 ## Auth setup
 
-Provide a Systeme.io API key via the `api_key` secret; it is sent as the `X-API-Key` header
-(`auth.mode: api_key_header`), no prefix. Never logged. `base_url` defaults to
-`https://api.systeme.io/api` and may be overridden for tests/proxies.
+Connection fields:
+
+- `api_key` (required, secret, string); Systeme.io API key, sent as the X-API-Key header. Never
+  logged.
+- `base_url` (optional, string); default `https://api.systeme.io/api`; format `uri`; Systeme.io API
+  base URL override for tests or proxies.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.systeme.io/api`.
+
+Authentication behavior:
+
+- API key authentication in `X-API-Key` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/contacts`.
 
 ## Streams notes
 
-All streams share the base's `page_number` pagination (`page_param: page`, `size_param: limit`,
-`page_size: 100`), stopping on a short page — the same shape the prior version of this bundle
-already established for `contacts` and now confirmed live (via `OPTIONS`) to apply identically to
-every other listed resource.
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 100.
 
-`contacts` (`GET /contacts`) preserves the legacy connector's emitted shape exactly: `id`, `email`,
-and `created_at` (computed from either raw `created_at` or `createdAt`). Systeme.io's wire contact
-object may include additional fields such as custom-field values or tags, but the legacy Go mapper
-did not emit them.
-
-`tags` (`GET /tags`) and `contact_fields` (`GET /contact_fields`) are plain top-level list streams,
-each with a matching `GET /{resource}/{id}` detail endpoint (live-confirmed, excluded as
-`duplicate_of`) and full CRUD write actions (also live-confirmed via each detail path's `Allow`
-header: `tags/{id}` allows `GET, PUT, DELETE`; `contact_fields/{id}` allows `GET, PATCH, DELETE`).
-
-`funnels` (`GET /funnels`) is read/create-only: `funnels/{id}` live-probes to `Allow: GET` only (no
-`PATCH`/`DELETE` exist for this resource today), so there is no `update_funnel`/`delete_funnel`
-write action — not an oversight, a faithful reflection of what the live API actually accepts.
-`funnel_steps` (`GET /funnels/{funnel_id}/steps`) `fan_out`s over every funnel id
-(`ids_from.request`: `GET /funnels`, `records_path: items`, `id_field: id`), stamping `funnel_id`
-onto every emitted record; `funnels/{id}/steps` live-probes to `Allow: GET, POST` (list + create,
-confirmed), with no per-step detail/update/delete endpoint found (`funnels/{id}/steps/{id}`
-live-probes to a bare 404).
-
-`webhooks` (`GET /webhooks`) is list/create-only: `webhooks/{id}` live-probes to a bare 404 with **no
-`Allow` header at all** — the same "no route registered" signature every genuinely nonexistent path
-in this review produced (contrasted with every real id-scoped resource's 405-with-`Allow`-header
-response to an unsupported method). This is a materially different, stronger signal than "detail
-endpoint not yet implemented by this bundle" — it means the live API itself has no per-webhook
-detail/update/delete route, so none is modeled here.
-
-Two resources named in Systeme.io's own help article could **not** be independently confirmed and
-are excluded rather than guessed at (`api_surface.json`): **newsletters** ("create/update/list/retrieve
-newsletters") — `GET`/`POST /newsletters` both returned a bare 404 with no `Allow` header during
-live probing, the same "no route" signature as a genuinely nonexistent path; and **subscriptions**
-("retrieve subscription resources... unsubscription") — no path variant tried
-(`/subscriptions`, `/subscription`, `/subscription-plans`) could be confirmed live. **communities**
-is a similar partial case: `communities/{id}` IS live (`Allow: GET`), but bare `GET /communities`
-404s with no `Allow` header — there is no list/discovery endpoint to enumerate community ids, so it
-cannot be modeled as a syncable stream (same shape as bitly's `custom_bitlinks` gap in the goldens).
-**courses** could not be confirmed live at all, consistent with Systeme.io's own public product
-roadmap listing "API: add endpoints for managing courses and students" as an open, unshipped feature
-request (`roadmap.systeme.io/c/228`) — the API genuinely does not have this surface yet, not merely
-undocumented.
+- `contacts`: GET `/contacts` - records path `items`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 100; computed output fields `created_at`.
+- `tags`: GET `/tags` - records path `items`; page-number pagination; page parameter `page`; size
+  parameter `limit`; starts at 1; page size 100.
+- `contact_fields`: GET `/contact_fields` - records path `items`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `funnels`: GET `/funnels` - records path `items`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 100.
+- `funnel_steps`: GET `/funnels/{{ fanout.id }}/steps` - records path `items`; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; fan-out;
+  ids from request `/funnels`; id-list records path `items`; id field `id`; id inserted into the
+  request path; stamps `funnel_id`.
+- `webhooks`: GET `/webhooks` - records path `items`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 100.
 
 ## Write actions & risks
 
-- `create_contact`/`update_contact`/`delete_contact` — contact lifecycle. `delete_contact` is
-  irreversible; approval required. Create/update are lower-risk (no approval required).
-- `create_tag`/`update_tag`/`delete_tag` — tag definition lifecycle. `delete_tag` removes the tag
-  from every contact it is assigned to; approval required.
-- `add_contact_tag`/`remove_contact_tag` — assign/remove a tag on a contact
-  (`POST`/`DELETE /contacts/{id}/tags[/{tag_id}]`). Per Systeme.io's own docs, tag assignment can
-  trigger workspace automations (course enrollment, campaign entry) as a side effect — this is
-  documented but not itself modeled as a distinct action (the API gives no way to suppress or
-  observe automation side effects from the tag-assignment call itself).
-- `create_contact_field`/`update_contact_field`/`delete_contact_field` — custom contact-field
-  definition lifecycle. `delete_contact_field` removes the field's stored value from every contact;
+Overall write risk: external Systeme.io API mutation (contact/tag/contact-field/funnel lifecycle,
+contact-tag assignment).
+
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_contact`: POST `/contacts` - kind `create`; body type `json`; required record fields
+  `email`; accepted fields `email`, `fields`, `locale`; risk: creates a new contact; low-risk
+  external mutation, no approval required.
+- `update_contact`: PATCH `/contacts/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `email`, `fields`, `id`, `locale`; risk:
+  updates an existing contact's email/locale/custom-field values; external mutation, no approval
+  required.
+- `delete_contact`: DELETE `/contacts/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: irreversibly deletes a contact; approval required.
+- `create_tag`: POST `/tags` - kind `create`; body type `json`; required record fields `name`;
+  accepted fields `name`; risk: creates a new tag; low-risk external mutation, no approval required.
+- `update_tag`: PUT `/tags/{{ record.id }}` - kind `update`; body type `json`; path fields `id`;
+  required record fields `id`, `name`; accepted fields `id`, `name`; risk: renames an existing tag;
+  external mutation, no approval required.
+- `delete_tag`: DELETE `/tags/{{ record.id }}` - kind `delete`; body type `none`; path fields `id`;
+  required record fields `id`; accepted fields `id`; missing records treated as success for status
+  `404`; risk: irreversibly deletes a tag, removing it from every contact it is assigned to;
   approval required.
-- `create_funnel` — creates a new funnel. No `update_funnel`/`delete_funnel` — see Streams notes
-  (the live API has no `PATCH`/`DELETE` for this resource).
-- `create_funnel_step` — creates a new step within an existing funnel. No update/delete — same
-  reasoning (no confirmed live route).
-- `create_webhook` — creates a new outgoing webhook subscription. No update/delete — see Streams
-  notes (the live API has no per-webhook detail route at all).
+- `add_contact_tag`: POST `/contacts/{{ record.contact_id }}/tags` - kind `create`; body type
+  `json`; path fields `contact_id`; required record fields `contact_id`, `tag_id`; accepted fields
+  `contact_id`, `tag_id`; risk: assigns a tag to a contact; assigning certain tags can trigger
+  Systeme.io automations (enrollment in a course/campaign); external mutation, no approval required.
+- `remove_contact_tag`: DELETE `/contacts/{{ record.contact_id }}/tags/{{ record.tag_id }}` - kind
+  `delete`; body type `none`; path fields `contact_id`, `tag_id`; required record fields
+  `contact_id`, `tag_id`; accepted fields `contact_id`, `tag_id`; missing records treated as success
+  for status `404`; risk: removes a tag from a contact; removing certain tags can trigger Systeme.io
+  automations; external mutation, no approval required.
+- `create_contact_field`: POST `/contact_fields` - kind `create`; body type `json`; required record
+  fields `slug`, `type`; accepted fields `slug`, `type`; risk: creates a new custom contact field
+  definition; low-risk external mutation, no approval required.
+- `update_contact_field`: PATCH `/contact_fields/{{ record.id }}` - kind `update`; body type `json`;
+  path fields `id`; required record fields `id`; accepted fields `id`, `slug`, `type`; risk: updates
+  an existing custom contact field definition; external mutation, no approval required.
+- `delete_contact_field`: DELETE `/contact_fields/{{ record.id }}` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: irreversibly deletes a custom contact field definition
+  and its stored values on every contact; approval required.
+- `create_funnel`: POST `/funnels` - kind `create`; body type `json`; required record fields `name`;
+  accepted fields `name`; risk: creates a new sales funnel; low-risk external mutation, no approval
+  required.
+- `create_funnel_step`: POST `/funnels/{{ record.funnel_id }}/steps` - kind `create`; body type
+  `json`; path fields `funnel_id`; required record fields `funnel_id`, `name`; accepted fields
+  `funnel_id`, `name`; risk: creates a new step within an existing funnel; low-risk external
+  mutation, no approval required.
+- `create_webhook`: POST `/webhooks` - kind `create`; body type `json`; required record fields
+  `url`, `event`; accepted fields `event`, `url`; risk: creates a new outgoing webhook subscription;
+  low-risk external mutation, no approval required.
 
 ## Known limits
 
-- **`funnels`/`funnel_steps`/`webhooks` are create-only beyond read** (no update/delete write
-  actions) — this reflects what the live API actually accepts (confirmed via `OPTIONS` `Allow`
-  headers), not an incomplete migration.
-- **Newsletter and subscription-resource management are excluded** — named in Systeme.io's own
-  help-center article but could not be independently confirmed live at any probed path; see
-  `api_surface.json`'s `requires_elevated_scope` entries.
-- **`communities` has no list stream** — `communities/{id}` is live but has no discovery/list
-  endpoint to enumerate ids from.
-- **Courses are not part of the live public API** — confirmed both by the absence of any live
-  route and by Systeme.io's own product roadmap listing course/student API endpoints as an open
-  feature request.
-- **Contact custom-field values are not emitted by `contacts`** — the wire contact object may
-  include workspace-defined custom-field values, but the legacy Go connector emitted only
-  `id`/`email`/`created_at`; `contact_fields` covers field definitions separately.
-- All fixtures (`fixtures/streams/**`, `fixtures/check.json`) represent Systeme.io's real wire
-  shape, including the camelCase `createdAt` field on contacts.
+- Batch defaults: read_page_size=100.
+- API coverage includes 6 stream-backed endpoint group(s), 14 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=4, requires_elevated_scope=7.

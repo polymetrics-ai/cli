@@ -1,56 +1,65 @@
 # Overview
 
-Mailosaur is a wave2 fan-out declarative-HTTP migration. Mailosaur is an email and SMS testing
-service; this bundle reads its virtual servers, the message summaries within a server, and account
-usage transactions through the Mailosaur REST API (`GET https://mailosaur.com/api/...`). This
-bundle migrates `internal/connectors/mailosaur` (the hand-written connector it replaces at
-capability parity); the legacy package stays registered and unchanged until wave6's registry flip.
+Reads Mailosaur virtual servers, message summaries, and account usage transactions through the
+Mailosaur REST API.
+
+Readable streams: `servers`, `messages`, `transactions`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://mailosaur.com/docs/api/.
 
 ## Auth setup
 
-Provide a Mailosaur API key via the `password` secret; it is sent as the password of HTTP Basic
-auth (username defaults to the literal `api`, matching Mailosaur's own convention, and is
-overridable via the `username` config value). It is never logged.
+Connection fields:
+
+- `base_url` (optional, string); default `https://mailosaur.com/api`; format `uri`; Mailosaur API
+  base URL override for tests or proxies.
+- `items_per_page` (optional, string); default `50`; Records per page (1-1000) for the 'messages'
+  stream.
+- `mode` (optional, string).
+- `password` (required, secret, string); Mailosaur API key, sent as the password of HTTP Basic auth
+  (username defaults to the literal 'api'). Never logged.
+- `received_after` (optional, string); Optional receivedAfter query filter for the 'messages' stream
+  (RFC3339 or Mailosaur's accepted date format).
+- `server` (optional, string); Mailosaur virtual server id the 'messages' stream is scoped to
+  (required for that stream).
+- `username` (optional, string); default `api`; HTTP Basic auth username. Defaults to the literal
+  'api', matching Mailosaur's own convention.
+
+Secret fields are redacted in logs and write previews: `password`.
+
+Default configuration values: `base_url=https://mailosaur.com/api`, `items_per_page=50`,
+`username=api`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `config.username`, `secrets.password`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/servers`.
 
 ## Streams notes
 
-`servers` (`GET /servers`) is a single-page endpoint whose response body IS the array itself (no
-enclosing envelope key) — `records.path: "."` matches legacy's `recordsPath: "."` /
-`connsdk.RecordsAt(resp.Body, ".")`.
+Default pagination: single request; no pagination.
 
-`messages` (`GET /messages`) is scoped to one Mailosaur virtual server: the required `server`
-config value is sent as the `server` query param (matching legacy's `base.Set("server", server)`;
-an absent `server` hard-errors on both sides — legacy: `"mailosaur stream \"messages\" requires
-config server (server id)"`; engine: an unresolved `config.server` query-template key, per
-conventions.md §5's config-validation-parity precedent). The optional `received_after` config value
-is sent as `receivedAfter` (opt-in optional-query object dialect, `omit_when_absent: true`,
-matching legacy's `if receivedAfter := ...; receivedAfter != "" && stream == "messages"`
-conditional). Pagination follows Mailosaur's zero-indexed `page`/`itemsPerPage` convention
-(`pagination.type: page_number`, `page_param: page`, `size_param: itemsPerPage`, `start_page: 0`,
-`page_size: 50` matching legacy's `mailosaurDefaultPageSize`), records at `items` — a page
-returning fewer than `itemsPerPage` records stops the read, matching legacy's `harvest`.
+Pagination by stream: none: `servers`, `transactions`; page_number: `messages`.
 
-`transactions` (`GET /usage/transactions`) reports account transactional usage over Mailosaur's own
-trailing 31-day window; legacy reads it as a single bounded GET with no pagination
-(`streamEndpoint.paginated` unset/false for this endpoint, unlike `messages`) — this bundle
-declares no `pagination` block for the stream (falling back to `base`'s absence, i.e. `none`),
-matching legacy exactly. Records live at `items`.
+- `servers`: GET `/servers` - records path `.`.
+- `messages`: GET `/messages` - records path `items`; query `receivedAfter` from template `{{
+  config.received_after }}`, omitted when absent; `server`=`{{ config.server }}`; page-number
+  pagination; page parameter `page`; size parameter `itemsPerPage`; starts at 0; page size 50.
+- `transactions`: GET `/usage/transactions` - records path `items`.
 
 ## Write actions & risks
 
-None. Mailosaur is a read-only source for this connector (legacy's `Write` returns
-`connectors.ErrUnsupportedOperation`); `capabilities.write` is `false` and this bundle ships no
-`writes.json`.
+This connector is read-only. Read behavior: external Mailosaur API read of virtual-server,
+message-summary, and usage-transaction data.
 
 ## Known limits
 
-- **`max_pages` is not modeled.** Legacy exposes a config-driven `max_pages` hard request-count cap
-  (`mailosaurMaxPages`) on the `messages` stream's read loop. The engine's `page_number` paginator
-  has no `MaxPages`-equivalent knob wired to a config value; pagination is bounded only by the
-  short-page stop signal, matching Mailosaur's own real termination behavior. `max_pages` is not
-  declared in `spec.json`.
-- Full Mailosaur API surface (message content/attachment retrieval, spam analysis, server
-  creation/deletion, message/server deletion, account plan limits) is out of scope for wave2; see
-  `api_surface.json`'s `excluded` entries (`out_of_scope` for not implemented in this bundle,
-  `destructive_admin` for delete mutations, `non_data_endpoint` for the account limits snapshot).
-  Only the 3 legacy-parity read streams are implemented.
+- Batch defaults: read_page_size=50.
+- API coverage includes 3 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=2, non_data_endpoint=1, out_of_scope=3.

@@ -10,22 +10,37 @@ SYNOPSIS
   pm credentials add <name> --connector onesignal [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads OneSignal apps, devices, notifications, and outcomes through the OneSignal REST API.
+  Reads OneSignal account-level applications through the OneSignal REST API. Device/notification/outcome streams remain quarantined (ENGINE_GAP: no per-stream auth override).
+
+ICON
+  asset: icons/onesignal.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://documentation.onesignal.com/reference
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  user_auth_key (secret)
+
+ETL STREAMS
+  apps:
+    primary key: id
+    fields: created_at(), id(), messageable_players(), name(), organization_id(), players(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external OneSignal API read of account-level application metadata
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

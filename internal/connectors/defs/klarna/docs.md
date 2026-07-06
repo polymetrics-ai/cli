@@ -1,85 +1,76 @@
 # Overview
 
-Klarna reads Klarna settlement payouts and transactions through the Klarna Settlements API. This
-bundle migrates `internal/connectors/klarna` (the hand-written connector) to a declarative defs
-bundle; the legacy package stays registered and unchanged until wave6's registry flip. Pass B adds
-the remaining JSON Settlements list/detail endpoints without changing legacy stream record data. The
-Klarna Settlements API is read-only for reverse-ETL purposes, so `capabilities.write` is `false` and
-this bundle ships no `writes.json`.
+Reads Klarna settlement payouts and transactions through the Klarna Settlements API.
+
+Readable streams: `payouts`, `transactions`, `payout_details`, `payout_summaries`, `payout_summary`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.klarna.com/api/.
 
 ## Auth setup
 
-Provide the Klarna merchant UID via the `username` secret and the API shared secret via the
-`password` secret; both flow only into HTTP Basic auth (`Authorization: Basic
-base64(username:password)`) and are never logged, matching legacy's `connsdk.Basic(username,
-password)` wiring. Legacy reads `username` from `Secrets` first, falling back to `Config` — this
-bundle models `username` as `x-secret` and sources it from `secrets.username` exclusively, matching
-legacy's actual precedence order (Secrets checked first) rather than its rarely-used Config fallback
-(see Known limits).
+Connection fields:
 
-`base_url` is **required** in this bundle (see Known limits for why the region/playground derivation
-is not reproduced).
+- `base_url` (required, string); format `uri`; Klarna Settlements API base URL, e.g.
+  https://api.klarna.com (EU production), https://api-na.klarna.com (NA), https://api-oc.klarna.com
+  (OC), or the matching *.playground.klarna.com host for test merchants.
+- `mode` (optional, string).
+- `password` (required, secret, string); Klarna API shared secret (password), sent via HTTP Basic
+  auth. Never logged.
+- `payment_references` (optional, string); Comma-separated Klarna payment_reference values to read
+  through the payout_details stream.
+- `summary_currency_code` (optional, string); Optional currency_code filter for Klarna's
+  /payouts/summary endpoint.
+- `summary_end_date` (optional, string); Required when reading payout_summaries. ISO 8601 end
+  date/time for Klarna's /payouts/summary endpoint.
+- `summary_start_date` (optional, string); Required when reading payout_summaries. ISO 8601 start
+  date/time for Klarna's /payouts/summary endpoint.
+- `username` (required, secret, string); Klarna merchant UID (username), sent via HTTP Basic auth.
+
+Secret fields are redacted in logs and write previews: `password`, `username`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.username`, `secrets.password`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/settlements/v1/payouts` with query `size`=`1`.
 
 ## Streams notes
 
-`payouts` (`GET /settlements/v1/payouts`, records at the `payouts` array) emits legacy's exact field
-set via `computed_fields`: `settlement_amount` is hoisted out of the nested `totals` object
-(`{{ record.totals.settlement_amount }}`, a bare single-reference so the engine copies the raw typed
-integer value, matching legacy's `klarnaPayoutRecord`'s manual `totals["settlement_amount"]` hoist).
-`transactions` (`GET /settlements/v1/transactions`, records at `transactions`) is a flat field-for-field
-projection with no `computed_fields` needed — the schema property names match the raw API field
-names exactly. `payout_summary` reads the identical `payouts` endpoint as `payouts` but re-shapes each
-record to only the settlement totals, keyed by `payout_reference` (matching legacy's
-`klarnaPayoutSummaryRecord`), via `computed_fields` hoisting all four `totals.*` fields.
+Default pagination: offset/limit pagination; offset parameter `offset`; limit parameter `size`; page
+size 100.
 
-Pass B adds `payout_details` (`GET /settlements/v1/payouts/{payment_reference}`), driven by the
-comma-separated `config.payment_references` fan-out list, and `payout_summaries`
-(`GET /settlements/v1/payouts/summary`), driven by `config.summary_start_date` and
-`config.summary_end_date` with optional `config.summary_currency_code`. These are new streams with
-their own schemas, so they do not alter the three legacy stream record shapes.
+Pagination by stream: none: `payout_details`, `payout_summaries`; offset_limit: `payouts`,
+`transactions`, `payout_summary`.
 
-Pagination is `offset_limit` (`limit_param: size`, `offset_param: offset`, `page_size: 100`, matching
-legacy's default `klarnaDefaultPageSize`/`OffsetPaginator` with Klarna's own `size`/`offset`
-query-param naming); the engine stops once a page returns fewer than `page_size` records. No
-`max_pages` cap is declared, matching legacy's default `klarnaMaxPages` behavior (unlimited). No
-stream declares an `incremental` block or `x-cursor-field`: legacy's `klarnaStreams()` catalog
-publishes no `CursorFields` for any stream (the Settlements API supports full refresh only), so this
-bundle matches that exactly.
+- `payouts`: GET `/settlements/v1/payouts` - records path `payouts`; offset/limit pagination; offset
+  parameter `offset`; limit parameter `size`; page size 100; computed output fields `currency_code`,
+  `merchant_settlement_type`, `payment_reference`, `payout_reference`, `settlement_amount`,
+  `totals`.
+- `transactions`: GET `/settlements/v1/transactions` - records path `transactions`; offset/limit
+  pagination; offset parameter `offset`; limit parameter `size`; page size 100.
+- `payout_details`: GET `/settlements/v1/payouts/{{ fanout.id }}` - single-object response; records
+  at response root; fan-out; ids from config field `payment_references`; id inserted into the
+  request path.
+- `payout_summaries`: GET `/settlements/v1/payouts/summary` - records path `.`; query
+  `currency_code` from template `{{ config.summary_currency_code }}`, omitted when absent;
+  `end_date`=`{{ config.summary_end_date }}`; `start_date`=`{{ config.summary_start_date }}`.
+- `payout_summary`: GET `/settlements/v1/payouts` - records path `payouts`; offset/limit pagination;
+  offset parameter `offset`; limit parameter `size`; page size 100; computed output fields
+  `currency_code`, `fee_amount`, `payout_reference`, `return_amount`, `sale_amount`,
+  `settlement_amount`.
 
 ## Write actions & risks
 
-None. The Klarna Settlements API is read-only for pm reverse-ETL purposes; `capabilities.write` is
-`false` and no `writes.json` is shipped, matching legacy's `Write` stub
-(`connectors.ErrUnsupportedOperation`).
+This connector is read-only. Read behavior: external Klarna Settlements API read of payout and
+transaction data.
 
 ## Known limits
 
-- **Region/playground-derived `base_url` is not reproduced; `base_url` is required instead.**
-  Legacy derives the API host from a `region` config value (`eu`/`na`/`oc`, defaulting to `eu`) plus
-  a `playground` boolean that rewrites the host to its `*.playground.klarna.com` counterpart
-  (`klarnaBaseURL`/`klarnaRegionHosts`), only falling back to an explicit `base_url` override when
-  one is set. The engine's `streams.json` `base.url` is a single template with no per-value
-  conditional/lookup-table mechanism (`spec.json`'s `"default"` materialization is a single fixed
-  literal, not a derived function of another config value — see
-  `docs/migration/conventions.md`'s `"default"` materialization section, which explicitly calls out
-  this exact shape as needing either a required `base_url` or a future computed-base-URL dialect
-  extension). This bundle takes the documented, honest path: `base_url` is `required`, with its
-  description enumerating the 6 real hosts (3 regions × production/playground) the caller must
-  choose from explicitly. This is a config-surface narrowing from legacy's region-shorthand
-  convenience, not a data/behavior deviation — every request Klarna itself would accept still
-  succeeds once the caller supplies the correct literal host.
-- **`username`'s dual Config/Secrets lookup is narrowed to Secrets-only.** Legacy checks
-  `cfg.Secrets["username"]` first and only falls back to `cfg.Config["username"]` if that's empty.
-  Since Secrets is checked first (i.e., is the precedent path when both single-value dialects are
-  compared), this bundle sources `username` from `secrets.username` only. A caller who previously
-  supplied `username` only via `Config` (the fallback path) must instead supply it as a secret; this
-  is a config-shape narrowing, not a behavior change for the common (Secrets-configured) case.
-- **`page_size`/`max_pages` runtime overrides are not modeled.** Legacy accepts `config.page_size`
-  (1-500, default 100) and `config.max_pages` (0/`all`/`unlimited` = unbounded). The engine's
-  `offset_limit` paginator reads `page_size`/`max_pages` only from fixed `streams.json` pagination
-  fields, not from runtime config, so `spec.json` intentionally does not declare these dead config
-  properties. The bundle matches legacy defaults: `page_size: 100` and unbounded pages.
-- The four report endpoints (`/reports/payout-with-transactions`, `/reports/payout`,
-  `/reports/payouts-summary-with-transactions`, and `/reports/payouts-summary`) return CSV or PDF
-  payloads. They are accounted for in `api_surface.json` as `binary_payload` exclusions because the
-  declarative stream engine consumes JSON records and this pass may not add a CSV/PDF hook package.
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=4.

@@ -10,22 +10,41 @@ SYNOPSIS
   pm credentials add <name> --connector hugging-face-datasets [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads dataset splits, per-split sizes, and rows from the Hugging Face dataset-viewer REST API. Read-only; an optional user access token unlocks gated and private datasets.
+  Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer REST API. Read-only; an optional user access token unlocks gated and private datasets.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  dataset_name
+  access_token (secret)
+  api_token (secret)
+  token (secret)
+
+ETL STREAMS
+  splits:
+    primary key: dataset, config, split
+    fields: config(), dataset(), split()
+  sizes:
+    primary key: dataset, config, split
+    fields: config(), dataset(), num_bytes_memory(), num_bytes_parquet_files(), num_columns(), num_rows(), split()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Hugging Face dataset-viewer API read of dataset split/size metadata; an optional access token unlocks gated/private dataset reads
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

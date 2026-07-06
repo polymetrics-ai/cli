@@ -43,7 +43,7 @@
 // live DB: in fixture mode Check succeeds, Catalog returns canned streams,
 // and Read emits canned rows.
 //
-// NO init()/RegisterFactory/RegisterNativeLive call exists in this package
+// NO init()/RegisterFactory call exists in this package
 // in wave0 (enforced by a grep-guard test, postgres_test.go
 // TestNoInitRegistration) — the registration flip that wires native/postgres
 // into the production registry is a wave6 change; wave0 only builds and

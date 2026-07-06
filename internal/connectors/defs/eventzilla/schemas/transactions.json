@@ -6,7 +6,7 @@
   "required": ["checkout_id"],
   "properties": {
     "checkout_id": { "type": "integer" },
-    "event_id": { "type": ["integer", "string"], "description": "Stamped by the fan_out dialect from the enclosing event id discovered via the events listing (always a string on the stamped path); the raw API also sends this field on some responses, so both shapes are declared." },
+    "event_id": { "type": ["integer", "null"] },
     "transaction_ref": { "type": ["string", "null"] },
     "transaction_date": { "type": ["string", "null"] },
     "transaction_amount": { "type": ["string", "null"] },

@@ -22,6 +22,6 @@
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "Every stream is StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL pagination loop verbatim; the engine's declarative next_url_path pagination reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all — see docs.md's Streams notes and docs/migration/quarantine.json's microsoft-lists ENGINE_GAP entry). hook-covered; proven live by internal/connectors/paritytest/microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
+    "reason": "Every stream is StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL pagination loop verbatim; the engine's declarative next_url_path pagination reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all — see docs.md's Streams notes and docs/migration/quarantine.json's microsoft-lists ENGINE_GAP entry). hook-covered; proven live by archived parity evidence for microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
   }
 }

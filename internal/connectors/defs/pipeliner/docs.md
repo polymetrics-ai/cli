@@ -1,62 +1,66 @@
 # Overview
 
-Pipeliner is a wave2 fan-out migration of `internal/connectors/pipeliner` (the hand-written
-connector it replaces). It reads Pipeliner CRM accounts, contacts, opportunities, and leads through
-the documented REST entity-list API. This bundle is read-only, matching legacy exactly; the legacy
-package stays registered and unchanged until wave6's registry flip.
+Reads Pipeliner CRM accounts, contacts, opportunities, and leads through the REST API.
+
+Readable streams: `accounts`, `contacts`, `opportunities`, `leads`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://workspace.pipelinersales.com/community/api/.
 
 ## Auth setup
 
-Provide `username` and `password` as secrets; both are sent as HTTP Basic auth credentials
-(`Authorization: Basic base64(username:password)`) and are never logged. A `space_id` config value
-(the Pipeliner space/account id) is required and is interpolated into every request path
-(`/spaces/{space_id}/entities/<Resource>`).
+Connection fields:
+
+- `base_url` (optional, string); default `https://api.pipelinersales.com/api/v100/rest`; format
+  `uri`; Pipeliner API base URL override for tests or proxies.
+- `mode` (optional, string).
+- `password` (required, secret, string); Pipeliner API password, sent as the HTTP Basic auth
+  password. Never logged.
+- `space_id` (required, string); Pipeliner space (account) id; sent as the
+  /spaces/{space_id}/entities/... path segment.
+- `username` (required, secret, string); Pipeliner API username, sent as the HTTP Basic auth
+  username. Never logged.
+
+Secret fields are redacted in logs and write previews: `password`, `username`.
+
+Default configuration values: `base_url=https://api.pipelinersales.com/api/v100/rest`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.username`, `secrets.password`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/spaces/{{ config.space_id }}/entities/Accounts` with query `limit`=`1`;
+`offset`=`0`.
 
 ## Streams notes
 
-All 4 streams (`accounts`, `contacts`, `opportunities`, `leads`) share the identical shape, matching
-legacy's `streamEndpoints` table: `GET /spaces/{space_id}/entities/<Resource>`, records at the
-top-level `data` array, primary key `["id"]`. Pagination is offset+limit
-(`pagination.type: offset_limit`, `limit_param: limit`, `offset_param: offset`, `page_size: 100`,
-matching legacy's `defaultPageSize`) — the engine stops when a page returns fewer records than
-`page_size`, identical to legacy's own `len(records) < pageSize` stop condition.
+Default pagination: offset/limit pagination; offset parameter `offset`; limit parameter `limit`;
+page size 100.
 
-`updated_at` is a `computed_fields` rename from the raw API's `modified` field — legacy's own
-`entityRecord` mapper tries `updated_at`/`modified`/`Modified`/`UpdateDate` in that order, but
-legacy's own unit test (`pipeliner_test.go`) fixes the real wire shape as lowercase `modified`, so
-this bundle projects from `modified` as the confirmed-real field name (see Known limits for the
-unexercised PascalCase fallbacks).
-
-Legacy never sends an incremental filter parameter for any stream (no `request_param`-driven
-cursor), so no `incremental` block is declared here either — every stream is full-refresh only,
-matching legacy's actual (non-incremental) read behavior exactly. `updated_at` is exposed as a
-plain field for downstream dedup/sort use, not as a declared cursor.
+- `accounts`: GET `/spaces/{{ config.space_id }}/entities/Accounts` - records path `data`;
+  offset/limit pagination; offset parameter `offset`; limit parameter `limit`; page size 100;
+  computed output fields `updated_at`.
+- `contacts`: GET `/spaces/{{ config.space_id }}/entities/Contacts` - records path `data`;
+  offset/limit pagination; offset parameter `offset`; limit parameter `limit`; page size 100;
+  computed output fields `updated_at`.
+- `opportunities`: GET `/spaces/{{ config.space_id }}/entities/Opportunities` - records path `data`;
+  offset/limit pagination; offset parameter `offset`; limit parameter `limit`; page size 100;
+  computed output fields `updated_at`.
+- `leads`: GET `/spaces/{{ config.space_id }}/entities/Leads` - records path `data`; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 100; computed output
+  fields `updated_at`.
 
 ## Write actions & risks
 
-None. Pipeliner is `capabilities.write: false`; no `writes.json` is shipped, matching legacy's
-`Write` always returning `connectors.ErrUnsupportedOperation`.
+This connector is read-only. Read behavior: external Pipeliner CRM API read of account, contact,
+opportunity, and lead data.
 
 ## Known limits
 
-- Legacy's `entityRecord`/`first(item, "id", "Id", "ID")`-style field lookup defensively tries
-  PascalCase (`Id`/`Name`/`Status`/`Modified`/`UpdateDate`) and camelCase (`ID`) variants alongside
-  lowercase field names, because the exact wire casing was never independently confirmed against a
-  live Pipeliner account at authoring time. Legacy's own unit test
-  (`internal/connectors/pipeliner/pipeliner_test.go`) is the strongest available ground truth and
-  fixes the real API response shape as lowercase (`id`, `name`, `modified`) — this bundle's schema
-  projection uses exactly those field names. The engine's `computed_fields` dialect has no
-  coalesce/fallback-across-multiple-source-keys mechanism (a single bare `{{ record.<path> }}`
-  reference names exactly one source field), so the defensive PascalCase/camelCase fallback paths
-  are not reachable here; this only changes behavior if a live Pipeliner deployment actually emits
-  PascalCase keys, which legacy's own test evidence contradicts. Documented per the parity-deviation
-  ledger as an accepted, unreachable-in-practice narrowing rather than a silent gap.
-- Full Pipeliner entity surface (activities, projects, documents, custom entities) and all
-  write/mutation endpoints are out of scope for this wave; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}` entries.
-- `page_size`/`max_pages` config overrides from legacy (`intConfig` reading `config.page_size`/
-  `config.max_pages`) have no runtime-config-driven equivalent in this engine dialect
-  (`PaginationSpec.PageSize`/`MaxPages` are bundle-fixed values, never read from `RuntimeConfig` —
-  see `docs/migration/conventions.md`'s searxng precedent for the identical narrowing) — `page_size`
-  and `max_pages` are therefore not declared in `spec.json` at all (a declared-but-unwireable key is
-  worse than an absent one, per the F6 dead-config rule) rather than accepted but silently ignored.
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, out_of_scope=5.

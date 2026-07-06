@@ -51,3 +51,42 @@ type WriteActionInfo struct {
 type DefinitionProvider interface {
 	Definition() Definition
 }
+
+func DefinitionOf(c Connector) (Definition, bool) {
+	provider, ok := c.(DefinitionProvider)
+	if !ok {
+		return Definition{}, false
+	}
+	def := provider.Definition()
+	def.Icon = MetadataWithIcon(c.Metadata()).Icon
+	return def, true
+}
+
+func streamSummariesFromManifest(manifest Manifest) []StreamSummary {
+	out := make([]StreamSummary, 0, len(manifest.Streams))
+	for _, stream := range manifest.Streams {
+		summary := StreamSummary{
+			Name:       stream.Name,
+			PrimaryKey: stream.PrimaryKey,
+			SyncModes:  append([]string(nil), manifest.SyncModes...),
+		}
+		if len(stream.CursorFields) > 0 {
+			summary.CursorField = stream.CursorFields[0]
+		}
+		out = append(out, summary)
+	}
+	return out
+}
+
+func writeActionInfosFromManifest(manifest Manifest) []WriteActionInfo {
+	out := make([]WriteActionInfo, 0, len(manifest.WriteActions))
+	for _, action := range manifest.WriteActions {
+		out = append(out, WriteActionInfo{
+			Name:   action.Name,
+			Method: action.Method,
+			Path:   action.Path,
+			Risk:   action.Risk,
+		})
+	}
+	return out
+}

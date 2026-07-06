@@ -10,15 +10,23 @@ SYNOPSIS
   pm etl status <run-id> [--json]
 
 DESCRIPTION
-  ETL can directly check, catalog, and read enabled runtime connectors by
-  catalog slug or built-in connector name. Catalog entries with
-  implementation_status=planned_native_port are inspectable through
-  pm connectors inspect and pm connectors port-plan, but cannot execute ETL
-  until a native Go port passes conformance and is enabled.
+  ETL can directly check, catalog, and read enabled connectors by name. The
+  read surface comes from connector definitions: declarative JSON bundles
+  interpreted by the connector engine, with hooks or native components where an
+  API or protocol needs custom behavior. Use pm connectors inspect <name> to
+  see available streams.
 
-  ETL runs read from a configured source connector, add Polymetrics metadata
-  fields, and write records to the destination connector. The MVP warehouse
-  destination stores tables as JSONL files.
+  Some catalog slugs remain migration metadata only. Those entries are still
+  inspectable through pm connectors inspect, but cannot execute ETL until a
+  runnable connector definition or component passes conformance and is enabled.
+
+  ETL runs read records from a configured source connector stream, add
+  Polymetrics metadata fields, and write records to the destination connector.
+  The MVP warehouse destination stores tables as JSONL files.
+
+  ETL and reverse ETL are separate first-class connector surfaces: ETL reads
+  streams, while pm reverse executes connector write actions where the upstream
+  API supports mutations.
 
   ETL writes destination records in bounded batches. Use --batch-size for large
   paginated streams when you want tighter memory bounds.
@@ -27,7 +35,7 @@ DESCRIPTION
   endpoints. It acquires a Dragonfly lease and appends a PostgreSQL run-ledger
   record after the local ETL completes.
 
-DIRECT NATIVE CONNECTOR COMMANDS
+DIRECT CONNECTOR COMMANDS
   check
     Calls the connector check operation and returns status=ok on success.
 

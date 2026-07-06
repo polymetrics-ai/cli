@@ -1,51 +1,56 @@
 # Overview
 
-Open Data DC is a read-only declarative-HTTP migration (wave2 fan-out) of
-`internal/connectors/open-data-dc` (the hand-written connector it replaces at capability parity). It
-reads District of Columbia Master Address Repository (MAR 2) locations, units, and SSL parcel records
-through the public Open Data DC API. The legacy package stays registered and unchanged until wave6's
-registry flip.
+Reads District of Columbia Master Address Repository (MAR 2) locations, units, and SSL parcel
+records via the Open Data DC API. Read-only.
+
+Readable streams: `locations`, `units`, `ssls`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://opendata.dc.gov/.
 
 ## Auth setup
 
-Provide the MAR 2 API key as the `api_key` secret; it is sent as the `apikey` query parameter
-(`{"mode": "api_key_query", "param": "apikey", "value": "{{ secrets.api_key }}"}`), matching legacy
-`open-data-dc.go`'s `connsdk.APIKeyQuery("apikey", key)` exactly. The key is never logged.
+Connection fields:
+
+- `api_key` (required, secret, string); Open Data DC (MAR 2) API key, sent as the apikey query
+  parameter. Never logged.
+- `base_url` (optional, string); default `https://datagate.dc.gov/mar/open/api/v2.2`; format `uri`;
+  Open Data DC API base URL override for tests or proxies.
+- `location` (optional, string); Address, place, or block search term for the 'locations' stream.
+  Required for that stream only.
+- `marid` (optional, string); MAR id for the 'units' stream (required for that stream) and an
+  optional filter for the 'ssls' stream.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://datagate.dc.gov/mar/open/api/v2.2`.
+
+Authentication behavior:
+
+- API key authentication in query parameter `apikey` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/ssls`.
 
 ## Streams notes
 
-The MAR API is not paginated — each stream returns its full result set in a single response
-(`pagination: {"type": "none"}`), matching legacy exactly.
+Default pagination: single request; no pagination.
 
-- `locations` requests `GET /locations/{{ config.location }}` (the search term is embedded in the
-  path, urlencoded by default per the engine's path-interpolation rule); `location` is required for
-  this stream only (an unresolved `config.location` reference hard-errors, matching legacy's own
-  explicit `"open-data-dc locations stream requires config location"` error). Records live at
-  `Result.addresses`; each raw item is normally shaped `{"address":{"properties":{...}}, "distance":
-  <num>}`. Legacy `locationProperties` also accepts `properties.<field>` and flat `<field>` fallback
-  shapes, so every lifted location field uses `coalesce` across those three raw locations while keeping
-  `{{ record.distance }}` as a top-level-only passthrough for the optional search-ranking score.
-- `units` requests `GET /units/{{ config.marid }}`; `marid` is required for this stream only, matching
-  legacy's explicit error. Records live at `Result.units` and are already flat (no nested wrap), so
-  plain schema projection (no `computed_fields`) reproduces legacy's `mapUnitRecord` exactly.
-- `ssls` requests `GET /ssls` with `marid` as an OPTIONAL query parameter
-  (`"query": {"marid": {"template": "{{ config.marid }}", "omit_when_absent": true}}` — the engine's
-  opt-in optional-query dialect), matching legacy's behavior of only setting the `marid` query param
-  when configured, and reading every record otherwise. Records live at `Result.ssls` and are already
-  flat, matching legacy's `mapSslRecord` exactly.
-
-No stream has an incremental cursor: the MAR API is a read-only address-lookup service with no
-modification timestamp, matching legacy's `CursorFields: nil` (full-refresh-only) exactly.
+- `locations`: GET `/locations/{{ config.location }}` - records path `Result.addresses`; computed
+  output fields `AddrNum`, `Anc`, `CensusTract`, `FullAddress`, `Latitude`, `Longitude`, `MarId`,
+  `Quadrant`, `ResidenceType`, `SSL`, `StName`, `Status`, `Ward`, `Xcoord`, `Ycoord`, and 2 more.
+- `units`: GET `/units/{{ config.marid }}` - records path `Result.units`.
+- `ssls`: GET `/ssls` - records path `Result.ssls`; query `marid` from template `{{ config.marid
+  }}`, omitted when absent.
 
 ## Write actions & risks
 
-None. Open Data DC's MAR 2 API is public and read-only; `capabilities.write` is `false` and this
-bundle ships no `writes.json`.
+This connector is read-only. Read behavior: external Open Data DC (MAR 2) API read of public
+address/parcel data.
 
 ## Known limits
 
-- No stream supports incremental sync; every read is a full refresh, matching legacy exactly.
-- `location` and `marid` are stream-scoped required config (only for `locations` and `units`
-  respectively) rather than globally required `spec.json` properties, since `ssls` needs neither and
-  legacy itself validates this per-stream, not globally — this mirrors legacy's exact per-stream
-  validation in `requestFor`.
+- API coverage includes 3 stream-backed endpoint group(s).

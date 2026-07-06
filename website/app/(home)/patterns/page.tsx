@@ -15,7 +15,7 @@ export default function PatternsPage() {
         <span className="font-mono text-[12px] uppercase tracking-widest text-text-disabled">
           {PATTERN_COUNT} patterns · {families.length} families
         </span>
-        <h1 className="font-square text-[40px] font-semibold leading-[1.05] text-text-primary md:text-[56px]">
+        <h1 className="font-analog text-[40px] leading-[1.05] text-text-primary md:text-[56px]">
           The math behind the canvas.
         </h1>
         <p className="max-w-[60ch] text-[15px] leading-relaxed text-text-tertiary">
@@ -31,7 +31,7 @@ export default function PatternsPage() {
         return (
           <section key={family} className="mb-14">
             <div className="mb-4 flex items-baseline gap-3 border-b border-line-structure pb-2">
-              <h2 className="font-square text-[16px] font-semibold text-text-secondary">{family}</h2>
+              <h2 className="text-[16px] font-medium text-text-secondary">{family}</h2>
               <span className="text-[12px] text-text-disabled">{items.length}</span>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
@@ -52,7 +52,7 @@ export default function PatternsPage() {
                     />
                   </div>
                   <figcaption className="flex flex-col gap-0.5 p-2.5">
-                    <span className="font-square text-[12px] font-semibold text-text-secondary">{p.name}</span>
+                    <span className="text-[12px] font-medium text-text-secondary">{p.name}</span>
                     <span className="font-mono text-[10px] leading-tight text-text-tertiary">
                       {p.formula}
                     </span>

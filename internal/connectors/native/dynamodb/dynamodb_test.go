@@ -37,7 +37,7 @@ func TestNameAndMetadata(t *testing.T) {
 
 // TestNoInitRegistration is the required grep-guard, mirroring
 // native/postgres's and native/bing-ads's identical guard (T-17 precedent):
-// the native package must NOT call RegisterFactory/RegisterNativeLive from
+// the native package must NOT call RegisterFactory from
 // anywhere in its own source. The registration flip is a later-wave change;
 // this package only builds and tests standalone.
 func TestNoInitRegistration(t *testing.T) {
@@ -68,9 +68,6 @@ func TestNoInitRegistration(t *testing.T) {
 		src := string(raw)
 		if strings.Contains(src, "RegisterFactory(") {
 			t.Fatalf("%s calls RegisterFactory — native/dynamodb must NOT self-register (registration flip is a later wave)", e.Name())
-		}
-		if strings.Contains(src, "RegisterNativeLive(") {
-			t.Fatalf("%s calls RegisterNativeLive — native/dynamodb must NOT self-register (registration flip is a later wave)", e.Name())
 		}
 		if strings.Contains(src, "func init()") {
 			t.Fatalf("%s declares an init() function — native/dynamodb must perform no registration side effects", e.Name())

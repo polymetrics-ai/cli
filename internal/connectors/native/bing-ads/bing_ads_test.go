@@ -35,7 +35,7 @@ func TestNameAndMetadata(t *testing.T) {
 
 // TestNoInitRegistration is the required grep-guard, mirroring
 // native/postgres's identical guard (T-17 precedent): the native package
-// must NOT call RegisterFactory/RegisterNativeLive from anywhere in its own
+// must NOT call RegisterFactory from anywhere in its own
 // source. The registration flip is a wave6 change; wave0 only builds and
 // tests the package.
 func TestNoInitRegistration(t *testing.T) {
@@ -66,9 +66,6 @@ func TestNoInitRegistration(t *testing.T) {
 		src := string(raw)
 		if strings.Contains(src, "RegisterFactory(") {
 			t.Fatalf("%s calls RegisterFactory — native/bing-ads must NOT self-register in wave0 (registration flip is wave6)", e.Name())
-		}
-		if strings.Contains(src, "RegisterNativeLive(") {
-			t.Fatalf("%s calls RegisterNativeLive — native/bing-ads must NOT self-register in wave0 (registration flip is wave6)", e.Name())
 		}
 		if strings.Contains(src, "func init()") {
 			t.Fatalf("%s declares an init() function — native/bing-ads must perform no registration side effects in wave0", e.Name())

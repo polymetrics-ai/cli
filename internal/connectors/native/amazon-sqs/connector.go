@@ -37,7 +37,7 @@
 // either), so neither connectors.StatefulReader nor connectors.CDCReader is
 // implemented here, unlike postgres.
 //
-// NO init()/RegisterFactory/RegisterNativeLive call exists in this package
+// NO init()/RegisterFactory call exists in this package
 // (enforced by a grep-guard test, amazon_sqs_test.go TestNoInitRegistration)
 // — the registration flip that wires native/amazon-sqs into the production
 // registry is a wave6 change; this wave only builds and tests the package

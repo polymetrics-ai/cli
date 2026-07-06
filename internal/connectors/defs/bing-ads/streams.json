@@ -20,7 +20,7 @@
       "path": "/AccountsInfo/Query",
       "records": { "path": "AccountsInfo" },
       "schema": "schemas/accounts.json",
-      "conformance": { "skip_dynamic": true, "reason": "Tier-3 native package (internal/connectors/native/bing-ads): this streams.json entry is documentation/schema-reference only (identity/spec/schema uniformity with every other connector, engine.Base.Definition()); Read/Catalog are hand-written Go, never routed through engine.Read. Proven live by internal/connectors/native/bing-ads's own unit tests and internal/connectors/paritytest/bing-ads." }
+      "conformance": { "skip_dynamic": true, "reason": "Tier-3 native package (internal/connectors/native/bing-ads): this streams.json entry is documentation/schema-reference only (identity/spec/schema uniformity with every other connector, engine.Base.Definition()); Read/Catalog are hand-written Go, never routed through engine.Read. Proven live by internal/connectors/native/bing-ads's own unit tests and archived parity evidence for bing-ads." }
     },
     {
       "name": "users",

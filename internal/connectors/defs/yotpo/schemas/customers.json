@@ -2,10 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "customers",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
+  "x-primary-key": ["external_id"],
+  "x-cursor-field": "account_updated_at",
   "properties": {
-    "id": { "type": ["string", "null"] },
     "external_id": { "type": ["string", "null"] },
     "email": { "type": ["string", "null"] },
     "phone_number": { "type": ["string", "null"] },
@@ -21,7 +20,6 @@
     "address": { "type": ["object", "null"] },
     "accepts_email_marketing": { "type": ["boolean", "null"] },
     "accepts_sms_marketing": { "type": ["boolean", "null"] },
-    "custom_properties": { "type": ["object", "null"] },
-    "updated_at": { "type": ["string", "null"] }
+    "custom_properties": { "type": ["object", "null"] }
   }
 }

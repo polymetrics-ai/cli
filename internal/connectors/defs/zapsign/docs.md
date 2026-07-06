@@ -1,86 +1,94 @@
 # Overview
 
-ZapSign is an electronic signature platform. This bundle reads documents, signers, templates, and
-webhooks from the ZapSign REST API (`GET {base_url}/docs/`, `/signers/`, `/templates/`,
-`/webhooks/`), and writes document/signer/webhook mutations that the dialect can express without a
-multipart file body. It migrates `internal/connectors/zapsign` (the hand-written legacy connector)
-to a declarative Tier-1 bundle at capability parity, then expands it to ZapSign's full practical
-API surface (Pass B); the legacy package stays registered and unchanged until wave6's registry
-flip.
+Reads and writes ZapSign documents, signers, templates, and webhooks.
+
+Readable streams: `documents`, `signers`, `templates`, `webhooks`.
+
+Write actions: `create_document_from_template`, `cancel_document`, `delete_document`, `add_signer`,
+`update_signer`, `remove_signer`, `create_webhook`, `delete_webhook`.
+
+Service API documentation: https://docs.zapsign.com.br/.
 
 ## Auth setup
 
-Requires a single secret, `api_token` (ZapSign API token), sent as `Authorization: Token
-<api_token>` — an `api_key_header` auth spec with `header: Authorization` and `prefix: "Token "`,
-matching legacy's `connsdk.APIKeyHeader("Authorization", token, "Token ")` exactly
-(`zapsign.go:118`). `base_url` defaults to `https://api.zapsign.com.br/api/v1`
-(`zapsign.go:17`'s `defaultBaseURL`), materialized via `spec.json`'s `"default"` when unset.
+Connection fields:
+
+- `api_token` (required, secret, string); ZapSign API token, sent as an 'Authorization: Token
+  <api_token>' header.
+- `base_url` (optional, string); default `https://api.zapsign.com.br/api/v1`; format `uri`; ZapSign
+  API base URL.
+
+Secret fields are redacted in logs and write previews: `api_token`.
+
+Default configuration values: `base_url=https://api.zapsign.com.br/api/v1`.
+
+Authentication behavior:
+
+- API key authentication in `Authorization` with prefix `Token` using `secrets.api_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/docs/`.
 
 ## Streams notes
 
-- **`documents`** (`GET /docs/`) and **`templates`** (`GET /templates/`) reproduce legacy's single
-  unpaginated request per read. The hand-written connector never sent a `page` query parameter or
-  followed additional pages, so these streams intentionally omit pagination for fidelity.
-- **`signers`** (`GET /signers/`) is a legacy-parity carryover: ZapSign's published API reference
-  does not document a top-level, account-wide "list all signers" endpoint (only
-  `GET /docs/{token}/` embeds a document's own signers, and `GET /signers/{signer_token}` fetches
-  one signer by token) — this stream reproduces the ORIGINAL hand-written legacy connector's own
-  behavior (`zapsign.go`'s `streams["signers"]` hitting `/signers/`) verbatim rather than inventing
-  a new capability; kept for read-parity with the legacy connector this bundle is migrating, not
-  because the endpoint is independently ZapSign-documented. See Known limits.
-- **`webhooks`** (`GET /webhooks/`) is new in this pass: lists registered outbound webhook
-  subscriptions.
-- Each stream's raw API record carries its identifier under the field name `token` (`documents`/
-  `signers`/`templates`) or `id` (`webhooks`). `computed_fields` maps the token-shaped legacy
-  streams to the schema's `id` property, matching legacy's `mapDocument`/`mapSigner`/`mapTemplate`
-  output names. `signers` and `templates` use the same `first(token, id)` fallback as legacy via
-  `coalesce`; `documents` matches legacy's stricter `id = token` mapping. Schema projection for
-  `documents` and `templates` is intentionally narrow, preserving only the fields those legacy
-  mappers emitted.
+Default pagination: single request; no pagination.
+
+- `documents`: GET `/docs/` - records path `results`; computed output fields `id`.
+- `signers`: GET `/signers/` - records path `results`; computed output fields `id`.
+- `templates`: GET `/templates/` - records path `results`; computed output fields `id`.
+- `webhooks`: GET `/webhooks/` - records path `results`.
 
 ## Write actions & risks
 
-- **`create_document_from_template`** (`POST /models/create-doc/`) creates a new signable document
-  from an existing template, replacing the template's dynamic fields with the submitted data.
-  External mutation; sends a real signing notification to every listed signer when
-  `send_automatic_email`/`send_automatic_whatsapp` is set. Approval required.
-- **`cancel_document`** (`POST /docs/{token}/cancel/`) interrupts an in-progress signature flow.
-  Irreversible for any signer who has not yet signed. Approval required.
-- **`delete_document`** (`DELETE /docs/{token}/delete/`) soft-deletes a document (hidden from the
-  ZapSign web UI, still readable via the API). `delete.missing_ok_status: [404]` treats an
-  already-deleted document as a successful, idempotent delete.
-- **`add_signer`** (`POST /docs/{token}/add-signer/`) adds a new signer to an existing document;
-  `body_fields` restricts the request body to signer-shaped fields only (`doc_token` stays
-  path-only, never leaks into the body). Immediately notifies the signer when
-  `send_automatic_email`/`send_automatic_whatsapp` is set.
-- **`update_signer`** (`POST /signers/{token}/`) mutates an existing signer's contact
-  details/authentication mode. ZapSign rejects this once the signer has already signed the
-  document — surfaced as an ordinary per-record write failure, not a special engine case.
-- **`remove_signer`** (`DELETE /signer/{token}/remove/`) permanently removes a signer; re-adding
-  the same person issues a brand-new signing token/link. `delete.missing_ok_status: [404]`.
-- **`create_webhook`** / **`delete_webhook`** (`POST`/`DELETE /webhooks/`) manage outbound event
-  subscriptions; creating one starts delivering live document-event payloads to a caller-supplied
-  URL — verify the target before enabling.
+Overall write risk: external mutation: creates documents from templates, cancels/deletes documents,
+adds/updates/removes signers, and manages webhook subscriptions that receive live document-event
+data.
 
-All write actions carry `body_type: "json"` except the two `delete`-kind actions
-(`delete_document`, `remove_signer`), which are `body_type: "none"` pure path-parameterized
-mutations, and `cancel_document`, which sends no body at all (`body_type: "none"` with no
-`body_fields`).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_document_from_template`: POST `/models/create-doc/` - kind `create`; body type `json`;
+  required record fields `template_id`, `signers`; accepted fields `allow_refusal`, `creator_email`,
+  `custom_metadata`, `folder_path`, `send_automatic_email`, `send_automatic_whatsapp`,
+  `signature_order_active`, `signers`, `template_id`; risk: creates a new signable document from an
+  existing template and notifies signers by email/WhatsApp if
+  send_automatic_email/send_automatic_whatsapp is set; external mutation, approval required.
+- `cancel_document`: POST `/docs/{{ record.token }}/cancel/` - kind `update`; body type `none`; path
+  fields `token`; required record fields `token`; accepted fields `token`; risk: irreversibly
+  interrupts an in-progress signature flow for a document; any signer who has not yet signed can no
+  longer complete it.
+- `delete_document`: DELETE `/docs/{{ record.token }}/delete/` - kind `delete`; body type `none`;
+  path fields `token`; required record fields `token`; accepted fields `token`; missing records
+  treated as success for status `404`; risk: soft-deletes a document, hiding it from the ZapSign web
+  interface for end users while it remains readable via the API.
+- `add_signer`: POST `/docs/{{ record.doc_token }}/add-signer/` - kind `create`; body type `json`;
+  path fields `doc_token`; body fields `name`, `email`, `phone_country`, `phone_number`,
+  `auth_mode`, `send_automatic_email`, `send_automatic_whatsapp`; required record fields
+  `doc_token`, `name`; accepted fields `auth_mode`, `doc_token`, `email`, `name`, `phone_country`,
+  `phone_number`, `send_automatic_email`, `send_automatic_whatsapp`; risk: adds a new signer to an
+  existing document and, if send_automatic_email/send_automatic_whatsapp is set, immediately
+  notifies them with a signing link.
+- `update_signer`: POST `/signers/{{ record.token }}/` - kind `update`; body type `json`; path
+  fields `token`; required record fields `token`; accepted fields `auth_mode`, `email`,
+  `lock_email`, `lock_name`, `lock_phone`, `name`, `phone_country`, `phone_number`, `token`; risk:
+  mutates an existing signer's contact details or authentication mode; only succeeds if the signer
+  has not yet signed the document (ZapSign rejects the request once the signer has already signed,
+  surfaced as an ordinary per-record write failure).
+- `remove_signer`: DELETE `/signer/{{ record.token }}/remove/` - kind `delete`; body type `none`;
+  path fields `token`; required record fields `token`; accepted fields `token`; missing records
+  treated as success for status `404`; risk: permanently removes a signer from a document; this is
+  irreversible, and re-adding the same person issues a brand new signing token/link.
+- `create_webhook`: POST `/webhooks/` - kind `create`; body type `json`; required record fields
+  `url`, `type`; accepted fields `enabled`, `type`, `url`; risk: registers a new outbound webhook
+  that will POST live document-event data to an external URL of the caller's choosing; verify the
+  target endpoint before enabling.
+- `delete_webhook`: DELETE `/webhooks/{{ record.id }}/` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: permanently removes a webhook subscription; event delivery to its target
+  URL stops immediately.
 
 ## Known limits
 
-- **`signers` stream has no independently-documented top-level list endpoint.** See Streams notes
-  above — this stream is a verbatim legacy-parity carryover (`GET /signers/`), not a capability
-  verified against ZapSign's current published API reference. Retained rather than removed to avoid
-  a read-parity regression for existing callers of the legacy connector; a future pass should
-  confirm against a live ZapSign account whether this path still resolves, or replace it with a
-  per-document `GET /docs/{token}/` signers sub-resource read (which would require the `fan_out`
-  dialect over the `documents` stream's own tokens, not attempted here to keep this pass's Blast
-  radius to additive changes only).
-- **Document/template creation from an uploaded file is out of scope.** `POST /docs/`, `POST
-  /docs/oneclick/create/`, `POST /templates/create-docx/`, and `PUT /templates/{id}/` all require a
-  multipart/form-data file body; the engine's write dialect supports `json`/`form`/`none` bodies
-  only. See `api_surface.json`'s `binary_payload` exclusions.
-- **Partner/reseller endpoints are out of scope.** `POST /partners/create-account/` and `POST
-  /partners/update-payment-status/` require a separate Partners API credential this bundle's
-  `spec.json` does not model (`requires_elevated_scope`).
+- API coverage includes 4 stream-backed endpoint group(s), 8 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=4, duplicate_of=4, requires_elevated_scope=2.

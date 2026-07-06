@@ -1,64 +1,62 @@
 # Overview
 
-Flexmail is a wave2 fan-out declarative-HTTP migration. It reads Flexmail contacts, custom fields,
-interests, segments, and sources through the Flexmail REST API
-(`GET https://api.flexmail.eu/...`). This bundle migrates `internal/connectors/flexmail` (the
-hand-written connector); the legacy package stays registered and unchanged until wave6's registry
-flip.
+Reads Flexmail contacts, custom fields, interests, segments, and sources through the Flexmail REST
+API.
+
+Readable streams: `contacts`, `custom_fields`, `interests`, `segments`, `sources`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://api.flexmail.eu/documentation/.
 
 ## Auth setup
 
-Provide the Flexmail `account_id` config value and a `personal_access_token` secret; both are sent
-as HTTP Basic auth (username = `account_id`, password = `personal_access_token`), matching legacy's
-`connsdk.Basic(accountID, secret)` (`flexmail.go:242`). The token is never logged. `base_url`
-defaults to `https://api.flexmail.eu` and may be overridden for tests/proxies.
+Connection fields:
+
+- `account_id` (required, string); Flexmail account id, used as the HTTP Basic auth username.
+- `base_url` (optional, string); default `https://api.flexmail.eu`; format `uri`; Flexmail API base
+  URL override for tests or proxies.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `500`; Records per page for paginated endpoints (contacts,
+  sources); 1-500.
+- `personal_access_token` (required, secret, string); Flexmail personal access token, used as the
+  HTTP Basic auth password. Never logged.
+
+Secret fields are redacted in logs and write previews: `personal_access_token`.
+
+Default configuration values: `base_url=https://api.flexmail.eu`, `page_size=500`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `config.account_id`, `secrets.personal_access_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/contacts` with query `limit`=`1`; `offset`=`0`.
 
 ## Streams notes
 
-All 5 streams read Flexmail's HAL-style collection envelope: records live at `_embedded.item`
-(`records.path`), matching legacy's `recordsPath` for every endpoint. `contacts` and `sources` are
-legacy's two paginated endpoints (`endpoint.paginated == true`); pagination is declared as
-`pagination.type: offset_limit` with `limit_param: limit`/`offset_param: offset` and a
-`page_size: 500` stop threshold — the same offset-advance-until-short-page behavior as legacy's
-`harvest` loop. `custom_fields`, `interests`, and `segments` are legacy's non-paginated endpoints:
-they return their full collection in a single response, so no `pagination` block is declared (a
-stream with no pagination block defaults to `type: none`, a single request).
+Default pagination: single request; no pagination.
 
-Every Flexmail object exposes an `id` primary key (`x-primary-key: ["id"]`); none of the streams
-support incremental sync (Flexmail is full-refresh only, matching legacy's empty `CursorFields`),
-so no schema declares `x-cursor-field` and no stream declares an `incremental` block.
+Pagination by stream: none: `custom_fields`, `interests`, `segments`; offset_limit: `contacts`,
+`sources`.
 
-`offset_limit`'s only stop signal is a short page (`recordCount < page_size`); it has no
-Stripe-style `stop_path`/token equivalent. The required 2-page fixtures for `contacts`/`sources`
-(conventions.md §4) therefore each ship a full `page_size`-sized (500-record) page 1 followed by a
-1-record page 2 — a smaller page 1 would trigger the short-page stop after a single request and
-never demonstrate real pagination, and lowering the bundle's *declared* `page_size` purely to make
-a smaller fixture easier to author would change production request cadence (far more roundtrips
-than legacy's real default), which this bundle avoids.
+- `contacts`: GET `/contacts` - records path `_embedded.item`; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 500.
+- `custom_fields`: GET `/custom-fields` - records path `_embedded.item`.
+- `interests`: GET `/interests` - records path `_embedded.item`.
+- `segments`: GET `/segments` - records path `_embedded.item`.
+- `sources`: GET `/sources` - records path `_embedded.item`; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 500.
 
 ## Write actions & risks
 
-None. Flexmail is read-only in legacy (`capabilities.write: false`, `Write` returns
-`connectors.ErrUnsupportedOperation`); this bundle ships no `writes.json`.
+This connector is read-only. Read behavior: external Flexmail API read of contact and marketing-list
+data.
 
 ## Known limits
 
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes `page_size` (1-500,
-  default 500) and `max_pages` (default unbounded) as config-driven overrides on the two paginated
-  endpoints (`flexmailPageSize`/`flexmailMaxPages`, `flexmail.go:275-303`). The engine's
-  `offset_limit` paginator reads `PaginationSpec.PageSize` as a static bundle-level integer, not a
-  `{{ config.* }}` template, and `PaginationSpec.MaxPages` is likewise a static int with no
-  per-request config wiring mechanism — matching bitly's identical documented gap
-  (`docs/migration/conventions.md`). This bundle declares `page_size: 500` (legacy's own default)
-  directly in `streams.json`'s pagination blocks and leaves `max_pages` unset (unbounded, legacy's
-  own default when unconfigured); `spec.json` still documents `page_size` for operator awareness
-  even though it is not wired to any template (informational parity with legacy's config surface),
-  but does not declare `max_pages` at all (F6, REVIEW.md: a declared-but-unwireable key is worse
-  than an absent one).
-- **Legacy's fixture-mode-only synthetic records are not modeled.** Legacy's `readFixture` path
-  (only reached when `config.mode == "fixture"`) emits deterministic in-code records with fields
-  not present on the live wire shape (`type`, `label`, `description`, etc. stamped onto every
-  fixture regardless of stream). This bundle's fixtures instead follow the conventions.md fixture
-  rules (recorded-real-shape per stream, sanitized), which the engine's own
-  `internal/connectors/conformance` fixture-replay harness consumes for credential-free testing —
-  no fixture-mode equivalent is needed in the bundle itself.
+- Batch defaults: read_page_size=500.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, out_of_scope=4.

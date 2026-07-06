@@ -1,98 +1,143 @@
 # Overview
 
-Deputy is a workforce-management product (scheduling, timesheets, HR). This bundle reads
-locations, employees, departments, timesheets, tasks, leave requests, rosters, webhooks, and teams,
-and writes department/leave/roster/webhook/team create/update/delete mutations, through the Deputy
-REST API. Full refresh. This bundle migrates `internal/connectors/deputy` (the hand-written
-connector); the legacy package stays registered and unchanged until wave6's registry flip. Pass B
-(2026-07-04) expanded this bundle against Deputy's own current documentation
-(`developer.deputy.com`, superseding the legacy `www.deputy.com/api-doc/...` docs_url, which now
-301-redirects there) — see `api_surface.json` for the full endpoint-by-endpoint accounting of
-Deputy's ~1700-page documented surface, the overwhelming majority of which is a single uniform
-reflection-generated CRUD matrix repeated across 68 ORM resource types.
+Reads Deputy locations, employees, departments, timesheets, tasks, leave, rosters, webhooks, and
+teams, and writes department/leave/roster/webhook/team mutations, through the Deputy REST API (full
+refresh).
+
+Readable streams: `locations`, `employees`, `departments`, `timesheets`, `tasks`, `leave`,
+`rosters`, `webhooks`, `teams`.
+
+Write actions: `create_department`, `update_department`, `delete_department`, `create_leave`,
+`update_leave`, `delete_leave`, `create_roster`, `update_roster`, `delete_roster`, `create_webhook`,
+`update_webhook`, `delete_webhook`, `create_team`, `update_team`, `delete_team`.
+
+Service API documentation: https://developer.deputy.com/.
 
 ## Auth setup
 
-Provide a Deputy bearer access token via the `api_key` secret; it is sent as the `Authorization`
-header (`auth: [{"mode": "bearer", "token": "{{ secrets.api_key }}"}]`), matching legacy's
-`connsdk.Bearer(secret)`. `base_url` is REQUIRED with no default — Deputy is install-specific
-(`https://{installname}.{geo}.deputy.com`), matching legacy's own `deputyBaseURL`, which has no
-in-code fallback.
+Connection fields:
+
+- `api_key` (required, secret, string); Deputy bearer access token, sent as the Authorization
+  header. Never logged.
+- `base_url` (required, string); format `uri`; Deputy install-specific API base URL, e.g.
+  https://{installname}.{geo}.deputy.com.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/api/v1/resource/Company` with query `max`=`1`.
 
 ## Streams notes
 
-Deputy's raw resource objects use PascalCase field names (`Id`, `CompanyName`, `DisplayName`, ...);
-every stream's `computed_fields` renames each field to this bundle's snake_case schema property
-(`id`, `company_name`, `display_name`, ...) via a bare `{{ record.<PascalField> }}` reference —
-schema projection alone only matches by exact key name, so without the rename every field would
-silently drop. A bare single-reference `computed_fields` entry (no filter, no literal text)
-performs typed extraction: the raw JSON value's native type (integer/boolean/string) is preserved,
-not stringified, matching legacy's `deputy*Record` functions which likewise copy the raw
-`map[string]any` values through unchanged.
+Default pagination: offset/limit pagination; offset parameter `start`; limit parameter `max`; page
+size 500.
 
-- `locations` (`/api/v1/resource/Company`) and `departments` (`/api/v1/resource/OperationalUnit`)
-  are Deputy's paginated `/resource/*` collection endpoints: `pagination.type: offset_limit` with
-  `limit_param: max`, `offset_param: start` (Deputy's own query parameter names), matching legacy's
-  `?start=N&max=N` convention; a page shorter than `page_size` is the last page.
-- `employees` (`/api/v1/supervise/employee`), `timesheets` (`/api/v1/my/timesheets`), and `tasks`
-  (`/api/v1/my/tasks`) are Deputy's curated, non-paginated endpoints; each stream overrides the
-  base pagination with `pagination: {"type": "none"}`, matching legacy's `endpoint.paginated:
-  false` branch (a single bounded request, no `start`/`max` query params sent at all).
-- `leave` (`/api/v1/resource/Leave`), `rosters` (`/api/v1/resource/Roster`), `webhooks`
-  (`/api/v1/resource/Webhook`), and `teams` (`/api/v1/resource/Team`) are Pass B additions on the
-  same generic `/resource/{Resource}` collection router `locations`/`departments` already use —
-  each inherits the base `offset_limit` pagination (`max`/`start`, `page_size: 500`) unchanged, and
-  each stream's `computed_fields` renames the raw PascalCase API fields to this bundle's snake_case
-  schema properties exactly like every pre-existing Deputy stream.
-- No stream declares an `incremental` block: Deputy is full-refresh only, matching legacy (no
-  cursor fields declared for any Deputy stream) — this includes all 4 Pass B streams, none of which
-  expose a documented updated-since filter parameter on their generic-resource list endpoint.
+Pagination by stream: none: `employees`, `timesheets`, `tasks`; offset_limit: `locations`,
+`departments`, `leave`, `rosters`, `webhooks`, `teams`.
+
+- `locations`: GET `/api/v1/resource/Company` - records at response root; offset/limit pagination;
+  offset parameter `start`; limit parameter `max`; page size 500; computed output fields `active`,
+  `address`, `code`, `company_name`, `country`, `created`, `creator`, `id`, `modified`.
+- `employees`: GET `/api/v1/supervise/employee` - records at response root; computed output fields
+  `active`, `company`, `created`, `display_name`, `first_name`, `id`, `last_name`, `modified`,
+  `role`.
+- `departments`: GET `/api/v1/resource/OperationalUnit` - records at response root; offset/limit
+  pagination; offset parameter `start`; limit parameter `max`; page size 500; computed output fields
+  `active`, `company`, `created`, `creator`, `id`, `modified`, `operational_unit_name`.
+- `timesheets`: GET `/api/v1/my/timesheets` - records at response root; computed output fields
+  `created`, `date`, `employee`, `end_time`, `id`, `is_in_progress`, `modified`, `operational_unit`,
+  `start_time`, `total_time`.
+- `tasks`: GET `/api/v1/my/tasks` - records at response root; computed output fields `completed`,
+  `created`, `creator`, `due_time`, `id`, `modified`, `priority`, `title`.
+- `leave`: GET `/api/v1/resource/Leave` - records at response root; offset/limit pagination; offset
+  parameter `start`; limit parameter `max`; page size 500; computed output fields `all_day`,
+  `comment`, `created`, `creator`, `date_end`, `date_start`, `days`, `employee`, `id`, `leave_rule`,
+  `modified`, `status`.
+- `rosters`: GET `/api/v1/resource/Roster` - records at response root; offset/limit pagination;
+  offset parameter `start`; limit parameter `max`; page size 500; computed output fields `cost`,
+  `created`, `creator`, `date`, `employee`, `end_time`, `id`, `modified`, `open`,
+  `operational_unit`, `published`, `start_time`, `total_time`.
+- `webhooks`: GET `/api/v1/resource/Webhook` - records at response root; offset/limit pagination;
+  offset parameter `start`; limit parameter `max`; page size 500; computed output fields `address`,
+  `created`, `creator`, `enabled`, `id`, `modified`, `topic`, `type`.
+- `teams`: GET `/api/v1/resource/Team` - records at response root; offset/limit pagination; offset
+  parameter `start`; limit parameter `max`; page size 500; computed output fields `created`,
+  `creator`, `id`, `leader_employee`, `modified`, `name`.
 
 ## Write actions & risks
 
-Pass B (2026-07-04) added write actions for the 5 generic-resource types with concretely-typed
-OpenAPI create/update/delete schemas and no elevated-scope requirement (`capabilities.write:
-true`): `create_department`/`update_department`/`delete_department` (`OperationalUnit`),
-`create_leave`/`update_leave`/`delete_leave` (`Leave` — `update_leave` is how a leave request's
-`Status` approval field is changed), `create_roster`/`update_roster`/`delete_roster` (`Roster`, a
-scheduled shift — creating or updating one may trigger a real notification to the assigned
-employee), `create_webhook`/`update_webhook`/`delete_webhook` (`Webhook`, a live event-subscription
-registration), and `create_team`/`update_team`/`delete_team` (`Team`). All 15 actions use Deputy's
-generic-resource router shape: `POST /api/v1/resource/{Resource}` to create, `POST
-/api/v1/resource/{Resource}/{{ record.Id }}` to update (Deputy's own API uses POST, not PUT/PATCH,
-for updates against this router), `DELETE /api/v1/resource/{Resource}/{{ record.Id }}` to delete
-(`delete.missing_ok_status: [404]`, idempotent). Every `record_schema` uses Deputy's own PascalCase
-wire field names directly (no `computed_fields`-style rename layer exists on the write path — only
-reads project/rename via `computed_fields`), matching every write action's `record_schema` in this
-codebase using the API's real wire field names as-is (see stripe's `email`/`name` vs its
-`computed_fields`-free writes.json). `Company`(locations)/`Employee`/`Timesheet`/`Task` mutations
-are deliberately NOT covered — see Known limits and `api_surface.json`'s per-endpoint reasons.
+Overall write risk: external mutation of departments, leave requests (approval status),
+rosters/shifts (may notify employees), webhook subscriptions, and teams; approval required.
+
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_department`: POST `/api/v1/resource/OperationalUnit` - kind `create`; body type `json`;
+  required record fields `Company`, `OperationalUnitName`; accepted fields `Active`, `Colour`,
+  `Company`, `OperationalUnitName`, `ParentOperationalUnit`, `ShowOnRoster`; risk: external
+  mutation; creates a real Deputy department/operational unit; approval required.
+- `update_department`: POST `/api/v1/resource/OperationalUnit/{{ record.Id }}` - kind `update`; body
+  type `json`; path fields `Id`; required record fields `Id`; accepted fields `Active`, `Colour`,
+  `Id`, `OperationalUnitName`, `ShowOnRoster`; risk: external mutation; updates a real Deputy
+  department/operational unit; approval required.
+- `delete_department`: DELETE `/api/v1/resource/OperationalUnit/{{ record.Id }}` - kind `delete`;
+  body type `none`; path fields `Id`; required record fields `Id`; accepted fields `Id`; missing
+  records treated as success for status `404`; risk: irreversible deletion of a real Deputy
+  department/operational unit; approval required.
+- `create_leave`: POST `/api/v1/resource/Leave` - kind `create`; body type `json`; required record
+  fields `Employee`, `DateStart`, `DateEnd`; accepted fields `AllDay`, `Comment`, `DateEnd`,
+  `DateStart`, `Employee`, `LeaveRule`; risk: external mutation; creates a real leave request for a
+  Deputy employee; approval required.
+- `update_leave`: POST `/api/v1/resource/Leave/{{ record.Id }}` - kind `update`; body type `json`;
+  path fields `Id`; required record fields `Id`; accepted fields `Comment`, `DateEnd`, `DateStart`,
+  `Id`, `Status`; risk: external mutation; updates a real Deputy leave request, including its
+  approval status; approval required.
+- `delete_leave`: DELETE `/api/v1/resource/Leave/{{ record.Id }}` - kind `delete`; body type `none`;
+  path fields `Id`; required record fields `Id`; accepted fields `Id`; missing records treated as
+  success for status `404`; risk: irreversible deletion of a real Deputy leave request; approval
+  required.
+- `create_roster`: POST `/api/v1/resource/Roster` - kind `create`; body type `json`; required record
+  fields `StartTime`, `EndTime`, `OperationalUnit`; accepted fields `Comment`, `Employee`,
+  `EndTime`, `Open`, `OperationalUnit`, `StartTime`; risk: external mutation; creates a real Deputy
+  roster/shift, potentially notifying the assigned employee; approval required.
+- `update_roster`: POST `/api/v1/resource/Roster/{{ record.Id }}` - kind `update`; body type `json`;
+  path fields `Id`; required record fields `Id`; accepted fields `Comment`, `Employee`, `EndTime`,
+  `Id`, `Published`, `StartTime`; risk: external mutation; updates a real Deputy roster/shift,
+  potentially notifying the assigned employee; approval required.
+- `delete_roster`: DELETE `/api/v1/resource/Roster/{{ record.Id }}` - kind `delete`; body type
+  `none`; path fields `Id`; required record fields `Id`; accepted fields `Id`; missing records
+  treated as success for status `404`; risk: irreversible deletion of a real Deputy roster/shift;
+  approval required.
+- `create_webhook`: POST `/api/v1/resource/Webhook` - kind `create`; body type `json`; required
+  record fields `Topic`, `Address`, `Type`; accepted fields `Address`, `Enabled`, `Topic`, `Type`;
+  risk: external mutation; registers a real Deputy webhook subscription that will deliver events to
+  the given address; approval required.
+- `update_webhook`: POST `/api/v1/resource/Webhook/{{ record.Id }}` - kind `update`; body type
+  `json`; path fields `Id`; required record fields `Id`; accepted fields `Address`, `Enabled`, `Id`;
+  risk: external mutation; updates a real Deputy webhook subscription; approval required.
+- `delete_webhook`: DELETE `/api/v1/resource/Webhook/{{ record.Id }}` - kind `delete`; body type
+  `none`; path fields `Id`; required record fields `Id`; accepted fields `Id`; missing records
+  treated as success for status `404`; risk: irreversible deletion of a real Deputy webhook
+  subscription; approval required.
+- `create_team`: POST `/api/v1/resource/Team` - kind `create`; body type `json`; required record
+  fields `Name`; accepted fields `LeaderEmployee`, `Name`; risk: external mutation; creates a real
+  Deputy team; approval required.
+- `update_team`: POST `/api/v1/resource/Team/{{ record.Id }}` - kind `update`; body type `json`;
+  path fields `Id`; required record fields `Id`; accepted fields `Id`, `LeaderEmployee`, `Name`;
+  risk: external mutation; updates a real Deputy team; approval required.
+- `delete_team`: DELETE `/api/v1/resource/Team/{{ record.Id }}` - kind `delete`; body type `none`;
+  path fields `Id`; required record fields `Id`; accepted fields `Id`; missing records treated as
+  success for status `404`; risk: irreversible deletion of a real Deputy team; approval required.
 
 ## Known limits
 
-- `base.pagination.page_size` is set to legacy's real production default/max
-  (`deputyDefaultPageSize`/`deputyMaxPageSize`, both `500`) — this is the actual value a live
-  deployment's paginator sends; it is not a fixture convenience. `page_size`/`max_pages` are still
-  not declared in `spec.json` (dead config, F6, REVIEW.md): the engine's `offset_limit` paginator
-  reads its page size only from `streams.json`'s statically-declared `pagination` block, with no
-  config-driven override mechanism (the same limitation documented for searxng's `page_size`/
-  `max_pages`, `docs/migration/conventions.md`'s Tier-1 read-only variant section).
-  `fixtures/streams/locations/{page_1,page_2}.json` uses a full 500-record first page and a short
-  second page so conformance exercises the same `max=500` live request shape legacy uses.
-- **Company/Employee/Timesheet/Task mutations are excluded, not silently dropped**: `Company`
-  (location) create/update/delete only exist via the separately-gated, untyped-body
-  `/supervise/company*` endpoints (no generic-resource `/resource/Company` mutation path exists at
-  all); `Employee`/`Timesheet` mutations touch HR/payroll-sensitive fields (`Role`,
-  `TimeApproved`/`PayRuleApproved`/`Exported`, termination fields) that this pass judged to need
-  elevated scope beyond a general-purpose data-sync connector; `Task` creation/update requires a
-  pre-existing Task Sheet template (`TaskSetupId`/`GroupId`) this connector's config surface has no
-  way to discover. See `api_surface.json`'s per-endpoint `excluded` reasons for the full accounting.
-- **The remaining 59 generic-resource types** (`Address`, `Contact`, `CustomField`,
-  `EmployeeAgreement`, `PayRules`, `TrainingRecord`, and so on — the full list is in
-  `api_surface.json`) share the identical CRUD-matrix shape as the 9 resource types this bundle
-  does implement, but were not selected as streams/writes this pass — each is a secondary/internal/
-  reference table, a payroll-detail export table, or a plausible-but-deferred future addition; see
-  `api_surface.json`'s single consolidated exclusion entry for the specific per-group reasoning
-  (not a blanket "Pass B" bucket).
-- `docs_url` in `metadata.json` was updated from the legacy `www.deputy.com/api-doc/API/
-  Getting_Started` (which now 301-redirects) to the canonical current `developer.deputy.com`.
+- Batch defaults: read_page_size=500.
+- API coverage includes 9 stream-backed endpoint group(s), 15 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=1, destructive_admin=3, duplicate_of=11, non_data_endpoint=5, out_of_scope=14,
+  requires_elevated_scope=6.

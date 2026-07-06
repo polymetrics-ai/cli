@@ -12,20 +12,41 @@ SYNOPSIS
 DESCRIPTION
   Reads HiBob HR data: employee profiles, company named lists, and people field definitions via the HiBob REST API (read-only).
 
+ICON
+  asset: icons/hibob.svg
+  source: official
+  review_status: official_verified
+  review_url: https://apidocs.hibob.com/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  username
+  password (secret)
+
+ETL STREAMS
+  profiles:
+    primary key: id
+    fields: displayName(), email(), firstName(), fullName(), id(), personal_pronouns(), surname(), work_department(), work_isManager(), work_site(), work_startDate(), work_title()
+  named_lists:
+    primary key: id
+    fields: archived(), children(), id(), name(), parentId(), value()
+  company_lists:
+    primary key: id
+    fields: category(), description(), id(), name(), type()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external HiBob API read of employee profile and HR metadata
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

@@ -1,63 +1,69 @@
 # Overview
 
-Square reads payments, refunds, customers, and locations through the Square Connect v2 REST API
-(`https://connect.squareup.com/v2`). This bundle migrates `internal/connectors/square` (the
-hand-written legacy connector) at capability parity; the legacy package stays registered and
-unchanged until wave6's registry flip. Square is read-only here — legacy has no reverse-ETL write
-surface, so `capabilities.write` is `false` and no `writes.json` is shipped.
+Reads Square payments, refunds, customers, and locations through the Square Connect v2 REST API.
+
+Readable streams: `payments`, `refunds`, `customers`, `locations`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developer.squareup.com/reference/square.
 
 ## Auth setup
 
-Provide a Square access token (an API key or an OAuth access token; both are bearer-shaped tokens
-Square accepts interchangeably) via the `api_key` secret. It is used only for
-`Authorization: Bearer <api_key>` and is never logged. Every request also sends a fixed
-`Square-Version: 2024-01-18` header (pinning the dated API's response shape), matching legacy's
-`squareAPIVersion` constant exactly.
+Connection fields:
+
+- `api_key` (required, secret, string); Square access token (API key or OAuth access token). Used
+  only for Bearer auth; never logged.
+- `base_url` (optional, string); default `https://connect.squareup.com/v2`; format `uri`; Square API
+  base URL. Set explicitly to https://connect.squareupsandbox.com/v2 for sandbox testing.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-100).
+- `start_date` (optional, string); Lower bound (YYYY-MM-DD or RFC3339) for
+  payments/refunds/customers time filtering; only objects at or after this time are read.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://connect.squareup.com/v2`, `max_pages=0`,
+`page_size=100`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/locations`.
 
 ## Streams notes
 
-All 4 streams (`payments`, `refunds`, `customers`, `locations`) share Square's cursor pagination
-convention: the response body carries a top-level `cursor` field; the next page is requested with
-`?cursor=<value>`, and pagination stops when `cursor` is absent or empty
-(`pagination.type: cursor`, `token_path: cursor`, `cursor_param: cursor` — no `stop_path`, matching
-legacy's exact stop-on-empty-cursor-only behavior since Square never sends a separate boolean stop
-signal). Every request sends `limit=100` (matches legacy's default `page_size`).
+Default pagination: cursor pagination; cursor parameter `cursor`; next token from `cursor`.
 
-`payments` and `refunds` additionally send `begin_time` computed from the incremental lower bound
-(the sync's persisted cursor, or the RFC3339/date `start_date` config value on a fresh sync) via the
-opt-in optional-query dialect (`omit_when_absent: true`) — present only when the lower bound
-resolves, absent on read paths where it does not, exactly matching legacy's
-`if endpoint.timeParam != "" && beginTime != "" { base.Set(endpoint.timeParam, beginTime) }` guard.
-Their schemas declare `x-cursor-field: updated_at`, matching legacy's published `CursorFields`.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-`customers` and `locations` are full-refresh only: legacy's own `streamEndpoint` table sets
-`timeParam: ""` for `customers` (locations never had a time param either), so the computed
-incremental lower bound is silently discarded and every read re-emits the complete object set —
-this bundle reproduces that exactly by declaring no `incremental` block for either stream (matching
-legacy's real behavior over its catalog-only advertised `CursorFields: ["updated_at"]` for
-customers, which legacy never actually wires into a request).
+- `payments`: GET `/payments` - records path `payments`; query `begin_time` from template `{{
+  incremental.lower_bound }}`, omitted when absent; `limit`=`100`; cursor pagination; cursor
+  parameter `cursor`; next token from `cursor`; incremental cursor `updated_at`; formatted as
+  `rfc3339`; initial lower bound from `start_date`.
+- `refunds`: GET `/refunds` - records path `refunds`; query `begin_time` from template `{{
+  incremental.lower_bound }}`, omitted when absent; `limit`=`100`; cursor pagination; cursor
+  parameter `cursor`; next token from `cursor`; incremental cursor `updated_at`; formatted as
+  `rfc3339`; initial lower bound from `start_date`.
+- `customers`: GET `/customers` - records path `customers`; query `limit`=`100`; cursor pagination;
+  cursor parameter `cursor`; next token from `cursor`.
+- `locations`: GET `/locations` - records path `locations`; query `limit`=`100`; cursor pagination;
+  cursor parameter `cursor`; next token from `cursor`.
 
 ## Write actions & risks
 
-None. Square is read-only in legacy (`Capabilities.Write` is `false`); `Write` always returns
-`connectors.ErrUnsupportedOperation`. No `writes.json` is shipped for this bundle.
+This connector is read-only. Read behavior: external Square API read of payments, refunds, customer,
+and location data.
 
 ## Known limits
 
-- Legacy accepts several secret key aliases for the same bearer token
-  (`credentials.api_key`/`api_key`/`access_token`/`credentials.access_token`) since the Square
-  catalog flattens an OAuth-vs-API-key `oneOf` into dotted keys and legacy takes the first non-empty
-  one. This bundle declares a single canonical secret, `api_key` — the caller supplies whichever
-  Square credential they have under that one key. This narrows the accepted config surface (a
-  caller who only ever populated `credentials.access_token` must remap it to `api_key`) but never
-  changes emitted record data for any accepted credential.
-- Legacy's `is_sandbox` config flag selects the sandbox host
-  (`https://connect.squareupsandbox.com/v2`) only when `base_url` is unset — a derived default (the
-  base URL is a function of another config value), which the engine's `spec.json` `"default"`
-  materialization mechanism (a fixed literal only) cannot express. `is_sandbox` is dropped from
-  `spec.json`; sandbox testing sets `base_url` explicitly instead. Documented config-surface
-  narrowing, never a silent behavior change for any caller who already sets `base_url` directly.
-- Full Square API surface (orders, catalog, invoices, team members, disputes) is out of scope for
-  this wave; see `api_surface.json`'s `excluded: {category: out_of_scope}` entries.
-- `metadata.json` declares no `rate_limit` block: legacy enforces no client-side rate limiting for
-  Square, so none is added here (matching legacy's real, lack-of, throttling behavior).
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=7.

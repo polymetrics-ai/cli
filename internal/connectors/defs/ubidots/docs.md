@@ -1,97 +1,104 @@
 # Overview
 
-Ubidots reads devices, variables, variable values (dots), device groups, device types, dashboards,
-and events from the Ubidots Industrial API (`GET {base_url}/api/v2.0/<resource>/`, plus the
-`v1.6`-only values endpoint), and writes device/variable lifecycle mutations and new variable data
-points. This bundle originally migrated the hand-written `internal/connectors/ubidots` legacy
-package to a declarative Tier-1 defs bundle at capability parity (4 read streams, read-only); this
-revision is a Pass B full-surface expansion that researches Ubidots' real documented API and adds
-every practical additional list stream and dialect-expressible mutation on top of that parity
-baseline. The legacy package stays registered and unchanged until wave6's registry flip.
+Reads Ubidots devices, variables, variable values, device groups, device types, dashboards, and
+events, and writes device/variable lifecycle mutations and new variable data points through API
+v2.0.
+
+Readable streams: `devices`, `variables`, `dashboards`, `events`, `device_groups`, `device_types`,
+`variable_values`.
+
+Write actions: `create_device`, `update_device`, `delete_device`, `create_variable`,
+`update_variable`, `delete_variable`, `create_variable_value`.
+
+Service API documentation: https://docs.ubidots.com/reference/welcome.
 
 ## Auth setup
 
-Requires one secret: `token` (Ubidots API token), sent as the `X-Auth-Token` header on every
-request via `streams.json` `base.auth`'s `api_key_header` mode — matching legacy's
-`connsdk.APIKeyHeader("X-Auth-Token", token, "")` exactly (no prefix). `base_url` defaults to
-`https://industrial.api.ubidots.com` (legacy's `defaultBaseURL`), overridable for tests or proxies.
+Connection fields:
+
+- `base_url` (optional, string); default `https://industrial.api.ubidots.com`; format `uri`; Ubidots
+  API base URL override for tests or proxies.
+- `token` (required, secret, string); Ubidots API token, sent as the X-Auth-Token header on every
+  request.
+
+Secret fields are redacted in logs and write previews: `token`.
+
+Default configuration values: `base_url=https://industrial.api.ubidots.com`.
+
+Authentication behavior:
+
+- API key authentication in `X-Auth-Token` using `secrets.token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `api/v2.0/devices/`.
 
 ## Streams notes
 
-Four original parity streams share the identical `page_number` pagination shape (legacy's own
-`page_size`/`page` query convention) and the identical record mapping (`id`, `label`, `name`,
-`created_at`): `devices` (`GET api/v2.0/devices/`), `variables` (`GET api/v2.0/variables/`),
-`dashboards` (`GET api/v2.0/dashboards/`), `events` (`GET api/v2.0/events/`) — all read records from
-the paginated envelope's `results` array, matching Ubidots' real Django REST Framework-style list
-response shape (`count`/`next`/`previous`/`results`). Pagination sends
-`page_size=<page_size>&page=<n>` and stops on a short page (fewer than `page_size` records),
-matching legacy's `harvest` loop exactly; `page_size` defaults to 100 (legacy's `defaultPageSize`)
-and is a fixed bundle-authored value (see Known limits).
+Default pagination: page-number pagination; page parameter `page`; size parameter `page_size`;
+starts at 1; page size 100; maximum 1 page(s).
 
-No stream declares `x-cursor-field`: legacy's own `streams()` catalog declares no `CursorFields` for
-any of these four streams either (`ubidots.go:212-220`), so there is nothing to reproduce — this is
-not a scope narrowing, it mirrors legacy's own manifest exactly. `created_at` is projected with a
-typed coalesce computed field that preserves legacy's `first(item, "created_at", "createdAt")`
-fallback behavior.
-
-**Pass B additions** (new in this revision, researched against `docs.ubidots.com/reference`):
-- `device_groups` (`GET api/v2.0/device_groups/`) and `device_types` (`GET api/v2.0/device_types/`)
-  — same `page_number`/`results` shape and record mapping as the four parity streams.
-- `variable_values` (`GET api/v1.6/variables/{id}/values/`) — Ubidots' variable "dots" (data points)
-  live under the older `v1.6` path (the `v2.0` API has no values sub-resource of its own); this
-  stream uses the `fan_out` dialect (`ids_from.request` against `api/v2.0/variables/`, `records_path:
-  results`, `id_field: id`) to enumerate every variable id first, then reads that variable's values
-  sub-resource once per id, `stamp_field: variable_id` tagging every emitted dot with its source
-  variable. Each dot's real wire shape is `{value, timestamp, context}` (`timestamp` a Unix
-  milliseconds integer, matching Ubidots' documented Dot object exactly — see `dev.ubidots.com`'s
-  "Devices, variables, and Dots" guide). No cursor metadata is declared because legacy published no
-  cursor fields for Ubidots.
+- `devices`: GET `api/v2.0/devices/` - records path `results`; page-number pagination; page
+  parameter `page`; size parameter `page_size`; starts at 1; page size 100; maximum 1 page(s);
+  computed output fields `created_at`.
+- `variables`: GET `api/v2.0/variables/` - records path `results`; page-number pagination; page
+  parameter `page`; size parameter `page_size`; starts at 1; page size 100; maximum 1 page(s);
+  computed output fields `created_at`.
+- `dashboards`: GET `api/v2.0/dashboards/` - records path `results`; page-number pagination; page
+  parameter `page`; size parameter `page_size`; starts at 1; page size 100; maximum 1 page(s);
+  computed output fields `created_at`.
+- `events`: GET `api/v2.0/events/` - records path `results`; page-number pagination; page parameter
+  `page`; size parameter `page_size`; starts at 1; page size 100; maximum 1 page(s); computed output
+  fields `created_at`.
+- `device_groups`: GET `api/v2.0/device_groups/` - records path `results`; page-number pagination;
+  page parameter `page`; size parameter `page_size`; starts at 1; page size 100; maximum 1 page(s).
+- `device_types`: GET `api/v2.0/device_types/` - records path `results`; page-number pagination;
+  page parameter `page`; size parameter `page_size`; starts at 1; page size 100; maximum 1 page(s).
+- `variable_values`: GET `api/v1.6/variables/{{ fanout.id }}/values/` - records path `results`;
+  page-number pagination; page parameter `page`; size parameter `page_size`; starts at 1; page size
+  100; maximum 1 page(s); fan-out; ids from request `api/v2.0/variables/`; id-list records path
+  `results`; id field `id`; id inserted into the request path; stamps `variable_id`.
 
 ## Write actions & risks
 
-Seven actions, all newly added in this Pass B revision (legacy shipped none —
-`capabilities.write` flips to `true`):
+Overall write risk: external mutation of Ubidots devices and variables (create/update/delete) and
+injection of new variable data points; device/variable delete is destructive and irreversible.
 
-- `create_device` (`POST api/v2.0/devices/`) — creates a new device; low-risk, no approval required.
-- `update_device` (`PATCH api/v2.0/devices/{id}/`) — updates one or more device fields; no approval
-  required.
-- `delete_device` (`DELETE api/v2.0/devices/{id}/`) — **destructive**: permanently removes a device
-  and cascades to all of its variables and stored values; approval required. Idempotent
-  (`missing_ok_status: [404]`).
-- `create_variable` (`POST api/v2.0/variables/`) — creates a new variable under an existing device;
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_device`: POST `api/v2.0/devices/` - kind `create`; body type `json`; required record
+  fields `label`; accepted fields `description`, `label`, `name`, `organization`, `properties`,
+  `tags`; risk: creates a new Ubidots device; low-risk external mutation, no approval required.
+- `update_device`: PATCH `api/v2.0/devices/{{ record.id }}/` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`; accepted fields `description`, `id`, `label`, `name`,
+  `properties`, `tags`; risk: updates the fields of an existing Ubidots device; external mutation,
   no approval required.
-- `update_variable` (`PATCH api/v2.0/variables/{id}/`) — updates one or more variable fields; no
+- `delete_device`: DELETE `api/v2.0/devices/{{ record.id }}/` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: permanently deletes a device and all of its variables/values;
+  destructive and irreversible; approval required.
+- `create_variable`: POST `api/v2.0/variables/` - kind `create`; body type `json`; required record
+  fields `label`, `device`; accepted fields `description`, `device`, `label`, `name`, `tags`,
+  `unit`; risk: creates a new variable under an existing device; low-risk external mutation, no
   approval required.
-- `delete_variable` (`DELETE api/v2.0/variables/{id}/`) — **destructive**: permanently removes a
-  variable and its entire value history; approval required. Idempotent (`missing_ok_status: [404]`).
-- `create_variable_value` (`POST api/v1.6/variables/{variable_id}/values/`) — injects a new data
-  point (dot) into an existing variable; `path_fields: ["variable_id"]`, body restricted to
-  `value`/`timestamp`/`context` via `body_fields` (matching the Dot object's real writable fields);
-  no approval required.
-
-Bulk/range value-delete and multi-device bulk-delete endpoints are deliberately excluded (see
-`api_surface.json`) as `destructive_admin` — see Known limits.
+- `update_variable`: PATCH `api/v2.0/variables/{{ record.id }}/` - kind `update`; body type `json`;
+  path fields `id`; required record fields `id`; accepted fields `description`, `id`, `label`,
+  `name`, `tags`, `unit`; risk: updates the fields of an existing variable; external mutation, no
+  approval required.
+- `delete_variable`: DELETE `api/v2.0/variables/{{ record.id }}/` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: permanently deletes a variable and all of its stored values;
+  destructive and irreversible; approval required.
+- `create_variable_value`: POST `api/v1.6/variables/{{ record.variable_id }}/values/` - kind
+  `create`; body type `json`; path fields `variable_id`; body fields `value`, `timestamp`,
+  `context`; required record fields `variable_id`, `value`; accepted fields `context`, `timestamp`,
+  `value`, `variable_id`; risk: injects a new data point (dot) into an existing variable; low-risk
+  external mutation, no approval required.
 
 ## Known limits
 
-- **`page_size`/`max_pages` are not exposed as runtime config.** Legacy accepts `config["page_size"]`
-  (1-1000, default 100) and `config["max_pages"]` (default 1; `"all"`/`"unlimited"` for unbounded)
-  as caller-overridable values. The engine's `PaginationSpec.PageSize`/`MaxPages` fields are plain
-  JSON integers fixed at bundle-authoring time in `streams.json`'s `base.pagination` block — there is
-  no templated/config-driven override mechanism for either field. Declaring `page_size`/`max_pages`
-  as `spec.json` properties that no template in the bundle ever consumes would be dead config (F6,
-  REVIEW.md; see also searxng's identical precedent), so neither is declared. This bundle bakes in
-  legacy's own DEFAULT values instead: `page_size: 100`, `max_pages: 1` — reproducing the exact
-  behavior a caller who never overrides either config key already gets from legacy.
-- **`variable_values` declares no cursor or `incremental` block.** Every read re-fans-out across all
-  variables and re-reads each variable's full first page of values. A future capability-expansion
-  pass could add real incremental support once a stable request-side timestamp filter is confirmed
-  against Ubidots' `v1.6` values endpoint.
-- **Organizations, users, tokens, UbiFunctions, Pages, plugins, and dashboard-widget CRUD are
-  out of scope** (see `api_surface.json`'s `excluded` entries) — none of these were part of legacy's
-  surface, and each is either elevated-scope multi-org admin, non-data account introspection, or
-  code/UI-configuration deployment rather than a syncable data record.
-- **Bulk/range value deletes and multi-device bulk-delete are excluded as `destructive_admin`.**
-  Ubidots exposes both a whole-variable value-history delete and a range-scoped value delete; both
-  are irreversible mass time-series data loss with no single-record-shaped equivalent this dialect
-  can express safely, so neither is modeled as a write action.
+- Batch defaults: read_page_size=100.
+- API coverage includes 7 stream-backed endpoint group(s), 7 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=7, duplicate_of=12, non_data_endpoint=3, out_of_scope=11,
+  requires_elevated_scope=2.

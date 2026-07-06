@@ -1,80 +1,97 @@
 # Overview
 
-SmartEngage is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to the full
-documented SmartEngage API surface. It reads SmartEngage avatars, tags, custom fields, sequences,
-and subscribers, and writes new subscribers/tags/custom-field values/sequence enrollments,
-through the SmartEngage API (`https://api.smartengage.com/...`, documented at
-`https://smartengage.com/docs/`). This bundle migrates `internal/connectors/smartengage` (the
-hand-written connector); the legacy package stays registered and unchanged until wave6's registry
-flip.
+Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers; creates/updates
+subscribers, tags, custom fields, and sequence enrollments.
+
+Readable streams: `avatars`, `tags`, `custom_fields`, `sequences`, `subscribers`.
+
+Write actions: `add_subscriber`, `update_subscriber`, `create_tag`, `add_tag_to_subscriber`,
+`remove_tag_from_subscriber`, `create_custom_field`, `set_custom_field_value`,
+`add_subscriber_to_sequence`, `remove_subscriber_from_sequence`.
+
+Service API documentation: https://smartengage.com/docs/.
 
 ## Auth setup
 
-Provide a SmartEngage API token via the `api_key` secret; it is sent as a Bearer token
-(`Authorization: Bearer <api_key>`), matching legacy's `connsdk.Bearer(key)`
-(`smartengage.go:143`). `base_url` defaults to `https://api.smartengage.com` and may be
-overridden for tests/proxies, matching legacy's own `validatedBaseURL` default.
+Connection fields:
+
+- `api_key` (required, secret, string); SmartEngage API token, sent as a Bearer token
+  (Authorization: Bearer <api_key>). Never logged.
+- `avatar_id` (optional, string).
+- `base_url` (optional, string); default `https://api.smartengage.com`; format `uri`; SmartEngage
+  API base URL override for tests or proxies.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.smartengage.com`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `avatars/list`.
 
 ## Streams notes
 
-All five streams (`avatars`, `tags`, `custom_fields`, `sequences`, `subscribers`) hit their own
-`GET <resource>` endpoint, matching legacy's `streamEndpoints` map exactly (`avatars/list`,
-`tags/list/`, `customfields/list/`, `sequences/list/`, `subscribers/list/`). Records are
-extracted from the response body's top-level array (`records.path: ""`), matching legacy's
-`recordsPath: ""` for every stream. None of the streams paginate in legacy (a single `r.Do` call
-per read, no loop) — `pagination.type: none` is declared, one request per read. An optional
-`avatar_id` config value is applied as a query filter on EVERY stream read, matching legacy's
-`queryParams` (called uniformly regardless of which stream is being read), omitted entirely when
-unset. Every stream declares `"projection": "passthrough"`: legacy's `readRecords` emits
-`connectors.Record(rec)` verbatim off the wire with no field-built mapping
-(`smartengage.go:102-120`), so schema-mode projection would silently drop any field the live API
-returns beyond `id`/`avatar_id`/`name` — passthrough preserves legacy's actual verbatim-emit
-behavior (conventions.md §8 rule 1). Records carry `id`, `avatar_id`, and `name`, the exact field
-set legacy's `streams()` catalog declares for every stream; `x-primary-key` is `id` per legacy's
-own catalog declaration (`PrimaryKey: []string{"id"}`), even though the live avatars endpoint's
-natural identity field is `avatar_id` — `id` is not declared `required` in this bundle's schemas
-for that reason. The schemas remain a documentation surface (the three declared fields), not an
-enforced allowlist.
+Default pagination: single request; no pagination.
+
+- `avatars`: GET `avatars/list` - records at response root; query `avatar_id` from template `{{
+  config.avatar_id }}`, omitted when absent; emits passthrough records.
+- `tags`: GET `tags/list/` - records at response root; query `avatar_id` from template `{{
+  config.avatar_id }}`, omitted when absent; emits passthrough records.
+- `custom_fields`: GET `customfields/list/` - records at response root; query `avatar_id` from
+  template `{{ config.avatar_id }}`, omitted when absent; emits passthrough records.
+- `sequences`: GET `sequences/list/` - records at response root; query `avatar_id` from template `{{
+  config.avatar_id }}`, omitted when absent; emits passthrough records.
+- `subscribers`: GET `subscribers/list/` - records at response root; query `avatar_id` from template
+  `{{ config.avatar_id }}`, omitted when absent; emits passthrough records.
 
 ## Write actions & risks
 
-Legacy's own connector is read-only, but Pass B full-surface expansion adds every
-dialect-expressible mutation SmartEngage documents (`api_surface.json`), all form-encoded
-(`body_type: "form"`, matching the API's documented `-d key=value` curl examples), each requiring
-approval:
+Overall write risk: creates/updates subscribers and custom-field values, creates tags and
+attaches/detaches them from subscribers, and enrolls/unenrolls subscribers in automation sequences
+(which triggers or stops scheduled outbound messages).
 
-- **`add_subscriber`** (`POST subscribers/add`, `create`): creates a subscriber under `avatar_id`
-  with optional name/email/Facebook-id/push-id fields.
-- **`update_subscriber`** (`POST subscribers/update`, `update`): overwrites fields on an existing
-  `subscriber_id`; SmartEngage's own docs describe this as accepting "mostly the same arguments as
-  the creation call" with omitted fields left unchanged.
-- **`create_tag`** (`POST tags/create`, `create`): creates a new tag under `avatar_id`.
-- **`add_tag_to_subscriber`** / **`remove_tag_from_subscriber`** (`POST tags/add` / `POST
-  tags/delete`, `custom`): attach/detach an existing tag (by name) to/from a subscriber.
-- **`create_custom_field`** (`POST customfields/create`, `create`): creates a new custom-field
-  definition under `avatar_id` (name/title/type/description).
-- **`set_custom_field_value`** (`POST customfields/update`, `update`): sets a custom field's value
-  on a specific subscriber.
-- **`add_subscriber_to_sequence`** / **`remove_subscriber_from_sequence`** (`POST sequences/add` /
-  `POST sequences/remove`, `custom`): enroll/unenroll a subscriber in an automation sequence.
-  Risk: this is the highest-impact write in this bundle — enrolling a subscriber triggers
-  SmartEngage's own scheduled-message delivery for that sequence, a real outbound communication
-  side effect, not just a data mutation.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Every action's `record_schema` requires `avatar_id` (SmartEngage's account/list scoping key,
-mirrored from every read stream's own optional `avatar_id` query filter) alongside whatever
-resource-specific identifier(s) that mutation needs (`subscriber_id`, `tag`, `sequence`, `field`).
+- `add_subscriber`: POST `subscribers/add` - kind `create`; body type `form`; required record fields
+  `avatar_id`; accepted fields `avatar_id`, `email`, `facebook_id`, `first_name`, `full_name`,
+  `last_name`, `push_id`; risk: external mutation; creates a new subscriber on the connected
+  SmartEngage account; approval required.
+- `update_subscriber`: POST `subscribers/update` - kind `update`; body type `form`; required record
+  fields `avatar_id`, `subscriber_id`; accepted fields `avatar_id`, `email`, `facebook_id`,
+  `first_name`, `full_name`, `last_name`, `subscriber_id`; risk: external mutation; overwrites
+  subscriber fields on the connected SmartEngage account (fields omitted from the record remain
+  unchanged); approval required.
+- `create_tag`: POST `tags/create` - kind `create`; body type `form`; required record fields
+  `avatar_id`, `name`; accepted fields `avatar_id`, `name`; risk: external mutation; creates a new
+  tag on the connected SmartEngage account; approval required.
+- `add_tag_to_subscriber`: POST `tags/add` - kind `custom`; body type `form`; required record fields
+  `avatar_id`, `subscriber_id`, `tag`; accepted fields `avatar_id`, `subscriber_id`, `tag`; risk:
+  external mutation; attaches an existing tag to a subscriber; approval required.
+- `remove_tag_from_subscriber`: POST `tags/delete` - kind `custom`; body type `form`; required
+  record fields `avatar_id`, `subscriber_id`, `tag`; accepted fields `avatar_id`, `subscriber_id`,
+  `tag`; risk: external mutation; detaches a tag from a subscriber; approval required.
+- `create_custom_field`: POST `customfields/create` - kind `create`; body type `form`; required
+  record fields `avatar_id`, `custom_field_name`, `custom_field_type`; accepted fields `avatar_id`,
+  `custom_field_desc`, `custom_field_name`, `custom_field_title`, `custom_field_type`; risk:
+  external mutation; creates a new custom field definition on the connected SmartEngage account;
+  approval required.
+- `set_custom_field_value`: POST `customfields/update` - kind `update`; body type `form`; required
+  record fields `avatar_id`, `subscriber_id`, `field`, `value`; accepted fields `avatar_id`,
+  `field`, `subscriber_id`, `value`; risk: external mutation; sets a custom field value on a
+  subscriber; approval required.
+- `add_subscriber_to_sequence`: POST `sequences/add` - kind `custom`; body type `form`; required
+  record fields `avatar_id`, `subscriber_id`, `sequence`; accepted fields `avatar_id`, `sequence`,
+  `subscriber_id`; risk: external mutation; enrolls a subscriber into an automation sequence,
+  triggering scheduled messages; approval required.
+- `remove_subscriber_from_sequence`: POST `sequences/remove` - kind `custom`; body type `form`;
+  required record fields `avatar_id`, `subscriber_id`, `sequence`; accepted fields `avatar_id`,
+  `sequence`, `subscriber_id`; risk: external mutation; unenrolls a subscriber from an automation
+  sequence, stopping scheduled messages; approval required.
 
 ## Known limits
 
-- The `id`/`avatar_id` primary-key note (Streams notes) still applies to every read stream: this
-  is a byte-for-byte parity port of legacy's read behavior, with no read-side scope narrowing.
-  Passthrough projection (Streams notes) means the schemas document the known field set but do not
-  gate what flows through on a live read, matching legacy's own unfiltered emit.
-- **Write request/response body shapes are inferred from SmartEngage's own public API
-  documentation and Zapier/Pipedream integration references, not from a legacy Go implementation**
-  (legacy has no write path to port from at all — `capabilities.write` was `false` prior to this
-  Pass B expansion). Field names (`avatar_id`/`subscriber_id`/`tag`/`sequence`/`field`/`value`/
-  `custom_field_name`/`custom_field_type`) are the documented parameter names; exact response
-  envelopes beyond the fields SmartEngage's docs explicitly show are not guaranteed byte-for-byte,
-  though the request shape (method, path, required parameters) is.
+- API coverage includes 5 stream-backed endpoint group(s), 9 write-backed endpoint group(s).

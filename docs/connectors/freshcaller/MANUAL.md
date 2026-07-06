@@ -12,20 +12,46 @@ SYNOPSIS
 DESCRIPTION
   Reads Freshcaller calls, agents, teams, and phone numbers through the Freshcaller REST API.
 
+ICON
+  asset: icons/freshcaller.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.freshcaller.com/api/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  api_key (secret)
+
+ETL STREAMS
+  calls:
+    primary key: id
+    cursor: call_time
+    fields: agent_id(), call_time(), direction(), duration(), id(), phone_number(), status()
+  agents:
+    primary key: id
+    fields: email(), id(), name(), status()
+  teams:
+    primary key: id
+    fields: id(), name()
+  numbers:
+    primary key: id
+    fields: id(), name(), phone_number()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Freshcaller API read of call, agent, team, and phone number data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

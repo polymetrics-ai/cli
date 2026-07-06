@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads Kissmetrics products, reports, events, and properties through the Kissmetrics query API using HTTP Basic authentication.
 
+ICON
+  asset: icons/kissmetrics.svg
+  source: official
+  review_status: official_verified
+  review_url: https://support.kissmetrics.io/reference
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  product_id
+  username
+  password (secret)
+
+ETL STREAMS
+  products:
+    primary key: id
+    fields: created_at(), id(), name(), updated_at()
+  reports:
+    primary key: id
+    fields: created_at(), id(), name(), product_id(), type(), updated_at()
+  events:
+    primary key: id
+    fields: created_at(), display_name(), id(), name(), product_id()
+  properties:
+    primary key: id
+    fields: created_at(), display_name(), id(), name(), product_id(), type()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Kissmetrics query API read of product analytics metadata
+  approval: none; read-only source
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

@@ -1,135 +1,109 @@
 # Overview
 
-Confluence reads Confluence Cloud spaces, pages, blog posts, labels, attachments, footer/inline
-comments, tasks, and app-defined custom content, and writes pages, blog posts, and comments,
-through the Confluence Cloud REST API v2. This bundle migrates `internal/connectors/confluence`
-(the legacy hand-written connector, kept registered and unchanged until wave6's registry flip) to a
-declarative defs bundle at capability parity, then expands past that legacy-parity floor with a
-Pass B full-surface review of the live v2 resource-group documentation.
+Reads Confluence Cloud spaces, pages, blog posts, labels, attachments, comments, tasks, and custom
+content, and writes pages, blog posts, and comments through the Confluence Cloud REST API v2.
+
+Readable streams: `spaces`, `pages`, `blogposts`, `labels`, `attachments`, `footer_comments`,
+`inline_comments`, `tasks`, `custom_content`.
+
+Write actions: `create_page`, `update_page`, `create_blogpost`, `create_footer_comment`,
+`create_inline_comment`.
+
+Service API documentation: https://developer.atlassian.com/cloud/confluence/rest/v2/intro/.
 
 ## Auth setup
 
-Provide `base_url` (your site's origin without the `/wiki/api/v2` path, e.g.
-`https://mysite.atlassian.net`), `email` (the Atlassian account email), and the `api_token` secret
-(an Atlassian API token). Auth is HTTP Basic (`email:api_token`); the token is only ever passed into
-the `basic` auth mode and never logged.
+Connection fields:
 
-Legacy also accepted a bare `domain_name` config key and derived the base URL in code as
-`https://<domain_name>/wiki/api/v2`. The engine's `spec.json` `"default"` mechanism only
-materializes a fixed literal default, not one derived from another config value (see
-`docs/migration/conventions.md` §3's "spec.json default values" section) — so this bundle requires
-`base_url` directly as the site origin and drops the `domain_name`-derivation convenience. See Known
-limits.
+- `api_token` (required, secret, string); Atlassian API token, used as the HTTP Basic auth password.
+  Never logged.
+- `base_url` (required, string); format `uri`; Your Confluence Cloud site origin, without the
+  /wiki/api/v2 path (e.g. https://mysite.atlassian.net). The bundle paths include /wiki/api/v2 so
+  relative _links.next pagination follows the same host correctly.
+- `custom_content_type` (optional, string); default `com.atlassian.confluence.macro.core`;
+  Confluence custom-content type key to sync via the custom_content stream. GET /custom-content
+  requires a type filter (Confluence has no type-agnostic custom-content list); set this to the
+  app-defined type key you want to read (e.g. a Forge/Connect app's registered custom content type).
+- `email` (required, string); Atlassian account email used as the HTTP Basic auth username.
+- `mode` (optional, string).
 
-`custom_content_type` (optional, defaults to `com.atlassian.confluence.macro.core`) selects which
-app-defined custom-content type key the `custom_content` stream reads — `GET /custom-content` has
-no type-agnostic list mode; `type` is a required query parameter on the real API.
+Secret fields are redacted in logs and write previews: `api_token`.
+
+Default configuration values: `custom_content_type=com.atlassian.confluence.macro.core`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `config.email`, `secrets.api_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/wiki/api/v2/spaces`.
 
 ## Streams notes
 
-All 9 streams are `GET` requests against the Confluence v2 list endpoints, with records at
-`results`, primary key `["id"]`, and `limit=25` sent on every request (matches legacy's default
-page size for the original 5 streams; the 4 new streams adopt the same page size for consistency).
-The stream and write paths include `/wiki/api/v2` explicitly because `base_url` is the Atlassian
-site origin.
+Default pagination: follows a next-page URL from the response body; URL path `_links.next`;
+cross-host next URLs are allowed.
 
-Pagination follows Confluence v2's cursor-in-relative-URL convention: each page response includes
-`_links.next`, a **relative** path (e.g. `/wiki/api/v2/spaces?cursor=<token>&limit=25`) carrying an
-opaque cursor token — Confluence's own docs confirm `_links.next` (and the equivalent `Link` response
-header) is always relative, never absolute. This bundle uses `pagination.type: next_url` with
-`next_url_path: "_links.next"` and `allow_cross_host: true`. `allow_cross_host` is ordinarily an
-opt-out of the engine's same-origin SSRF guard for a genuinely cross-host next-page URL; here it is
-the only way to route around the guard's stricter "next URL has no host" fail-closed check, which
-otherwise rejects every relative URL outright regardless of same-origin intent. This is safe for
-Confluence specifically: `_links.next` is a same-instance relative path by API design, incapable of
-ever pointing at a different host.
-
-`pages`, `blogposts`, `footer_comments`, `inline_comments`, and `custom_content` project a computed
-`version` field from the raw nested `{"version": {"number": N}}` shape via `computed_fields`' bare
-`{{ record.version.number }}` reference, which copies the raw typed integer value (typed extraction,
-not stringified). `spaces`, `labels`, `attachments`, and `tasks` have no `version` field in the real
-API response, matching legacy's own per-stream record mappers exactly for the 5 original streams;
-`tasks`' own docs confirm it carries no version-history field at all (unlike every other content
-type in v2).
-
-Legacy declares `CursorFields: ["createdAt"]` on `pages`/`blogposts`/`attachments` in its published
-catalog but never actually performs incremental filtering in `Read`/`harvest` (it is a full-refresh
-connector in practice). This bundle mirrors that exactly: `x-cursor-field: "createdAt"` is declared
-on those 3 schemas (publishing the same catalog metadata), but no stream declares an `incremental`
-block, so no incremental lower-bound filtering happens here either — full parity with legacy's
-actual (not just advertised) behavior. The 4 new Pass B streams declare no `x-cursor-field` either:
-none of `footer_comments`/`inline_comments`/`tasks`/`custom_content`'s real API responses expose a
-top-level `createdAt`/`updatedAt` field suitable as a cursor at the list level (comments/custom
-content nest their timestamp under `version.createdAt`, and tasks' own `createdAt`/`updatedAt` are
-not documented as filterable/sortable list parameters), so no incremental capability is advertised
-for them, honestly reflecting the real surface rather than a narrowed one.
-
-`footer_comments` and `inline_comments` are separate v2 resources (not two views of one `comments`
-list) — `inline_comments` additionally carries a `resolutionStatus` field (`open`/`resolved`/
-`reopened`) that footer comments do not have, matching the real API's distinct schemas for the two
-comment kinds.
+- `spaces`: GET `/wiki/api/v2/spaces` - records path `results`; query `limit`=`25`; follows a
+  next-page URL from the response body; URL path `_links.next`; cross-host next URLs are allowed.
+- `pages`: GET `/wiki/api/v2/pages` - records path `results`; query `limit`=`25`; follows a
+  next-page URL from the response body; URL path `_links.next`; cross-host next URLs are allowed;
+  computed output fields `version`.
+- `blogposts`: GET `/wiki/api/v2/blogposts` - records path `results`; query `limit`=`25`; follows a
+  next-page URL from the response body; URL path `_links.next`; cross-host next URLs are allowed;
+  computed output fields `version`.
+- `labels`: GET `/wiki/api/v2/labels` - records path `results`; query `limit`=`25`; follows a
+  next-page URL from the response body; URL path `_links.next`; cross-host next URLs are allowed.
+- `attachments`: GET `/wiki/api/v2/attachments` - records path `results`; query `limit`=`25`;
+  follows a next-page URL from the response body; URL path `_links.next`; cross-host next URLs are
+  allowed.
+- `footer_comments`: GET `/wiki/api/v2/footer-comments` - records path `results`; query
+  `body-format`=`storage`; `limit`=`25`; follows a next-page URL from the response body; URL path
+  `_links.next`; cross-host next URLs are allowed; computed output fields `version`.
+- `inline_comments`: GET `/wiki/api/v2/inline-comments` - records path `results`; query
+  `body-format`=`storage`; `limit`=`25`; follows a next-page URL from the response body; URL path
+  `_links.next`; cross-host next URLs are allowed; computed output fields `version`.
+- `tasks`: GET `/wiki/api/v2/tasks` - records path `results`; query `body-format`=`storage`;
+  `limit`=`25`; follows a next-page URL from the response body; URL path `_links.next`; cross-host
+  next URLs are allowed.
+- `custom_content`: GET `/wiki/api/v2/custom-content` - records path `results`; query `limit`=`25`;
+  `type`=`{{ config.custom_content_type }}`; follows a next-page URL from the response body; URL
+  path `_links.next`; cross-host next URLs are allowed; computed output fields `version`.
 
 ## Write actions & risks
 
-Six write actions are exposed, all `external mutation` / `approval required` per `metadata.json`'s
-`capabilities.write: true`:
+Overall write risk: external mutation: creates/updates Confluence pages, blog posts, and comments;
+no destructive (delete) actions are exposed.
 
-- `create_page` (`POST /pages`) — creates a page in `spaceId` with `title` and a `body.value`/
-  `body.representation` (Confluence storage-format XHTML is the conventional representation).
-- `update_page` (`POST` via `PUT /pages/{{ record.id }}`) — mutates an existing page's `title`/
-  `status`/`body`. Confluence's PUT requires the caller to supply the NEXT `version.number`
-  (strictly greater than the page's current version) — a stale/repeated version number is rejected
-  by the live API, not by this bundle; callers must track the current version (e.g. from a prior
-  `pages` stream read) themselves.
-- `create_blogpost` (`POST /blogposts`) — creates a blog post, same body shape as `create_page`
-  minus `parentId` (blog posts have no page-hierarchy parent).
-- `create_footer_comment` (`POST /footer-comments`) — creates a footer comment or, when
-  `parentCommentId` is set, a reply, on a page or blog post.
-- `create_inline_comment` (`POST /inline-comments`) — creates an inline comment anchored to a text
-  selection (`inlineCommentProperties.textSelection`, required by the real API to locate the
-  anchor) on a page or blog post.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-No delete action is exposed for any resource (all deletes are `destructive_admin`, out of scope —
-see `api_surface.json`), and no update action is exposed for blog posts/comments/custom content
-(breadth-vs-cost triage for this probe run — see `api_surface.json`'s `out_of_scope` entries on
-those PUT endpoints; `create_*` covers the primary lifecycle mutation for each resource).
+- `create_page`: POST `/wiki/api/v2/pages` - kind `create`; body type `json`; required record fields
+  `spaceId`, `title`, `body`; accepted fields `body`, `parentId`, `spaceId`, `status`, `title`;
+  risk: creates a new published or draft page in the target space; external mutation, no approval
+  required.
+- `update_page`: PUT `/wiki/api/v2/pages/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`, `status`, `title`, `spaceId`, `version`; accepted fields
+  `body`, `id`, `spaceId`, `status`, `title`, `version`; risk: mutates an existing page's
+  content/status; requires the caller to supply the next version.number (Confluence rejects a stale
+  version number), external mutation, no approval required.
+- `create_blogpost`: POST `/wiki/api/v2/blogposts` - kind `create`; body type `json`; required
+  record fields `spaceId`, `title`, `body`; accepted fields `body`, `spaceId`, `status`, `title`;
+  risk: creates a new published or draft blog post in the target space; external mutation, no
+  approval required.
+- `create_footer_comment`: POST `/wiki/api/v2/footer-comments` - kind `create`; body type `json`;
+  required record fields `pageId`, `body`; accepted fields `blogPostId`, `body`, `pageId`,
+  `parentCommentId`; risk: creates a new footer comment (or reply) on a page/blogpost; external
+  mutation, no approval required.
+- `create_inline_comment`: POST `/wiki/api/v2/inline-comments` - kind `create`; body type `json`;
+  required record fields `pageId`, `body`, `inlineCommentProperties`; accepted fields `blogPostId`,
+  `body`, `inlineCommentProperties`, `pageId`, `parentCommentId`; risk: creates a new inline comment
+  (or reply) anchored to a text selection on a page/blogpost; external mutation, no approval
+  required.
 
 ## Known limits
 
-- Legacy's configurable `page_size` (1-250, default 25) and `max_pages` (0/all/unlimited or a
-  positive integer cap) config knobs are not modeled. The `next_url` pagination type does not read
-  a page-size field at all (the next page's full URL, including its own `limit` query param, comes
-  verbatim from `_links.next`), and there is no config-driven override mechanism for a
-  `streams.json` pagination block's static fields (same class of limitation as searxng's
-  `page_size`/`max_pages`, `docs/migration/conventions.md`'s read-only/no-auth golden). Every
-  stream's static `query: {"limit": "25"}` sends the same page size legacy defaulted to; a caller
-  needing a different page size or a bounded page count has no equivalent knob in this bundle. A
-  declared-but-unwireable config key is worse than an absent one (F6, REVIEW.md), so `page_size`/
-  `max_pages` are not declared in `spec.json`.
-- `domain_name`-based base URL derivation (legacy's `https://<domain_name>/wiki/api/v2` fallback)
-  is not modeled; `base_url` must be supplied as the Atlassian site origin. This is a documented
-  config-surface narrowing per `docs/migration/conventions.md` §3 (derived defaults are not
-  expressible via the engine's `spec.json` `"default"` mechanism), not a data or behavior deviation
-  for any input this bundle does accept. Supplying a `base_url` that already includes `/wiki/api/v2`
-  would double-prefix requests because the bundle paths include the API prefix explicitly.
-- Per-content-id-scoped sub-resources (content properties, version history, ancestors/children/
-  descendants for every content type; space permissions/roles/properties; classification levels;
-  redactions; likes) have no global/cross-item list endpoint in the real API — enumerating them
-  would require a `fan_out` parent-id source over every already-read page/blogpost/attachment/
-  comment/custom-content id, which this bundle does not declare config for. See
-  `api_surface.json`'s per-endpoint `out_of_scope` reasons (each cites the specific fan_out gap,
-  not a blanket bucket).
-- Whiteboards, databases, folders, and smart links (embeds) have no global list endpoint at all in
-  v2 (only single-item detail-by-id and creation) — they cannot be modeled as streams under this
-  dialect's list-endpoint stream shape, and their creation payloads (freeform canvas/binary
-  containers) have no meaningful declarative `record_schema`; see `api_surface.json`.
-- `custom-content`'s create/update endpoints are excluded: the request body shape is defined per
-  app-registered custom-content `type` with no single stable schema this probe run can express
-  safely across arbitrary types; only the read stream (parameterized by `custom_content_type`) is
-  covered.
-- Per `docs/migration/conventions.md` §4's sanctioned exception, `fixtures/streams/**` ships a
-  single page per stream (not a 2-page fixture): a `next_url` stream's next-page URL is the replay
-  server's own address, unknown until the harness picks a port at runtime, so a static fixture file
-  cannot embed a correct second-page URL. `pagination_terminates` is satisfied by the paginator's
-  own defined behavior (no `_links.next` in the fixture response means pagination stops after page
-  1), matching every other `next_url` bundle's accepted shape (e.g. bitly, calendly).
+- Batch defaults: read_page_size=25.
+- API coverage includes 9 stream-backed endpoint group(s), 5 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=10, duplicate_of=30, non_data_endpoint=10, out_of_scope=31,
+  requires_elevated_scope=10.

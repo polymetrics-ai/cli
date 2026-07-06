@@ -1,84 +1,76 @@
 # Overview
 
-Bugsnag is a fully declarative (Tier 1) migration. It reads a user's Bugsnag organizations,
-projects, collaborators, errors, events, and releases through the Bugsnag Data Access API v2
-(`GET {{ config.base_url }}/...`), a hierarchical resource tree (organizations -> projects ->
-errors/events/releases). This bundle targets full capability parity with
-`internal/connectors/bugsnag` (the hand-written connector it replaces); the legacy package stays
-registered and unchanged until wave6's registry flip. Read-only (`capabilities.write` is `false`,
-matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`).
+Reads Bugsnag organizations, projects, collaborators, errors, events, and releases through the
+Bugsnag Data Access API.
+
+Readable streams: `organizations`, `projects`, `collaborators`, `errors`, `events`, `releases`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://bugsnagapiv2.docs.apiary.io/.
 
 ## Auth setup
 
-Provide a Bugsnag personal auth token via the `auth_token` secret; it is sent as
-`Authorization: token <auth_token>` (`mode: api_key_header`, `prefix: "token "`), matching
-legacy's `connsdk.APIKeyHeader("Authorization", secret, "token ")`. Every request also carries the
-mandatory `X-Version: 2` header (a static-literal `base.headers` entry, matching legacy's
-`bugsnagAPIVersion` constant). `base_url` defaults to `https://api.bugsnag.com` and may be
-overridden for tests/proxies.
+Connection fields:
+
+- `auth_token` (required, secret, string); Bugsnag personal auth token, sent as 'Authorization:
+  token <auth_token>'. Never logged.
+- `base_url` (optional, string); default `https://api.bugsnag.com`; format `uri`; Bugsnag Data
+  Access API base URL override for tests or proxies.
+- `organization_id` (optional, string); Comma-separated list of Bugsnag organization ids to fan out
+  over for the projects/collaborators streams (one GET per id).
+- `page_size` (optional, string); default `100`; Records per page (1-100, per_page).
+- `project_id` (optional, string); Comma-separated list of Bugsnag project ids to fan out over for
+  the errors/events/releases streams (one GET per id).
+
+Secret fields are redacted in logs and write previews: `auth_token`.
+
+Default configuration values: `base_url=https://api.bugsnag.com`, `page_size=100`.
+
+Authentication behavior:
+
+- API key authentication in `Authorization` with prefix `token` using `secrets.auth_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/user/organizations` with query `per_page`=`1`.
 
 ## Streams notes
 
-`organizations` is the root stream: `GET /user/organizations`, records at the response root
-(`records.path: ""`, matching `connsdk.RecordsAt(resp.Body, "")`'s bare-array behavior), no
-`fan_out`. The other 5 streams are sub-resource fan-out reads, expressible via the engine's
-`stream.fan_out` primitive (`docs/migration/conventions.md` §3):
+Default pagination: follows RFC 5988 Link headers with rel=next.
 
-- `projects` (`GET /organizations/{organization_id}/projects`) and `collaborators`
-  (`GET /organizations/{organization_id}/collaborators`) fan out over the `organization_id` config
-  value (comma-separated list, `fan_out.ids_from.config_key`), forwarded into the path as
-  `{{ fanout.id }}`.
-- `errors` (`GET /projects/{project_id}/errors`), `events`
-  (`GET /projects/{project_id}/events`), and `releases`
-  (`GET /projects/{project_id}/releases`) fan out over the `project_id` config value the same way.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-All 6 streams share `link_header` (RFC 5988 `Link: <url>; rel="next"`) pagination, matching
-legacy's `connsdk.LinkHeaderPaginator`. `per_page` is templated from `config.page_size` (default
-`100`, matching legacy's `bugsnagDefaultPageSize`/`bugsnagMaxPageSize`).
-
-`projects`/`errors`/`events`/`releases` stamp the current fan-out id onto their
-`organization_id`/`project_id` field respectively (`fan_out.stamp_field`) — Bugsnag's real API
-already returns these as ordinary fields on child objects, so this guarantees the value even on a
-response shape that omits it (a common real-world "implicit from the URL" API quirk), matching
-the value the URL parameter itself carries either way. `errors`'s `events_count` field requires a
-`computed_fields` rename from the raw API's `events` key (schema projection only copies by exact
-key match; without the rename the field would silently drop). `errors`/`events`/`releases`
-declare a bare `incremental.cursor_field` (`last_seen`/`received_at`/`release_time`) with no
-`request_param` — legacy publishes `CursorFields` for these 3 streams (a downstream incremental
-sync watermark) but Bugsnag's Data Access API v2 has no server-side date-range filter parameter
-legacy ever sends, matching `docs/migration/conventions.md` §8 rule 2's truth table exactly
-(bare cursor_field iff legacy publishes CursorFields with no server-side filter).
-
-Primary key `id` on every stream (every Bugsnag resource exposes a string id, matching legacy's
-uniform `PrimaryKey: []string{"id"}}`).
+- `organizations`: GET `/user/organizations` - records at response root; query `per_page`=`{{
+  config.page_size }}`; follows RFC 5988 Link headers with rel=next.
+- `projects`: GET `/organizations/{{ fanout.id }}/projects` - records at response root; query
+  `per_page`=`{{ config.page_size }}`; follows RFC 5988 Link headers with rel=next; fan-out; ids
+  from config field `organization_id`; id inserted into the request path; stamps `organization_id`.
+- `collaborators`: GET `/organizations/{{ fanout.id }}/collaborators` - records at response root;
+  query `per_page`=`{{ config.page_size }}`; follows RFC 5988 Link headers with rel=next; fan-out;
+  ids from config field `organization_id`; id inserted into the request path.
+- `errors`: GET `/projects/{{ fanout.id }}/errors` - records at response root; query `per_page`=`{{
+  config.page_size }}`; follows RFC 5988 Link headers with rel=next; incremental cursor `last_seen`;
+  formatted as `rfc3339`; computed output fields `events_count`; fan-out; ids from config field
+  `project_id`; id inserted into the request path; stamps `project_id`.
+- `events`: GET `/projects/{{ fanout.id }}/events` - records at response root; query `per_page`=`{{
+  config.page_size }}`; follows RFC 5988 Link headers with rel=next; incremental cursor
+  `received_at`; formatted as `rfc3339`; fan-out; ids from config field `project_id`; id inserted
+  into the request path; stamps `project_id`.
+- `releases`: GET `/projects/{{ fanout.id }}/releases` - records at response root; query
+  `per_page`=`{{ config.page_size }}`; follows RFC 5988 Link headers with rel=next; incremental
+  cursor `release_time`; formatted as `rfc3339`; fan-out; ids from config field `project_id`; id
+  inserted into the request path; stamps `project_id`.
 
 ## Write actions & risks
 
-None. Legacy `bugsnag.go`'s `Write` returns `connectors.ErrUnsupportedOperation`
-unconditionally; `capabilities.write` is `false` and this bundle ships no `writes.json`.
+This connector is read-only. Read behavior: external Bugsnag API read of organization, project,
+collaborator, and error/event/release data.
 
 ## Known limits
 
-- **Auto-discovery of `organization_id`/`project_id` is NOT modeled (documented config-surface
-  narrowing).** Legacy's `resolveParents` prefers the configured id(s) and, only when unset,
-  auto-discovers organizations via `/user/organizations` (for `projects`/`collaborators`) or
-  projects across all the user's organizations via a nested org-then-project lookup (for
-  `errors`/`events`/`releases`) — a genuine TWO-LEVEL discovery chain in the worst case (neither
-  `organization_id` nor `project_id` configured). The engine's `fan_out` primitive resolves its id
-  list from EXACTLY ONE preliminary request (or a config value) — it has no support for a
-  multi-level "discover A, then discover B from each A" chain, and no way to express "prefer
-  config, else auto-discover" as a single `ids_from` declaration (`config_key` and `request` are
-  mutually exclusive). `organization_id`/`project_id` are both real, legacy-documented config keys
-  a caller could already set explicitly; this migration requires them to be set for
-  `projects`/`collaborators`/`errors`/`events`/`releases` (matching appfollow's identical
-  documented `app_collection_ids`/`ext_ids`-required precedent) rather than silently
-  auto-discovering with zero configuration. This never changes emitted record DATA for any
-  configured-id input legacy itself would accept — only the zero-config auto-discovery convenience
-  is out of scope.
-- **`max_pages`** is not modeled (F6, dead config): legacy's `bugsnagMaxPages` accepts an optional
-  cap (integer, `all`/`unlimited`/`0` synonyms for unbounded), but the engine's `link_header`
-  paginator has no config-driven request-count override mechanism, so it is not declared in
-  `spec.json`.
-- The full Bugsnag Data Access API surface (single-resource lookups, error/event mutation
-  endpoints, release group management) is out of scope for this wave; see `api_surface.json`'s
-  `excluded` entries.
+- Batch defaults: read_page_size=100.
+- API coverage includes 6 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, out_of_scope=4.

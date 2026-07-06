@@ -1,232 +1,353 @@
 # Overview
 
-Chargebee started as a wave1-pilot Tier-1 declarative migration (PLAN.md P-6, SPEC.md §5.4) and was
-expanded to full API-surface coverage in Pass B (api_surface.json `reviewed_at: 2026-07-03`). It
-reads 32 Chargebee resources (customers, subscriptions, invoices, plans, items, item prices, item
-families, coupons, coupon codes/sets, credit notes, transactions, orders, quotes, payment sources,
-events, hosted pages, virtual bank accounts, unbilled charges, ramps, gifts, alerts, comments,
-promotional credits, features, entitlements, differential prices, price variants, products, webhook
-endpoints, ledger operations, and ledger account balances) and writes 36 actions (the core
-create/update/delete/void/cancel triad for its primary business objects) through the Chargebee v2
-REST API (Product Catalog 2.0). The original 5 streams (`customers`, `subscriptions`, `invoices`,
-`plans`, `items`) remain engine-vs-legacy parity-tested against `internal/connectors/chargebee` (the
-hand-written connector this bundle originally migrated); the legacy package stays registered and
-unchanged until wave6's registry flip, and is frozen at its original 5-stream, read-only surface —
-it never gained the 27 additional streams or any write capability. See
-`docs/migration/conventions.md` §8 for the Pass B review rules this expansion followed.
+Reads and writes Chargebee subscription billing data (customers, subscriptions, invoices, plans,
+items, item prices, coupons, credit notes, transactions, orders, quotes, payment sources, events,
+and more) through the Chargebee v2 REST API.
+
+Readable streams: `customers`, `subscriptions`, `invoices`, `plans`, `items`, `item_prices`,
+`item_families`, `coupons`, `coupon_codes`, `coupon_sets`, `credit_notes`, `transactions`, `orders`,
+`quotes`, `payment_sources`, `events`, `hosted_pages`, `virtual_bank_accounts`, `unbilled_charges`,
+`ramps`, `gifts`, `alerts`, `comments`, `promotional_credits`, `features`, `entitlements`,
+`differential_prices`, `price_variants`, `products`, `webhook_endpoints`, `ledger_operations`,
+`ledger_account_balances`.
+
+Write actions: `create_customer`, `update_customer`, `delete_customer`, `create_item`,
+`update_item`, `delete_item`, `create_item_price`, `update_item_price`, `delete_item_price`,
+`create_item_family`, `update_item_family`, `delete_item_family`, `create_subscription`,
+`update_subscription`, `cancel_subscription`, `create_credit_note`, `void_credit_note`,
+`create_coupon`, `update_coupon`, `delete_coupon`, `create_order`, `update_order`, `cancel_order`,
+`void_invoice`, `collect_payment_for_invoice`, `create_webhook_endpoint`, `update_webhook_endpoint`,
+`delete_webhook_endpoint`, `create_comment`, `delete_comment`, `add_promotional_credit`,
+`deduct_promotional_credit`, `create_virtual_bank_account`, `delete_virtual_bank_account`,
+`create_card_payment_source`, `delete_payment_source`.
+
+Service API documentation: https://apidocs.chargebee.com/docs/api.
 
 ## Auth setup
 
-Provide a Chargebee site API key via the `site_api_key` secret; it is used as the HTTP Basic
-username with an empty password (`auth: [{"mode":"basic","username":"{{ secrets.site_api_key }}",
-"password":""}]`), matching legacy's `connsdk.Basic(secret, "")` exactly (chargebee.go:262-264,278).
-The API host is `base_url`, which is **required** in this bundle (`spec.json`'s
-`required: ["site_api_key", "base_url"]`) — e.g. `https://{site}.chargebee.com/api/v2`. Legacy
-instead DERIVES the host from a `site` config value (`chargebeeBaseURL`,
-`"https://" + site + ".chargebee.com/api/v2"` when `base_url` is unset); this bundle does not
-reproduce that derivation (see "Known limits" below for why and the config-surface change this
-implies for an operator migrating a legacy-shaped config).
+Connection fields:
+
+- `base_url` (required, string); format `uri`; Chargebee API base URL, e.g.
+  https://{site}.chargebee.com/api/v2.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-100).
+- `site_api_key` (required, secret, string); Chargebee site API key. Sent as the HTTP Basic username
+  with an empty password; never logged.
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; only objects updated at
+  or after this time are read.
+
+Secret fields are redacted in logs and write previews: `site_api_key`.
+
+Default configuration values: `max_pages=0`, `page_size=100`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.site_api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/customers`.
 
 ## Streams notes
 
-Every stream shares the same base shape: `GET` against the Chargebee list endpoint, records at the
-top-level `list` array, each element wrapped in a single-key resource envelope (e.g.
-`{"customer": {...}}`, `{"item_price": {...}}`). Pagination follows Chargebee's `offset`/
-`next_offset` convention uniformly across all 32 streams (`base.pagination.type: cursor` with
-`cursor_param: offset` and `token_path: next_offset`): the next page's `offset` query value is read
-verbatim from the previous response body's `next_offset` field, and pagination stops when
-`next_offset` is absent. Every request sends `limit=100` via each stream's static
-`query: {"limit": "100"}`.
+Default pagination: cursor pagination; cursor parameter `offset`; next token from `next_offset`.
 
-**The original 5 legacy-parity streams** (`customers`, `subscriptions`, `invoices`, `plans`,
-`items`) match legacy's `harvest()` loop (chargebee.go:148-196) exactly, including
-`sort_by[asc]=updated_at` sent alongside `updated_at[after]` on every incremental request
-(`chargebee.go:151-155`), expressed via the `incremental.lower_bound` query-var dialect (S3 engine
-mini-wave item 1) — see "Known limits" below and `paritytest/chargebee/parity_test.go`'s
-`TestParityChargebee_SortByAscSentOnIncrementalFromState`/
-`TestParityChargebee_SortByAscSentOnIncrementalFromStartDate`/
-`TestParityChargebee_SortByAscOmittedOnFullSync`.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-**The 27 Pass B streams** were added directly from Chargebee's official OpenAPI spec
-(`chargebee_api_v2_pc_v2_spec.json`, https://github.com/chargebee/openapi) rather than a legacy
-connector (Chargebee's legacy Go package only ever implemented the original 5), so there is no
-parity claim for them — only a documented-API-contract claim. Incremental coverage per stream
-follows the truth table in conventions.md §8 rule 2 (`request_param` iff the API's own list endpoint
-accepts an `updated_at`/`occurred_at` filter parameter, confirmed against the OpenAPI spec's
-per-endpoint `parameters` list for every stream added):
-
-- **Incremental via `updated_at[after]`** (server-side filter confirmed in the OpenAPI spec):
-  `item_prices`, `item_families`, `credit_notes`, `transactions`, `orders`, `quotes`,
-  `payment_sources`, `hosted_pages`, `virtual_bank_accounts`, `ramps`, `price_variants`, `products`.
-  Of these, `coupons`/`credit_notes`/`quotes` support `updated_at[after]` filtering but their list
-  endpoints do NOT accept `sort_by[asc]=updated_at` (only `created_at`/`date` sorting is offered —
-  confirmed via the spec's per-endpoint `sort_by.properties.asc.enum`); the `sort_by[asc]` query
-  key is therefore omitted entirely for those 3 streams' `query` blocks (declaring it would be a
-  request Chargebee's own API rejects). Incremental filtering still returns exactly the records at
-  or after the lower bound in both cases — only the ordering GUARANTEE within a page differs (a
-  `sort_by`-less incremental page is not guaranteed strictly ascending by `updated_at`, but every
-  record `>=` the lower bound is still returned across the full paginated read).
-- **Incremental via `occurred_at[after]`** (Chargebee's events log has no `updated_at`, only an
-  immutable `occurred_at`): `events`.
-- **No incremental block** (the OpenAPI spec's list endpoint accepts no time-based filter parameter
-  at all — confirmed absent from that endpoint's `parameters`): `coupon_codes`, `coupon_sets`,
-  `unbilled_charges`, `gifts`, `alerts`, `comments`, `promotional_credits`, `features`,
-  `entitlements`, `differential_prices`, `webhook_endpoints`, `ledger_operations`,
-  `ledger_account_balances`. These are full-refresh-only streams; `x-cursor-field` is likewise
-  absent from their schemas (conventions.md §8 rule 2: "neither → no incremental block").
-
-**Non-standard primary keys**: `coupon_codes`' primary key is `["code"]` (Chargebee's own natural
-key for that resource — coupon codes have no separate `id` field); `ledger_account_balances` has no
-`id` field at all in the API response, so its primary key is the composite
-`["subscription_id", "unit_id", "unit_type"]` the API itself uses to identify a balance row.
-
-**Envelope unwrap via per-field `computed_fields`** (conventions.md §2 schema-as-projection):
-Chargebee wraps every list item in a single-key resource envelope, so plain schema projection
-(which looks up each schema property directly on the raw extracted record) sees only that one
-wrapper key and produces an empty record. Every schema property is therefore populated by a
-`computed_fields` entry reaching into the envelope (e.g. `"id": "{{ record.customer.id }}"`,
-`"created_at": "{{ record.customer.created_at }}"`), matching legacy's `chargebeeCustomerRecord`
-(and its 4 sibling `mapRecord` functions in streams.go) field-for-field — including TYPE, not just
-value: every computed_fields entry here is a single bare `{{ record.<envelope>.<field> }}`
-reference with no filter stage, so the engine's typed computed_fields extraction (gap-loop cycle-1
-item 1) copies the raw JSON value straight through (numeric/boolean fields preserve their native
-type instead of being stringified). Schemas declare the real wire type
-(`integer`/`boolean`/`string`) per field, matching `chargebeeStreams()`'s field catalog exactly; see
-`paritytest/chargebee/parity_test.go`'s
-`TestParityChargebee_ComputedFieldsPreserveNativeNumericAndBooleanTypes`.
+- `customers`: GET `/customers` - records path `list`; query `limit`=`100`; `sort_by[asc]` from
+  template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; incremental cursor
+  `updated_at`; sent as `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower
+  bound from `start_date`; computed output fields `auto_collection`, `company`, `created_at`,
+  `deleted`, `email`, `first_name`, `id`, `last_name`, `net_term_days`, `phone`, `taxability`,
+  `updated_at`.
+- `subscriptions`: GET `/subscriptions` - records path `list`; query `limit`=`100`; `sort_by[asc]`
+  from template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; incremental cursor
+  `updated_at`; sent as `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower
+  bound from `start_date`; computed output fields `created_at`, `currency_code`, `current_term_end`,
+  `current_term_start`, `customer_id`, `deleted`, `id`, `plan_amount`, `plan_id`, `plan_quantity`,
+  `started_at`, `status`, `updated_at`.
+- `invoices`: GET `/invoices` - records path `list`; query `limit`=`100`; `sort_by[asc]` from
+  template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; incremental cursor
+  `updated_at`; sent as `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower
+  bound from `start_date`; computed output fields `amount_due`, `amount_paid`, `currency_code`,
+  `customer_id`, `date`, `deleted`, `due_date`, `id`, `paid_at`, `status`, `subscription_id`,
+  `total`, `updated_at`.
+- `plans`: GET `/plans` - records path `list`; query `limit`=`100`; `sort_by[asc]` from template `{{
+  incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor pagination; cursor
+  parameter `offset`; next token from `next_offset`; incremental cursor `updated_at`; sent as
+  `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower bound from `start_date`;
+  computed output fields `created_at`, `currency_code`, `id`, `invoice_name`, `name`, `period`,
+  `period_unit`, `price`, `status`, `updated_at`.
+- `items`: GET `/items` - records path `list`; query `limit`=`100`; `sort_by[asc]` from template `{{
+  incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor pagination; cursor
+  parameter `offset`; next token from `next_offset`; incremental cursor `updated_at`; sent as
+  `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower bound from `start_date`;
+  computed output fields `created_at`, `enabled_for_checkout`, `id`, `is_shippable`,
+  `item_family_id`, `name`, `status`, `type`, `updated_at`.
+- `item_prices`: GET `/item_prices` - records path `list`; query `limit`=`100`; `sort_by[asc]` from
+  template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; incremental cursor
+  `updated_at`; sent as `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower
+  bound from `start_date`; computed output fields `created_at`, `currency_code`, `deleted`,
+  `free_quantity`, `id`, `is_taxable`, `item_family_id`, `item_id`, `item_type`, `name`, `period`,
+  `period_unit`, `price`, `pricing_model`, `status`, and 1 more.
+- `item_families`: GET `/item_families` - records path `list`; query `limit`=`100`; `sort_by[asc]`
+  from template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; incremental cursor
+  `updated_at`; sent as `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower
+  bound from `start_date`; computed output fields `created_at`, `deleted`, `description`, `id`,
+  `name`, `status`, `updated_at`.
+- `coupons`: GET `/coupons` - records path `list`; query `limit`=`100`; cursor pagination; cursor
+  parameter `offset`; next token from `next_offset`; incremental cursor `updated_at`; sent as
+  `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower bound from `start_date`;
+  computed output fields `apply_on`, `created_at`, `currency_code`, `deleted`, `discount_amount`,
+  `discount_percentage`, `discount_type`, `duration_type`, `id`, `name`, `redemptions`, `status`,
+  `updated_at`, `valid_till`.
+- `coupon_codes`: GET `/coupon_codes` - records path `list`; query `limit`=`100`; cursor pagination;
+  cursor parameter `offset`; next token from `next_offset`; computed output fields `code`,
+  `coupon_id`, `coupon_set_id`, `coupon_set_name`, `status`.
+- `coupon_sets`: GET `/coupon_sets` - records path `list`; query `limit`=`100`; cursor pagination;
+  cursor parameter `offset`; next token from `next_offset`; computed output fields `archived_count`,
+  `coupon_id`, `id`, `name`, `redeemed_count`, `total_count`.
+- `credit_notes`: GET `/credit_notes` - records path `list`; query `limit`=`100`; cursor pagination;
+  cursor parameter `offset`; next token from `next_offset`; incremental cursor `updated_at`; sent as
+  `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower bound from `start_date`;
+  computed output fields `amount_allocated`, `amount_available`, `amount_refunded`, `currency_code`,
+  `customer_id`, `date`, `deleted`, `id`, `reference_invoice_id`, `status`, `subscription_id`,
+  `total`, `type`, `updated_at`, `voided_at`.
+- `transactions`: GET `/transactions` - records path `list`; query `limit`=`100`; `sort_by[asc]`
+  from template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; incremental cursor
+  `updated_at`; sent as `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower
+  bound from `start_date`; computed output fields `amount`, `currency_code`, `customer_id`, `date`,
+  `deleted`, `gateway`, `id`, `payment_method`, `payment_source_id`, `status`, `subscription_id`,
+  `type`, `updated_at`.
+- `orders`: GET `/orders` - records path `list`; query `limit`=`100`; `sort_by[asc]` from template
+  `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor pagination; cursor
+  parameter `offset`; next token from `next_offset`; incremental cursor `updated_at`; sent as
+  `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower bound from `start_date`;
+  computed output fields `created_at`, `currency_code`, `customer_id`, `deleted`, `document_number`,
+  `id`, `invoice_id`, `order_type`, `price_type`, `status`, `subscription_id`, `total`,
+  `updated_at`.
+- `quotes`: GET `/quotes` - records path `list`; query `limit`=`100`; cursor pagination; cursor
+  parameter `offset`; next token from `next_offset`; incremental cursor `updated_at`; sent as
+  `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower bound from `start_date`;
+  computed output fields `currency_code`, `customer_id`, `date`, `id`, `invoice_id`, `name`,
+  `operation_type`, `price_type`, `status`, `subscription_id`, `total`, `updated_at`, `valid_till`.
+- `payment_sources`: GET `/payment_sources` - records path `list`; query `limit`=`100`;
+  `sort_by[asc]` from template `{{ incremental.lower_bound | const:updated_at }}`, omitted when
+  absent; cursor pagination; cursor parameter `offset`; next token from `next_offset`; incremental
+  cursor `updated_at`; sent as `updated_at[after]`; formatted as Unix-seconds timestamp; initial
+  lower bound from `start_date`; computed output fields `created_at`, `customer_id`, `deleted`,
+  `gateway`, `gateway_account_id`, `id`, `reference_id`, `status`, `type`, `updated_at`.
+- `events`: GET `/events` - records path `list`; query `limit`=`100`; `sort_by[asc]` from template
+  `{{ incremental.lower_bound | const:occurred_at }}`, omitted when absent; cursor pagination;
+  cursor parameter `offset`; next token from `next_offset`; incremental cursor `occurred_at`; sent
+  as `occurred_at[after]`; formatted as Unix-seconds timestamp; initial lower bound from
+  `start_date`; computed output fields `api_version`, `event_type`, `id`, `occurred_at`, `source`.
+- `hosted_pages`: GET `/hosted_pages` - records path `list`; query `limit`=`100`; cursor pagination;
+  cursor parameter `offset`; next token from `next_offset`; incremental cursor `updated_at`; sent as
+  `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower bound from `start_date`;
+  computed output fields `created_at`, `expires_at`, `id`, `state`, `type`, `updated_at`, `url`.
+- `virtual_bank_accounts`: GET `/virtual_bank_accounts` - records path `list`; query `limit`=`100`;
+  cursor pagination; cursor parameter `offset`; next token from `next_offset`; incremental cursor
+  `updated_at`; sent as `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower
+  bound from `start_date`; computed output fields `account_number`, `bank_name`, `created_at`,
+  `customer_id`, `deleted`, `email`, `gateway`, `gateway_account_id`, `id`, `updated_at`.
+- `unbilled_charges`: GET `/unbilled_charges` - records path `list`; query `limit`=`100`; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; computed output fields
+  `amount`, `currency_code`, `customer_id`, `date_from`, `date_to`, `entity_id`, `entity_type`,
+  `id`, `is_voided`, `subscription_id`.
+- `ramps`: GET `/ramps` - records path `list`; query `limit`=`100`; `sort_by[asc]` from template `{{
+  incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor pagination; cursor
+  parameter `offset`; next token from `next_offset`; incremental cursor `updated_at`; sent as
+  `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower bound from `start_date`;
+  computed output fields `created_at`, `deleted`, `description`, `effective_from`, `id`, `status`,
+  `subscription_id`, `updated_at`.
+- `gifts`: GET `/gifts` - records path `list`; query `limit`=`100`; cursor pagination; cursor
+  parameter `offset`; next token from `next_offset`; computed output fields `auto_claim`,
+  `claim_expiry_date`, `id`, `no_expiry`, `scheduled_at`, `status`, `updated_at`.
+- `alerts`: GET `/alerts` - records path `list`; query `limit`=`100`; cursor pagination; cursor
+  parameter `offset`; next token from `next_offset`; computed output fields `created_at`,
+  `description`, `id`, `metered_feature_id`, `name`, `status`, `subscription_id`, `type`,
+  `updated_at`.
+- `comments`: GET `/comments` - records path `list`; query `limit`=`100`; cursor pagination; cursor
+  parameter `offset`; next token from `next_offset`; computed output fields `added_by`,
+  `created_at`, `entity_id`, `entity_type`, `id`, `notes`, `type`.
+- `promotional_credits`: GET `/promotional_credits` - records path `list`; query `limit`=`100`;
+  cursor pagination; cursor parameter `offset`; next token from `next_offset`; computed output
+  fields `amount`, `closing_balance`, `created_at`, `credit_type`, `currency_code`, `customer_id`,
+  `description`, `id`, `type`.
+- `features`: GET `/features` - records path `list`; query `limit`=`100`; cursor pagination; cursor
+  parameter `offset`; next token from `next_offset`; computed output fields `created_at`,
+  `description`, `id`, `name`, `status`, `type`, `unit`, `updated_at`.
+- `entitlements`: GET `/entitlements` - records path `list`; query `limit`=`100`; cursor pagination;
+  cursor parameter `offset`; next token from `next_offset`; computed output fields `entity_id`,
+  `entity_type`, `feature_id`, `feature_name`, `id`, `name`, `value`.
+- `differential_prices`: GET `/differential_prices` - records path `list`; query `limit`=`100`;
+  cursor pagination; cursor parameter `offset`; next token from `next_offset`; computed output
+  fields `created_at`, `currency_code`, `deleted`, `id`, `item_price_id`, `parent_item_id`, `price`,
+  `status`, `updated_at`.
+- `price_variants`: GET `/price_variants` - records path `list`; query `limit`=`100`; `sort_by[asc]`
+  from template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; incremental cursor
+  `updated_at`; sent as `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower
+  bound from `start_date`; computed output fields `created_at`, `deleted`, `description`, `id`,
+  `name`, `status`, `updated_at`, `variant_group`.
+- `products`: GET `/products` - records path `list`; query `limit`=`100`; `sort_by[asc]` from
+  template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; incremental cursor
+  `updated_at`; sent as `updated_at[after]`; formatted as Unix-seconds timestamp; initial lower
+  bound from `start_date`; computed output fields `created_at`, `deleted`, `description`,
+  `external_name`, `has_variant`, `id`, `name`, `shippable`, `sku`, `status`, `updated_at`.
+- `webhook_endpoints`: GET `/webhook_endpoints` - records path `list`; query `limit`=`100`; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; computed output fields
+  `api_version`, `disabled`, `id`, `name`, `primary_url`, `url`.
+- `ledger_operations`: GET `/ledger_operations` - records path `list`; query `limit`=`100`; cursor
+  pagination; cursor parameter `offset`; next token from `next_offset`; computed output fields
+  `amount`, `created_at`, `end_balance`, `id`, `modified_at`, `start_balance`, `subscription_id`,
+  `type`, `unit_id`, `unit_type`.
+- `ledger_account_balances`: GET `/ledger_account_balances` - records path `list`; query
+  `limit`=`100`; cursor pagination; cursor parameter `offset`; next token from `next_offset`;
+  computed output fields `modified_at`, `subscription_id`, `unit_id`, `unit_type`.
 
 ## Write actions & risks
 
-Pass B added write capability (`metadata.json`'s `capabilities.write` is now `true`); legacy
-(`chargebee.go:258-260`'s `Write` still returns `connectors.ErrUnsupportedOperation` and is
-unaffected by this bundle's expansion — see
-`paritytest/chargebee/parity_test.go`'s `TestParityChargebee_LegacyWriteStillUnsupported`, which
-pins that legacy behavior stays frozen, and `TestParityChargebee_CreateCustomerWriteSupported`,
-which exercises the new capability end-to-end. 36 actions cover the core create/update/delete/
-void/cancel triad for Chargebee's primary business objects, all `body_type: form` (matches every
-mutation endpoint's documented `application/x-www-form-urlencoded` content type):
+Overall write risk: external mutation of Chargebee billing data (customers, subscriptions, invoices,
+credit notes, orders, coupons, payment sources); several actions have direct financial/billing side
+effects and require approval.
 
-- **Customers**: `create_customer`, `update_customer`, `delete_customer`.
-- **Items catalog**: `create_item`/`update_item`/`delete_item`, `create_item_price`/
-  `update_item_price`/`delete_item_price`, `create_item_family`/`update_item_family`/
-  `delete_item_family`.
-- **Subscriptions**: `create_subscription` (POST `/customers/{id}/subscription_for_items`),
-  `update_subscription` (POST `/subscriptions/{id}/update_for_items`), `cancel_subscription`
-  (POST `/subscriptions/{id}/cancel_for_items` — irreversible; risk-flagged).
-- **Billing documents**: `create_credit_note`/`void_credit_note`, `create_coupon`/`update_coupon`/
-  `delete_coupon` (coupon creation/update route through Chargebee's Product-Catalog-2.0
-  `create_for_items`/`update_for_items` endpoints — there is no plain `POST /coupons`),
-  `create_order`/`update_order`/`cancel_order`, `void_invoice`, `collect_payment_for_invoice`
-  (attempts to charge a payment method — risk-flagged).
-- **Payments**: `create_card_payment_source` (carries raw card data via nested `card[...]`
-  form fields — Chargebee's own form-encoding convention for the `card` object parameter;
-  `write.go`'s `buildForm` sends record keys verbatim as form field names, so the record schema
-  declares the bracketed key names directly, e.g. `"card[number]"`), `delete_payment_source`,
-  `create_virtual_bank_account`/`delete_virtual_bank_account`.
-- **Other**: `create_webhook_endpoint`/`update_webhook_endpoint`/`delete_webhook_endpoint`,
-  `create_comment`/`delete_comment`, `add_promotional_credit`/`deduct_promotional_credit` (direct
-  financial-credit effect — risk-flagged).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Every `delete`-kind action declares `delete.missing_ok_status: [404]` (an already-deleted record is
-treated as successfully written, not failed), matching conventions.md §3's delete semantics.
-Deliberately NOT covered as writes (see api_surface.json for the full, itemized exclusion list):
-hard-deletes of invoices/credit notes/subscriptions (void/cancel are the safer, already-covered
-reversible alternatives), quote/estimate/hosted-page checkout workflows (multi-step, no persisted
-side effect until converted), invoice/credit-note payment-application and dunning-control actions,
-and narrow catalog/packaging sub-resource management (differential prices, item entitlements,
-price-variant attributes) beyond the core CRUD triads — breadth-first Pass B scope prioritizes real
-business-object CRUD over exotic operational/admin actions.
+- `create_customer`: POST `/customers` - kind `create`; body type `form`; accepted fields `company`,
+  `email`, `first_name`, `last_name`, `phone`; risk: external mutation; approval required.
+- `update_customer`: POST `/customers/{{ record.id }}` - kind `update`; body type `form`; path
+  fields `id`; required record fields `id`; accepted fields `company`, `email`, `first_name`, `id`,
+  `last_name`, `phone`; risk: external mutation; approval required.
+- `delete_customer`: POST `/customers/{{ record.id }}/delete` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: irreversible external deletion; approval required.
+- `create_item`: POST `/items` - kind `create`; body type `form`; required record fields `id`,
+  `name`, `type`, `item_family_id`; accepted fields `description`, `id`, `item_family_id`, `name`,
+  `type`, `unit`; risk: external mutation; approval required.
+- `update_item`: POST `/items/{{ record.id }}` - kind `update`; body type `form`; path fields `id`;
+  required record fields `id`; accepted fields `description`, `id`, `name`, `status`; risk: external
+  mutation; approval required.
+- `delete_item`: POST `/items/{{ record.id }}/delete` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; missing records treated as success for
+  status `404`; risk: irreversible external deletion; approval required.
+- `create_item_price`: POST `/item_prices` - kind `create`; body type `form`; required record fields
+  `id`, `item_id`, `name`; accepted fields `currency_code`, `description`, `id`, `item_id`, `name`,
+  `period`, `period_unit`, `price`; risk: external mutation; approval required.
+- `update_item_price`: POST `/item_prices/{{ record.id }}` - kind `update`; body type `form`; path
+  fields `id`; required record fields `id`; accepted fields `description`, `id`, `name`, `price`,
+  `status`; risk: external mutation; approval required.
+- `delete_item_price`: POST `/item_prices/{{ record.id }}/delete` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: irreversible external deletion; approval required.
+- `create_item_family`: POST `/item_families` - kind `create`; body type `form`; required record
+  fields `id`, `name`; accepted fields `description`, `id`, `name`; risk: external mutation;
+  approval required.
+- `update_item_family`: POST `/item_families/{{ record.id }}` - kind `update`; body type `form`;
+  path fields `id`; required record fields `id`; accepted fields `description`, `id`, `name`; risk:
+  external mutation; approval required.
+- `delete_item_family`: POST `/item_families/{{ record.id }}/delete` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: irreversible external deletion; approval required.
+- `create_subscription`: POST `/customers/{{ record.customer_id }}/subscription_for_items` - kind
+  `create`; body type `form`; path fields `customer_id`; required record fields `customer_id`;
+  accepted fields `auto_collection`, `customer_id`, `id`, `po_number`, `start_date`; risk: external
+  mutation with billing side effects; approval required.
+- `update_subscription`: POST `/subscriptions/{{ record.id }}/update_for_items` - kind `update`;
+  body type `form`; path fields `id`; required record fields `id`; accepted fields
+  `auto_collection`, `id`, `invoice_date`, `po_number`; risk: external mutation with billing side
+  effects; approval required.
+- `cancel_subscription`: POST `/subscriptions/{{ record.id }}/cancel_for_items` - kind `update`;
+  body type `form`; path fields `id`; required record fields `id`; accepted fields `cancel_option`,
+  `cancel_reason_code`, `end_of_term`, `id`; risk: irreversible external mutation (subscription
+  cancellation) with billing side effects; approval required.
+- `create_credit_note`: POST `/credit_notes` - kind `create`; body type `form`; required record
+  fields `type`; accepted fields `currency_code`, `customer_id`, `reason_code`,
+  `reference_invoice_id`, `total`, `type`; risk: external mutation with accounting/billing side
+  effects; approval required.
+- `void_credit_note`: POST `/credit_notes/{{ record.id }}/void` - kind `update`; body type `form`;
+  path fields `id`; required record fields `id`; accepted fields `comment`, `id`; risk: irreversible
+  external mutation; approval required.
+- `create_coupon`: POST `/coupons/create_for_items` - kind `create`; body type `form`; required
+  record fields `id`, `name`, `apply_on`; accepted fields `apply_on`, `discount_amount`,
+  `discount_percentage`, `discount_type`, `duration_type`, `id`, `name`; risk: external mutation
+  with billing/discount side effects; approval required.
+- `update_coupon`: POST `/coupons/{{ record.id }}/update_for_items` - kind `update`; body type
+  `form`; path fields `id`; required record fields `id`; accepted fields `id`, `name`, `status`,
+  `valid_till`; risk: external mutation with billing/discount side effects; approval required.
+- `delete_coupon`: POST `/coupons/{{ record.id }}/delete` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: irreversible external deletion; approval required.
+- `create_order`: POST `/orders` - kind `create`; body type `form`; required record fields
+  `invoice_id`; accepted fields `id`, `invoice_id`, `reference_id`, `status`, `tracking_id`; risk:
+  external mutation; approval required.
+- `update_order`: POST `/orders/{{ record.id }}` - kind `update`; body type `form`; path fields
+  `id`; required record fields `id`; accepted fields `id`, `note`, `status`, `tracking_id`,
+  `tracking_url`; risk: external mutation; approval required.
+- `cancel_order`: POST `/orders/{{ record.id }}/cancel` - kind `update`; body type `form`; path
+  fields `id`; required record fields `id`, `cancellation_reason`; accepted fields
+  `cancellation_reason`, `comment`, `id`; risk: irreversible external mutation (order cancellation);
+  approval required.
+- `void_invoice`: POST `/invoices/{{ record.id }}/void` - kind `update`; body type `form`; path
+  fields `id`; required record fields `id`; accepted fields `comment`, `id`; risk: irreversible
+  external mutation with accounting side effects; approval required.
+- `collect_payment_for_invoice`: POST `/invoices/{{ record.id }}/collect_payment` - kind `update`;
+  body type `form`; path fields `id`; required record fields `id`; accepted fields `amount`,
+  `comment`, `id`, `payment_source_id`; risk: external mutation that attempts to charge a payment
+  method; approval required.
+- `create_webhook_endpoint`: POST `/webhook_endpoints` - kind `create`; body type `form`; required
+  record fields `name`, `url`; accepted fields `api_version`, `disabled`, `name`, `url`; risk:
+  external mutation exposing business data to a third-party URL; approval required.
+- `update_webhook_endpoint`: POST `/webhook_endpoints/{{ record.id }}` - kind `update`; body type
+  `form`; path fields `id`; required record fields `id`; accepted fields `disabled`, `id`, `name`,
+  `url`; risk: external mutation exposing business data to a third-party URL; approval required.
+- `delete_webhook_endpoint`: POST `/webhook_endpoints/{{ record.id }}/delete` - kind `delete`; body
+  type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: irreversible external deletion; approval required.
+- `create_comment`: POST `/comments` - kind `create`; body type `form`; required record fields
+  `entity_type`, `entity_id`, `notes`; accepted fields `added_by`, `entity_id`, `entity_type`,
+  `notes`; risk: external mutation; approval required.
+- `delete_comment`: POST `/comments/{{ record.id }}/delete` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: irreversible external deletion; approval required.
+- `add_promotional_credit`: POST `/promotional_credits/add` - kind `update`; body type `form`;
+  required record fields `customer_id`, `description`; accepted fields `amount`, `credit_type`,
+  `currency_code`, `customer_id`, `description`; risk: external mutation with a direct
+  billing-credit financial effect; approval required.
+- `deduct_promotional_credit`: POST `/promotional_credits/deduct` - kind `update`; body type `form`;
+  required record fields `customer_id`, `description`; accepted fields `amount`, `credit_type`,
+  `currency_code`, `customer_id`, `description`; risk: external mutation with a direct
+  billing-credit financial effect; approval required.
+- `create_virtual_bank_account`: POST `/virtual_bank_accounts` - kind `create`; body type `form`;
+  required record fields `customer_id`; accepted fields `customer_id`, `email`,
+  `gateway_account_id`; risk: external mutation; approval required.
+- `delete_virtual_bank_account`: POST `/virtual_bank_accounts/{{ record.id }}/delete` - kind
+  `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  missing records treated as success for status `404`; risk: irreversible external deletion;
+  approval required.
+- `create_card_payment_source`: POST `/payment_sources/create_card` - kind `create`; body type
+  `form`; required record fields `customer_id`; accepted fields `card[cvv]`, `card[expiry_month]`,
+  `card[expiry_year]`, `card[first_name]`, `card[last_name]`, `card[number]`, `customer_id`; risk:
+  external mutation carrying raw payment-card data; approval required.
+- `delete_payment_source`: POST `/payment_sources/{{ record.id }}/delete` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: irreversible external deletion; approval required.
 
 ## Known limits
 
-- **Pass B full-surface expansion (this revision)**: `api_surface.json` was rewritten from the
-  wave1-pilot's minimal-honest 13-endpoint manifest to a full enumeration of Chargebee's
-  official Product-Catalog-2.0 OpenAPI spec (428 endpoints total, including the legacy `/plans`
-  PC1.0 endpoint carried from the pre-Pass-B bundle). Every endpoint is `covered_by` a stream/write
-  action XOR `excluded` with one of the closed-vocabulary categories
-  (`destructive_admin`/`requires_elevated_scope`/`binary_payload`/`deprecated`/`non_data_endpoint`/
-  `duplicate_of`/`out_of_scope`) and a specific, non-boilerplate reason — see `api_surface.json`'s
-  `scope` field for the full breakdown. Notably excluded, with reasons: PDF/e-invoice generation and
-  async bulk-export jobs (`binary_payload`); site/currency/custom-field configuration
-  (`non_data_endpoint`); omnichannel/app-store billing, Product-Catalog-2.0 migration tooling, and
-  multi-business-entity transfers, all gated behind add-ons most sites don't have enabled
-  (`requires_elevated_scope`); the deprecated `/cards` endpoint (superseded by `payment_sources`)
-  and short-lived payment tokens (`deprecated`/`duplicate_of`); irreversible hard-deletes and
-  sandbox-only time-machine clock control, each with an already-covered safer alternative
-  (`destructive_admin`); and compound checkout/quote/estimate workflows plus narrow catalog/
-  packaging sub-resource management beyond the core CRUD triads (`out_of_scope`).
-- **Chargebee's Product Catalog 1.0 vs 2.0**: the `plans` stream (legacy parity) reads the PC1.0
-  `/plans` endpoint, which is NOT part of Chargebee's current public OpenAPI spec — it remains live
-  for backward compatibility on sites that have not migrated to Product Catalog 2.0, but is
-  undocumented in the current API reference. The 27 Pass B streams instead cover Chargebee's current
-  PC2.0 surface (`items`/`item_prices`/`item_families` replace the PC1.0 `plans`/`addons` model for
-  any site that has migrated). A site still on PC1.0 will return data for `plans` but likely empty
-  or errored results for `item_prices`/`item_families`/`differential_prices`/`price_variants`
-  (PC2.0-only concepts); this is an accurate reflection of Chargebee's own dual-catalog-version
-  reality, not a bundle defect.
-- Full Chargebee API surface (coupons, credit notes, addons, hosted pages, events, webhooks) is out
-  of scope for wave1-pilot; see `api_surface.json`'s `excluded: {category: out_of_scope, reason:
-  "Pass B capability expansion"}` entries. Only the 5 legacy-parity streams are implemented.
-  **SUPERSEDED by the Pass B full-surface expansion above** — kept for historical trace continuity;
-  coupons/credit_notes/hosted_pages/events/webhook_endpoints are now implemented streams.
-- **RESOLVED — computed_fields envelope unwrap now preserves native numeric/boolean types.**
-  Previously (pre gap-loop-cycle-1), every schema field derived via a `computed_fields` envelope
-  unwrap was stringified by `engine.Interpolate` regardless of the raw JSON value's real type,
-  which forced every numeric/boolean schema property to a widened `["string", "null"]` type. The
-  engine's typed computed_fields extraction (gap-loop cycle-1 item 1: a bare
-  `{{ record.<path> }}` template with no filter stage copies the raw typed value instead of
-  stringifying) now applies to every computed_fields entry in this bundle, so schemas declare the
-  real wire type (`integer` for Unix-seconds timestamps and plain integers, `boolean` for booleans)
-  matching legacy's `chargebeeStreams()` field catalog and `mapRecord` functions exactly, TYPE
-  included. Asserted by `paritytest/chargebee/parity_test.go`'s
-  `TestParityChargebee_ComputedFieldsPreserveNativeNumericAndBooleanTypes`.
-  - **Why not a `RecordHook` instead** (SPEC §5.4's suggested fallback for cases computed_fields
-    cannot reproduce exactly): `internal/connectors/conformance/dynamic.go`'s dynamic checks
-    (`checkReadFixtureNonempty`, `checkPaginationTerminates`, `checkRecordsMatchSchema`,
-    `checkCursorAdvances`) all call `engine.Read`/`engine.Check` with a literal `nil` Hooks
-    parameter — a `RecordHook` would never fire during conformance, so `checkRecordsMatchSchema`
-    would validate the schema against the still-envelope-wrapped raw record (one top-level key)
-    instead of a flattened one, failing hard for every stream regardless of hook correctness.
-    `computed_fields` is therefore the only mechanism whose output conformance actually exercises;
-    with typed extraction it now ALSO preserves the real wire type, closing the gap this note
-    originally documented. See `.planning/phases/wave1-pilot/traces/p6-chargebee-ledger.md` and
-    `.planning/phases/wave1-pilot/traces/gaploop-s1-ledger.md`/`s2-chargebee-sentry-ledger.md` for
-    the full design-decision trace.
-- ~~**OPEN — `sort_by[asc]=updated_at` is not sent on incremental requests.**~~ **RESOLVED (S3 engine
-  mini-wave item 1).** Legacy sets `sort_by[asc]=updated_at` alongside `updated_at[after]` on every
-  incremental request whenever the computed lower bound is non-empty (`chargebee.go:151-155`), never
-  on a full-refresh read. The engine now exposes the RESOLVED, post-`formatParam` incremental lower
-  bound to `stream.Query` template resolution as `{{ incremental.lower_bound }}` (populated in
-  `buildInitialQuery` BEFORE the query-template resolution loop runs, so it reflects EITHER the
-  persisted `state.cursor` OR the `start_config_key` fallback — exactly the same value/precedence
-  `updated_at[after]` itself uses). Composed with the existing `omit_when_absent` dialect and the new
-  `const:<value>` filter (send a FIXED literal iff a reference resolves, without depending on the
-  reference's own value), each stream's `query` now declares:
-  ```json
-  "sort_by[asc]": { "template": "{{ incremental.lower_bound | const:updated_at }}", "omit_when_absent": true }
-  ```
-  — present with the constant value `updated_at` iff the incremental lower bound resolves (state
-  cursor or `start_date`), absent on a full-refresh read, exactly matching legacy's
-  `if updatedAfter != ""` gate. See `paritytest/chargebee/parity_test.go`'s
-  `TestParityChargebee_SortByAscSentOnIncrementalFromState`/
-  `TestParityChargebee_SortByAscSentOnIncrementalFromStartDate`/
-  `TestParityChargebee_SortByAscOmittedOnFullSync` and
-  `.planning/phases/wave2-fanout-http-sm/traces/s3-engine-ledger.md` for the full design trace; the
-  original STOP analysis remains at
-  `.planning/phases/wave1-pilot/traces/s2-chargebee-sentry-ledger.md`'s chargebee item 2 section for
-  historical reference.
-- **`site` config key dropped; `base_url` is now required.** Legacy derives the API host from a
-  `site` config value (`https://{site}.chargebee.com/api/v2`) when `base_url` is unset
-  (`chargebeeBaseURL`). The engine's spec-default materialization (gap-loop cycle-1 item 6, C3)
-  only fills in a LITERAL per-key default — it cannot express "derive `base_url` from `site`", a
-  cross-key template. Per `docs/migration/conventions.md`'s guidance for this exact shape (sentry's
-  `hostname` hit the identical class), this bundle drops `site` entirely and requires `base_url`
-  instead: an operator migrating a legacy `site`-only config must now supply the fully-formed
-  `https://{site}.chargebee.com/api/v2` URL as `base_url`. This is a documented config-surface
-  narrowing (every legacy-accepted `site` value has an operator-reachable `base_url` equivalent; no
-  request/data change once configured), not a data-shape regression.
-- `metadata.json` declares no `rate_limit` block: legacy chargebee enforces no client-side rate
-  limiting (no `rate_limit`/throttle field anywhere in `chargebee.go`), so this bundle adds none
-  either, matching conventions.md §3's "informational vs. enforced" rate-limit rule (an absent
-  block, not merely an unenforced one, since Chargebee's public rate limit was never documented in
-  the legacy package to carry forward informationally).
+- Batch defaults: read_page_size=100.
+- API coverage includes 32 stream-backed endpoint group(s), 36 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=29, deprecated=1, destructive_admin=5, duplicate_of=16, non_data_endpoint=16,
+  out_of_scope=247, requires_elevated_scope=46.

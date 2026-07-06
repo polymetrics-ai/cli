@@ -18,89 +18,24 @@ import (
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
 
-// factoryRegistry holds process-global connector factories registered by
-// per-system connector packages via RegisterFactory. Registration order is
-// preserved so NewRegistry() builds connectors deterministically.
-var factoryRegistry = struct {
-	mu     sync.Mutex
-	order  []string
-	byName map[string]func() Connector
-}{byName: map[string]func() Connector{}}
+var defaultRegistryBuilder = struct {
+	mu sync.RWMutex
+	fn func() *Registry
+}{}
 
-var liveFactoryNamesCache = struct {
-	once  sync.Once
-	names map[string]bool
-}{names: map[string]bool{}}
-
-// nativeLiveNames holds pm-native connector names that should be live
-// (CLI-executable via the production registry) even though they have NO
-// catalog_data.json entry. Populated by RegisterNativeLive from a connector
-// package init(), alongside RegisterFactory.
-var nativeLiveNames = struct {
-	mu    sync.Mutex
-	names map[string]bool
-}{names: map[string]bool{}}
-
-// RegisterNativeLive marks a self-registered connector as live so NewLiveRegistry
-// (and therefore the CLI) exposes it without a catalog entry. It is intended for
-// pm-native connectors built directly on connsdk — e.g. searxng — that are not
-// part of the imported upstream-style catalog. Call it from init() next to
-// RegisterFactory. Safe to call before the live-name cache is built.
-func RegisterNativeLive(name string) {
-	nativeLiveNames.mu.Lock()
-	defer nativeLiveNames.mu.Unlock()
-	nativeLiveNames.names[name] = true
+// RegisterDefaultRegistryBuilder installs the process default registry builder.
+// Wave 6 uses this to let the bundle-backed registry live in a package that can
+// import engine/defs without creating a connectors<->engine cycle.
+func RegisterDefaultRegistryBuilder(fn func() *Registry) {
+	defaultRegistryBuilder.mu.Lock()
+	defer defaultRegistryBuilder.mu.Unlock()
+	defaultRegistryBuilder.fn = fn
 }
 
-// RegisterFactory registers a connector factory under name. It is intended to
-// be called from a connector package's init(); a generated registry_gen.go (in
-// the registryset package) blank-imports each connector package to run those
-// init() side effects. Re-registering an existing name overwrites its factory
-// while preserving its original position in the deterministic order.
-func RegisterFactory(name string, factory func() Connector) {
-	factoryRegistry.mu.Lock()
-	defer factoryRegistry.mu.Unlock()
-	if _, exists := factoryRegistry.byName[name]; !exists {
-		factoryRegistry.order = append(factoryRegistry.order, name)
-	}
-	factoryRegistry.byName[name] = factory
-}
-
-// unregisterFactory removes a previously registered factory. It exists for test
-// cleanup so process-global registration does not leak between tests.
-func unregisterFactory(name string) {
-	factoryRegistry.mu.Lock()
-	defer factoryRegistry.mu.Unlock()
-	if _, exists := factoryRegistry.byName[name]; !exists {
-		return
-	}
-	delete(factoryRegistry.byName, name)
-	for i, n := range factoryRegistry.order {
-		if n == name {
-			factoryRegistry.order = append(factoryRegistry.order[:i], factoryRegistry.order[i+1:]...)
-			break
-		}
-	}
-}
-
-// registeredFactories returns the registered factories in deterministic order.
-func registeredFactories() []struct {
-	name    string
-	factory func() Connector
-} {
-	factoryRegistry.mu.Lock()
-	defer factoryRegistry.mu.Unlock()
-	out := make([]struct {
-		name    string
-		factory func() Connector
-	}, 0, len(factoryRegistry.order))
-	for _, name := range factoryRegistry.order {
-		out = append(out, struct {
-			name    string
-			factory func() Connector
-		}{name: name, factory: factoryRegistry.byName[name]})
-	}
-	return out
+func registeredDefaultRegistryBuilder() func() *Registry {
+	defaultRegistryBuilder.mu.RLock()
+	defer defaultRegistryBuilder.mu.RUnlock()
+	return defaultRegistryBuilder.fn
 }
 
 type Record map[string]any
@@ -180,6 +115,25 @@ func IgnoreReadLimit(err error) error {
 		return nil
 	}
 	return err
+}
+
+func RejectLegacyConnectorName(name string) error {
+	if !IsLegacyConnectorName(name) {
+		return nil
+	}
+	return fmt.Errorf("connector %q uses a legacy source-/destination- prefix; use bare connector name %q", name, legacyBareConnectorName(name))
+}
+
+func IsLegacyConnectorName(name string) bool {
+	normalized := strings.TrimSpace(strings.ToLower(name))
+	return strings.HasPrefix(normalized, "source-") || strings.HasPrefix(normalized, "destination-")
+}
+
+func legacyBareConnectorName(name string) string {
+	normalized := strings.TrimSpace(strings.ToLower(name))
+	normalized = strings.TrimPrefix(normalized, "source-")
+	normalized = strings.TrimPrefix(normalized, "destination-")
+	return normalized
 }
 
 type WriteRequest struct {
@@ -270,75 +224,26 @@ type Registry struct {
 	connectors map[string]Connector
 }
 
+func NewEmptyRegistry() *Registry {
+	return &Registry{connectors: make(map[string]Connector)}
+}
+
 func NewRegistry() *Registry {
-	return newRegistry(false)
+	if builder := registeredDefaultRegistryBuilder(); builder != nil {
+		return builder()
+	}
+	r := NewEmptyRegistry()
+	r.RegisterBuiltins()
+	return r
 }
 
-func NewLiveRegistry() *Registry {
-	return newRegistry(true)
-}
-
-func newRegistry(liveOnly bool) *Registry {
-	r := &Registry{connectors: make(map[string]Connector)}
-	// Built-in primitive connectors stay explicit.
+// RegisterBuiltins adds the primitive local connectors that are implemented in
+// this package rather than in defs/. They are not legacy per-connector packages.
+func (r *Registry) RegisterBuiltins() {
 	r.Register(Sample{})
 	r.Register(File{})
 	r.Register(Warehouse{})
 	r.Register(Outbox{})
-	// Self-registered per-system connectors (e.g. github) come next so the
-	// enabled catalog-alias loop below can target them. A connector package
-	// runs RegisterFactory in its init(); the registryset package blank-imports
-	// those packages in the production binary.
-	for _, entry := range registeredFactories() {
-		if liveOnly && !isLiveFactory(entry.name) {
-			continue
-		}
-		if _, exists := r.connectors[entry.name]; exists {
-			continue
-		}
-		r.Register(entry.factory())
-	}
-	for _, def := range ConnectorCatalog() {
-		if def.ImplementationStatus != ImplementationEnabled {
-			continue
-		}
-		if _, exists := r.connectors[def.Slug]; exists {
-			continue
-		}
-		if def.PMConnectorName != "" {
-			if target, ok := r.connectors[def.PMConnectorName]; ok {
-				r.Register(CatalogAliasConnector{def: def, target: target})
-				continue
-			}
-		}
-		r.Register(NewNativeCatalogConnector(def))
-	}
-	return r
-}
-
-func isLiveFactory(name string) bool {
-	liveFactoryNamesCache.once.Do(func() {
-		names := map[string]bool{}
-		for _, def := range ConnectorCatalog() {
-			if def.ImplementationStatus != ImplementationEnabled {
-				continue
-			}
-			if def.PMConnectorName != "" {
-				names[def.PMConnectorName] = true
-			}
-			names[def.Slug] = true
-			names[BareName(def.Slug)] = true
-		}
-		// pm-native connectors with no catalog entry (e.g. searxng) opt in via
-		// RegisterNativeLive and are live too.
-		nativeLiveNames.mu.Lock()
-		for n := range nativeLiveNames.names {
-			names[n] = true
-		}
-		nativeLiveNames.mu.Unlock()
-		liveFactoryNamesCache.names = names
-	})
-	return liveFactoryNamesCache.names[name]
 }
 
 func (r *Registry) Register(c Connector) {
@@ -359,103 +264,33 @@ func (r *Registry) List() []Metadata {
 	return out
 }
 
-type CatalogAliasConnector struct {
-	def    ConnectorDefinition
-	target Connector
-}
-
-func (c CatalogAliasConnector) Name() string { return c.def.Slug }
-
-func (c CatalogAliasConnector) Metadata() Metadata {
-	target := c.target.Metadata()
-	return MetadataWithIcon(Metadata{
-		Name:            c.def.Slug,
-		DisplayName:     valueOrDefault(c.def.Name, target.DisplayName),
-		IntegrationType: target.IntegrationType,
-		Description:     nativeDescription(c.def),
-		Capabilities:    c.def.RuntimeCapabilities.toCapabilities(),
-	})
-}
-
-func (c CatalogAliasConnector) Check(ctx context.Context, cfg RuntimeConfig) error {
-	return c.target.Check(ctx, cfg)
-}
-
-func (c CatalogAliasConnector) Catalog(ctx context.Context, cfg RuntimeConfig) (Catalog, error) {
-	catalog, err := c.target.Catalog(ctx, cfg)
-	if err != nil {
-		return Catalog{}, err
+func (r *Registry) CatalogEntries() []Definition {
+	list := r.List()
+	out := make([]Definition, 0, len(list))
+	for _, item := range list {
+		connector, ok := r.Get(item.Name)
+		if !ok {
+			continue
+		}
+		def, ok := DefinitionOf(connector)
+		if !ok {
+			manifest := ManifestOf(connector)
+			def = Definition{
+				Name:            manifest.Metadata.Name,
+				DisplayName:     manifest.Metadata.DisplayName,
+				Description:     manifest.Metadata.Description,
+				IntegrationType: manifest.Metadata.IntegrationType,
+				Capabilities:    manifest.Metadata.Capabilities,
+				Streams:         streamSummariesFromManifest(manifest),
+				WriteActions:    writeActionInfosFromManifest(manifest),
+				Risk:            manifest.Risk,
+			}
+		}
+		def.Icon = MetadataWithIcon(connector.Metadata()).Icon
+		out = append(out, def)
 	}
-	catalog.Connector = c.Name()
-	return catalog, nil
-}
-
-func (c CatalogAliasConnector) Read(ctx context.Context, req ReadRequest, emit func(Record) error) error {
-	return c.target.Read(ctx, req, emit)
-}
-
-func (c CatalogAliasConnector) Write(ctx context.Context, req WriteRequest, records []Record) (WriteResult, error) {
-	return c.target.Write(ctx, req, records)
-}
-
-func (c CatalogAliasConnector) ValidateWrite(ctx context.Context, req WriteRequest, records []Record) error {
-	validator, ok := c.target.(WriteValidator)
-	if !ok {
-		return ErrUnsupportedOperation
-	}
-	return validator.ValidateWrite(ctx, req, records)
-}
-
-func (c CatalogAliasConnector) DryRunWrite(ctx context.Context, req WriteRequest, records []Record) (WritePreview, error) {
-	if writer, ok := c.target.(DryRunWriter); ok {
-		return writer.DryRunWrite(ctx, req, records)
-	}
-	if err := c.ValidateWrite(ctx, req, records); err != nil {
-		return WritePreview{}, err
-	}
-	return WritePreview{RecordsStaged: len(records), Action: req.Action, Warnings: []string{"target connector has validation but no connector-specific dry-run writer"}}, nil
-}
-
-func (c CatalogAliasConnector) Query(ctx context.Context, req QueryRequest) (QueryResult, error) {
-	querier, ok := c.target.(Querier)
-	if !ok {
-		return QueryResult{}, ErrUnsupportedOperation
-	}
-	return querier.Query(ctx, req)
-}
-
-func (c CatalogAliasConnector) Manifest() Manifest {
-	manifest := ManifestOf(c.target)
-	manifest.Metadata = c.Metadata()
-	return manifest
-}
-
-func (c CatalogAliasConnector) Guide() ConnectorGuide {
-	manifest := c.Manifest()
-	return ConnectorGuide{
-		Name:        c.def.Slug,
-		DisplayName: c.def.Name,
-		Summary:     nativeDescription(c.def),
-		Sections: compactSections([]GuideSection{
-			capabilitySection(manifest),
-			implementationSection(c.def),
-			runtimeCapabilitiesSection(c.def),
-			nativePortPlanSection(c.def),
-			officialApplicationDocsSection(c.def),
-			authSection(manifest),
-			configSection(manifest),
-			streamSection(manifest),
-			syncModeSection(manifest),
-			writeActionSection(manifest),
-			paginationSection(manifest),
-			securitySection(manifest),
-		}),
-		Examples: examplesForManifest(manifest),
-		Links:    nativeGuideLinks(c.def),
-		AgentNotes: append([]string{
-			"This catalog slug delegates to the enabled pm connector " + c.def.PMConnectorName + ".",
-		}, agentNotesForManifest(manifest)...),
-	}
+	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
+	return out
 }
 
 type Sample struct{}

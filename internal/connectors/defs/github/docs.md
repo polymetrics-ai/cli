@@ -1,460 +1,495 @@
 # Overview
 
-GitHub started as the wave1-pilot Tier-2 (AuthHook + WriteHook) migration of
-`internal/connectors/github` (the largest, highest-risk legacy connector: 1980+352+295+85 = ~2712
-loc across `github.go`/`streams.go`/`auth.go`/`manifest.go`, 19 read streams, 25 write actions — the
-only pilot with real writes), then underwent a **Pass B full-surface expansion** (this pass): every
-repository-scoped endpoint in GitHub's published OpenAPI description (500 operations under
-`/repos/{owner}/{repo}/...`, `docs/github/rest-api-description`) was reviewed and mapped to either a
-stream, a write action, or a documented exclusion in `api_surface.json` — no blanket
-`out_of_scope` bucket. The bundle now reads GitHub repository, issue, pull request, code, release,
-collaboration, Actions, webhook, deploy-key, environment, fork, invitation, issue-event, and security
-(code scanning / Dependabot / secret scanning / security-advisory) data, plus repository rulesets and
-autolinks, and writes 67 approved reverse-ETL actions through the GitHub REST API. This bundle is
-engine-vs-legacy parity-tested against `internal/connectors/github` (read-only reference, frozen at
-its own 19-stream/25-write surface); the legacy package stays registered and unchanged until wave6's
-registry flip — parity tests now assert the bundle is a **superset** of legacy's surface, not an
-exact match, since Pass B intentionally adds streams/writes legacy never had.
+GitHub reads 33 stream(s), and writes through 67 action(s).
 
-Declarative bundle: `metadata.json`, `spec.json`, `streams.json` (33 streams), `writes.json` (67
-actions), `schemas/*.json`, `fixtures/**`, this file. Go escape hatch:
-`internal/connectors/hooks/github/hooks.go` implements exactly 2 hook interfaces (the Tier-2 cap):
-`AuthHook` (github_app JWT -> installation-token exchange) and `WriteHook` (compound multi-request
-write actions a single declarative action cannot express). None of the 42 write actions Pass B added
-need a hook — every one of them is a single-request declarative action — so `hooks.go` is unchanged
-at exactly 400 lines (see the STANDING EXCEPTION note in Known limits, also unchanged).
-
-Note: PLAN.md/SPEC.md's per-connector row cites "16 actions"; the legacy source
-(`github.go:1759` `githubWriteActionSpecs`) actually enumerates 25 distinct write actions. The
-wave1-pilot bundle implemented the full 25 for capability parity (the task mandate at the time), not
-the 16 the planning doc cited — flagged for the P-12 conventions/planning-doc correction pass. Pass B
-adds 42 more on top of that 25 (67 total; see "Write actions & risks" below).
-
-## Pass B full-surface expansion (this pass)
-
-`api_surface.json` was rewritten from a 63-entry "wave1-pilot scope, everything else `out_of_scope`"
-manifest into a full enumeration of the connector's natural surface: every one of the 500
-`/repos/{owner}/{repo}/...` operations in GitHub REST API v3 1.1.4's published OpenAPI description.
-Org-level, user-level, enterprise-level, and gist/GraphQL surfaces remain out of scope — this
-connector's `spec.json` configures a single `owner`+`repo` identity, not an org or user identity, so
-org/user-scoped resources (teams, org secrets, gists, enterprise admin, etc.) have no config surface
-to hang off of without a distinct, separate scope-widening change.
-
-**New streams (14)**: `commit_comments`, `deploy_keys`, `webhooks`, `environments`, `forks`,
-`invitations`, `issue_events`, `code_scanning_alerts`, `dependabot_alerts`,
-`secret_scanning_alerts`, `security_advisories`, `repo_rulesets`, `autolinks`, `languages`.
-
-**New write actions (42)**: `create_webhook`/`update_webhook`/`delete_webhook`,
-`create_deploy_key`/`delete_deploy_key`, `create_or_update_environment`/`delete_environment`,
-`create_commit_comment`/`update_commit_comment`/`delete_commit_comment`,
-`update_issue_comment`/`delete_issue_comment`, `lock_issue`/`unlock_issue`,
-`set_issue_labels`/`add_issue_labels`/`remove_issue_label`,
-`add_issue_assignees`/`remove_issue_assignees`,
-`create_review_comment`/`update_review_comment`/`delete_review_comment`,
-`submit_pull_request_review`/`dismiss_pull_request_review`, `update_pull_request_branch`,
-`update_release_asset`/`delete_release_asset`, `replace_repo_topics`,
-`add_collaborator`/`remove_collaborator`, `create_ref`/`update_ref`/`delete_ref`, `merge_branch`,
-`update_code_scanning_alert`/`update_dependabot_alert`/`update_secret_scanning_alert`,
-`create_deployment`, `create_fork`,
-`create_repo_ruleset`/`update_repo_ruleset`/`delete_repo_ruleset`.
-
-**Exclusion category breakdown** (all 402 excluded endpoints carry a real category + reason, closed
-vocabulary, no blanket bucket): `requires_elevated_scope` (168 — Actions/Dependabot/environment
-secrets and variables, branch protection, org-scoped resources surfaced under the repo path,
-security-feature toggles, CodeQL/code-quality/traffic analytics requiring elevated scopes),
-`out_of_scope` (143 — narrow preview features like sub-issues/issue-field-values/Codespaces,
-caller-chosen-path/ref/SHA lookups with no bulk enumeration, CI-provider-credential-conventional
-endpoints like commit statuses and check runs), `duplicate_of` (67 — single-resource detail GETs
-whose data is already covered by the corresponding list stream, or an action that's a narrower
-variant of one already implemented), `binary_payload` (10 — zip/tarball/SBOM/SARIF/raw-asset-upload
-endpoints), `non_data_endpoint` (8 — boolean checks, pings, generators with no persisted record),
-`destructive_admin` (5 — repo/branch/deployment deletion, ownership transfer), `deprecated` (1 — the
-legacy repository events timeline). See `api_surface.json` for the full per-endpoint mapping.
-
-## Auth setup
-
-Three credential shapes, reproduced via `streams.json` `base.auth`'s ordered candidates. Legacy's
-`auto` resolution order (`auth.go:73-80`: token wins, then github_app, then **silently** public) is
-matched for the token/github_app precedence, but the final fallback is now a documented, deliberate
-**stricter-than-legacy** deviation (see the "auth config surface" paragraph below and ledger G14):
-
-1. **Token** (`{"mode":"bearer","token":"{{ secrets.token }}","when":"{{ secrets.token }}"}`) — a
-   classic PAT, fine-grained PAT, OAuth token, GitHub Actions `GITHUB_TOKEN`, or a pre-generated
-   installation access token, supplied via the `token` secret. Sent as `Authorization: Bearer
-   <token>`. This candidate's `when` truthiness check means it is skipped entirely (falls through
-   to the next candidate) when `token` is unset — the engine's absent-key-falsy semantics for `when`
-   (never for ordinary interpolation) make this safe.
-2. **GitHub App** (`{"mode":"custom","hook":"github","when":"{{ config.app_id }}"}`) — server-to-
-   server auth. `hooks/github/hooks.go`'s `Authenticator` signs an RS256 JWT (stdlib
-   `crypto/rsa`, exactly like legacy `auth.go:154+` `githubAppJWT`) from `app_id`
-   (config) + the private key (`private_key`/`private_key_base64` secrets, base64-decoded when
-   using the latter), then POSTs `/app/installations/{installation_id}/access_tokens` on the
-   connector's own base URL to exchange it for a one-hour installation access token, and returns a
-   `connsdk.Authenticator` that sets `Authorization: Bearer <installation_token>`. Matches legacy
-   exactly, including the **uncached** re-mint-on-every-call behavior (Known limits).
-3. **Public** — unauthenticated reads only, reachable via EITHER of two candidates (see the config
-   surface paragraph below): `{"mode":"none","when":"{{ config.public_access }}"}` (the primary,
-   dedicated boolean opt-in), OR `{"mode":"none","when":"{{ config.auth_type in ['public', 'none',
-   'anonymous', 'unauthenticated'] }}"}` (S3 engine mini-wave item 2: legacy's exact string-enum
-   selection, restored as an additional opt-in once `engine.ResolveCheckWhen` made the `in` operator
-   statically validatable — see ledger G14 R1 CONDITION). Writes fail per-request with a GitHub
-   401/403 (no separate "requires write auth" precheck is reproduced — see Known limits).
-
-`app_id`+`installation_id` must both be configured for the github_app path; `installation_id`
-absence is caught by the hook itself (not the `when` gate, which only tests `app_id`'s truthiness —
-see the parity-deviation ledger item G5) with the same error class legacy raises.
-
-**Auth config surface vs legacy — secret ALIASES and `auth_type`'s non-public modes are NOT
-reproduced; `public_access` (primary) and `auth_type`'s 4 public synonyms (additional, S3 restored)
-close a silent-fallthrough hazard (ledger G14).** Legacy honors an explicit `auth_type`/`auth`/
-`authentication` config value (`auth.go:61-96`, case/hyphen-insensitive, many synonyms per mode:
-`auth_type=github_app` forces app auth even when a token secret is ALSO set,
-`auth_type=public`/`none`/`anonymous`/`unauthenticated` forces anonymous reads) plus a wide set of
-secret aliases for the token (`personalAccessToken`/`accessToken`/`oauthToken`/`installationToken`/
-`githubToken`/`GITHUB_TOKEN`, `github.go:1634-1644`), the private key
-(`privateKey`/`githubAppPrivateKey`/`privateKeyBase64`/`githubAppPrivateKeyBase64`), and the app ID
-(`client_id`/`github_app_id`, `auth.go:256-257`). None of the secret ALIASES, and none of `auth_type`'s
-non-public-synonym behavior (forcing github_app over a simultaneously-set token; the
-token/oauth/actions/installation mode distinctions, which this bundle collapses into the single
-`bearer` candidate since it never needs to distinguish them), are reproduced — this bundle reads
-only the canonical `token`/`private_key`/`private_key_base64`/`app_id` keys for credential material.
-The dangerous failure mode this created (REVIEW-A.md major finding) was that a caller who supplied
-ONLY an alias-shaped secret (e.g. `personalAccessToken` but not `token`) got a **silent,
-unauthenticated** read with zero error — the bundle's `base.auth` chain fell through the token
-candidate (unset `token`) and the github_app candidate (no `app_id`) straight to an unconditional
-`mode:none`. This is now fixed: the `none` outcome requires an EXPLICIT opt-in — either the
-dedicated `public_access` config key (any non-empty value; the primary, documented surface) OR
-`auth_type` set to one of the 4 legacy public synonyms (`public`/`none`/`anonymous`/`unauthenticated`
-— S3 engine mini-wave item 2, restored once `engine.ResolveCheckWhen` made the `in` operator
-statically validatable; see ledger G14 R1 CONDITION) — so a config that resolves to none of
-token/github_app/either-public-opt-in now hard-errors ("select auth: no auth spec matched") instead
-of silently reading unauthenticated (F4, THREAT-MODEL: never fail open). This is intentionally
-**stricter than legacy** (legacy's own `auto` mode silently falls through to public in this exact
-shape) — a deliberate, documented deviation, not a parity-preserving one, closing a real
-security-relevant gap rather than reproducing it. The two opt-ins are two SEPARATE `mode:none`
-candidates in the `auth` list (not one OR'd condition) since `EvalWhen`'s grammar has no `||`
-operator; both gate on an explicit signal, so this is purely additive — no new way to reach
-`mode:none` implicitly exists. `auth_type`'s restoration is intentionally NARROW: it reproduces only
-the 4 public-synonym STRING VALUES, not legacy's full mode-selection semantics (e.g.
-`auth_type=github_app` forcing app auth ahead of a configured token) — any other `auth_type` value
-is inert (auth selection still resolves via the token/app_id-presence candidates ahead of it in the
-list). Any caller who previously depended on an alias secret name, `auth_type=github_app` forcing
-app auth over a simultaneously-set token, or another non-public `auth_type` synonym must migrate to
-the canonical `token`/`app_id`+`installation_id`+`private_key` keys (see ledger G14; parity tests:
-`TestParityGithub_AuthNoCredentialsFailsLoudRatherThanSilentlyPublic`,
-`TestParityGithub_AuthExplicitPublicOptIn`, `TestParityGithub_AuthTypePublicEnumOptIn`,
-`TestParityGithub_AuthTypeUnrelatedValueDoesNotGrantPublicAccess`).
-
-## Streams notes
-
-All 19 legacy streams (`repository`, `issues`, `pull_requests`, `branches`, `commits`, `tags`,
+Readable streams: `repository`, `issues`, `pull_requests`, `branches`, `commits`, `tags`,
 `releases`, `labels`, `milestones`, `issue_comments`, `pull_request_review_comments`,
 `collaborators`, `contributors`, `stargazers`, `subscribers`, `workflows`, `workflow_runs`,
-`workflow_artifacts`, `deployments`) are implemented. Pagination is uniformly `page_number`
-(`page`/`per_page`, `page_size: 100`, short-page stop — matches legacy's `readPages`/
-`readEnvelopePages` short-page-stop-when-`len(page) < perPage` behavior exactly). `owner`/`repo` are
-two separate config keys (see Known limits) interpolated into every stream's `/repos/{{ config.owner
-}}/{{ config.repo }}/...` path.
+`workflow_artifacts`, `deployments`, `commit_comments`, `deploy_keys`, `webhooks`, `environments`,
+`forks`, `invitations`, `issue_events`, `code_scanning_alerts`, `dependabot_alerts`,
+`secret_scanning_alerts`, `security_advisories`, `repo_rulesets`, `autolinks`, `languages`.
 
-**`per_page`/`max_pages` are NOT runtime-configurable** (documented deviation from legacy's default
-of `max_pages=1`/`per_page=100`, both config-overridable): `PaginationSpec` fields are static bundle
-JSON, never templated (conventions.md's dialect reference: no field references `PaginationSpec` in
-`connectorgen validate`, and no `{{ }}` resolution exists for pagination knobs at all), so this
-bundle's `page_size: 100` and the ABSENCE of a declared `max_pages` (which defaults to 0/unbounded
-per `engine/read.go`) are fixed values, not per-sync-configurable. This means the bundle's default
-behavior is **unbounded** pagination (reads every page until a short/empty page), while legacy's own
-default (`githubDefaultMaxPages = 1`) reads only ONE page unless a caller explicitly sets
-`config.max_pages`. Parity is asserted with legacy configured for the SAME effective behavior
-(`max_pages=all`), not against legacy's capped default — see
-`TestParityGithub_IssuesPaginationFiltersOutPullRequests`.
-
-- `repository` is `single_object: true` (a single JSON object response, not a list).
-- `issues` filters out pull requests via `records.filter.field_absent: pull_request` (declarative
-  equivalent of legacy's `if _, ok := item["pull_request"]; ok { return nil, false }`), and is the
-  only stream with SERVER-SIDE incremental filtering (`since` query param). `issue_comments`/
-  `pull_request_review_comments` are also server-side `since`-filtered.
-  **This matches legacy exactly ONLY on the config path** (`config.since` -> `since` query param,
-  `TestParityGithub_SinceConfigOnlyMatchesLegacy`): legacy's `since` filter reads
-  `req.Config.Config["since"]` only and never consults `req.State` anywhere in the package. The
-  engine-wide incremental mechanism (`engine/read.go`'s `incrementalLowerBoundValue`) prefers an
-  app-persisted STATE cursor over `start_config_key` when one is present, so a sync with persisted
-  state forwards the state cursor as `since` on the engine side while legacy would ignore it and
-  re-request the full (or config-`since`-bounded) set — a smaller, correctly-incremental record set,
-  and a deliberate, documented IMPROVEMENT consistent with every other incremental stream in the
-  fleet, not a parity bug (`TestParityGithub_SinceStateCursorForwardingIsEngineOnlyBehavior` pins
-  both halves: config-path equality AND the state-path divergence).
-- `pull_requests`/`releases`/`milestones` declare an `incremental.cursor_field` for manifest/
-  sync-mode surface parity (legacy's own `Stream{CursorFields: [...]}` declares these too) but
-  neither legacy nor this bundle actually filters by it server- or client-side — both are
-  always-full-stream reads, matching legacy's real (non-)behavior exactly (no `request_param`, no
-  `client_filtered`).
-- `workflows`/`workflow_runs`/`workflow_artifacts` are envelope responses
-  (`{"workflows":[...],"total_count":N}` etc.) — `records.path` names the envelope array key
-  (`workflows`/`workflow_runs`/`artifacts`), matching legacy's `readEnvelopePages`.
-- Heavy `computed_fields` flattening reproduces legacy's `nestedString`/`nestedValue` field
-  flattening (`user_login`, `author_login`, `commit_author_name`, `base_ref`, `head_sha`,
-  `workflow_run_id`, etc.). Legacy's `repository` marker field (every emitted record carries the
-  `owner/repo` string) IS reproduced on all 19 streams via
-  `"repository": "{{ config.owner }}/{{ config.repo }}"` (gap-loop cycle-1 engine mini-wave closed
-  `ENGINE_GAP` G0 — `computed_fields` can now reference `config.*`, never `secrets.*` — see Known
-  limits / ledger G0, RESOLVED).
-- `checkOrigin`/link-header pagination is NOT used: legacy's own `readPages` is `page`/`per_page`
-  query-param pagination, not RFC 5988 Link-header following, so `page_number` (not `link_header`)
-  is the byte-accurate parity choice despite GitHub's REST API also supporting Link headers.
-
-### Pass B streams (14 new, this pass)
-
-All 14 use the same `page_number` pagination as the legacy-parity streams (`page`/`per_page: 100`,
-short-page stop) except `languages`, which declares `pagination: {type: none}` (GitHub's
-`/languages` endpoint returns exactly one object, never paginated).
-
-- `commit_comments`, `deploy_keys`, `webhooks`, `forks`, `invitations`, `issue_events`,
-  `repo_rulesets`, `autolinks`: plain array responses, `records.path: "."`, same shape as the
-  legacy-parity streams.
-- `environments` is an envelope response (`{"total_count": N, "environments": [...]}`) —
-  `records.path: "environments"` names the envelope array key, same convention as
-  `workflows`/`workflow_runs`/`workflow_artifacts`.
-- `code_scanning_alerts`, `dependabot_alerts`, `secret_scanning_alerts`, `security_advisories`
-  declare `incremental.cursor_field: updated_at` (client-side surface parity only — no
-  `request_param`, matching the `pull_requests`/`releases`/`milestones` precedent of declaring the
-  cursor field for manifest/sync-mode purposes without a server-side filter, since none of these
-  four alert/advisory list endpoints document a since-style incremental query parameter).
-  `secret_scanning_alerts`' schema deliberately does NOT project the API's own `secret` field (the
-  actual leaked-credential value GitHub echoes back) — schema-mode projection already drops any
-  undeclared field by default, and this omission is intentional, not an oversight: a record is what
-  flows to a destination warehouse, and a leaked secret has no business landing there.
-- `languages` is a single-object-per-repository stream whose body is a raw `{"Go": 123, ...}` map
-  keyed by an arbitrary, dynamic language name (not a fixed property set) — it declares
-  `projection: "passthrough"` (conventions.md §3) so every language key survives verbatim; only the
-  `repository` marker field is statically declared in `schemas/languages.json`.
-- `repo_rulesets`'s stream covers ruleset LIST/detail data (name/target/enforcement/source); the
-  full `rules[]`/`conditions`/`bypass_actors` nested structures returned by GitHub are passed through
-  raw only via `create_repo_ruleset`/`update_repo_ruleset`'s write-side `record_schema` (loosely
-  typed as `object`/`array` there, not decomposed field-by-field) — the read-side schema stays
-  intentionally narrower (the summary fields most consumers need), matching the same "read schema
-  narrower than write schema" shape `repository`'s own PATCH-equivalent settings surface has.
-
-## Write actions & risks
-
-All 25 legacy write actions (`github.go:1759+` `githubWriteActionSpecs`) are implemented — 21
-purely declarative (`writes.json` actions with `path_fields`/`body_fields`/JSON-Schema `record_schema`
-validation), 4 requiring `hooks/github/hooks.go`'s `WriteHook.ExecuteWrite` because they are
-genuinely compound (multiple HTTP requests per logical write, matching legacy's own follow-up
-request helpers): `close_issue` (state PATCH + optional comment POST via legacy's
-`writeIssueComment`), `create_pull_request` (create POST + optional issue-metadata PATCH + optional
-reviewers POST via legacy's `writePullRequestFollowups`/`writeReviewers`), `update_pull_request`
-(optional core PATCH + optional issue-metadata PATCH + optional reviewers POST), `close_pull_request`
-(optional comment POST + state PATCH). `request_reviewers` and `create_pull_request_review`, despite
-sounding related, are each a SINGLE request in legacy and are fully declarative here.
-
-Declarative actions: `create_issue`, `update_issue`, `comment_issue`, `request_reviewers`,
+Write actions: `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
+`create_pull_request`, `update_pull_request`, `close_pull_request`, `request_reviewers`,
 `merge_pull_request`, `create_label`, `update_label`, `delete_label`, `create_milestone`,
 `update_milestone`, `delete_milestone`, `create_release`, `update_release`, `delete_release`,
 `dispatch_workflow`, `rerun_workflow_run`, `cancel_workflow_run`, `delete_workflow_run`,
-`create_pull_request_review`, `create_or_update_file`, `delete_file` (DELETE with a JSON body via
-`body_fields`, matching legacy's contents-API delete semantics). None of the 4 `delete_*` actions
-declare `delete.missing_ok_status` — legacy's own `doJSONWithAuth` treats ANY non-2xx status
-(including a 404 for an already-deleted resource) as a hard failure with no idempotent-delete
-special-casing at all, so this bundle intentionally does NOT add the engine's `missing_ok_status`
-leniency (conventions.md §3's delete semantics are available but declaring them here would be new,
-more-lenient behavior legacy never had, changing write-accounting for a 404 input from "failed" to
-"written" — not a parity-preserving deviation, see the ledger).
+`create_pull_request_review`, `create_or_update_file`, `delete_file`, `create_webhook`,
+`update_webhook`, `delete_webhook`, `create_deploy_key`, `delete_deploy_key`,
+`create_or_update_environment`, `delete_environment`, `create_commit_comment`,
+`update_commit_comment`, `delete_commit_comment`, `update_issue_comment`, `delete_issue_comment`,
+`lock_issue`, `unlock_issue`, `set_issue_labels`, `add_issue_labels`, `remove_issue_label`,
+`add_issue_assignees`, `remove_issue_assignees`, `create_review_comment`, `update_review_comment`,
+`delete_review_comment`, `submit_pull_request_review`, `dismiss_pull_request_review`,
+`update_pull_request_branch`, `update_release_asset`, `delete_release_asset`, `replace_repo_topics`,
+`add_collaborator`, `remove_collaborator`, `create_ref`, `update_ref`, `delete_ref`, `merge_branch`,
+`update_code_scanning_alert`, `update_dependabot_alert`, `create_deployment`, `create_fork`,
+`create_repo_ruleset`, `update_repo_ruleset`, `delete_repo_ruleset`, `update_secret_scanning_alert`.
 
-Every write action carries the exact legacy `Risk` prose (github.go's `githubWriteActionSpecs`).
-`merge_pull_request` is the highest-risk action (irreversibly changes repository history unless
-branch protection blocks the merge); `dispatch_workflow`/`rerun_workflow_run` start or repeat CI/CD
-automation.
+Service API documentation: https://docs.github.com/en/rest.
 
-### Pass B write actions (42 new, this pass)
+## Auth setup
 
-All 42 are purely declarative — none needed a `WriteHook` (every one of them is genuinely a single
-HTTP request): `create_webhook`/`update_webhook`/`delete_webhook`,
-`create_deploy_key`/`delete_deploy_key`, `create_or_update_environment`/`delete_environment`,
-`create_commit_comment`/`update_commit_comment`/`delete_commit_comment`,
-`update_issue_comment`/`delete_issue_comment`, `lock_issue`/`unlock_issue`,
-`set_issue_labels`/`add_issue_labels`/`remove_issue_label`,
-`add_issue_assignees`/`remove_issue_assignees`,
-`create_review_comment`/`update_review_comment`/`delete_review_comment`,
-`submit_pull_request_review`/`dismiss_pull_request_review`, `update_pull_request_branch`,
-`update_release_asset`/`delete_release_asset`, `replace_repo_topics`,
-`add_collaborator`/`remove_collaborator`, `create_ref`/`update_ref`/`delete_ref`, `merge_branch`,
-`update_code_scanning_alert`/`update_dependabot_alert`/`update_secret_scanning_alert`,
-`create_deployment`, `create_fork`,
-`create_repo_ruleset`/`update_repo_ruleset`/`delete_repo_ruleset`.
+Connection fields:
 
-- `delete_webhook`/`delete_deploy_key`/`delete_environment`/`delete_commit_comment`/
-  `delete_issue_comment`/`remove_issue_label`/`delete_review_comment`/`delete_release_asset`/
-  `remove_collaborator`/`delete_repo_ruleset` all declare `delete.missing_ok_status: [404]` (an
-  already-deleted resource counts as written, not failed) — unlike the 4 wave1-pilot `delete_*`
-  actions above, these are NEW actions with no legacy behavior to stay byte-parity with, so the
-  engine's idempotent-delete leniency (conventions.md §3) is the correct default here, not a
-  deviation from anything. `delete_ref` additionally declares `missing_ok_status: [404, 422]` —
-  GitHub's git/refs delete returns 422 (not 404) for a ref that doesn't exist under certain
-  ref-name shapes.
-- `update_ref`/`delete_ref`'s `ref` path field genuinely contains a literal `/` (GitHub's own
-  convention: `heads/my-branch`, `tags/v1.0.0`) — `InterpolatePath`'s default per-segment urlencoding
-  turns this into a percent-encoded `%2F` on the wire, which both Go's own `net/http` server (used by
-  this bundle's fixture replay/parity harness) and GitHub's real API decode back into a literal `/`
-  for path routing — this is standard percent-decoding behavior, not a workaround, so no deviation is
-  recorded for it.
-- `create_ref` intentionally does NOT reproduce a convenience default for `sha` (create-a-branch-off-
-  HEAD); the caller supplies the full 40-character commit SHA explicitly, matching GitHub's own API
-  contract (`sha` is a required field on the create-ref request body).
-- `merge_branch` is GitHub's plain two-ref merge-commit endpoint (POST `/merges`) — distinct from
-  `merge_pull_request` (which merges an existing pull request via its `pull_number`) and from
-  `update_pull_request_branch` (which merges the base INTO a PR's head to resolve a stale/behind PR,
-  POST `/pulls/{pull_number}/update-branch`); all three create a merge commit but target different
-  ref pairs and are not interchangeable.
-- `create_repo_ruleset`/`update_repo_ruleset`'s `rules`/`conditions`/`bypass_actors` fields are typed
-  loosely (`"type": "array"`/`"type": "object"` with no nested property decomposition) in
-  `record_schema` — GitHub's ruleset rule shapes are a large, evolving `oneOf` union (branch naming
-  patterns, required status checks, required signatures, merge-queue settings, etc.); validating the
-  full union would require `anyOf`/`oneOf` support the engine's draft-07 subset does not have (see
-  the parity-deviation ledger's stripe item 1 precedent for the same subset limitation) — a caller
-  supplies a well-formed rules array per GitHub's own docs, and GitHub's API is the final validator.
-- `add_issue_assignees`/`remove_issue_assignees` both hit the identical `/assignees` endpoint (POST
-  to add, DELETE to remove — DELETE-with-body, matching `delete_file`'s established DELETE-with-body
-  precedent above) — this is GitHub's own REST convention (an unusual but real, documented shape),
-  not a bundle-specific oddity.
+- `app_id` (optional, string); GitHub App ID for auth_type=github_app.
+- `auth_type` (optional, string).
+- `base_url` (optional, string); default `https://api.github.com`; format `uri`; GitHub API base URL
+  override for tests or GitHub Enterprise.
+- `installation_id` (optional, string); GitHub App installation ID for auth_type=github_app.
+- `installation_permissions` (optional, string); Optional JSON object of requested GitHub App
+  installation-token permissions.
+- `installation_repositories` (optional, string); Optional comma-separated repository names for a
+  restricted installation token.
+- `installation_repository_ids` (optional, string); Optional comma-separated repository IDs for a
+  restricted installation token.
+- `owner` (required, string); Repository owner (user or organization login).
+- `private_key` (optional, secret, string); GitHub App PEM private key for auth_type=github_app.
+  Never logged.
+- `private_key_base64` (optional, secret, string); Base64-encoded GitHub App PEM private key for
+  auth_type=github_app (alternative to private_key). Never logged.
+- `public_access` (optional, string); Explicit opt-in for unauthenticated (public) reads. Set to any
+  non-empty value (e.g. 'true') to allow reads with no token/app credentials configured.
+- `repo` (required, string); Repository name (without the owner prefix).
+- `since` (optional, string); format `date-time`; Lower-bound timestamp for issues, issue_comments,
+  and pull_request_review_comments (incremental start; also usable as a fresh-sync start_config_key
+  value).
+- `token` (optional, secret, string); GitHub token: classic PAT, fine-grained PAT, OAuth token,
+  GitHub Actions GITHUB_TOKEN, or a pre-generated installation access token. Used only for Bearer
+  auth; never logged.
+
+Secret fields are redacted in logs and write previews: `private_key`, `private_key_base64`, `token`.
+
+Default configuration values: `base_url=https://api.github.com`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.token` when `{{ secrets.token }}`.
+- Connector-specific authentication when `{{ config.app_id }}`.
+- No authentication when `{{ config.public_access }}`.
+- No authentication when `{{ config.auth_type in ['public', 'none', 'anonymous', 'unauthenticated']
+  }}`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/repos/{{ config.owner }}/{{ config.repo }}`.
+
+## Streams notes
+
+Default pagination: page-number pagination; page parameter `page`; size parameter `per_page`; starts
+at 1; page size 100.
+
+Pagination by stream: none: `languages`; page_number: `repository`, `issues`, `pull_requests`,
+`branches`, `commits`, `tags`, `releases`, `labels`, `milestones`, `issue_comments`,
+`pull_request_review_comments`, `collaborators`, `contributors`, `stargazers`, `subscribers`,
+`workflows`, `workflow_runs`, `workflow_artifacts`, `deployments`, `commit_comments`, `deploy_keys`,
+`webhooks`, `environments`, `forks`, `invitations`, `issue_events`, `code_scanning_alerts`,
+`dependabot_alerts`, `secret_scanning_alerts`, `security_advisories`, `repo_rulesets`, `autolinks`.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `repository`: GET `/repos/{{ config.owner }}/{{ config.repo }}` - single-object response; records
+  path `.`; page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1;
+  page size 100; computed output fields `repository`.
+- `issues`: GET `/repos/{{ config.owner }}/{{ config.repo }}/issues` - records path `.`; drops
+  records where `pull_request` is present; query `state`=`all`; page-number pagination; page
+  parameter `page`; size parameter `per_page`; starts at 1; page size 100; incremental cursor
+  `updated_at`; sent as `since`; formatted as `rfc3339`; initial lower bound from `since`; computed
+  output fields `repository`, `user_id`, `user_login`.
+- `pull_requests`: GET `/repos/{{ config.owner }}/{{ config.repo }}/pulls` - records path `.`; query
+  `state`=`all`; page-number pagination; page parameter `page`; size parameter `per_page`; starts at
+  1; page size 100; incremental cursor `updated_at`; formatted as `rfc3339`; computed output fields
+  `base_ref`, `base_sha`, `head_ref`, `head_sha`, `repository`, `user_id`, `user_login`.
+- `branches`: GET `/repos/{{ config.owner }}/{{ config.repo }}/branches` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `commit_sha`, `commit_url`, `repository`.
+- `commits`: GET `/repos/{{ config.owner }}/{{ config.repo }}/commits` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `author_id`, `author_login`, `commit_author_date`,
+  `commit_author_email`, `commit_author_name`, `commit_committer_date`, `commit_committer_email`,
+  `commit_committer_name`, `commit_message`, `committer_id`, `committer_login`, `repository`.
+- `tags`: GET `/repos/{{ config.owner }}/{{ config.repo }}/tags` - records path `.`; page-number
+  pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size 100; computed
+  output fields `commit_sha`, `commit_url`, `repository`.
+- `releases`: GET `/repos/{{ config.owner }}/{{ config.repo }}/releases` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; incremental cursor `published_at`; formatted as `rfc3339`; computed output fields
+  `assets_count`, `author_login`, `repository`.
+- `labels`: GET `/repos/{{ config.owner }}/{{ config.repo }}/labels` - records path `.`; page-number
+  pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size 100; computed
+  output fields `repository`.
+- `milestones`: GET `/repos/{{ config.owner }}/{{ config.repo }}/milestones` - records path `.`;
+  query `state`=`all`; page-number pagination; page parameter `page`; size parameter `per_page`;
+  starts at 1; page size 100; incremental cursor `updated_at`; formatted as `rfc3339`; computed
+  output fields `creator_login`, `repository`.
+- `issue_comments`: GET `/repos/{{ config.owner }}/{{ config.repo }}/issues/comments` - records path
+  `.`; page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page
+  size 100; incremental cursor `updated_at`; sent as `since`; formatted as `rfc3339`; initial lower
+  bound from `since`; computed output fields `repository`, `user_id`, `user_login`.
+- `pull_request_review_comments`: GET `/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments` -
+  records path `.`; page-number pagination; page parameter `page`; size parameter `per_page`; starts
+  at 1; page size 100; incremental cursor `updated_at`; sent as `since`; formatted as `rfc3339`;
+  initial lower bound from `since`; computed output fields `repository`, `user_login`.
+- `collaborators`: GET `/repos/{{ config.owner }}/{{ config.repo }}/collaborators` - records path
+  `.`; page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page
+  size 100; computed output fields `relation`, `repository`.
+- `contributors`: GET `/repos/{{ config.owner }}/{{ config.repo }}/contributors` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `relation`, `repository`.
+- `stargazers`: GET `/repos/{{ config.owner }}/{{ config.repo }}/stargazers` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `relation`, `repository`.
+- `subscribers`: GET `/repos/{{ config.owner }}/{{ config.repo }}/subscribers` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `relation`, `repository`.
+- `workflows`: GET `/repos/{{ config.owner }}/{{ config.repo }}/actions/workflows` - records path
+  `workflows`; page-number pagination; page parameter `page`; size parameter `per_page`; starts at
+  1; page size 100; computed output fields `repository`.
+- `workflow_runs`: GET `/repos/{{ config.owner }}/{{ config.repo }}/actions/runs` - records path
+  `workflow_runs`; page-number pagination; page parameter `page`; size parameter `per_page`; starts
+  at 1; page size 100; computed output fields `repository`.
+- `workflow_artifacts`: GET `/repos/{{ config.owner }}/{{ config.repo }}/actions/artifacts` -
+  records path `artifacts`; page-number pagination; page parameter `page`; size parameter
+  `per_page`; starts at 1; page size 100; computed output fields `repository`, `workflow_run_id`.
+- `deployments`: GET `/repos/{{ config.owner }}/{{ config.repo }}/deployments` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `creator_login`, `repository`.
+- `commit_comments`: GET `/repos/{{ config.owner }}/{{ config.repo }}/comments` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; incremental cursor `updated_at`; formatted as `rfc3339`; computed output fields `repository`,
+  `user_id`, `user_login`.
+- `deploy_keys`: GET `/repos/{{ config.owner }}/{{ config.repo }}/keys` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `repository`.
+- `webhooks`: GET `/repos/{{ config.owner }}/{{ config.repo }}/hooks` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `config_url`, `repository`.
+- `environments`: GET `/repos/{{ config.owner }}/{{ config.repo }}/environments` - records path
+  `environments`; page-number pagination; page parameter `page`; size parameter `per_page`; starts
+  at 1; page size 100; computed output fields `repository`.
+- `forks`: GET `/repos/{{ config.owner }}/{{ config.repo }}/forks` - records path `.`; page-number
+  pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size 100; computed
+  output fields `owner_login`, `repository`.
+- `invitations`: GET `/repos/{{ config.owner }}/{{ config.repo }}/invitations` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `invitee_login`, `inviter_login`, `repository`.
+- `issue_events`: GET `/repos/{{ config.owner }}/{{ config.repo }}/issues/events` - records path
+  `.`; page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page
+  size 100; computed output fields `actor_login`, `repository`.
+- `code_scanning_alerts`: GET `/repos/{{ config.owner }}/{{ config.repo }}/code-scanning/alerts` -
+  records path `.`; page-number pagination; page parameter `page`; size parameter `per_page`; starts
+  at 1; page size 100; incremental cursor `updated_at`; formatted as `rfc3339`; computed output
+  fields `dismissed_by_login`, `repository`, `rule_id`, `rule_severity`, `tool_name`.
+- `dependabot_alerts`: GET `/repos/{{ config.owner }}/{{ config.repo }}/dependabot/alerts` - records
+  path `.`; page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1;
+  page size 100; incremental cursor `updated_at`; formatted as `rfc3339`; computed output fields
+  `dismissed_by_login`, `package_ecosystem`, `package_name`, `repository`.
+- `secret_scanning_alerts`: GET `/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/alerts`
+  - records path `.`; page-number pagination; page parameter `page`; size parameter `per_page`;
+  starts at 1; page size 100; incremental cursor `updated_at`; formatted as `rfc3339`; computed
+  output fields `repository`, `resolved_by_login`.
+- `security_advisories`: GET `/repos/{{ config.owner }}/{{ config.repo }}/security-advisories` -
+  records path `.`; page-number pagination; page parameter `page`; size parameter `per_page`; starts
+  at 1; page size 100; incremental cursor `updated_at`; formatted as `rfc3339`; computed output
+  fields `author_login`, `publisher_login`, `repository`.
+- `repo_rulesets`: GET `/repos/{{ config.owner }}/{{ config.repo }}/rulesets` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `repository`.
+- `autolinks`: GET `/repos/{{ config.owner }}/{{ config.repo }}/autolinks` - records path `.`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; computed output fields `repository`.
+- `languages`: GET `/repos/{{ config.owner }}/{{ config.repo }}/languages` - single-object response;
+  records path `.`; computed output fields `repository`; emits passthrough records.
+
+## Write actions & risks
+
+Overall write risk: external GitHub API mutation.
+
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_issue`: POST `/repos/{{ config.owner }}/{{ config.repo }}/issues` - kind `create`; body
+  type `json`; required record fields `title`; accepted fields `assignees`, `body`, `labels`,
+  `milestone`, `title`, `type`; risk: creates user-visible GitHub issue and may notify watchers.
+- `update_issue`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number
+  }}` - kind `update`; body type `json`; path fields `issue_number`; required record fields
+  `issue_number`; accepted fields `assignees`, `body`, `issue_number`, `labels`, `milestone`,
+  `state`, `state_reason`, `title`, `type`; risk: mutates existing GitHub issue or pull request
+  issue metadata.
+- `comment_issue`: POST `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number
+  }}/comments` - kind `create`; body type `json`; path fields `issue_number`; body fields `body`;
+  required record fields `issue_number`, `body`; accepted fields `body`, `issue_number`; risk:
+  creates user-visible comment and may notify participants.
+- `close_issue`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number
+  }}` - kind `update`; body type `json`; path fields `issue_number`; required record fields
+  `issue_number`; accepted fields `comment`, `issue_number`, `state_reason`; risk: closes existing
+  GitHub issue.
+- `create_pull_request`: POST `/repos/{{ config.owner }}/{{ config.repo }}/pulls` - kind `create`;
+  body type `json`; required record fields `head`, `base`; accepted fields `assignees`, `base`,
+  `body`, `draft`, `head`, `issue`, `labels`, `maintainer_can_modify`, `milestone`, `reviewers`,
+  `team_reviewers`, `title`; risk: creates user-visible pull request and may notify
+  watchers/reviewers.
+- `update_pull_request`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{
+  record.pull_number }}` - kind `update`; body type `json`; path fields `pull_number`; required
+  record fields `pull_number`; accepted fields `assignees`, `base`, `body`, `labels`,
+  `maintainer_can_modify`, `milestone`, `pull_number`, `reviewers`, `state`, `team_reviewers`,
+  `title`; risk: mutates existing GitHub pull request.
+- `close_pull_request`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{
+  record.pull_number }}` - kind `update`; body type `json`; path fields `pull_number`; required
+  record fields `pull_number`; accepted fields `comment`, `pull_number`; risk: closes existing
+  GitHub pull request.
+- `request_reviewers`: POST `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number
+  }}/requested_reviewers` - kind `create`; body type `json`; path fields `pull_number`; required
+  record fields `pull_number`; accepted fields `pull_number`, `reviewers`, `team_reviewers`; risk:
+  notifies requested GitHub reviewers.
+- `merge_pull_request`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number
+  }}/merge` - kind `update`; body type `json`; path fields `pull_number`; required record fields
+  `pull_number`; accepted fields `commit_message`, `commit_title`, `merge_method`, `pull_number`,
+  `sha`; risk: irreversibly changes repository history unless branch protection blocks merge.
+- `create_label`: POST `/repos/{{ config.owner }}/{{ config.repo }}/labels` - kind `create`; body
+  type `json`; required record fields `name`, `color`; accepted fields `color`, `description`,
+  `name`; risk: changes repository taxonomy used by issues and pull requests.
+- `update_label`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/labels/{{ record.name }}` -
+  kind `update`; body type `json`; path fields `name`; body fields `new_name`, `color`,
+  `description`; required record fields `name`; accepted fields `color`, `description`, `name`,
+  `new_name`; risk: renames or changes labels already used by issues and pull requests.
+- `delete_label`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/labels/{{ record.name }}` -
+  kind `delete`; body type `none`; path fields `name`; required record fields `name`; accepted
+  fields `name`; risk: removes a label from the repository and existing issue metadata.
+- `create_milestone`: POST `/repos/{{ config.owner }}/{{ config.repo }}/milestones` - kind `create`;
+  body type `json`; required record fields `title`; accepted fields `description`, `due_on`,
+  `state`, `title`; risk: creates planning metadata visible to repository collaborators.
+- `update_milestone`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/milestones/{{
+  record.milestone_number }}` - kind `update`; body type `json`; path fields `milestone_number`;
+  required record fields `milestone_number`; accepted fields `description`, `due_on`,
+  `milestone_number`, `state`, `title`; risk: changes planning metadata used by issues and pull
+  requests.
+- `delete_milestone`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/milestones/{{
+  record.milestone_number }}` - kind `delete`; body type `none`; path fields `milestone_number`;
+  required record fields `milestone_number`; accepted fields `milestone_number`; risk: removes
+  repository planning metadata from GitHub.
+- `create_release`: POST `/repos/{{ config.owner }}/{{ config.repo }}/releases` - kind `create`;
+  body type `json`; required record fields `tag_name`; accepted fields `body`, `draft`,
+  `generate_release_notes`, `make_latest`, `name`, `prerelease`, `tag_name`, `target_commitish`;
+  risk: publishes release metadata and may notify repository watchers.
+- `update_release`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/releases/{{ record.release_id
+  }}` - kind `update`; body type `json`; path fields `release_id`; required record fields
+  `release_id`; accepted fields `body`, `draft`, `generate_release_notes`, `make_latest`, `name`,
+  `prerelease`, `release_id`, `tag_name`, `target_commitish`; risk: changes published release
+  metadata.
+- `delete_release`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/releases/{{
+  record.release_id }}` - kind `delete`; body type `none`; path fields `release_id`; required record
+  fields `release_id`; accepted fields `release_id`; risk: removes release metadata from GitHub;
+  tags are not deleted by this action.
+- `dispatch_workflow`: POST `/repos/{{ config.owner }}/{{ config.repo }}/actions/workflows/{{
+  record.workflow_id }}/dispatches` - kind `create`; body type `json`; path fields `workflow_id`;
+  required record fields `workflow_id`, `ref`; accepted fields `inputs`, `ref`, `workflow_id`; risk:
+  starts CI/CD automation that may deploy, publish, or mutate external systems.
+- `rerun_workflow_run`: POST `/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{
+  record.run_id }}/rerun` - kind `custom`; body type `none`; path fields `run_id`; required record
+  fields `run_id`; accepted fields `run_id`; risk: reruns CI/CD automation and consumes workflow
+  minutes.
+- `cancel_workflow_run`: POST `/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{
+  record.run_id }}/cancel` - kind `custom`; body type `none`; path fields `run_id`; required record
+  fields `run_id`; accepted fields `run_id`; risk: interrupts in-flight CI/CD automation.
+- `delete_workflow_run`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{
+  record.run_id }}` - kind `delete`; body type `none`; path fields `run_id`; required record fields
+  `run_id`; accepted fields `run_id`; risk: removes workflow run history from GitHub.
+- `create_pull_request_review`: POST `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{
+  record.pull_number }}/reviews` - kind `create`; body type `json`; path fields `pull_number`;
+  required record fields `pull_number`; accepted fields `body`, `comments`, `commit_id`, `event`,
+  `pull_number`; risk: submits reviewer feedback and may approve or request changes on a pull
+  request.
+- `create_or_update_file`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/contents/{{ record.path
+  }}` - kind `upsert`; body type `json`; path fields `path`; required record fields `path`,
+  `message`, `content`; accepted fields `author`, `branch`, `committer`, `content`, `message`,
+  `path`, `sha`; risk: writes a commit to the repository and may trigger CI/CD.
+- `delete_file`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/contents/{{ record.path }}` -
+  kind `delete`; body type `json`; path fields `path`; body fields `message`, `sha`, `branch`,
+  `committer`, `author`; required record fields `path`, `message`, `sha`; accepted fields `author`,
+  `branch`, `committer`, `message`, `path`, `sha`; risk: writes a commit that removes a file from
+  the repository.
+- `create_webhook`: POST `/repos/{{ config.owner }}/{{ config.repo }}/hooks` - kind `create`; body
+  type `json`; required record fields `config`; accepted fields `active`, `config`, `events`,
+  `name`; risk: registers an outbound webhook that will receive repository event payloads.
+- `update_webhook`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}` -
+  kind `update`; body type `json`; path fields `hook_id`; required record fields `hook_id`; accepted
+  fields `active`, `add_events`, `config`, `events`, `hook_id`, `remove_events`; risk: changes an
+  existing webhook's target URL, secret, or event subscriptions.
+- `delete_webhook`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}`
+  - kind `delete`; body type `none`; path fields `hook_id`; required record fields `hook_id`;
+  accepted fields `hook_id`; missing records treated as success for status `404`; risk: removes a
+  webhook; the target will stop receiving repository event payloads.
+- `create_deploy_key`: POST `/repos/{{ config.owner }}/{{ config.repo }}/keys` - kind `create`; body
+  type `json`; required record fields `key`; accepted fields `key`, `read_only`, `title`; risk:
+  grants a new SSH public key deploy access to the repository.
+- `delete_deploy_key`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/keys/{{ record.key_id }}`
+  - kind `delete`; body type `none`; path fields `key_id`; required record fields `key_id`; accepted
+  fields `key_id`; missing records treated as success for status `404`; risk: revokes an SSH deploy
+  key's access to the repository.
+- `create_or_update_environment`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/environments/{{
+  record.environment_name }}` - kind `upsert`; body type `json`; path fields `environment_name`;
+  required record fields `environment_name`; accepted fields `deployment_branch_policy`,
+  `environment_name`, `prevent_self_review`, `reviewers`, `wait_timer`; risk: creates or changes a
+  deployment environment's protection rules and reviewers.
+- `delete_environment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/environments/{{
+  record.environment_name }}` - kind `delete`; body type `none`; path fields `environment_name`;
+  required record fields `environment_name`; accepted fields `environment_name`; missing records
+  treated as success for status `404`; risk: removes a deployment environment and its protection
+  rules.
+- `create_commit_comment`: POST `/repos/{{ config.owner }}/{{ config.repo }}/commits/{{
+  record.commit_sha }}/comments` - kind `create`; body type `json`; path fields `commit_sha`;
+  required record fields `commit_sha`, `body`; accepted fields `body`, `commit_sha`, `line`, `path`,
+  `position`; risk: creates a user-visible comment attached to a specific commit.
+- `update_commit_comment`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/comments/{{
+  record.comment_id }}` - kind `update`; body type `json`; path fields `comment_id`; body fields
+  `body`; required record fields `comment_id`, `body`; accepted fields `body`, `comment_id`; risk:
+  changes the text of an existing commit comment.
+- `delete_commit_comment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/comments/{{
+  record.comment_id }}` - kind `delete`; body type `none`; path fields `comment_id`; required record
+  fields `comment_id`; accepted fields `comment_id`; missing records treated as success for status
+  `404`; risk: removes a commit comment.
+- `update_issue_comment`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{
+  record.comment_id }}` - kind `update`; body type `json`; path fields `comment_id`; body fields
+  `body`; required record fields `comment_id`, `body`; accepted fields `body`, `comment_id`; risk:
+  changes the text of an existing issue or pull request comment.
+- `delete_issue_comment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{
+  record.comment_id }}` - kind `delete`; body type `none`; path fields `comment_id`; required record
+  fields `comment_id`; accepted fields `comment_id`; missing records treated as success for status
+  `404`; risk: removes an issue or pull request comment.
+- `lock_issue`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number
+  }}/lock` - kind `update`; body type `json`; path fields `issue_number`; body fields `lock_reason`;
+  required record fields `issue_number`; accepted fields `issue_number`, `lock_reason`; risk:
+  prevents further comments from non-collaborators on an issue or pull request.
+- `unlock_issue`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number
+  }}/lock` - kind `update`; body type `none`; path fields `issue_number`; required record fields
+  `issue_number`; accepted fields `issue_number`; risk: reopens an issue or pull request to comments
+  from non-collaborators.
+- `set_issue_labels`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number
+  }}/labels` - kind `update`; body type `json`; path fields `issue_number`; body fields `labels`;
+  required record fields `issue_number`; accepted fields `issue_number`, `labels`; risk: replaces
+  every label on an issue or pull request, removing any not listed.
+- `add_issue_labels`: POST `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{
+  record.issue_number }}/labels` - kind `update`; body type `json`; path fields `issue_number`; body
+  fields `labels`; required record fields `issue_number`, `labels`; accepted fields `issue_number`,
+  `labels`; risk: adds labels to an issue or pull request without removing existing ones.
+- `remove_issue_label`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{
+  record.issue_number }}/labels/{{ record.name }}` - kind `delete`; body type `none`; path fields
+  `issue_number`, `name`; required record fields `issue_number`, `name`; accepted fields
+  `issue_number`, `name`; missing records treated as success for status `404`; risk: removes a
+  single label from an issue or pull request.
+- `add_issue_assignees`: POST `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{
+  record.issue_number }}/assignees` - kind `update`; body type `json`; path fields `issue_number`;
+  body fields `assignees`; required record fields `issue_number`, `assignees`; accepted fields
+  `assignees`, `issue_number`; risk: assigns additional GitHub users to an issue or pull request and
+  may notify them.
+- `remove_issue_assignees`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{
+  record.issue_number }}/assignees` - kind `update`; body type `json`; path fields `issue_number`;
+  body fields `assignees`; required record fields `issue_number`, `assignees`; accepted fields
+  `assignees`, `issue_number`; risk: removes assignees from an issue or pull request.
+- `create_review_comment`: POST `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{
+  record.pull_number }}/comments` - kind `create`; body type `json`; path fields `pull_number`;
+  required record fields `pull_number`, `body`, `commit_id`, `path`; accepted fields `body`,
+  `commit_id`, `in_reply_to`, `line`, `path`, `pull_number`, `side`, `start_line`, `start_side`;
+  risk: creates a user-visible inline review comment on a pull request diff.
+- `update_review_comment`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{
+  record.comment_id }}` - kind `update`; body type `json`; path fields `comment_id`; body fields
+  `body`; required record fields `comment_id`, `body`; accepted fields `body`, `comment_id`; risk:
+  changes the text of an existing pull request review comment.
+- `delete_review_comment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{
+  record.comment_id }}` - kind `delete`; body type `none`; path fields `comment_id`; required record
+  fields `comment_id`; accepted fields `comment_id`; missing records treated as success for status
+  `404`; risk: removes a pull request review comment.
+- `submit_pull_request_review`: POST `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{
+  record.pull_number }}/reviews/{{ record.review_id }}/events` - kind `update`; body type `json`;
+  path fields `pull_number`, `review_id`; body fields `body`, `event`; required record fields
+  `pull_number`, `review_id`, `event`; accepted fields `body`, `event`, `pull_number`, `review_id`;
+  risk: submits a pending pull request review, which may approve or request changes.
+- `dismiss_pull_request_review`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{
+  record.pull_number }}/reviews/{{ record.review_id }}/dismissals` - kind `update`; body type
+  `json`; path fields `pull_number`, `review_id`; body fields `message`, `event`; required record
+  fields `pull_number`, `review_id`, `message`; accepted fields `event`, `message`, `pull_number`,
+  `review_id`; risk: dismisses an existing pull request review, clearing its approval status.
+- `update_pull_request_branch`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{
+  record.pull_number }}/update-branch` - kind `update`; body type `json`; path fields `pull_number`;
+  body fields `expected_head_sha`; required record fields `pull_number`; accepted fields
+  `expected_head_sha`, `pull_number`; risk: merges the base branch into the pull request's head
+  branch, adding a merge commit.
+- `update_release_asset`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/releases/assets/{{
+  record.asset_id }}` - kind `update`; body type `json`; path fields `asset_id`; required record
+  fields `asset_id`; accepted fields `asset_id`, `label`, `name`, `state`; risk: changes a release
+  asset's file name or label.
+- `delete_release_asset`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/releases/assets/{{
+  record.asset_id }}` - kind `delete`; body type `none`; path fields `asset_id`; required record
+  fields `asset_id`; accepted fields `asset_id`; missing records treated as success for status
+  `404`; risk: removes a downloadable asset from a published release.
+- `replace_repo_topics`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/topics` - kind `update`;
+  body type `json`; required record fields `names`; accepted fields `names`; risk: replaces the
+  repository's entire topic list, removing any topic not listed.
+- `add_collaborator`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/collaborators/{{
+  record.username }}` - kind `upsert`; body type `json`; path fields `username`; body fields
+  `permission`; required record fields `username`; accepted fields `permission`, `username`; risk:
+  grants a GitHub user access to the repository and may send an invitation email.
+- `remove_collaborator`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/collaborators/{{
+  record.username }}` - kind `delete`; body type `none`; path fields `username`; required record
+  fields `username`; accepted fields `username`; missing records treated as success for status
+  `404`; risk: revokes a collaborator's access to the repository.
+- `create_ref`: POST `/repos/{{ config.owner }}/{{ config.repo }}/git/refs` - kind `create`; body
+  type `json`; required record fields `ref`, `sha`; accepted fields `ref`, `sha`; risk: creates a
+  new branch or tag ref pointing at the given commit SHA.
+- `update_ref`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}` - kind
+  `update`; body type `json`; path fields `ref`; body fields `sha`, `force`; required record fields
+  `ref`, `sha`; accepted fields `force`, `ref`, `sha`; risk: moves an existing branch or tag ref to
+  a different commit SHA, potentially discarding history.
+- `delete_ref`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}` -
+  kind `delete`; body type `none`; path fields `ref`; required record fields `ref`; accepted fields
+  `ref`; missing records treated as success for status `404`, `422`; confirmation `destructive`;
+  risk: permanently deletes a branch or tag ref.
+- `merge_branch`: POST `/repos/{{ config.owner }}/{{ config.repo }}/merges` - kind `create`; body
+  type `json`; required record fields `base`, `head`; accepted fields `base`, `commit_message`,
+  `head`; risk: creates a merge commit combining the head ref into the base branch.
+- `update_code_scanning_alert`: PATCH `/repos/{{ config.owner }}/{{ config.repo
+  }}/code-scanning/alerts/{{ record.alert_number }}` - kind `update`; body type `json`; path fields
+  `alert_number`; required record fields `alert_number`, `state`; accepted fields `alert_number`,
+  `dismissed_comment`, `dismissed_reason`, `state`; risk: changes a code scanning alert's triage
+  state, which can suppress a real security finding.
+- `update_dependabot_alert`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/dependabot/alerts/{{
+  record.alert_number }}` - kind `update`; body type `json`; path fields `alert_number`; required
+  record fields `alert_number`, `state`; accepted fields `alert_number`, `dismissed_comment`,
+  `dismissed_reason`, `state`; risk: changes a dependabot alert's triage state, which can suppress a
+  real vulnerability finding.
+- `create_deployment`: POST `/repos/{{ config.owner }}/{{ config.repo }}/deployments` - kind
+  `create`; body type `json`; required record fields `ref`; accepted fields `auto_merge`,
+  `description`, `environment`, `payload`, `production_environment`, `ref`, `required_contexts`,
+  `task`, `transient_environment`; risk: records a new deployment and may trigger CI/CD deployment
+  automation.
+- `create_fork`: POST `/repos/{{ config.owner }}/{{ config.repo }}/forks` - kind `create`; body type
+  `json`; accepted fields `default_branch_only`, `name`, `organization`; risk: creates a new
+  repository forked from this one, under the caller's account or a target organization.
+- `create_repo_ruleset`: POST `/repos/{{ config.owner }}/{{ config.repo }}/rulesets` - kind
+  `create`; body type `json`; required record fields `name`, `enforcement`; accepted fields
+  `bypass_actors`, `conditions`, `enforcement`, `name`, `rules`, `target`; risk: creates a
+  repository ruleset that can block pushes, merges, or deletions repo-wide once active.
+- `update_repo_ruleset`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{
+  record.ruleset_id }}` - kind `update`; body type `json`; path fields `ruleset_id`; required record
+  fields `ruleset_id`; accepted fields `bypass_actors`, `conditions`, `enforcement`, `name`,
+  `rules`, `ruleset_id`, `target`; risk: changes an existing repository ruleset's enforcement or
+  rule set, which can block pushes, merges, or deletions repo-wide.
+- `delete_repo_ruleset`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{
+  record.ruleset_id }}` - kind `delete`; body type `none`; path fields `ruleset_id`; required record
+  fields `ruleset_id`; accepted fields `ruleset_id`; missing records treated as success for status
+  `404`; risk: removes a repository ruleset, lifting any push/merge/deletion restrictions it
+  enforced.
+- `update_secret_scanning_alert`: PATCH `/repos/{{ config.owner }}/{{ config.repo
+  }}/secret-scanning/alerts/{{ record.alert_number }}` - kind `update`; body type `json`; path
+  fields `alert_number`; required record fields `alert_number`, `state`; accepted fields
+  `alert_number`, `resolution`, `resolution_comment`, `state`; risk: changes a secret scanning
+  alert's triage state, which can suppress a real leaked-credential finding.
 
 ## Known limits
 
-- **`auth`/`authentication` aliases, every legacy secret ALIAS, and `auth_type`'s non-public modes
-  are NOT reproduced** (`personalAccessToken`/`accessToken`/`oauthToken`/`installationToken`/
-  `githubToken`/`GITHUB_TOKEN`; `privateKey`/`githubAppPrivateKey`/`privateKeyBase64`/
-  `githubAppPrivateKeyBase64`; `client_id`/`github_app_id`; `auth_type=github_app`'s
-  override-token-precedence behavior) — only the canonical `token`/`private_key`/
-  `private_key_base64`/`app_id` config/secret keys are read for credential material. **RESOLVED (S3
-  engine mini-wave item 2) — `auth_type`'s 4 public synonyms ARE now reproduced**: `auth_type`
-  set to `public`/`none`/`anonymous`/`unauthenticated` is an additional, purely-additive opt-in for
-  unauthenticated reads, restored once `engine.ResolveCheckWhen` made the when-grammar's `in`
-  operator statically validatable (previously `connectorgen validate`'s `engine.ResolveCheck` only
-  parsed bare `namespace.key` truthiness, hard-failing any `==`/`in`-shaped `when` clause even when
-  the referenced key was spec-declared). See "Auth setup"'s config-surface paragraph above for the
-  full alias list and the fix for the silent-fallthrough hazard this previously caused (ledger G14):
-  a config resolving to none of token/github_app/either-public-opt-in now hard-errors instead of
-  silently reading unauthenticated.
-- **`ENGINE_GAP` G0 — RESOLVED.** Legacy's `repository` marker field (every stream stamps the
-  `owner/repo` string onto every emitted record) was NOT reproducible at pilot time because
-  `streams.json`'s `computed_fields` templates were resolved via `Vars{Record: raw}` only
-  (`engine/read.go`'s `applyComputedFields`) — `config.*` was never wired into that interpolation
-  environment, unlike every OTHER templating surface in the dialect (base URL, headers, query, path,
-  auth all receive both `Config` and `Record`/`Secrets`). The gap-loop cycle-1 engine mini-wave wired
-  `Config` (never `Secrets` — a computed field must never be able to copy a secret into record data)
-  into `applyComputedFields`'s `Vars`, so every stream now declares
-  `"repository": "{{ config.owner }}/{{ config.repo }}"` in its `computed_fields`, restoring the
-  marker on all 19 streams (see `TestParityGithub_RepositoryMarkerFieldRestored`,
-  `docs/migration/conventions.md` §3 "`config.*` in `computed_fields`"). `owner`/`repo` also remain
-  available on `RuntimeConfig.Config` directly for any caller that needs them.
-- **G0b — RESOLVED (stale ledger prose fixed).** `p9-github-ledger.md`'s G0b entry (and this file's
-  prior text) described `user_id`/`author_id`/`committer_id`/`workflow_run_id` (all sourced via a
-  bare, single `computed_fields` template like `"{{ record.user.id }}"`, no filter/literal text) as
-  emitted STRINGS, with `issues.json`/`pull_requests.json`/`commits.json`/`issue_comments.json`/
-  `workflow_artifacts.json` widening these 4 fields' schema type to `["integer","string"]` and the
-  parity suite comparing them string-form-only (`isStringifiedNestedID`). The gap-loop cycle-1 typed
-  `computed_fields` extraction increment (same engine change that closed G0 above — REVIEW-A.md
-  adjudication A1) now preserves the native JSON type for exactly this bare-single-reference
-  template shape, so these 4 fields emit real `json.Number` values, matching legacy's own
-  raw-JSON-passthrough numeric type exactly. Schemas are retightened to `["integer","null"]` (no
-  more widened union) and the parity suite compares them via plain RAW equality (see
-  `TestParityGithub_NestedIDComputedFieldsEmitNativeNumbers`; the old string-form-only
-  `isStringifiedNestedID` helper is removed, not just bypassed).
-- **`owner`/`repo` are two config keys, not legacy's single `repository` ("owner/repo") field.**
-  The engine's `InterpolatePath` urlencodes every `{{ }}`-resolved value as one opaque path segment
-  (a literal `/` inside a resolved value becomes `%2F`, not a segment delimiter), so a single
-  `repository` config value cannot be split into two path segments declaratively (the dialect has no
-  string-split filter). `owner` and `repo` are declared as separate required `spec.json` properties
-  instead — an honest config-surface change from legacy, not a silent behavior narrowing (SPEC.md
-  §5.6 anticipates this exact shape).
-- **`labels_count`/`assignees_count`/`assets_count` are NOT reproduced.** Legacy derives these via
-  `len(item["labels"])`/`len(item["assignees"])`/`len(item["assets"])`. The dialect's only
-  array-aware `computed_fields` filter is `join:<sep>` (string-join, not count); there is no
-  length/count filter. These three fields are omitted from `issues`/`releases` schemas entirely
-  rather than approximated with a wrong value.
-- **`is_pull_request` is NOT reproduced on the `issues` stream.** It is always legacy's literal
-  `false` (issues stream already filters out PRs), but `computed_fields`' `Interpolate` always
-  produces a STRING (`"false"`), never JSON-Schema `boolean` `false` — stamping it would introduce a
-  byte-level record-shape mismatch with legacy rather than removing one. Omitted entirely.
-  `pull_requests` stream's `draft`/other native booleans are unaffected (they pass through raw JSON
-  values via schema projection, not `computed_fields`, so they keep their real boolean type).
-- **Optional per-request passthrough filters are not wired**: legacy's `sort`/`direction` (issues/
-  PRs/milestones), and the full `sha`/`path`/`author`/`committer`/`until` (commits) and
-  `actor`/`branch`/`event`/`status`/`created`/`head_sha`/`check_suite_id` (workflow_runs) config
-  filters are conditionally-sent-if-non-empty in legacy. The dialect's `stream.Query` templating has
-  no absent-key-falsy tolerance (only `auth`'s `when` does), so an unconditional `{{ config.x }}`
-  reference hard-errors whenever the caller leaves that filter unset — the common case. These
-  filters are not declared in `spec.json` at all (F6, conventions.md: a declared-but-unwireable key
-  is worse than an absent one). `state` (issues/pull_requests/milestones) IS always sent, but as the
-  static literal `"all"` (legacy's own default when unconfigured) rather than a runtime-overridable
-  config value, for the identical reason.
-- **github_app installation-token exchange is uncached** (matches legacy exactly, not a new
-  limitation introduced here): `hooks/github/hooks.go`'s `Authenticator` mints a fresh JWT and POSTs
-  a fresh installation-token exchange on every call, exactly like legacy's `authorizationHeader` ->
-  `githubAppInstallationToken` (auth.go:117-152) does on every single HTTP request during a sync.
-  This is real, legacy-inherited inefficiency (documented, not silently "fixed" by adding caching
-  this migration never asked for — conventions.md's rate-limit-placement precedent).
-  `installation_repositories`/`installation_repository_ids`/`installation_permissions` (restricted
-  installation-token scoping) are read from `config.*` inside the hook, matching legacy's
-  `githubInstallationTokenPayload`.
-  A `public`-mode write attempt is NOT pre-validated the way legacy's `githubHasWriteAuth` check
-  short-circuits it before ever building a request; this bundle relies on GitHub's own 401/403
-  response for an unauthenticated write instead (still fails, just one HTTP round-trip later — never
-  silently succeeds).
-- **Legacy's write-action name ALIASES are not reproduced** (`issue_create`, `pr_merge`, etc. all
-  normalizing to a canonical action name via `githubNormalizeWriteAction`). This bundle's
-  `writes.json` declares only the 25 canonical action names; a caller must supply the canonical name
-  (documented scope narrowing, parity-deviation ledger item G1).
-- **OR-rule / "at least one mutable field" validations are approximated, not exact**, for
-  `create_pull_request` (title+body XOR issue), `update_issue`/`update_pull_request`/
-  `update_milestone`/`update_release`/`update_label` ("at least one field present"), matching
-  stripe's existing documented deviation #1 precedent (draft-07 subset has no `anyOf`/`oneOf`) —
-  strictly more permissive than legacy, never stricter, never diverges for a legacy-valid record.
-- **`create_or_update_file`'s dual `content`/`content_base64` convenience fallback is not
-  reproduced.** Legacy accepts either a pre-base64-encoded `content_base64` OR raw `content` (which
-  it then base64-encodes itself before sending). The engine has no filter that base64-encodes a body
-  FIELD value (only `{{ }}`-templated string values support the `base64` filter, and body
-  construction passes record fields through verbatim). This bundle's `content` field is the
-  pre-encoded (GitHub API's actual wire shape) form only — a caller must supply already-base64
-  content, matching GitHub's real contents API contract directly.
-- **SUPERSEDED (Pass B full-surface expansion, this pass)**: this bullet previously read "Full
-  GitHub REST surface (orgs, teams, projects v2, notifications, code scanning, dependabot, secrets
-  administration, webhooks, GraphQL) is out of scope" — that blanket framing is no longer accurate.
-  Webhooks, code scanning, and dependabot are now real streams/writes (see "Pass B streams"/"Pass B
-  write actions" above). Org-level, user-level, enterprise-level, gist, and GraphQL surfaces remain
-  genuinely out of scope (this connector's `spec.json` has no org/user identity to hang those
-  resources off), each with its own specific category+reason in `api_surface.json`
-  (`requires_elevated_scope` for org-scoped resources surfaced under the repo path,
-  `out_of_scope` for narrow preview features and caller-chosen-parameter lookups with no bulk
-  enumeration) — see `api_surface.json`'s `scope` field and the "Pass B full-surface expansion"
-  section above for the full breakdown, not a single blanket bucket.
-- **Parity-test methodology changed from exact-equality to superset (Pass B)**:
-  `paritytest/github/parity_test.go`'s `TestParityGithub_BundleLoadsAndValidates` and
-  `TestParityGithub_ManifestSurface` asserted `reflect.DeepEqual` against legacy's exact 19
-  streams/25 writes at wave1-pilot time. Both now assert the bundle's stream/write name set is a
-  SUPERSET containing every legacy-parity name (via a shared `assertSupersetOf` helper), since Pass B
-  intentionally adds streams/writes legacy never had — an exact-equality assertion would have to be
-  deleted or perpetually rewritten on every future capability addition, which superset-checking
-  avoids while still catching an accidental regression (a legacy-parity stream/write silently
-  dropped).
-- **STANDING EXCEPTION — `hooks/github/hooks.go` stays at exactly 400 lines (the Tier-2 hard
-  ceiling), zero headroom, evaluated and NOT reduced this pass** (S3 engine mini-wave item 3, carried
-  minor: "github hooks.go sits exactly AT the 400-line hard ceiling — reduce ONLY if achievable
-  without gaming"). Re-evaluated at S3: the wave1-pilot gap-loop repair round (REVIEW-A.md's
-  github label major fix) already trimmed this file from 424 to exactly 400 lines by removing
-  redundant comment prose and collapsing 3 near-identical `updateLabel` field-ifs into one loop — the
-  cheap, safe reductions were already taken. Surveyed again here for any REMAINING safe reduction:
-  the file's ~21 comment lines are all load-bearing (explaining non-obvious legacy-parity behavior —
-  e.g. the uncached JWT re-mint, the OR-rule approximation, the label color-strip rationale — not
-  restatements of the code); its ~29 blank lines are single standard `gofmt`-conventional separators
-  between logical blocks (`gofmt -l` reports the file clean; removing any would violate normal Go
-  formatting purely to hit a number). The one candidate logic consolidation considered
-  (`createLabel`/`updateLabel` sharing a payload-builder) was rejected: the two functions have
-  different validation rules (create requires name+color both; update requires only name, every
-  other field optional) and merging them would trade a couple of lines for reduced clarity/increased
-  coupling risk in Tier-2 escape-hatch code, which is a net-negative trade, not a genuine
-  simplification. Conclusion: no further reduction is achievable without removing genuine
-  documentation or forcing an artificial merge — this is a standing exception, not deferred work.
-  Reviewer citation: REVIEW-A.md's "Re-review (gap loop cycle 1)" disposition table (github label
-  major row: "hooks.go trimmed 424→400 (AT the hard ceiling — watch item)") and SUMMARY.md's carried
-  minors list (wave1-pilot phase summary) name this exact line as the standing watch item this
-  bullet resolves the evaluation of.
+- Batch defaults: read_page_size=100.
+- API coverage includes 33 stream-backed endpoint group(s), 67 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=10, deprecated=1, destructive_admin=5, duplicate_of=67, non_data_endpoint=9,
+  out_of_scope=143, requires_elevated_scope=168.

@@ -1,57 +1,75 @@
 # Overview
 
-Twitter (X) reads tweets and their authors matching a configured search query from the Twitter API
-v2 recent-search endpoint, using an App-only Bearer token. This bundle migrates
-`internal/connectors/twitter` (the hand-written connector) to a declarative defs bundle at
-capability parity; the legacy package stays registered and unchanged until wave6's registry flip.
+Reads tweets and their authors matching a search query from the Twitter (X) API v2 recent search
+endpoint using an App-only Bearer token.
+
+Readable streams: `tweets`, `authors`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developer.twitter.com/en/docs/twitter-api.
 
 ## Auth setup
 
-Provide a Twitter API v2 App-only Bearer token via the `api_key` secret; it is used only for
-Bearer auth (`Authorization: Bearer <api_key>`) and is never logged.
+Connection fields:
+
+- `api_key` (optional, secret, string); Twitter (X) API v2 App-only Bearer token. Used only for
+  Bearer auth; never logged.
+- `base_url` (optional, string); default `https://api.twitter.com/2`; format `uri`; Twitter API base
+  URL override for tests or proxies.
+- `end_date` (optional, string); format `date-time`; Optional RFC3339 upper bound sent as end_time;
+  only tweets created at or before this time are returned.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (10-100, Twitter's max_results
+  bounds).
+- `query` (required, string); Recent-search query string (Twitter v2 search syntax), e.g.
+  "from:example".
+- `start_date` (optional, string); format `date-time`; Optional RFC3339 lower bound sent as
+  start_time; only tweets created at or after this time are returned.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.twitter.com/2`, `max_pages=0`, `page_size=100`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/tweets/search/recent` with query `max_results`=`10`; `query`=`{{
+config.query }}`.
 
 ## Streams notes
 
-Both streams read the SAME endpoint (`GET /2/tweets/search/recent`) with the SAME query
-parameters; they differ only in which JSON path the records live at:
+Default pagination: cursor pagination; cursor parameter `next_token`; next token from
+`meta.next_token`.
 
-- `tweets` reads the top-level `data[]` array — primary key `id`, cursor field `created_at`.
-- `authors` reads the `includes.users[]` expansion array (populated by the shared
-  `expansions=author_id` query parameter) — primary key `id`, no cursor field (matches legacy,
-  which declares `CursorFields: nil` for this stream: Twitter's recent-search endpoint has no
-  server-side incremental filter on authors, and legacy surfaces no client-side one either).
-
-Pagination follows Twitter v2's `meta.next_token` cursor convention (`pagination.type: cursor`
-with `token_path: meta.next_token`): the next page's `next_token` query param is read from the
-current page's `meta.next_token` body field, and pagination stops when that field is absent or
-empty — identical to legacy's `harvest` loop.
-
-The required `query` config value (Twitter v2 search syntax, e.g. `from:example`) is sent
-unconditionally, matching legacy's own hard requirement (`Check`/`Read` both fail without it).
-`start_date`/`end_date` are optional RFC3339 bounds sent as `start_time`/`end_time` only when
-configured (`omit_when_absent: true` on both), matching legacy's own `if start := ...; start != ""`
-conditional sends. `page_size` (default `100`) is sent as `max_results`; legacy additionally bounds
-it to 10-100 and `max_pages` to a non-negative integer, `all`, or `unlimited` — this bundle does not
-enforce those input-validation range checks (the engine dialect has no config-value range
-validation primitive), documented as a scope narrowing in Known limits, not a data-emission
-deviation: any value a user configures within the range legacy would have accepted behaves
-identically here.
+- `tweets`: GET `/tweets/search/recent` - records path `data`; query `end_time` from template `{{
+  config.end_date }}`, omitted when absent; `expansions`=`author_id`; `max_results`=`{{
+  config.page_size }}`; `query`=`{{ config.query }}`; `start_time` from template `{{
+  config.start_date }}`, omitted when absent;
+  `tweet.fields`=`id,text,author_id,created_at,conversation_id,lang,source,in_reply_to_user_id,possibly_sensitive,public_metrics`;
+  `user.fields`=`id,name,username,created_at,description,location,verified,protected,url,public_metrics`;
+  cursor pagination; cursor parameter `next_token`; next token from `meta.next_token`.
+- `authors`: GET `/tweets/search/recent` - records path `includes.users`; query `end_time` from
+  template `{{ config.end_date }}`, omitted when absent; `expansions`=`author_id`; `max_results`=`{{
+  config.page_size }}`; `query`=`{{ config.query }}`; `start_time` from template `{{
+  config.start_date }}`, omitted when absent;
+  `tweet.fields`=`id,text,author_id,created_at,conversation_id,lang,source,in_reply_to_user_id,possibly_sensitive,public_metrics`;
+  `user.fields`=`id,name,username,created_at,description,location,verified,protected,url,public_metrics`;
+  cursor pagination; cursor parameter `next_token`; next token from `meta.next_token`.
 
 ## Write actions & risks
 
-None. Twitter is read-only in both legacy and this bundle (`capabilities.write: false`) — posting
-tweets or other mutating actions are side-effecting actions inappropriate for a generic reverse-ETL
-source.
+This connector is read-only. Read behavior: external Twitter (X) API read of tweets and author
+profiles matching a search query.
 
 ## Known limits
 
-- `page_size`/`max_pages` range/shape validation (legacy's 10-100 bound on `page_size`, its
-  non-negative/`all`/`unlimited` parsing for `max_pages`) is not enforced by this bundle — the
-  engine has no declarative config-range-validation primitive. Any value a user would have
-  configured successfully under legacy behaves identically here; only the "friendly error before
-  the first request" behavior for a wildly out-of-range value is dropped.
-- Full Twitter v2 API surface (full-archive search, spaces, DMs, lists, likes, follows, tweet
-  writes) is out of scope for this wave; see `api_surface.json`'s `excluded` entries. Only the
-  2 legacy-parity streams are implemented.
-- `authors` has no incremental cursor field, matching legacy exactly (Twitter's recent-search
-  `includes.users` expansion carries no per-author timestamp legacy ever surfaced as a cursor).
+- Batch defaults: read_page_size=100.
+- API coverage includes 2 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=4, requires_elevated_scope=1.

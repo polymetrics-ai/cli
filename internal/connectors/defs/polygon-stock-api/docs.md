@@ -1,79 +1,85 @@
 # Overview
 
-Polygon Stock API is a read-only declarative-HTTP bundle migrated from
-`internal/connectors/polygon-stock-api` (the hand-written legacy connector, which stays registered
-and unchanged until wave6's registry flip). It reads Polygon.io stock tickers, dividends, and
-splits through the Polygon.io reference REST API.
+Reads Polygon.io stock tickers, dividends, and splits through the Polygon.io reference REST API.
+
+Readable streams: `tickers`, `dividends`, `splits`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://polygon.io/docs/stocks/getting-started.
 
 ## Auth setup
 
-Provide a Polygon.io API key via the `api_key` secret. It is sent as a Bearer token
-(`Authorization: Bearer <api_key>`), matching legacy's `connsdk.Bearer(key)` construction exactly.
+Connection fields:
+
+- `active` (optional, string).
+- `api_key` (required, secret, string); Polygon.io API key, sent as a Bearer token (Authorization:
+  Bearer <api_key>). Never logged.
+- `base_url` (optional, string); default `https://api.polygon.io`; format `uri`; Polygon.io API base
+  URL override for tests or proxies.
+- `ex_dividend_date` (optional, string); Optional ex-dividend date filter, applied to the dividends
+  stream.
+- `execution_date` (optional, string); Optional split execution date filter, applied to the splits
+  stream.
+- `locale` (optional, string); Optional locale filter (e.g. us, global), applied to the tickers
+  stream.
+- `market` (optional, string); Optional market filter (e.g. stocks, otc), applied to the tickers
+  stream.
+- `mode` (optional, string).
+- `order` (optional, string); Optional sort order (asc/desc), applied to all three streams.
+- `page_size` (optional, string); default `100`; Records per page (1-1000), sent as the 'limit'
+  query param on the first request.
+- `sort` (optional, string); Optional sort field, applied to all three streams.
+- `ticker` (optional, string); Optional ticker symbol filter, applied to all three streams.
+- `type` (optional, string); Optional ticker type filter (e.g. CS, ETF), applied to the tickers
+  stream.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.polygon.io`, `page_size=100`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/v3/reference/tickers` with query `limit`=`1`.
 
 ## Streams notes
 
-All 3 streams (`tickers`, `dividends`, `splits`) share the same shape: `GET` against a Polygon
-reference list endpoint, records at `results`, `limit=<page_size>` (default `100`, matching
-legacy's `defaultPageSize`) sent on the first request. Each stream's optional passthrough query
-filters (`ticker`/`sort`/`order` on all three; `market`/`locale`/`type`/`active` on `tickers` only;
-`ex_dividend_date` on `dividends`; `execution_date` on `splits`) use `streams.json`'s optional-query
-object dialect (`omit_when_absent: true`) so an unset config value is left off the request
-entirely, matching legacy's `for _, key := range [...] { if v := cfg.Config[key]; v != "" {
-q.Set(key, v) } }` loop. The `tickers` stream's `active` filter additionally carries `"default":
-"true"` — legacy always sets `active=true` on the tickers endpoint specifically when the config
-value is unset (`if endpoint.path == "v3/reference/tickers" && q.Get("active") == "" { q.Set
-("active", "true") }`), a stream-specific default this bundle reproduces exactly (the other two
-streams have no such default).
+Default pagination: follows a next-page URL from the response body; URL path `next_url`; next URLs
+stay on the configured API host; maximum 3 page(s).
 
-Pagination follows Polygon's `next_url` absolute-URL convention (`pagination.type: next_url`,
-`next_url_path: next_url`) — the engine's built-in same-host SSRF guard and loop-guard (same URL
-requested twice) reproduce legacy's `harvest`-style loop, which followed `next_url` verbatim until
-it was empty. `primary_key` is `["ticker"]` for `tickers` (Polygon's own natural key) and `["id"]`
-for `dividends`/`splits` (Polygon's own opaque record identifier, confirmed present on every real
-dividend/split object per Polygon's API reference — legacy's `first(item, "id", "cash_amount")`/
-`first(item, "id", "execution_date")` fallback for a missing `id` is defensive dead code for a
-shape the real API never actually returns; this bundle's plain schema projection of `id` is
-equivalent for every real response).
-
-`dividends`/`splits` declare `x-cursor-field` (`ex_dividend_date`/`execution_date` respectively)
-for schema/manifest parity with legacy's `CursorFields`, but — matching legacy exactly — no
-`incremental` block is declared on either stream: legacy's `harvest` never sends a server-side
-date-range filter param for either endpoint (the `ex_dividend_date`/`execution_date` config values
-are plain passthrough query filters, not incremental-cursor-driven), so adding one here would be
-new, legacy-diverging behavior, not a straight port.
+- `tickers`: GET `/v3/reference/tickers` - records path `results`; query `active` from template `{{
+  config.active }}`, default `true`; `limit`=`{{ config.page_size }}`; `locale` from template `{{
+  config.locale }}`, omitted when absent; `market` from template `{{ config.market }}`, omitted when
+  absent; `order` from template `{{ config.order }}`, omitted when absent; `sort` from template `{{
+  config.sort }}`, omitted when absent; `ticker` from template `{{ config.ticker }}`, omitted when
+  absent; `type` from template `{{ config.type }}`, omitted when absent; follows a next-page URL
+  from the response body; URL path `next_url`; next URLs stay on the configured API host; maximum 3
+  page(s).
+- `dividends`: GET `/v3/reference/dividends` - records path `results`; query `ex_dividend_date` from
+  template `{{ config.ex_dividend_date }}`, omitted when absent; `limit`=`{{ config.page_size }}`;
+  `order` from template `{{ config.order }}`, omitted when absent; `sort` from template `{{
+  config.sort }}`, omitted when absent; `ticker` from template `{{ config.ticker }}`, omitted when
+  absent; follows a next-page URL from the response body; URL path `next_url`; next URLs stay on the
+  configured API host; maximum 3 page(s).
+- `splits`: GET `/v3/reference/splits` - records path `results`; query `execution_date` from
+  template `{{ config.execution_date }}`, omitted when absent; `limit`=`{{ config.page_size }}`;
+  `order` from template `{{ config.order }}`, omitted when absent; `sort` from template `{{
+  config.sort }}`, omitted when absent; `ticker` from template `{{ config.ticker }}`, omitted when
+  absent; follows a next-page URL from the response body; URL path `next_url`; next URLs stay on the
+  configured API host; maximum 3 page(s).
 
 ## Write actions & risks
 
-None. Polygon Stock API is a read-only source in both legacy and this bundle
-(`capabilities.write: false`, no `writes.json`).
+This connector is read-only. Read behavior: external Polygon.io API read of stock reference data
+(tickers, dividends, splits).
 
 ## Known limits
 
-- Only the 3 legacy-parity streams (`tickers`, `dividends`, `splits`) are implemented; the full
-  Polygon.io stocks surface (ticker details, financials, aggregates/bars, snapshots, exchanges,
-  market status) is out of scope for this wave — see `api_surface.json`'s `excluded:
-  {category: out_of_scope, reason: "not implemented in this bundle"}` entries.
-- `max_pages` (legacy default `3`, config-overridable including `0`/`all`/`unlimited` for
-  unbounded) is NOT exposed as a config property here: the `next_url` paginator's `MaxPages` is a
-  static `int` field on `streams.json`'s `pagination` block, with no runtime config-driven override
-  mechanism at all (same F6 lesson as searxng's `max_pages`/`page_size` — a `spec.json` property no
-  template anywhere in the bundle consumes should not be declared). `pagination.max_pages` is fixed
-  at `3` here, matching legacy's own default constant exactly; a config-time override of this value
-  is out of scope until the engine dialect grows one. `page_size`, by contrast, IS config-driven
-  (sent via each stream's own `query.limit`, independent of the paginator).
-- Legacy's `pageSize`/`maxPages` numeric-range validation (`page_size` clamped 1-1000, `max_pages`
-  clamped to a configured ceiling) is not reproduced: the engine dialect has no numeric-range
-  validation for `spec.json` string-typed config values. An out-of-range `page_size` is sent to
-  Polygon as-is rather than rejected client-side or clamped; Polygon's own API validates the `limit`
-  query param server-side.
-- Per `conventions.md` §4's sanctioned `next_url` exception, every stream ships a single-page
-  fixture (the replay server's own absolute URL cannot be embedded in a static fixture ahead of
-  time) — `pagination_terminates` exercises the `tickers` stream's 1-page fixture and confirms
-  exactly one request is issued and consumed, proving the loop terminates on a null `next_url`
-  rather than looping. No live `paritytest/polygon-stock-api` 2-page test exists for this migration
-  wave; the single-page fixture is the Pass-A-scope proof here.
-- The engine's `next_url` paginator stops purely on an absent/empty `next_url` value; legacy also
-  independently stops early on a short page (`len(records) < pageSize`). Real Polygon responses
-  only set `next_url` on a genuinely-incomplete final page, so this never diverges for any real API
-  response — documented here because it is a structural difference in the stop condition, not
-  because it is reachable behavior.
+- Batch defaults: read_page_size=100.
+- API coverage includes 3 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  non_data_endpoint=1, out_of_scope=6.

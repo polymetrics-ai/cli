@@ -1,9 +1,7 @@
 // Package conformance implements conformance v2 (design §E.2): static
 // structural/policy checks plus dynamic fixture-backed replay checks that
 // exercise the REAL engine (internal/connectors/engine) against recorded
-// fixture pages, replacing the legacy native_conformance.go's
-// mode=fixture synthetic-record shortcut. Legacy native_conformance.go is
-// untouched and out of scope.
+// fixture pages.
 package conformance
 
 import (
@@ -18,9 +16,7 @@ import (
 // --- report shape ------------------------------------------------------
 
 // TestReportJSONShape locks the {Connector, Checks: [{Name, Passed, Skipped,
-// Error}], Passed} shape mirroring native_conformance.go's
-// {Name, Passed, Error} test entries plus the accumulator's Passed rollup
-// (report_shape note in the dispatch brief).
+// Error}], Passed} shape.
 func TestReportJSONShape(t *testing.T) {
 	rep := Report{
 		Connector: "acme",

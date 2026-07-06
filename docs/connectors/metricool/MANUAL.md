@@ -12,20 +12,49 @@ SYNOPSIS
 DESCRIPTION
   Reads Metricool brand profiles and per-brand Instagram, Facebook, LinkedIn, and TikTok post analytics through the Metricool REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  blog_ids
+  end_date
+  start_date
+  user_id
+  user_token (secret)
+
+ETL STREAMS
+  brands:
+    primary key: id
+    fields: id(), label(), timezone(), title(), url(), userId()
+  instagram_posts:
+    primary key: blogId, postId
+    fields: blogId(), comments(), impressions(), interactions(), likes(), postId(), publishDate(), reach(), saved(), text(), type(), url()
+  facebook_posts:
+    primary key: blogId, postId
+    fields: blogId(), comments(), impressions(), interactions(), likes(), postId(), publishDate(), reach(), shares(), text(), type(), url()
+  linkedin_posts:
+    primary key: blogId, postId
+    fields: blogId(), clicks(), comments(), impressions(), interactions(), likes(), postId(), publishDate(), shares(), text(), type(), url()
+  tiktok_posts:
+    primary key: blogId, videoId
+    fields: blogId(), comments(), engagement(), likes(), publishDate(), reach(), shares(), text(), url(), videoId(), views()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Metricool API read of brand-scoped social analytics for the configured user_id/blog_ids
+  approval: none; read-only, no reverse-ETL write surface
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

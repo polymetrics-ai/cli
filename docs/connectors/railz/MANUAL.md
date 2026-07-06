@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads Railz businesses, connections, customers, invoices, and bills through the Railz REST API. Read-only.
 
+ICON
+  asset: icons/railz.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  access_token (secret)
+  api_key (secret)
+
+ETL STREAMS
+  businesses:
+    primary key: id
+    cursor: created_at
+    fields: created_at(), id(), name(), status()
+  connections:
+    primary key: id
+    cursor: created_at
+    fields: business_id(), created_at(), id(), status()
+  customers:
+    primary key: id
+    fields: business_id(), email(), id(), name()
+  invoices:
+    primary key: id
+    fields: business_id(), customer_id(), id(), status(), total_amount(), vendor_id()
+  bills:
+    primary key: id
+    fields: business_id(), id(), status(), total_amount(), vendor_id()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Railz API read of connected-business accounting data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

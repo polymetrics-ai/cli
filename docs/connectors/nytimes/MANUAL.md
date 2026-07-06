@@ -10,22 +10,46 @@ SYNOPSIS
   pm credentials add <name> --connector nytimes [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads New York Times Most Popular (viewed, emailed, shared) articles and the article Archive via the NYTimes Developer APIs.
+  Reads New York Times Most Popular (viewed, emailed, shared) articles via the NYTimes Developer APIs.
+
+ICON
+  asset: icons/nytimes.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developer.nytimes.com/apis
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  period
+  api_key (secret)
+
+ETL STREAMS
+  most_popular_viewed:
+    primary key: id
+    cursor: published_date
+    fields: abstract(), byline(), id(), published_date(), section(), source(), title(), type(), updated(), uri(), url()
+  most_popular_emailed:
+    primary key: id
+    cursor: published_date
+    fields: abstract(), byline(), id(), published_date(), section(), source(), title(), type(), updated(), uri(), url()
+  most_popular_shared:
+    primary key: id
+    cursor: published_date
+    fields: abstract(), byline(), id(), published_date(), section(), source(), title(), type(), updated(), uri(), url()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external NYTimes API read of published article metadata (no PII)
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

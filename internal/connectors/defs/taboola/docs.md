@@ -1,60 +1,60 @@
 # Overview
 
-Taboola reads campaigns through the Taboola Backstage API (`https://backstage.taboola.com`). This
-bundle migrates `internal/connectors/taboola` (the hand-written legacy connector) at capability
-parity; the legacy package stays registered and unchanged until wave6's registry flip. Taboola is
-read-only here — legacy has no write surface, so `capabilities.write` is `false` and no
-`writes.json` is shipped.
+Reads Taboola campaigns through the Backstage API. Read-only.
+
+Readable streams: `campaigns`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developers.taboola.com/backstage-api/reference.
 
 ## Auth setup
 
-Provide `client_id` and `client_secret` secrets (a Taboola Backstage OAuth2 client-credentials
-application). The bundle exchanges them for a Bearer access token via
-`mode: oauth2_client_credentials`, `token_url: {{ config.base_url }}/backstage/oauth/token` — the
-identical derived endpoint legacy's `requester` constructs
-(`strings.TrimRight(base, "/") + "/backstage/oauth/token"`). Both secrets are never logged.
-`account_id` is a required config value sent as a path segment on the campaigns endpoint
-(`urlencode`d and traversal-guarded by the engine's path interpolation, matching legacy's own
-`ContainsAny(id, "/?#")`/`Contains(id, "..")` validation intent).
+Connection fields:
+
+- `account_id` (required, string); Taboola account ID; sent as a path segment on the campaigns
+  endpoint.
+- `base_url` (optional, string); default `https://backstage.taboola.com`; format `uri`; Taboola
+  Backstage API base URL override for tests or proxies. Also used to derive the OAuth2 token
+  endpoint (<base_url>/backstage/oauth/token).
+- `client_id` (required, secret, string); Taboola Backstage OAuth2 client ID. Never logged.
+- `client_secret` (required, secret, string); Taboola Backstage OAuth2 client secret. Never logged.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-100).
+
+Secret fields are redacted in logs and write previews: `client_id`, `client_secret`.
+
+Default configuration values: `base_url=https://backstage.taboola.com`, `max_pages=0`,
+`page_size=100`.
+
+Authentication behavior:
+
+- OAuth 2.0 client credentials authentication using `config.base_url`, `secrets.client_id`,
+  `secrets.client_secret`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/backstage/api/1.0/{{ config.account_id }}/campaigns` with query
+`page`=`1`; `page_size`=`1`.
 
 ## Streams notes
 
-The single `campaigns` stream (`GET /backstage/api/1.0/{account_id}/campaigns`) uses page-number
-pagination (`pagination.type: page_number`, `page_param: page`, `size_param: page_size`,
-`start_page: 1`, default `page_size: 100`), records at `results` — matching legacy's
-`connsdk.PageNumberPaginator{PageParam: "page", SizeParam: "page_size", StartPage: 1}` exactly.
-Legacy's published catalog declares `CursorFields: ["created_at"]`, mirrored here via the schema's
-`x-cursor-field`, but legacy never actually derives a request filter or client-side drop from a
-persisted cursor for this stream — every read re-emits the complete campaign set. This bundle
-reproduces that exactly: no `incremental` block is declared, so `campaigns` is full-refresh only
-(declaring `client_filtered` here would silently drop records legacy would still emit).
+Default pagination: page-number pagination; page parameter `page`; size parameter `page_size`;
+starts at 1; page size 100.
+
+- `campaigns`: GET `/backstage/api/1.0/{{ config.account_id }}/campaigns` - records path `results`;
+  page-number pagination; page parameter `page`; size parameter `page_size`; starts at 1; page size
+  100.
 
 ## Write actions & risks
 
-None. Taboola is read-only in legacy (`Capabilities.Write` is `false`); `Write` always returns
-`connectors.ErrUnsupportedOperation`. No `writes.json` is shipped for this bundle.
+This connector is read-only. Read behavior: external Taboola Backstage API read of campaign data.
 
 ## Known limits
 
-- Legacy accepts an optional `token_url` config override to replace the derived OAuth2 token
-  endpoint. Since the derived default (`{{ config.base_url }}/backstage/oauth/token`) is itself a
-  template (not a fixed spec-default literal) and the engine's `oauth2_client_credentials` auth spec
-  has exactly one `token_url` field with no override-vs-derive branching mechanism, this bundle
-  always derives `token_url` from `base_url` and drops the standalone override. Documented
-  config-surface narrowing — the derived value matches legacy's own default, and no caller who
-  relies on the default token endpoint is affected; only the (rarely used) explicit override is
-  dropped.
-- **Dynamic conformance is skipped for this bundle** (`metadata.json`'s `conformance.skip_dynamic`):
-  `token_url`'s derivation from `config.base_url` resolves, under conformance's synthetic non-secret
-  config value, to an unreachable non-URL (`synthetic-conformance-value/backstage/oauth/token`), so
-  the OAuth token exchange fails before any declarative stream/check request is ever issued. Static
-  checks (spec/schema validity, interpolation resolution, docs/fixtures presence, secret redaction)
-  still run and pass. This bundle has no Tier-2 `AuthHook` (auth is fully declarative
-  `oauth2_client_credentials`), so there is no `paritytest/taboola` package for this wave; the
-  read/pagination/schema-projection shape is proven by structural review against legacy
-  `internal/connectors/taboola` instead — the same documented precedent as dwolla, clazar, and
-  sendpulse.
-- Full Taboola Backstage surface (campaign items, reports, audiences, creative previews) is out of
-  scope for this wave; see `api_surface.json`'s `excluded: {category: out_of_scope}` entries.
-- `metadata.json` declares no `rate_limit` block: legacy enforces no client-side rate limiting for
-  Taboola, so none is added here (matching legacy's real, lack-of, throttling behavior).
+- Batch defaults: read_page_size=100.
+- API coverage includes 1 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=4.

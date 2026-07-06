@@ -1,126 +1,115 @@
 # Overview
 
-Track PMS is a wave2 fan-out declarative-HTTP migration, expanded in Pass B against Track PMS's
-published per-domain OpenAPI specs (`https://developer.trackhs.com/reference`, fetched 2026-07-03 —
-see `api_surface.json`; the real API is a very large multi-domain surface — PMS reservations/
-units/owners, CRM, channel, guest-communications, system — comparable in scope to GitHub's REST
-API). It reads reservations, guests, units, owners, CRM contacts, and unit types
-(`GET https://api.trackhs.com/...`), and writes create/update mutations for reservations, units,
-owners, and contacts. This bundle is migrated at capability parity from
-`internal/connectors/track-pms` (the hand-written `trackpms` package it replaces) for its original
-4 read streams; the legacy package stays registered and unchanged until wave6's registry flip, and
-never implemented any write action or the 2 new streams (`contacts`, `unit_types`) — those are new
-capability, not a parity port. **Two significant pre-existing legacy/real-API discrepancies were
-discovered during this research** — see Known limits.
+Reads and writes Track PMS reservations, guests, units, owners, CRM contacts, and unit types through
+the Track PMS API.
+
+Readable streams: `reservations`, `guests`, `units`, `owners`, `contacts`, `unit_types`.
+
+Write actions: `create_reservation`, `create_unit`, `update_unit`, `create_owner`, `update_owner`,
+`create_contact`, `update_contact`, `delete_contact`.
+
+Service API documentation: https://developer.trackhs.com/reference.
 
 ## Auth setup
 
-Provide a Track PMS API access token via the `access_token` secret; it is sent as a Bearer token
-(`Authorization: Bearer <access_token>`) and is never logged, matching legacy's
-`connsdk.Bearer(token)` (`track_pms.go:146`). `base_url` defaults to `https://api.trackhs.com` and
-may be overridden for tests/proxies.
+Connection fields:
+
+- `access_token` (required, secret, string); Track PMS API access token, sent as a Bearer token
+  (Authorization: Bearer <access_token>). Never logged.
+- `base_url` (optional, string); default `https://api.trackhs.com`; format `uri`; Track PMS API base
+  URL override for tests or proxies.
+
+Secret fields are redacted in logs and write previews: `access_token`.
+
+Default configuration values: `base_url=https://api.trackhs.com`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.access_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/reservations`.
 
 ## Streams notes
 
-All four streams (`reservations`, `guests`, `units`, `owners`) are `page_number`-paginated list
-endpoints using `limit`/`page` query parameters (legacy's `harvest` function, `track_pms.go:87-119`),
-records extracted from a top-level key matching the resource name. Pagination is declared with
-`page_size: 100` and `max_pages: 1`, matching legacy's own `defaultPageSize`/`defaultMaxPages`
-constants (`track_pms.go:19-21`) exactly — legacy only fetches beyond one page when `max_pages`
-is explicitly configured to a larger number, `"all"`, or `"unlimited"` (`track_pms.go:170-183`).
-`reservations` declares `arrival_date` as its `x-cursor-field` for manifest-surface parity; legacy
-never actually filters or advances reads by it (no `incremental` block on legacy's own reservation
-read path), so no `incremental` block is declared here either — matching legacy's real full-refresh
-behavior.
-Legacy accepts alternate wire keys in its fixed record mappers; this bundle mirrors them with typed
-coalesce computed fields: `confirmation_number` falls back to `confirmationNumber`, `arrival_date`
-falls back to `arrivalDate`, guest/owner `name` falls back to `full_name`, and unit `name` falls
-back to `unit_name`.
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 100; maximum 1 page(s).
 
-**New Pass B streams** (real documented paths — no legacy precedent, so these use the CURRENT
-documented shape rather than reproducing any legacy convention):
-
-- `contacts` — `GET /crm/contacts`, the real modern CRM contact resource (see Known limits for why
-  this is distinct from legacy's `guests` stream). Paginated `page_number` (`page`/`size` query
-  params, `page_size: 100`, no `max_pages` cap — genuinely unbounded, matching the real API's own
-  contract). Records live at `_embedded.contacts` (Track PMS's real API wraps every list response
-  in a HAL-style `_embedded` envelope — see Known limits). `computed_fields` renames every
-  camelCase field (`firstName`, `primaryEmail`, `isVip`, etc.) to this bundle's snake_case schema.
-- `unit_types` — `GET /pms/units/types`, the unit-type taxonomy (bed count, occupancy, node/lodging
-  assignment) each real unit belongs to. Same `page_number`/`_embedded.units`/`computed_fields`
-  shape as `contacts`.
+- `reservations`: GET `/reservations` - records path `reservations`; page-number pagination; page
+  parameter `page`; size parameter `limit`; starts at 1; page size 100; maximum 1 page(s); computed
+  output fields `arrival_date`, `confirmation_number`.
+- `guests`: GET `/guests` - records path `guests`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 100; maximum 1 page(s); computed output fields
+  `name`.
+- `units`: GET `/units` - records path `units`; page-number pagination; page parameter `page`; size
+  parameter `limit`; starts at 1; page size 100; maximum 1 page(s); computed output fields `name`.
+- `owners`: GET `/owners` - records path `owners`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 100; maximum 1 page(s); computed output fields
+  `name`.
+- `contacts`: GET `/crm/contacts` - records path `_embedded.contacts`; page-number pagination; page
+  parameter `page`; size parameter `size`; starts at 1; page size 100; computed output fields
+  `cell_phone`, `created_at`, `first_name`, `home_phone`, `is_owner_contact`, `is_vip`, `last_name`,
+  `postal_code`, `primary_email`, `secondary_email`, `street_address`, `updated_at`, `work_phone`.
+- `unit_types`: GET `/pms/units/types` - records path `_embedded.units`; page-number pagination;
+  page parameter `page`; size parameter `size`; starts at 1; page size 100; computed output fields
+  `created_at`, `is_active`, `is_bookable`, `lodging_type_id`, `max_occupancy`, `node_id`,
+  `short_name`, `type_code`, `updated_at`.
 
 ## Write actions & risks
 
-**New Pass B capability — legacy is entirely read-only** (legacy's `Write` unconditionally returns
-`connectors.ErrUnsupportedOperation`). `capabilities.write` is now `true` and `writes.json` declares
-7 actions against the REAL documented `/pms/...`/`/crm/...` paths (not legacy's unprefixed
-`/reservations`/`/units`/`/owners` paths — see Known limits):
+Overall write risk: external mutation of Track PMS reservations, units, owners, and CRM contacts; no
+destructive-admin or elevated-scope actions modeled.
 
-- `create_reservation` (`POST /pms/reservations`; required `unitId`/`arrivalDate`/`departureDate`
-  — modeled from Track PMS's own `reservation.request.v1` schema).
-- `create_unit`/`update_unit` (`.../pms/units[/{{ record.id }}]`).
-- `create_owner`/`update_owner` (`.../pms/owners[/{{ record.id }}]`; update uses `PATCH`, matching
-  the real API's documented "Update Owner" verb).
-- `create_contact`/`update_contact`/`delete_contact` (`.../crm/contacts[/{{ record.id }}]`; update
-  uses `PATCH` — the real API also documents an equivalent `PUT` variant, excluded in
-  `api_surface.json` as `duplicate_of` since this bundle's per-record write model needs only one
-  update verb per resource).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Every write's `record_schema` models a practical field subset (the required fields plus the most
-commonly-set optional ones), not every property the real API's request schemas document — Track
-PMS's real create/update payloads run to 20-80+ optional properties per resource (unit creation
-alone documents dozens of amenity/policy/tax fields); modeling every one is a distinct, larger
-follow-on effort, not a Pass B blocker (every field this bundle DOES model is real and verified
-against the published OpenAPI spec, never guessed). See `api_surface.json` for the full accounting
-of every excluded sub-resource write (payment plans, fees, access codes, owner statements,
-fractional ownership, and the many admin-taxonomy configuration endpoints).
+- `create_reservation`: POST `/pms/reservations` - kind `create`; body type `json`; required record
+  fields `unitId`, `arrivalDate`, `departureDate`; accepted fields `arrivalDate`, `contactId`,
+  `departureDate`, `guaranteePolicyId`, `isTaxable`, `notes`, `occupants`, `rateTypeId`,
+  `reservationTypeId`, `status`, `unitId`; risk: creates a new guest reservation and blocks the
+  unit's availability for the given date range; external mutation, approval required.
+- `create_unit`: POST `/pms/units` - kind `create`; body type `json`; required record fields `name`;
+  accepted fields `longDescription`, `maxPets`, `minimumAgeLimit`, `name`, `nodeId`, `notes`,
+  `phone`, `shortDescription`, `shortName`, `unitTypeId`, `websiteUrl`; risk: creates a new rentable
+  unit/property record; external mutation, approval required.
+- `update_unit`: PUT `/pms/units/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; body fields `name`, `shortName`, `shortDescription`, `longDescription`, `notes`, `maxPets`,
+  `minimumAgeLimit`, `phone`, `websiteUrl`, `nodeId`, and 1 more; required record fields `id`;
+  accepted fields `id`, `longDescription`, `maxPets`, `minimumAgeLimit`, `name`, `nodeId`, `notes`,
+  `phone`, `shortDescription`, `shortName`, `unitTypeId`, `websiteUrl`; risk: mutates an existing
+  unit's descriptive/configuration fields; a changed nodeId or unitTypeId affects rate/availability
+  grouping for future reservations.
+- `create_owner`: POST `/pms/owners` - kind `create`; body type `json`; required record fields
+  `name`; accepted fields `country`, `email`, `isActive`, `locality`, `name`, `notes`, `phone`,
+  `postal`, `region`, `streetAddress`; risk: creates a new property owner record; external mutation,
+  approval required.
+- `update_owner`: PATCH `/pms/owners/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; body fields `name`, `isActive`, `streetAddress`, `locality`, `region`, `postal`, `country`,
+  `phone`, `email`, `notes`; required record fields `id`; accepted fields `country`, `email`, `id`,
+  `isActive`, `locality`, `name`, `notes`, `phone`, `postal`, `region`, `streetAddress`; risk:
+  mutates an existing owner's contact/status fields; setting isActive:false affects that owner's
+  active-unit reporting.
+- `create_contact`: POST `/crm/contacts` - kind `create`; body type `json`; required record fields
+  `firstName`, `lastName`; accepted fields `cellPhone`, `country`, `firstName`, `homePhone`,
+  `isVip`, `lastName`, `locality`, `notes`, `postalCode`, `primaryEmail`, `region`,
+  `secondaryEmail`, `streetAddress`; risk: creates a new CRM contact (guest, lead, or owner-linked
+  person record); external mutation, approval required. Tremendous-adjacent restricted fields
+  (taxId, paymentType, ACH banking fields) are not modeled - see docs.md Known limits.
+- `update_contact`: PATCH `/crm/contacts/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; body fields `firstName`, `lastName`, `primaryEmail`, `secondaryEmail`, `homePhone`,
+  `cellPhone`, `streetAddress`, `locality`, `region`, `postalCode`, and 3 more; required record
+  fields `id`; accepted fields `cellPhone`, `country`, `firstName`, `homePhone`, `id`, `isVip`,
+  `lastName`, `locality`, `notes`, `postalCode`, `primaryEmail`, `region`, `secondaryEmail`,
+  `streetAddress`; risk: mutates an existing CRM contact's identity/contact-method fields.
+- `delete_contact`: DELETE `/crm/contacts/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: permanently deletes a CRM contact; irreversible, and may disassociate the
+  contact from any reservations that reference it.
 
 ## Known limits
 
-- **Legacy's `/reservations`, `/guests`, `/units`, `/owners` paths and bare-top-level-key response
-  shape do not match Track PMS's currently documented API.** The real, currently-published Track
-  PMS OpenAPI specs (fetched 2026-07-03) document these resources at `/pms/reservations`,
-  `/crm/contacts` (not `/guests` at all — no `/guests` path exists anywhere in the current docs),
-  `/pms/units`, and `/pms/owners`, and EVERY real list response wraps its records in a HAL-style
-  envelope (`_embedded.<resource>`, e.g. `{"_embedded":{"reservations":[...]}, "page":1,
-  "page_count":5, ...}`) rather than the bare top-level key (`{"reservations":[...]}`) legacy's
-  `harvest` function (`track_pms.go:87-119`, `connsdk.RecordsAt(resp.Body, spec.recordsPath)` with
-  `recordsPath` set to the bare resource name) assumes. This bundle reproduces legacy's exact
-  path/response-shape assumptions UNCHANGED for the 4 legacy-parity streams (parity-preserving per
-  the meta-rule — this is not a Pass B regression, legacy itself has apparently drifted from Track
-  PMS's real current API surface, an independent pre-existing issue this research surfaced but did
-  not introduce). The 2 NEW Pass B streams (`contacts`, `unit_types`) have no legacy precedent, so
-  they correctly use the REAL current paths and the real `_embedded.<resource>` records path from
-  the start. Reconciling the 4 legacy streams against Track PMS's real current API is a distinct,
-  deliberate parity-deviation decision for a future pass, not a Pass B capability-expansion change.
-- **Legacy's Bearer-token auth does not match Track PMS's currently documented authentication.**
-  Track PMS's own authentication docs (`https://developer.trackhs.com/docs/authentication`)
-  describe a multi-tenant API (`https://{customer}.trackhs.com/api`) authenticated with HTTP Basic
-  Auth (an API key/secret pair as username/password) or HMAC request signing — not a Bearer token
-  against a single shared `api.trackhs.com` host, which is what legacy (`track_pms.go:146`,
-  `connsdk.Bearer(token)`) and this bundle's `base.auth` both implement. This is left unchanged for
-  the identical parity-preserving reason as the path/response-shape discrepancy above — flagged
-  here as a significant finding for whoever next reconciles this connector's auth against the real
-  API, not silently corrected mid-pass.
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config-driven
-  overrides (`pageSize`/`maxPages` helpers, `track_pms.go:167-183`, `page_size` bounded 1-500 via
-  `boundedInt`, `max_pages` accepting a literal integer or the sentinels `"all"`/`"unlimited"` for
-  unbounded). The engine's `page_number` paginator's `PageSize`/`MaxPages` fields are plain static
-  integers in `streams.json` — never templated against a runtime config value (`bundle.go`'s
-  `PaginationSpec`; `paginate.go`'s constructor reads them as fixed ints) — so neither can be wired
-  to a config override at all. This bundle therefore declares legacy's own DEFAULTS
-  (`page_size: 100`, `max_pages: 1`) as fixed pagination values and does not declare `page_size`/
-  `max_pages` in `spec.json` (F6, REVIEW.md precedent: a declared-but-unwireable config key is
-  worse than an absent one). Because `max_pages: 1` genuinely caps every read at one page (matching
-  legacy's own default), this bundle ships single-page fixtures for every stream, following
-  searxng's identical `max_pages: 1` + single-page-fixture precedent
-  (`internal/connectors/defs/searxng/fixtures`) — proving 2-page pagination termination would
-  require the paginator to fetch a page this connector's declared configuration can never actually
-  request.
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
-  when `config.mode == "fixture"`) stamps a static `connector: "track-pms"` marker and a `fixture:
-  true` flag onto two synthesized records per stream (`track_pms.go:121-135`). Neither is part of
-  the LIVE record shape; this bundle's schemas and fixtures target the live path only. The engine's
-  own conformance/fixture-replay harness provides the credential-free test affordance this bundle
-  needs, so no fixture-mode equivalent is needed here.
+- Batch defaults: read_page_size=100.
+- API coverage includes 6 stream-backed endpoint group(s), 8 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=6, destructive_admin=1, duplicate_of=6, out_of_scope=206,
+  requires_elevated_scope=46.

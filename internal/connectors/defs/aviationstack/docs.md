@@ -1,82 +1,66 @@
 # Overview
 
-Aviationstack is a read-only declarative-HTTP bundle migrated from
-`internal/connectors/aviationstack` (the hand-written legacy connector, which stays registered and
-unchanged until wave6's registry flip). It reads flight records and aviation reference data
-(airlines, airports, airplanes, countries) through the aviationstack REST API.
+Reads aviationstack flights and aviation reference data (airlines, airports, airplanes, countries)
+through the aviationstack REST API. Read-only.
+
+Readable streams: `flights`, `airlines`, `airports`, `airplanes`, `countries`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://aviationstack.com/documentation.
 
 ## Auth setup
 
-Provide an aviationstack API access key via the `access_key` secret. It is sent as the
-`access_key` query parameter (`{"mode": "api_key_query", "param": "access_key", "value": "{{
-secrets.access_key }}"}`), matching legacy's `connsdk.APIKeyQuery("access_key", key)` exactly.
+Connection fields:
+
+- `access_key` (required, secret, string); Aviationstack API access key. Sent as the access_key
+  query parameter; never logged.
+- `base_url` (optional, string); default `https://api.aviationstack.com/v1`; format `uri`;
+  Aviationstack API base URL override for tests or proxies.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `access_key`.
+
+Default configuration values: `base_url=https://api.aviationstack.com/v1`.
+
+Authentication behavior:
+
+- API key authentication in query parameter `access_key` using `secrets.access_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/countries` with query `limit`=`1`.
 
 ## Streams notes
 
-All 5 streams (`flights`, `airlines`, `airports`, `airplanes`, `countries`) share the identical
-`{pagination:{...}, data:[...]}` envelope and `offset_limit` pagination (`limit`/`offset` query
-params, short-page stop) — matching legacy's `harvest` loop, which advanced `offset` by
-`page_size` until a short page (or the reported `pagination.total`) was reached. `flights` is the
-only nested-object stream: its raw `departure`/`arrival`/`airline`/`flight` sub-objects are
-flattened into top-level fields (`departure_airport`, `airline_name`, `flight_iata`, etc.) via
-`computed_fields` bare `{{ record.<nested.path> }}` references — a computed field whose source
-path is absent (nil parent) on a given record is silently skipped for that record, matching
-legacy's own `nestedField` nil-safe helper. The 4 reference-data streams
-(`airlines`/`airports`/`airplanes`/`countries`) need no `computed_fields` at all: every kept field
-name already matches the raw API key, so plain schema projection suffices.
+Default pagination: offset/limit pagination; offset parameter `offset`; limit parameter `limit`;
+page size 100.
 
-`flights` has a composite primary key (`["flight_date", "flight_iata"]`, no singular `id` field at
-all) and cursors on `flight_date`; the 4 reference-data streams key on a stable string `id` and
-declare no incremental cursor (legacy exposes no cursor field for them either).
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-Legacy's `page_size` (config-overridable, default 100, max 100) and `max_pages` config values are
-**not wired into this bundle's `spec.json`**: the engine's `offset_limit` paginator
-(`PaginationSpec.PageSize`/`MaxPages`) reads a static JSON int declared once in `streams.json`'s
-`base.pagination` block, with no per-request template/config-driven override mechanism at all
-(confirmed by `internal/connectors/engine/parity_searxng_test.go`'s own comment: "`PaginationSpec.
-MaxPages` is a static int with no template support") — this is the exact same engine-shape gap
-searxng's golden already documented and resolved by simply not declaring the dead config (F6,
-`docs/migration/conventions.md` searxng worked example). `streams.json`'s `base.pagination.page_size`
-is set to legacy's real production default, `100` (legacy: `defaultPageSize = 100`,
-`maxPageSize = 100`) — this is the actual value a live deployment's paginator sends; it is not a
-fixture convenience. All 5 streams, including `airlines`, use this same base pagination block
-end-to-end (no stream-level override) — `airlines` previously declared a stream-level
-`page_size: 2` override that leaked a fixture-sized page size into live config; that override has
-been removed so `airlines` reads legacy's true 100-record page size like every other stream. Its
-2-page conformance fixture (`fixtures/streams/airlines/{page_1,page_2}.json`) is sized to match:
-page 1 returns a full 100-record page (so the paginator continues), page 2 returns the remainder.
+- `flights`: GET `/flights` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100; incremental cursor `flight_date`; formatted as
+  `rfc3339`; computed output fields `airline_iata`, `airline_name`, `arrival_airport`,
+  `arrival_iata`, `arrival_scheduled`, `departure_airport`, `departure_iata`, `departure_scheduled`,
+  `flight_iata`, `flight_icao`, `flight_number`.
+- `airlines`: GET `/airlines` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100.
+- `airports`: GET `/airports` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100.
+- `airplanes`: GET `/airplanes` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100.
+- `countries`: GET `/countries` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 100.
 
 ## Write actions & risks
 
-None. Aviationstack is a read-only data source in both legacy and this bundle
-(`capabilities.write: false`, no `writes.json`).
+This connector is read-only. Read behavior: external aviationstack API read of flight and aviation
+reference data.
 
 ## Known limits
 
-- `page_size`/`max_pages` config-driven overrides are not implemented (see Streams notes above) —
-  an `ENGINE_GAP`-class limitation of the `offset_limit` paginator's static (non-templated)
-  `PageSize`/`MaxPages` fields, not a scope-narrowing choice specific to this connector. A live
-  read always requests pages of the bundle's fixed page size; there is no way to request larger or
-  smaller pages, or a hard page-count cap, without an engine change.
-- **Pass B full-surface research**: aviationstack's own pricing page (aviationstack.com/pricing)
-  confirms only real-time flights ships on the Free plan — `/v1/routes` (airline routes),
-  `/v1/flightsFuture` (future flight schedules), `/v1/historical` (historical flight status), and
-  `/v1/timetable` are all explicitly gated to the paid Basic tier and above, hence
-  `requires_elevated_scope` in `api_surface.json`. `/v1/cities`, `/v1/taxes`, and
-  `/v1/aircraft_types` are additional reference-data resources this migration had no paid-tier
-  account to verify live field shapes against and which were never part of legacy's own covered
-  surface (`streamEndpoints` in `internal/connectors/aviationstack/streams.go` lists exactly the 5
-  streams this bundle already implements) — triaged `out_of_scope` rather than assumed covered.
-  aviationstack's documented surface has no mutation endpoint of any kind (GET-only throughout);
-  `capabilities.write` stays `false`, no `writes.json` — this is the full extent of the real
-  surface, not a scoping choice.
-- **Check request now sends legacy's `limit=1` query param.** Legacy's `Check` sends
-  `GET /countries?limit=1` (a bounded read of the small countries reference list, used only to
-  confirm auth/connectivity without pulling a full page). A prior revision of this bundle omitted
-  the `limit` param because `RequestSpec` (`internal/connectors/engine/bundle.go`, used by
-  `base.check`) had no `query` field at the time; the engine gained `RequestSpec.Query` (the same
-  `engine.QueryParam` dialect `stream.Query` uses) since then, and `read.go`'s `Check()` now builds
-  and sends it via `buildCheckQuery`. `streams.json`'s `base.check` is now `{"method": "GET",
-  "path": "/countries", "query": {"limit": "1"}}`, matching legacy exactly. This ENGINE_GAP is
-  RESOLVED, not still open — see `docs/migration/conventions.md` §3 for the general
-  `RequestSpec.Query` mechanism.
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=3, requires_elevated_scope=4.

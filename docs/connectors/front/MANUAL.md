@@ -12,20 +12,51 @@ SYNOPSIS
 DESCRIPTION
   Reads Front contacts, conversations, inboxes, tags, teammates, and channels through the Front Core REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  page_limit
+  api_key (secret)
+
+ETL STREAMS
+  contacts:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), description(), id(), is_private(), is_spammer(), name(), updated_at()
+  conversations:
+    primary key: id
+    cursor: last_message_at
+    fields: created_at(), id(), is_private(), last_message_at(), status(), subject(), waiting_since()
+  inboxes:
+    primary key: id
+    fields: custom_fields(), id(), is_private(), is_public(), name()
+  tags:
+    primary key: id
+    fields: created_at(), highlight(), id(), is_private(), is_visible_in_conversation_lists(), name(), updated_at()
+  teammates:
+    primary key: id
+    fields: email(), first_name(), id(), is_admin(), is_available(), is_blocked(), last_name(), username()
+  channels:
+    primary key: id
+    fields: address(), id(), is_private(), is_valid(), name(), send_as(), type()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Front API read of contact, conversation, inbox, tag, teammate, and channel data
+  approval: none; read-only, no reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

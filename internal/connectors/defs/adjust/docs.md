@@ -1,66 +1,62 @@
 # Overview
 
-Adjust is a Tier-1 declarative-HTTP migration (catalog-labeled native/destination — that label is
-WRONG: legacy `internal/connectors/adjust/adjust.go` is a `connsdk.Requester`-based, read-only
-report reader with no write actions and no protocol-native/SDK dependency, so it belongs at
-Tier 1, not Tier 3 or a destination). It reads Adjust Report Service report rows for configured
-dimensions and metrics through the documented `reports-service/report` endpoint. This bundle is
-engine-vs-legacy parity-tested against `internal/connectors/adjust` (the hand-written connector it
-migrates); the legacy package stays registered and unchanged until wave6's registry flip.
+Reads Adjust report-service report rows for configured dimensions and metrics. Read-only.
+
+Readable streams: `reports`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://help.adjust.com/en/article/reports-endpoint.
 
 ## Auth setup
 
-Provide an Adjust Report Service API token via the `api_token` secret; it is used only for Bearer
-auth (`Authorization: Bearer <api_token>`) and is never logged.
+Connection fields:
+
+- `additional_metrics` (optional, string); Optional comma-separated list of additional Adjust
+  metrics sent as additional_metrics.
+- `api_token` (required, secret, string); Adjust Report Service API token. Used only for Bearer
+  auth; never logged.
+- `base_url` (optional, string); default `https://automate.adjust.com`; format `uri`; Adjust Report
+  Service base URL override for tests or proxies.
+- `dimensions` (optional, string); default `country`; Comma-separated list of Adjust report
+  dimensions (e.g. country,app). Defaults to country.
+- `end_date` (optional, string); format `date`; Report period upper bound (YYYY-MM-DD), sent as the
+  end of date_period. Defaults to start_date when unset.
+- `metrics` (optional, string); default `installs`; Comma-separated list of Adjust report metrics
+  (e.g. installs,clicks,cost). Defaults to installs.
+- `mode` (optional, string).
+- `start_date` (optional, string); format `date`; Report period lower bound (YYYY-MM-DD), sent as
+  the start of date_period.
+
+Secret fields are redacted in logs and write previews: `api_token`.
+
+Default configuration values: `base_url=https://automate.adjust.com`, `dimensions=country`,
+`metrics=installs`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/reports-service/report` with query `limit`=`1`.
 
 ## Streams notes
 
-The single `reports` stream issues `GET /reports-service/report` with `dimensions` and `metrics`
-query parameters (each a comma-separated list, defaulting to `country` and `installs`
-respectively — matching legacy's `csvOrDefault` defaults). An optional `additional_metrics` config
-value is sent verbatim when set, omitted entirely otherwise (`omit_when_absent`). When both
-`start_date` and `end_date` are configured, a `date_period` query parameter is sent as
-`{{ start_date }}:{{ end_date }}` (legacy's `date_period` range format); when either is unset, the
-parameter is omitted entirely rather than sent malformed (also `omit_when_absent` — the underlying
-template hard-errors on either absent key, and the object form's absence-tolerance catches it).
+Default pagination: cursor pagination; cursor parameter `page`; next token from `next_page`.
 
-Pagination follows Adjust's `next_page` convention: `pagination.type: cursor` with
-`token_path: next_page` reads the next page number straight from the response body and resends it
-as the `page` query parameter; pagination stops when `next_page` is absent or empty, matching
-legacy's `strings.TrimSpace(next) == ""` stop condition exactly.
-
-Each raw report row carries the row's dimension/metric values nested under `dimensions`/`metrics`
-sub-objects (Adjust's real wire shape); legacy's `reportRecord` flattens both objects' keys onto
-the top-level record and drops the `dimensions`/`metrics` wrapper keys themselves. This bundle
-reproduces that flattening via `computed_fields`, each of which reaches into the raw nested path
-(`record.dimensions.date`, `record.metrics.installs`, etc.) and schema-mode projection then keeps
-only those declared top-level fields — the identical effective output legacy produces for any
-configuration using the 6 fields below.
+- `reports`: GET `/reports-service/report` - records path `rows`; query `additional_metrics` from
+  template `{{ config.additional_metrics }}`, omitted when absent; `date_period` from template `{{
+  config.start_date }}:{{ config.end_date }}`, omitted when absent; `dimensions`=`{{
+  config.dimensions }}`; `metrics`=`{{ config.metrics }}`; cursor pagination; cursor parameter
+  `page`; next token from `next_page`; computed output fields `app`, `clicks`, `cost`, `country`,
+  `date`, `installs`.
 
 ## Write actions & risks
 
-None. This is a read-only source connector — `capabilities.write` is `false` and `Write` always
-returns `ErrUnsupportedOperation`, matching legacy exactly.
+This connector is read-only. Read behavior: external Adjust report-service read of configured
+dimensions/metrics.
 
 ## Known limits
 
-- Legacy's `reportRecord` flattens **every** key found under the raw `dimensions`/`metrics`
-  objects, whatever dimensions/metrics the caller configured (fully dynamic w.r.t.
-  `cfg.Config["dimensions"]`/`cfg.Config["metrics"]`). This bundle's `computed_fields` instead
-  declares a **fixed** set of 6 flattened fields (`date`, `country`, `app`, `installs`, `clicks`,
-  `cost`) — the same fixed field set legacy's own `Catalog()` advertises. A caller who configures a
-  dimension/metric outside this set (e.g. `os_name` or `revenue`) will have that field silently
-  dropped by schema projection here, whereas legacy would have emitted it dynamically. This is a
-  documented scope narrowing (the dialect's `computed_fields` map is declared statically per
-  stream, with no mechanism to flatten an arbitrary caller-configured key set) — not a data
-  distortion for the catalog-declared default configuration (`dimensions=country`,
-  `metrics=installs`), which is fully reproduced.
-- Legacy's `reportQuery` also recognized `ingest_start`/`until` as aliases for `start_date`/
-  `end_date`. This bundle's `spec.json` only declares `start_date`/`end_date` — a `spec.json`
-  property with no template consuming it is dead config (per this repo's dead-config rule), and a
-  second alias pair adds no expressive power the primary pair lacks. Both mean lower/upper Adjust
-  report period bounds.
-- Adjust's app automation, campaign, device, S2S, blocklist, deep-link, and export/report-job
-  endpoints are not implemented here. They are separate operational surfaces from the JSON report
-  row endpoint this connector is scoped to, and legacy never implemented them either; see
-  `api_surface.json`'s scope note.
+- API coverage includes 1 stream-backed endpoint group(s).

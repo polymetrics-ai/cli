@@ -1,4 +1,4 @@
-// Package ashby bridges the ashby quarantine bundle to the legacy connector.
+// Package ashby bridges the ashby quarantine bundle to the native connector.
 package ashby
 
 import (
@@ -6,21 +6,21 @@ import (
 	"fmt"
 
 	"polymetrics.ai/internal/connectors"
-	legacy "polymetrics.ai/internal/connectors/ashby"
 	"polymetrics.ai/internal/connectors/engine"
+	native "polymetrics.ai/internal/connectors/native/ashby"
 )
 
 func init() {
 	engine.RegisterHooks("ashby", func() engine.Hooks { return New() })
 }
 
-// Hooks implements CheckHook and StreamHook by delegating to the legacy connector.
+// Hooks implements CheckHook and StreamHook by delegating to the native connector.
 type Hooks struct {
 	Connector connectors.Connector
 }
 
-// New returns a hook set backed by the legacy ashby connector.
-func New() engine.Hooks { return Hooks{Connector: legacy.New()} }
+// New returns a hook set backed by the native ashby connector.
+func New() engine.Hooks { return Hooks{Connector: native.New()} }
 
 func (h Hooks) ConnectorName() string { return "ashby" }
 
@@ -37,15 +37,15 @@ func (h Hooks) connector() connectors.Connector {
 	if h.Connector != nil {
 		return h.Connector
 	}
-	return legacy.New()
+	return native.New()
 }
 
-// Check delegates to the legacy connector's Check implementation.
+// Check delegates to the native connector's Check implementation.
 func (h Hooks) Check(ctx context.Context, cfg connectors.RuntimeConfig, rt *engine.Runtime) (bool, error) {
 	return true, h.connector().Check(ctx, cfg)
 }
 
-// ReadStream delegates to the legacy connector's Read implementation.
+// ReadStream delegates to the native connector's Read implementation.
 func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
 	if req.Stream == "" {
 		req.Stream = stream.Name

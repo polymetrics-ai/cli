@@ -1,122 +1,131 @@
 # Overview
 
-You Need A Budget (YNAB) is a declarative bundle migrated from
-`internal/connectors/you-need-a-budget-ynab` (the hand-written legacy connector, which stays
-registered and unchanged until wave6's registry flip). It reads YNAB budgets, accounts,
-categories, payees, months, transactions, and scheduled transactions, and writes
-transaction/account/category/payee/scheduled-transaction mutations, through the YNAB REST API v1.
+Reads YNAB budgets, accounts, categories, payees, months, transactions, and scheduled transactions,
+and writes transaction/account/category/payee/scheduled-transaction mutations through the YNAB REST
+API.
+
+Readable streams: `budgets`, `accounts`, `transactions`, `categories`, `payees`, `months`,
+`scheduled_transactions`.
+
+Write actions: `create_transaction`, `update_transaction`, `delete_transaction`, `create_account`,
+`create_category`, `update_category`, `update_month_category`, `create_payee`, `update_payee`,
+`create_scheduled_transaction`, `delete_scheduled_transaction`.
+
+Service API documentation: https://api.ynab.com/.
 
 ## Auth setup
 
-Provide a YNAB personal access token via the `api_key` secret; it is used only for Bearer auth
-(`Authorization: Bearer <api_key>`) and is never logged. `budget_id` (config, optional) scopes the
-`accounts`/`categories`/`payees`/`months`/`transactions`/`scheduled_transactions` streams and every
-write action to a specific budget, and defaults to YNAB's own `last-used` budget alias when unset
-(matching legacy's `budgetPath` fallback exactly) via `spec.json`'s `"default": "last-used"`
-materialization.
+Connection fields:
+
+- `api_key` (required, secret, string); YNAB personal access token, sent as a Bearer token
+  (Authorization: Bearer <api_key>). Never logged.
+- `base_url` (optional, string); default `https://api.ynab.com/v1`; format `uri`; YNAB API base URL
+  override for tests or proxies.
+- `budget_id` (optional, string); default `last-used`; YNAB budget ID scoping the 'accounts' and
+  'transactions' streams; defaults to YNAB's 'last-used' budget alias.
+- `limit` (optional, string); Optional 'limit' query param passed through verbatim on
+  'accounts'/'transactions' reads.
+- `mode` (optional, string).
+- `month` (optional, string); YYYY-MM-01 month identifier (or the 'current' alias) required by the
+  'months' stream's per-month detail path; also accepted by scheduled-transaction reads'
+  since_date-equivalent narrowing is not applicable here (months has no since_date param).
+- `since_date` (optional, string); format `date`; Optional YYYY-MM-DD lower bound passed as the
+  'since_date' query param on 'accounts'/'transactions' reads.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.ynab.com/v1`, `budget_id=last-used`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/budgets`.
 
 ## Streams notes
 
-All 7 streams share YNAB's `{"data": {...}}` response envelope. `budgets` (`GET /budgets`, records
-at `data.budgets`) has no path parameters. The other 6 streams are scoped to `budget_id`,
-substituted into the path (urlencoded by default): `accounts` (`data.accounts`), `categories`
-(`data.category_groups` — YNAB's categories endpoint returns category GROUPS, each with a nested
-`categories[]` array; this bundle publishes one record per group, matching the API's own top-level
-list shape, not one record per leaf category), `payees` (`data.payees`), `months`
-(`data.months` — a `MonthSummary` list; the richer nested per-month `categories[]` breakdown is
-only on the single-month detail endpoint, excluded as `duplicate_of` per `api_surface.json`),
-`transactions` (`data.transactions`), and `scheduled_transactions`
-(`data.scheduled_transactions`).
+Default pagination: single request; no pagination.
 
-**`/budgets` vs `/plans` path naming**: YNAB renamed its primary documented resource path from
-`/budgets/{budget_id}` to `/plans/{plan_id}` in API v1.79.0 (2026-03-25), including renaming
-response keys (`budgets`→`plans`, `budget`→`plan`). The `/budgets/{budget_id}` paths remain fully
-functional as an undocumented backward-compatible alias returning the original response key names.
-This bundle deliberately keeps every path/response-key on the `/budgets` shape — matching legacy's
-own paths exactly (zero accepted-input behavior change) — rather than migrating to `/plans`, which
-would be a new-terminology adoption decision, not a mechanical parity port. Revisit if YNAB ever
-deprecates the alias outright.
-
-All 7 streams project in `"passthrough"` mode (every native YNAB field survives, matching legacy's
-`mapRecord`, which copies every raw key into the emitted record) plus per-stream `computed_fields`
-that alias legacy's derived convenience fields on top: `budgets`/`accounts`/`categories`/`payees`
-alias `updated_at` from each object's own most-recent-change-bearing field (`last_modified_on` for
-budgets/accounts; `name` is used as `categories`/`payees`' `updated_at` surrogate since neither
-`CategoryGroup` nor `Payee` publishes any modification timestamp at all — YNAB's API has no
-`updated_at`-shaped field on either resource; documented as a known limit below, unchanged
-scope-narrowing carried over from the pre-Pass-B bundle's identical treatment of `accounts`).
-`months` synthesizes both `id` and `updated_at` from the native `month` field (`MonthSummary` has
-no native `id` at all — `month`, e.g. `"2026-01-01"`, is its own natural key). `transactions`
-aliases `name` from `payee_name` and `updated_at` from `date`; `scheduled_transactions` aliases
-`name` from `payee_name` and `updated_at` from `date_next` (its nearest analogous
-recently-changed-shaped field, since scheduled transactions have no `last_modified_on` either).
-Primary key is `["id"]` for every stream except `months`, whose primary key is the computed `id`
-alias of `month` (no native `id` field exists on `MonthSummary`). No pagination is declared on any
-stream — legacy issues exactly one request per stream with no pager at all, matching the real
-YNAB API's own behavior (none of these list endpoints paginate; each returns its full collection in
-one response, bounded by `server_knowledge`-based delta sync which this bundle does not use).
-
-Optional `since_date` (YYYY-MM-DD) and `limit` config values are sent as query params on
-`budgets`/`accounts`/`transactions` reads via the opt-in optional-query dialect
-(`omit_when_absent: true`), matching legacy's `baseQuery`, which attaches both params
-unconditionally (including on the `budgets` request, where YNAB's API simply ignores them —
-legacy's own behavior, reproduced verbatim). `categories`/`payees`/`months`/
-`scheduled_transactions` are new Pass-B streams with no legacy analog, so they do not carry
-`since_date`/`limit` (YNAB's real API does not document either param for these 4 endpoints at all
-— `since_date` is `accounts`/`transactions`-specific server-side incremental filtering, and
-`categories`/`payees`/`months`/`scheduled_transactions` have no equivalent).
+- `budgets`: GET `/budgets` - records path `data.budgets`; query `limit` from template `{{
+  config.limit }}`, omitted when absent; `since_date` from template `{{ config.since_date }}`,
+  omitted when absent; computed output fields `updated_at`; emits passthrough records.
+- `accounts`: GET `/budgets/{{ config.budget_id }}/accounts` - records path `data.accounts`; query
+  `limit` from template `{{ config.limit }}`, omitted when absent; `since_date` from template `{{
+  config.since_date }}`, omitted when absent; computed output fields `updated_at`; emits passthrough
+  records.
+- `transactions`: GET `/budgets/{{ config.budget_id }}/transactions` - records path
+  `data.transactions`; query `limit` from template `{{ config.limit }}`, omitted when absent;
+  `since_date` from template `{{ config.since_date }}`, omitted when absent; computed output fields
+  `name`, `updated_at`; emits passthrough records.
+- `categories`: GET `/budgets/{{ config.budget_id }}/categories` - records path
+  `data.category_groups`; computed output fields `updated_at`; emits passthrough records.
+- `payees`: GET `/budgets/{{ config.budget_id }}/payees` - records path `data.payees`; computed
+  output fields `updated_at`; emits passthrough records.
+- `months`: GET `/budgets/{{ config.budget_id }}/months` - records path `data.months`; computed
+  output fields `id`, `updated_at`; emits passthrough records.
+- `scheduled_transactions`: GET `/budgets/{{ config.budget_id }}/scheduled_transactions` - records
+  path `data.scheduled_transactions`; computed output fields `name`, `updated_at`; emits passthrough
+  records.
 
 ## Write actions & risks
 
-10 write actions, all requiring approval (`capabilities.write: true`):
+Overall write risk: external mutation: creates/updates/deletes budget transactions, creates
+accounts/categories/payees/scheduled transactions, updates category names/goals and month-category
+budgeted amounts.
 
-- `create_transaction` / `update_transaction` / `delete_transaction` (`POST`/`PUT`/`DELETE
-  /budgets/{budget_id}/transactions[/{id}]`): creates, mutates, or deletes a single budget
-  transaction. `delete_transaction`'s `missing_ok_status: [404]` treats an already-deleted
-  transaction id as a successful (idempotent) delete.
-- `create_account` (`POST /budgets/{budget_id}/accounts`): creates a new budget account with an
-  opening balance. YNAB's API has no delete-account endpoint at all, so this write has no
-  companion delete action — irreversible via the API.
-- `create_category` / `update_category` (`POST`/`PATCH .../categories[/{id}]`): creates a category
-  within an existing category group, or renames/re-notes/re-goals an existing one.
-- `update_month_category` (`PATCH .../months/{month}/categories/{category_id}`): reassigns
-  (budgets) an amount to a category for one specific month — YNAB's actual "move money" primitive.
-- `create_payee` / `update_payee` (`POST`/`PATCH .../payees[/{id}]`): creates or renames a payee;
-  renaming also renames every transaction and the shared cross-app payee-matching history.
-- `create_scheduled_transaction` / `delete_scheduled_transaction` (`POST`/`DELETE
-  .../scheduled_transactions[/{id}]`): creates or deletes a recurring scheduled transaction that
-  auto-posts future budget transactions on its own cadence.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-All 10 actions use YNAB's own top-level wrapper-key request-body convention (`{"transaction":
-{...}}`, `{"account": {...}}`, `{"category": {...}}`, `{"payee": {...}}`,
-`{"scheduled_transaction": {...}}`) — the engine's write dialect has no nested-wrapper body
-construction primitive, so each action's `record_schema` declares the wrapper key itself as a
-required nested-object field, and the caller-supplied record already carries that shape
-(`body_type: json`'s default body-from-record-fields construction then emits it byte-for-byte; see
-teamwork's `create_project`/bitly's `create_qr_code.destination` for the identical sanctioned
-pattern, documented in `docs/migration/conventions.md`).
+- `create_transaction`: POST `/budgets/{{ config.budget_id }}/transactions` - kind `create`; body
+  type `json`; required record fields `transaction`; accepted fields `transaction`; risk: external
+  mutation; creates a new budget transaction; approval required. Body is wrapped under a top-level
+  "transaction" key (YNAB's own POST /budgets/{budget_id}/transactions convention) - the record
+  itself carries that wrapper, since the engine's write dialect sends record fields verbatim as the
+  JSON body with no nested-wrapper construction primitive (see teamwork/bitly precedent).
+- `update_transaction`: PUT `/budgets/{{ config.budget_id }}/transactions/{{ record.id }}` - kind
+  `update`; body type `json`; path fields `id`; required record fields `id`, `transaction`; accepted
+  fields `id`, `transaction`; risk: external mutation; updates an existing budget transaction
+  (amount, category, memo, cleared/approved status); approval required.
+- `delete_transaction`: DELETE `/budgets/{{ config.budget_id }}/transactions/{{ record.id }}` - kind
+  `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  missing records treated as success for status `404`; risk: irreversible external deletion; deletes
+  a budget transaction (YNAB marks it deleted rather than purging, but it disappears from active
+  budget totals); approval required.
+- `create_account`: POST `/budgets/{{ config.budget_id }}/accounts` - kind `create`; body type
+  `json`; required record fields `account`; accepted fields `account`; risk: external mutation;
+  creates a new budget account with an opening balance; approval required. This action cannot be
+  undone via the API (YNAB has no delete-account endpoint).
+- `create_category`: POST `/budgets/{{ config.budget_id }}/categories` - kind `create`; body type
+  `json`; required record fields `category`; accepted fields `category`; risk: external mutation;
+  creates a new budget category within a category group; approval required.
+- `update_category`: PATCH `/budgets/{{ config.budget_id }}/categories/{{ record.id }}` - kind
+  `update`; body type `json`; path fields `id`; required record fields `id`, `category`; accepted
+  fields `category`, `id`; risk: external mutation; renames/re-notes/re-goals an existing budget
+  category; approval required.
+- `update_month_category`: PATCH `/budgets/{{ config.budget_id }}/months/{{ record.month
+  }}/categories/{{ record.category_id }}` - kind `update`; body type `json`; path fields `month`,
+  `category_id`; required record fields `month`, `category_id`, `category`; accepted fields
+  `category`, `category_id`, `month`; risk: external mutation; reassigns (budgets) an amount to a
+  category for a specific month; approval required.
+- `create_payee`: POST `/budgets/{{ config.budget_id }}/payees` - kind `create`; body type `json`;
+  required record fields `payee`; accepted fields `payee`; risk: external mutation; creates a new
+  payee; approval required.
+- `update_payee`: PATCH `/budgets/{{ config.budget_id }}/payees/{{ record.id }}` - kind `update`;
+  body type `json`; path fields `id`; required record fields `id`, `payee`; accepted fields `id`,
+  `payee`; risk: external mutation; renames an existing payee (also renames the corresponding
+  transactions and shared payee history); approval required.
+- `create_scheduled_transaction`: POST `/budgets/{{ config.budget_id }}/scheduled_transactions` -
+  kind `create`; body type `json`; required record fields `scheduled_transaction`; accepted fields
+  `scheduled_transaction`; risk: external mutation; creates a new recurring scheduled transaction
+  that will auto-post future budget transactions; approval required.
+- `delete_scheduled_transaction`: DELETE `/budgets/{{ config.budget_id }}/scheduled_transactions/{{
+  record.id }}` - kind `delete`; body type `none`; path fields `id`; required record fields `id`;
+  accepted fields `id`; missing records treated as success for status `404`; risk: irreversible
+  external deletion; removes a recurring scheduled transaction; approval required.
 
 ## Known limits
 
-- Legacy fallback aliases are modeled with `coalesce`: account `updated_at` uses
-  `last_modified_on` then `updated_at`, transaction `name` uses `payee_name` then `memo`, and
-  transaction `updated_at` uses `date` then `last_modified_on`.
-- No pagination or `max_pages`/`page_size` config is modeled on any stream — none of the 7
-  documented list endpoints this bundle covers actually paginate; YNAB's own change-tracking
-  mechanism is `server_knowledge`-based delta sync (`last_knowledge_of_server` query param /
-  `server_knowledge` response field), not offset/cursor pagination. This bundle does not implement
-  delta sync (an `ENGINE_GAP`-adjacent full-vs-incremental design question, not a pagination gap);
-  every read is a full snapshot of the current collection.
-- `create_transaction`'s real API also accepts a bulk multi-transaction array body
-  (`{"transactions": [...]}` alongside the modeled single-`{"transaction": {...}}"` shape) and a
-  dedicated `/transactions/import` bank-resync trigger; neither is modeled (`api_surface.json`:
-  `duplicate_of`/`out_of_scope`) — the single-record write dialect emits exactly one record's body
-  per write call, so a genuinely bulk array-body endpoint has no natural per-record mapping here.
-- Category-group create/update (`POST`/`PATCH /budgets/{budget_id}/category_groups[/{id}]`) is not
-  modeled: a category group has no dedicated read stream of its own in this bundle (it is read
-  only as the `categories` stream's group-level record, alongside its nested nominal `categories[]`
-  array) — see `api_surface.json`'s `out_of_scope` entries.
-- `payee_locations` (GPS coordinates auto-captured from mobile-app payee entry) is out of scope —
-  convenience geolocation metadata, not core budget business data.
-- `money_movements`/`money_movement_groups` (a newer aggregate view over existing
-  transactions/transfers) are out of scope as derived, non-source data.
+- API coverage includes 7 stream-backed endpoint group(s), 11 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=17, non_data_endpoint=2, out_of_scope=7.

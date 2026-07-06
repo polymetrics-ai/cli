@@ -12,20 +12,49 @@ SYNOPSIS
 DESCRIPTION
   Reads Marketstack exchanges, tickers, end-of-day prices, splits, and dividends through the Marketstack REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  start_date
+  symbols
+  api_key (secret)
+
+ETL STREAMS
+  exchanges:
+    primary key: mic
+    fields: acronym(), city(), country(), country_code(), currency_code(), currency_name(), currency_symbol(), mic(), name(), timezone(), timezone_abbr(), website()
+  tickers:
+    primary key: symbol
+    fields: has_eod(), has_intraday(), name(), stock_exchange_mic(), stock_exchange_name(), symbol()
+  eod:
+    primary key: symbol, date
+    cursor: date
+    fields: adj_close(), adj_high(), adj_low(), adj_open(), adj_volume(), close(), date(), dividend(), exchange(), high(), low(), open(), split_factor(), symbol(), volume()
+  splits:
+    primary key: symbol, date
+    cursor: date
+    fields: date(), split_factor(), symbol()
+  dividends:
+    primary key: symbol, date
+    cursor: date
+    fields: date(), dividend(), symbol()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Marketstack API read of financial market data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

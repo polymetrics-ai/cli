@@ -1,57 +1,53 @@
 # Overview
 
-JustSift reads Sift people directory profiles and person field definitions through the JustSift
-REST API (`https://api.justsift.com/v1`). This bundle migrates the legacy
-`internal/connectors/just-sift` package to the declarative engine at capability parity; the legacy
-package stays registered and unchanged until wave6's registry flip. The connector is read-only.
+Reads JustSift people directory profiles and person field definitions through the Sift REST API.
+
+Readable streams: `peoples`, `fields`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://sift.com/developers/docs/curl/apis-overview.
 
 ## Auth setup
 
-Provide a JustSift API token via the `api_token` secret; it is used only for Bearer auth
-(`Authorization: Bearer <api_token>`) and is never logged.
+Connection fields:
+
+- `api_token` (required, secret, string); JustSift API token. Used only for Bearer auth
+  (Authorization: Bearer <api_token>); never logged.
+- `base_url` (optional, string); default `https://api.justsift.com/v1`; format `uri`; JustSift API
+  base URL override for tests or proxies.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `api_token`.
+
+Default configuration values: `base_url=https://api.justsift.com/v1`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/fields/person`.
 
 ## Streams notes
 
-Two streams, each with a different pagination shape (matching legacy's `streamEndpoint.pagination`
-routing):
+Default pagination: single request; no pagination.
 
-- `peoples` (`GET /search/people`): 1-based `page_number` pagination (`page_param: page`,
-  `start_page: 1`) with a fixed `limit=100`, matching legacy's default page size and the engine's
-  short-page stop threshold. Every record gets a static `connector: "just-sift"` marker stamped via
-  `computed_fields`, matching legacy `peopleRecord`/`fieldRecord`'s `rec["connector"] =
-  registryName` line.
-- `fields` (`GET /fields/person`): `cursor` pagination with `token_path: links.next` and
-  `cursor_param: cursor` — the next-page token is read from the response body's `links.next` and
-  sent back as the `cursor` query parameter.
+Pagination by stream: cursor: `fields`; page_number: `peoples`.
 
-Neither stream declares an `incremental` block: legacy's `streams()` sets no `CursorFields` for
-either stream (`peoples`/`fields` are full-refresh only in both legacy and this bundle).
+- `peoples`: GET `/search/people` - records path `data`; query `limit`=`100`; page-number
+  pagination; page parameter `page`; no page-size parameter; starts at 1; page size 100; computed
+  output fields `connector`.
+- `fields`: GET `/fields/person` - records path `data`; query `limit`=`100`; cursor pagination;
+  cursor parameter `cursor`; next token from `links.next`; computed output fields `connector`.
 
 ## Write actions & risks
 
-None. JustSift is read-only in both legacy and this bundle (`capabilities.write: false`, no
-`writes.json`).
+This connector is read-only. Read behavior: external JustSift API read of people directory profiles
+and field definitions.
 
 ## Known limits
 
-- `page_size` is not exposed as bundle config. The engine's `page_number` paginator requires a
-  fixed short-page stop threshold, so the bundle uses legacy's default `limit=100` consistently
-  rather than accepting a non-default request size that could stop paging early.
-- **`links.next` query-fragment parsing (ACCEPTABLE, documented)**: legacy's `applyNextCursor`
-  defensively handles a `links.next` token shaped as a full `"key=value"` query fragment (e.g.
-  `"cursor=abc"`) by parsing it and merging the parsed key/value pairs into the request query,
-  falling back to `query.Set("cursor", next)` only when the token is NOT a parseable query string.
-  The engine's `cursor`+`token_path` paginator (`tokenPathCursor`) always sends the token verbatim
-  as the `cursor_param` value (`cursor_param.Set(cursor, token)`) with no fragment-parsing — for
-  JustSift's real-world opaque-cursor-token shape (the common case) this is identical to legacy's
-  behavior; the divergence only manifests for the defensive `"key=value"`-shaped token branch,
-  which JustSift's documented API does not produce in the normal case. This never changes emitted
-  record DATA (only the shape of the next-page request in an edge case legacy's own tests exercise
-  via mock server but the real API is not documented to trigger) — see
-  `docs/migration/conventions.md`'s parity-deviation ledger.
-- Full JustSift API surface (any write/mutation endpoints, other read resources) is out of scope;
-  see `api_surface.json` — only the 2 legacy-parity read streams are implemented.
-- `peoples` fixture ships a 100-record page 1 (matching the fixed `pagination.page_size: 100`
-  short-page threshold) plus a 1-record page 2; `fields` ships a 2-page fixture where page 1's
-  `links.next` is a non-empty opaque token and page 2's `links` is empty, proving the cursor
-  paginator advances then terminates.
+- Batch defaults: read_page_size=100.
+- API coverage includes 2 stream-backed endpoint group(s).

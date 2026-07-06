@@ -12,20 +12,45 @@ SYNOPSIS
 DESCRIPTION
   Reads Zoho Campaigns lists, campaigns, and contacts through the Zoho Campaigns REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  access_token (secret)
+
+ETL STREAMS
+  lists:
+    primary key: id
+    cursor: updated_at
+    fields: createdtime(), id(), list_name(), listkey(), listname(), listtype(), modified_time(), name(), tag(), updated_at()
+  campaigns:
+    primary key: id
+    cursor: updated_at
+    fields: campaign_key(), campaign_name(), campaignkey(), campaignname(), from_email(), id(), modified_time(), name(), sent_time(), status(), subject(), updated_at()
+  contacts:
+    primary key: id
+    cursor: updated_at
+    fields: contact_id(), contact_key(), email(), first_name(), id(), last_name(), modified_time(), name(), status(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Zoho Campaigns API read of email marketing data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

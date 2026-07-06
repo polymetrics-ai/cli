@@ -82,7 +82,7 @@
       "pagination": { "type": "none" },
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled: PayPal's disputes list returns HATEOAS pagination as links:[{rel,href}], an array of objects matched by rel==\"next\" -- the engine's only body-path next-page-URL pagination type (next_url_path) resolves a single dotted string path via connsdk.StringAt/selectPath, which has no array-element-matching-by-sibling-field grammar (interpolate.go/extract.go), so a bare links.<n>.href index would only ever read one fixed array position, not the record whose rel is \"next\". hook-covered, proven live by internal/connectors/paritytest/paypal-transaction and internal/connectors/hooks/paypal-transaction/hooks_test.go."
+        "reason": "StreamHook-handled: PayPal's disputes list returns HATEOAS pagination as links:[{rel,href}], an array of objects matched by rel==\"next\" -- the engine's only body-path next-page-URL pagination type (next_url_path) resolves a single dotted string path via connsdk.StringAt/selectPath, which has no array-element-matching-by-sibling-field grammar (interpolate.go/extract.go), so a bare links.<n>.href index would only ever read one fixed array position, not the record whose rel is \"next\". hook-covered, proven live by archived parity evidence for paypal-transaction and internal/connectors/hooks/paypal-transaction/hooks_test.go."
       },
       "schema": "schemas/disputes.json"
     }

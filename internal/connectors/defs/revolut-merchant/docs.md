@@ -1,75 +1,80 @@
 # Overview
 
-Revolut Merchant is a wave2 fan-out declarative-HTTP migration. It reads Revolut Merchant orders,
-customers, settlements, and payment links through the Merchant API
-(`GET https://merchant.revolut.com/api/1.0/...`). This bundle targets capability parity with
-`internal/connectors/revolut-merchant` (the hand-written connector it migrates); the legacy
-package stays registered and unchanged until wave6's registry flip. Read-only
-(`capabilities.write` is `false`, matching legacy's `Write` returning
-`connectors.ErrUnsupportedOperation`).
+Reads Revolut Merchant orders, customers, settlements, and payment links through the REST API.
+
+Readable streams: `orders`, `customers`, `settlements`, `payment_links`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developer.revolut.com/docs/guides/merchant/reference/api.
 
 ## Auth setup
 
-Provide a Revolut Merchant API secret key via the `api_key` secret. It is sent as an
-`Authorization: Bearer <api_key>` header, matching legacy's `connsdk.Bearer(key)`
-(`revolut_merchant.go:170`). Every request also carries a fixed `Revolut-Api-Version: 2023-09-01`
-header, matching legacy's `DefaultHeaders: map[string]string{"Revolut-Api-Version": "2023-09-01"}`
-— declared as a static-literal value in `streams.json`'s `base.headers` (no template markers, so
-it is a fixed constant, not config-driven). `base_url` defaults to
-`https://merchant.revolut.com/api/1.0` and may be overridden for tests/proxies.
+Connection fields:
+
+- `api_key` (required, secret, string); Revolut Merchant API secret key, sent as an Authorization:
+  Bearer <api_key> header. Never logged.
+- `base_url` (optional, string); default `https://merchant.revolut.com/api/1.0`; format `uri`;
+  Revolut Merchant API base URL override for tests or proxies.
+- `customer_id` (optional, string); Optional passthrough filter: scope the orders stream to a single
+  customer id.
+- `from_created_date` (optional, string); Optional passthrough filter: only return records created
+  at or after this value.
+- `state` (optional, string); Optional passthrough filter: scope the orders stream to a single order
+  state.
+- `to_created_date` (optional, string); Optional passthrough filter: only return records created at
+  or before this value.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://merchant.revolut.com/api/1.0`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/orders` with query `limit`=`1`.
 
 ## Streams notes
 
-All 4 streams (`orders`, `customers`, `settlements`, `payment_links`) share the identical shape:
-`GET` against the Merchant API's list endpoint (`/orders`, `/customers`, `/settlements`,
-`/payment-links` — note the endpoint's own hyphenated path vs. the stream's snake_case name,
-matching legacy's `endpoints["payment_links"] = {"payment-links", ...}` exactly), records at the
-response body's root array (`records.path: ""`) — legacy's own `recordsPath` for every endpoint is
-`""` (`revolut_merchant.go:106-111`), so this reproduces the exact primary-candidate behavior;
-legacy's `recordsAt` fallback list would only try `"data"`/`"items"`/etc. for a differently-shaped
-response, which the root-array envelope never triggers. Pagination is `page_number`
-(`page`/`limit`, `page_size: 100`), stopping on a short page exactly as legacy's
-`connsdk.PageNumberPaginator` does.
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 100.
 
-Legacy applies four passthrough filters (`from_created_date`, `to_created_date`, `customer_id`,
-`state`) identically to every stream's request (`revolut_merchant.go:87-92`'s loop iterates a
-fixed key list regardless of which stream is being read) — this bundle reproduces that exact
-blanket behavior via the identical four `omit_when_absent` query entries declared on EACH of the
-four streams' own `query` block (`HTTPBase` has no `query` field in the engine dialect, so this is
-per-stream duplicated rather than a single shared declaration), sent only when the corresponding
-config value is set, matching legacy's own `strings.TrimSpace(...) != ""` gate. `computed_fields`
-stamps a static `stream` marker on every record, matching legacy's `mapRecord`'s
-`out["stream"] = stream`.
-
-`created_at` is declared as `x-cursor-field` on every schema, matching legacy's own
-`CursorFields: []string{"created_at"}` Catalog declarations for all 4 streams. No `incremental`
-block is declared: legacy's `Read` never reads a persisted sync cursor back into
-`from_created_date`/`to_created_date` (`harvest` reads only `req.Config.Config[key]`, never
-`req.State["cursor"]`) — it always resends the exact same raw config value on every sync, with no
-forward advancement.
+- `orders`: GET `/orders` - records at response root; query `customer_id` from template `{{
+  config.customer_id }}`, omitted when absent; `from_created_date` from template `{{
+  config.from_created_date }}`, omitted when absent; `state` from template `{{ config.state }}`,
+  omitted when absent; `to_created_date` from template `{{ config.to_created_date }}`, omitted when
+  absent; page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page
+  size 100; computed output fields `stream`; emits passthrough records.
+- `customers`: GET `/customers` - records at response root; query `customer_id` from template `{{
+  config.customer_id }}`, omitted when absent; `from_created_date` from template `{{
+  config.from_created_date }}`, omitted when absent; `state` from template `{{ config.state }}`,
+  omitted when absent; `to_created_date` from template `{{ config.to_created_date }}`, omitted when
+  absent; page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page
+  size 100; computed output fields `stream`; emits passthrough records.
+- `settlements`: GET `/settlements` - records at response root; query `customer_id` from template
+  `{{ config.customer_id }}`, omitted when absent; `from_created_date` from template `{{
+  config.from_created_date }}`, omitted when absent; `state` from template `{{ config.state }}`,
+  omitted when absent; `to_created_date` from template `{{ config.to_created_date }}`, omitted when
+  absent; page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page
+  size 100; computed output fields `stream`; emits passthrough records.
+- `payment_links`: GET `/payment-links` - records at response root; query `customer_id` from
+  template `{{ config.customer_id }}`, omitted when absent; `from_created_date` from template `{{
+  config.from_created_date }}`, omitted when absent; `state` from template `{{ config.state }}`,
+  omitted when absent; `to_created_date` from template `{{ config.to_created_date }}`, omitted when
+  absent; page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page
+  size 100; computed output fields `stream`; emits passthrough records.
 
 ## Write actions & risks
 
-None. Legacy `revolut_merchant.go`'s `Write` returns `connectors.ErrUnsupportedOperation`
-unconditionally; `capabilities.write` is `false` and this bundle ships no `writes.json`.
+This connector is read-only. Read behavior: external Revolut Merchant API read of order, customer,
+settlement, and payment-link data.
 
 ## Known limits
 
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config-driven
-  overrides (`page_size` bounded 1-100, default 100; `max_pages` 0/all/unlimited for unbounded).
-  The engine's `page_number` paginator reads `PaginationSpec.PageSize`/`MaxPages` as static
-  bundle-authored integers, not config templates — there is no mechanism to wire a `spec.json`
-  property into either field. This bundle sends `page_size: 100` (legacy's own default) as a
-  static value in `streams.json`'s `base.pagination` block; neither `page_size` nor `max_pages` is
-  declared in `spec.json` (F6: dead config is worse than absent config). Pagination is otherwise
-  unbounded (matches legacy's `max_pages: 0` = unlimited default) other than the short-page stop
-  signal.
-- **Legacy's `id` fallback (`uuid`/`email`/`reference`) is not modeled.** Legacy's `mapRecord`
-  falls back to a record's `uuid`, `email`, or `reference` field when `id` is absent. Every Revolut
-  Merchant resource this bundle reads always carries an `id` in its real wire shape (legacy's own
-  `Catalog`/`PrimaryKey` declarations assume `id` unconditionally for all 4 streams), so this
-  fallback is defensive dead code against the real API — not exercised by any input legacy itself
-  would realistically receive. Documented here for completeness, not implemented via a hook.
-- The full Revolut Merchant API surface (order create/capture/cancel/refund, customer
-  create/update, webhook management, payout endpoints) is out of scope for this wave; see
-  `api_surface.json`'s `excluded: {category: out_of_scope}` entries.
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=2, out_of_scope=5.

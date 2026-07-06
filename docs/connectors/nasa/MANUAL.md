@@ -12,20 +12,53 @@ SYNOPSIS
 DESCRIPTION
   Reads NASA Open API data: Astronomy Picture of the Day, Near-Earth Objects (NeoWs feed and browse), EPIC Earth imagery, and Mars rover photos. Read-only.
 
+ICON
+  asset: icons/nasa.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://api.nasa.gov/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  count
+  end_date
+  mode
+  sol
+  start_date
+  thumbs
+  api_key (secret)
+
+ETL STREAMS
+  apod:
+    primary key: date
+    cursor: date
+    fields: copyright(), date(), explanation(), hdurl(), media_type(), service_version(), thumbnail_url(), title(), url()
+  neo_feed:
+    primary key: id
+    fields: absolute_magnitude_h(), id(), is_potentially_hazardous_asteroid(), is_sentry_object(), name(), nasa_jpl_url(), neo_reference_id()
+  neo_browse:
+    primary key: id
+    fields: absolute_magnitude_h(), id(), is_potentially_hazardous_asteroid(), is_sentry_object(), name(), nasa_jpl_url(), neo_reference_id()
+  epic:
+    primary key: identifier
+    fields: caption(), date(), identifier(), image(), version()
+  mars_photos:
+    primary key: id
+    fields: camera(), earth_date(), id(), img_src(), rover(), sol()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external NASA Open API read of public astronomy and space data
+  approval: none; read-only, no reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

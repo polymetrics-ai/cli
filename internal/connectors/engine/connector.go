@@ -189,8 +189,24 @@ func synthesizeMetadata(b Bundle) connectors.Metadata {
 func synthesizeManifest(b Bundle) connectors.Manifest {
 	streams := make([]connectors.Stream, 0, len(b.Streams))
 	writeActions := make([]connectors.WriteActionSpec, 0, len(b.Writes))
+	configFields := []connectors.ConfigField{}
+	secretFields := []connectors.SecretField{}
 	modeSet := map[string]bool{}
 	var syncModes []string
+
+	if b.Spec != nil {
+		secretSet := map[string]bool{}
+		for _, key := range b.Spec.SecretKeys() {
+			secretSet[key] = true
+		}
+		for _, property := range b.Spec.Properties() {
+			if secretSet[property] {
+				secretFields = append(secretFields, connectors.SecretField{Name: property})
+				continue
+			}
+			configFields = append(configFields, connectors.ConfigField{Name: property})
+		}
+	}
 
 	for _, s := range b.Streams {
 		streams = append(streams, legacyStreamOf(b, s))
@@ -219,6 +235,8 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 
 	return connectors.Manifest{
 		Metadata:     synthesizeMetadata(b),
+		ConfigFields: configFields,
+		SecretFields: secretFields,
 		Streams:      streams,
 		WriteActions: writeActions,
 		SyncModes:    syncModes,

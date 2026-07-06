@@ -1,108 +1,121 @@
 # Overview
 
-Amplitude is a declarative-HTTP connector for the Amplitude Analytics REST APIs (Behavioral
-Cohorts, Chart Annotations, Taxonomy, and the event-list resource). It reads behavioral cohorts,
-cohort-download usage, chart annotations and their categories, the event-list catalog, and the
-governed taxonomy (categories, event types, event/user/group properties), and it manages chart
-annotations, annotation categories, and taxonomy categories/event types through Pass B's
-full-surface expansion. This bundle originally migrated `internal/connectors/amplitude` (the
-hand-written connector); the legacy package stays registered and unchanged until wave6's registry
-flip.
+Reads and manages Amplitude behavioral cohorts, chart annotations, annotation categories, event
+lists, and the governed taxonomy (event/category definitions) through the Amplitude Analytics REST
+API.
+
+Readable streams: `cohorts`, `cohorts_usage`, `annotations`, `annotation_categories`, `events_list`,
+`taxonomy_categories`, `taxonomy_events`, `taxonomy_event_properties`, `taxonomy_user_properties`,
+`taxonomy_group_properties`.
+
+Write actions: `create_annotation`, `update_annotation`, `delete_annotation`,
+`create_annotation_category`, `update_annotation_category`, `delete_annotation_category`,
+`create_taxonomy_category`, `update_taxonomy_category`, `delete_taxonomy_category`,
+`create_taxonomy_event`, `update_taxonomy_event`, `delete_taxonomy_event`.
+
+Service API documentation: https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/.
 
 ## Auth setup
 
-Provide an Amplitude project API key via the `api_key` secret and its paired secret key via the
-`secret_key` secret. Both flow only into HTTP Basic auth (`api_key` as username, `secret_key` as
-password) and are never logged. All streams and writes share the same Basic-auth credential pair —
-Amplitude's Behavioral Cohorts, Chart Annotations, and Taxonomy APIs are all authenticated
-identically.
+Connection fields:
+
+- `api_key` (required, secret, string); Amplitude project API key. Used as the HTTP Basic auth
+  username; never logged.
+- `base_url` (optional, string); default `https://amplitude.com`; format `uri`; Amplitude Analytics
+  REST API base URL. Defaults to the Standard-server host; set explicitly to
+  https://analytics.eu.amplitude.com for EU-residency projects (see docs.md Known limits).
+- `mode` (optional, string).
+- `secret_key` (required, secret, string); Amplitude project secret key. Used as the HTTP Basic auth
+  password; never logged.
+- `taxonomy_show_deleted` (optional, string); Optional 'true'/'false' string forwarded as the
+  showDeleted query parameter on the taxonomy_events and taxonomy_user_properties streams. Left
+  unset, the parameter is omitted and Amplitude applies its own default (deleted items excluded).
+
+Secret fields are redacted in logs and write previews: `api_key`, `secret_key`.
+
+Default configuration values: `base_url=https://amplitude.com`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.api_key`, `secrets.secret_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/api/3/cohorts`.
 
 ## Streams notes
 
-10 streams, all full-refresh with no pagination and no incremental cursor — every Amplitude list
-endpoint this connector reads returns its full collection in one response:
+Default pagination: single request; no pagination.
 
-- `cohorts` — `GET /api/3/cohorts`, records at `cohorts`, primary key `id`.
-- `cohorts_usage` — `GET /api/3/cohorts/usage`, a single-object response with no records array;
-  `records.path: ""` treats the whole body as one record, and `computed_fields` flattens the
-  nested `rest_download.{limit,usage,resets_at}` fields onto the emitted record's top level
-  (typed bare-reference extraction keeps `limit`/`usage` as native integers, per
-  `docs/migration/conventions.md` §3). Primary key `resets_at` (a fresh timestamp each reset
-  window; this is a usage-quota snapshot, not a stable-id resource, so no other candidate key
-  exists).
-- `annotations` — `GET /api/3/annotations`, records at `data`, primary key `id`.
-- `annotation_categories` — `GET /api/3/annotation-categories`, records at `data`, primary key
-  `id`.
-- `events_list` — `GET /api/2/events/list`, records at `data`, primary key `value` (Amplitude's own
-  event-name identifier).
-- `taxonomy_categories` — `GET /api/2/taxonomy/category`, records at `data`, primary key `id`.
-- `taxonomy_events` — `GET /api/2/taxonomy/event`, records at `data`, primary key `event_type`. An
-  optional `taxonomy_show_deleted` config value (a `'true'`/`'false'` string) is forwarded as the
-  `showDeleted` query parameter via the opt-in optional-query dialect (`omit_when_absent: true`);
-  left unset, Amplitude applies its own default (deleted event types excluded).
-- `taxonomy_event_properties` — `GET /api/2/taxonomy/event-property`, records at `data`, composite
-  primary key `[event_property, event_type]` (an event property name may repeat across different
-  event types).
-- `taxonomy_user_properties` — `GET /api/2/taxonomy/user-property`, records at `data`, primary key
-  `user_property`. Same optional `taxonomy_show_deleted` -> `showDeleted` wiring as `taxonomy_events`.
-- `taxonomy_group_properties` — `GET /api/2/taxonomy/group-property`, records at `data`, composite
-  primary key `[group_type, group_property]`.
-
-Field names are copied verbatim from the raw API response (Amplitude's own camelCase/snake_case
-mix, e.g. `lastComputed`, `non_active`, `is_hidden_from_dropdowns`, preserved as-is) via schema
-projection; no `computed_fields` renames are needed for any list-shaped stream.
+- `cohorts`: GET `/api/3/cohorts` - records path `cohorts`.
+- `cohorts_usage`: GET `/api/3/cohorts/usage` - records at response root; computed output fields
+  `limit`, `resets_at`, `usage`.
+- `annotations`: GET `/api/3/annotations` - records path `data`.
+- `annotation_categories`: GET `/api/3/annotation-categories` - records path `data`.
+- `events_list`: GET `/api/2/events/list` - records path `data`.
+- `taxonomy_categories`: GET `/api/2/taxonomy/category` - records path `data`.
+- `taxonomy_events`: GET `/api/2/taxonomy/event` - records path `data`; query `showDeleted` from
+  template `{{ config.taxonomy_show_deleted }}`, omitted when absent.
+- `taxonomy_event_properties`: GET `/api/2/taxonomy/event-property` - records path `data`.
+- `taxonomy_user_properties`: GET `/api/2/taxonomy/user-property` - records path `data`; query
+  `showDeleted` from template `{{ config.taxonomy_show_deleted }}`, omitted when absent.
+- `taxonomy_group_properties`: GET `/api/2/taxonomy/group-property` - records path `data`.
 
 ## Write actions & risks
 
-`capabilities.write: true`. 12 actions, all requiring reverse-ETL plan approval before executing
-(`metadata.json`'s `risk.approval`):
+Overall write risk: external Amplitude API mutation of chart annotations, annotation categories, and
+governed taxonomy event/category definitions - never behavioral event data itself.
 
-- `create_annotation` / `update_annotation` / `delete_annotation` — `POST`/`PUT`/`DELETE
-  /api/3/annotations[/{id}]`. Creates, mutates, or permanently deletes a chart annotation visible
-  to every user of the Amplitude project.
-- `create_annotation_category` / `update_annotation_category` / `delete_annotation_category` —
-  `POST`/`PUT`/`DELETE /api/3/annotation-categories[/{id}]`. Manages the shared category taxonomy
-  annotations are organized under.
-- `create_taxonomy_category` / `update_taxonomy_category` / `delete_taxonomy_category` —
-  `POST`/`PUT`/`DELETE /api/2/taxonomy/category[/{id}]`. Manages the Amplitude project's governed
-  event-category taxonomy.
-- `create_taxonomy_event` / `update_taxonomy_event` / `delete_taxonomy_event` — `POST`/`PUT`/`DELETE
-  /api/2/taxonomy/event[/{event_type}]`. Registers, edits, or soft-deletes a governed event type
-  in the taxonomy. `delete_taxonomy_event` is a soft delete on Amplitude's side (recoverable via
-  `POST /api/2/taxonomy/event/{event_type}/restore`); the restore endpoint itself is not modeled as
-  a separate write action (see `api_surface.json`) since it targets an already-deleted resource
-  outside the create/update/delete model.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-None of these writes ever touch raw behavioral event data or user-level analytics — the write
-surface is scoped entirely to Amplitude's own metadata-management resources (annotations,
-categories, taxonomy definitions), never the events/users/cohort membership an Amplitude project
-actually tracks.
+- `create_annotation`: POST `/api/3/annotations` - kind `create`; body type `json`; required record
+  fields `label`, `start`; accepted fields `category`, `chart_id`, `details`, `end`, `label`,
+  `start`; risk: creates a chart annotation visible to every Amplitude project user.
+- `update_annotation`: PUT `/api/3/annotations/{{ record.id }}` - kind `update`; body type `json`;
+  path fields `id`; required record fields `id`; accepted fields `category`, `chart_id`, `details`,
+  `end`, `id`, `label`, `start`; risk: mutates an existing chart annotation visible to every
+  Amplitude project user.
+- `delete_annotation`: DELETE `/api/3/annotations/{{ record.id }}` - kind `delete`; body type
+  `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: permanently deletes a chart annotation.
+- `create_annotation_category`: POST `/api/3/annotation-categories` - kind `create`; body type
+  `json`; required record fields `category`; accepted fields `category`; risk: creates a new
+  annotation category shared across the Amplitude project.
+- `update_annotation_category`: PUT `/api/3/annotation-categories/{{ record.id }}` - kind `update`;
+  body type `json`; path fields `id`; required record fields `id`, `category`; accepted fields
+  `category`, `id`; risk: renames an existing annotation category shared across the Amplitude
+  project.
+- `delete_annotation_category`: DELETE `/api/3/annotation-categories/{{ record.id }}` - kind
+  `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  missing records treated as success for status `404`; risk: permanently deletes an annotation
+  category shared across the Amplitude project.
+- `create_taxonomy_category`: POST `/api/2/taxonomy/category` - kind `create`; body type `json`;
+  required record fields `category_name`; accepted fields `category_name`; risk: creates a new event
+  category in the Amplitude project's governed taxonomy.
+- `update_taxonomy_category`: PUT `/api/2/taxonomy/category/{{ record.category_id }}` - kind
+  `update`; body type `json`; path fields `category_id`; required record fields `category_id`,
+  `category_name`; accepted fields `category_id`, `category_name`; risk: renames an existing event
+  category in the Amplitude project's governed taxonomy.
+- `delete_taxonomy_category`: DELETE `/api/2/taxonomy/category/{{ record.category_id }}` - kind
+  `delete`; body type `none`; path fields `category_id`; required record fields `category_id`;
+  accepted fields `category_id`; missing records treated as success for status `404`; risk:
+  permanently deletes an event category from the Amplitude project's governed taxonomy.
+- `create_taxonomy_event`: POST `/api/2/taxonomy/event` - kind `create`; body type `json`; required
+  record fields `event_type`; accepted fields `category`, `description`, `event_type`, `is_active`,
+  `owner`, `tags`; risk: registers a new governed event type in the Amplitude project's taxonomy.
+- `update_taxonomy_event`: PUT `/api/2/taxonomy/event/{{ record.event_type }}` - kind `update`; body
+  type `json`; path fields `event_type`; required record fields `event_type`; accepted fields
+  `category`, `description`, `display_name`, `event_type`, `is_active`, `new_event_type`, `owner`,
+  `tags`; risk: mutates an existing governed event type's taxonomy metadata.
+- `delete_taxonomy_event`: DELETE `/api/2/taxonomy/event/{{ record.event_type }}` - kind `delete`;
+  body type `none`; path fields `event_type`; required record fields `event_type`; accepted fields
+  `event_type`; missing records treated as success for status `404`; risk: soft-deletes a governed
+  event type from the Amplitude project's taxonomy (recoverable via the restore endpoint, not
+  modeled as a separate write action).
 
 ## Known limits
 
-- EU-residency projects: legacy derived `https://analytics.eu.amplitude.com` automatically from a
-  `data_region` config value containing "eu". The engine's `spec.json` `"default"` mechanism only
-  materializes a fixed literal default, not one derived from another config key's value (see
-  `docs/migration/conventions.md` §3's `default` materialization note — this is the same
-  base-URL-derivation gap documented for sentry/chargebee). This bundle narrows the config surface:
-  `data_region` is no longer a config option; EU-residency users must set `base_url` to
-  `https://analytics.eu.amplitude.com` explicitly. Documented scope narrowing, not a silent
-  behavior change — every request legacy would route to the EU host still reaches it, just via an
-  explicit `base_url` instead of an inferred one.
-- Cohort membership download/upload (`/api/5/cohorts/request/*`, `/api/3/cohorts/upload`,
-  `/api/3/cohorts/membership`) is out of scope: the download side is a 2-step async job-poll
-  protocol that can redirect to a presigned S3 URL for large cohorts, and the upload/membership
-  side is a bulk id-list mutation with no single addressable record — neither shape fits this
-  connector's per-record read/write model. See `api_surface.json` for the full per-endpoint
-  rationale.
-- The raw event Export API (`GET /api/2/export`) is out of scope: it returns a zipped archive of
-  newline-delimited JSON files, not a single JSON body, and this connector deliberately ships zero
-  Tier-2 hooks (decompression/archive-fan-out is a hook-only concern per
-  `docs/migration/conventions.md` §1).
-- Event ingestion (`POST /2/httpapi`) is out of scope: it is a write-only telemetry sink for
-  creating new raw analytics events, not a reverse-ETL mutation of an existing Amplitude-managed
-  resource.
-- Taxonomy event-property/user-property/group-property mutations are read-only in this wave (their
-  list endpoints are covered streams; create/update/delete are not yet implemented) — a deliberate
-  write-depth cut, not a capability gap; see `api_surface.json` for each excluded mutation's
-  rationale.
+- Batch defaults: read_page_size=100.
+- API coverage includes 10 stream-backed endpoint group(s), 12 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=2, duplicate_of=7, non_data_endpoint=1, out_of_scope=14, requires_elevated_scope=2.

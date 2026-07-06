@@ -10,22 +10,54 @@ SYNOPSIS
   pm credentials add <name> --connector aws-cloudtrail [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API using AWS Signature V4 authentication. Read-only.
+  Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API using AWS Signature V4 authentication. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+
+ICON
+  asset: icons/aws-cloudtrail.svg
+  source: upstream_registry
+  review_status: upstream_seeded
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  aws_region_name
+  base_url
+  lookup_attributes_filter
+  mode
+  start_date
+  aws_key_id (secret)
+  aws_secret_key (secret)
+
+ETL STREAMS
+  management_events:
+    primary key: EventId
+    cursor: EventTime
+    fields: AccessKeyId(), CloudTrailEvent(), EventId(), EventName(), EventSource(), EventTime(), ReadOnly(), Resources(), Username()
+  read_only_events:
+    primary key: EventId
+    cursor: EventTime
+    fields: AccessKeyId(), CloudTrailEvent(), EventId(), EventName(), EventSource(), EventTime(), ReadOnly(), Resources(), Username()
+  write_only_events:
+    primary key: EventId
+    cursor: EventTime
+    fields: AccessKeyId(), CloudTrailEvent(), EventId(), EventName(), EventSource(), EventTime(), ReadOnly(), Resources(), Username()
+  console_logins:
+    primary key: EventId
+    cursor: EventTime
+    fields: AccessKeyId(), CloudTrailEvent(), EventId(), EventName(), EventSource(), EventTime(), ReadOnly(), Resources(), Username()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external AWS CloudTrail API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

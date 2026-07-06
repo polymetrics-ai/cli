@@ -216,7 +216,7 @@ export function DocsSearch({ variant = 'sidebar' }: DocsSearchProps) {
           'group relative overflow-hidden border border-line-structure text-left font-sans normal-case tracking-normal',
           'focus-visible:outline-surface-cta-primary',
           isNavbar
-            ? 'docs-search-navbar-trigger h-9 w-[clamp(220px,18vw,320px)] max-w-full justify-start bg-surface-bg px-2.5 text-[12px] shadow-[inset_0_1px_0_rgba(255,255,255,0.58)] hover:border-line-cta hover:bg-surface-2'
+            ? 'docs-search-navbar-trigger h-9 w-[clamp(250px,22vw,360px)] max-w-full justify-start bg-surface-bg px-2.5 text-[12px] shadow-[inset_0_1px_0_rgba(255,255,255,0.58)] hover:border-line-cta hover:bg-surface-2'
             : 'link-box h-auto w-full justify-start bg-surface-bg px-2.5 py-2 text-[12px] hover:bg-surface-2',
         )}
         aria-label="Search documentation"

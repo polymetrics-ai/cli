@@ -1,65 +1,62 @@
 # Overview
 
-commercetools reads customers, orders, and products from the commercetools Composable Commerce
-HTTP API. This bundle is a full capability-parity migration of the legacy hand-written connector
-(`internal/connectors/commercetools`), which stays registered and unchanged until wave6's registry
-flip. Read-only: legacy implements no write path (`Write` is a stub returning
-`ErrUnsupportedOperation`).
+Reads commercetools customers, orders, and products through the HTTP API.
+
+Readable streams: `customers`, `orders`, `products`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.commercetools.com/api/.
 
 ## Auth setup
 
-Provide `client_id`/`client_secret` secrets for an OAuth2 client-credentials grant
-(`mode: oauth2_client_credentials`); the engine fetches and caches a Bearer token from `token_url`,
-refreshing automatically before expiry, exactly matching legacy's
-`connsdk.OAuth2ClientCredentials` usage. `base_url` and `token_url` must be the fully-formed API and
-OAuth2 token endpoint URLs (see Known limits for why the region/host convenience shorthand is not
-supported here). `project_key` scopes every stream path (`/{project_key}/customers` etc.).
+Connection fields:
+
+- `base_url` (required, string); format `uri`; commercetools API base URL, e.g.
+  https://api.<region>.<host>.commercetools.com.
+- `client_id` (required, secret, string); commercetools OAuth2 client-credentials client id. Never
+  logged.
+- `client_secret` (required, secret, string); commercetools OAuth2 client-credentials client secret.
+  Never logged.
+- `mode` (optional, string).
+- `project_key` (required, string); commercetools project key; every stream path is scoped to this
+  project.
+- `token_url` (required, string); format `uri`; commercetools OAuth2 token endpoint, e.g.
+  https://auth.<region>.<host>.commercetools.com/oauth/token. Required for the same reason base_url
+  is required (see docs.md Known limits).
+
+Secret fields are redacted in logs and write previews: `client_id`, `client_secret`.
+
+Authentication behavior:
+
+- OAuth 2.0 client credentials authentication using `config.token_url`, `secrets.client_id`,
+  `secrets.client_secret`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/{{ config.project_key }}/customers` with query `limit`=`1`.
 
 ## Streams notes
 
-All 3 streams (`customers`, `orders`, `products`) share the same shape: `GET
-/{project_key}/<resource>`, records at `results` (commercetools' list-endpoint envelope), `limit`/
-`offset` query pagination (`pagination.type: offset_limit`) with a fixed page size of 100 matching
-legacy's `defaultPageSize`. Pagination stops on a short page (fewer than 100 records), the same
-signal legacy's own `readOffset` checks first; `max_pages` is a static cap of 100 (`streams.json`'s
-`base.pagination.max_pages`), matching legacy's `defaultMaxPages` constant exactly — legacy also
-allows per-read config overrides of `page_size` and `max_pages`, which have no engine-dialect
-equivalent (see Known limits).
+Default pagination: offset/limit pagination; offset parameter `offset`; limit parameter `limit`;
+page size 100; maximum 100 page(s).
 
-Every stream uses `projection: "passthrough"`: legacy's `readOffset` emits
-`connectors.Record(rec)` directly from the raw decoded JSON with no field-built mapping, so
-schema-mode projection (which would silently drop any field the schema doesn't declare) would be a
-parity violation here. Schemas describe commercetools' real wire shape for the fields most
-consumers need (`id`/`version`/`createdAt`/etc.), but `additionalProperties` is not restricted, so
-every other raw API field still survives untouched, matching legacy's verbatim passthrough.
-
-Legacy publishes no `CursorFields` for any of these 3 streams and its `Read` path performs no
-incremental filtering at all (always a fresh full offset-paginated read from 0) — no `incremental`
-block is declared on any stream, matching legacy exactly. `x-cursor-field: createdAt` is
-schema-only documentation of each resource's natural timestamp field, not a claim that incremental
-sync is implemented.
+- `customers`: GET `/{{ config.project_key }}/customers` - records path `results`; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 100; maximum 100
+  page(s); emits passthrough records.
+- `orders`: GET `/{{ config.project_key }}/orders` - records path `results`; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 100; maximum 100
+  page(s); emits passthrough records.
+- `products`: GET `/{{ config.project_key }}/products` - records path `results`; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 100; maximum 100
+  page(s); emits passthrough records.
 
 ## Write actions & risks
 
-None. `capabilities.write` is `false`; no `writes.json` is shipped.
+This connector is read-only. Read behavior: external commercetools API read of customer, order, and
+product data.
 
 ## Known limits
 
-- Legacy derives `base_url` and the OAuth2 `token_url` from `region`+`host` config values when
-  `base_url`/`token_url` are not explicitly set (`https://api.<region>.<host>.commercetools.com` /
-  `https://auth.<region>.<host>.commercetools.com/oauth/token`). This cross-key derivation has no
-  engine-dialect mechanism (`spec.json`'s `default` materialization only fills in a FIXED literal,
-  never a value computed from another config key — see `docs/migration/conventions.md`'s
-  `param_format`/default-materialization section and the sentry/chargebee precedent for the same
-  narrowing). This bundle requires `base_url` and `token_url` as fully-formed URLs instead; a
-  caller previously relying on the region/host shorthand must now precompute those two URLs itself.
-- Legacy's config-overridable `page_size` and `max_pages` have no engine-dialect equivalent for a
-  per-call override: `PaginationSpec.PageSize` and `PaginationSpec.MaxPages` are static integers
-  declared in `streams.json`, not templated/config-driven. This bundle declares the static defaults
-  (100 for each), matching legacy's own default behavior for every caller that never overrides
-  them; a caller that previously set different numeric values has no equivalent knob here.
-- Legacy's `Catalog()` publishes a shared generic `Fields` list (`id`/`version`/`createdAt`) across
-  all 3 streams as a simplified illustrative catalog. This bundle's per-stream schemas instead
-  describe commercetools' real per-resource wire shape (matching the "recorded-real-shape" fixture
-  rule), which is closer to what `records_match_schema` actually needs; runtime output is
-  unaffected either way since projection is `passthrough`.
+- Batch defaults: read_page_size=100.
+- API coverage includes 3 stream-backed endpoint group(s).

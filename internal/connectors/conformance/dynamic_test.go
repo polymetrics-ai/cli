@@ -179,6 +179,38 @@ func TestCheckFixture_AndReadFixtureNonempty(t *testing.T) {
 	}
 }
 
+func TestReusableStreamReplayServerResetsBetweenStreams(t *testing.T) {
+	b := loadTestBundle(t, "testdata/good", "acme")
+	replay := newReusableStreamReplayServer()
+	defer replay.Close()
+
+	var widgets int
+	if err := readRawRecordsWithReplay(b, "widgets", nil, replay, func(map[string]any) error {
+		widgets++
+		return nil
+	}); err != nil {
+		t.Fatalf("read widgets: %v", err)
+	}
+	if widgets == 0 {
+		t.Fatalf("widgets emitted zero records")
+	}
+	replayURL := replay.URL
+
+	var notes int
+	if err := readRawRecordsWithReplay(b, "notes", nil, replay, func(map[string]any) error {
+		notes++
+		return nil
+	}); err != nil {
+		t.Fatalf("read notes: %v", err)
+	}
+	if notes == 0 {
+		t.Fatalf("notes emitted zero records")
+	}
+	if replay.URL != replayURL {
+		t.Fatalf("replay server URL changed between streams: %q -> %q", replayURL, replay.URL)
+	}
+}
+
 // --- ENGINE DIALECT ADDITION (checkquery-ledger.md item 5): check_fixture
 // must compare the fixture's recorded request.query, not just replay a
 // canned response to any request whatsoever. --------------------------------
@@ -248,7 +280,7 @@ func TestDynamicChecks_StreamLevelSkipMarkerSkipsReadCheckWithReason(t *testing.
 	if result.Error == "" {
 		t.Fatalf("read_fixture_nonempty:widgets Skipped but carries no reason text")
 	}
-	if !strings.Contains(result.Error, "paritytest/acme-stream-marker") {
+	if !strings.Contains(result.Error, "archived parity evidence for acme-stream-marker") {
 		t.Fatalf("read_fixture_nonempty:widgets Error %q does not name the authoritative substitute", result.Error)
 	}
 

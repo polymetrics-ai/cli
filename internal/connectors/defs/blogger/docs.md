@@ -1,105 +1,85 @@
 # Overview
 
-Blogger is a Tier-2 (AuthHook) migration of `internal/connectors/blogger` (legacy, read-only
-reference until the wave6 registry flip). It reads Google Blogger API v3 blogs, posts, pages,
-comments, and page-view counts via the Google OAuth 2.0 **refresh-token grant** only — the 3-legged consent/acquisition
-dance is out of scope (the refresh token arrives as a pre-issued secret; the credentials layer
-already owns acquisition/storage). This bundle is engine-vs-legacy parity-tested against
-`internal/connectors/blogger`. Read-only: legacy `blogger.go:494-496` always returns
-`ErrUnsupportedOperation` from `Write`, and this bundle declares `capabilities.write: false` with
-no `writes.json` to match.
+Reads Blogger (Google Blogger API v3) blogs, posts, pages, comments, and page-view counts using an
+OAuth 2.0 refresh-token grant. Read-only.
+
+Readable streams: `blogs`, `posts`, `pages`, `comments`, `pageviews`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developers.google.com/blogger/docs/3.0/reference.
 
 ## Auth setup
 
-Provide three secrets: `client_id`, `client_secret`, and `client_refresh_token` (long-lived; never
-logged), plus the `blog_id` config value identifying which blog to read. `hooks/blogger/hooks.go`
-implements `AuthHook`, porting legacy `blogger.go`'s `refreshTokenAuth` almost verbatim: it POSTs
-`grant_type=refresh_token` + `refresh_token` + `client_id` + `client_secret` to `token_url`
-(default `https://oauth2.googleapis.com/token`, config-overridable), caches the resulting access
-token until 60 seconds before its declared expiry, and sets `Authorization: Bearer <access_token>`
-on every request.
+Connection fields:
 
-`token_url` MUST resolve to an `https://` URL: the hook fails closed on a non-https or unparseable
-override rather than sending the refresh token/client secret to an attacker-chosen endpoint
-(mirrors gmail's identical hook-level tightening — legacy's own `bloggerTokenURL` accepted any
-scheme the caller passed with no validation at all, so this is strictly safer, never stricter for
-the one real production Google token endpoint). See Known limits.
+- `base_url` (optional, string); default `https://www.googleapis.com/blogger/v3`; format `uri`;
+  Blogger API base URL override for tests or proxies.
+- `blog_id` (required, string); The Blogger blog id to read (blogs/{blog_id}/... resources).
+- `client_id` (required, secret, string); Google OAuth 2.0 client ID for the refresh-token grant.
+  Used only in the token-request form; never logged.
+- `client_refresh_token` (required, secret, string); Long-lived Google OAuth 2.0 refresh token.
+  Exchanged for a short-lived access token at token_url; never logged. The 3-legged
+  consent/acquisition dance is out of scope for this connector (credentials layer already owns it).
+- `client_secret` (required, secret, string); Google OAuth 2.0 client secret. Used only in the
+  token-request form; never logged.
+- `page_size` (optional, string); default `100`; Records per page (1-500, maxResults) for paginated
+  streams (posts, pages, comments).
+- `token_url` (optional, string); default `https://oauth2.googleapis.com/token`; format `uri`;
+  Google OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a
+  non-https or unparseable value to prevent exfiltrating the refresh token to an attacker-chosen
+  endpoint.
 
-The bundle's `base.auth` declares exactly one candidate: `{"mode": "custom", "hook": "blogger",
-...}` — legacy has no alternate auth path (no static API key, no public/no-auth fallback), so there
-is no `when`-gated bypass to declare.
+Secret fields are redacted in logs and write previews: `client_id`, `client_refresh_token`,
+`client_secret`.
+
+Default configuration values: `base_url=https://www.googleapis.com/blogger/v3`, `page_size=100`,
+`token_url=https://oauth2.googleapis.com/token`.
+
+Authentication behavior:
+
+- Connector-specific authentication using `secrets.client_refresh_token`, `config.token_url`,
+  `secrets.client_id`, `secrets.client_secret`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/blogs/{{ config.blog_id }}`.
 
 ## Streams notes
 
-Five streams. The four legacy-parity resource streams are primary-keyed on `id` with
-`x-cursor-field: updated` (legacy's catalog publishes `CursorFields: []string{"updated"}` for every
-legacy stream, §8 rule 2): `blogs` (single-resource,
-`pagination: {"type": "none"}`, `records.path: ""` selects the bare object response exactly like
-legacy's `readSingle`), and `posts`/`pages`/`comments` (all three paginated via Blogger's
-`pageToken`/`nextPageToken` cursor convention — `pagination.type: cursor` with
-`token_path: nextPageToken`, `cursor_param: pageToken`, `page_size: 100` sent as `maxResults`,
-matching legacy's `harvest` loop exactly).
+Default pagination: cursor pagination; cursor parameter `pageToken`; next token from
+`nextPageToken`; page size 100.
 
-`pageviews` reads `GET /blogs/{{ config.blog_id }}/pageviews`, emits each `counts[]` entry, and
-stamps the configured `blog_id` because Blogger nests the counts under a single response object. It
-is non-paginated and primary-keyed by `blog_id` + `time_range`.
+Pagination by stream: cursor: `posts`, `pages`, `comments`; none: `blogs`, `pageviews`.
 
-`computed_fields` flatten legacy's nested-object reads (`nestedField(item, outer, inner)`,
-streams.go:201-207) into the schema's flat column names: `posts_total`/`pages_total` from
-`posts.totalItems`/`pages.totalItems` on the `blogs` resource; `blog_id`/`author_id`/
-`author_display_name` from `blog.id`/`author.id`/`author.displayName` on every stream;
-`replies_total` from `replies.totalItems` on `posts`; `post_id` from `post.id` on `comments`. Every
-one of these `totalItems` fields is Blogger's real wire type — a JSON **string** (e.g. `"2"`), not
-a number — so the schema types them `["integer", "string", "null"]` rather than coercing; legacy
-itself never parses these as integers either (streams.go's `bloggerBlogRecord`/`bloggerPostRecord`
-copy the raw `any` value straight through).
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-**No incremental sync mode wired**: legacy's own doc comment (blogger.go:104-106) states Blogger
-list endpoints do not accept an arbitrary updated-since filter, so `InitialState` always seeds an
-empty cursor and no stream declares `incremental.request_param`/`client_filtered` — matching
-legacy, every stream's `incremental` block is a bare `cursor_field` only (full_refresh +
-incremental_append sync-mode eligibility, never a server-side or client-side filter).
+- `blogs`: GET `/blogs/{{ config.blog_id }}` - records at response root; incremental cursor
+  `updated`; formatted as `rfc3339`; computed output fields `pages_total`, `posts_total`.
+- `posts`: GET `/blogs/{{ config.blog_id }}/posts` - records path `items`; query `maxResults`=`{{
+  config.page_size }}`; cursor pagination; cursor parameter `pageToken`; next token from
+  `nextPageToken`; page size 100; incremental cursor `updated`; formatted as `rfc3339`; computed
+  output fields `author_display_name`, `author_id`, `blog_id`, `replies_total`.
+- `pages`: GET `/blogs/{{ config.blog_id }}/pages` - records path `items`; query `maxResults`=`{{
+  config.page_size }}`; cursor pagination; cursor parameter `pageToken`; next token from
+  `nextPageToken`; page size 100; incremental cursor `updated`; formatted as `rfc3339`; computed
+  output fields `author_display_name`, `author_id`, `blog_id`.
+- `comments`: GET `/blogs/{{ config.blog_id }}/comments` - records path `items`; query
+  `maxResults`=`{{ config.page_size }}`; cursor pagination; cursor parameter `pageToken`; next token
+  from `nextPageToken`; page size 100; incremental cursor `updated`; formatted as `rfc3339`;
+  computed output fields `author_display_name`, `author_id`, `blog_id`, `post_id`.
+- `pageviews`: GET `/blogs/{{ config.blog_id }}/pageviews` - records path `counts`; computed output
+  fields `blog_id`, `time_range`.
 
 ## Write actions & risks
 
-None — Blogger is read-only. `capabilities.write: false`, no `writes.json` file, matching legacy's
-`ErrUnsupportedOperation` (`blogger.go:494-496`).
+This connector is read-only. Read behavior: external Blogger API read of blog/post/page/comment
+metadata and page-view counts.
 
 ## Known limits
 
-- **`max_pages` is not modeled**: legacy accepts a `max_pages` config value (`0`/`all`/`unlimited`
-  for unbounded, else a positive integer hard-capping request count per stream,
-  `bloggerMaxPages`). The engine's `PaginationSpec.MaxPages` is a fixed bundle-declared integer,
-  not a runtime-config-driven override — there is no declarative mechanism to thread a per-request
-  `config.max_pages` value into the pagination spec's cap. Left undeclared in `spec.json` (F6: a
-  spec property with no wired template is dead config) rather than declaring an unwireable
-  `max_pages` field; pagination is otherwise unbounded here (matching legacy's own default of
-  unbounded when `max_pages` is unset/`all`/`unlimited`), so this narrows only the rarely-used
-  explicit-cap case, not the default behavior. Deferred to Pass B if the engine grows a
-  config-driven `MaxPages` override.
-- **`token_url` https-only enforcement is stricter than legacy**, which performed no scheme
-  validation on `token_url` at all (`bloggerTokenURL`, blogger.go:435-443, only reads a raw
-  string override with no `url.Parse` check). This is documented as a parity deviation (never
-  stricter for any *production* Google OAuth endpoint, which is always https; strictly safer for
-  the one SSRF-adjacent secret-bearing surface this connector has). See the parity-deviation
-  ledger in `docs/migration/conventions.md` §5.
-- **`base_url`/`blog_id` path validation**: legacy validates `base_url`'s scheme (http/https only)
-  and requires a non-empty `blog_id`, both enforced structurally here instead: `base_url` is a
-  `spec.json` `format: uri` property fed straight into `streams.json`'s `base.url` template (an
-  invalid override surfaces as a request-time failure rather than a dedicated pre-flight
-  validation error), and `blog_id` is `required` in `spec.json` so an absent value is a hard load
-  error rather than legacy's dedicated `errors.New("blogger connector requires config blog_id")`
-  message. Same rejected-input set, different (still honest) error-classification path — see
-  conventions.md §5's postgres precedent for the same acceptable deviation shape.
-- **Lookup by URL and Blogger writes are not modeled**: `/blogs/byurl` requires a second identity
-  input (`blog_url`) while this bundle is intentionally keyed by `blog_id`; post/page create,
-  update, delete, and comment moderation require Blogger write/admin OAuth scopes. Those endpoints
-  stay excluded in `api_surface.json` with config/scope-specific reasons.
-- **Bundle-level `skip_dynamic` marker**: this bundle's sole auth candidate is `mode: custom` (no
-  `when`-gated non-custom fallback, mirroring gmail exactly), and conformance's synthetic
-  non-secret config can never carry a real `https` `token_url` the AuthHook's own guard would
-  accept — every auth-resolving dynamic check (`check_fixture`, every `read_fixture_nonempty:
-  <stream>`, `pagination_terminates`, `records_match_schema`, `cursor_advances`) would otherwise
-  fail identically and uninformatively. `paritytest/blogger` (which wires the real `AuthHook` via
-  `engine.HooksFor("blogger")`) is the authoritative parity/correctness bar for this connector's
-  auth and read paths.
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, duplicate_of=2, out_of_scope=1, requires_elevated_scope=3.

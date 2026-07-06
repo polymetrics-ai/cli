@@ -10,22 +10,76 @@ SYNOPSIS
   pm credentials add <name> --connector activecampaign [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads ActiveCampaign contacts, lists, deals, and campaigns through the ActiveCampaign v3 REST API.
+  Reads ActiveCampaign contacts, lists, deals, campaigns, tags, automations, custom fields, accounts, users, deal stages, and deal tasks through the ActiveCampaign v3 REST API.
+
+ICON
+  asset: icons/activecampaign.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developers.activecampaign.com/reference/overview
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  api_key (secret)
+
+ETL STREAMS
+  contacts:
+    primary key: id
+    cursor: udate
+    fields: cdate(), deleted(), email(), firstName(), id(), lastName(), orgid(), phone(), udate()
+  lists:
+    primary key: id
+    cursor: cdate
+    fields: cdate(), id(), name(), sender_url(), stringid(), subscriber_count(), userid()
+  deals:
+    primary key: id
+    cursor: mdate
+    fields: cdate(), contact(), currency(), id(), mdate(), owner(), stage(), status(), title(), value()
+  campaigns:
+    primary key: id
+    cursor: cdate
+    fields: cdate(), id(), linkclicks(), mdate(), name(), opens(), send_amt(), status(), subject(), type(), uniqueopens()
+  tags:
+    primary key: id
+    cursor: cdate
+    fields: cdate(), description(), id(), subscriber_count(), tag(), tagType()
+  automations:
+    primary key: id
+    cursor: mdate
+    fields: cdate(), entered(), exited(), hidden(), id(), mdate(), name(), status(), userid()
+  fields:
+    primary key: id
+    cursor: udate
+    fields: cdate(), descript(), id(), isrequired(), perstag(), title(), type(), udate(), visible()
+  accounts:
+    primary key: id
+    cursor: updatedTimestamp
+    fields: accountUrl(), contactCount(), createdTimestamp(), dealCount(), id(), name(), updatedTimestamp()
+  users:
+    primary key: id
+    fields: email(), firstName(), id(), lastName(), phone(), username()
+  deal_stages:
+    primary key: id
+    cursor: udate
+    fields: cdate(), color(), group(), id(), order(), title(), udate()
+  deal_tasks:
+    primary key: id
+    cursor: udate
+    fields: cdate(), duedate(), id(), note(), relid(), reltype(), status(), title(), udate()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external ActiveCampaign API read of contacts, lists, deals, campaigns, tags, automations, custom fields, accounts, users, deal stages, and deal tasks
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

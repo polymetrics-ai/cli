@@ -1,138 +1,179 @@
 # Overview
 
-e-conomic is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to the FULL practical
-surface of the legacy REST API at `https://restapi.e-conomic.com` (the `X-AppSecretToken`/
-`X-AgreementGrantToken`-authenticated product; a separate, newer `apis.e-conomic.com` OpenAPI
-product line is out of scope, see `api_surface.json`). It reads customers, products, suppliers,
-accounts, booked and draft invoices, draft and archived orders, and reference/lookup data
-(customer/product/supplier groups, payment terms, VAT zones, currencies). It also now WRITES:
-customer/product/supplier create-update-delete, draft-invoice create/update, and booking a draft
-invoice into a final booked invoice. This bundle migrates `internal/connectors/e-conomic` (the
-hand-written connector, which was read-only); the legacy package stays registered and unchanged
-until wave6's registry flip — the write surface here is a genuinely NEW Pass-B capability, not a
-migrated legacy behavior, since legacy itself never wrote.
+Reads and writes e-conomic customers, products, suppliers, accounts, invoices (booked/draft),
+orders, and reference data (currencies, payment terms, VAT zones, customer/product/supplier groups)
+through the e-conomic REST API.
+
+Readable streams: `customers`, `products`, `suppliers`, `accounts`, `invoices`, `invoices_drafts`,
+`customer_groups`, `product_groups`, `supplier_groups`, `payment_terms`, `vat_zones`, `currencies`,
+`orders_drafts`, `orders_archived`.
+
+Write actions: `create_customer`, `update_customer`, `delete_customer`, `create_product`,
+`update_product`, `delete_product`, `create_supplier`, `update_supplier`, `delete_supplier`,
+`create_draft_invoice`, `update_draft_invoice`, `book_invoice`.
+
+Service API documentation: https://restdocs.e-conomic.com/.
 
 ## Auth setup
 
-Provide two secrets: `app_secret_token` (the e-conomic app's secret) and `agreement_grant_token`
-(the per-agreement grant). Both are sent as plain request headers —
-`X-AppSecretToken: <app_secret_token>` and `X-AgreementGrantToken: <agreement_grant_token>` — via
-`streams.json`'s `base.headers`, matching legacy's `requester` construction exactly
-(`e_conomic.go`'s `appSecretHeader`/`agreementGrantHead` constants). Both secrets are required;
-neither has a fallback. `base_url` defaults to `https://restapi.e-conomic.com` and may be
-overridden for tests/proxies. The same two secrets authenticate every write action — e-conomic has
-no separate write-scoped credential.
+Connection fields:
+
+- `agreement_grant_token` (required, secret, string); e-conomic per-agreement grant token, sent as
+  the X-AgreementGrantToken request header. Never logged.
+- `app_secret_token` (required, secret, string); e-conomic app secret token, sent as the
+  X-AppSecretToken request header. Never logged.
+- `base_url` (optional, string); default `https://restapi.e-conomic.com`; format `uri`; e-conomic
+  API base URL override for tests or proxies.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `agreement_grant_token`, `app_secret_token`.
+
+Default configuration values: `base_url=https://restapi.e-conomic.com`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/customers` with query `pagesize`=`1`; `skippages`=`0`.
 
 ## Streams notes
 
-All 12 streams (`customers`, `products`, `suppliers`, `accounts`, `invoices`, `invoices_drafts`,
-`customer_groups`, `product_groups`, `supplier_groups`, `payment_terms`, `vat_zones`, `currencies`,
-`orders_drafts`, `orders_archived`) share the same list shape: `GET` against the e-conomic
-collection path, records at `collection`, and e-conomic's own `skippages`/`pagesize` pagination
-convention with `pagination.nextPage` (an absolute URL) driving the next page (`pagination.type:
-next_url`, `next_url_path: "pagination.nextPage"`) — matching legacy's `harvest` function exactly
-for the 5 original streams, and applying the identical documented convention to every newly-added
-stream (confirmed via `restdocs.e-conomic.com` and e-conomic's own TechTalk developer-blog posts on
-`/orders` and invoice-drafts/booking). `invoices` reads from `/invoices/booked`; `invoices_drafts`
-reads from `/invoices/drafts` (unbooked, still-mutable work-in-progress invoices).
-`orders_drafts`/`orders_archived` read from `/orders/drafts` and `/orders/archived` respectively —
-e-conomic's `/orders` API is itself split into a mutable `drafts` collection and an immutable
-`archived` collection once an order is sent (mirroring the invoices drafts/booked split). Every
-stream's initial request sends `skippages=0&pagesize=100` (legacy's `defaultPageSize`);
-`page_size`/`max_pages` are not modeled as runtime config (see Known limits).
+Default pagination: follows a next-page URL from the response body; URL path `pagination.nextPage`;
+next URLs stay on the configured API host.
 
-Every stream requires a `computed_fields` rename because e-conomic's wire shape uses camelCase
-field names (`customerNumber`, `salesPrice`, `creditLimit`, ...) while this bundle's schemas use
-snake_case, and schema-as-projection matches only by exact raw-key equality (conventions.md §2) —
-a plain projection with no renames would silently drop every e-conomic field. Nested business-key
-references (e.g. `{"vatZone":{"vatZoneNumber":1}}`) are flattened via dotted `record.<path>`
-references (`{{ record.vatZone.vatZoneNumber }}`), matching legacy's `refNumber` helper — a bare
-single reference like this receives the engine's typed extraction (conventions.md §3), preserving
-the real integer type, exactly like legacy's `refNumber` returning the raw `any` value. The 6
-reference-data streams (`customer_groups`/`product_groups`/`supplier_groups`/`payment_terms`/
-`vat_zones`/`currencies`) are narrow lookup tables (id/name(/code) shape); `currencies`' primary
-key is its ISO code (`code`, a string), not a numeric id.
+- `customers`: GET `/customers` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `address`, `balance`, `barred`,
+  `city`, `country`, `credit_limit`, `currency`, `customer_group_number`, `customer_number`,
+  `email`, `name`, `self`, `vat_zone_number`, `zip`.
+- `products`: GET `/products` - records path `collection`; query `pagesize`=`100`; `skippages`=`0`;
+  follows a next-page URL from the response body; URL path `pagination.nextPage`; next URLs stay on
+  the configured API host; computed output fields `barred`, `cost_price`, `description`, `name`,
+  `product_group_number`, `product_number`, `recommended_price`, `sales_price`, `self`,
+  `unit_number`.
+- `suppliers`: GET `/suppliers` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `address`, `barred`, `city`,
+  `country`, `currency`, `email`, `name`, `self`, `supplier_group_number`, `supplier_number`,
+  `vat_zone_number`, `zip`.
+- `accounts`: GET `/accounts` - records path `collection`; query `pagesize`=`100`; `skippages`=`0`;
+  follows a next-page URL from the response body; URL path `pagination.nextPage`; next URLs stay on
+  the configured API host; computed output fields `account_number`, `account_type`, `balance`,
+  `block_direct_entries`, `debit_credit`, `name`, `self`, `vat_code`.
+- `invoices`: GET `/invoices/booked` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `booked_invoice_number`,
+  `currency`, `customer_number`, `date`, `due_date`, `gross_amount`, `net_amount`,
+  `payment_terms_number`, `remainder`, `self`, `vat_amount`.
+- `invoices_drafts`: GET `/invoices/drafts` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `currency`, `customer_number`,
+  `date`, `draft_invoice_number`, `due_date`, `gross_amount`, `net_amount`, `payment_terms_number`,
+  `self`, `vat_amount`.
+- `customer_groups`: GET `/customer-groups` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `customer_group_number`, `name`,
+  `self`.
+- `product_groups`: GET `/product-groups` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `name`, `product_group_number`,
+  `self`.
+- `supplier_groups`: GET `/supplier-groups` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `name`, `self`,
+  `supplier_group_number`.
+- `payment_terms`: GET `/payment-terms` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `days_of_credit`, `name`,
+  `payment_terms_number`, `self`.
+- `vat_zones`: GET `/vat-zones` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `name`, `self`,
+  `vat_zone_number`.
+- `currencies`: GET `/currencies` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `code`, `name`, `self`.
+- `orders_drafts`: GET `/orders/drafts` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `currency`, `customer_number`,
+  `date`, `draft_order_number`, `gross_amount`, `net_amount`, `self`.
+- `orders_archived`: GET `/orders/archived` - records path `collection`; query `pagesize`=`100`;
+  `skippages`=`0`; follows a next-page URL from the response body; URL path `pagination.nextPage`;
+  next URLs stay on the configured API host; computed output fields `currency`, `customer_number`,
+  `date`, `gross_amount`, `net_amount`, `order_number`, `self`.
 
 ## Write actions & risks
 
-10 write actions, all newly added in this Pass-B expansion (legacy itself never wrote):
+Overall write risk: creates/updates/deletes customer, product, and supplier master-data records;
+creates/updates draft invoices; books a draft invoice into a legally-binding, thereafter-immutable
+booked invoice.
 
-- `create_customer` / `update_customer` / `delete_customer` — full CRUD against `/customers`.
-  `update_customer` is a `PUT` (e-conomic's full-resource-replace semantics: omitted optional
-  fields may be cleared, not left untouched) scoped by `path_fields: ["customerNumber"]`.
-  `delete_customer` is idempotent (`missing_ok_status: [404]`); e-conomic itself additionally
-  rejects (409, surfaced as a normal write failure, not specially handled) deleting a customer with
-  existing booked entries — this bundle does not attempt to special-case that response.
-- `create_product` / `update_product` / `delete_product` — identical full-CRUD shape against
-  `/products`, keyed by `productNumber` (a string, e-conomic's product numbers are not
-  guaranteed-numeric).
-- `create_supplier` / `update_supplier` / `delete_supplier` — identical full-CRUD shape against
-  `/suppliers`, keyed by `supplierNumber`.
-- `create_draft_invoice` / `update_draft_invoice` — author a draft (unbooked, still work-in-progress)
-  invoice against `/invoices/drafts`; `update_draft_invoice` only succeeds while the invoice remains
-  a draft (e-conomic rejects an update once booked).
-- `book_invoice` — `POST /invoices/booked` with a `draftInvoice` reference (and optional
-  `bookWithNumber`/`sendBy`, e.g. `sendBy: "ean"` for electronic NemHandel/EAN invoicing, per
-  e-conomic's own TechTalk documentation), transitioning a draft into a legally-binding, thereafter
-  immutable booked invoice. This is the highest-risk action in this bundle: e-conomic's own
-  documentation states core invoice fields cannot be changed post-booking — a correction requires
-  issuing a credit note against the booked invoice, not a further update/delete. Treat this action
-  as effectively irreversible.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Orders (`orders_drafts`/`orders_archived`) remain READ-ONLY this wave — e-conomic's own
-`/orders/drafts` POST/PUT/DELETE and `/orders/sent` transition are real, documented endpoints (see
-`api_surface.json`) but are excluded as `out_of_scope`: legacy never modeled order writes at all,
-and this Pass-B expansion's write scope was bounded to the invoice/customer/product/supplier
-mutation surface; a future wave can add order-authoring writes following the identical
-draft/sent-transition shape already proven by the invoice drafts/booked pair.
+- `create_customer`: POST `/customers` - kind `create`; body type `json`; required record fields
+  `customerNumber`, `name`, `currency`, `customerGroup`, `vatZone`, `paymentTerms`; accepted fields
+  `address`, `city`, `country`, `currency`, `customerGroup`, `customerNumber`, `email`, `name`,
+  `paymentTerms`, `vatZone`, `zip`; risk: creates a new customer record in the live e-conomic
+  bookkeeping ledger; low-risk additive mutation, no approval required.
+- `update_customer`: PUT `/customers/{{ record.customerNumber }}` - kind `update`; body type `json`;
+  path fields `customerNumber`; required record fields `customerNumber`; accepted fields `address`,
+  `barred`, `city`, `country`, `customerNumber`, `email`, `name`, `zip`; risk: overwrites an
+  existing customer's stored details; e-conomic's PUT is a full replace of the resource, so omitted
+  optional fields may be cleared.
+- `delete_customer`: DELETE `/customers/{{ record.customerNumber }}` - kind `delete`; body type
+  `none`; path fields `customerNumber`; required record fields `customerNumber`; accepted fields
+  `customerNumber`; missing records treated as success for status `404`; risk: permanently removes a
+  customer record; e-conomic rejects the delete (409) if the customer has any booked entries, but a
+  customer with no bookkeeping history is removed irreversibly.
+- `create_product`: POST `/products` - kind `create`; body type `json`; required record fields
+  `productNumber`, `name`, `productGroup`; accepted fields `costPrice`, `description`, `name`,
+  `productGroup`, `productNumber`, `salesPrice`, `unit`; risk: creates a new sellable/purchasable
+  product in the live e-conomic catalog; low-risk additive mutation, no approval required.
+- `update_product`: PUT `/products/{{ record.productNumber }}` - kind `update`; body type `json`;
+  path fields `productNumber`; required record fields `productNumber`; accepted fields `barred`,
+  `costPrice`, `description`, `name`, `productNumber`, `salesPrice`; risk: overwrites an existing
+  product's stored details, including its sales/cost price used on future invoices; e-conomic's PUT
+  is a full replace, so omitted optional fields may be cleared.
+- `delete_product`: DELETE `/products/{{ record.productNumber }}` - kind `delete`; body type `none`;
+  path fields `productNumber`; required record fields `productNumber`; accepted fields
+  `productNumber`; missing records treated as success for status `404`; risk: permanently removes a
+  product from the catalog; e-conomic rejects the delete (409) if the product is referenced by any
+  booked invoice line.
+- `create_supplier`: POST `/suppliers` - kind `create`; body type `json`; required record fields
+  `supplierNumber`, `name`, `currency`, `supplierGroup`, `vatZone`; accepted fields `address`,
+  `city`, `country`, `currency`, `email`, `name`, `supplierGroup`, `supplierNumber`, `vatZone`,
+  `zip`; risk: creates a new supplier record in the live e-conomic bookkeeping ledger; low-risk
+  additive mutation, no approval required.
+- `update_supplier`: PUT `/suppliers/{{ record.supplierNumber }}` - kind `update`; body type `json`;
+  path fields `supplierNumber`; required record fields `supplierNumber`; accepted fields `address`,
+  `barred`, `city`, `country`, `email`, `name`, `supplierNumber`, `zip`; risk: overwrites an
+  existing supplier's stored details; e-conomic's PUT is a full replace of the resource, so omitted
+  optional fields may be cleared.
+- `delete_supplier`: DELETE `/suppliers/{{ record.supplierNumber }}` - kind `delete`; body type
+  `none`; path fields `supplierNumber`; required record fields `supplierNumber`; accepted fields
+  `supplierNumber`; missing records treated as success for status `404`; risk: permanently removes a
+  supplier record; e-conomic rejects the delete (409) if the supplier has any booked entries.
+- `create_draft_invoice`: POST `/invoices/drafts` - kind `create`; body type `json`; required record
+  fields `date`, `currency`, `customer`, `paymentTerms`, `layout`, `lines`; accepted fields
+  `currency`, `customer`, `date`, `layout`, `lines`, `paymentTerms`, `recipient`; risk: creates a
+  new draft (work-in-progress, not yet legally binding) invoice; not yet booked, so reversible by
+  deleting the draft - low-risk.
+- `update_draft_invoice`: PUT `/invoices/drafts/{{ record.draftInvoiceNumber }}` - kind `update`;
+  body type `json`; path fields `draftInvoiceNumber`; required record fields `draftInvoiceNumber`;
+  accepted fields `currency`, `customer`, `date`, `draftInvoiceNumber`, `lines`, `paymentTerms`;
+  risk: overwrites an existing draft invoice's stored details; only draft (unbooked) invoices are
+  mutable - a booked invoice number here is rejected by e-conomic.
+- `book_invoice`: POST `/invoices/booked` - kind `create`; body type `json`; required record fields
+  `draftInvoice`; accepted fields `bookWithNumber`, `draftInvoice`, `sendBy`; risk: irreversibly
+  transitions a draft invoice to a legally-binding booked invoice; e-conomic core invoice fields
+  become immutable after booking (a correction requires issuing a credit note against it, not an
+  update/delete).
 
 ## Known limits
 
-- **No incremental cursor on any stream.** Legacy exposes no incremental cursor field for any
-  e-conomic stream (`economicStreams()` declares no `CursorFields` anywhere), and none of the
-  newly-added Pass-B streams introduce one either — e-conomic's REST API supports `filter`/`sort`
-  query parameters but no server-side "modified since" semantics this bundle wires up. Every stream
-  is full-refresh only; no `incremental` block is declared anywhere, matching legacy's original 5
-  streams and extending the same shape to the 7 new ones.
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes `page_size` (default
-  100, capped at 1000) and `max_pages` (0/all/unlimited = unbounded) as config-driven overrides
-  (`pageSize`/`maxPages` in `e_conomic.go`). The engine's `next_url` paginator has no
-  config-driven page-size or max-pages knob, so this bundle sends legacy's own default
-  (`pagesize=100`) as a static per-stream query literal and does not declare `page_size`/`max_pages`
-  in `spec.json` at all (a declared-but-unwireable config key is worse than an absent one, per
-  conventions.md F6 precedent). Pagination is bounded only by e-conomic's own empty-`nextPage` stop
-  signal, matching e-conomic's real termination behavior.
-- **Legacy's fixture-mode-only synthetic fields are not modeled.** Legacy's `readFixture` path
-  (only reached when `config.mode == "fixture"`, a credential-free conformance-harness affordance
-  in the legacy Go connector) stamps deterministic placeholder records with fields shaped after —
-  but not identical to — the live wire shape. This bundle's schemas and fixtures target the LIVE
-  record shape only (`e_conomic.go`'s `harvest`/`mapRecord` functions), per the bitly-pilot
-  precedent (`docs/migration/conventions.md`'s worked example): the engine's own
-  fixture-replay conformance harness supersedes the need for an in-connector fixture-mode branch.
-- **`next_url` pagination ships single-page conformance fixtures for every stream** (the sanctioned
-  exception, conventions.md §4): e-conomic's `pagination.nextPage` is an absolute URL whose host is
-  the live API (or, in a real sync, whatever `base_url` resolves to) — a static fixture file cannot
-  embed the conformance replay server's own dynamically-assigned address ahead of time. All 12
-  streams share the identical base-level `next_url` pagination, so every stream fixture here is
-  single-page; `pagination_terminates` exercises `customers` (the first declared stream) against
-  its one-page fixture, which trivially proves the read terminates and consumes exactly the one
-  recorded page. A live two-page proof (an `httptest.Server` asserting the engine correctly follows
-  a `nextPage` URL across two real pages) is out of scope for this wave (JSON+docs only, no
-  `paritytest` packages) and is a documented follow-up: extend this bundle with a
-  `paritytest/e-conomic` suite (mirroring bitly's/calendly's `next_url` parity tests) in a
-  subsequent wave.
-- **The newer `apis.e-conomic.com` OpenAPI product line is out of scope.** e-conomic separately
-  publishes versioned OpenAPI products (`customersapi`, `journalsapi`, `subscriptionsapi`, ...) at
-  `apis.e-conomic.com` with their own base URLs (e.g.
-  `https://apis.e-conomic.com/customersapi/v3.1.0/`) while sharing the same two auth headers. This
-  bundle's `spec.json`/`streams.json` target the legacy `restapi.e-conomic.com` surface only, the
-  one legacy's own hand-written connector was built against; the newer product line is a distinct
-  API surface with its own versioning lifecycle and is not modeled here (see `api_surface.json`'s
-  final entry).
-- **Write actions have no dedicated hook/compound logic.** Every write action here is a single
-  plain HTTP request (`body_type: "json"`, default body construction) — none needed a `WriteHook`.
-  `book_invoice`'s real-world usage often chains a preceding `create_draft_invoice` (or a prior
-  `update_draft_invoice`) followed by this action with the resulting `draftInvoiceNumber`; this
-  bundle does not compose that chain automatically (each action is one independent write call, per
-  the engine's per-record write model) — the caller is responsible for sequencing draft-then-book
-  across two separate write calls.
+- Batch defaults: read_page_size=100.
+- API coverage includes 14 stream-backed endpoint group(s), 12 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=1, deprecated=1, destructive_admin=4, duplicate_of=18, non_data_endpoint=3,
+  out_of_scope=30.

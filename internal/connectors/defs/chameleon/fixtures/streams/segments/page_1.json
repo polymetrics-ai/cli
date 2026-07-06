@@ -13,16 +13,7 @@
         {
           "id": "seg_fixture_1",
           "name": "Fixture Segment 1",
-          "items": [
-            {
-              "id": "item_1",
-              "kind": "property",
-              "prop": "role",
-              "op": "eq",
-              "value": "admin"
-            }
-          ],
-          "items_op": "and",
+          "description": "Fixture segment description",
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-02T00:00:00Z"
         }

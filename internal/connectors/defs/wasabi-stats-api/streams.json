@@ -41,6 +41,9 @@
       "records": {
         "path": "data"
       },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.bucket record.date }}"
+      },
       "projection": "passthrough",
       "schema": "schemas/bucket_stats.json"
     },
@@ -52,6 +55,9 @@
       },
       "records": {
         "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ coalesce record.id record.date }}"
       },
       "projection": "passthrough",
       "schema": "schemas/account_stats.json"

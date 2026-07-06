@@ -12,20 +12,52 @@ SYNOPSIS
 DESCRIPTION
   Reads articles and news sources from the News API (newsapi.org): the everything search, top headlines, and the sources directory.
 
+ICON
+  asset: icons/newsapi.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://newsapi.org/docs
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  category
+  country
+  domains
+  end_date
+  exclude_domains
+  language
+  search_in
+  search_query
+  sort_by
+  sources
+  start_date
+  api_key (secret)
+
+ETL STREAMS
+  everything:
+    primary key: url
+    cursor: published_at
+    fields: author(), content(), description(), published_at(), source_id(), source_name(), title(), url(), url_to_image()
+  top_headlines:
+    primary key: url
+    cursor: published_at
+    fields: author(), content(), description(), published_at(), source_id(), source_name(), title(), url(), url_to_image()
+  sources:
+    primary key: id
+    fields: category(), country(), description(), id(), language(), name(), url()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external News API read of article and source metadata
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

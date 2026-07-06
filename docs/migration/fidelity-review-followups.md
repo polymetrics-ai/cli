@@ -75,6 +75,23 @@ re-fixed. A targeted adversarial re-review (review → independent confirm) of a
 Net fidelity outcome: **41 defects → 37 fully closed, 1 minor documented deviation (netsuite edge),
 3 deferred (adjust/productive object-flatten, plausible config-param).**
 
+## Wave 6 sub-phase 1 update (2026-07-05)
+
+Re-verified with connector-local `connectorgen validate` (0 findings) and targeted
+`TestConformance/<name>` runs unless noted.
+
+- **Fixed**: chameleon fixture field sets now match the narrowed legacy projections; eventzilla
+  transactions preserve raw numeric `event_id`; shopwired schemas are narrowed to the legacy emitted
+  field sets; wasabi-stats-api fills missing ids from legacy bucket/date candidates; yotpo schemas
+  and primary keys match passthrough emission; piwik SitesManager site streams now use the same
+  `site_id`/`main_url` coalesce fallbacks as the legacy `sites` mapper.
+- **Already fixed before this pass**: sharepoint-lists-enterprise already had the legacy
+  `max_pages: 1` cap; re-verified with no bundle delta.
+- **Accepted deferrals / no-action**: wufoo's `Hash` primary key remains intentionally faithful to
+  legacy Catalog metadata even though emitted entry data carries `EntryId`; xero remains deferred
+  until the engine has an emit-null/default-when-absent mode for fixed-projection mappers; simplesat
+  had already removed the invented `modified_after` cursor and required no change.
+
 ## Additional shard-1 deferred findings (2026-07-04)
 
 | Connector | Defect | Required engine feature |
@@ -85,7 +102,6 @@ Net fidelity outcome: **41 defects → 37 fully closed, 1 minor documented devia
 
 | Connector | Defect | Required engine feature |
 |---|---|---|
-| shopwired | legacy fixed-projection streams always emit `sku`/`email`/`status` keys as `null` when the source field is absent; schema projection can drop passthrough extras and restore coalesce fallbacks, but cannot synthesize explicit null-valued absent fields | **per-field emit-null/default-when-absent** projection/computed-field mode |
 | surveycto | legacy `forms` and `cases` streams are no longer honest object-list endpoints on the published API v2 surface: form discovery is `GET /forms/ids` returning a bare scalar-string array, while cases are represented as records inside the generic datasets API rather than a standalone `/cases` list with legacy's `caseid`/`form_id`/`status` projection | **scalar-array-to-record wrapping for reads/fan-out**, plus a SurveyCTO-specific alias/hook or dataset-record value projection for legacy cases |
-| xero | legacy's six fixed-projection mappers always emit every declared field and alias key (for example `ContactID`, `LineAmountTypes`, `updated_at`) as `null` when the source field or nested path is absent; schema projection and computed fields currently omit absent keys, while `passthrough` would incorrectly retain extra raw Xero fields and nested objects legacy dropped | **per-field emit-null/default-when-absent** projection/computed-field mode |
+| xero | accepted Wave 6 deferral: legacy's six fixed-projection mappers always emit every declared field and alias key (for example `ContactID`, `LineAmountTypes`, `updated_at`) as `null` when the source field or nested path is absent; schema projection and computed fields currently omit absent keys, while `passthrough` would incorrectly retain extra raw Xero fields and nested objects legacy dropped | **per-field emit-null/default-when-absent** projection/computed-field mode |
 | younium | legacy `mapRecord` copy-first overlays always assign `id`/`name`/`account_id`/`updated_at` with `nil` when every candidate fallback key is absent; `coalesce` now restores first-non-null fallback behavior for present values, but still omits the alias key on total absence | **per-field emit-null/default-when-absent** projection/computed-field mode |

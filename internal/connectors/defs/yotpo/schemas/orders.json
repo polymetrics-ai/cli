@@ -2,10 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "orders",
   "type": "object",
-  "x-primary-key": ["id"],
-  "x-cursor-field": "updated_at",
+  "x-primary-key": ["yotpo_id"],
+  "x-cursor-field": "order_date",
   "properties": {
-    "id": { "type": "integer" },
     "yotpo_id": { "type": ["integer", "null"] },
     "external_id": { "type": ["string", "null"] },
     "order_number": { "type": ["string", "null"] },
@@ -26,7 +25,6 @@
     "custom_properties": { "type": ["object", "null"] },
     "fulfillments": { "type": ["array", "null"] },
     "line_items": { "type": ["array", "null"] },
-    "status": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] }
+    "status": { "type": ["string", "null"] }
   }
 }

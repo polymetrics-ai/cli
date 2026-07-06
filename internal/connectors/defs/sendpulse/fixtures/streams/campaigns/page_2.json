@@ -1,9 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/campaigns", "query": { "limit": "100", "page": "2" } },
-  "response": {
-    "status": 200,
-    "body": [
-      { "id": 13, "name": "Fixture Campaign 3", "status": "sent" }
-    ]
-  }
-}

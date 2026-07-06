@@ -12,20 +12,51 @@ SYNOPSIS
 DESCRIPTION
   Reads Orb customers, subscriptions, plans, and invoices.
 
+ICON
+  asset: icons/orb.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.withorb.com/reference/api-reference
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  start_date
+  api_key (secret)
+
+ETL STREAMS
+  customers:
+    primary key: id
+    cursor: created_at
+    fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  subscriptions:
+    primary key: id
+    cursor: created_at
+    fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  plans:
+    primary key: id
+    cursor: created_at
+    fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+  invoices:
+    primary key: id
+    cursor: created_at
+    fields: amount(), created_at(), currency(), customer_id(), email(), id(), name(), plan_id(), status(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Orb API read of customer and billing data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

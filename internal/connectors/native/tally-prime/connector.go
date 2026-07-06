@@ -43,7 +43,7 @@
 // live TallyPrime instance: in fixture mode Check succeeds, Catalog returns
 // canned streams, and Read emits canned rows.
 //
-// NO init()/RegisterFactory/RegisterNativeLive call exists in this package
+// NO init()/RegisterFactory call exists in this package
 // (enforced by a grep-guard test, tally_prime_test.go TestNoInitRegistration)
 // — the registration flip that wires native/tally-prime into the production
 // registry is a later-wave change; this wave only builds and tests the

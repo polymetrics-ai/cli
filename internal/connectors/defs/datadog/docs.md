@@ -1,149 +1,189 @@
 # Overview
 
-Datadog reads monitors, dashboards, dashboard lists, users, SLOs, SLO corrections, scheduled
-downtimes, notebooks, organizations, hosts, Synthetics tests/locations/variables, and API/
-application keys, and writes monitor/dashboard/downtime/notebook/SLO/user/event/Synthetics-test/
-API-key mutations, through the Datadog API v1 — the full 5-stream legacy-parity surface of
-`internal/connectors/datadog` (the legacy hand-written connector, which stays registered and
-unchanged until wave6's registry flip) plus, as of this Pass B full-surface expansion, every other
-practical v1 catalog resource and dialect-expressible mutation. See `api_surface.json` for the
-endpoint-by-endpoint accounting against Datadog's own published OpenAPI v1 spec
-(`github.com/DataDog/datadog-api-client-go/.generator/schemas/v1/openapi.yaml`).
+Datadog reads 15 stream(s), and writes through 27 action(s).
+
+Readable streams: `monitors`, `dashboards`, `users`, `slo`, `downtimes`, `dashboard_lists`,
+`notebooks`, `organizations`, `hosts`, `slo_corrections`, `s_tests`, `s_locations`, `s_variables`,
+`api_keys`, `application_keys`.
+
+Write actions: `create_monitor`, `update_monitor`, `delete_monitor`, `create_dashboard`,
+`update_dashboard`, `delete_dashboard`, `create_dashboard_list`, `update_dashboard_list`,
+`delete_dashboard_list`, `create_downtime`, `update_downtime`, `cancel_downtime`, `create_notebook`,
+`update_notebook`, `delete_notebook`, `create_slo`, `update_slo`, `delete_slo`, `create_user`,
+`update_user`, `disable_user`, `create_event`, `create_s_api_test`, `update_s_api_test`,
+`create_api_key`, `update_api_key`, `delete_api_key`.
+
+Service API documentation: https://docs.datadoghq.com/api/latest/.
 
 ## Auth setup
 
-Provide `api_key` and `application_key` secrets; both are sent as raw header values —
-`DD-API-KEY: <api_key>` and `DD-APPLICATION-KEY: <application_key>` — matching legacy's
-`DefaultHeaders` map exactly (neither is a Bearer/Basic scheme, so `streams.json`'s `base.headers`
-declares them directly rather than via an `auth` candidate; both secrets are required, so an absent
-value is always a hard error per the engine's secrets-in-headers rule, matching legacy's own
-explicit `errors.New(...)` checks). Neither value is ever logged.
+Connection fields:
+
+- `api_key` (required, secret, string); Datadog API key, sent as the DD-API-KEY header. Never
+  logged.
+- `application_key` (required, secret, string); Datadog application key, sent as the
+  DD-APPLICATION-KEY header. Never logged.
+- `base_url` (optional, string); default `https://api.datadoghq.com`; format `uri`; Datadog API base
+  URL override for tests, proxies, or a regional site (e.g. https://api.datadoghq.eu,
+  https://api.us3.datadoghq.com).
+
+Secret fields are redacted in logs and write previews: `api_key`, `application_key`.
+
+Default configuration values: `base_url=https://api.datadoghq.com`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/api/v1/dashboard`.
 
 ## Streams notes
 
-The original 5 streams (`monitors`, `dashboards`, `users`, `slo`, `downtimes`) are unchanged from
-the wave2 migration; see the per-stream pagination/incremental notes already documented below.
+Default pagination: single request; no pagination.
 
-New in this Pass B expansion (9 additional streams, all read-only catalog resources):
+Pagination by stream: none: `dashboards`, `downtimes`, `dashboard_lists`, `organizations`,
+`s_locations`, `s_variables`, `api_keys`, `application_keys`; offset_limit: `notebooks`, `hosts`,
+`slo_corrections`; page_number: `monitors`, `users`, `slo`, `s_tests`.
 
-- **`dashboard_lists`** (`GET /api/v1/dashboard/lists/manual`, records at `dashboard_lists`) —
-  unpaginated, matching the real endpoint's shape (no `limit`/`offset`/page params documented).
-- **`notebooks`** (`GET /api/v1/notebooks`, records at `data`) — JSON:API envelope
-  (`{id, type, attributes: {...}}`); `computed_fields` lifts `name`/`created`/`modified` out of
-  `attributes` and `author_handle` out of the nested `attributes.author.handle`. Pagination is
-  `offset_limit` with `offset_param: start`, `limit_param: count` (the real endpoint's own
-  parameter names — an index-of-first-result offset and a result-count limit, not Datadog's more
-  common `page`/`page_size` naming).
-- **`organizations`** (`GET /api/v1/org`, records at `orgs`) — unpaginated (every managed
-  organization for the account is returned in one call); primary key is `public_id` (Datadog
-  organizations have no numeric `id` field).
-- **`hosts`** (`GET /api/v1/hosts`, records at `host_list`) — pagination is `offset_limit` with
-  `offset_param: start`, `limit_param: count` (the same offset/limit shape as `notebooks`, distinct
-  param names from either).
-- **`slo_corrections`** (`GET /api/v1/slo/correction`, records at `data`) — JSON:API envelope;
-  `computed_fields` lifts `slo_id`/`category`/`description`/`start`/`end`/`duration`/`timezone`/
-  `created_at`/`modified_at` out of `attributes`. Pagination is `offset_limit` with
-  `offset_param: offset`, `limit_param: limit` (the real endpoint's own documented param names).
-- **`synthetics_tests`** (`GET /api/v1/synthetics/tests`, records at `tests`) — pagination is
-  `page_number` with `page_param: page_number`, `size_param: page_size`, `start_page: 0` (the real
-  endpoint's own docs state "Starts at zero" for `page_number`, the same 0-based convention already
-  established for `monitors`/`slo`/`users`). Primary key is `public_id` (Synthetics tests have no
-  numeric `id` field, unlike monitors/dashboards).
-- **`synthetics_locations`** (`GET /api/v1/synthetics/locations`, records at `locations`) —
-  unpaginated; returns every public and private test-execution location.
-- **`synthetics_variables`** (`GET /api/v1/synthetics/variables`, records at `variables`) —
-  unpaginated; the raw API's `value.value`/`value.secure` fields (the variable's actual stored
-  value and whether it is marked secure) are deliberately NOT declared in this stream's schema —
-  see Known limits.
-- **`api_keys`** (`GET /api/v1/api_key`, records at `api_keys`) — unpaginated; primary key is `key`
-  (the API key's own value IS its identifier in this API, not a separate opaque id).
-- **`application_keys`** (`GET /api/v1/application_key`, records at `application_keys`) —
-  unpaginated; primary key is `hash` (a fixed-length hash of the key value, the closest thing to an
-  id this resource has — the real key VALUE itself is never returned by the list endpoint, only by
-  the create response).
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-`GET /api/v1/events` (Datadog's event-stream read) and `GET /api/v1/tags/hosts` (a tag-to-hostnames
-map) are NOT migrated as streams — both are genuine `ENGINE_GAP`s, not scoping choices; see Known
-limits.
+- `monitors`: GET `/api/v1/monitor` - records path `.`; page-number pagination; page parameter
+  `page`; size parameter `page_size`; starts at 0; page size 100; incremental cursor `modified`;
+  formatted as `rfc3339`.
+- `dashboards`: GET `/api/v1/dashboard` - records path `dashboards`.
+- `users`: GET `/api/v2/users` - records path `data`; page-number pagination; page parameter
+  `page[number]`; size parameter `page[size]`; starts at 0; page size 100; computed output fields
+  `created_at`, `disabled`, `email`, `handle`, `name`, `status`, `verified`.
+- `slo`: GET `/api/v1/slo` - records path `data`; page-number pagination; page parameter `page`;
+  size parameter `page_size`; starts at 0; page size 100.
+- `downtimes`: GET `/api/v1/downtime` - records path `.`.
+- `dashboard_lists`: GET `/api/v1/dashboard/lists/manual` - records path `dashboard_lists`.
+- `notebooks`: GET `/api/v1/notebooks` - records path `data`; offset/limit pagination; offset
+  parameter `start`; limit parameter `count`; page size 100; computed output fields `author_handle`,
+  `created`, `modified`, `name`.
+- `organizations`: GET `/api/v1/org` - records path `orgs`.
+- `hosts`: GET `/api/v1/hosts` - records path `host_list`; offset/limit pagination; offset parameter
+  `start`; limit parameter `count`; page size 100.
+- `slo_corrections`: GET `/api/v1/slo/correction` - records path `data`; offset/limit pagination;
+  offset parameter `offset`; limit parameter `limit`; page size 100; computed output fields
+  `category`, `created_at`, `description`, `duration`, `end`, `modified_at`, `slo_id`, `start`,
+  `timezone`.
+- `stream`: GET connector-managed request path - records path `tests`; page-number pagination; page
+  parameter `page_number`; size parameter `page_size`; starts at 0; page size 100.
+- `stream`: GET connector-managed request path - records path `locations`.
+- `stream`: GET connector-managed request path - records path `variables`.
+- `api_keys`: GET `/api/v1/api_key` - records path `api_keys`.
+- `application_keys`: GET `/api/v1/application_key` - records path `application_keys`.
 
 ## Write actions & risks
 
-20 write actions now cover every dialect-expressible Datadog v1 mutation:
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-- **Monitors**: `create_monitor`/`update_monitor`/`delete_monitor`.
-- **Dashboards**: `create_dashboard`/`update_dashboard`/`delete_dashboard` (update replaces the
-  dashboard's full widget layout — the real API's `PUT` is a whole-resource replace, not a patch).
-- **Dashboard lists**: `create_dashboard_list`/`update_dashboard_list`/`delete_dashboard_list`.
-- **Downtimes**: `create_downtime`/`update_downtime`/`cancel_downtime` (`cancel_downtime` maps to
-  the real API's `DELETE /api/v1/downtime/{downtime_id}`, which Datadog itself calls "cancel", not
-  "delete" — downtime records are never truly erased, only deactivated).
-- **Notebooks**: `create_notebook`/`update_notebook`/`delete_notebook` (update replaces the full
-  cell/time definition — the real API's `PUT` is a whole-resource replace).
-- **SLOs**: `create_slo`/`update_slo`/`delete_slo`.
-- **Users**: `create_user` (invites a new user), `update_user`, `disable_user` (Datadog has no true
-  user delete — accounts are disabled, never erased, matching the real API's `DELETE` semantics
-  exactly).
-- **Events**: `create_event` (posts a custom event into the event stream) — the corresponding read
-  (`GET /api/v1/events`) is out of scope (see Known limits), but posting a NEW event needs no time
-  window and is fully dialect-expressible.
-- **Synthetics**: `create_synthetics_api_test`/`update_synthetics_api_test` (API-type tests only —
-  browser/mobile tests require a recorded step sequence from Datadog's own visual test recorder,
-  with no practical declarative-record equivalent; see `api_surface.json`).
-- **API keys**: `create_api_key`/`update_api_key`/`delete_api_key`.
-
-`capabilities.write` is now `true` (previously `false`); `metadata.json`'s `risk.write`/
-`risk.approval` document per-action risk tiers — every delete/cancel action and every write with a
-live-alerting or access-control side effect (monitor/downtime/SLO/user updates, downtime/user
-creation) requires approval; pure-creation/rename actions with no live-alerting impact are
-low-risk.
+- `create_monitor`: POST `/api/v1/monitor` - kind `create`; body type `json`; required record fields
+  `name`, `type`, `query`, `message`; accepted fields `message`, `name`, `options`, `priority`,
+  `query`, `tags`, `type`; risk: creates a new alerting monitor; low-risk external mutation, no
+  approval required.
+- `update_monitor`: PUT `/api/v1/monitor/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`; accepted fields `id`, `message`, `name`, `options`,
+  `priority`, `query`, `tags`; risk: mutates an existing monitor's alert condition/notification
+  message; a changed query/threshold affects live alerting behavior, approval required.
+- `delete_monitor`: DELETE `/api/v1/monitor/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: irreversibly removes a monitor and its alerting history reference;
+  approval required.
+- `create_dashboard`: POST `/api/v1/dashboard` - kind `create`; body type `json`; required record
+  fields `title`, `layout_type`, `widgets`; accepted fields `description`, `layout_type`,
+  `notify_list`, `tags`, `title`, `widgets`; risk: creates a new dashboard; low-risk external
+  mutation, no approval required.
+- `update_dashboard`: PUT `/api/v1/dashboard/{{ record.id }}` - kind `update`; body type `json`;
+  path fields `id`; required record fields `id`, `title`, `layout_type`, `widgets`; accepted fields
+  `description`, `id`, `layout_type`, `notify_list`, `tags`, `title`, `widgets`; risk: replaces an
+  existing dashboard's full widget layout; external mutation, approval required.
+- `delete_dashboard`: DELETE `/api/v1/dashboard/{{ record.id }}` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: irreversibly removes a dashboard; approval required.
+- `create_dashboard_list`: POST `/api/v1/dashboard/lists/manual` - kind `create`; body type `json`;
+  required record fields `name`; accepted fields `name`; risk: creates a new dashboard list
+  (folder); low-risk external mutation, no approval required.
+- `update_dashboard_list`: PUT `/api/v1/dashboard/lists/manual/{{ record.id }}` - kind `update`;
+  body type `json`; path fields `id`; required record fields `id`, `name`; accepted fields `id`,
+  `name`; risk: renames an existing dashboard list; external mutation, approval required.
+- `delete_dashboard_list`: DELETE `/api/v1/dashboard/lists/manual/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing
+  records treated as success for status `404`; risk: irreversibly removes a dashboard list (folder);
+  the dashboards themselves are unaffected, approval required.
+- `create_downtime`: POST `/api/v1/downtime` - kind `create`; body type `json`; required record
+  fields `scope`; accepted fields `end`, `message`, `monitor_id`, `monitor_tags`, `recurrence`,
+  `scope`, `start`, `timezone`; risk: schedules a downtime that silences monitor alerts for the
+  given scope; suppresses real alerting during the window, approval required.
+- `update_downtime`: PUT `/api/v1/downtime/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`; accepted fields `end`, `id`, `message`, `scope`,
+  `start`; risk: mutates an existing downtime's window/scope; changes which alerts are currently
+  suppressed, approval required.
+- `cancel_downtime`: DELETE `/api/v1/downtime/{{ record.id }}` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: cancels a scheduled/active downtime; alerting resumes immediately
+  for its scope, approval required.
+- `create_notebook`: POST `/api/v1/notebooks` - kind `create`; body type `json`; required record
+  fields `name`, `cells`, `time`; accepted fields `cells`, `name`, `status`, `time`; risk: creates a
+  new notebook; low-risk external mutation, no approval required.
+- `update_notebook`: PUT `/api/v1/notebooks/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`, `name`, `cells`, `time`; accepted fields `cells`, `id`,
+  `name`, `status`, `time`; risk: replaces an existing notebook's content; external mutation,
+  approval required.
+- `delete_notebook`: DELETE `/api/v1/notebooks/{{ record.id }}` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: irreversibly removes a notebook; approval required.
+- `create_slo`: POST `/api/v1/slo` - kind `create`; body type `json`; required record fields `name`,
+  `type`, `thresholds`; accepted fields `description`, `monitor_ids`, `name`, `query`, `tags`,
+  `thresholds`, `type`; risk: creates a new SLO target; low-risk external mutation, no approval
+  required.
+- `update_slo`: PUT `/api/v1/slo/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `description`, `id`, `name`, `tags`,
+  `thresholds`; risk: mutates an existing SLO's target thresholds; affects SLO burn-rate alerting,
+  approval required.
+- `delete_slo`: DELETE `/api/v1/slo/{{ record.id }}` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; missing records treated as success for
+  status `404`; risk: irreversibly removes an SLO and its historical error-budget tracking; approval
+  required.
+- `create_user`: POST `/api/v1/user` - kind `create`; body type `json`; required record fields
+  `email`; accepted fields `access_role`, `email`, `name`; risk: invites a new user into the Datadog
+  organization with the given role; approval required.
+- `update_user`: PUT `/api/v1/user/{{ record.handle }}` - kind `update`; body type `json`; path
+  fields `handle`; required record fields `handle`; accepted fields `access_role`, `disabled`,
+  `email`, `handle`, `name`; risk: mutates an existing user's role/profile; a changed access_role
+  directly changes that user's permissions, approval required.
+- `disable_user`: DELETE `/api/v1/user/{{ record.handle }}` - kind `delete`; body type `none`; path
+  fields `handle`; required record fields `handle`; accepted fields `handle`; missing records
+  treated as success for status `404`; risk: disables a user's access to the Datadog organization;
+  approval required.
+- `create_event`: POST `/api/v1/events` - kind `create`; body type `json`; required record fields
+  `title`, `text`; accepted fields `aggregation_key`, `alert_type`, `date_happened`, `host`,
+  `priority`, `tags`, `text`, `title`; risk: posts a custom event into the Datadog event stream;
+  low-risk external mutation, no approval required.
+- `create_s_api_test`: POST connector-managed endpoint - kind `create`; body type `json`; required
+  record fields `name`, `type`, `config`, `locations`; accepted fields `config`, `locations`,
+  `message`, `name`, `options`, `subtype`, `tags`, `type`.
+- `update_s_api_test`: PUT connector-managed endpoint - kind `update`; body type `json`; path fields
+  `public_id`; required record fields `public_id`; accepted fields `config`, `locations`, `message`,
+  `name`, `options`, `public_id`, `tags`.
+- `create_api_key`: POST `/api/v1/api_key` - kind `create`; body type `json`; required record fields
+  `name`; accepted fields `name`; risk: creates a new organization API key with full
+  agent-submission scope; a newly-minted long-lived credential, approval required.
+- `update_api_key`: PUT `/api/v1/api_key/{{ record.key }}` - kind `update`; body type `json`; path
+  fields `key`; required record fields `key`, `name`; accepted fields `key`, `name`; risk: renames
+  an existing API key; low-risk external mutation, no approval required.
+- `delete_api_key`: DELETE `/api/v1/api_key/{{ record.key }}` - kind `delete`; body type `none`;
+  path fields `key`; required record fields `key`; accepted fields `key`; missing records treated as
+  success for status `404`; risk: irreversibly revokes an organization API key; every
+  agent/integration still using it immediately loses ingest access, approval required.
 
 ## Known limits
 
-- A `site`-derived `base_url` (legacy's `datadogBaseURL` builds `https://api.<site>` from a `site`
-  config value, e.g. `datadoghq.eu`, when `base_url` itself is unset) is not modeled: the engine's
-  `spec.json` `"default"` mechanism only materializes a fixed literal, not one derived from another
-  config field (conventions.md §3, the sentry/chargebee derived-default case). Set `base_url`
-  directly to the regional host (e.g. `https://api.datadoghq.eu`) instead of a bare `site` value.
-- **`GET /api/v1/events` is an `ENGINE_GAP`, not a scoping choice**: the real endpoint requires BOTH
-  `start` and `end` as mandatory POSIX-timestamp query parameters. `end`'s real-world value is
-  always "now" at request time — there is no fixed or config-derivable value for it — and the
-  engine's template `Vars` environment has no resolvable "current time" reference at all (`grep`
-  confirms no `time.Now()`-equivalent anywhere in `engine/{interpolate,read}.go`), the same gap
-  documented for the datascope bundle's windowed `answers`/`notifications` streams in this same
-  wave. `create_event` (posting a NEW event) needs no time window and is fully implemented as a
-  write action; only the READ side is blocked.
-- **`GET /api/v1/tags/hosts` is an `ENGINE_GAP`, not a scoping choice**: the real response shape is
-  `{"tags": {"<tag-name>": ["host1", "host2", ...]}}` — a map whose VALUES are ARRAYS of hostnames,
-  not objects. The engine's `records.keyed_object` flag explodes a keyed object's OBJECT-valued
-  entries into records; it has no equivalent for a keyed object whose values are arrays, and there
-  is no other declarative way to flatten an arbitrary-cardinality tag-to-hostnames map into stable
-  schema properties without a `RecordHook` (a 3rd hook interface this Tier-1 bundle does not have,
-  and does not need for anything else).
-- **`synthetics_variables`' raw `value.value`/`value.secure` fields are deliberately not declared
-  in the read-side schema**: the real API's list response DOES include the variable's actual
-  stored value (Datadog itself marks some variables `secure`/masks them server-side, but the field
-  is present in the raw JSON either way) — emitting a field that may carry a live credential value
-  into a destination warehouse is exactly the record-data credential-exfiltration risk the engine's
-  `computed_fields`' secrets exclusion (conventions.md §3) is designed to prevent at the
-  computed-fields layer; this bundle extends the same caution to plain schema projection for this
-  one field by simply never declaring it, rather than declaring and then hoping a downstream
-  consumer treats it carefully. `create`/`update`/`delete` for Synthetics variables are correctly
-  NOT implemented as writes this pass for the same reason (see `api_surface.json`) — a future
-  increment modeling a write-only-credential write action (the same pattern the dbt bundle's
-  `create_ssh_tunnel`/`update_ssh_tunnel` `private_key` field already establishes) would be the
-  correct way to add variable writes without this exposure.
-- The v1-vs-v2 API boundary: Datadog's v2 API is a separate, vastly larger (~1383-operation)
-  surface spanning entirely distinct product areas this connector's `docs_url`/`base_url` never
-  targeted — Security Monitoring, Cloud Cost Management, Case Management, LLM Observability,
-  Incidents, Teams, Static Analysis, Status Pages, Feature Flags, App Builder, On-Call, and
-  identity/org-administration surfaces (Org Groups, Roles, Service Accounts, Restriction Policies).
-  This bundle stays v1-only, matching its own `spec.json` `base_url` default
-  (`https://api.datadoghq.com`, the same host both API versions share, but this bundle's `streams`/
-  `writes` paths are exclusively `/api/v1/...`) and legacy's own v1-only implementation; the v2
-  surface is out of scope for this pass, not individually enumerated in `api_surface.json` (which
-  only lists the target v1 surface this connector actually addresses, the same convention the dbt
-  bundle uses for its v2-vs-v3 boundary in this same wave).
-- Full per-endpoint reasoning for every excluded v1 endpoint (integration credential management,
-  usage/billing metering, log-pipeline administration, metrics/timeseries query surfaces, public
-  dashboard sharing, Synthetics browser/mobile test authoring, and more) is in `api_surface.json`'s
-  `excluded` entries — every one carries a specific category and reason, no blanket bucket.
+- Batch defaults: read_page_size=100.
+- API coverage includes 12 stream-backed endpoint group(s), 25 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=1, destructive_admin=8, duplicate_of=27, non_data_endpoint=8, out_of_scope=97,
+  requires_elevated_scope=52.

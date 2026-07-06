@@ -12,20 +12,39 @@ SYNOPSIS
 DESCRIPTION
   Reads Google task lists and tasks through the Google Tasks REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  records_limit
+  api_key (secret)
+
+ETL STREAMS
+  tasklists:
+    primary key: id
+    cursor: updated
+    fields: etag(), id(), kind(), self_link(), title(), updated()
+  tasks:
+    primary key: id
+    cursor: updated
+    fields: completed(), deleted(), due(), etag(), hidden(), id(), kind(), notes(), parent(), position(), self_link(), status(), tasklist_id(), title(), updated()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Google Tasks API read of the authenticated user's task lists and tasks
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

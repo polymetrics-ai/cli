@@ -1,5 +1,5 @@
-// Command connectorgen is the wave0 migration-tooling CLI for the
-// declarative connector engine (design §C.3):
+// Command connectorgen is the declarative connector engine tooling CLI
+// (design §C.3):
 //
 //	validate [dir] [--json]   loads and validates every bundle under dir
 //	                           (default internal/connectors/defs), exit 1 on
@@ -8,8 +8,8 @@
 //	                           native/nativeset/nativeset_gen.go
 //	new <name>                 scaffolds internal/connectors/defs/<name>/
 //
-// cmd/connectorgen does not replace cmd/registrygen in wave0 (that happens in
-// wave6); it is purely additive tooling for the new defs/ bundle format.
+// It owns bundle validation plus generated hook/native import sets for the
+// connector-architecture-v2 runtime.
 package main
 
 import (
@@ -143,7 +143,7 @@ func renderText(w io.Writer, report Report) {
 }
 
 // repoRoot finds the module root by walking up to the directory containing
-// go.mod (mirrors cmd/registrygen's repoRoot).
+// go.mod.
 func repoRoot() (string, error) {
 	dir, err := os.Getwd()
 	if err != nil {

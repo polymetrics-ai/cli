@@ -10,22 +10,41 @@ SYNOPSIS
   pm credentials add <name> --connector adjust [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Adjust report-service report rows. Read-only.
+  Reads Adjust report-service report rows for configured dimensions and metrics. Read-only.
+
+ICON
+  asset: icons/adjust.svg
+  source: official
+  review_status: official_verified
+  review_url: https://dev.adjust.com/en/api/rs-api/
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  additional_metrics
+  base_url
+  dimensions
+  end_date
+  metrics
+  mode
+  start_date
+  api_token (secret)
+
+ETL STREAMS
+  reports:
+    fields: app(), clicks(), cost(), country(), date(), installs()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Adjust report-service read of configured dimensions/metrics
+  approval: none; read-only reporting API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

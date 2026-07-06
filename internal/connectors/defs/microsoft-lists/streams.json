@@ -40,7 +40,7 @@
       "schema": "schemas/lists.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
+        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
       }
     },
     {
@@ -50,7 +50,7 @@
       "schema": "schemas/list_items.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
+        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
       }
     },
     {
@@ -60,7 +60,7 @@
       "schema": "schemas/columns.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
+        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
       }
     },
     {
@@ -70,7 +70,7 @@
       "schema": "schemas/content_types.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by internal/connectors/paritytest/microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
+        "reason": "StreamHook-handled (hooks/microsoft-lists/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-lists (TestParityMicrosoftLists_ListsNextLinkPagination) and internal/connectors/hooks/microsoft-lists/hooks_test.go."
       }
     }
   ]

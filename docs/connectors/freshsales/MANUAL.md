@@ -12,20 +12,50 @@ SYNOPSIS
 DESCRIPTION
   Reads Freshsales (Freshworks CRM) contacts, sales accounts, deals, and leads through the Freshsales REST API.
 
+ICON
+  asset: icons/freshsales.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://developers.freshworks.com/crm/api/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  domain_name
+  max_pages
+  mode
+  view_id
+  api_key (secret)
+
+ETL STREAMS
+  contacts:
+    primary key: id
+    cursor: updated_at
+    fields: city(), country(), created_at(), display_name(), email(), first_name(), id(), job_title(), last_name(), mobile_number(), owner_id(), updated_at(), work_number()
+  sales_accounts:
+    primary key: id
+    cursor: updated_at
+    fields: annual_revenue(), city(), country(), created_at(), id(), industry_type_id(), name(), number_of_employees(), owner_id(), phone(), updated_at(), website()
+  deals:
+    primary key: id
+    cursor: updated_at
+    fields: amount(), created_at(), currency_id(), deal_pipeline_id(), deal_stage_id(), expected_close(), id(), name(), owner_id(), probability(), sales_account_id(), updated_at()
+  leads:
+    primary key: id
+    cursor: updated_at
+    fields: city(), company_name(), country(), created_at(), display_name(), email(), first_name(), id(), job_title(), last_name(), lead_stage_id(), owner_id(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Freshsales API read of CRM contact, account, deal, and lead data
+  approval: none; read-only, no reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

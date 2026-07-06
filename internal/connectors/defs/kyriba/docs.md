@@ -1,124 +1,68 @@
 # Overview
 
-Kyriba is a treasury and cash management platform. This bundle migrates
-`internal/connectors/kyriba` (`kyriba.go` + `streams.go`), a conservative
-read-only connector that reads a documented-style Kyriba tenant v1 REST API:
-bank accounts, transactions, statements, and payments, each a page-number
-paginated `GET` collection endpoint under a tenant-configurable base URL.
-Kyriba deployments vary by tenant, so both `base_url` and `token_url` are
-configurable overrides of the documented defaults
-(`https://api.kyriba.com/api/v1` / `https://api.kyriba.com/oauth/token`),
-matching legacy's own `baseURL`/`tokenURL` helper functions exactly.
+Reads Kyriba bank accounts, transactions, statements, and payments through tenant REST API
+collection endpoints. Read-only.
+
+Readable streams: `bank_accounts`, `transactions`, `statements`, `payments`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developer.kyriba.com/.
 
 ## Auth setup
 
-Kyriba uses OAuth2 client-credentials: `client_id` + `client_secret` (both
-`x-secret`) are exchanged at `token_url` for a bearer access token, sent as
-`Authorization: Bearer <token>` on every request — this bundle's
-`streams.json` `base.auth` declares a single `oauth2_client_credentials`
-candidate, matching legacy's `connsdk.OAuth2ClientCredentials` construction
-(`kyriba.go:144`) exactly, including the optional `scope` config value
-(`config.scope`, defaulting to an empty string so the templated `scopes`
-field always resolves cleanly): legacy only sets `auth.Scopes` when
-`config["scope"]` is non-empty after trimming, which the engine's own
-`strings.Fields("")` → empty-slice behavior reproduces byte-for-byte when
-`scope` is left unset.
+Connection fields:
+
+- `base_url` (optional, string); default `https://api.kyriba.com/api/v1`; format `uri`; Kyriba
+  tenant REST API base URL override. Kyriba deployments vary by tenant; defaults to
+  https://api.kyriba.com/api/v1.
+- `client_id` (required, secret, string); Kyriba OAuth2 client-credentials client id.
+- `client_secret` (required, secret, string); Kyriba OAuth2 client-credentials client secret. Never
+  logged.
+- `scope` (optional, string); default ; Optional OAuth2 scope requested at token exchange. Left
+  unset, no scope is sent (Kyriba tenant defaults apply).
+- `token_url` (optional, string); default `https://api.kyriba.com/oauth/token`; format `uri`; Kyriba
+  OAuth2 client-credentials token endpoint override. Defaults to https://api.kyriba.com/oauth/token.
+
+Secret fields are redacted in logs and write previews: `client_id`, `client_secret`.
+
+Default configuration values: `base_url=https://api.kyriba.com/api/v1`, `scope=`,
+`token_url=https://api.kyriba.com/oauth/token`.
+
+Authentication behavior:
+
+- OAuth 2.0 client credentials authentication using `config.token_url`, `secrets.client_id`,
+  `secrets.client_secret`, `config.scope`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/bank-accounts` with query `page`=`1`; `size`=`1`.
 
 ## Streams notes
 
-Legacy defines 4 streams, each a distinct GET collection endpoint sharing
-identical page-number pagination (`page`/`size` query params, 1-based start
-page, a page returning fewer than `page_size` records stops the sync —
-`kyriba.go:97-118`'s `harvest`):
+Default pagination: page-number pagination; page parameter `page`; size parameter `size`; starts at
+1; page size 100.
 
-- `bank_accounts` (`/bank-accounts`) — `id`, `account_number` (from the raw
-  API's `accountNumber`, or `account_number` if already present —
-  `streams.go`'s `first` helper), `currency`, `status`.
-- `transactions` (`/transactions`) — the same fields as `bank_accounts` plus
-  `amount`.
-- `statements` (`/statements`) — identical shape to `bank_accounts` (legacy's
-  `statementRecord` is a bare alias for `bankAccountRecord`).
-- `payments` (`/payments`) — `id`, `amount`, `currency`, `status` (no
-  `account_number`; legacy's `paymentRecord` builds a distinct, smaller
-  record).
-
-None of the 4 legacy `connectors.Stream` definitions publish `CursorFields`
-(confirmed by `streams.go`'s `streams()`), so this bundle declares no
-`incremental` block on any stream and no `x-cursor-field` on any schema
-(conventions.md §8 rule 2's "neither → no incremental block") — every read is
-a full stream read, matching legacy exactly.
-
-`accountNumber`-vs-`account_number` field-name tolerance (legacy's `first`
-helper, preferring a raw `accountNumber` and falling back to an
-already-snake_case `account_number`) is modeled with `computed_fields`
-`{{ coalesce record.accountNumber record.account_number }}` on
-`bank_accounts`, `transactions`, and `statements`. Fixtures record the real
-Kyriba wire shape (`accountNumber`), while the emitted record keeps legacy's
-`account_number` field.
+- `bank_accounts`: GET `/bank-accounts` - records path `data`; page-number pagination; page
+  parameter `page`; size parameter `size`; starts at 1; page size 100; computed output fields
+  `account_number`.
+- `transactions`: GET `/transactions` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `size`; starts at 1; page size 100; computed output fields
+  `account_number`.
+- `statements`: GET `/statements` - records path `data`; page-number pagination; page parameter
+  `page`; size parameter `size`; starts at 1; page size 100; computed output fields
+  `account_number`.
+- `payments`: GET `/payments` - records path `data`; page-number pagination; page parameter `page`;
+  size parameter `size`; starts at 1; page size 100.
 
 ## Write actions & risks
 
-None. Kyriba is read-only (`capabilities.write: false`, no `writes.json`),
-matching legacy's `Write` returning `connectors.ErrUnsupportedOperation`
-unconditionally (`kyriba.go:218-220`).
-
-## Pass B surface notes
-
-The public developer portal is a Gravitee portal. Its frontend config points
-to `https://api.developer.kyriba.com/portal`, and the public catalog endpoint
-`/portal/environments/DEFAULT/apis?size=200` listed 42 API products on
-2026-07-04. Examples include Bank Accounts (`https://{host}/v1/accounts`),
-Cash Balances (`https://{host}/v1/cash-balances`), Payment Transfers
-(`https://{host}/v1/payment/transfers`), Working Capital product APIs,
-platform reference-data APIs, and webhook callback products.
-
-Those are separate API products with product-specific entrypoint bases,
-scopes, and operation contracts. Representative products checked in Pass B
-(Bank Accounts and Cash Balances) exposed Markdown overview pages through the
-portal API, while direct OpenAPI candidates under `static/apis/...` returned
-404. This bundle therefore does not attach those product APIs to the legacy
-Kyriba tenant REST connector. The exclusion is recorded in
-`api_surface.json` with concrete portal evidence instead of the previous
-Pass B placeholder.
+This connector is read-only. Read behavior: external Kyriba tenant REST API read of bank
+accounts/transactions/statements/payments.
 
 ## Known limits
 
-- **`page_size`/`max_pages` are NOT configurable at runtime (documented scope
-  narrowing, ACCEPTABLE per conventions.md §5's meta-rule).** Legacy accepts
-  `config.page_size` (1-500, default 100) and `config.max_pages` (default
-  unbounded) at read time (`kyriba.go`'s `pageSize`/`maxPages` helpers).
-  `streams.json`'s `base.pagination` is a fixed JSON literal
-  (`page_size: 100`, no `max_pages` cap) the `page_number` paginator
-  constructor reads once at bundle-authoring time, with no runtime
-  config-driven override mechanism in this dialect (the same class of gap
-  documented in `docs/migration/conventions.md`'s searxng worked example, and
-  employment-hero's identical `items_per_page` deviation) — declaring a spec
-  property no template consumes would be dead config (F6). `page_size: 100`
-  and unbounded `max_pages` are legacy's own defaults, so a caller that never
-  overrode either config value observes byte-for-byte identical pagination
-  behavior; a caller that DID override them loses that override.
-- **Bundle-level `conformance.skip_dynamic` (see `metadata.json`).** Kyriba's
-  OAuth2 client-credentials `token_url` is a separate declared config
-  property; `internal/connectors/conformance`'s `withReplayURL` only
-  redirects `b.HTTP.URL` (stream/check request paths) to the fixture-replay
-  server, never `RuntimeConfig.Config["token_url"]` — so the token exchange
-  always targets the synthetic placeholder value
-  (`"synthetic-conformance-value"`), an unreachable non-URL, and every
-  auth-resolving dynamic check would fail identically and uninformatively
-  before ever reaching a declarative stream/check request. This is the exact,
-  now-repeated shape documented for clazar/sendpulse (`docs/migration/
-  conventions.md` §4's skip-marker section) — static checks (spec/schema
-  validity, `interpolations_resolve`, docs/fixtures presence, secret
-  redaction) still run and pass; the read/pagination/schema-projection shape
-  is proven by structural review against legacy `internal/connectors/kyriba`
-  instead. There is no Tier-2 hook here (auth is fully declarative
-  `oauth2_client_credentials`), so there is no `paritytest/kyriba` package
-  for this wave.
-- **Legacy's `mode: fixture` credential-free affordance is NOT part of this
-  bundle.** Legacy's `readFixture`/`fixtureMode` (`kyriba.go:120-134,214-216`)
-  emit synthetic records without any network call when `config.mode ==
-  "fixture"` — this is a legacy-only testing convenience, not part of the
-  live record shape; parity is asserted against legacy's LIVE (httptest-driven)
-  read path only. The `connector`/`fixture` marker fields legacy's fixture
-  mode stamps onto every record are correspondingly absent from this bundle's
-  schemas.
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=2.

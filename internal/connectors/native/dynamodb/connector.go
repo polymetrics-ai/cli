@@ -64,7 +64,7 @@
 // static stream, and Read emits two canned rows (ported verbatim from
 // legacy's readFixture).
 //
-// NO init()/RegisterFactory/RegisterNativeLive call exists in this package
+// NO init()/RegisterFactory call exists in this package
 // (enforced by a grep-guard test, dynamodb_test.go TestNoInitRegistration,
 // mirroring native/postgres's and native/bing-ads's identical guard) — the
 // registration flip that wires native/dynamodb into the production registry

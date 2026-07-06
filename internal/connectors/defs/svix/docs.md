@@ -1,118 +1,152 @@
 # Overview
 
-Svix is a Tier-1 declarative-HTTP connector for the Svix REST API v1
-(`https://api.svix.com/api/v1`; real published OpenAPI 3.1 spec at
-`https://api.svix.com/api/v1/openapi.json`). This is a Pass B full-surface expansion against that
-spec: 7 read streams (`applications`, `endpoints`, `event_types`, `messages`, `background_tasks`,
-`connectors`, `operational_webhook_endpoints`) and 16 write actions covering the
-application/endpoint/event-type/connector/operational-webhook-endpoint lifecycle plus outgoing
-message creation — the core surface an outbound-webhooks-as-a-service account actually operates on
-day to day. See `api_surface.json` for the full endpoint-by-endpoint disposition of the other ~100
-documented operations (message-attempt/delivery-log detail, endpoint secret/header/transformation
-sub-resources, and the newer Stream/Poller/Ingest beta product lines).
+Reads Svix applications, endpoints, event types, messages, message delivery attempts, background
+tasks, connectors, and operational webhook endpoints, and writes
+application/endpoint/event-type/connector/operational-webhook-endpoint lifecycle mutations and
+outgoing messages, through the Svix REST API.
 
-**Tier justification**: a plain declarative-HTTP bundle. Auth is a static Bearer token (Svix's own
-OpenAPI spec declares `HTTPBearer`), pagination is the engine's `cursor` type end to end, and every
-sub-resource stream is an ordinary single-level `fan_out` over `applications` — nothing needs a Go
-hook.
+Readable streams: `applications`, `endpoints`, `event_types`, `messages`, `background_tasks`,
+`connectors`, `operational_webhook_endpoints`.
+
+Write actions: `create_application`, `update_application`, `delete_application`, `create_endpoint`,
+`update_endpoint`, `delete_endpoint`, `create_event_type`, `update_event_type`, `delete_event_type`,
+`send_message`, `create_connector`, `update_connector`, `delete_connector`,
+`create_operational_webhook_endpoint`, `update_operational_webhook_endpoint`,
+`delete_operational_webhook_endpoint`.
+
+Service API documentation: https://docs.svix.com/api-reference.
 
 ## Auth setup
 
-Provide a Svix API key via the `api_key` secret; it is sent as a Bearer token (`Authorization:
-Bearer <api_key>`) and is never logged. `base_url` defaults to `https://api.svix.com/api/v1`. Svix
-is multi-region (US/EU/CA/AU/IN, per the OpenAPI spec's `servers` list); an account provisioned
-outside the default region must override `base_url` with the matching regional host (e.g.
-`https://api.eu.svix.com/api/v1`).
+Connection fields:
+
+- `api_key` (required, secret, string); Svix API key, sent as a Bearer token (Authorization: Bearer
+  <api_key>). Never logged.
+- `base_url` (optional, string); default `https://api.svix.com/api/v1`; format `uri`; Svix API base
+  URL. Svix is multi-region (us/eu/ca/au/in); override with the region-specific host (e.g.
+  https://api.eu.svix.com/api/v1) if the account is not on the default/US region, or for
+  tests/proxies.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.svix.com/api/v1`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/app`.
 
 ## Streams notes
 
-All 7 streams share the base's `cursor` pagination (`cursor_param: iterator`, `token_path:
-iterator`) — every Svix list endpoint returns the identical `{data, iterator, done}` envelope.
-Svix's real stop signal is the boolean `done` field, not merely an empty `iterator` (the OpenAPI
-spec marks `iterator` `nullable` but the value on a final page is not guaranteed to be an empty
-string — Svix's own SDKs treat `done` as authoritative). The engine's `stop_path` mechanism cannot
-express this directly: `stop_path` stops on a FALSY body value (i.e. it names a "more pages exist"
-field), while Svix's `done` means the opposite (`true` = no more pages) — there is no negation
-option in the pagination dialect for a stop-when-truthy field. This bundle instead relies on the
-`token_path` cursor paginator's built-in same-token-twice loop guard (`tokenPathCursor`,
-`docs/migration/conventions.md` §3): if a final page repeats its own `iterator` value (the
-documented Svix behavior), the second identical request is detected and pagination stops safely
-even without inspecting `done`. Every stream's fixtures set `iterator: ""` on the final page (the
-common case, and the one this repo's own conformance harness needs to terminate cleanly), so this
-gap does not affect fixture-replay correctness; it is a real, documented gap for the corner case
-where Svix returns a non-empty repeating iterator on the last page (`ENGINE_GAP`: the pagination
-dialect has no stop-when-truthy variant).
+Default pagination: cursor pagination; cursor parameter `iterator`; next token from `iterator`.
 
-`applications` (`GET /app`) lists every application. Its emitted schema is intentionally narrowed
-to legacy's fixed projection (`id`, `name`, `created_at`), with `created_at` filled from either the
-raw `created_at` or Svix's `createdAt` camelCase field. Legacy published no cursor field for this
-stream, so the schema declares none.
-
-`endpoints` (`GET /app/{app_id}/endpoint`) and `messages` (`GET /app/{app_id}/msg`) both `fan_out`
-over every application id (`ids_from.request`: `GET /app`, `records_path: data`, `id_field: id`),
-stamping `app_id` onto every emitted record.
-
-`event_types` (`GET /event-type`) sends `with_content=true` and `include_archived=true` statically
-so the emitted records carry the full JSON-schema payload (`schemas`) and include archived
-(soft-deleted) event types, matching what an operator managing event-type lifecycle needs to see.
-
-`background_tasks` (`GET /background-task`) and `connectors` (`GET /connector`) and
-`operational_webhook_endpoints` (`GET /operational-webhook/endpoint`) are plain top-level list
-streams with no fan-out.
-
-Message-attempt/delivery-log data (`/app/{app_id}/attempt/endpoint/{endpoint_id}`,
-`/app/{app_id}/endpoint/{endpoint_id}/msg`, `/app/{app_id}/msg/{msg_id}/endpoint`, and related
-per-attempt detail) is nested two-to-three levels deep (app_id, then endpoint_id or msg_id, then
-attempt_id) — the engine's `fan_out` dialect resolves exactly one level of parent ids per stream;
-a second nested fan-out level cannot be expressed in Tier 1 without inventing a `StreamHook`, which
-`docs/migration/conventions.md` §1 reserves for genuinely un-expressible shapes, not a convenience
-shortcut. This is a real, documented `requires_elevated_scope` gap (`api_surface.json`), not a
-silently-dropped capability.
+- `applications`: GET `/app` - records path `data`; query `limit`=`50`; cursor pagination; cursor
+  parameter `iterator`; next token from `iterator`; computed output fields `created_at`.
+- `endpoints`: GET `/app/{{ fanout.id }}/endpoint` - records path `data`; query `limit`=`50`; cursor
+  pagination; cursor parameter `iterator`; next token from `iterator`; computed output fields
+  `created_at`, `updated_at`; fan-out; ids from request `/app`; id-list records path `data`; id
+  field `id`; id inserted into the request path; stamps `app_id`.
+- `event_types`: GET `/event-type` - records path `data`; query `include_archived`=`true`;
+  `limit`=`50`; `with_content`=`true`; cursor pagination; cursor parameter `iterator`; next token
+  from `iterator`; computed output fields `created_at`, `updated_at`.
+- `messages`: GET `/app/{{ fanout.id }}/msg` - records path `data`; query `limit`=`50`; cursor
+  pagination; cursor parameter `iterator`; next token from `iterator`; fan-out; ids from request
+  `/app`; id-list records path `data`; id field `id`; id inserted into the request path; stamps
+  `app_id`.
+- `background_tasks`: GET `/background-task` - records path `data`; query `limit`=`50`; cursor
+  pagination; cursor parameter `iterator`; next token from `iterator`; computed output fields
+  `updated_at`.
+- `connectors`: GET `/connector` - records path `data`; query `limit`=`50`; cursor pagination;
+  cursor parameter `iterator`; next token from `iterator`; computed output fields `created_at`,
+  `updated_at`.
+- `operational_webhook_endpoints`: GET `/operational-webhook/endpoint` - records path `data`; query
+  `limit`=`50`; cursor pagination; cursor parameter `iterator`; next token from `iterator`; computed
+  output fields `created_at`, `updated_at`.
 
 ## Write actions & risks
 
-- `create_application`/`update_application`/`delete_application` — application lifecycle.
-  `delete_application` irreversibly removes an application and all its endpoints, messages, and
-  delivery history; approval required.
-- `create_endpoint`/`update_endpoint`/`delete_endpoint` — webhook delivery endpoint lifecycle on an
-  application. `create_endpoint` immediately starts receiving future events matching its filters;
-  `update_endpoint` changing `url` redirects all future deliveries; `delete_endpoint` stops all
-  future deliveries to that endpoint. Approval required for the destructive delete; the create/update
-  mutations are lower-risk (no approval required) since they only affect future deliveries, not
-  already-sent data.
-- `create_event_type`/`update_event_type`/`delete_event_type` — event type definition lifecycle.
-  `delete_event_type` is Svix's own soft-delete (archive), not a hard delete.
-- `send_message` — sends a REAL outgoing webhook message that Svix immediately attempts to deliver
-  to every matching endpoint on the application; approval required (this is the highest-risk action
-  in this bundle — it is not a metadata mutation, it triggers real external HTTP delivery attempts).
-- `create_connector`/`update_connector`/`delete_connector` — payload-transformation-template
-  lifecycle; `update_connector` changes the payload shape delivered to every endpoint using that
-  connector.
-- `create_operational_webhook_endpoint`/`update_operational_webhook_endpoint`/
-  `delete_operational_webhook_endpoint` — account-level operational-event (e.g.
-  `message.attempt.exhausted`) webhook endpoint lifecycle, parallel to the per-application `endpoint`
-  actions above but scoped to Svix's own account-level ops events rather than application messages.
+Overall write risk: external Svix API mutation
+(application/endpoint/event-type/connector/operational-webhook-endpoint lifecycle, outgoing message
+creation).
 
-All updates use `PUT` (full-body replace), matching Svix's own `EndpointUpdate`/`ApplicationIn`-
-shaped full-replacement semantics, rather than `PATCH` (Svix's partial-update variant) — the
-engine's write dialect sends the record's full field set by default, which is the `PUT` contract;
-the `PATCH` operations for each of these resources are excluded in `api_surface.json` as
-`duplicate_of` since the `PUT` action is a strict superset of what a partial-update caller needs.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_application`: POST `/app` - kind `create`; body type `json`; required record fields
+  `name`; accepted fields `metadata`, `name`, `throttleRate`, `uid`; risk: creates a new Svix
+  application (a webhook-sending namespace); low-risk external mutation, no approval required.
+- `update_application`: PUT `/app/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`, `name`; accepted fields `id`, `metadata`, `name`,
+  `throttleRate`, `uid`; risk: replaces an existing application's metadata/name/throttle rate;
+  external mutation, no approval required.
+- `delete_application`: DELETE `/app/{{ record.id }}` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; missing records treated as success for
+  status `404`; risk: irreversibly deletes an application and all its endpoints, messages, and
+  delivery history; approval required.
+- `create_endpoint`: POST `/app/{{ record.app_id }}/endpoint` - kind `create`; body type `json`;
+  path fields `app_id`; required record fields `app_id`, `url`; accepted fields `app_id`,
+  `channels`, `description`, `disabled`, `filterTypes`, `metadata`, `uid`, `url`; risk: creates a
+  new webhook delivery endpoint on an application; the endpoint immediately starts receiving future
+  events; low-risk external mutation, no approval required.
+- `update_endpoint`: PUT `/app/{{ record.app_id }}/endpoint/{{ record.id }}` - kind `update`; body
+  type `json`; path fields `app_id`, `id`; required record fields `app_id`, `id`, `url`; accepted
+  fields `app_id`, `channels`, `description`, `disabled`, `filterTypes`, `id`, `uid`, `url`; risk:
+  replaces an existing endpoint's delivery URL/filters/disabled state; changing url redirects all
+  future webhook deliveries for that endpoint; external mutation, no approval required.
+- `delete_endpoint`: DELETE `/app/{{ record.app_id }}/endpoint/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `app_id`, `id`; required record fields `app_id`, `id`; accepted
+  fields `app_id`, `id`; missing records treated as success for status `404`; risk: irreversibly
+  deletes a webhook delivery endpoint and stops all future deliveries to it; approval required.
+- `create_event_type`: POST `/event-type` - kind `create`; body type `json`; required record fields
+  `name`, `description`; accepted fields `archived`, `deprecated`, `description`, `groupName`,
+  `name`, `schemas`; risk: creates a new event type definition; low-risk external mutation, no
+  approval required.
+- `update_event_type`: PUT `/event-type/{{ record.name }}` - kind `update`; body type `json`; path
+  fields `name`; required record fields `name`, `description`; accepted fields `archived`,
+  `deprecated`, `description`, `groupName`, `name`, `schemas`; risk: replaces an existing event
+  type's description/schema/archived state; external mutation, no approval required.
+- `delete_event_type`: DELETE `/event-type/{{ record.name }}` - kind `delete`; body type `none`;
+  path fields `name`; required record fields `name`; accepted fields `name`; missing records treated
+  as success for status `404`; risk: archives (soft-deletes) an event type definition; approval
+  required.
+- `send_message`: POST `/app/{{ record.app_id }}/msg` - kind `create`; body type `json`; path fields
+  `app_id`; required record fields `app_id`, `eventType`, `payload`; accepted fields `app_id`,
+  `channels`, `eventId`, `eventType`, `payload`, `tags`; risk: sends a real outgoing webhook message
+  that Svix immediately attempts to deliver to every matching endpoint on the application; approval
+  required.
+- `create_connector`: POST `/connector` - kind `create`; body type `json`; required record fields
+  `name`, `transformation`; accepted fields `allowedEventTypes`, `description`, `instructions`,
+  `kind`, `logo`, `name`, `productType`, `transformation`; risk: creates a new outgoing-webhook
+  payload-transformation connector template; low-risk external mutation, no approval required.
+- `update_connector`: PUT `/connector/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`, `name`, `transformation`; accepted fields `description`,
+  `id`, `name`, `transformation`; risk: replaces an existing connector's transformation
+  JS/description; changes the payload shape delivered to every endpoint using this connector;
+  external mutation, no approval required.
+- `delete_connector`: DELETE `/connector/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: irreversibly deletes a connector transformation template; approval
+  required.
+- `create_operational_webhook_endpoint`: POST `/operational-webhook/endpoint` - kind `create`; body
+  type `json`; required record fields `url`; accepted fields `description`, `disabled`,
+  `filterTypes`, `uid`, `url`; risk: creates a new operational webhook endpoint (Svix account-level
+  events, e.g. message.attempt.exhausted); low-risk external mutation, no approval required.
+- `update_operational_webhook_endpoint`: PUT `/operational-webhook/endpoint/{{ record.id }}` - kind
+  `update`; body type `json`; path fields `id`; required record fields `id`, `url`; accepted fields
+  `description`, `disabled`, `filterTypes`, `id`, `url`; risk: replaces an existing operational
+  webhook endpoint's delivery URL/filters/disabled state; external mutation, no approval required.
+- `delete_operational_webhook_endpoint`: DELETE `/operational-webhook/endpoint/{{ record.id }}` -
+  kind `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields
+  `id`; missing records treated as success for status `404`; risk: irreversibly deletes an
+  operational webhook endpoint and stops all future account-level event deliveries to it; approval
+  required.
 
 ## Known limits
 
-- **Nested fan-out (message attempts / per-endpoint message lists) is not modeled** — see Streams
-  notes above (`requires_elevated_scope`, 2-3 levels of path nesting the single-level `fan_out`
-  dialect cannot express).
-- **`done`-as-stop-signal is not directly wired** — pagination relies on the `token_path`
-  paginator's same-token-twice loop guard instead of Svix's own `done` boolean; see Streams notes.
-  This never causes a real sync to loop forever (the loop guard is unconditional), but a
-  pathological API response repeating a non-final page's iterator would not be distinguished from
-  a genuine last page by this mechanism alone.
-- Endpoint/operational-webhook-endpoint HMAC secrets, custom headers, and per-endpoint inline
-  transformation JS are excluded (`requires_elevated_scope`/`duplicate_of`) — none of these are
-  ordinary list-shaped or create/update/delete-shaped resources this dialect's stream/write model
-  fits cleanly; see `api_surface.json`.
-- The newer Stream/Poller/Ingest-source product surface (inbound webhook receiving and a
-  separately-versioned event-streaming product) is entirely out of scope for this pass — it is a
-  distinct product line from the classic outgoing-webhooks surface this bundle covers.
+- Batch defaults: read_page_size=50.
+- API coverage includes 7 stream-backed endpoint group(s), 16 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=2, destructive_admin=4, duplicate_of=15, non_data_endpoint=8, out_of_scope=56,
+  requires_elevated_scope=20.

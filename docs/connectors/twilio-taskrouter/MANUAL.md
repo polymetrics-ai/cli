@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads Twilio TaskRouter workers, tasks, activities, task queues, and workflows for a workspace.
 
+ICON
+  asset: icons/twilio.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.twilio.com/docs/taskrouter/api
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  workspace_sid
+  account_sid (secret)
+  auth_token (secret)
+
+ETL STREAMS
+  workers:
+    primary key: sid
+    fields: activity_name(), available(), friendly_name(), sid()
+  tasks:
+    primary key: sid
+    fields: assignment_status(), sid(), workflow_sid()
+  activities:
+    primary key: sid
+    fields: friendly_name(), sid()
+  task_queues:
+    primary key: sid
+    fields: friendly_name(), sid()
+  workflows:
+    primary key: sid
+    fields: friendly_name(), sid()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Twilio TaskRouter API read of workspace workers, tasks, activities, task queues, and workflows
+  approval: none; read-only, no reverse-ETL writes implemented by legacy
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

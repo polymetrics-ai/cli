@@ -1,136 +1,107 @@
 # Overview
 
-SurveyCTO is a Tier-1 declarative-HTTP connector for the SurveyCTO **Server API v2**
-(`https://<server>.surveycto.com/api/v2`). This is a Pass B full-surface expansion against the
-real, published API v2 OpenAPI 3.0 spec (`https://developer.surveycto.com/specs/api-v2.json`,
-found via `developer.surveycto.com`'s VitePress-rendered developer portal — the same
-`docs.surveycto.com` product-docs site the pre-Pass-B bundle's `docs_url` pointed at only links
-out to this separate Developer Portal for the actual API reference).
+Reads SurveyCTO form IDs, submissions, datasets (including case-management datasets), dataset
+records, groups, roles, teams, and users, and writes dataset lifecycle mutations, dataset record
+creation, and user lifecycle mutations, through the SurveyCTO Server API v2.
 
-**The v2 API is a substantially different, richer surface than the earlier version of this
-bundle assumed.** There is no plain `GET /forms` or `GET /cases` endpoint at all:
-- "Forms" are enumerated only via `GET /forms/ids`, which returns a **bare JSON array of scalar
-  strings** (`["my_survey", "registration_form", ...]`), not objects — see Known limits for why
-  this cannot be modeled as a stream.
-- "Cases" are not a separate resource — they are simply one dataset among others, distinguished by
-  `discriminator: "CASES"` in the generic `/datasets` catalog (a `title: "Cases"`, `fieldNames:
-  "id,label,formids,users,roles,sortby,enumerators"` dataset, per the API's own documented
-  example). `dataset_records` (this bundle's generic per-dataset record stream) reads cases exactly
-  like any other dataset's records once fanned out to the `cases` dataset id.
+Readable streams: `datasets`, `dataset_records`, `submissions`, `groups`, `roles`, `users`.
 
-This bundle covers **6 read streams** (`datasets`, `dataset_records`, `submissions`, `groups`,
-`roles`, `users`) and **7 write actions** (dataset create/update/delete, dataset record creation,
-user create/update/delete) — the full real surface this dialect can express; see `api_surface.json`
-for the disposition of every one of the 22 documented v2 paths, including two genuine `ENGINE_GAP`
-blockers detailed below.
+Write actions: `create_dataset`, `update_dataset`, `delete_dataset`, `create_dataset_record`,
+`create_user`, `update_user`, `delete_user`.
 
-**Tier justification**: a plain declarative-HTTP bundle. Auth is HTTP Basic (unchanged from the
-prior version), pagination is the engine's `cursor` type throughout (the real API's own
-`CursorPaginatedResponse` envelope — `{total, limit, data, nextCursor}` — applies identically to
-every list endpoint), and `dataset_records` is an ordinary single-level `fan_out` over `datasets`
-— nothing needs a Go hook.
+Service API documentation: https://developer.surveycto.com/.
 
 ## Auth setup
 
-Provide a SurveyCTO username and password/API key via the `username` and `password` secrets; both
-are sent as HTTP Basic auth credentials (unchanged from the prior version of this bundle). Neither
-is logged.
+Connection fields:
+
+- `base_url` (required, string); format `uri`; SurveyCTO API base URL, e.g.
+  https://<server_name>.surveycto.com/api/v2.
+- `form_id` (optional, string); SurveyCTO form ID; required for the submissions stream, which is
+  scoped to a single form (the real API has no 'list all form ids' stream-friendly endpoint -- see
+  docs.md Known limits).
+- `mode` (optional, string).
+- `password` (required, secret, string); SurveyCTO password or API key, sent as the HTTP Basic auth
+  password. Never logged.
+- `server_name` (optional, string); Bare SurveyCTO server name (no scheme/path), for
+  documentation/reference only -- not wired into any template.
+- `username` (required, secret, string); SurveyCTO account username/email, sent as the HTTP Basic
+  auth username. Never logged.
+
+Secret fields are redacted in logs and write previews: `password`, `username`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.username`, `secrets.password`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/datasets` with query `limit`=`1`.
 
 ## Streams notes
 
-All streams share the base's `cursor` pagination (`cursor_param: cursor`, `token_path:
-nextCursor`) — SurveyCTO's real v2 wire envelope for every list endpoint (`CursorPaginatedResponse`:
-`{"total": N, "limit": N, "data": [...], "nextCursor": "..."}`, confirmed directly from the published
-OpenAPI spec's own response examples for `datasets`/`dataset records`/`groups`/`roles`/`users`).
-`limit=1000` (the documented max) is sent statically on every stream.
+Default pagination: cursor pagination; cursor parameter `cursor`; next token from `nextCursor`.
 
-`datasets` (`GET /datasets`) is the generic dataset catalog — every SurveyCTO dataset (general
-`DATA`, `ENUMERATORS`, and `CASES`-discriminated case-management datasets alike) as one uniform
-stream, matching the API's own single-endpoint modeling of what the prior bundle's `datasets` and
-`cases` streams incorrectly treated as two separate resources. The emitted record shape remains the
-legacy fixed projection (`id`, `title`, `version`); additional v2 dataset metadata is intentionally
-dropped.
-
-`dataset_records` (`GET /datasets/{dataset_id}/records`) `fan_out`s over every dataset id
-(`ids_from.request`: `GET /datasets`, `records_path: data`, `id_field: id`), stamping `dataset_id`
-onto every emitted record. This is the correct, general replacement for the prior bundle's
-dedicated `cases` stream — reading the `cases` dataset's records now happens automatically as one
-of many datasets this stream fans out over, with no special-casing needed.
-
-`submissions` (`GET /forms/{form_id}/submissions`) remains scoped to a single, config-supplied
-`form_id` (required config, unchanged in spirit from the prior version) rather than fanning out
-over every form, because of the `forms/ids` `ENGINE_GAP` below — there is no config-free way to
-discover every form id to fan out over. The emitted schema intentionally preserves legacy's
-fixed-projection record (`id`, `form_id`, `submissionDate`) and catalog cursor
-(`submissionDate`): the v2 API's documented metadata name is `submissionId`, so the bundle fills
-legacy `id` from `id` or `submissionId` with a typed coalesce. No `incremental` block is declared,
-since neither legacy nor this bundle sends a server-side lower-bound request parameter.
-
-`groups`/`roles`/`users` are plain top-level list streams, each with a matching `GET
-/{resource}/{id}` (or `/roles/{roleId}`, permission-detail-shaped rather than a plain record read)
-detail endpoint excluded per `api_surface.json`.
+- `datasets`: GET `/datasets` - records path `data`; query `limit`=`1000`; cursor pagination; cursor
+  parameter `cursor`; next token from `nextCursor`.
+- `dataset_records`: GET `/datasets/{{ fanout.id }}/records` - records path `data`; query
+  `limit`=`1000`; cursor pagination; cursor parameter `cursor`; next token from `nextCursor`;
+  fan-out; ids from request `/datasets`; id-list records path `data`; id field `id`; id inserted
+  into the request path; stamps `dataset_id`.
+- `submissions`: GET `/forms/{{ config.form_id }}/submissions` - records path `data`; query
+  `limit`=`1000`; cursor pagination; cursor parameter `cursor`; next token from `nextCursor`;
+  computed output fields `form_id`, `id`.
+- `groups`: GET `/groups` - records path `data`; query `limit`=`1000`; cursor pagination; cursor
+  parameter `cursor`; next token from `nextCursor`.
+- `roles`: GET `/roles` - records path `data`; query `limit`=`1000`; cursor pagination; cursor
+  parameter `cursor`; next token from `nextCursor`.
+- `users`: GET `/users` - records path `data`; query `limit`=`1000`; cursor pagination; cursor
+  parameter `cursor`; next token from `nextCursor`.
 
 ## Write actions & risks
 
-- `create_dataset`/`update_dataset`/`delete_dataset` — dataset lifecycle. SurveyCTO's own API
-  forbids changing a dataset's `discriminator` (type) after creation — `update_dataset` still
-  requires `discriminator` in its record schema (matching the real `DatasetInput` request body
-  shape) but the API itself rejects an attempt to change it, not this bundle. `delete_dataset` is
-  irreversible; approval required. Create/update are lower-risk (no approval required).
-- `create_dataset_record` — adds a record to a dataset (`POST /datasets/{dataset_id}/records`).
-  SurveyCTO's own `DatasetRecordFieldMap` request body has no fixed schema (dataset field names are
-  workspace-defined per dataset), so `record_schema` only requires the routing field `dataset_id`;
-  every other record property is sent verbatim as the field-name/value map. Low-risk, no approval
-  required.
-- `create_user`/`update_user`/`delete_user` — user lifecycle. `create_user`/`update_user` can set
-  the user's password in the same call — this is a credential-provisioning action, not an ordinary
-  data mutation, and both require approval for that reason (not merely because they mutate data).
-  `delete_user` revokes access; approval required.
+Overall write risk: external SurveyCTO API mutation (dataset lifecycle, dataset record creation,
+user lifecycle including password-setting).
+
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_dataset`: POST `/datasets` - kind `create`; body type `json`; body fields `id`, `title`,
+  `discriminator`, `uniqueRecordField`, `allowOfflineUpdates`; required record fields
+  `discriminator`; accepted fields `allowOfflineUpdates`, `discriminator`, `id`, `title`,
+  `uniqueRecordField`; risk: creates a new server dataset (a general-purpose, enumerator, or
+  case-management dataset); low-risk external mutation, no approval required.
+- `update_dataset`: PUT `/datasets/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; body fields `title`, `discriminator`, `uniqueRecordField`, `allowOfflineUpdates`; required
+  record fields `id`, `discriminator`; accepted fields `allowOfflineUpdates`, `discriminator`, `id`,
+  `title`, `uniqueRecordField`; risk: updates an existing dataset's metadata/configuration (the
+  dataset type/discriminator itself cannot be changed after creation, per SurveyCTO's own API);
+  external mutation, no approval required.
+- `delete_dataset`: DELETE `/datasets/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: irreversibly deletes a dataset and its records; approval required.
+- `create_dataset_record`: POST `/datasets/{{ record.dataset_id }}/records` - kind `create`; body
+  type `json`; path fields `dataset_id`; required record fields `dataset_id`; accepted fields
+  `dataset_id`; risk: adds a new record to a dataset; the field name set is dataset-defined
+  (SurveyCTO's own DatasetRecordFieldMap has no fixed schema), so record_schema only requires the
+  routing field dataset_id -- every other record property is sent verbatim as the record's
+  field-name/value map; low-risk external mutation, no approval required.
+- `create_user`: POST `/users` - kind `create`; body type `json`; required record fields `username`,
+  `roleId`, `password`; accepted fields `password`, `roleId`, `username`; risk: creates a new
+  SurveyCTO server user AND sets their initial password in the same call; a credential-provisioning
+  action, not an ordinary data mutation -- approval required.
+- `update_user`: PUT `/users/{{ record.username }}` - kind `update`; body type `json`; path fields
+  `username`; required record fields `username`; accepted fields `password`, `roleId`, `username`;
+  risk: updates an existing user's password and/or role; a credential-provisioning action when
+  password is set -- approval required.
+- `delete_user`: DELETE `/users/{{ record.username }}` - kind `delete`; body type `none`; path
+  fields `username`; required record fields `username`; accepted fields `username`; missing records
+  treated as success for status `404`; risk: irreversibly deletes a server user and revokes their
+  access; approval required.
 
 ## Known limits
 
-- **`ENGINE_GAP` — `GET /forms/ids` and `GET /teams/ids` cannot be modeled as streams (or as
-  `fan_out` id sources).** Both return a bare JSON array of SCALAR STRINGS
-  (`["my_survey", "registration_form", ...]`), not objects. `connsdk.RecordsAt` — used by both
-  ordinary stream reads and `fan_out`'s `ids_from.request` — only keeps array elements that decode
-  as a JSON object (`map[string]any`); every element of a scalar-only array is silently dropped,
-  yielding zero records or zero fan-out ids. There is no dialect mechanism for "array of bare
-  scalars" extraction. This is the same class of gap `docs/migration/conventions.md`'s
-  parity-deviation ledger item 12 (ip2whois's `nameservers` field) documents and formalizes as a
-  genuine, still-open `ENGINE_GAP` rather than a workaround target. Consequence: there is no
-  standalone `forms`/`teams` stream, and `submissions` cannot fan out over every form (it is
-  instead scoped by a single required `config.form_id`, forcing one connection per form for full
-  multi-form coverage).
-- **Legacy `forms` and `cases` cannot be restored honestly with the current declarative dialect.**
-  Legacy exposed `forms` (`recordsPath: forms`, emitting `id`/`title`/`version`) and `cases`
-  (`recordsPath: cases`, emitting `caseid`/`form_id`/`status`). The current published API v2 spec
-  does not expose those object-list endpoints: form discovery is the scalar-string
-  `GET /forms/ids` endpoint above, and cases are represented as dataset records rather than a
-  standalone `/cases` object list. Adding fake `forms`/`cases` streams would either emit zero
-  records (scalar-array extraction) or guess at workspace-specific dataset fields.
-- **`ENGINE_GAP` — dataset single-record CRUD (`getRecord`/`updateRecord`/`deleteRecord`/
-  `upsertRecord`, all at `/datasets/{datasetId}/record` singular) cannot be modeled as write
-  actions.** Every one of these endpoints takes `recordId` as a **query parameter**
-  ("passed as a query parameter to support special characters", per the API's own docs), not a
-  path segment. `engine.WriteAction` has no `query` field at all — `write.go`'s `ExecuteWrite`
-  always issues `Requester.Do`/`DoForm` with a `nil` query — so there is no mechanism to templatize
-  a query parameter on a write request, only `path_fields` (path segments) and the body. Only
-  `create_dataset_record` (`POST /datasets/{dataset_id}/records`, the PLURAL endpoint, which takes
-  no `recordId` at all — the API assigns/derives it from the submitted field map) is expressible.
-  Updating or deleting a specific existing record by id is not possible through this bundle's
-  writes today.
-- **`submissions`' real per-record field shape beyond legacy's fixed projection is unconfirmed** —
-  the OpenAPI spec's response schema for this endpoint is the bare `{"type": "object"}`
-  placeholder, not a `$ref`'d schema like `datasets`/`groups`/`users` get. This bundle therefore
-  emits only legacy's `id`, `form_id`, and `submissionDate` fields, with `id` filled from either
-  `id` or v2's documented `submissionId` metadata field.
-- **Encrypted-form submission handling is out of scope** — the multipart `POST
-  /forms/{formID}/submissions` variant (accepting an RSA private-key PEM file part to decrypt
-  encrypted payloads) is excluded; handling a private-key file upload is both a materially
-  different write shape than this dialect's JSON/form body model and security-sensitive (a private
-  key is credential-shaped data that should not flow through an ordinary write action).
-- **Bulk endpoints are out of scope** — `users/bulk/{file,json}` (create/update, multi-user in one
-  request) and `datasets/{id}/records/upload` (bulk CSV record upload) are excluded; each is a
-  materially different shape from this dialect's single-record write-body model, and the
-  single-record equivalents (`create_user`/`update_user`/`create_dataset_record`) already cover the
-  same underlying mutation one record at a time.
+- Batch defaults: read_page_size=100.
+- API coverage includes 6 stream-backed endpoint group(s), 7 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=1, destructive_admin=2, duplicate_of=4, non_data_endpoint=1, out_of_scope=2,
+  requires_elevated_scope=12.

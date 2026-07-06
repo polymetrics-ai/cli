@@ -7,26 +7,1731 @@ description: Freshservice connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Freshservice tickets, agents, requesters, assets, and problems through the Freshservice REST API v2.
+Reads and writes documented Freshservice REST API v2 resources, preserving legacy ticket, agent, requester, asset, and problem stream projections.
+
+## Icon
+
+- asset: icons/freshservice.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://api.freshservice.com/
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=true query=false
 - Integration type: api
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- agent_id
+- alert_id
+- announcement_id
+- application_id
+- approval_id
+- article_id
+- asset_id
+- asset_type_id
+- business_hour_id
+- canned_respons_id
+- category_id
+- change_id
+- communication_id
+- config_id
+- contract_id
+- contract_type_id
+- department_id
+- device_id
+- display_id
+- domain_name
+- ep_id
+- filter_alerts_order_by
+- filter_alerts_order_type
+- filter_alerts_query
+- filter_all_project_tasks_newgen_query
+- filter_departments_query
+- filter_locations_query
+- filter_name
+- filter_schedules_query
+- filter_tickets_query
+- folder_id
+- group_id
+- incident_id
+- lifecycle_event_id
+- list_all_approvals_parent
+- location_id
+- maintenance_id
+- maintenance_window_id
+- max_pages
+- mode
+- module_name
+- note_id
+- object_id
+- offboarding_request_id
+- onboarding_request_id
+- page_size
+- physical_subtype_id
+- problem_id
+- product_id
+- project_id
+- purchase_order_id
+- relationship_id
+- release_id
+- request_id
+- requester_group_id
+- requester_id
+- resource_id
+- role_id
+- schedule_id
+- service_component_id
+- shared_field_id
+- shift_id
+- start_date
+- start_token
+- status_page_id
+- subscriber_id
+- task_id
+- template_id
+- ticket_id
+- time_entry_id
+- type_id
+- user_id
+- vendor_id
+- view_calendar_events_schedule_end_time
+- view_calendar_events_schedule_start_time
+- view_calendar_events_schedule_user_end_time
+- view_calendar_events_schedule_user_start_time
+- view_calendar_events_shift_end_time
+- view_calendar_events_shift_start_time
+- view_calendar_events_shift_user_end_time
+- view_calendar_events_shift_user_start_time
+- view_calendar_events_user_end_time
+- view_calendar_events_user_start_time
+- workspace_id
+- api_key (secret)
+
+## ETL Streams
+
+- tickets:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), department_id(), description_text(), due_by(), group_id(), id(), priority(), requester_id(), responder_id(), source(), spam(), status(), subject(), type(), updated_at()
+- agents:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), created_at(), department_ids(), email(), first_name(), id(), job_title(), last_name(), occasional(), updated_at()
+- requesters:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), created_at(), department_ids(), first_name(), id(), job_title(), last_name(), primary_email(), updated_at()
+- assets:
+  - primary key: id
+  - cursor: updated_at
+  - fields: agent_id(), asset_tag(), asset_type_id(), created_at(), department_id(), display_id(), id(), impact(), name(), updated_at(), user_id()
+- problems:
+  - primary key: id
+  - cursor: updated_at
+  - fields: agent_id(), created_at(), department_id(), due_by(), group_id(), id(), impact(), priority(), requester_id(), status(), subject(), updated_at()
+- view_a_ticket:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- filter_tickets:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_ticket_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- get_ticket_activities:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_ticket_time_entry:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_ticket_time_entries:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_req_items_of_sr:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_ticket_approvals:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_ticket_approval:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_ticket_approval_groups:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_ticket_tasks:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_csat_response:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_conversations:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_problem:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_problem_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_problem_notes:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_problem_time_entry:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_problem_time_entries:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_problem_tasks:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_change:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_changes:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_change_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_change_approvals:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_change_approval:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_change_approval_groups:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_change_notes:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_time_entry:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_time_entries:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_change_tasks:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_release:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- filter_releases:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_release:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_release_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_release_notes:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_release_time_entry:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_release_time_entries:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_release_tasks:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_approvals:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_requester:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_requester_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_an_agent:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_agent_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_role:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_role:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_group:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_group:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_requester_group:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_requester_group:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_members_of_requester_group:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_location:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_locations:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- filter_locations:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_product:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_products:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_vendor:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_vendors:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_alert:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- filter_alerts:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_alert_logs:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_alert_notes:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_alert_note:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_an_asset:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_asset_components:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_asset_requests:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_contracts_of_an_asset:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_relationship:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_relationships:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_relationship_types:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_purchase_orders:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_purchase_order:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_an_asset_type:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_asset_types:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_asset_type_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_users:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_installations:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_contract_types:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_contract_type_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_contract:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_contracts:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_associated_assets:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_attachments:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_department:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_departments:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- filter_departments:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_department_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_business_hour:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_business_hours:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_project:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_projects:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_project_task:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_project_tasks:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_project_newgen:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_projects_newgen:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_templates:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_associations:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_project_task_newgen:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_project_tasks_newgen:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- filter_all_project_tasks_newgen:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_task_type_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_task_types:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_task_priorities:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_task_statuses:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_versions:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_sprints:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_memberships:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_project_task_associations:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_notes_task_newgen:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_solution_category:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_solution_category:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_solution_folder:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_solution_sub_folders:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_solution_folder:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_solution_article:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_solution_article:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_service_item:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_service_items:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_service_categories:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- shared_fields:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- retrieve_shared_fields_data:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_an_announcement:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_announcements:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- onboarding_form:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_onboarding_request:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_onboarding_requests:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_onboarding_tickets:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- offboarding_form:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_offboarding_request:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_offboarding_requests:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_offboarding_tickets:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- journey_configs:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- journey_initiator_config_form:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_journey_request:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_journey_requests:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_journey_request_activities:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_schedules:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- filter_schedules:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_schedule:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_shifts:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_shift:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_calendar_events_user:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_calendar_events_schedule:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_calendar_events_shift:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_calendar_events_shift_user:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_calendar_events_schedule_user:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_who_is_oncall:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_ep:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_ep:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_custom_objects:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- show_custom_object:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_custom_object_records:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- get_pir_templates_by_id:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- get_all_pir_templates:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_sla:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_canned_response_folders:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- show_canned_response_folder:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_canned_response_in_folder:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_canned_responses:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- show_canned_response:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- retrieve_emails_with_id:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- retrieve_emails:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_incidents:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_incident:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_incident_updates:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_incident_statuses:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_maintenances:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_maintenance_from_change:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_maintenance_from_maintenance_window:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_maintenance_statuses:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_maintenance_update_from_change:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_maintenance_update_from_maintenance_window:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_status_pages:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- identify_publishable_services_ticket:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- identify_publishable_services_change:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- identify_publishable_services_maintenance:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_service_component:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_service_components:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- list_all_subscribers:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_subscriber:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_delegation:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_physical_subtypes:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_physical_subtype:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_devices:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_device:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_assets_for_freshservice_itam:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_an_asset_for_freshservice_itam:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_cloud_resources:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_cloud_resource:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_cloud_resource_relationships:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_cloud_infrastructure:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_all_lifecycle_events:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+- view_a_lifecycle_event:
+  - primary key: id
+  - fields: created_at(), description(), id(), name(), subject(), updated_at()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+## Reverse ETL Actions
+
+- create_ticket:
+  - endpoint: POST /tickets
+  - risk: Create a Ticket through the Freshservice API.
+- update_a_ticket:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}
+  - required fields: ticket_id
+  - risk: Update a Ticket through the Freshservice API.
+- move_a_ticket:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/move_workspace
+  - required fields: ticket_id
+  - risk: Move a Ticket through the Freshservice API.
+- delete_a_ticket:
+  - endpoint: DELETE /tickets/{{ record.ticket_id }}
+  - required fields: ticket_id
+  - risk: Deletes Freshservice data: Delete a Ticket.
+- delete_a_ticket_attachment:
+  - endpoint: DELETE /tickets/{{ record.ticket_id }}/attachments/{{ record.attachment_id }}
+  - required fields: ticket_id, attachment_id
+  - risk: Deletes Freshservice data: Delete a Ticket Attachment.
+- restore_a_ticket:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/restore
+  - required fields: ticket_id
+  - risk: Restore a Ticket through the Freshservice API.
+- create_child_ticket:
+  - endpoint: POST /tickets/{{ record.parent_id }}/create_child_ticket
+  - required fields: parent_id
+  - risk: Create a Child Ticket through the Freshservice API.
+- create_ticket_time_entry:
+  - endpoint: POST /tickets/{{ record.ticket_id }}/time_entries
+  - required fields: ticket_id
+  - risk: Create a Time Entry through the Freshservice API.
+- update_ticket_time_entry:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/time_entries/{{ record.time_entry_id }}
+  - required fields: ticket_id, time_entry_id
+  - risk: Update a Time Entry through the Freshservice API.
+- delete_ticket_time_entry:
+  - endpoint: DELETE /tickets/{{ record.ticket_id }}/time_entries/{{ record.time_entry_id }}
+  - required fields: ticket_id, time_entry_id
+  - risk: Deletes Freshservice data: Delete a Time Entry.
+- create_custom_ticket_source:
+  - endpoint: POST /ticket_fields/sources
+  - risk: Create a Source through the Freshservice API.
+- create_service_request:
+  - endpoint: POST /service_catalog/items/{{ record.display_id }}/place_request
+  - required fields: display_id
+  - risk: Create a Service Request through the Freshservice API.
+- update_req_items_of_sr:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/requested_items/{{ record.requested_item_id }}
+  - required fields: ticket_id, requested_item_id
+  - risk: Update Requested Items of a Service Request through the Freshservice API.
+- add_catalog_item_to_existing_sr:
+  - endpoint: POST /tickets/{{ record.ticket_id }}/requested_items
+  - required fields: ticket_id
+  - risk: Add Catalog Item to Existing Service Request through the Freshservice API.
+- create_ticket_approval:
+  - endpoint: POST /tickets/{{ record.ticket_id }}/approvals
+  - required fields: ticket_id
+  - risk: Request Approval for a Service Request through the Freshservice API.
+- resend_reminder_ticket_approval:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/approvals/{{ record.approval_id }}/remind
+  - required fields: ticket_id, approval_id
+  - risk: Send Reminder for an Approval through the Freshservice API.
+- cancel_a_ticket_approval:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/approvals/{{ record.approval_id }}
+  - required fields: ticket_id, approval_id
+  - risk: Cancel an approval through the Freshservice API.
+- create_approval_groups:
+  - endpoint: POST /tickets/{{ record.ticket_id }}/approval-groups
+  - required fields: ticket_id
+  - risk: Create Approval Groups for a Service Request through the Freshservice API.
+- update_approval_groups:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/approval-groups/{{ record.approval_group_id }}
+  - required fields: ticket_id, approval_group_id
+  - risk: Update Approval Group In A Service Request through the Freshservice API.
+- update_service_request_approval_chain_rule:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/approval-chain-rule
+  - required fields: ticket_id
+  - risk: Update approval chain rule for a service request through the Freshservice API.
+- promote_incident_to_major:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/promote
+  - required fields: ticket_id
+  - risk: Promote an incident to a major incident through the Freshservice API.
+- demote_incident_from_major:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/demote
+  - required fields: ticket_id
+  - risk: Demote an incident from a major incident through the Freshservice API.
+- create_ticket_task:
+  - endpoint: POST /tickets/{{ record.ticket_id }}/tasks
+  - required fields: ticket_id
+  - risk: Create a Task through the Freshservice API.
+- update_a_ticket_task:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/tasks/{{ record.task_id }}
+  - required fields: ticket_id, task_id
+  - risk: Update a Task through the Freshservice API.
+- delete_a_ticket_task:
+  - endpoint: DELETE /tickets/{{ record.ticket_id }}/tasks/{{ record.task_id }}
+  - required fields: ticket_id, task_id
+  - risk: Deletes Freshservice data: Delete a Task.
+- create_a_reply:
+  - endpoint: POST /tickets/{{ record.ticket_id }}/reply
+  - required fields: ticket_id
+  - risk: Create a Reply through the Freshservice API.
+- create_a_note:
+  - endpoint: POST /tickets/{{ record.ticket_id }}/notes
+  - required fields: ticket_id
+  - risk: Create a Note through the Freshservice API.
+- update_a_conversations:
+  - endpoint: PUT /conversations/{{ record.conversation_id }}
+  - required fields: conversation_id
+  - risk: Update a Conversation through the Freshservice API.
+- delete_a_conversations:
+  - endpoint: DELETE /conversations/{{ record.conversation_id }}
+  - required fields: conversation_id
+  - risk: Deletes Freshservice data: Delete a Conversation.
+- delete_a_conversation_attachment:
+  - endpoint: DELETE /conversations/{{ record.conversation_id }}/attachments/{{ record.attachment_id }}
+  - required fields: conversation_id, attachment_id
+  - risk: Deletes Freshservice data: Delete a Conversation Attachment.
+- create_problem:
+  - endpoint: POST /problems
+  - risk: Create a Problem through the Freshservice API.
+- update_problem_priority:
+  - endpoint: PUT /problems/{{ record.problem_id }}
+  - required fields: problem_id
+  - risk: Update a Problem through the Freshservice API.
+- move_a_problem:
+  - endpoint: PUT /problems/{{ record.problem_id }}/move_workspace
+  - required fields: problem_id
+  - risk: Move a Problem through the Freshservice API.
+- delete_a_problem:
+  - endpoint: DELETE /problems/{{ record.problem_id }}
+  - required fields: problem_id
+  - risk: Deletes Freshservice data: Delete a Problem.
+- restore_a_problem:
+  - endpoint: PUT /problems/{{ record.problem_id }}/restore
+  - required fields: problem_id
+  - risk: Restore a Problem through the Freshservice API.
+- create_problem_note:
+  - endpoint: POST /problems/{{ record.problem_id }}/notes
+  - required fields: problem_id
+  - risk: Create a note through the Freshservice API.
+- update_a_problem_note:
+  - endpoint: PUT /problems/{{ record.problem_id }}/notes/{{ record.note_id }}
+  - required fields: problem_id, note_id
+  - risk: Update a note through the Freshservice API.
+- delete_a_problem_note:
+  - endpoint: DELETE /problems/{{ record.problem_id }}/notes/{{ record.note_id }}
+  - required fields: problem_id, note_id
+  - risk: Deletes Freshservice data: Delete a note.
+- create_problem_time_entries:
+  - endpoint: POST /problems/{{ record.problem_id }}/time_entries
+  - required fields: problem_id
+  - risk: Create a Time Entry through the Freshservice API.
+- update_problem_time_entry:
+  - endpoint: PUT /problems/{{ record.problem_id }}/time_entries/{{ record.time_entry_id }}
+  - required fields: problem_id, time_entry_id
+  - risk: Update a Time Entry through the Freshservice API.
+- delete_a_problem_time_entry:
+  - endpoint: DELETE /problems/{{ record.problem_id }}/time_entries/{{ record.time_entry_id }}
+  - required fields: problem_id, time_entry_id
+  - risk: Deletes Freshservice data: Delete a Time Entry.
+- create_problem_task:
+  - endpoint: POST /problems/{{ record.problem_id }}/tasks
+  - required fields: problem_id
+  - risk: Create a Task through the Freshservice API.
+- update_a_problem_task:
+  - endpoint: PUT /problems/{{ record.problem_id }}/tasks/{{ record.task_id }}
+  - required fields: problem_id, task_id
+  - risk: Update a Task through the Freshservice API.
+- delete_a_problem_task:
+  - endpoint: DELETE /problems/{{ record.problem_id }}/tasks/{{ record.task_id }}
+  - required fields: problem_id, task_id
+  - risk: Deletes Freshservice data: Delete a Task.
+- create_change:
+  - endpoint: POST /changes
+  - risk: Create a Change through the Freshservice API.
+- update_change_priority:
+  - endpoint: PUT /changes/{{ record.change_id }}
+  - required fields: change_id
+  - risk: Update a Change through the Freshservice API.
+- move_a_change:
+  - endpoint: PUT /changes/{{ record.change_id }}/move_workspace
+  - required fields: change_id
+  - risk: Move a Change through the Freshservice API.
+- delete_a_change:
+  - endpoint: DELETE /changes/{{ record.change_id }}
+  - required fields: change_id
+  - risk: Deletes Freshservice data: Delete a Change.
+- resend_reminder_change_approval:
+  - endpoint: PUT /changes/{{ record.change_id }}/approvals/{{ record.approval_id }}/remind
+  - required fields: change_id, approval_id
+  - risk: Send Reminder for a Change Approval through the Freshservice API.
+- cancel_change_approval:
+  - endpoint: PUT /changes/{{ record.change_id }}/approvals/{{ record.approval_id }}
+  - required fields: change_id, approval_id
+  - risk: Cancel a Change Approval through the Freshservice API.
+- create_change_approval_groups:
+  - endpoint: POST /changes/{{ record.change_id }}/approval-groups
+  - required fields: change_id
+  - risk: Create an Approval Group for Changes through the Freshservice API.
+- update_change_approval_groups:
+  - endpoint: PUT /changes/{{ record.change_id }}/approval-groups/{{ record.approval_group_id }}
+  - required fields: change_id, approval_group_id
+  - risk: Update Approval Group In A Change Request through the Freshservice API.
+- update_approval_chain_rule_change:
+  - endpoint: PUT /changes/{{ record.change_id }}/approval-chain-rule
+  - required fields: change_id
+  - risk: Update approval chain rule for a change through the Freshservice API.
+- create_change_note:
+  - endpoint: POST /changes/{{ record.change_id }}/notes
+  - required fields: change_id
+  - risk: Create a Note through the Freshservice API.
+- update_a_change_note:
+  - endpoint: PUT /changes/{{ record.change_id }}/notes/{{ record.note_id }}
+  - required fields: change_id, note_id
+  - risk: Update a Note through the Freshservice API.
+- delete_a_change_note:
+  - endpoint: DELETE /changes/{{ record.change_id }}/notes/{{ record.note_id }}
+  - required fields: change_id, note_id
+  - risk: Deletes Freshservice data: Delete a Note.
+- create_time_entries:
+  - endpoint: POST /changes/{{ record.change_id }}/time_entries
+  - required fields: change_id
+  - risk: Create a Time Entry through the Freshservice API.
+- update_time_entry:
+  - endpoint: PUT /changes/{{ record.change_id }}/time_entries/{{ record.time_entry_id }}
+  - required fields: change_id, time_entry_id
+  - risk: Update a Time Entry through the Freshservice API.
+- delete_a_time_entry:
+  - endpoint: DELETE /changes/{{ record.change_id }}/time_entries/{{ record.time_entry_id }}
+  - required fields: change_id, time_entry_id
+  - risk: Deletes Freshservice data: Delete a Time Entry.
+- create_change_task:
+  - endpoint: POST /changes/{{ record.change_id }}/tasks
+  - required fields: change_id
+  - risk: Create a Task through the Freshservice API.
+- update_a_change_task:
+  - endpoint: PUT /changes/{{ record.change_id }}/tasks/{{ record.task_id }}
+  - required fields: change_id, task_id
+  - risk: Update a Task through the Freshservice API.
+- delete_a_change_task:
+  - endpoint: DELETE /changes/{{ record.change_id }}/tasks/{{ record.task_id }}
+  - required fields: change_id, task_id
+  - risk: Deletes Freshservice data: Delete a Task.
+- create_release:
+  - endpoint: POST /releases
+  - risk: Create a Release through the Freshservice API.
+- update_release_priority:
+  - endpoint: PUT /releases/{{ record.release_id }}
+  - required fields: release_id
+  - risk: Update a Release through the Freshservice API.
+- move_a_release:
+  - endpoint: PUT /releases/{{ record.release_id }}/move_workspace
+  - required fields: release_id
+  - risk: Move a Release through the Freshservice API.
+- delete_a_release:
+  - endpoint: DELETE /releases/{{ record.release_id }}
+  - required fields: release_id
+  - risk: Deletes Freshservice data: Delete a Release.
+- restore_a_release:
+  - endpoint: PUT /releases/{{ record.release_id }}/restore
+  - required fields: release_id
+  - risk: Restore a Release through the Freshservice API.
+- create_release_note:
+  - endpoint: POST /releases/{{ record.release_id }}/notes
+  - required fields: release_id
+  - risk: Create a note through the Freshservice API.
+- update_a_release_note:
+  - endpoint: PUT /releases/{{ record.release_id }}/notes/{{ record.note_id }}
+  - required fields: release_id, note_id
+  - risk: Update a note through the Freshservice API.
+- delete_a_release_note:
+  - endpoint: DELETE /releases/{{ record.release_id }}/notes/{{ record.note_id }}
+  - required fields: release_id, note_id
+  - risk: Deletes Freshservice data: Delete a note.
+- create_release_time_entries:
+  - endpoint: POST /releases/{{ record.release_id }}/time_entries
+  - required fields: release_id
+  - risk: Create a Time Entry through the Freshservice API.
+- update_release_time_entry:
+  - endpoint: PUT /releases/{{ record.release_id }}/time_entries/{{ record.time_entry_id }}
+  - required fields: release_id, time_entry_id
+  - risk: Update a Time Entry through the Freshservice API.
+- delete_a_release_time_entry:
+  - endpoint: DELETE /releases/{{ record.release_id }}/time_entries/{{ record.time_entry_id }}
+  - required fields: release_id, time_entry_id
+  - risk: Deletes Freshservice data: Delete a Time Entry.
+- create_release_task:
+  - endpoint: POST /releases/{{ record.release_id }}/tasks
+  - required fields: release_id
+  - risk: Create a Task through the Freshservice API.
+- update_a_release_task:
+  - endpoint: PUT /releases/{{ record.release_id }}/tasks/{{ record.task_id }}
+  - required fields: release_id, task_id
+  - risk: Update a Task through the Freshservice API.
+- delete_a_release_task:
+  - endpoint: DELETE /releases/{{ record.release_id }}/tasks/{{ record.task_id }}
+  - required fields: release_id, task_id
+  - risk: Deletes Freshservice data: Delete a Task.
+- update_a_cab:
+  - endpoint: PATCH /cabs/{{ record.cab_id }}
+  - required fields: cab_id
+  - risk: Update a CAB through the Freshservice API.
+- delete_a_cab:
+  - endpoint: DELETE /cabs/{{ record.cab_id }}
+  - required fields: cab_id
+  - risk: Deletes Freshservice data: Delete a CAB.
+- create_a_requester:
+  - endpoint: POST /requesters
+  - risk: Create a Requester/Contact through the Freshservice API.
+- update_a_requester:
+  - endpoint: PUT /requesters/{{ record.requester_id }}
+  - required fields: requester_id
+  - risk: Update a Requester/Contact through the Freshservice API.
+- deactivate_a_requester:
+  - endpoint: DELETE /requesters/{{ record.requester_id }}
+  - required fields: requester_id
+  - risk: Deletes Freshservice data: Deactivate a Requester/Contact.
+- forget_a_requester:
+  - endpoint: DELETE /requesters/{{ record.requester_id }}/forget
+  - required fields: requester_id
+  - risk: Deletes Freshservice data: Forget a Requester/Contact.
+- convert_to_agent:
+  - endpoint: PUT /requesters/{{ record.requester_id }}/convert_to_agent
+  - required fields: requester_id
+  - risk: Convert To Agent through the Freshservice API.
+- merge_requesters:
+  - endpoint: PUT /requesters/{{ record.requester_id }}/merge?secondary_requesters=111,222,333
+  - required fields: requester_id
+  - risk: Merge Requesters/Contacts through the Freshservice API.
+- create_an_agent:
+  - endpoint: POST /agents
+  - risk: Create an Agent through the Freshservice API.
+- update_an_agent:
+  - endpoint: PUT /agents/{{ record.agent_id }}
+  - required fields: agent_id
+  - risk: Update an Agent through the Freshservice API.
+- delete_an_agent:
+  - endpoint: DELETE /agents/{{ record.agent_id }}
+  - required fields: agent_id
+  - risk: Deletes Freshservice data: Deactivate an Agent.
+- forget_an_agent:
+  - endpoint: DELETE /agents/{{ record.agent_id }}/forget
+  - required fields: agent_id
+  - risk: Deletes Freshservice data: Forget an Agent.
+- reactivate_an_agent:
+  - endpoint: PUT /agents/{{ record.agent_id }}/reactivate
+  - required fields: agent_id
+  - risk: Reactivate an Agent through the Freshservice API.
+- convert_an_agent_to_requester:
+  - endpoint: PUT /agents/{{ record.agent_id }}/convert_to_requester
+  - required fields: agent_id
+  - risk: Convert To Requester through the Freshservice API.
+- create_a_group:
+  - endpoint: POST /groups
+  - risk: Create a Group through the Freshservice API.
+- update_a_group:
+  - endpoint: PUT /groups/{{ record.group_id }}
+  - required fields: group_id
+  - risk: Update a Group through the Freshservice API.
+- delete_a_group:
+  - endpoint: DELETE /groups/{{ record.group_id }}
+  - required fields: group_id
+  - risk: Deletes Freshservice data: Delete a Group.
+- create_a_requester_group:
+  - endpoint: POST /requester_groups
+  - risk: Create a Requester Group/Contact Group through the Freshservice API.
+- update_a_requester_group:
+  - endpoint: PUT /requester_groups/{{ record.requester_group_id }}
+  - required fields: requester_group_id
+  - risk: Update a Requester Group/Contact Group through the Freshservice API.
+- delete_a_requester_group:
+  - endpoint: DELETE /requester_groups/{{ record.requester_group_id }}
+  - required fields: requester_group_id
+  - risk: Deletes Freshservice data: Delete a Requester Group/Contact Group.
+- add_member_to_requester_group:
+  - endpoint: POST /requester_groups/{{ record.requester_group_id }}/members/{{ record.requester_id }}
+  - required fields: requester_group_id, requester_id
+  - risk: Add Requester to Requester/Contact Group through the Freshservice API.
+- delete_member_from_requester_group:
+  - endpoint: DELETE /requester_groups/{{ record.requester_group_id }}/members/{{ record.requester_id }}
+  - required fields: requester_group_id, requester_id
+  - risk: Deletes Freshservice data: Delete Requester/Contact from Requester/Contact Group.
+- create_a_location:
+  - endpoint: POST /locations
+  - risk: Create a Location through the Freshservice API.
+- update_a_location:
+  - endpoint: PUT /locations/{{ record.location_id }}
+  - required fields: location_id
+  - risk: Update a Location through the Freshservice API.
+- delete_a_location:
+  - endpoint: DELETE /locations/{{ record.location_id }}
+  - required fields: location_id
+  - risk: Deletes Freshservice data: Delete a Location.
+- create_a_product:
+  - endpoint: POST /products
+  - risk: Create a Product through the Freshservice API.
+- update_a_product:
+  - endpoint: PUT /products/{{ record.product_id }}
+  - required fields: product_id
+  - risk: Update a Product through the Freshservice API.
+- delete_a_product:
+  - endpoint: DELETE /products/{{ record.product_id }}
+  - required fields: product_id
+  - risk: Deletes Freshservice data: Delete a Product.
+- create_a_vendor:
+  - endpoint: POST /vendors
+  - risk: Create a Vendor through the Freshservice API.
+- update_a_vendor:
+  - endpoint: PUT /vendors/{{ record.vendor_id }}
+  - required fields: vendor_id
+  - risk: Update a Vendor through the Freshservice API.
+- delete_a_vendor:
+  - endpoint: DELETE /vendors/{{ record.vendor_id }}
+  - required fields: vendor_id
+  - risk: Deletes Freshservice data: Delete a Vendor.
+- acknowledge_alert:
+  - endpoint: PUT /ams/alerts/{{ record.alert_id }}/acknowledge
+  - required fields: alert_id
+  - risk: Acknowledge an alert through the Freshservice API.
+- resolve_alert:
+  - endpoint: PUT /ams/alerts/{{ record.alert_id }}/resolve
+  - required fields: alert_id
+  - risk: Resolve an alert through the Freshservice API.
+- suppress_alert:
+  - endpoint: PUT /ams/alerts/{{ record.alert_id }}/suppress
+  - required fields: alert_id
+  - risk: Suppress an alert through the Freshservice API.
+- unsuppress_alert:
+  - endpoint: PUT /ams/alerts/{{ record.alert_id }}/unsuppress
+  - required fields: alert_id
+  - risk: Unsuppress an alert through the Freshservice API.
+- delete_alert:
+  - endpoint: DELETE /ams/alerts/{{ record.alert_id }}
+  - required fields: alert_id
+  - risk: Deletes Freshservice data: Delete an Alert.
+- create_alert_note:
+  - endpoint: POST /ams/alerts/{{ record.alert_id }}/notes
+  - required fields: alert_id
+  - risk: Create an Alert Note through the Freshservice API.
+- update_alert_note:
+  - endpoint: PUT /ams/alerts/{{ record.alert_id }}/notes/{{ record.note_id }}
+  - required fields: alert_id, note_id
+  - risk: Update an alert note through the Freshservice API.
+- delete_alert_note:
+  - endpoint: DELETE /ams/alerts/{{ record.alert_id }}/notes/{{ record.note_id }}
+  - required fields: alert_id, note_id
+  - risk: Deletes Freshservice data: Delete an alert note.
+- create_an_asset:
+  - endpoint: POST /assets
+  - risk: Create an Asset through the Freshservice API.
+- update_an_asset:
+  - endpoint: PUT /assets/{{ record.display_id }}
+  - required fields: display_id
+  - risk: Update an Asset through the Freshservice API.
+- delete_an_asset:
+  - endpoint: DELETE /assets/{{ record.display_id }}
+  - required fields: display_id
+  - risk: Deletes Freshservice data: Delete an Asset.
+- restore_an_asset:
+  - endpoint: PUT /assets/{{ record.display_id }}/restore
+  - required fields: display_id
+  - risk: Restore an Asset through the Freshservice API.
+- delete_forever_an_asset:
+  - endpoint: PUT /assets/{{ record.display_id }}/delete_forever
+  - required fields: display_id
+  - risk: Delete an Asset Permanently through the Freshservice API.
+- create_a_component:
+  - endpoint: POST /assets/{{ record.display_id }}/components
+  - required fields: display_id
+  - risk: Create a Component through the Freshservice API.
+- update_a_component:
+  - endpoint: PUT /assets/{{ record.display_id }}/components/{{ record.component_id }}
+  - required fields: display_id, component_id
+  - risk: Update a Component through the Freshservice API.
+- create_relationships:
+  - endpoint: POST /relationships/bulk-create
+  - risk: Create Relationships in bulk through the Freshservice API.
+- delete_relationships:
+  - endpoint: DELETE /relationships?ids={{ record.ids }}
+  - required fields: ids
+  - risk: Deletes Freshservice data: Delete Relationships in bulk.
+- create_a_new_purchase_order:
+  - endpoint: POST /purchase_orders
+  - risk: Create a new Purchase Order through the Freshservice API.
+- update_a_purchase_order:
+  - endpoint: PUT /purchase_orders/{{ record.purchase_order_id }}
+  - required fields: purchase_order_id
+  - risk: Update a Purchase Order through the Freshservice API.
+- delete_a_purchase_order:
+  - endpoint: DELETE /purchase_orders/{{ record.purchase_order_id }}
+  - required fields: purchase_order_id
+  - risk: Deletes Freshservice data: Delete a Purchase Order.
+- create_an_asset_type:
+  - endpoint: POST /asset_types
+  - risk: Create an Asset Type through the Freshservice API.
+- update_an_asset_type:
+  - endpoint: PUT /asset_types/{{ record.asset_type_id }}
+  - required fields: asset_type_id
+  - risk: Update an Asset Type through the Freshservice API.
+- delete_an_asset_type:
+  - endpoint: DELETE /asset_types/{{ record.asset_type_id }}
+  - required fields: asset_type_id
+  - risk: Deletes Freshservice data: Delete an Asset Type.
+- create_a_software:
+  - endpoint: POST /applications
+  - risk: Create a Software through the Freshservice API.
+- update_a_software:
+  - endpoint: PUT /applications/{{ record.application_id }}
+  - required fields: application_id
+  - risk: Update a Software through the Freshservice API.
+- delete_a_software:
+  - endpoint: DELETE /applications/{{ record.application_id }}
+  - required fields: application_id
+  - risk: Deletes Freshservice data: Delete a Software.
+- delete_multiple_software:
+  - endpoint: DELETE /applications
+  - risk: Deletes Freshservice data: Delete multiple Software.
+- create_a_contract:
+  - endpoint: POST /contracts
+  - risk: Create a Contract through the Freshservice API.
+- update_a_contract:
+  - endpoint: PUT /contracts/{{ record.contract_id }}
+  - required fields: contract_id
+  - risk: Update a Contract through the Freshservice API.
+- submit_contract_for_approval:
+  - endpoint: PUT /contracts/{{ record.contract_id }}?operation=submit-for-approval
+  - required fields: contract_id
+  - risk: Submit a contract for approval through the Freshservice API.
+- approve_contract:
+  - endpoint: PUT /contracts/{{ record.contract_id }}?operation=approve
+  - required fields: contract_id
+  - risk: Approve a Contract through the Freshservice API.
+- reject_contract:
+  - endpoint: PUT /contracts/{{ record.contract_id }}?operation=reject
+  - required fields: contract_id
+  - risk: Reject a Contract through the Freshservice API.
+- create_a_department:
+  - endpoint: POST /departments
+  - risk: Create a Department through the Freshservice API.
+- update_a_department:
+  - endpoint: PUT /departments/{{ record.department_id }}
+  - required fields: department_id
+  - risk: Update a Department through the Freshservice API.
+- delete_a_department:
+  - endpoint: DELETE /departments/{{ record.department_id }}
+  - required fields: department_id
+  - risk: Deletes Freshservice data: Delete a Department.
+- create_a_project:
+  - endpoint: POST /projects
+  - risk: Create a Project through the Freshservice API.
+- update_a_project:
+  - endpoint: PUT /projects/{{ record.project_id }}
+  - required fields: project_id
+  - risk: Update a Project through the Freshservice API.
+- delete_a_project:
+  - endpoint: DELETE /projects/{{ record.project_id }}
+  - required fields: project_id
+  - risk: Deletes Freshservice data: Delete a Project.
+- archive_a_project:
+  - endpoint: POST /projects/{{ record.project_id }}/archive
+  - required fields: project_id
+  - risk: Archive a Project through the Freshservice API.
+- restore_a_project:
+  - endpoint: POST /projects/{{ record.project_id }}/restore
+  - required fields: project_id
+  - risk: Restore a Project through the Freshservice API.
+- create_a_project_task:
+  - endpoint: POST /projects/{{ record.project_id }}/tasks
+  - required fields: project_id
+  - risk: Create a Project Task through the Freshservice API.
+- update_a_project_task:
+  - endpoint: PUT /projects/{{ record.project_id }}/task/{{ record.task_id }}
+  - required fields: project_id, task_id
+  - risk: Update a Project Task through the Freshservice API.
+- delete_a_project_task:
+  - endpoint: DELETE /projects/{{ record.project_id }}/tasks/{{ record.task_id }}
+  - required fields: project_id, task_id
+  - risk: Deletes Freshservice data: Delete a Project Task.
+- create_a_project_newgen:
+  - endpoint: POST /pm/projects
+  - risk: Create a Project through the Freshservice API.
+- update_a_project_newgen:
+  - endpoint: PUT /pm/projects/{{ record.project_id }}
+  - required fields: project_id
+  - risk: Update a Project through the Freshservice API.
+- delete_a_project_newgen:
+  - endpoint: DELETE /pm/projects/{{ record.project_id }}
+  - required fields: project_id
+  - risk: Deletes Freshservice data: Delete a Project.
+- archive_a_project_newgen:
+  - endpoint: POST /pm/projects/{{ record.project_id }}/archive
+  - required fields: project_id
+  - risk: Archive a Project through the Freshservice API.
+- restore_a_project_newgen:
+  - endpoint: POST /pm/projects/{{ record.project_id }}/restore
+  - required fields: project_id
+  - risk: Restore a Project through the Freshservice API.
+- add_project_members:
+  - endpoint: POST /pm/projects/{{ record.project_id }}/members
+  - required fields: project_id
+  - risk: Add Members through the Freshservice API.
+- create_project_associations:
+  - endpoint: POST /pm/projects/{{ record.project_id }}/{{ record.module_name }}
+  - required fields: project_id, module_name
+  - risk: Create Associations through the Freshservice API.
+- delete_project_association:
+  - endpoint: DELETE /pm/projects/{{ record.project_id }}/{{ record.module_name }}/{{ record.project_id_3 }}
+  - required fields: project_id, module_name, project_id_3
+  - risk: Deletes Freshservice data: Delete Association.
+- delete_attachment_project_newgen:
+  - endpoint: DELETE /pm/projects/{{ record.project_id }}/attachments/{{ record.attachment_id }}
+  - required fields: project_id, attachment_id
+  - risk: Deletes Freshservice data: Delete Attachment of a Project.
+- create_a_project_task_newgen:
+  - endpoint: POST /pm/projects/{{ record.project_id }}/tasks
+  - required fields: project_id
+  - risk: Create a Project Task through the Freshservice API.
+- update_a_project_task_newgen:
+  - endpoint: PUT /pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}
+  - required fields: project_id, task_id
+  - risk: Update a Project Task through the Freshservice API.
+- delete_a_project_task_newgen:
+  - endpoint: DELETE /pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}
+  - required fields: project_id, task_id
+  - risk: Deletes Freshservice data: Delete a Project Task.
+- create_project_task_associations:
+  - endpoint: POST /pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/{{ record.module_name }}
+  - required fields: project_id, task_id, module_name
+  - risk: Create Associations through the Freshservice API.
+- delete_project_task_association:
+  - endpoint: DELETE /pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/{{ record.module_name }}/{{ record.task_id_4 }}
+  - required fields: project_id, task_id, module_name, task_id_4
+  - risk: Deletes Freshservice data: Delete Association.
+- create_note_task_newgen:
+  - endpoint: POST /pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/notes
+  - required fields: project_id, task_id
+  - risk: Create Note through the Freshservice API.
+- update_note_task_newgen:
+  - endpoint: PUT /pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/notes/{{ record.note_id }}
+  - required fields: project_id, task_id, note_id
+  - risk: Update Note through the Freshservice API.
+- delete_note_task_newgen:
+  - endpoint: DELETE /pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/notes/{{ record.note_id }}
+  - required fields: project_id, task_id, note_id
+  - risk: Deletes Freshservice data: Delete Note.
+- delete_attachment_note_task_newgen:
+  - endpoint: DELETE /pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/notes/{{ record.note_id }}/attachments/{{ record.attachment_id }}
+  - required fields: project_id, task_id, note_id, attachment_id
+  - risk: Deletes Freshservice data: Delete Attachment of a Note.
+- delete_attachment_task_newgen:
+  - endpoint: DELETE /pm/projects/{{ record.project_id }}/tasks/{{ record.task_id }}/attachments/{{ record.attachment_id }}
+  - required fields: project_id, task_id, attachment_id
+  - risk: Deletes Freshservice data: Delete Attachment of a Task.
+- create_solution_category:
+  - endpoint: POST /solutions/categories
+  - risk: Create Solution Category through the Freshservice API.
+- update_solution_category:
+  - endpoint: PUT /solutions/categories/{{ record.category_id }}
+  - required fields: category_id
+  - risk: Update Solution Category through the Freshservice API.
+- delete_solution_category:
+  - endpoint: DELETE /solutions/categories/{{ record.category_id }}
+  - required fields: category_id
+  - risk: Deletes Freshservice data: Delete Solution Category.
+- restore_solution_category:
+  - endpoint: PUT /solutions/categories/{{ record.category_id }}/restore
+  - required fields: category_id
+  - risk: Restore Solution Category through the Freshservice API.
+- delete_forever_solution_category:
+  - endpoint: DELETE /solutions/categories/{{ record.category_id }}/delete_forever
+  - required fields: category_id
+  - risk: Deletes Freshservice data: Permanently Delete Solution Category.
+- create_solution_folder:
+  - endpoint: POST /solutions/folders
+  - risk: Create Solution Folder through the Freshservice API.
+- update_solution_folder:
+  - endpoint: PUT /solutions/folders/{{ record.folder_id }}
+  - required fields: folder_id
+  - risk: Update Solution Folder through the Freshservice API.
+- delete_solution_folder:
+  - endpoint: DELETE /solutions/folders/{{ record.folder_id }}
+  - required fields: folder_id
+  - risk: Deletes Freshservice data: Delete Solution Folder.
+- restore_solution_folder:
+  - endpoint: PUT /solutions/folders/{{ record.folder_id }}/restore
+  - required fields: folder_id
+  - risk: Restore Solution Folder through the Freshservice API.
+- delete_forever_solution_folder:
+  - endpoint: DELETE /solutions/folders/{{ record.folder_id }}/delete_forever
+  - required fields: folder_id
+  - risk: Deletes Freshservice data: Permanently Delete Solution Folder.
+- create_solution_article:
+  - endpoint: POST /solutions/articles
+  - risk: Create Solution Article through the Freshservice API.
+- send_article_to_approval:
+  - endpoint: PUT /solutions/articles/{{ record.article_id }}/send_for_approval
+  - required fields: article_id
+  - risk: Send Article to Approval through the Freshservice API.
+- publish_solution_article:
+  - endpoint: PUT /solutions/articles/{{ record.article_id }}
+  - required fields: article_id
+  - risk: Publish Solution Article through the Freshservice API.
+- delete_solution_article:
+  - endpoint: DELETE /solutions/articles/{{ record.article_id }}
+  - required fields: article_id
+  - risk: Deletes Freshservice data: Delete Solution Article.
+- restore_solution_article:
+  - endpoint: PUT /solutions/articles/{{ record.article_id }}/restore
+  - required fields: article_id
+  - risk: Restore Solution Article through the Freshservice API.
+- delete_forever_solution_article:
+  - endpoint: DELETE /solutions/articles/{{ record.article_id }}/delete_forever
+  - required fields: article_id
+  - risk: Deletes Freshservice data: Permanently Delete Solution Article.
+- bulk_restore_solution_article:
+  - endpoint: PUT /solutions/articles/bulk_restore
+  - risk: Bulk Restore Solution Articles through the Freshservice API.
+- update_service_item:
+  - endpoint: PUT /service-catalog/items/{{ record.service_item_id }}
+  - required fields: service_item_id
+  - risk: Update a Service Catalog Item through the Freshservice API.
+- delete_a_service_item:
+  - endpoint: DELETE /service-catalog/items/{{ record.service_item_id }}
+  - required fields: service_item_id
+  - risk: Deletes Freshservice data: Delete a Service Catalog Item.
+- create_shared_fields:
+  - endpoint: POST /service-catalog/shared-fields
+  - risk: Create a shared field through the Freshservice API.
+- update_shared_fields:
+  - endpoint: PUT /service-catalog/shared-fields/{{ record.shared_field_id }}
+  - required fields: shared_field_id
+  - risk: Update shared fields through the Freshservice API.
+- delete_shared_fields:
+  - endpoint: DELETE /service-catalog/shared-fields/{{ record.shared_field_id }}
+  - required fields: shared_field_id
+  - risk: Deletes Freshservice data: Delete shared fields.
+- archive_shared_fields:
+  - endpoint: POST /service-catalog/shared-fields/{{ record.shared_field_id }}/archive
+  - required fields: shared_field_id
+  - risk: Archive shared fields through the Freshservice API.
+- unarchive_shared_fields:
+  - endpoint: POST /service-catalog/shared-fields/{{ record.shared_field_id }}/unarchive
+  - required fields: shared_field_id
+  - risk: Unarchive shared fields through the Freshservice API.
+- create_an_announcement:
+  - endpoint: POST /announcements
+  - risk: Create an Announcement through the Freshservice API.
+- edit_an_announcement:
+  - endpoint: PUT /announcements/{{ record.announcement_id }}
+  - required fields: announcement_id
+  - risk: Edit an Announcement through the Freshservice API.
+- delete_an_announcement:
+  - endpoint: DELETE /announcements/{{ record.announcement_id }}
+  - required fields: announcement_id
+  - risk: Deletes Freshservice data: Delete an Announcement.
+- create_onboarding_request:
+  - endpoint: POST /onboarding_requests
+  - risk: Create an Onboarding Request through the Freshservice API.
+- create_offboarding_request:
+  - endpoint: POST /offboarding_requests
+  - risk: Create an Offboarding Request through the Freshservice API.
+- create_journey_request:
+  - endpoint: POST /journeys/requests
+  - risk: Create a Journey Request through the Freshservice API.
+- filter_journey_requests:
+  - endpoint: POST /journeys/requests/view
+  - risk: Filter Journey Requests through the Freshservice API.
+- update_journey_request:
+  - endpoint: PATCH /journeys/requests/{{ record.request_id }}
+  - required fields: request_id
+  - risk: Update a Journey Request through the Freshservice API.
+- cancel_journey_request:
+  - endpoint: PUT /journeys/requests/{{ record.request_id }}/cancel
+  - required fields: request_id
+  - risk: Cancel a Journey Request through the Freshservice API.
+- delete_journey_request:
+  - endpoint: DELETE /journeys/requests/{{ record.request_id }}
+  - required fields: request_id
+  - risk: Deletes Freshservice data: Delete a Journey Request.
+- create_schedule:
+  - endpoint: POST /oncall/ws/{{ record.workspace_id }}/schedules
+  - required fields: workspace_id
+  - risk: Create a schedule through the Freshservice API.
+- edit_schedule:
+  - endpoint: PUT /oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}
+  - required fields: workspace_id, schedule_id
+  - risk: Update a schedule through the Freshservice API.
+- delete_schedule:
+  - endpoint: DELETE /oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}
+  - required fields: workspace_id, schedule_id
+  - risk: Deletes Freshservice data: Delete a schedule.
+- edit_shift:
+  - endpoint: PUT /oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/shifts/{{ record.shift_id }}
+  - required fields: workspace_id, schedule_id, shift_id
+  - risk: Update a shift through the Freshservice API.
+- delete_shift:
+  - endpoint: DELETE /oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/shifts/{{ record.shift_id }}
+  - required fields: workspace_id, schedule_id, shift_id
+  - risk: Deletes Freshservice data: Delete a shift.
+- override:
+  - endpoint: PUT /oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/shifts/{{ record.shift_id }}/rosters/override
+  - required fields: workspace_id, schedule_id, shift_id
+  - risk: Create/Update/Delete an override through the Freshservice API.
+- create_ep:
+  - endpoint: POST /oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/escalation-policies
+  - required fields: workspace_id, schedule_id
+  - risk: Create an escalation policy through the Freshservice API.
+- delete_ep:
+  - endpoint: DELETE /oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/escalation-policies/{{ record.ep_id }}
+  - required fields: workspace_id, schedule_id, ep_id
+  - risk: Deletes Freshservice data: Delete an escalation policy.
+- reorder_ep:
+  - endpoint: PUT /oncall/ws/{{ record.workspace_id }}/schedules/{{ record.schedule_id }}/escalation-policies/reorder
+  - required fields: workspace_id, schedule_id
+  - risk: Reorder an escalation policy through the Freshservice API.
+- create_custom_object_record:
+  - endpoint: POST /objects/{{ record.object_id }}/records
+  - required fields: object_id
+  - risk: Create new Custom Object Record through the Freshservice API.
+- put_custom_object_record:
+  - endpoint: PUT /objects/{{ record.object_id }}/records/{{ record.record_id }}
+  - required fields: object_id, record_id
+  - risk: Update Custom Object Record through the Freshservice API.
+- delete_custom_object_record:
+  - endpoint: DELETE /objects/{{ record.object_id }}/records/{{ record.record_id }}
+  - required fields: object_id, record_id
+  - risk: Deletes Freshservice data: Delete Custom Object Record.
+- create_new_template:
+  - endpoint: POST /post-incident-reports/templates
+  - risk: Create new templates for post-incident reports through the Freshservice API.
+- enable_pir_template:
+  - endpoint: PUT /post-incident-reports/templates/{{ record.template_id }}
+  - required fields: template_id
+  - risk: Enable template for post-incident reports through the Freshservice API.
+- mark_primary_pir_template:
+  - endpoint: PUT /post-incident-reports/templates/{{ record.template_id }}/mark-as-primary
+  - required fields: template_id
+  - risk: Set template as primary for post-incident reports through the Freshservice API.
+- delete_pir_template:
+  - endpoint: DELETE /post-incident-reports/templates/{{ record.template_id }}
+  - required fields: template_id
+  - risk: Deletes Freshservice data: Delete an existing post-incident report template.
+- trigger_email:
+  - endpoint: POST /tickets/{{ record.ticket_id }}/communications
+  - required fields: ticket_id
+  - risk: Trigger email for a major incident through the Freshservice API.
+- create_incident:
+  - endpoint: POST /tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents
+  - required fields: ticket_id, status_page_id
+  - risk: Create an incident through the Freshservice API.
+- update_incident:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents/{{ record.incident_id }}
+  - required fields: ticket_id, status_page_id, incident_id
+  - risk: Update an incident through the Freshservice API.
+- delete_incident:
+  - endpoint: DELETE /tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents/{{ record.incident_id }}
+  - required fields: ticket_id, status_page_id, incident_id
+  - risk: Deletes Freshservice data: Delete an incident.
+- create_incident_update:
+  - endpoint: POST /tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents/{{ record.incident_id }}/updates
+  - required fields: ticket_id, status_page_id, incident_id
+  - risk: Create incident update through the Freshservice API.
+- update_incident_update:
+  - endpoint: PUT /tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents/{{ record.incident_id }}/updates/{{ record.update_id }}
+  - required fields: ticket_id, status_page_id, incident_id, update_id
+  - risk: Edit an incident update through the Freshservice API.
+- delete_incident_update:
+  - endpoint: DELETE /tickets/{{ record.ticket_id }}/status/pages/{{ record.status_page_id }}/incidents/{{ record.incident_id }}/updates/{{ record.update_id }}
+  - required fields: ticket_id, status_page_id, incident_id, update_id
+  - risk: Deletes Freshservice data: Delete an incident update.
+- create_maintenance_from_change:
+  - endpoint: POST /changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances
+  - required fields: change_id, status_page_id
+  - risk: Create a maintenance from a change through the Freshservice API.
+- update_maintenance_from_change:
+  - endpoint: PUT /changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}
+  - required fields: change_id, status_page_id, maintenance_id
+  - risk: Update a maintenance from a change through the Freshservice API.
+- delete_maintenance_from_change:
+  - endpoint: DELETE /changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}
+  - required fields: change_id, status_page_id, maintenance_id
+  - risk: Deletes Freshservice data: Delete a maintenance from a change.
+- create_maintenance_from_maintenance_window:
+  - endpoint: POST /maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances
+  - required fields: maintenance_window_id, status_page_id
+  - risk: Create a maintenance from a maintenance window through the Freshservice API.
+- update_maintenance_from_maintenance_window:
+  - endpoint: PUT /maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}
+  - required fields: maintenance_window_id, status_page_id, maintenance_id
+  - risk: Update a maintenance from a maintenance window through the Freshservice API.
+- delete_maintenance_from_maintenance_window:
+  - endpoint: DELETE /maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}
+  - required fields: maintenance_window_id, status_page_id, maintenance_id
+  - risk: Deletes Freshservice data: Delete a maintenance from a maintenance window.
+- create_maintenance_update_from_change:
+  - endpoint: POST /changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates
+  - required fields: change_id, status_page_id, maintenance_id
+  - risk: Create a maintenance update from a change through the Freshservice API.
+- update_maintenance_update_from_change:
+  - endpoint: PUT /changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates/{{ record.update_id }}
+  - required fields: change_id, status_page_id, maintenance_id, update_id
+  - risk: Update a maintenance update from a change through the Freshservice API.
+- delete_maintenance_update_from_change:
+  - endpoint: DELETE /changes/{{ record.change_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates/{{ record.update_id }}
+  - required fields: change_id, status_page_id, maintenance_id, update_id
+  - risk: Deletes Freshservice data: Delete a maintenance update from a change.
+- create_maintenance_update_from_maintenance_window:
+  - endpoint: POST /maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates
+  - required fields: maintenance_window_id, status_page_id, maintenance_id
+  - risk: Create a maintenance update from a maintenance window through the Freshservice API.
+- update_maintenance_update_from_maintenance_window:
+  - endpoint: PUT /maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates/{{ record.update_id }}
+  - required fields: maintenance_window_id, status_page_id, maintenance_id, update_id
+  - risk: Update a maintenance update from a maintenance window through the Freshservice API.
+- delete_maintenance_update_from_maintenance_window:
+  - endpoint: DELETE /maintenance-windows/{{ record.maintenance_window_id }}/status/pages/{{ record.status_page_id }}/maintenances/{{ record.maintenance_id }}/updates/{{ record.update_id }}
+  - required fields: maintenance_window_id, status_page_id, maintenance_id, update_id
+  - risk: Deletes Freshservice data: Delete a maintenance update from a maintenance window.
+- create_subscriber:
+  - endpoint: POST /status/pages/{{ record.status_page_id }}/subscribers
+  - required fields: status_page_id
+  - risk: Create a subscriber through the Freshservice API.
+- update_subscriber:
+  - endpoint: PUT /status/pages/{{ record.status_page_id }}/subscribers/{{ record.subscriber_id }}
+  - required fields: status_page_id, subscriber_id
+  - risk: Update a subscriber through the Freshservice API.
+- delete_subscriber:
+  - endpoint: DELETE /status/pages/{{ record.status_page_id }}/subscribers/{{ record.subscriber_id }}
+  - required fields: status_page_id, subscriber_id
+  - risk: Deletes Freshservice data: Delete a subscriber.
+- create_delegation:
+  - endpoint: POST /users/{{ record.user_id }}/delegation
+  - required fields: user_id
+  - risk: Create a delegation through the Freshservice API.
+- update_delegation:
+  - endpoint: PUT /users/{{ record.user_id }}/delegation
+  - required fields: user_id
+  - risk: Update a delegation through the Freshservice API.
+- delete_delegation:
+  - endpoint: DELETE /users/{{ record.user_id }}/delegation
+  - required fields: user_id
+  - risk: Deletes Freshservice data: Delete a delegation.
+- create_physical_subtype:
+  - endpoint: POST /itam/physical-subtypes
+  - risk: Create or update physical subtypes through the Freshservice API.
+- delete_physical_subtype:
+  - endpoint: DELETE /itam/physical-subtypes/{{ record.physical_subtype_id }}
+  - required fields: physical_subtype_id
+  - risk: Deletes Freshservice data: Delete a physical subtype.
+- create_device:
+  - endpoint: POST /itam/devices
+  - risk: Create a device through the Freshservice API.
+- update_device:
+  - endpoint: PUT /itam/devices/{{ record.device_id }}
+  - required fields: device_id
+  - risk: Update a device through the Freshservice API.
+- update_custom_field_of_devices:
+  - endpoint: PUT /itam/custom_fields/devices
+  - risk: Create or update custom field through the Freshservice API.
+- delete_device:
+  - endpoint: DELETE /itam/devices/{{ record.device_id }}
+  - required fields: device_id
+  - risk: Deletes Freshservice data: Delete a device.
+- create_an_asset_for_freshservice_itam:
+  - endpoint: POST /itam/assets
+  - risk: Create an asset through the Freshservice API.
+- update_an_asset_for_freshservice_itam:
+  - endpoint: PUT /itam/assets
+  - risk: Update an asset through the Freshservice API.
+- update_an_asset_by_id_for_freshservice_itam:
+  - endpoint: PUT /itam/assets/{{ record.asset_id }}
+  - required fields: asset_id
+  - risk: Update an asset by ID through the Freshservice API.
+- delete_an_asset_for_freshservice_itam:
+  - endpoint: DELETE /itam/assets/{{ record.asset_id }}
+  - required fields: asset_id
+  - risk: Deletes Freshservice data: Delete an asset.
+- create_or_update_custom_field_of_assets_for_freshservice_itam:
+  - endpoint: PUT /itam/custom_fields/assets
+  - risk: Create or update custom field through the Freshservice API.
+- update_cloud_resource:
+  - endpoint: POST /itam/resources
+  - risk: Update a cloud resource through the Freshservice API.
+- delete_cloud_resource:
+  - endpoint: DELETE /itam/resources/{{ record.resource_id }}
+  - required fields: resource_id
+  - risk: Deletes Freshservice data: Delete a cloud resource.
+- update_custom_field_of_resources:
+  - endpoint: PUT /itam/custom_fields/resources
+  - risk: Create or update custom field through the Freshservice API.
+- delete_cloud_resource_relationship:
+  - endpoint: DELETE /itam/resource_relationships/{{ record.resource_relationship_id }}
+  - required fields: resource_relationship_id
+  - risk: Deletes Freshservice data: Delete a cloud resource relationship.
+- update_cloud_infrastructure:
+  - endpoint: POST /itam/cloud_infrastructures
+  - risk: Update cloud details through the Freshservice API.
+- update_custom_field_of_cloud_infrastructure:
+  - endpoint: PUT /itam/custom_fields/cloudinfrastructures
+  - risk: Create or update custom field through the Freshservice API.
+- update_lifecycle_events:
+  - endpoint: PUT /itam/lifecycle_events
+  - risk: Create or update lifecycle events through the Freshservice API.
+- delete_lifecycle_event:
+  - endpoint: DELETE /itam/lifecycle_events/{{ record.lifecycle_event_id }}
+  - required fields: lifecycle_event_id
+  - risk: Deletes Freshservice data: Delete a lifecycle event.
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Freshservice API reads across documented REST API v2 JSON resources
+- write risk: creates, updates, restores, archives, cancels, and deletes Freshservice records through documented REST API v2 mutation endpoints
+- approval: reverse ETL writes require plan preview and approval token; destructive delete actions are marked destructive
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands
@@ -48,4 +1753,4 @@ pm connectors inspect freshservice --json
 - Run pm connectors inspect freshservice before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

@@ -1,57 +1,58 @@
 # Overview
 
-GoLogin is a declarative-HTTP, read-only connector that reads browser profiles, folders, tags,
-and account information through the GoLogin REST API (`https://api.gologin.com`). This bundle is
-a capability-parity migration of the legacy hand-written connector at
-`internal/connectors/gologin`; the legacy package stays registered and unchanged until the wave6
-registry flip.
+Reads GoLogin browser profiles, folders, tags, and account information through the GoLogin REST API.
+
+Readable streams: `profiles`, `folders`, `user`, `tags`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://api.gologin.com/docs.
 
 ## Auth setup
 
-Provide a GoLogin API key via the `api_key` secret; it is used only for Bearer auth
-(`Authorization: Bearer <api_key>`) and is never logged.
+Connection fields:
+
+- `api_key` (required, secret, string); GoLogin API key. Used only for Bearer auth (Authorization:
+  Bearer <api_key>); never logged.
+- `base_url` (optional, string); default `https://api.gologin.com`; format `uri`; GoLogin API base
+  URL override for tests or proxies.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.gologin.com`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/browser/v2` with query `page`=`1`.
 
 ## Streams notes
 
-Four streams, matching legacy's `gologinStreamEndpoints` routing table exactly:
+Default pagination: single request; no pagination.
 
-- `profiles` — `GET /browser/v2`, records at `profiles`. Page-number pagination (`page` query
-  param, 1-based, no page-size query parameter is ever sent — GoLogin's profiles list has no
-  server-side page-size control). `page_size: 30` in this bundle's `pagination` block is the
-  client-side short-page stop threshold only (matches legacy's `gologinDefaultPageSize`), not a
-  request parameter (`size_param` is intentionally the empty string, matching legacy's
-  `harvest`, which sends only `?page=N`). Legacy publishes `CursorFields: ["updatedAt"]` for this
-  stream but never sends any server-side incremental filter (`InitialState` always starts at an
-  empty cursor, and `Read` never references it) — so this bundle declares a bare
-  `incremental.cursor_field: "updatedAt"` with no `request_param`, matching legacy's "sorts by
-  cursor field for downstream dedup, but always reads every page" behavior exactly.
-- `folders` — `GET /folders`, root-array response (`records.path: ""`), single page.
-- `user` — `GET /user`, single root object (`records.path: ""`), single page. Legacy publishes
-  `CursorFields: ["createdAt"]` with the same no-server-filter behavior as `profiles`, so this
-  bundle declares the equivalent bare `incremental.cursor_field: "createdAt"`.
-- `tags` — `GET /tags/all`, records at `tags`, single page.
+Pagination by stream: none: `folders`, `user`, `tags`; page_number: `profiles`.
 
-`spec.json` does not declare `page_size`/`max_pages` config keys: GoLogin's pagination spec fields
-(`PaginationSpec.PageSize`/`MaxPages`) are plain, non-templated integers in this engine dialect, so
-neither value can be wired to a runtime config override — declaring config keys that no template
-anywhere in the bundle consumes would be dead config (F6, `docs/migration/conventions.md`). This
-mirrors legacy's own `gologinPageSize`/`gologinMaxPages` config-parsing helpers, which exist in
-legacy Go code but have no equivalent expression path in this dialect; the fixed literal values
-(`page_size: 30`, unbounded `max_pages`) reproduce legacy's actual defaults.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `profiles`: GET `/browser/v2` - records path `profiles`; page-number pagination; page parameter
+  `page`; no page-size parameter; starts at 1; page size 30; incremental cursor `updatedAt`;
+  formatted as `rfc3339`.
+- `folders`: GET `/folders` - records at response root.
+- `user`: GET `/user` - records at response root; incremental cursor `createdAt`; formatted as
+  `rfc3339`.
+- `tags`: GET `/tags/all` - records path `tags`.
 
 ## Write actions & risks
 
-None. GoLogin is read-only in this bundle, matching legacy exactly: `capabilities.write: false`
-and no `writes.json` file. Legacy's `Write` method is a stub returning
-`connectors.ErrUnsupportedOperation`; the GoLogin API has no reverse-ETL-safe write surface
-documented.
+This connector is read-only. Read behavior: external GoLogin API read of browser profile and account
+data.
 
 ## Known limits
 
-- `page_size`/`max_pages` are not config-overridable in this bundle (see Streams notes above) —
-  an accepted, documented scope narrowing versus legacy's config-parsing helpers, since the
-  underlying values (30 / unbounded) are unchanged and legacy itself only ever varies them via
-  config that most callers never set.
-- Full GoLogin API surface (proxy management, browser automation triggers, team/workspace admin
-  endpoints) is out of scope; see `api_surface.json`. Only the 4 legacy-parity read streams are
-  implemented, matching `gologinStreamEndpoints`' exact route table.
+- Batch defaults: read_page_size=30.
+- API coverage includes 4 stream-backed endpoint group(s).

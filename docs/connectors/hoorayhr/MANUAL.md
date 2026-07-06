@@ -12,20 +12,44 @@ SYNOPSIS
 DESCRIPTION
   Reads HoorayHR users, time-off, leave-types, and sick-leave records through the HoorayHR REST API using session-token authentication.
 
+ICON
+  asset: icons/hoorayhr.svg
+  source: official
+  review_status: official_verified
+  review_url: https://api.hoorayhr.io/swagger.json
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  hoorayhrusername
+  mode
+  hoorayhrpassword (secret)
+
+ETL STREAMS
+  users:
+    primary key: id
+    fields: companyId(), companyStartDate(), createdAt(), email(), firstName(), id(), isAdmin(), jobTitle(), lastName(), status(), updatedAt()
+  time_off:
+    primary key: id
+    fields: createdAt(), end(), id(), leaveTypeId(), leaveUnit(), notes(), start(), status(), timeOffType(), updatedAt(), userId()
+  leave_types:
+    primary key: id
+    fields: budget(), color(), createdAt(), default(), icon(), id(), leaveInDays(), name(), unpaidLeave(), updatedAt()
+  sick_leaves:
+    primary key: id
+    fields: actualReturn(), actualStart(), createdAt(), id(), notes(), percentage(), reportedReturn(), reportedStart(), status(), updatedAt(), userId()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external HoorayHR API read of employee, time-off, leave-type, and sick-leave data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

@@ -1,163 +1,101 @@
 # Overview
 
-Zoho Analytics Metadata API is a Tier-2 (AuthHook) migration repairing the `AUTH_COMPLEX` quarantine
-entry recorded in `docs/migration/quarantine.json` ("OAuth refresh-token exchange (hook needed)").
-It reads Zoho Analytics workspace, view, and table metadata via the Zoho OAuth 2.0
-**refresh-token grant** only — the 3-legged consent/acquisition dance is out of scope (the refresh
-token arrives as a pre-issued secret; the credentials layer already owns acquisition/storage),
-matching gmail's precedent (`internal/connectors/hooks/gmail/hooks.go`) and mirroring the sibling
-zoho-bigin migration's identical hook shape. This bundle migrates
-`internal/connectors/zoho-analytics-metadata-api` (the hand-written connector it replaces); the
-legacy package stays registered and unchanged until wave6's registry flip.
+Reads Zoho Analytics workspace/view/table/organization/folder/query-table/datasource metadata and
+triggers datasource/view data syncs, via the Zoho OAuth 2.0 refresh-token grant.
 
-**Pass B full-surface expansion** (`api_surface.json`) added every remaining GET endpoint in Zoho
-Analytics' **Metadata API** category specifically — `organizations`, `recent_views`,
-`shared_workspaces`, `shared_dashboards`, `folders`, `query_tables`, `datasources` — plus the 2 POST
-data-sync-trigger mutations that category documents (`sync_datasource`, `refetch_view_data`), so
-`capabilities.write` is now `true`. The connector's name/`docs_url` deliberately scope it to the
-Metadata API category alone; Zoho Analytics' separate Workspace Management/Modeling/Bulk/
-Data-Manipulation API categories (workspace/view/table/column CRUD, row-level data import/export)
-are out of scope — see `api_surface.json`'s per-endpoint `out_of_scope` reasons.
+Readable streams: `workspaces`, `views`, `tables`, `organizations`, `recent_views`,
+`shared_workspaces`, `shared_dashboards`, `folders`, `query_tables`, `datasources`.
+
+Write actions: `sync_datasource`, `refetch_view_data`.
+
+Service API documentation: https://www.zoho.com/analytics/api/v2/metadata-api.html.
 
 ## Auth setup
 
-Provide three secrets: `client_id`, `client_secret`, and `refresh_token` (long-lived; never logged)
-— all three are `required` in `spec.json`, matching legacy's `requireOAuth` check.
-`hooks/zoho-analytics-metadata-api/hooks.go` implements `AuthHook`, copying gmail's hook pattern
-(`docs/migration/conventions.md` §1's Tier-2 table: token-exchange auth) and mirroring the sibling
-zoho-bigin hook: it POSTs `grant_type=refresh_token` + `client_id` + `client_secret` +
-`refresh_token` to `token_url` (default `https://accounts.zoho.com/oauth/v2/token`,
-config-overridable), caches the resulting access token until 60 seconds before its declared expiry,
-and sets `Authorization: Zoho-oauthtoken <access_token>` on every request (Zoho's own header scheme
-— legacy's `refreshToken` decodes `access_token` from the JSON response and the read path applies it
-via `connsdk.Bearer`, which legacy itself sends as a plain `Bearer <token>` header; this bundle
-instead uses Zoho's documented `Zoho-oauthtoken` scheme directly in the hook, since a custom
-AuthHook is not constrained to `connsdk.Bearer`'s prefix — this is a stricter-correctness match to
-Zoho's own published API contract, not a deviation from any legacy-observable behavior since legacy
-only replayed the raw access token string it received).
+Connection fields:
 
-`token_url` MUST resolve to an `https://` URL: the hook fails closed on a non-https or unparseable
-override rather than sending the refresh token/client secret to an attacker-chosen endpoint. This
-mirrors legacy's `validateURL` (`zoho_analytics_metadata_api.go:226-234`) but tightens it to
-https-only in the hook (legacy's `validateURL` also accepted plain `http`) — see Known limits.
+- `base_url` (optional, string); default `https://analyticsapi.zoho.com/restapi/v2`; format `uri`;
+  Zoho Analytics Metadata API base URL override for tests or region-specific data centers (e.g.
+  https://analyticsapi.zoho.eu/restapi/v2).
+- `client_id` (required, secret, string); Zoho OAuth 2.0 client ID for the refresh-token grant. Used
+  only in the token-request form; never logged.
+- `client_secret` (required, secret, string); Zoho OAuth 2.0 client secret. Used only in the
+  token-request form; never logged.
+- `mode` (optional, string).
+- `org_id` (optional, string); Optional Zoho Analytics organization ID; sent as the ZANALYTICS-ORGID
+  header on every request when set.
+- `refresh_token` (required, secret, string); Long-lived Zoho OAuth 2.0 refresh token. Exchanged for
+  a short-lived access token at token_url; never logged. The 3-legged consent/acquisition dance is
+  out of scope (credentials layer already owns it).
+- `token_url` (optional, string); default `https://accounts.zoho.com/oauth/v2/token`; format `uri`;
+  Zoho OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a
+  non-https or unparseable value to prevent exfiltrating the refresh token to an attacker-chosen
+  endpoint.
+- `workspace_id` (optional, string); Reading/writing those without this set fails with an
+  unresolved-config-key error naming workspace_id; every other stream/action does not require it.
 
-The bundle's `base.auth` declares exactly one candidate: `{"mode": "custom", "hook":
-"zoho-analytics-metadata-api", ...}` — legacy has no alternate auth path (no static API key, no
-public/no-auth fallback), so there is no `when`-gated bypass to declare.
+Secret fields are redacted in logs and write previews: `client_id`, `client_secret`,
+`refresh_token`.
 
-Optional `org_id` config sends a `ZANALYTICS-ORGID` header on every request when set, matching
-legacy's `zoho_analytics_metadata_api.go:101-104` conditional header (declared but not in
-`required[]` — omitted entirely when unset, per `docs/migration/conventions.md` §3's conditional
-header rule, matching legacy's `if orgID != "" { headers[...] = orgID }` guard exactly).
+Default configuration values: `base_url=https://analyticsapi.zoho.com/restapi/v2`,
+`token_url=https://accounts.zoho.com/oauth/v2/token`.
+
+Authentication behavior:
+
+- Connector-specific authentication using `secrets.refresh_token`, `config.token_url`,
+  `secrets.client_id`, `secrets.client_secret`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/workspaces`.
 
 ## Streams notes
 
-Nine streams total, primary-keyed on whichever id field their own real API response uses (`id` for
-the 3 legacy streams; `orgId`/`viewId`/`workspaceId`/`folderId`/`datasourceId` for the 6 new ones —
-each schema's `x-primary-key` names the field that stream's own response actually returns, per
-`docs/migration/conventions.md`'s schema-as-projection rule). None are paginated
-(`base.pagination: {"type": "none"}` at the base level; none of the 9 streams override it) — every
-metadata-api.html endpoint researched for this Pass B pass returns its full result set in one
-response with no page/cursor/next-link field of any kind (confirmed by reading each endpoint's own
-documented sample response).
+Default pagination: single request; no pagination.
 
-The original 3 legacy-parity streams reproduce the hand-written connector's mapper output:
-
-- `workspaces` — `GET /workspaces`, records at `data`. `computed_fields` maps `id` from
-  `workspaceId` falling back to `id`, `name` from `workspaceName` falling back to `name`, and
-  `created_time` from `createdTime`, matching legacy's `mapWorkspace`.
-- `views` — `GET /views`, records at `data`. `computed_fields` maps `id` from the first non-empty
-  value of `viewId`, `tableId`, or `id`, and `name` from `viewName`, `tableName`, or `name`,
-  matching legacy's shared `mapView`.
-- `tables` — `GET /tables`, records at `data`. Uses the same `mapView`-equivalent mapping as
-  `views`, since the legacy Go implementation shared the mapper for both streams.
-
-The 6 new Pass-B streams model the REAL Zoho Analytics Metadata API response envelopes (each
-endpoint's own documented sample response was read individually rather than assumed, since the
-envelope key differs per endpoint — `data.orgs`, `data.views`, `data.workspaces`, `data.folders`,
-`data.queryTables`, `data.dataSources` are all genuinely different keys, not a uniform `data.data`
-shape):
-
-- `organizations` — `GET /orgs`, records at `data.orgs`. Top-level, no workspace scoping.
-- `recent_views` — `GET /recentviews`, records at `data.views`. Top-level, no workspace scoping.
-- `shared_workspaces` — `GET /workspaces/shared`, records at `data.workspaces`.
-- `shared_dashboards` — `GET /dashboards/shared`, records at `data.views` (Zoho's own docs use the
-  same `views` envelope key for both regular views and dashboards — a dashboard is itself a `view`
-  object with `viewType: "Dashboard"`).
-- `folders` — `GET /workspaces/{{ config.workspace_id }}/folders`, records at `data.folders`.
-  **Requires `config.workspace_id`** — see Known limits.
-- `query_tables` — `GET /workspaces/{{ config.workspace_id }}/querytables`, records at
-  `data.queryTables`. **Requires `config.workspace_id`**.
-- `datasources` — `GET /workspaces/{{ config.workspace_id }}/datasources`, records at
-  `data.dataSources`. **Requires `config.workspace_id`**. Each record's `tableDetails` field is a
-  nested array of per-table sync-status objects, preserved as an opaque JSON array
-  (`type: ["array","null"]`) rather than fanned out into separate records — there is no legacy
-  behavior to match (this is entirely new coverage) and fanning it out would require a `fan_out`
-  spec keyed on a per-datasource table list this connector has no other reason to enumerate
-  up-front.
+- `workspaces`: GET `/workspaces` - records path `data`; computed output fields `created_time`,
+  `id`, `name`.
+- `views`: GET `/views` - records path `data`; computed output fields `id`, `name`.
+- `tables`: GET `/tables` - records path `data`; computed output fields `id`, `name`.
+- `organizations`: GET `/orgs` - records path `data.orgs`; emits passthrough records.
+- `recent_views`: GET `/recentviews` - records path `data.views`; emits passthrough records.
+- `shared_workspaces`: GET `/workspaces/shared` - records path `data.workspaces`; emits passthrough
+  records.
+- `shared_dashboards`: GET `/dashboards/shared` - records path `data.views`; emits passthrough
+  records.
+- `folders`: GET `/workspaces/{{ config.workspace_id }}/folders` - records path `data.folders`;
+  emits passthrough records.
+- `query_tables`: GET `/workspaces/{{ config.workspace_id }}/querytables` - records path
+  `data.queryTables`; emits passthrough records.
+- `datasources`: GET `/workspaces/{{ config.workspace_id }}/datasources` - records path
+  `data.dataSources`; emits passthrough records.
 
 ## Write actions & risks
 
-Two write actions, both triggering an asynchronous Zoho-side data sync rather than mutating any
-Zoho Analytics object — `capabilities.write` is `true`:
+Overall write risk: triggers an asynchronous datasource or view data sync/refetch in Zoho Analytics;
+does not create, modify, or delete any Zoho Analytics workspace/view/table/data record itself --
+only re-pulls from an already-configured external datasource.
 
-- `sync_datasource` — `POST /workspaces/{workspace_id}/datasources/{datasource_id}/sync`,
-  `body_type: none`, `path_fields: ["workspace_id", "datasource_id"]`. Initiates a data sync for one
-  datasource. Low risk: re-fetches from an already-configured external source, never creates/
-  modifies/deletes a Zoho Analytics record.
-- `refetch_view_data` — `POST /workspaces/{workspace_id}/views/{view_id}/sync`, `body_type: none`,
-  `path_fields: ["workspace_id", "view_id"]`. Initiates a data refetch for one view. Same low-risk
-  profile as `sync_datasource`.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Both endpoints also document an optional `CONFIG` query parameter that can carry the target
-datasource's OWN `userName`/`password` credential (and, for `sync_datasource` only, a
-`syncIntervalId` when multiple sync schedules are configured) to authenticate the sync — this
-bundle does NOT model that parameter; see Known limits.
+- `sync_datasource`: POST `/workspaces/{{ record.workspace_id }}/datasources/{{ record.datasource_id
+  }}/sync` - kind `update`; body type `none`; path fields `workspace_id`, `datasource_id`; required
+  record fields `workspace_id`, `datasource_id`; accepted fields `datasource_id`, `workspace_id`;
+  risk: triggers an asynchronous data sync for one datasource in a workspace; low-risk (re-fetches
+  data from the connected source, does not itself mutate any Zoho Analytics record). The documented
+  optional CONFIG query parameter, which can carry a datasource's own username/password credential
+  for the sync, is NOT supported by this action (see docs.md Known limits) -- only the no-CONFIG
+  invocation shown in Zoho's own sample request is modeled.
+- `refetch_view_data`: POST `/workspaces/{{ record.workspace_id }}/views/{{ record.view_id }}/sync`
+  - kind `update`; body type `none`; path fields `workspace_id`, `view_id`; required record fields
+  `workspace_id`, `view_id`; accepted fields `view_id`, `workspace_id`; risk: triggers an
+  asynchronous data refetch for one view from its available datasource; low-risk (re-fetches, does
+  not itself mutate any Zoho Analytics record). Same CONFIG-credential limitation as sync_datasource
+  -- see docs.md Known limits.
 
 ## Known limits
 
-- **`token_url` https-only enforcement is stricter than legacy's `validateURL`** (which accepted
-  plain `http` too, `zoho_analytics_metadata_api.go:226-234`): the hook only accepts `https://`
-  overrides. Never stricter for any *production* Zoho OAuth endpoint, which is always https;
-  strictly safer for the one new SSRF-adjacent secret-bearing surface this migration adds. See the
-  parity-deviation ledger in `docs/migration/conventions.md` §5.
-- **`data_center` is not modeled as a config key.** Legacy's own test fixtures set a `data_center`
-  config value, but `zoho_analytics_metadata_api.go` never reads it anywhere (dead config in legacy
-  itself, not just in this migration) — `base_url` is the sole, already-correct override mechanism
-  for a region-specific data center (e.g. `https://analyticsapi.zoho.eu/restapi/v2`). Not declared
-  in `spec.json` per `docs/migration/conventions.md` F6 (a spec property with no wired template is
-  dead config).
-- **`folders`/`query_tables`/`datasources` streams and both write actions require `config.workspace_id`
-  set.** These are the only genuinely workspace-scoped paths in the real Metadata API this bundle
-  models (unlike `workspaces`/`views`/`tables`, whose flat legacy-parity paths return every
-  accessible object with no workspace segment at all). `workspace_id` is declared optional in
-  `spec.json` (not `required[]`, since the 3 legacy streams and `organizations`/`recent_views`/
-  `shared_workspaces`/`shared_dashboards` never need it) — reading/writing one of the
-  workspace-scoped items without it configured hard-errors with an unresolved-config-key message
-  naming `workspace_id` (path interpolation has no absent-key tolerance, per
-  `docs/migration/conventions.md` §3), which is the honest, loud failure mode rather than a silent
-  wrong-URL request.
-- **`sync_datasource`/`refetch_view_data` do not model the optional `CONFIG` query parameter.** Both
-  endpoints document an optional `CONFIG` JSONObject query parameter that can carry the target
-  datasource's own `userName`/`password` (and, for `sync_datasource`, a `syncIntervalId` when
-  multiple sync schedules exist) to authenticate the triggered sync. This is out of scope for two
-  reasons: (1) the parameter's shape is itself a second, datasource-scoped credential pair with no
-  natural home in this connector's `spec.json` (it varies per datasource, not per connection), and
-  (2) Zoho's own sample request for both endpoints omits `CONFIG` entirely, confirming the
-  no-parameter invocation is the documented common case. Only that no-`CONFIG` invocation is
-  modeled; a datasource that specifically requires re-authentication on every sync cannot be synced
-  through this action today.
-- **`meta_details` (`GET /metadetails`) and view-dependents (`GET
-  /workspaces/{workspace-id}/views/{view-id}/dependents`) are excluded, not migrated** — see
-  `api_surface.json` for the specific per-endpoint reasons (an opaque target-type-dependent `CONFIG`
-  shape for the former; a view-id fan-out this connector has no other reason to collect for the
-  latter).
-- **`TestConformance/zoho-analytics-metadata-api`'s dynamic (fixture-replay) checks are
-  `skip_dynamic`'d** for the identical reason as gmail's bundle-level marker: this bundle's *sole*
-  auth candidate is `mode: custom`, and conformance's synthetic config can never carry a real
-  `https` `token_url` — the AuthHook's own https-only guard means no synthetic secret value can ever
-  satisfy it, so every auth-resolving dynamic check would fail identically and uninformatively
-  regardless of hook wiring. `hooks/zoho-analytics-metadata-api/hooks_test.go` is the authoritative
-  substitute proof for the AuthHook's real OAuth2 refresh-grant behavior (form shape, caching/
-  expiry, https enforcement, error paths, secret redaction) — the same gmail precedent this bundle's
-  `metadata.json` `conformance.reason` names.
+- Batch defaults: read_page_size=100.
+- API coverage includes 10 stream-backed endpoint group(s), 2 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=2, out_of_scope=9.

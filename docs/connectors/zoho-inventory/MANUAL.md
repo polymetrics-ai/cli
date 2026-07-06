@@ -12,20 +12,46 @@ SYNOPSIS
 DESCRIPTION
   Reads Zoho Inventory contacts, items, and sales orders through the Zoho Inventory REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  organization_id
+  page_size
+  access_token (secret)
+
+ETL STREAMS
+  contacts:
+    primary key: id
+    cursor: updated_at
+    fields: company_name(), contact_id(), contact_name(), contact_type(), created_time(), currency_code(), email(), id(), last_modified_time(), outstanding_receivable_amount(), phone(), status(), updated_at()
+  items:
+    primary key: id
+    cursor: updated_at
+    fields: created_time(), description(), id(), item_id(), item_name(), last_modified_time(), name(), rate(), sku(), status(), unit(), updated_at()
+  salesorders:
+    primary key: id
+    cursor: updated_at
+    fields: balance(), created_time(), currency_code(), customer_id(), customer_name(), date(), id(), last_modified_time(), salesorder_id(), salesorder_number(), shipment_date(), status(), total(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Zoho Inventory API read of contact/item/sales-order data
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

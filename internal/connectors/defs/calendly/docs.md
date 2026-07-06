@@ -1,183 +1,169 @@
 # Overview
 
-Calendly is a wave1-pilot declarative-HTTP migration (P-4), expanded to full documented API-surface
-coverage in Pass B. It reads Calendly scheduled events (and their invitees), event types,
-organization memberships, groups, routing forms and submissions, webhook subscriptions, availability
-schedules, activity log entries, and the current user, and creates/cancels bookings, manages
-webhooks/memberships/invitations, and creates event types/shares, through the Calendly v2 REST API.
-This bundle targets capability parity with `internal/connectors/calendly` (the hand-written
-connector it migrates, which was read-only); the legacy package stays registered and unchanged until
-wave6's registry flip. Pass B research verified this bundle against Calendly's real published
-OpenAPI 3.1 spec (35 method+path endpoints across 30 paths,
-`github.com/api-evangelist/calendly/openapi/calendly-scheduling-api-openapi.yml`); see
-`api_surface.json` for the full endpoint-by-endpoint disposition.
+Reads Calendly scheduled events (and their invitees), event types, organization memberships, groups,
+routing forms and submissions, webhook subscriptions, availability schedules, activity log entries,
+and the current user, and manages bookings/webhooks/memberships/invitations/event types through the
+Calendly v2 REST API.
+
+Readable streams: `scheduled_events`, `event_types`, `organization_memberships`, `groups`, `users`,
+`routing_forms`, `routing_form_submissions`, `webhook_subscriptions`, `user_availability_schedules`,
+`group_relationships`, `activity_log_entries`, `invitees`.
+
+Write actions: `cancel_scheduled_event`, `create_invitee`, `create_webhook_subscription`,
+`delete_webhook_subscription`, `remove_organization_membership`, `invite_user_to_organization`,
+`create_one_off_event_type`, `create_share`.
+
+Service API documentation: https://developer.calendly.com/api-docs.
 
 ## Auth setup
 
-Provide a Calendly personal access token or OAuth token via the `api_key` secret; it is used only
-for Bearer auth (`Authorization: Bearer <api_key>`) and is never logged.
+Connection fields:
 
-Every organization-scoped list stream (`scheduled_events`, `event_types`,
-`organization_memberships`, `groups`, `routing_forms`, `webhook_subscriptions`,
-`group_relationships`, `activity_log_entries`) also requires the `organization_uri` config value —
-the authenticated user's Calendly organization URI (e.g.
-`https://api.calendly.com/organizations/AAAAAAAAAAAAAAAA`). Resolve it once by calling
-`GET https://api.calendly.com/users/me` with your API key and reading
-`resource.current_organization`, then configure it here. See "Known limits" below for why this
-differs from legacy's behavior. Two more streams need their own single-resource config value, for
-the identical reason: `user_availability_schedules` needs `user_uri` (a specific user's URI —
-defaults to the authenticated user if you resolve it the same way as `organization_uri`, via
-`resource.uri` instead of `resource.current_organization`), and `routing_form_submissions` needs
-`routing_form_uri` (one specific form's URI, resolvable from the `routing_forms` stream's own `uri`
-field). Both are optional at the spec level (they gate only their own stream, not the whole
-connector) but reads of that specific stream hard-error without them.
+- `api_key` (required, secret, string); Calendly personal access token or OAuth token. Used only for
+  Bearer auth (Authorization: Bearer <api_key>); never logged.
+- `base_url` (optional, string); default `https://api.calendly.com`; format `uri`; Calendly API base
+  URL override for tests or proxies.
+- `organization_uri` (required, string); format `uri`; The authenticated user's Calendly
+  organization URI (e.g. https://api.calendly.com/organizations/AAAAAAAAAAAAAAAA), used to scope
+  every organization-level list request (organization=<organization_uri>). See docs.md's Known
+  limits.
+- `page_size` (optional, string); default `100`; Records per page (1-100), sent as the count query
+  param.
+- `routing_form_uri` (optional, string); format `uri`; The Calendly routing form URI whose
+  submissions the routing_form_submissions stream reads (Calendly's `routing_form` query filter is a
+  required parameter naming one specific form, not the whole organization). Resolvable from the
+  routing_forms stream's own uri field. See docs.md's Known limits.
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; only scheduled_events
+  starting at or after this time are read (Calendly's min_start_time filter).
+- `user_uri` (optional, string); format `uri`; The Calendly user URI whose availability schedules
+  the user_availability_schedules stream reads (Calendly's `user` query filter is a required
+  parameter naming one specific user, not the whole organization). Same per-account-invariant-value
+  pattern as organization_uri: Calendly's API gives no 'list every user' endpoint and the engine
+  dialect cannot chain a prior request's response into this one, so the operator configures it once
+  - resolvable by calling GET https://api.calendly.com/users/me and reading resource.uri (the
+  authenticated user's own URI is the common case). See docs.md's Known limits.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.calendly.com`, `page_size=100`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/users/me`.
 
 ## Streams notes
 
-- `scheduled_events` (records at `collection`, cursor field `start_time`): Calendly's scheduled
-  (booked) events for the organization. Incremental reads send `min_start_time` (RFC3339, sent
-  verbatim — `param_format` defaults to `rfc3339`) computed from the persisted state cursor or,
-  on a fresh sync, from the `start_date` config value — this is the ONLY stream that receives a
-  server-side lower-bound filter, matching legacy's `harvest`/`incrementalLowerBound` exactly
-  (legacy only sets `min_start_time` when `endpoint.resource == "scheduled_events"`; every other
-  stream ignores an unknown filter param, so legacy never sends one for them either, and this
-  bundle matches that by simply not wiring `incremental.request_param` for those streams).
-- `event_types` (cursor field `updated_at`), `organization_memberships` (cursor field
-  `updated_at`, computed_fields flatten the nested `user` object into `user`/`user_name`/
-  `user_email`), `groups` (cursor field `updated_at`): all three declare an `x-cursor-field` for
-  manifest-surface parity with legacy's published `CursorFields`, but — matching legacy exactly —
-  receive NO server-side incremental filter and are NOT `client_filtered` either; legacy simply
-  never applies any filter for these three streams' `updated_at` cursor, so a full page is always
-  requested regardless of prior sync state. This bundle intentionally does not set
-  `client_filtered: true` for these streams — doing so would be NEW behavior legacy never had.
-- `users` (`single_object: true`, records at `resource`, no incremental — matches legacy, which
-  publishes no `CursorFields` for this stream): the authenticated Calendly user (`GET /users/me`).
-- **New in Pass B:**
-  - `routing_forms` (cursor field `updated_at`) and `routing_form_submissions` (cursor field
-    `updated_at`, requires `routing_form_uri` — see Auth setup): routing-form definitions and their
-    submitted responses.
-  - `webhook_subscriptions` (cursor field `updated_at`): registered webhook endpoints, scoped to the
-    organization (`scope=organization` sent as a static query value — the API also supports
-    `scope=user`, not modeled as a separate stream in this wave).
-  - `user_availability_schedules` (no incremental, unpaginated — Calendly's own response has no
-    `pagination` block for this endpoint; requires `user_uri` — see Auth setup): a user's named
-    recurring/date-override availability windows.
-  - `group_relationships` (cursor field `updated_at`): user-to-group membership links.
-  - `activity_log_entries` (cursor field `occurred_at`): THE ONLY new stream with a genuine
-    server-side incremental filter — `incremental.request_param: min_occurred_at` sends the
-    resolved lower bound directly (Calendly's own documented filter parameter for this endpoint).
-  - `invitees` (cursor field `updated_at`): a `fan_out` stream over `scheduled_events` — Calendly has
-    no "list every invitee across the account" endpoint; invitees are always scoped to one scheduled
-    event (`GET /scheduled_events/{event_uuid}/invitees`). `fan_out.ids_from.request` re-lists
-    `scheduled_events` (organization-scoped, same as the `scheduled_events` stream itself) to collect
-    every event's `uri` as the fan-out id (`id_field: "uri"`), then `into.path_var` threads each
-    event's URI into `invitees`' own `path` as `{{ fanout.id }}`; `stamp_field:
-    scheduled_event_id` stamps that same event URI onto every emitted invitee record. Because the
-    engine's `fan_out.ids_from.request` has no `query` field of its own (only `path`), the
-    organization/count query parameters are embedded directly as a literal query string inside the
-    `path` template itself (`/scheduled_events?organization={{ config.organization_uri | urlencode
-    }}&count={{ config.page_size }}`) rather than a separate `query` block — `InterpolatePath`
-    treats `{{ }}` markers exactly the same wherever they appear in the template string, and
-    `connsdk.Requester`'s URL resolution parses the resulting literal `?...` suffix as an ordinary
-    query string, so this is a correct, supported (if unusual-looking) use of the existing dialect,
-    not a workaround.
+Default pagination: follows a next-page URL from the response body; URL path `pagination.next_page`;
+next URLs stay on the configured API host.
 
-Pagination is Calendly's absolute-URL `pagination.next_page` cursor (`pagination.type: next_url`,
-`next_url_path: pagination.next_page`) — a `null`/absent `next_page` stops pagination immediately
-(SPEC wave1-pilot §4 N3: calendly returns ABSOLUTE next-page URLs, so the engine's same-host SSRF
-guard never blocks legitimate pagination here; no `allow_cross_host` override is needed). The
-`users` single-object stream (`GET /users/me`) declares an explicit stream-level
-`"pagination": {"type": "none"}` override rather than inheriting the collection streams'
-`next_url` paginator, matching its real (unpaginated, single-object) response shape.
+Pagination by stream: next_url: `scheduled_events`, `event_types`, `organization_memberships`,
+`groups`, `routing_forms`, `routing_form_submissions`, `webhook_subscriptions`,
+`group_relationships`, `activity_log_entries`, `invitees`; none: `users`,
+`user_availability_schedules`.
 
-`count={{ config.page_size }}` is sent on every organization-scoped list request. `page_size` is
-NOT required: leaving it unset resolves to spec.json's declared `"default": "100"`, materialized
-into `RuntimeConfig.Config` at runtime by the engine's config-default mechanism
-(`engine/read.go`'s `materializeConfigDefaults`) before query templating runs — matching legacy's
-`calendlyPageSize` default-100 fallback (`calendly.go:363-376`) exactly, for the identical (unset)
-input, without a hard error.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `scheduled_events`: GET `/scheduled_events` - records path `collection`; query `count`=`{{
+  config.page_size }}`; `organization`=`{{ config.organization_uri }}`; follows a next-page URL from
+  the response body; URL path `pagination.next_page`; next URLs stay on the configured API host;
+  incremental cursor `start_time`; sent as `min_start_time`; formatted as `rfc3339`; initial lower
+  bound from `start_date`; computed output fields `id`.
+- `event_types`: GET `/event_types` - records path `collection`; query `count`=`{{ config.page_size
+  }}`; `organization`=`{{ config.organization_uri }}`; follows a next-page URL from the response
+  body; URL path `pagination.next_page`; next URLs stay on the configured API host; computed output
+  fields `id`.
+- `organization_memberships`: GET `/organization_memberships` - records path `collection`; query
+  `count`=`{{ config.page_size }}`; `organization`=`{{ config.organization_uri }}`; follows a
+  next-page URL from the response body; URL path `pagination.next_page`; next URLs stay on the
+  configured API host; computed output fields `id`, `user`, `user_email`, `user_name`.
+- `groups`: GET `/groups` - records path `collection`; query `count`=`{{ config.page_size }}`;
+  `organization`=`{{ config.organization_uri }}`; follows a next-page URL from the response body;
+  URL path `pagination.next_page`; next URLs stay on the configured API host; computed output fields
+  `id`.
+- `users`: GET `/users/me` - single-object response; records path `resource`; computed output fields
+  `id`.
+- `routing_forms`: GET `/routing_forms` - records path `collection`; query `count`=`{{
+  config.page_size }}`; `organization`=`{{ config.organization_uri }}`; follows a next-page URL from
+  the response body; URL path `pagination.next_page`; next URLs stay on the configured API host;
+  incremental cursor `updated_at`; formatted as `rfc3339`; computed output fields `id`.
+- `routing_form_submissions`: GET `/routing_form_submissions` - records path `collection`; query
+  `count`=`{{ config.page_size }}`; `routing_form`=`{{ config.routing_form_uri }}`; follows a
+  next-page URL from the response body; URL path `pagination.next_page`; next URLs stay on the
+  configured API host; incremental cursor `updated_at`; formatted as `rfc3339`; computed output
+  fields `id`.
+- `webhook_subscriptions`: GET `/webhook_subscriptions` - records path `collection`; query
+  `count`=`{{ config.page_size }}`; `organization`=`{{ config.organization_uri }}`;
+  `scope`=`organization`; follows a next-page URL from the response body; URL path
+  `pagination.next_page`; next URLs stay on the configured API host; incremental cursor
+  `updated_at`; formatted as `rfc3339`; computed output fields `id`.
+- `user_availability_schedules`: GET `/user_availability_schedules` - records path `collection`;
+  query `user`=`{{ config.user_uri }}`; computed output fields `id`.
+- `group_relationships`: GET `/group_relationships` - records path `collection`; query `count`=`{{
+  config.page_size }}`; `organization`=`{{ config.organization_uri }}`; follows a next-page URL from
+  the response body; URL path `pagination.next_page`; next URLs stay on the configured API host;
+  incremental cursor `updated_at`; formatted as `rfc3339`; computed output fields `id`.
+- `activity_log_entries`: GET `/activity_log_entries` - records path `collection`; query `count`=`{{
+  config.page_size }}`; `organization`=`{{ config.organization_uri }}`; follows a next-page URL from
+  the response body; URL path `pagination.next_page`; next URLs stay on the configured API host;
+  incremental cursor `occurred_at`; sent as `min_occurred_at`; formatted as `rfc3339`; computed
+  output fields `id`.
+- `invitees`: GET `/scheduled_events/{{ fanout.id }}/invitees` - records path `collection`; query
+  `count`=`{{ config.page_size }}`; follows a next-page URL from the response body; URL path
+  `pagination.next_page`; next URLs stay on the configured API host; incremental cursor
+  `updated_at`; formatted as `rfc3339`; computed output fields `id`; fan-out; ids from request
+  `/scheduled_events?organization={{ config.organization_uri | urlencode }}&count={{
+  config.page_size }}`; id-list records path `collection`; id field `uri`; id inserted into the
+  request path; stamps `scheduled_event_id`.
 
 ## Write actions & risks
 
-This bundle adds write support beyond legacy (which was read-only); `capabilities.write` is now
-`true` and `writes.json` declares 8 actions:
+Overall write risk: external mutation of live scheduling data: cancels real scheduled events and
+books new ones (notifying invitees), creates/deletes webhook subscriptions, removes organization
+memberships, sends organization invitation emails, and creates one-off event types/shareable booking
+links.
 
-- **`cancel_scheduled_event`** (`POST /scheduled_events/{{ record.uuid }}/cancellation`,
-  `path_fields: ["uuid"]`): cancels a real scheduled event. **Risk: notifies invitees; approval
-  required.**
-- **`create_invitee`** (`POST /invitees`, nested `invitee` object): books a new meeting on an event
-  type at a specific `start_time`. **Risk: books a real slot and notifies the invitee; approval
-  required.**
-- **`create_webhook_subscription`**/**`delete_webhook_subscription`** (`POST /webhook_subscriptions`
-  requires `url`/`events`/`organization`/`scope`; `DELETE /webhook_subscriptions/{{ record.uuid }}`).
-  **Risk: a new subscription receives live invitee/routing-form event payloads at an operator-supplied
-  URL; approval required.**
-- **`remove_organization_membership`** (`DELETE /organization_memberships/{{ record.uuid }}`).
-  **Risk: destructive — revokes a real user's access to the organization; approval required.**
-- **`invite_user_to_organization`** (`POST /organizations/{{ record.organization_uuid
-  }}/invitations`, `body_fields: ["email"]` since the org uuid lives only in the path). **Risk:
-  sends a real invitation email; approval required.**
-- **`create_one_off_event_type`** (`POST /one_off_event_types`, requires
-  `name`/`host`/`duration`/`date_setting`). **Risk: publishes a new publicly-bookable event type;
-  approval required.**
-- **`create_share`** (`POST /shares`, requires `event_type`). **Risk: creates a new shareable
-  booking link with its own spot limit; approval required.**
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-An in-place webhook update (`PATCH /webhook_subscriptions/{uuid}`) is not published by Calendly's
-API at all (only create/list/delete exist) — there is nothing to model beyond create+delete.
+- `cancel_scheduled_event`: POST `/scheduled_events/{{ record.uuid }}/cancellation` - kind `update`;
+  body type `json`; path fields `uuid`; required record fields `uuid`; accepted fields `reason`,
+  `uuid`; risk: external mutation; cancels a real scheduled event and notifies invitees; approval
+  required.
+- `create_invitee`: POST `/invitees` - kind `create`; body type `json`; required record fields
+  `event_type`, `start_time`, `invitee`; accepted fields `event_type`, `invitee`, `start_time`;
+  risk: external mutation; books a real meeting slot on the target event type and notifies the
+  invitee; approval required.
+- `create_webhook_subscription`: POST `/webhook_subscriptions` - kind `create`; body type `json`;
+  required record fields `url`, `events`, `organization`, `scope`; accepted fields `events`,
+  `organization`, `scope`, `url`, `user`; risk: external mutation; registers a new webhook endpoint
+  that will receive live invitee/routing-form event payloads; approval required.
+- `delete_webhook_subscription`: DELETE `/webhook_subscriptions/{{ record.uuid }}` - kind `delete`;
+  body type `none`; path fields `uuid`; required record fields `uuid`; accepted fields `uuid`; risk:
+  destructive; permanently deletes a webhook subscription; approval required.
+- `remove_organization_membership`: DELETE `/organization_memberships/{{ record.uuid }}` - kind
+  `delete`; body type `none`; path fields `uuid`; required record fields `uuid`; accepted fields
+  `uuid`; risk: destructive; permanently removes a user's membership from the organization, revoking
+  their access; approval required.
+- `invite_user_to_organization`: POST `/organizations/{{ record.organization_uuid }}/invitations` -
+  kind `create`; body type `json`; path fields `organization_uuid`; body fields `email`; required
+  record fields `organization_uuid`, `email`; accepted fields `email`, `organization_uuid`; risk:
+  external mutation; sends a real organization-invitation email to the given address; approval
+  required.
+- `create_one_off_event_type`: POST `/one_off_event_types` - kind `create`; body type `json`;
+  required record fields `name`, `host`, `duration`, `date_setting`; accepted fields `date_setting`,
+  `duration`, `host`, `location`, `name`; risk: external mutation; publishes a new one-off
+  publicly-bookable event type; approval required.
+- `create_share`: POST `/shares` - kind `create`; body type `json`; required record fields
+  `event_type`; accepted fields `event_type`, `max_spots`; risk: external mutation; creates a new
+  shareable booking link with its own spot limit for an event type; approval required.
 
 ## Known limits
 
-- **Organization scoping is config-driven, not auto-discovered (documented parity deviation,
-  conventions.md §5 ledger).** Legacy resolves the `organization` query param DYNAMICALLY on every
-  single read by first calling `GET /users/me` and reading `resource.current_organization`
-  (`calendly.go`'s `currentUser`/`scopeQuery`). The engine's declarative dialect has no mechanism
-  to chain one request's response into a later request's query params (`read.go`'s
-  `buildInitialQuery` only resolves `config.*`/`secrets.*`/`record.*`/`cursor` templates against
-  the READ REQUEST's own inputs, never a prior response body) — expressing this would require a
-  `StreamHook` (Tier 2), which SPEC wave1-pilot §5.2 does not call for calendly. This bundle
-  instead asks the operator to configure `organization_uri` once (the exact, per-account-invariant
-  value legacy would have discovered via `/users/me` at read time). Every subsequent request both
-  connectors send is byte-identical given the same organization URI — this never changes any
-  emitted record's DATA for any input legacy itself would accept, it only changes WHEN/HOW the
-  (invariant) organization URI is supplied. If a future wave needs true auto-discovery (e.g. to
-  support switching organizations without a config update), that is a `StreamHook` escalation, not
-  an engine dialect change.
-- **The `id` primary-key convenience field IS reproduced** (gap-loop cycle-1 fix, REVIEW-B.md
-  finding 1/adjudication 1 — this item previously documented `id` as a NOT-reproduced deviation;
-  that was superseded by the `last_path_segment` engine filter and is corrected here rather than
-  left stale). Legacy derives `id` from `uri`'s trailing path segment (`idFromURI`) on every
-  record; every stream here does the identical derivation via
-  `"id": "{{ record.uri | last_path_segment }}"` in `computed_fields`, and every schema declares
-  `x-primary-key: ["id"]` — matching legacy's published primary key exactly, byte-for-byte, for
-  every input legacy itself would accept.
-- `event_types`/`organization_memberships`/`groups` publish an `x-cursor-field` (`updated_at`,
-  matching legacy's published `CursorFields`) but have NO server-side incremental filtering and
-  are NOT `client_filtered` — matching legacy's actual (lack of) filtering behavior for these
-  three streams exactly, not a bundle-authoring gap.
-- **`user_availability_schedules` and `routing_form_submissions` are `conformance: {skip_dynamic:
-  true}`** at the stream level: both require a config value (`user_uri`/`routing_form_uri`
-  respectively) naming one specific real Calendly resource that `conformance`'s synthetic
-  non-secret config value (`"synthetic-conformance-value"` for every declared spec property) cannot
-  meaningfully represent — the same class of limitation `organization_uri` itself would have if this
-  bundle's very first (wave1-pilot) fixtures had not already been authored against it. Both streams'
-  declarative shape (an ordinary `collection`+pagination or `single_object`-equivalent stream) is
-  identical to every other stream in this bundle and is proven correct by static validation
-  (`connectorgen validate`'s `checkInterpolations`) plus the shared, already-proven pattern; there is
-  no hook or engine-side gap here, purely a fixture-authoring/conformance-harness limitation for a
-  per-resource-specific required filter value.
-- **`invitees` is `conformance: {skip_dynamic: true}`** at the stream level: it is a `fan_out`
-  stream, and `conformance`'s dynamic (fixture-replay) checks assume one fixed request path per
-  stream — they have no mechanism to replay a two-phase "list ids, then fan out" sequence. The
-  `fan_out` mechanism itself (id-listing request, `path_var` threading, `stamp_field`) is not new —
-  it is the same engine mechanism other already-migrated bundles use — and is proven here by static
-  validation of `fan_out.ids_from.request.path`'s interpolation (identical `ResolveCheck` coverage
-  `stream.path` gets) plus the shared, already-proven pattern.
-- Full Calendly v2 API surface beyond what is listed above (single-resource detail-fetch duplicates,
-  GDPR data-compliance deletion, pending-invitation management, point-in-time availability
-  calculations) is out of scope; see `api_surface.json`'s per-endpoint `excluded` categories and
-  reasons.
-- Legacy's fixture-mode credential-free read path (`readFixture`, deterministic synthetic records
-  keyed off `mode: fixture`) is a legacy-only affordance and is NOT part of this bundle; this
-  bundle's own `fixtures/` directory serves the same credential-free-testing purpose for
-  `conformance`'s dynamic checks via bundle-level fixture replay, not a runtime `mode` branch.
+- Batch defaults: read_page_size=100.
+- API coverage includes 12 stream-backed endpoint group(s), 8 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=2, duplicate_of=11, non_data_endpoint=1, out_of_scope=1.

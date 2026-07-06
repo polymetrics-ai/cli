@@ -1,44 +1,58 @@
 # Overview
 
-Onfleet is a read-only declarative-HTTP migration (wave2 fan-out) of `internal/connectors/onfleet`
-(the hand-written connector it replaces at capability parity). It reads tasks, workers, teams, hubs,
-and administrators through the Onfleet v2 REST API. The legacy package stays registered and unchanged
-until wave6's registry flip.
+Reads Onfleet tasks, workers, teams, hubs, and administrators through the Onfleet REST API.
+
+Readable streams: `tasks`, `workers`, `teams`, `hubs`, `administrators`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.onfleet.com/reference.
 
 ## Auth setup
 
-Provide the Onfleet API key as the `api_key` secret. Onfleet authenticates with HTTP Basic auth where
-the API key is the username and the password is intentionally blank
-(`{"mode": "basic", "username": "{{ secrets.api_key }}", "password": ""}`), matching legacy
-`onfleet.go`'s `connsdk.Basic(apiKey, "")` exactly — Onfleet expects a blank password, not a second
-credential. The key is never logged.
+Connection fields:
+
+- `api_key` (required, secret, string); Onfleet API key, sent as the HTTP Basic auth username with
+  an empty password. Never logged.
+- `base_url` (optional, string); default `https://onfleet.com/api/v2`; format `uri`; Onfleet API
+  base URL override for tests or proxies.
+- `max_pages` (optional, string); default `0`; Maximum pages for the paginated tasks stream; use 0,
+  all, or unlimited to exhaust the stream.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://onfleet.com/api/v2`, `max_pages=0`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/auth/test`.
 
 ## Streams notes
 
-`tasks` reads `GET /tasks/all`, which returns `{lastId, tasks:[...]}`; this is a body-token cursor
-(`pagination.type: cursor`, `token_path: lastId`, `cursor_param: lastId`) with no `stop_path` declared
-— matching legacy's own stop condition exactly (an absent/empty `lastId` in the response body ends
-pagination; the engine's `tokenPathCursor` already treats an empty/missing token as the stop signal
-with no additional configuration needed).
+Default pagination: single request; no pagination.
 
-`workers`, `teams`, `hubs`, and `administrators` are non-paginated top-level JSON arrays
-(`records.path: "."`, `pagination: {"type": "none"}` overriding the base cursor pagination for these
-4 streams), matching legacy's `arrayPath: ""` / `paginated: false` shape.
+Pagination by stream: cursor: `tasks`; none: `workers`, `teams`, `hubs`, `administrators`.
 
-Every stream's primary key is `id`; `timeLastModified` is declared as `x-cursor-field` wherever legacy
-published it (`tasks`, `workers`, `teams`, `administrators`) — `hubs` has no cursor field, matching
-legacy's `CursorFields: nil`. As in legacy, no stream actually issues a server-side incremental filter
-(Onfleet's API supports no query timestamp filter); every sync is a full refresh.
+- `tasks`: GET `/tasks/all` - records path `tasks`; cursor pagination; cursor parameter `lastId`;
+  next token from `lastId`.
+- `workers`: GET `/workers` - records path `.`.
+- `teams`: GET `/teams` - records path `.`.
+- `hubs`: GET `/hubs` - records path `.`.
+- `administrators`: GET `/admins` - records path `.`.
 
 ## Write actions & risks
 
-None. Onfleet's write surface (creating/updating live delivery tasks) is operationally sensitive and
-was deliberately never implemented in legacy (`Capabilities.Write: false` in both); this bundle ships
-no `writes.json`.
+This connector is read-only. Read behavior: external Onfleet API read of delivery task and workforce
+data.
 
 ## Known limits
 
-- Onfleet's broader API surface (organization details, webhooks, task creation/mutation) is out of
-  scope; see `api_surface.json`'s `excluded` entries.
-- No stream supports a real incremental filter; `x-cursor-field` values are manifest-parity only
-  (matching legacy's own published `CursorFields`, which legacy also never used to filter requests).
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=2, non_data_endpoint=1, out_of_scope=2.

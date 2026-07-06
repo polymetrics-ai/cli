@@ -1,128 +1,159 @@
 # Overview
 
-Aircall is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to the full documented
-Aircall surface (developer.aircall.io/api-references/). It reads Aircall calls, users, contacts,
-numbers, teams, tags, and webhooks, and writes user/team/contact/tag/webhook create-update-delete
-plus call archive/unarchive/comment/tag actions, through the Aircall REST API
-(`https://api.aircall.io/v1/...`). This bundle originally targeted read-only capability parity with
-`internal/connectors/aircall` (the hand-written connector it migrates, itself read-only); the legacy
-package stays registered and unchanged until wave6's registry flip, so this bundle's write surface
-is a genuine capability expansion beyond legacy, not a parity port.
+Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and writes
+user/team/contact/tag/webhook mutations plus call archive/comment/tag actions, through the Aircall
+REST API.
+
+Readable streams: `calls`, `users`, `contacts`, `numbers`, `teams`, `tags`, `webhooks`.
+
+Write actions: `create_user`, `update_user`, `delete_user`, `create_team`, `delete_team`,
+`add_user_to_team`, `remove_user_from_team`, `create_contact`, `update_contact`, `delete_contact`,
+`create_tag`, `update_tag`, `delete_tag`, `create_webhook`, `update_webhook`, `delete_webhook`,
+`archive_call`, `unarchive_call`, `comment_call`, `tag_call`.
+
+Service API documentation: https://developer.aircall.io/api-references/.
 
 ## Auth setup
 
-Provide `api_id` and `api_token` secrets; they are sent as HTTP Basic auth (`api_id:api_token`,
-base64-encoded) and never logged, matching legacy's `connsdk.Basic(id, token)`
-(`aircall.go:257`). `base_url` defaults to `https://api.aircall.io/v1` (legacy's
-`aircallDefaultBaseURL`) and may be overridden for tests/proxies.
+Connection fields:
+
+- `api_id` (required, secret, string); Aircall API ID, used as the HTTP Basic auth username. Never
+  logged.
+- `api_token` (required, secret, string); Aircall API token, used as the HTTP Basic auth password.
+  Never logged.
+- `base_url` (optional, string); default `https://api.aircall.io/v1`; format `uri`; Aircall API base
+  URL override for tests or proxies.
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; only calls/contacts
+  created at or after this time are read (sent as the unix-seconds `from` filter).
+
+Secret fields are redacted in logs and write previews: `api_id`, `api_token`.
+
+Default configuration values: `base_url=https://api.aircall.io/v1`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.api_id`, `secrets.api_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/calls` with query `per_page`=`1`.
 
 ## Streams notes
 
-All seven streams share Aircall's `meta.next_page_link` envelope: `GET /<resource>` returns
-`{"<resource>":[...],"meta":{"next_page_link":<url|null>,...}}`, records live at the
-resource-named top-level key (identical to the resource segment: `calls`/`users`/`contacts`/
-`numbers`/`teams`/`tags`/`webhooks`). `tags` and `webhooks` are Pass B additions (the full
-documented `GET /v1/tags` and `GET /v1/webhooks` list endpoints); neither carries a `created_at`/
-`updated_at` field in Aircall's documented response shape, so neither declares an `incremental`
-block (per §8's incremental truth table: no incremental filter, keep no `x-cursor-field`). Pagination
-is `next_url` (`next_url_path: meta.next_page_link`) — Aircall
-returns a fully-qualified absolute next-page URL, matching legacy's own "follow next_page_link
-verbatim" behavior (`aircall.go:190-193`) and the engine's `next_url` paginator's same-host SSRF
-guard (THREAT-MODEL §3), which passes cleanly in production since Aircall's own `next_page_link`
-is always same-origin as `base_url`. `per_page=50` (Aircall's own default, `aircallDefaultPageSize`)
-is a static per-stream query value re-sent on every page request the engine issues; see Known
-limits for the same "re-sent vs. legacy's reset-to-empty-then-follow" divergence already documented
-on bitly's bundle (this wave's `next_url` sibling pilot).
+Default pagination: follows a next-page URL from the response body; URL path `meta.next_page_link`;
+next URLs stay on the configured API host.
 
-`calls` and `contacts` are the two streams Aircall's own API supports a `from` (unix-seconds) lower
-bound filter on (legacy's `harvest`, `aircall.go:156-158`: `if fromUnix != "" && (endpoint.resource
-== "calls" || endpoint.resource == "contacts")`); this bundle expresses that exact same-branch
-gating via `incremental.request_param: "from"` (declared only on `calls`', cursor field
-`started_at`, and `contacts`', cursor field `created_at`, `incremental` blocks) with
-`param_format: unix_seconds` (matching legacy's `toUnixSeconds` conversion of the RFC3339
-`start_date`/state cursor) — the engine's `buildInitialQuery` sends `request_param` only when the
-formatted lower bound is non-empty, identical to legacy's own `if fromUnix != ""` gate. `users`,
-`numbers`, and `teams` declare no `incremental` block and no `from` query key at all, matching
-legacy's `harvest` never setting `from` for those three resources (the `base.Set("from", ...)` call
-is conditioned on the resource name, so `users`/`numbers`/`teams` never receive it either way).
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `calls`: GET `/calls` - records path `calls`; query `per_page`=`50`; follows a next-page URL from
+  the response body; URL path `meta.next_page_link`; next URLs stay on the configured API host;
+  incremental cursor `started_at`; sent as `from`; formatted as Unix-seconds timestamp; initial
+  lower bound from `start_date`.
+- `users`: GET `/users` - records path `users`; query `per_page`=`50`; follows a next-page URL from
+  the response body; URL path `meta.next_page_link`; next URLs stay on the configured API host;
+  incremental cursor `created_at`; formatted as `rfc3339`.
+- `contacts`: GET `/contacts` - records path `contacts`; query `per_page`=`50`; follows a next-page
+  URL from the response body; URL path `meta.next_page_link`; next URLs stay on the configured API
+  host; incremental cursor `created_at`; sent as `from`; formatted as Unix-seconds timestamp;
+  initial lower bound from `start_date`.
+- `numbers`: GET `/numbers` - records path `numbers`; query `per_page`=`50`; follows a next-page URL
+  from the response body; URL path `meta.next_page_link`; next URLs stay on the configured API host.
+- `teams`: GET `/teams` - records path `teams`; query `per_page`=`50`; follows a next-page URL from
+  the response body; URL path `meta.next_page_link`; next URLs stay on the configured API host.
+- `tags`: GET `/tags` - records path `tags`; query `per_page`=`50`; follows a next-page URL from the
+  response body; URL path `meta.next_page_link`; next URLs stay on the configured API host.
+- `webhooks`: GET `/webhooks` - records path `webhooks`; query `per_page`=`50`; follows a next-page
+  URL from the response body; URL path `meta.next_page_link`; next URLs stay on the configured API
+  host.
 
 ## Write actions & risks
 
-Pass B flips `capabilities.write` to `true` (a genuine capability expansion beyond legacy, which was
-fully read-only — "no obvious safe reverse-ETL surface" was legacy's own package doc, but the full
-documented Aircall API does expose real dialect-expressible mutations). 18 actions in `writes.json`:
+Overall write risk: external Aircall API mutation of agents, teams, contacts, tags, webhooks, and
+call archive/comment/tag state; approval required for user/team/contact/webhook
+create-update-delete, low-risk for additive call tagging/commenting.
 
-- **Users**: `create_user`/`update_user`/`delete_user` (`POST`/`PUT`/`DELETE /v1/users(/:id)`) —
-  deleting a user permanently frees an Aircall agent seat/license; approval required for
-  create/update/delete.
-- **Teams**: `create_team`/`delete_team` (`POST`/`DELETE /v1/teams(/:id)`), plus
-  `add_user_to_team`/`remove_user_from_team` (`POST`/`DELETE /v1/teams/:team_id/users/:user_id`,
-  both bodyless path-parameterized mutations — `body_type: "none"`) for team membership.
-- **Contacts**: `create_contact`/`update_contact`/`delete_contact` (`POST`/`PUT`/
-  `DELETE /v1/contacts(/:id)`) — `update_contact`'s `PUT` replaces the full contact record
-  including `phone_numbers`/`emails` arrays; the per-sub-item add/update/delete endpoints
-  (`/contacts/:id/phone_numbers/...`, `/contacts/:id/emails/...`) are not separately modeled (see
-  `api_surface.json`), since the same outcome is reachable via a full-record `update_contact` PUT.
-- **Tags**: `create_tag`/`update_tag`/`delete_tag` (`POST`/`PUT`/`DELETE /v1/tags(/:id)`).
-- **Webhooks**: `create_webhook`/`update_webhook`/`delete_webhook` (`POST`/`PUT`/
-  `DELETE /v1/webhooks(/:id)`) — `create_webhook`/`update_webhook` register/repoint a live outbound
-  HTTP callback; verify the target `url` before enabling.
-- **Calls**: `archive_call`/`unarchive_call` (`PUT /v1/calls/:id/archive` /`/unarchive`, both
-  bodyless), `comment_call` (`POST /v1/calls/:id/comments`, body restricted to `content` via
-  `body_fields`), `tag_call` (`POST /v1/calls/:id/tags`, body restricted to `tag_ids`).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Every action uses `body_type: "json"` (default JSON body construction, `path_fields` excluding the
-id(s) already in the path) except the four bodyless mutations above, which use `body_type: "none"`.
-No action needs a hook: every one of these operations is a single JSON/bodyless HTTP request with no
-signature auth, multipart body, or compound follow-up call. Excluded live-telephony/messaging/
-dialer/conversation-intelligence/analytics-export mutations are documented per-endpoint in
-`api_surface.json` (categories `destructive_admin`/`requires_elevated_scope`/`out_of_scope`, e.g.
-starting an outbound call, sending a live SMS/WhatsApp message, or triggering an AI Voice Agent
-call — all real-world telephony/messaging side effects, not reverse-ETL record mutations).
+- `create_user`: POST `/users` - kind `create`; body type `json`; required record fields `name`,
+  `email`; accepted fields `available`, `email`, `language`, `name`, `time_zone`; risk: creates a
+  new Aircall agent seat, which may consume a billable license; external mutation, approval
+  required.
+- `update_user`: PUT `/users/{{ record.id }}` - kind `update`; body type `json`; path fields `id`;
+  required record fields `id`; accepted fields `available`, `id`, `language`, `name`, `time_zone`,
+  `wrap_up_time`; risk: mutates an existing agent's profile/availability; a visible change for that
+  agent's call routing.
+- `delete_user`: DELETE `/users/{{ record.id }}` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; missing records treated as success for
+  status `404`; risk: permanently removes an Aircall agent seat; irreversible, frees the associated
+  license; approval required.
+- `create_team`: POST `/teams` - kind `create`; body type `json`; required record fields `name`;
+  accepted fields `name`, `user_ids`; risk: creates a new team container; low-risk external
+  mutation, no approval required.
+- `delete_team`: DELETE `/teams/{{ record.id }}` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; missing records treated as success for
+  status `404`; risk: permanently removes a team; agents assigned to it lose that team's
+  routing/membership immediately.
+- `add_user_to_team`: POST `/teams/{{ record.team_id }}/users/{{ record.user_id }}` - kind `update`;
+  body type `none`; path fields `team_id`, `user_id`; required record fields `team_id`, `user_id`;
+  accepted fields `team_id`, `user_id`; risk: adds an agent to a team, changing that agent's call
+  routing/membership; low-risk, reversible via remove_user_from_team.
+- `remove_user_from_team`: DELETE `/teams/{{ record.team_id }}/users/{{ record.user_id }}` - kind
+  `delete`; body type `none`; path fields `team_id`, `user_id`; required record fields `team_id`,
+  `user_id`; accepted fields `team_id`, `user_id`; missing records treated as success for status
+  `404`; risk: removes an agent from a team, changing that agent's call routing/membership
+  immediately.
+- `create_contact`: POST `/contacts` - kind `create`; body type `json`; accepted fields
+  `company_name`, `emails`, `first_name`, `information`, `is_shared`, `last_name`, `phone_numbers`;
+  risk: creates a new shared/personal directory contact; low-risk external mutation, no approval
+  required.
+- `update_contact`: PUT `/contacts/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `company_name`, `emails`, `first_name`, `id`,
+  `information`, `is_shared`, `last_name`, `phone_numbers`; risk: mutates an existing contact's
+  directory record, including its full phone_numbers/emails arrays (a partial array here replaces
+  the previous set).
+- `delete_contact`: DELETE `/contacts/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: permanently removes a directory contact; irreversible.
+- `create_tag`: POST `/tags` - kind `create`; body type `json`; required record fields `name`,
+  `color`; accepted fields `color`, `description`, `name`; risk: creates a new call-tagging label;
+  low-risk external mutation, no approval required.
+- `update_tag`: PUT `/tags/{{ record.id }}` - kind `update`; body type `json`; path fields `id`;
+  required record fields `id`; accepted fields `color`, `description`, `id`, `name`; risk: renames
+  or recolors an existing tag; a visible change everywhere the tag is already applied.
+- `delete_tag`: DELETE `/tags/{{ record.id }}` - kind `delete`; body type `none`; path fields `id`;
+  required record fields `id`; accepted fields `id`; missing records treated as success for status
+  `404`; risk: permanently removes a tag; it is un-applied from every call that previously carried
+  it.
+- `create_webhook`: POST `/webhooks` - kind `create`; body type `json`; required record fields
+  `url`, `events`; accepted fields `active`, `events`, `url`; risk: registers a new outbound webhook
+  that will POST live call/event data to an external URL of the caller's choosing; verify the target
+  endpoint before enabling.
+- `update_webhook`: PUT `/webhooks/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `active`, `events`, `id`, `url`; risk: mutates
+  an existing webhook's target URL, subscribed events, or active state; a changed url redirects
+  future event deliveries to a different endpoint.
+- `delete_webhook`: DELETE `/webhooks/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: permanently removes a webhook subscription; event delivery to its target
+  URL stops immediately.
+- `archive_call`: PUT `/calls/{{ record.id }}/archive` - kind `update`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; risk: marks a call as archived,
+  hiding it from default call-list views; reversible via unarchive_call.
+- `unarchive_call`: PUT `/calls/{{ record.id }}/unarchive` - kind `update`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; risk: restores a previously
+  archived call to default call-list views.
+- `comment_call`: POST `/calls/{{ record.id }}/comments` - kind `create`; body type `json`; path
+  fields `id`; body fields `content`; required record fields `id`, `content`; accepted fields
+  `content`, `id`; risk: adds an internal comment note to a call record; visible to other agents
+  with call access, no external side effect.
+- `tag_call`: POST `/calls/{{ record.id }}/tags` - kind `update`; body type `json`; path fields
+  `id`; body fields `tag_ids`; required record fields `id`, `tag_ids`; accepted fields `id`,
+  `tag_ids`; risk: applies the given tags to a call; additive, does not remove tags already present.
 
 ## Known limits
 
-- **`next_url` fixtures are single-page, per the sanctioned exception (conventions.md §4).** A
-  `next_url` stream's next-page URL is the replay server's own runtime address, unknown until the
-  harness picks a port — a static fixture file cannot embed the correct absolute URL for a second
-  page. Every stream in this bundle ships a single-page fixture (satisfies `fixtures_present`/
-  `read_fixture_nonempty`); `pagination_terminates` passes on the first stream (`calls`) with its
-  single page (`hits == len(pages) == 1`), which is not a 2-page pagination proof but is not a
-  false failure either. Real 2-page `next_url`-following correctness for THIS bundle's exact request
-  shape is proven by legacy's own existing test
-  (`internal/connectors/aircall/aircall_test.go`'s `TestReadPaginatesAndAuthenticates`, which drives
-  a real 2-page `httptest.Server` and asserts the second page is requested via the served
-  `next_page_link`), plus the engine's own generic `next_url` paginator unit tests
-  (`internal/connectors/engine/paginate_test.go`'s `TestNewPaginatorNextURLFollowsAbsoluteURL` and
-  siblings) and read-path integration test
-  (`internal/connectors/engine/read_test.go`'s `TestReadNextURLPaginationSetsBaseHostFromRequester`).
-  This wave does not add a new `paritytest/aircall` package (out of scope per this wave's JSON-only
-  mandate); a future wave adding hand-written parity suites should follow bitly's/calendly's
-  `TestParity<Name>_..._TwoPagePagination` pattern for aircall specifically.
-- **`per_page` is re-sent on every page request, unlike legacy's reset-to-empty-then-follow.** The
-  engine's `readDeclarative` loop merges `stream.Query` into every page request regardless of
-  pagination type, and `connsdk.Requester.resolveURL` re-applies that merged query onto the absolute
-  next-page URL (replacing any same-named param already present). Legacy instead resets to an empty
-  `url.Values{}` once it follows an absolute next-page URL (mirrors bitly's identical, already-ledgered
-  divergence in this same wave — see bitly's `docs.md`). This is benign in DATA terms only because
-  Aircall's own `next_page_link` already carries the identical `per_page` value the engine
-  re-applies (the replace is idempotent); if Aircall's `next_page_link` ever diverged from
-  `per_page`, this bundle's request would differ from legacy's — today it does not.
-- **`per_page`/`max_pages` config overrides are not modeled.** Legacy exposes `per_page` (1-50,
-  default 50) and `max_pages` (0/all/unlimited or a positive integer cap) as config-driven overrides
-  (`aircallPageSize`/`aircallMaxPages`). The engine's `next_url` paginator has no config-driven
-  page-size or request-count-cap knob at all (mirrors bitly's identical, already-ledgered
-  limitation); `per_page`/`max_pages` are therefore not declared in `spec.json`, and this bundle
-  sends Aircall's own default (`per_page=50`) as a static per-stream query literal.
-- **Write actions are a Pass B capability expansion beyond legacy, not a parity port.** Legacy's
-  `Write` always returns `connectors.ErrUnsupportedOperation` ("no obvious safe reverse-ETL
-  surface"); this bundle's 18 write actions have no legacy behavior to stay in parity with, so there
-  is no parity-deviation ledger entry for them (§5's meta-rule only applies to a deviation from
-  legacy behavior). No `paritytest/aircall` package exists yet (out of scope per the JSON-only
-  mandate); correctness for each write action is proven by `conformance`'s
-  `write_request_shape:<action>` dynamic check against `fixtures/writes/<action>.json`.
-- **Detail-by-id GET endpoints are not modeled as streams.** `/v1/users/:id`, `/v1/teams/:id`,
-  `/v1/calls/:id`, `/v1/contacts/:id`, `/v1/tags/:id`, and `/v1/webhooks/:id` each require an id a
-  caller must already have (typically obtained from the corresponding list stream); none is a bulk
-  syncable resource in its own right, so each is `excluded: {category: "duplicate_of"}` in
-  `api_surface.json` rather than a stream.
+- Batch defaults: read_page_size=50.
+- API coverage includes 7 stream-backed endpoint group(s), 20 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=14, duplicate_of=13, out_of_scope=24, requires_elevated_scope=15.

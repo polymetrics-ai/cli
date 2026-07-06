@@ -1,84 +1,66 @@
 # Overview
 
-Infor Nexus Datasets is a Tier-2 (AuthHook) migration of `internal/connectors/nexus-datasets`
-(quarantine.json: `AUTH_COMPLEX`, "complex auth (hook needed)"). It reads records from a single
-configured Infor Nexus export dataset through the Infor Nexus Data API (v3.1), authenticating with
-an HMAC-SHA256 request signature the declarative dialect cannot express (no `auth.mode` computes a
-signature over method/path/timestamp). This bundle is parity-tested against
-`internal/connectors/nexus-datasets` (the hand-written connector it migrates); the legacy package
-stays registered and unchanged until wave6's registry flip. Read-only: legacy's `Write` always
-returns `ErrUnsupportedOperation`, and this bundle declares `capabilities.write: false` with no
-`writes.json` to match.
+Reads records from a configured Infor Nexus export dataset through the Infor Nexus Data API (v3.1)
+using HMAC-SHA256 request signing. Read-only.
+
+Readable streams: `datasets`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.infor.com/inforos/nexus/.
 
 ## Auth setup
 
-Provide four secrets: `access_key_id`, `user_id`, `secret_key`, and `api_key` (all `x-secret` in
-`spec.json`, never logged). `hooks/nexus-datasets/hooks.go` implements `AuthHook`, porting legacy
-`nexus_datasets.go`'s `hmacAuth` field-for-field: on every outgoing request it computes
-`HMAC-SHA256(secret_key, method + "\n" + path + "\n" + unix_timestamp)`, base64-encodes the
-signature, and sets:
+Connection fields:
 
-- `X-Infor-AccessKeyId: <access_key_id>`
-- `X-Infor-UserId: <user_id>`
-- `X-Infor-ApiKey: <api_key>`
-- `X-Infor-Timestamp: <unix_timestamp>`
-- `Authorization: InforNexus <access_key_id>:<signature>`
+- `access_key_id` (required, secret, string); Infor Nexus HMAC access key id. Sent verbatim on the
+  X-Infor-AccessKeyId header and as the credential prefix of the signed Authorization header; never
+  logged.
+- `api_key` (required, secret, string); Infor Nexus Data API key. Sent verbatim on the
+  X-Infor-ApiKey header; never logged.
+- `base_url` (required, string); format `uri`; Infor Nexus Data API (v3.1) base URL, e.g.
+  https://mingle-portal.inforcloudsuite.com/TENANT/ns/api/v3.1.
+- `dataset_name` (required, string); Name of the configured Infor Nexus export dataset to read
+  (path-escaped into /datasets/{dataset_name}).
+- `mode` (optional, string).
+- `secret_key` (required, secret, string); Infor Nexus HMAC secret key. Used only to compute the
+  HMAC-SHA256 request signature (never sent on the wire itself, never logged).
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound for the modifiedSince
+  query filter on the first sync (superseded by the persisted incremental cursor on subsequent
+  syncs).
+- `user_id` (required, secret, string); Infor Nexus user id. Sent verbatim on the X-Infor-UserId
+  header; never logged.
 
-`secret_key` never appears on the wire itself (only its HMAC digest does) and is never logged; no
-error path in the hook interpolates a secret value into an error string.
+Secret fields are redacted in logs and write previews: `access_key_id`, `api_key`, `secret_key`,
+`user_id`.
 
-The bundle's `base.auth` declares exactly one candidate: `{"mode": "custom", "hook":
-"nexus-datasets"}` — legacy has no alternate auth path, so there is no `when`-gated fallback to
-declare (same shape as gmail's sole custom-mode candidate).
+Authentication behavior:
+
+- Connector-specific authentication.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/datasets/{{ config.dataset_name }}` with query `limit`=`1`;
+`offset`=`0`.
 
 ## Streams notes
 
-One stream, `datasets`, primary-keyed on `id`, incrementally cursored on `updated_at`
-(`incremental.request_param: modifiedSince`, `param_format: rfc3339`, `start_config_key:
-start_date`) — matches legacy's `incrementalLowerBound` (state cursor, falling back to
-`start_date`). Pagination is `offset_limit` (`limit`/`offset` query params, fixed `page_size: 100`)
-with the engine's standard short-page stop, matching legacy's default page size and unbounded
-`max_pages` behavior. `computed_fields` stamps the `dataset_name` marker onto every record
-(legacy's `rec["dataset_name"] = dataset`, streams.go's routing table has only one dataset per
-connector instance, so this is a static-literal-shaped config reference, not a per-record
-derivation) and uses `coalesce` to preserve legacy's alternate `id` (`record_id`/`key`/`uid`) and
-`updated_at` (`modified_at`/`last_modified`/`timestamp`) fallbacks when those alternate fields are
-present.
+Default pagination: offset/limit pagination; offset parameter `offset`; limit parameter `limit`;
+page size 100.
 
-Records are extracted from the page body's `records` array (`records.path: "records"`), the API's
-documented envelope shape: each item carries `id`, `raw_data` (the dataset row payload, an opaque
-JSON object), `raw_data_string` (its stringified form), and `updated_at`. Schema projection keeps
-these four fields verbatim (`raw_data`/`raw_data_string` typed `["object","null"]`/`["string",
-"null"]`, matching the API's real wire shape and legacy's pass-through).
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `datasets`: GET `/datasets/{{ config.dataset_name }}` - records path `records`; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 100; incremental cursor
+  `updated_at`; sent as `modifiedSince`; formatted as `rfc3339`; initial lower bound from
+  `start_date`; computed output fields `dataset_name`, `id`, `updated_at`.
 
 ## Write actions & risks
 
-None — Infor Nexus dataset export is read-only. `capabilities.write: false`, no `writes.json` file,
-matching legacy's `ErrUnsupportedOperation` (`nexus_datasets.go` `Write`).
+This connector is read-only. Read behavior: external Infor Nexus dataset export read, HMAC-signed.
 
 ## Known limits
 
-- **`page_size`/`max_pages` runtime overrides are not modeled.** Legacy accepts `config.page_size`
-  (1-1000, default 100) and `config.max_pages` (0/`all`/`unlimited` = unbounded). The engine's
-  `offset_limit` pagination fields are fixed bundle literals, so `spec.json` intentionally does not
-  declare dead config properties. The bundle matches legacy defaults: `limit=100` and unbounded
-  pages.
-- **The raw-record `raw_data` fallback is not modeled.** Legacy's `nexusDatasetRecord` sets
-  `raw_data` to the entire raw row when the documented `raw_data` envelope is absent. The current
-  `computed_fields` dialect can coalesce `record.*` paths but cannot copy the root `record` object
-  into a field, so this defensive malformed-row fallback remains an engine gap. Legacy also treats
-  empty strings as missing in the `id`/`updated_at` fallback chain; `coalesce` is first-non-null, so
-  it models absent/null alternate keys but not empty-string fallback semantics.
-- **The HMAC canonicalization scheme (`method + "\n" + path + "\n" + timestamp`) is legacy's own
-  best-effort implementation**, not a scheme independently verified against Infor's own signing
-  spec (legacy's own doc comment: "the exact upstream canonicalization may differ across Infor
-  Nexus deployments"). This bundle reproduces legacy's exact scheme byte-for-byte (same doc caveat
-  carried forward) — this is a parity port, not a new gap introduced by migration.
-- **`TestConformance/nexus-datasets`'s dynamic (fixture-replay) checks are `skip_dynamic`'d** for
-  the same reason as gmail: the sole auth candidate is `mode: custom`, and conformance's synthetic
-  non-secret config can never carry a real `secret_key`/`api_key` that would make a signed
-  request meaningful against the replay server. See `metadata.json`'s `conformance.reason`. The
-  hook's own unit tests (`internal/connectors/hooks/nexus-datasets/hooks_test.go`) and the
-  pre-existing legacy test suite (`internal/connectors/nexus-datasets/nexus_datasets_test.go`,
-  unchanged, still passing against the read-only legacy package) remain the authoritative
-  correctness bar for the HMAC auth path.
+- Batch defaults: read_page_size=100.
+- API coverage includes 1 stream-backed endpoint group(s).

@@ -7,29 +7,13 @@ import (
 	"testing"
 )
 
-func TestConnectorCatalogIncludesIconMetadata(t *testing.T) {
-	catalog := ConnectorCatalog()
-	if got, want := len(catalog), 646; got != want {
-		t.Fatalf("catalog len = %d, want %d", got, want)
-	}
-	for _, entry := range catalog {
-		if entry.Icon == nil {
-			t.Fatalf("%s missing icon metadata", entry.Slug)
-		}
-		if entry.Icon.ID == "" || entry.Icon.Path == "" || entry.Icon.Source == "" || entry.Icon.ReviewStatus == "" {
-			t.Fatalf("%s incomplete icon metadata: %+v", entry.Slug, entry.Icon)
-		}
-		if !strings.HasPrefix(entry.Icon.Path, "icons/") || !strings.HasSuffix(entry.Icon.Path, ".svg") {
-			t.Fatalf("%s icon path = %q, want icons/*.svg", entry.Slug, entry.Icon.Path)
-		}
-	}
-
-	github, ok := ConnectorDefinitionBySlug("source-github")
+func TestConnectorIconRegistryResolvesBareNames(t *testing.T) {
+	github, ok := ConnectorIconFor("github")
 	if !ok {
-		t.Fatal("source-github not found")
+		t.Fatal("github icon not found")
 	}
-	if github.Icon == nil || github.Icon.Path != "icons/github.svg" || github.Icon.Source != IconSourceUpstream {
-		t.Fatalf("source-github icon = %+v, want upstream github.svg", github.Icon)
+	if github.Path != "icons/github.svg" || github.Source != IconSourceUpstream {
+		t.Fatalf("github icon = %+v, want upstream github.svg", github)
 	}
 }
 
@@ -54,8 +38,8 @@ func TestRegistryListIncludesBuiltinIcons(t *testing.T) {
 }
 
 func TestValidateConnectorIconsReportsMissingMetadata(t *testing.T) {
-	err := ValidateConnectorIcons(t.TempDir(), []ConnectorDefinition{{Slug: "source-missing", Name: "Missing", Type: ConnectorTypeSource}}, nil)
-	if err == nil || !strings.Contains(err.Error(), "connector icon source-missing: missing icon registry entry") {
+	err := ValidateConnectorIcons(t.TempDir(), []Definition{{Name: "missing", DisplayName: "Missing"}}, nil)
+	if err == nil || !strings.Contains(err.Error(), "connector icon missing: missing icon registry entry") {
 		t.Fatalf("ValidateConnectorIcons() error = %v", err)
 	}
 }
@@ -69,14 +53,12 @@ func TestValidateConnectorIconsRejectsUnsafeSVG(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(iconsDir, "unsafe.svg"), []byte(`<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>`), 0o644); err != nil {
 		t.Fatalf("write unsafe icon: %v", err)
 	}
-	defs := []ConnectorDefinition{{
-		Slug: "source-unsafe",
-		Name: "Unsafe",
-		Type: ConnectorTypeSource,
+	defs := []Definition{{
+		Name: "unsafe",
 		Icon: &ConnectorIcon{ID: "unsafe", Path: "icons/unsafe.svg", Source: IconSourceUpstream, ReviewStatus: IconReviewUpstreamSeeded},
 	}}
 	err := ValidateConnectorIcons(dir, defs, nil)
-	if err == nil || !strings.Contains(err.Error(), `connector icon source-unsafe: svg contains forbidden content "<script"`) {
+	if err == nil || !strings.Contains(err.Error(), `connector icon unsafe: svg contains forbidden content "<script"`) {
 		t.Fatalf("ValidateConnectorIcons() error = %v", err)
 	}
 }
@@ -93,7 +75,7 @@ func TestValidateConnectorIconSVGContentRejectsEventHandlersAndExternalReference
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			err := ValidateConnectorIconSVGContent("source-test", []byte(tc.svg))
+			err := ValidateConnectorIconSVGContent("unsafe-test", []byte(tc.svg))
 			if err == nil || !strings.Contains(err.Error(), tc.want) {
 				t.Fatalf("ValidateConnectorIconSVGContent() error = %v, want %q", err, tc.want)
 			}

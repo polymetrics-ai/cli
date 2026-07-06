@@ -232,6 +232,9 @@ func resolveCoalesceRecordValue(record map[string]any, paths []string) (any, boo
 		if val == nil {
 			continue
 		}
+		if s, ok := val.(string); ok && s == "" {
+			continue
+		}
 		return val, true, nil
 	}
 	return nil, false, nil

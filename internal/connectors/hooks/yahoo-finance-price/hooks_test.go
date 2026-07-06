@@ -6,7 +6,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
-	legacy "polymetrics.ai/internal/connectors/yahoo-finance-price"
+	native "polymetrics.ai/internal/connectors/native/yahoo-finance-price"
 )
 
 func TestHooksRegistered(t *testing.T) {
@@ -26,7 +26,7 @@ func TestHooksRegistered(t *testing.T) {
 }
 
 func TestHooksDelegateFixtureCheckAndRead(t *testing.T) {
-	h := Hooks{Connector: legacy.New()}
+	h := Hooks{Connector: native.New()}
 	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
 	handled, err := h.Check(context.Background(), cfg, nil)
 	if err != nil {
@@ -53,7 +53,7 @@ func TestHooksDelegateFixtureCheckAndRead(t *testing.T) {
 }
 
 func TestHooksIgnoreUnknownStream(t *testing.T) {
-	h := Hooks{Connector: legacy.New()}
+	h := Hooks{Connector: native.New()}
 	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "orders"}, connectors.ReadRequest{Stream: "orders"}, nil, func(connectors.Record) error {
 		t.Fatal("unexpected emit")
 		return nil

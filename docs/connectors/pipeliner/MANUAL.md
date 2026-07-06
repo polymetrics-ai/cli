@@ -12,20 +12,45 @@ SYNOPSIS
 DESCRIPTION
   Reads Pipeliner CRM accounts, contacts, opportunities, and leads through the REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  space_id
+  password (secret)
+  username (secret)
+
+ETL STREAMS
+  accounts:
+    primary key: id
+    fields: id(), name(), status(), updated_at()
+  contacts:
+    primary key: id
+    fields: id(), name(), status(), updated_at()
+  opportunities:
+    primary key: id
+    fields: id(), name(), status(), updated_at()
+  leads:
+    primary key: id
+    fields: id(), name(), status(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Pipeliner CRM API read of account, contact, opportunity, and lead data
+  approval: none; read-only CRM sync
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

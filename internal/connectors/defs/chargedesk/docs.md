@@ -1,115 +1,137 @@
 # Overview
 
-ChargeDesk is a wave2 fan-out migration, expanded in Pass B to the full documented API surface.
-This bundle reads ChargeDesk charges, customers, subscriptions, products, activity logs, and
-subscription-cancellation logs, and a static catalog of webhook notification types, through the
-ChargeDesk REST API, migrating `internal/connectors/chargedesk` (the legacy hand-written connector,
-which stays registered and unchanged until wave6's registry flip). It also writes 13 mutations:
-customer/charge/webhook/agent create-update-delete lifecycle actions, plus 4 live "gateway methods"
-(refund/capture/void a charge, cancel a subscription) that mutate the connected payment gateway
-itself, not just ChargeDesk's own records. Legacy is entirely read-only (`Write` stub returning
-`connectors.ErrUnsupportedOperation`); every write action here is new capability, not a parity port.
+Reads ChargeDesk charges, customers, subscriptions, and products through the ChargeDesk REST API.
 
-The four legacy streams are field-built from the Go mappers; their schemas intentionally project
-only those legacy output fields even when ChargeDesk's current API returns additional attributes.
+Readable streams: `charges`, `customers`, `subscriptions`, `products`, `log_activity`,
+`log_cancellations`, `webhook_notifications`.
+
+Write actions: `create_customer`, `update_customer`, `delete_customer`, `update_charge`,
+`delete_charge`, `refund_charge`, `capture_charge`, `void_charge`, `cancel_subscription`,
+`create_webhook`, `delete_webhook`, `create_agent`, `delete_agent`.
+
+Service API documentation: https://chargedesk.com/api-docs.
 
 ## Auth setup
 
-ChargeDesk authenticates with HTTP Basic auth
-(https://chargedesk.com/api-docs/authentication). Provide the ChargeDesk secret API key via the
-`password` secret; by default it is sent as the Basic auth USERNAME with a blank password
-(`Authorization: Basic base64(<password>:)`), matching legacy's default scheme. An optional
-`username` config value overrides this: when set, `username` is the Basic auth username and
-`password` is its Basic auth password instead (`Authorization: Basic base64(<username>:<password>)`).
+Connection fields:
 
-This is a **dual-auth candidate list**, evaluated first-match-wins (`base.auth`'s declaration
-order is load-bearing — see `docs/migration/conventions.md` §3's dual-auth-ordering rule): the
-`username`-gated candidate is declared FIRST (`when: "{{ config.username }}"`, true only when
-`username` is configured), falling through to the secret-as-username default candidate when
-`username` is absent — reproducing legacy's exact `switch { case username != "": ...; case secret
-!= "": ...}` precedence (username override wins whenever both are present).
+- `base_url` (optional, string); default `https://api.chargedesk.com/v1`; format `uri`; ChargeDesk
+  API base URL override for tests or proxies.
+- `mode` (optional, string).
+- `password` (required, secret, string); ChargeDesk secret API key, used as the HTTP Basic auth
+  username (blank password) unless username is also set. Never logged.
+- `username` (optional, string); Optional explicit HTTP Basic auth username override; when set,
+  password is sent as its Basic auth password instead of a blank password.
+
+Secret fields are redacted in logs and write previews: `password`.
+
+Default configuration values: `base_url=https://api.chargedesk.com/v1`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `config.username`, `secrets.password` when `{{ config.username
+  }}`.
+- HTTP Basic authentication using `secrets.password`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/charges`.
 
 ## Streams notes
 
-`charges`/`customers`/`subscriptions`/`products`/`log_activity`/`log_cancellations` share the same
-shape: `GET` against the ChargeDesk list endpoint, records at `data`, offset/count pagination
-(`pagination.type: offset_limit`, `limit_param: count`, `offset_param: offset`, `page_size: 100` —
-matches legacy's `chargedeskDefaultPageSize` and ChargeDesk's own documented `count` param, whose
-default is 20 but whose maximum is 500; 100 matches legacy's choice), stopping on a short page
-(fewer than 100 records), matching legacy's `len(records) < pageSize` rule exactly (every one of
-these envelopes has no `has_more`/next-page-token field — offset/count is the API's real, only
-documented pagination shape for all 6). `webhook_notifications` declares `pagination.type: none`
-and `records.path: "."`: `/webhooks/notifications` returns a bare JSON array (not an object with a
-named field), a static reference catalog of every possible webhook notification type ChargeDesk can
-send, with no pagination at all.
+Default pagination: offset/limit pagination; offset parameter `offset`; limit parameter `count`;
+page size 100.
 
-`charges`/`customers`/`subscriptions`/`products` all keep the legacy catalog cursor field
-`occurred`. `log_activity`/`log_cancellations` both declare `incremental.cursor_field: occurred`
-(their own documented timestamp field). None of these 6 streams declare `request_param` or
-`client_filtered` — this bundle never sends any incremental filter to the API and never
-client-side filters either (matching legacy's own unfiltered-full-walk behavior for the original
-4 streams); the bare `cursor_field` declaration exists only so the engine derives
-`incremental_append` sync-mode eligibility from the schema's own cursor field. `webhook_notifications`
-has no incremental cursor (it is a static, non-time-ordered catalog). Primary keys: `charges` uses
-`charge_id`, `customers` uses `customer_id`, `subscriptions` uses `subscription_id`, `products`
-uses `product_id`, `webhook_notifications` uses `notification` — matching each resource's real
-unique identifier field. `log_activity`/`log_cancellations` declare NO `x-primary-key`: neither
-resource's documented response fields include any unique id (they are append-only event logs keyed
-only by `occurred` + the referenced `object_id`/`subscription_id`), so these two streams support
-only `full_refresh_append`/`incremental_append` sync modes, never a deduped variant — this is
-Chargedesk's real API shape, not an authoring gap (§2 sync-mode derivation is schema-driven: no
-declared `x-primary-key` means no `*_deduped` mode is offered, correctly).
+Pagination by stream: none: `webhook_notifications`; offset_limit: `charges`, `customers`,
+`subscriptions`, `products`, `log_activity`, `log_cancellations`.
 
-`spec.json` intentionally does NOT declare `page_size`/`max_pages` as runtime-configurable
-properties (unlike legacy, which accepts config overrides for both): `PaginationSpec.PageSize`/
-`MaxPages` are read exclusively from `streams.json`'s static `pagination` JSON literal, never from
-a `config.*`-templated value (F6, `conventions.md`). See Known limits.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `charges`: GET `/charges` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `count`; page size 100; incremental cursor `occurred`; formatted as
+  `rfc3339`.
+- `customers`: GET `/customers` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `count`; page size 100; incremental cursor `occurred`; formatted as
+  `rfc3339`.
+- `subscriptions`: GET `/subscriptions` - records path `data`; offset/limit pagination; offset
+  parameter `offset`; limit parameter `count`; page size 100; incremental cursor `occurred`;
+  formatted as `rfc3339`.
+- `products`: GET `/products` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `count`; page size 100; incremental cursor `occurred`; formatted as
+  `rfc3339`.
+- `log_activity`: GET `/log/activity` - records path `data`; offset/limit pagination; offset
+  parameter `offset`; limit parameter `count`; page size 100; incremental cursor `occurred`;
+  formatted as `rfc3339`.
+- `log_cancellations`: GET `/log/cancellations` - records path `data`; offset/limit pagination;
+  offset parameter `offset`; limit parameter `count`; page size 100; incremental cursor `occurred`;
+  formatted as `rfc3339`.
+- `webhook_notifications`: GET `/webhooks/notifications` - records path `.`.
 
 ## Write actions & risks
 
-Thirteen write actions were added in Pass B, all gated by approval (`metadata.json`'s
-`capabilities.write: true`, `risk.write`). None existed in legacy, which is entirely read-only:
+Overall write risk: external mutations creating/updating/deleting customers, charges, webhooks, and
+agents, plus live gateway methods (refund/capture/void a charge, cancel a subscription) that mutate
+the connected payment gateway; every write action requires approval.
 
-- `create_customer`/`update_customer`/`delete_customer` (`POST /customers`, `POST
-  /customers/{id}`, `DELETE /customers/{id}`) — ordinary customer-record lifecycle.
-  `delete_customer` is irreversible and, by ChargeDesk's own documented default
-  (`delete_all` unset), also deletes all associated charges/tickets.
-- `update_charge`/`delete_charge` (`POST /charges/{id}`, `DELETE /charges/{id}`) — updates a
-  charge record's stored data (amount/currency/status/customer_id), or deletes the record.
-  `create_charge` (a plain, non-gateway record-only create) is deliberately excluded — see
-  `api_surface.json`.
-- `refund_charge`/`capture_charge`/`void_charge` (`POST /gateway/charges/{id}/{refund,capture,void}`)
-  — these are ChargeDesk's "gateway methods": each mutates the charge on the ORIGINATING PAYMENT
-  GATEWAY itself (Stripe, Braintree, etc.), not just ChargeDesk's own record, and each may fail per
-  the connected gateway's own rules. `refund_charge` is irreversible.
-  `void_charge` doubles as "cancel a payment request" per ChargeDesk's own docs.
-- `cancel_subscription` (`POST /gateway/subscriptions/{id}/cancel`) — another gateway method:
-  irreversibly cancels future recurring charges for a subscription on the connected gateway.
-- `create_webhook`/`delete_webhook` (`POST /webhooks`, `DELETE /webhooks/{id}`) — creates or
-  removes an outbound webhook subscription; `create_webhook`'s `notifications`/`all` params
-  select which of the `webhook_notifications` stream's catalog entries to subscribe to.
-- `create_agent`/`delete_agent` (`POST /agents`, `DELETE /agents/{email}`) — invites (or updates
-  the role of) a support agent with ChargeDesk account access, or revokes it. `delete_agent` is
-  addressed by email (ChargeDesk has no separate numeric agent id in its documented API).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Every other documented ChargeDesk mutation is excluded — see `api_surface.json` for the specific
-category+reason per endpoint: the highest-risk live gateway methods (`gateway/products/charge`
-— directly charges a customer's card — and `gateway/subscriptions/{id}/plans` — changes a live
-billing plan) are deliberately excluded pending real demand, as are record-only (non-gateway)
-create/update paths for charges/subscriptions/products that this connector's write surface does not
-need to duplicate.
+- `create_customer`: POST `/customers` - kind `create`; body type `form`; accepted fields `country`,
+  `customer_id`, `email`, `name`, `phone`, `tax_number`; risk: external mutation creating a new
+  ChargeDesk customer record; approval required.
+- `update_customer`: POST `/customers/{{ record.customer_id }}` - kind `update`; body type `form`;
+  path fields `customer_id`; required record fields `customer_id`; accepted fields `country`,
+  `customer_id`, `delinquent`, `email`, `name`, `phone`; risk: external mutation updating an
+  existing ChargeDesk customer record; approval required.
+- `delete_customer`: DELETE `/customers/{{ record.customer_id }}` - kind `delete`; body type `none`;
+  path fields `customer_id`; required record fields `customer_id`; accepted fields `customer_id`;
+  missing records treated as success for status `404`; risk: irreversible deletion of a customer
+  record (and, by ChargeDesk's own default, all associated charges/tickets); approval required.
+- `update_charge`: POST `/charges/{{ record.charge_id }}` - kind `update`; body type `form`; path
+  fields `charge_id`; required record fields `charge_id`; accepted fields `amount`, `charge_id`,
+  `currency`, `customer_id`, `status`; risk: external mutation updating an existing charge record's
+  stored data; approval required.
+- `delete_charge`: DELETE `/charges/{{ record.charge_id }}` - kind `delete`; body type `none`; path
+  fields `charge_id`; required record fields `charge_id`; accepted fields `charge_id`; missing
+  records treated as success for status `404`; risk: irreversible deletion of a charge record;
+  approval required.
+- `refund_charge`: POST `/gateway/charges/{{ record.charge_id }}/refund` - kind `update`; body type
+  `form`; path fields `charge_id`; required record fields `charge_id`; accepted fields `amount`,
+  `charge_id`, `log_reason`; risk: gateway method; irreversibly refunds a charge (full or partial)
+  on the originating payment gateway as well as ChargeDesk; approval required.
+- `capture_charge`: POST `/gateway/charges/{{ record.charge_id }}/capture` - kind `update`; body
+  type `form`; path fields `charge_id`; required record fields `charge_id`; accepted fields
+  `amount`, `charge_id`; risk: gateway method; captures (settles) a previously authorized charge on
+  the originating payment gateway; approval required.
+- `void_charge`: POST `/gateway/charges/{{ record.charge_id }}/void` - kind `update`; body type
+  `none`; path fields `charge_id`; required record fields `charge_id`; accepted fields `charge_id`;
+  risk: gateway method; voids an authorized charge or cancels an outstanding payment request on the
+  originating payment gateway; approval required.
+- `cancel_subscription`: POST `/gateway/subscriptions/{{ record.subscription_id }}/cancel` - kind
+  `update`; body type `form`; path fields `subscription_id`; required record fields
+  `subscription_id`; accepted fields `log_reason`, `subscription_id`; risk: gateway method;
+  irreversibly cancels future recurring charges for a subscription on the originating payment
+  gateway as well as ChargeDesk; approval required.
+- `create_webhook`: POST `/webhooks` - kind `create`; body type `form`; required record fields
+  `url`; accepted fields `all`, `notifications`, `url`; risk: external mutation creating a new
+  outbound webhook subscription that will POST ChargeDesk event data to a third-party URL; approval
+  required.
+- `delete_webhook`: DELETE `/webhooks/{{ record.webhook_id }}` - kind `delete`; body type `none`;
+  path fields `webhook_id`; required record fields `webhook_id`; accepted fields `webhook_id`;
+  missing records treated as success for status `404`; risk: irreversible removal of an outbound
+  webhook subscription; approval required.
+- `create_agent`: POST `/agents` - kind `create`; body type `form`; required record fields `name`,
+  `email`, `role`; accepted fields `email`, `name`, `role`; risk: external mutation inviting a new
+  support agent (or updating an existing agent's role) with account access to ChargeDesk; approval
+  required.
+- `delete_agent`: DELETE `/agents/{{ record.email }}` - kind `delete`; body type `none`; path fields
+  `email`; required record fields `email`; accepted fields `email`; missing records treated as
+  success for status `404`; risk: irreversible removal of a support agent's ChargeDesk account
+  access; approval required.
 
 ## Known limits
 
-- Additional current-API fields on the four legacy streams are intentionally not projected; legacy
-  emitted field-built records and remains the fidelity target for this pass.
-- `page_size`/`max_pages` runtime overrides are not exposed (see Streams notes above) — every
-  read uses the fixed `page_size: 100`/unbounded-pages shape baked into `streams.json`. This never
-  changes any single emitted record's DATA, only how many requests a sync issues and at what page
-  size — parity-deviation ledger candidate, ACCEPTABLE under the meta-rule.
-- `log_activity`/`log_cancellations` have no primary key (ChargeDesk's own API documents none for
-  either resource) — see Streams notes above for the sync-mode consequence.
-- `/charges/{id}/items` (per-charge line-item/tax breakdown), `/customers/grouped` (an
-  identity-search lookup, not a list), and `/charges/preview` (a stateless tax/total calculator)
-  are excluded — none of the three is a list resource with an independent primary key to project as
-  a stream. See `api_surface.json` for every other excluded endpoint and its specific reason.
+- Batch defaults: read_page_size=100.
+- API coverage includes 7 stream-backed endpoint group(s), 13 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=4, non_data_endpoint=1, out_of_scope=10.

@@ -1,106 +1,106 @@
 # Overview
 
-Tally (`https://tally.so`) is a form builder — this connector talks to the **Tally Forms API**
-(`https://api.tally.so`), not any Tally accounting/finance product of the same name. It is a
-greenfield build (no legacy Go connector exists for this name) authored directly from Tally's
-published OpenAPI spec (`https://developers.tally.so/api-reference/openapi.json`) and its
-human-readable reference (`https://developers.tally.so/api-reference/introduction`). It reads
-forms, form-scoped submissions (fanned out over every form id), webhooks, and workspaces, and
-writes the documented form/webhook/workspace mutations and submission deletion.
+Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and writes
+form/webhook/workspace mutations through the Tally REST API.
+
+Readable streams: `forms`, `workspaces`, `webhooks`, `submissions`.
+
+Write actions: `create_webhook`, `update_webhook`, `delete_webhook`, `create_form`, `update_form`,
+`delete_form`, `delete_submission`, `create_workspace`.
+
+Service API documentation: https://developers.tally.so/api-reference/introduction.
 
 ## Auth setup
 
-Provide a Tally personal access token via the `api_key` secret; it is sent as
-`Authorization: Bearer <api_key>` (`streams.json` `base.auth`'s `bearer` mode). Never logged.
-Generate a token from Tally's account settings. `base_url` defaults to `https://api.tally.so` and
-may be overridden for tests/proxies.
+Connection fields:
+
+- `api_key` (required, secret, string); Tally personal access token, sent as a Bearer token.
+  Generate one from Tally account settings. Never logged.
+- `base_url` (optional, string); default `https://api.tally.so`; format `uri`; Tally API base URL
+  override for tests or proxies.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page for forms/workspaces/submissions
+  (1-500 per Tally's documented max).
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; only submissions
+  submitted at or after this time are read.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.tally.so`, `page_size=100`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/forms` with query `limit`=`1`.
 
 ## Streams notes
 
-- **`forms`** (`GET /forms`) — top-level paginated collection; records live at the `items` key.
-  Not incremental: Tally's list-forms endpoint has no time-filter query parameter, only
-  `page`/`limit`/`workspaceIds`.
-- **`workspaces`** (`GET /workspaces`) — top-level paginated collection; records live at the
-  `items` key. Not incremental (no documented time-filter parameter).
-- **`webhooks`** (`GET /webhooks`) — account-wide paginated collection (spans every accessible
-  form/workspace per Tally's own docs, not form-scoped); records live at the `webhooks` key. Not
-  incremental (no documented time-filter parameter).
-- **`submissions`** (`GET /forms/{formId}/submissions`) — form-scoped: this bundle uses the
-  engine's `fan_out` dialect (`conventions.md` §3) to first list every form id (`ids_from.request`
-  paginates `GET /forms` to exhaustion via the SAME base pagination spec every other stream uses,
-  extracting `id` off each record at `items`), then repeats the full paginated submissions read
-  once per form id, threading the id into the path as `{{ fanout.id }}` and stamping it onto every
-  emitted record's `form_id` field. Records live at the `submissions` key of each page. Incremental
-  via `submittedAt`: `incremental.request_param: startDate` sends the resolved lower bound
-  (state cursor, falling back to the `start_date` config key) as the documented `startDate` query
-  filter (ISO 8601/RFC3339, per Tally's docs) on every sub-sequence's requests; a fresh full sync
-  (no state, no `start_date`) omits the parameter entirely. A `computed_fields` rename copies the
-  raw `submittedAt` value into `submitted_at` (the schema's declared `x-cursor-field`) so the
-  cursor-field name follows this bundle's snake_case convention while the raw camelCase field is
-  also preserved verbatim for parity with the documented wire shape. **`conformance`'s dynamic
-  `cursor_advances` check carries a `skip_dynamic` marker on this stream**: that check's generic
-  re-read harness has no fan_out awareness (it cannot distinguish the preliminary `/forms`
-  id-listing request from the per-form submissions sub-sequence against a single always-empty
-  capture server, so the sub-sequence request that would carry `startDate` is never issued in that
-  harness). The real behavior is proven instead by
-  `internal/connectors/paritytest/tally/parity_test.go`
-  (`TestParityTally_SubmissionsFanOutSendsStartDateOnResumedSync` and
-  `TestParityTally_SubmissionsFreshSyncOmitsStartDate`), which drives a real two-request server and
-  asserts both the resumed-sync and fresh-sync cases directly.
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 100.
 
-Pagination is uniform `page_number` (`page_param: page`, `size_param: limit`, `start_page: 1`,
-`page_size: 100`) across every stream, exactly matching Tally's documented `page`/`limit` query
-parameters and 1-based page numbering (`default: 1` in the OpenAPI spec) — the engine's short-page
-stop rule (a page returning fewer than `page_size` records ends pagination) is the correct
-termination signal for this shape; Tally's own `hasMore` response field is a redundant, not
-consulted, restatement of the same fact for API consumers who prefer not to count. `limit`'s
-documented max is 500 for forms/submissions and 100 for webhooks; `page_size: 100` (this bundle's
-uniform value) is within both documented maxima. `page_size` is also exposed as a `spec.json`
-config override (default `"100"`) wired into each stream's `query.limit` — the base pagination
-block's own `page_size: 100` still governs the client-side short-page stop threshold and is
-independent of the config override, matching the stripe/akeneo precedent (`conventions.md` §3).
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `forms`: GET `/forms` - records path `items`; query `limit`=`{{ config.page_size }}`; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `workspaces`: GET `/workspaces` - records path `items`; query `limit`=`{{ config.page_size }}`;
+  page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+- `webhooks`: GET `/webhooks` - records path `webhooks`; query `limit`=`{{ config.page_size }}`;
+  page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100.
+  Note: the webhooks endpoint caps the page size at 100, while forms and submissions accept up to
+  500.
+- `submissions`: GET `/forms/{{ fanout.id }}/submissions` - records path `submissions`; query
+  `limit`=`{{ config.page_size }}`; page-number pagination; page parameter `page`; size parameter
+  `limit`; starts at 1; page size 100; incremental cursor `submitted_at`; sent as `startDate`;
+  formatted as `rfc3339`; initial lower bound from `start_date`; computed output fields
+  `submitted_at`; fan-out; ids from request `/forms`; id-list records path `items`; id field `id`;
+  id inserted into the request path; stamps `form_id`.
 
 ## Write actions & risks
 
-- **`create_webhook`** / **`update_webhook`** / **`delete_webhook`** (`POST`/`PATCH`/`DELETE
-  /webhooks[/{id}]`) — the documented webhook mutation surface this build's mandate calls out by
-  name. `eventTypes` currently has exactly one documented value (`FORM_RESPONSE`). Deleting a
-  form's last webhook also marks its webhook integration deleted (Tally's own documented behavior,
-  not a side effect this bundle introduces). `delete_webhook` is `confirm: destructive`.
-- **`create_form`** / **`update_form`** / **`delete_form`** — full form lifecycle mutations.
-  `delete_form` moves a form to the trash (Tally's documented soft-delete semantics, not a
-  permanent purge) and is `confirm: destructive`. `update_form` requires at least the form `id`
-  plus one other field (`minProperties: 2` on `record_schema`, since a body with zero changed
-  fields is a meaningless PATCH).
-- **`delete_submission`** (`DELETE /forms/{formId}/submissions/{submissionId}`) — permanently
-  removes one respondent's submission and its answers; `confirm: destructive`. Requires both
-  `form_id` and `id` since the endpoint path is form-scoped.
-- **`create_workspace`** (`POST /workspaces`) — Tally's docs state this requires a Pro
-  subscription on the account; a Free-tier account will see this fail with a real API 403, not a
-  bundle-side check (the dialect has no plan-tier precondition mechanism, nor should it fake one).
+Overall write risk: external Tally API mutation (form/webhook/workspace create-update-delete,
+submission delete).
+
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_webhook`: POST `/webhooks` - kind `create`; body type `json`; required record fields
+  `formId`, `url`, `eventTypes`; accepted fields `eventTypes`, `externalSubscriber`, `formId`,
+  `httpHeaders`, `signingSecret`, `url`; risk: registers an external endpoint to receive form
+  submission events.
+- `update_webhook`: PATCH `/webhooks/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`, `formId`, `url`, `eventTypes`, `isEnabled`; accepted fields
+  `eventTypes`, `formId`, `httpHeaders`, `id`, `isEnabled`, `signingSecret`, `url`; risk: changes
+  where and whether an existing webhook delivers form submission events.
+- `delete_webhook`: DELETE `/webhooks/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; confirmation `destructive`; risk:
+  stops delivery of form submission events to the webhook's registered endpoint; if this is the
+  form's last webhook, the webhooks integration is also marked deleted.
+- `create_form`: POST `/forms` - kind `create`; body type `json`; required record fields `blocks`,
+  `status`; accepted fields `blocks`, `settings`, `status`, `templateId`, `workspaceId`; risk:
+  creates a new live form in the Tally account.
+- `update_form`: PATCH `/forms/{{ record.id }}` - kind `update`; body type `json`; path fields `id`;
+  required record fields `id`; accepted fields `blocks`, `id`, `name`, `settings`, `status`;
+  requires at least one changed field alongside the form `id` — requests with no changes are
+  rejected; risk: changes a live form's name, status, blocks, or settings.
+- `delete_form`: DELETE `/forms/{{ record.id }}` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; confirmation `destructive`; risk: moves a
+  form to the trash, stopping new submissions.
+- `delete_submission`: DELETE `/forms/{{ record.form_id }}/submissions/{{ record.id }}` - kind
+  `delete`; body type `none`; path fields `form_id`, `id`; required record fields `form_id`, `id`;
+  accepted fields `form_id`, `id`; confirmation `destructive`; risk: permanently removes a
+  respondent's submission and its answers from Tally.
+- `create_workspace`: POST `/workspaces` - kind `create`; body type `json`; required record fields
+  `name`; accepted fields `name`; risk: creates a new workspace; requires the account to have a Pro
+  subscription — Free-tier accounts receive a 403.
 
 ## Known limits
 
-- **Webhook event delivery-log and retry endpoints are not modeled**
-  (`GET /webhooks/{webhookId}/events`, `POST /webhooks/{webhookId}/events/{eventId}`) — these are
-  delivery-log inspection/retry actions, not syncable data objects or reverse-ETL mutations; see
-  `api_surface.json`.
-- **Analytics endpoints are not modeled** (`metrics`/`visits`/`submissions`/`dimensions`/
-  `drop-off` under `/forms/{formId}/analytics/*`) — each returns an aggregate snapshot for a
-  parameterized time window, not a list of syncable records with a stable primary key.
-- **Organization/user/invite administration is not modeled** — out of scope for a forms/
-  submissions/webhooks/workspaces-focused connector; these mutate account membership, not form
-  data.
-- **Workspace update/delete and folder management are not modeled** — `PATCH`/`DELETE
-  /workspaces/{workspaceId}` and the entire `/workspaces/{workspaceId}/folders` sub-resource are
-  excluded (`requires_elevated_scope`/`destructive_admin`/`out_of_scope` respectively in
-  `api_surface.json`); `create_workspace` is the only workspace write this build ships.
-- **`questions`/`blocks` form-definition sub-resources are not modeled** as separate streams —
-  they describe a form's structure (form-builder metadata), not response data; a future
-  capability-expansion pass could add them as read-only streams if a consumer needs form structure
-  alongside submission data.
-- **No live-API credentials were available while authoring this bundle.** Fixtures were derived
-  directly from Tally's published OpenAPI examples/schemas (recorded-real-shape per
-  `conventions.md` §4) with synthetic values substituted for every real identifier/timestamp; they
-  have not been validated against a live Tally account. `mode: fixture` short-circuits network
-  access for credential-free conformance, matching every other bundle's convention.
+- Published rate limit metadata: requests_per_minute=100.
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s), 8 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=3, duplicate_of=3, non_data_endpoint=1, out_of_scope=17,
+  requires_elevated_scope=2.

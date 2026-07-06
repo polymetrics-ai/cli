@@ -141,6 +141,65 @@ func newStreamReplayServer(fixtures fs.FS, stream string, tracker *hitTracker) (
 	return httptest.NewServer(http.HandlerFunc(handler)), nil
 }
 
+// reusableStreamReplayServer serves one stream's fixture pages at a time while
+// keeping the same loopback listener. Large bundles can have hundreds of
+// streams; using a fresh httptest.Server for every stream exhausts local TCP
+// ports when the full repository test suite runs package tests concurrently.
+type reusableStreamReplayServer struct {
+	*httptest.Server
+
+	mu      sync.Mutex
+	stream  string
+	pages   []fixturePage
+	served  []bool
+	tracker *hitTracker
+}
+
+func newReusableStreamReplayServer() *reusableStreamReplayServer {
+	rs := &reusableStreamReplayServer{}
+	rs.Server = httptest.NewServer(http.HandlerFunc(rs.serveHTTP))
+	return rs
+}
+
+func (rs *reusableStreamReplayServer) reset(stream string, pages []fixturePage, tracker *hitTracker) {
+	rs.mu.Lock()
+	defer rs.mu.Unlock()
+	rs.stream = stream
+	rs.pages = pages
+	rs.served = make([]bool, len(pages))
+	rs.tracker = tracker
+}
+
+func (rs *reusableStreamReplayServer) serveHTTP(w http.ResponseWriter, r *http.Request) {
+	rs.mu.Lock()
+	idx := matchFixturePage(rs.pages, rs.served, r)
+	if idx < 0 {
+		rs.mu.Unlock()
+		http.NotFound(w, r)
+		return
+	}
+	rs.served[idx] = true
+	stream := rs.stream
+	tracker := rs.tracker
+	page := rs.pages[idx]
+	rs.mu.Unlock()
+
+	if tracker != nil {
+		tracker.record(stream)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	status := page.Response.Status
+	if status == 0 {
+		status = http.StatusOK
+	}
+	w.WriteHeader(status)
+	if len(page.Response.Body) > 0 {
+		_, _ = w.Write(page.Response.Body)
+	} else {
+		_, _ = w.Write([]byte("{}"))
+	}
+}
+
 // matchFixturePage returns the index of the first not-yet-served page whose
 // recorded request shape matches r, or -1 if none match. Matching compares
 // path exactly and every recorded query key/value (extra query params on

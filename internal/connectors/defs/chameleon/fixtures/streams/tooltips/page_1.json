@@ -12,10 +12,10 @@
       "tooltips": [
         {
           "id": "tt_fixture_1",
-          "name": "Fixture Tooltip 1",
-          "position": 0,
-          "tag_ids": [],
-          "published_at": "2026-01-02T00:00:00Z",
+          "title": "Fixture Tooltip 1",
+          "type": "tooltip",
+          "state": "published",
+          "is_live": true,
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-02T00:00:00Z"
         }

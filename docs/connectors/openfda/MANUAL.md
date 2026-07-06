@@ -10,22 +10,97 @@ SYNOPSIS
   pm credentials add <name> --connector openfda [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads FDA drug, device, and food datasets (adverse events, labels, and recall enforcement reports) from the public openFDA REST API.
+  Reads documented FDA drug, device, food, animal/veterinary, cosmetics, tobacco, transparency, and other public datasets from the openFDA REST API.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  search
+  api_key (secret)
+
+ETL STREAMS
+  drug_event:
+    primary key: safetyreportid
+    fields: fulfillexpeditecriteria(), occurcountry(), primarysourcecountry(), receiptdate(), receivedate(), safetyreportid(), safetyreportversion(), serious(), seriousnessdeath(), transmissiondate()
+  drug_label:
+    primary key: id
+    fields: effective_time(), id(), indications_and_usage(), openfda(), purpose(), set_id(), version(), warnings()
+  drug_enforcement:
+    primary key: recall_number
+    fields: classification(), country(), distribution_pattern(), product_type(), reason_for_recall(), recall_initiation_date(), recall_number(), recalling_firm(), report_date(), state(), status(), voluntary_mandated()
+  device_event:
+    primary key: mdr_report_key
+    fields: adverse_event_flag(), date_of_event(), date_received(), event_type(), manufacturer_name(), mdr_report_key(), product_problem_flag(), report_number(), report_source_code()
+  food_enforcement:
+    primary key: recall_number
+    fields: classification(), country(), distribution_pattern(), product_type(), reason_for_recall(), recall_initiation_date(), recall_number(), recalling_firm(), report_date(), state(), status(), voluntary_mandated()
+  animalandveterinary_event:
+    fields: id(), openfda()
+  cosmetic_event:
+    fields: id(), openfda()
+  food_event:
+    fields: id(), openfda()
+  drug_ndc:
+    fields: id(), openfda()
+  drug_drugsfda:
+    fields: id(), openfda()
+  drug_shortages:
+    fields: id(), openfda()
+  drug_orangebook:
+    fields: id(), openfda()
+  device_510k:
+    fields: id(), openfda()
+  device_pma:
+    fields: id(), openfda()
+  device_udi:
+    fields: id(), openfda()
+  device_enforcement:
+    fields: id(), openfda()
+  device_recall:
+    fields: id(), openfda()
+  device_classification:
+    fields: id(), openfda()
+  device_registrationlisting:
+    fields: id(), openfda()
+  device_covid19serology:
+    fields: id(), openfda()
+  tobacco_problem:
+    fields: id(), openfda()
+  tobacco_researchdigitalads:
+    fields: id(), openfda()
+  tobacco_researchpreventionads:
+    fields: id(), openfda()
+  tobacco_researchsmokefree:
+    fields: id(), openfda()
+  transparency_crl:
+    fields: id(), openfda()
+  other_historicaldocument:
+    fields: id(), openfda()
+  other_nsde:
+    fields: id(), openfda()
+  other_substance:
+    fields: id(), openfda()
+  other_unii:
+    fields: id(), openfda()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external openFDA API read of public FDA regulatory datasets
+  approval: none; read-only public reference API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

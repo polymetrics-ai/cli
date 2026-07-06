@@ -10,22 +10,47 @@ SYNOPSIS
   pm credentials add <name> --connector workday [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Workday tenant data through conservative Workday API endpoints. Read-only.
+  Reads Workday tenant data (workers, organizations, positions) through conservative Workday API endpoints. Read-only.
+
+ICON
+  asset: icons/workday.svg
+  source: official
+  review_status: official_verified
+  review_url: https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  tenant
+  password (secret)
+  username (secret)
+
+ETL STREAMS
+  workers:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), updated_at()
+  organizations:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), type(), updated_at()
+  positions:
+    primary key: id
+    cursor: updated_at
+    fields: id(), title(), updated_at(), worker_id()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Workday tenant API read of worker, organization, and position data (HR/PII-adjacent)
+  approval: none; read-only, HTTP Basic auth
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

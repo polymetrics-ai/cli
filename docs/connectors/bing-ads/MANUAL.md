@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector bing-ads [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Microsoft Advertising (Bing Ads) accounts, users, campaigns, ad groups, and ads through the v13 Customer Management and Campaign Management REST APIs.
+  Reads Microsoft Advertising (Bing Ads) accounts, users, campaigns, ad groups, and ads through the v13 Customer Management and Campaign Management REST APIs. Read-only.
+
+ICON
+  asset: icons/bingads.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://learn.microsoft.com/en-us/advertising/guides/release-notes
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

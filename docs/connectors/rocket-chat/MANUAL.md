@@ -12,20 +12,56 @@ SYNOPSIS
 DESCRIPTION
   Reads Rocket.Chat users, public channels, private groups, direct messages, and rooms through the REST API.
 
+ICON
+  asset: icons/rocket-chat.svg
+  source: official
+  review_status: official_verified
+  review_url: https://developer.rocket.chat/apidocs
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  fields
+  mode
+  query
+  room_id
+  updated_since
+  auth_token (secret)
+  user_id (secret)
+
+ETL STREAMS
+  users:
+    primary key: id
+    cursor: updated_at
+    fields: emails(), id(), name(), status(), stream(), updated_at(), username()
+  channels:
+    primary key: id
+    cursor: updated_at
+    fields: fname(), id(), msgs(), name(), stream(), updated_at()
+  groups:
+    primary key: id
+    cursor: updated_at
+    fields: fname(), id(), msgs(), name(), stream(), updated_at()
+  direct_messages:
+    primary key: id
+    cursor: updated_at
+    fields: id(), msgs(), stream(), updated_at(), usernames()
+  rooms:
+    primary key: id
+    cursor: updated_at
+    fields: id(), name(), stream(), type(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Rocket.Chat API read of workspace users, rooms, and messages metadata
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

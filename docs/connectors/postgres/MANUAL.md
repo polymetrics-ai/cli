@@ -12,6 +12,12 @@ SYNOPSIS
 DESCRIPTION
   Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and supports cursor-incremental reads on a configurable cursor column. Read-only source; CDC is a documented stub pending the gated pglogrepl dependency.
 
+ICON
+  asset: icons/postgresql.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://www.postgresql.org/docs/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: database

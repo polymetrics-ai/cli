@@ -24,6 +24,6 @@
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); conformance synthetic config cannot route config.token_url to the replay server, so auth-resolving dynamic checks would fail before reaching streams. The Keka AuthHook token exchange is covered by internal/connectors/paritytest/keka for legacy paths; Pass B stream and write definitions are declarative and statically validated against the official Keka Postman documentation."
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); conformance synthetic config cannot route config.token_url to the replay server, so auth-resolving dynamic checks would fail before reaching streams. The Keka AuthHook token exchange is covered by archived parity evidence for keka for legacy paths; Pass B stream and write definitions are declarative and statically validated against the official Keka Postman documentation."
   }
 }

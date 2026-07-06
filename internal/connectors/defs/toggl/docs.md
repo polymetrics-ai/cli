@@ -1,125 +1,154 @@
 # Overview
 
-Toggl is a wave2 fan-out declarative-HTTP migration, expanded in Pass B to the practical documented
-surface of the Toggl Track API v9 (full OpenAPI spec: `https://engineering.toggl.com/assets/files/
-api-b2b7afb49ca646faff07d1e19b7b2afd.json`, 282 real operations across every published tag — see
-`api_surface.json`). It reads time entries, projects, clients, tags, tasks, and users
-(`GET https://api.track.toggl.com/api/v9/...`), and writes create/update/delete/stop mutations for
-time entries, projects, clients, tags, and tasks. This bundle is migrated at capability parity from
-`internal/connectors/toggl` (the hand-written connector it replaces) for its original 5 read
-streams; the legacy package stays registered and unchanged until wave6's registry flip, and never
-implemented any of the Pass B write actions or the 2 new streams (`tags`, `tasks`) — those are new
-capability, not a parity port, and are called out as such below and in `api_surface.json`.
+Reads and writes time entries, projects, clients, tags, tasks, and users through the Toggl Track
+API.
+
+Readable streams: `time_entries`, `projects`, `clients`, `workspace_users`, `organization_users`,
+`tags`, `tasks`.
+
+Write actions: `create_time_entry`, `update_time_entry`, `stop_time_entry`, `delete_time_entry`,
+`create_project`, `update_project`, `delete_project`, `create_client`, `update_client`,
+`delete_client`, `create_tag`, `update_tag`, `delete_tag`, `create_task`, `update_task`,
+`delete_task`.
+
+Service API documentation: https://developers.track.toggl.com/docs/.
 
 ## Auth setup
 
-Provide a Toggl API token via the `api_token` secret. Toggl authenticates API-token requests as
-HTTP Basic auth with the token as the username and the literal string `api_token` as the password
-(`connsdk.Basic(token, "api_token")`, `toggl.go:122`) — this bundle reproduces that exact shape via
-`base.auth`'s `{"mode":"basic","username":"{{ secrets.api_token }}","password":"api_token"}`, where
-`password` is a static literal (no `{{ }}` markers), matching chargebee's identical
-token-as-username Basic-auth precedent (`docs/migration/conventions.md`). `base_url` defaults to
-`https://api.track.toggl.com/api/v9` and may be overridden for tests/proxies.
+Connection fields:
+
+- `api_token` (required, secret, string); Toggl Track API token, sent as HTTP Basic auth username
+  with the literal string 'api_token' as password (Toggl's own token-auth convention). Never logged.
+- `base_url` (optional, string); default `https://api.track.toggl.com/api/v9`; format `uri`; Toggl
+  Track API base URL override for tests or proxies.
+- `end_date` (optional, string); Optional end_date filter (Toggl date format) for the 'time_entries'
+  stream.
+- `organization_id` (optional, string); Toggl organization id required by the 'organization_users'
+  stream.
+- `start_date` (optional, string); Optional start_date filter (Toggl date format) for the
+  'time_entries' stream.
+- `workspace_id` (optional, string); Toggl workspace id required by the 'projects', 'clients', and
+  'workspace_users' streams.
+
+Secret fields are redacted in logs and write previews: `api_token`.
+
+Default configuration values: `base_url=https://api.track.toggl.com/api/v9`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `secrets.api_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/me`.
 
 ## Streams notes
 
-All five streams declare `"projection": "passthrough"` (conventions.md §3/§5 defect class 1):
-legacy's `Read` (`toggl.go:94-103`) does `emit(connectors.Record(rec))` on every record read from
-the raw API response with no field-building/filtering step at all — `streamSpecs[...].fields` is
-Catalog-only decoration (`toggl.go:125-137`, consumed solely by `Catalog()`'s `connectors.Stream`
-construction), never applied to the emitted record itself. Default `"schema"` projection mode would
-silently drop every real Toggl field not named in each stream's declared schema properties (e.g.
-`time_entries`' real `tags`/`tag_ids`/`billable`/`at`/`server_deleted_at`/`duronly`/`created_with`,
-`projects`' real `color`/`template`/`auto_estimates`/`is_private`/`billable`/`rate`/`currency`), an
-undocumented silent data-shape change relative to legacy's raw passthrough. Each schema still
-declares the real Toggl Track API v9 wire-shape properties it knows about (both the current
-`workspace_id`/`client_id`/`user_id`-style names and the API's legacy-compat aliases
-`wid`/`cid`/`uid`/`pid`/`tid` — Toggl's v9 API emits both on every record) for `x-primary-key`
-typing and `records_match_schema` coverage, but passthrough mode means ANY other real field Toggl
-adds or returns still survives unfiltered, matching legacy exactly.
+Default pagination: single request; no pagination.
 
-`time_entries` reads `GET /me/time_entries` for the authenticated user, optionally filtered by
-`start_date`/`end_date` config values sent only when configured (legacy: `toggl.go:82-89`,
-conditional `q.Set` calls) — reproduced here via the opt-in `omit_when_absent` query dialect
-(conventions.md §3).
+Pagination by stream: none: `time_entries`, `projects`, `clients`, `workspace_users`,
+`organization_users`, `tags`; page_number: `tasks`.
 
-`projects`, `clients`, and `workspace_users` are workspace-scoped
-(`GET /workspaces/{{ config.workspace_id }}/{projects,clients,users}`), matching legacy's
-`workspacePath` helper (`toggl.go:158-166`, `url.PathEscape(id)`) — path interpolation's per-segment
-`urlencode` default (conventions.md §3) reproduces the identical escaping. `organization_users` is
-organization-scoped (`GET /organizations/{{ config.organization_id }}/users`), matching legacy's
-`organizationPath` helper (`toggl.go:167-175`). Neither `workspace_id` nor `organization_id` is
-globally `required` in `spec.json` (only the streams that need them fail without one) — an absent
-value hard-errors at path-interpolation time with an unresolved-`config.*`-key error, the same
-failure classification legacy produces (`"toggl connector requires config workspace_id"` /
-`"...organization_id"`) via a differently-worded message, per conventions.md §5's config-validation
-parity precedent. None of the five legacy streams expose an incremental cursor field in legacy, so
-all five are always full-refresh reads. Neither of the 5 legacy streams is paginated — Toggl's
-`/me/time_entries` and workspace/organization list endpoints return their full result set in one
-response in legacy's own implementation (`toggl.go` never follows a next-page link for any of
-them).
-
-**New Pass B streams** (no legacy precedent — capability expansion, not a parity port):
-
-- `tags` — `GET /workspaces/{{ config.workspace_id }}/tags`, a bare-array workspace-scoped list
-  endpoint (`records.path: "."`), matching the exact shape of the pre-existing `clients`/
-  `workspace_users` streams; not paginated (Toggl's own OpenAPI spec declares no page/per_page
-  parameters on this endpoint).
-- `tasks` — `GET /workspaces/{{ config.workspace_id }}/tasks`, a workspace-scoped flat task list
-  (deliberately NOT the project-scoped `GET /workspaces/{id}/projects/{project_id}/tasks` shape,
-  which would require the engine's `fan_out` dialect to enumerate every project first); records
-  live under a `data` envelope key with `page`/`per_page` pagination (`page_number`, `page_size:
-  100`, no `max_pages` — the real API paginates this endpoint and this bundle follows it to
-  exhaustion, unlike the unpaginated legacy streams).
+- `time_entries`: GET `/me/time_entries` - records path `.`; query `end_date` from template `{{
+  config.end_date }}`, omitted when absent; `start_date` from template `{{ config.start_date }}`,
+  omitted when absent; emits passthrough records.
+- `projects`: GET `/workspaces/{{ config.workspace_id }}/projects` - records path `.`; emits
+  passthrough records.
+- `clients`: GET `/workspaces/{{ config.workspace_id }}/clients` - records path `.`; emits
+  passthrough records.
+- `workspace_users`: GET `/workspaces/{{ config.workspace_id }}/users` - records path `.`; emits
+  passthrough records.
+- `organization_users`: GET `/organizations/{{ config.organization_id }}/users` - records path `.`;
+  emits passthrough records.
+- `tags`: GET `/workspaces/{{ config.workspace_id }}/tags` - records path `.`; emits passthrough
+  records.
+- `tasks`: GET `/workspaces/{{ config.workspace_id }}/tasks` - records path `data`; page-number
+  pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size 100; emits
+  passthrough records.
 
 ## Write actions & risks
 
-**New Pass B capability — legacy is entirely read-only** (package doc: "implements a read-only
-native Go connector for the Toggl Track API"; legacy's `Write` unconditionally returns
-`connectors.ErrUnsupportedOperation`). `capabilities.write` is now `true` and `writes.json` declares
-16 actions, every one a dialect-expressible plain JSON-body create/update/delete/stop mutation
-matching a real, documented Toggl Track v9 endpoint (`api_surface.json`'s `covered_by.write`
-entries):
+Overall write risk: external mutation of Toggl time entries, projects, clients, tags, and tasks; no
+destructive-admin or elevated-scope actions modeled.
 
-- **Time entries**: `create_time_entry` (`POST .../time_entries`; `created_with` is a
-  Toggl-required field identifying the calling application), `update_time_entry` (`PUT
-  .../time_entries/{id}`), `stop_time_entry` (`PATCH .../time_entries/{id}/stop`, a `kind: custom`
-  no-body action — Toggl's own dedicated "stop the running timer" endpoint), `delete_time_entry`
-  (`DELETE .../time_entries/{id}`, idempotent on 404).
-- **Projects**: `create_project`/`update_project`/`delete_project` (`.../projects[/{id}]`).
-- **Clients**: `create_client`/`update_client`/`delete_client` (`.../clients[/{id}]`).
-- **Tags**: `create_tag`/`update_tag`/`delete_tag` (`.../tags[/{id}]`).
-- **Tasks**: `create_task`/`update_task`/`delete_task` (`.../projects/{{ record.project_id }}/
-  tasks[/{{ record.id }}]` — task mutations are project-scoped in the real API even though the
-  `tasks` stream itself reads the flatter workspace-scoped list endpoint; every task write action
-  declares `project_id` in both `path_fields` and `record_schema.required` for this reason).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Every write's `risk` field states its specific blast radius; all are plain external mutations with
-no organization-billing, ownership-transfer, or other `destructive_admin`/`requires_elevated_scope`
-action modeled (see `api_surface.json` for the full excluded-endpoint accounting).
+- `create_time_entry`: POST `/workspaces/{{ config.workspace_id }}/time_entries` - kind `create`;
+  body type `json`; required record fields `start`, `duration`, `created_with`; accepted fields
+  `billable`, `created_with`, `description`, `duration`, `project_id`, `start`, `stop`, `tag_ids`,
+  `tags`, `task_id`; risk: creates a new time entry on the caller's account; external mutation, no
+  approval required.
+- `update_time_entry`: PUT `/workspaces/{{ config.workspace_id }}/time_entries/{{ record.id }}` -
+  kind `update`; body type `json`; path fields `id`; body fields `description`, `start`, `stop`,
+  `duration`, `project_id`, `task_id`, `tag_ids`, `tags`, `tag_action`, `billable`, and 1 more;
+  required record fields `id`; accepted fields `billable`, `created_with`, `description`,
+  `duration`, `id`, `project_id`, `start`, `stop`, `tag_action`, `tag_ids`, `tags`, `task_id`; risk:
+  mutates an existing time entry's timing, project/task association, tags, or billable flag.
+- `stop_time_entry`: PATCH `/workspaces/{{ config.workspace_id }}/time_entries/{{ record.id }}/stop`
+  - kind `custom`; body type `none`; path fields `id`; required record fields `id`; accepted fields
+  `id`; risk: stops a currently-running time entry by setting its stop time to now; no effect on an
+  already-stopped entry beyond the API's own idempotency.
+- `delete_time_entry`: DELETE `/workspaces/{{ config.workspace_id }}/time_entries/{{ record.id }}` -
+  kind `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields
+  `id`; missing records treated as success for status `404`; risk: permanently deletes a time entry;
+  irreversible.
+- `create_project`: POST `/workspaces/{{ config.workspace_id }}/projects` - kind `create`; body type
+  `json`; required record fields `name`; accepted fields `active`, `billable`, `client_id`, `color`,
+  `currency`, `end_date`, `is_private`, `name`, `rate`, `start_date`; risk: creates a new project in
+  the target workspace; external mutation, no approval required.
+- `update_project`: PUT `/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}` - kind
+  `update`; body type `json`; path fields `id`; body fields `name`, `client_id`, `is_private`,
+  `active`, `color`, `billable`, `rate`, `currency`, `start_date`, `end_date`; required record
+  fields `id`; accepted fields `active`, `billable`, `client_id`, `color`, `currency`, `end_date`,
+  `id`, `is_private`, `name`, `rate`, `start_date`; risk: mutates an existing project's name, client
+  association, active/private state, or billing settings.
+- `delete_project`: DELETE `/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}` - kind
+  `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  missing records treated as success for status `404`; risk: permanently deletes a project; also
+  removes its association from any time entries that referenced it.
+- `create_client`: POST `/workspaces/{{ config.workspace_id }}/clients` - kind `create`; body type
+  `json`; required record fields `name`; accepted fields `external_reference`, `name`, `notes`;
+  risk: creates a new client in the target workspace; external mutation, no approval required.
+- `update_client`: PUT `/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}` - kind
+  `update`; body type `json`; path fields `id`; body fields `name`, `notes`, `external_reference`;
+  required record fields `id`; accepted fields `external_reference`, `id`, `name`, `notes`; risk:
+  mutates an existing client's name or notes.
+- `delete_client`: DELETE `/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}` - kind
+  `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  missing records treated as success for status `404`; risk: permanently deletes a client; projects
+  previously associated with it lose that association.
+- `create_tag`: POST `/workspaces/{{ config.workspace_id }}/tags` - kind `create`; body type `json`;
+  required record fields `name`; accepted fields `name`; risk: creates a new tag in the target
+  workspace; external mutation, no approval required.
+- `update_tag`: PUT `/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}` - kind `update`;
+  body type `json`; path fields `id`; body fields `name`; required record fields `id`, `name`;
+  accepted fields `id`, `name`; risk: renames an existing tag; the new name applies retroactively
+  everywhere the tag is shown.
+- `delete_tag`: DELETE `/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing
+  records treated as success for status `404`; risk: permanently deletes a tag; it is removed from
+  every time entry that referenced it.
+- `create_task`: POST `/workspaces/{{ config.workspace_id }}/projects/{{ record.project_id }}/tasks`
+  - kind `create`; body type `json`; path fields `project_id`; body fields `name`, `active`,
+  `estimated_seconds`, `user_id`, `external_reference`; required record fields `project_id`, `name`;
+  accepted fields `active`, `estimated_seconds`, `external_reference`, `name`, `project_id`,
+  `user_id`; risk: creates a new task under the given project; external mutation, no approval
+  required.
+- `update_task`: PUT `/workspaces/{{ config.workspace_id }}/projects/{{ record.project_id
+  }}/tasks/{{ record.id }}` - kind `update`; body type `json`; path fields `project_id`, `id`; body
+  fields `name`, `active`, `estimated_seconds`, `user_id`, `external_reference`; required record
+  fields `project_id`, `id`; accepted fields `active`, `estimated_seconds`, `external_reference`,
+  `id`, `name`, `project_id`, `user_id`; risk: mutates an existing task's name, active/done state,
+  estimate, or assignee; setting active:false marks the task done.
+- `delete_task`: DELETE `/workspaces/{{ config.workspace_id }}/projects/{{ record.project_id
+  }}/tasks/{{ record.id }}` - kind `delete`; body type `none`; path fields `project_id`, `id`;
+  required record fields `project_id`, `id`; accepted fields `id`, `project_id`; missing records
+  treated as success for status `404`; risk: permanently deletes a task; time entries previously
+  linked to it lose that association.
 
 ## Known limits
 
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
-  when `config.mode == "fixture"`, a credential-free conformance-harness affordance) stamps a
-  static `fixture: true` marker and a hardcoded `workspace_id: "fixture_workspace"` string onto two
-  synthesized records per stream (`toggl.go:176-187`). None of these are part of the LIVE record
-  shape (where `workspace_id` is a real integer, not the fixture-mode string literal); this
-  bundle's schemas and fixtures target the live path only. The engine's own conformance/
-  fixture-replay harness (`internal/connectors/conformance`) provides the credential-free test
-  affordance this bundle needs, so no fixture-mode equivalent is needed here.
-- **No pagination is modeled for any of the 5 legacy streams or the new `tags` stream**, matching
-  legacy exactly (and Toggl's own documented lack of page parameters on `tags`); only the new
-  `tasks` stream paginates, since its real API endpoint genuinely does.
-- **Toggl's dual-key legacy-compat aliases (`wid`/`cid`/`uid`/`pid`/`tid`) are read but not written.**
-  The read-side schemas model both the modern and legacy-alias field names Toggl's API emits (see
-  each stream's schema); the new write actions only ever SEND the modern field names
-  (`workspace_id`/`client_id`/`user_id`/`project_id`/`task_id` — configured via path or
-  `record_schema`, never the aliases) since Toggl's write payloads document only the modern names
-  as accepted request fields (`timeentry.Payload`/`project.Payload`/`client.Payload`/
-  `tags.payload`/`task.Payload` in the published OpenAPI spec never declare the alias fields on the
-  request side, only on responses).
-- **`create_time_entry` requires `created_with`.** Toggl's API documents this as a required field
-  on entry creation (used to identify the calling application in Toggl's own UI/reporting); this
-  bundle declares it `required` in `record_schema` rather than silently defaulting it, so a caller
-  omitting it gets a clear validation failure instead of a confusing 400 from the live API.
+- API coverage includes 7 stream-backed endpoint group(s), 16 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=12, destructive_admin=4, duplicate_of=20, non_data_endpoint=10, out_of_scope=118,
+  requires_elevated_scope=95.

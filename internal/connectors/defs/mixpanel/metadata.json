@@ -22,6 +22,6 @@
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by internal/connectors/paritytest/mixpanel (the AuthHook's real Basic-auth username/password + api_secret fallback resolution) -- conformance's synthetic config has no real username/password/api_secret combination and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
+    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); hook-covered, proven live by archived parity evidence for mixpanel (the AuthHook's real Basic-auth username/password + api_secret fallback resolution) -- conformance's synthetic config has no real username/password/api_secret combination and cannot exercise mode:custom auth at all, so every auth-resolving dynamic check would otherwise fail identically and uninformatively"
   }
 }

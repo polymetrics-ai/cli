@@ -1,90 +1,79 @@
 # Overview
 
-TickTick reads TickTick projects and project-scoped tasks, and writes task create/complete/delete
-actions, through the TickTick Open API (`https://api.ticktick.com/open/v1/...`). This bundle
-originated as a capability-parity migration from `internal/connectors/ticktick` (the hand-written
-connector it migrates; the legacy package stays registered and unchanged until wave6's registry
-flip) and was then expanded to TickTick's full documented Open API v1 surface (Pass B). TickTick's
-own published OpenAPI 3.0 document for this exact product (servers: `https://ticktick.com`, base
-path `/open/v1` — matching this bundle's `base_url` exactly) declares exactly 6 operations across
-4 paths; every one is accounted for by a stream, a write action, or a documented `duplicate_of`
-exclusion in `api_surface.json`.
+Reads projects and project tasks, and writes task create/complete/delete actions, through the
+TickTick Open API.
+
+Readable streams: `projects`, `tasks`.
+
+Write actions: `create_task`, `complete_task`, `delete_task`.
+
+Service API documentation: https://developer.ticktick.com/api.
 
 ## Auth setup
 
-TickTick issues an OAuth access token. Legacy accepts it under any of 3 aliased secret keys, in a
-first-non-empty-wins fallback chain (`firstSecret(cfg, "bearer_token", "client_access_token",
-"access_token")`, `ticktick.go:109,178-190`): `bearer_token` first, `client_access_token` second,
-`access_token` third. This bundle reproduces the exact same precedence as 3 ordered `bearer`
-auth candidates, each gated by a `when` clause on its own secret's truthiness — `base.auth`'s
-first-match-wins `selectAuth` evaluation (conventions.md §3, "Dual-auth ordering is
-load-bearing") reproduces legacy's fallback chain exactly: `bearer_token` wins if set (regardless
-of the other two), otherwise `client_access_token` wins if set, otherwise `access_token` is used.
-Whichever one resolves is sent as `Authorization: Bearer <token>`; none is ever logged.
-`base_url` defaults to `https://api.ticktick.com/open/v1`, matching legacy's `defaultBaseURL`
-fallback.
+Connection fields:
+
+- `access_token` (optional, secret, string); Fallback TickTick OAuth access token, used only when
+  neither bearer_token nor client_access_token is configured. Sent as a Bearer token. Never logged.
+- `base_url` (optional, string); default `https://api.ticktick.com/open/v1`; format `uri`; TickTick
+  Open API base URL override for tests or proxies.
+- `bearer_token` (optional, secret, string); TickTick OAuth access token, sent as a Bearer token
+  (Authorization: Bearer <token>). Never logged. Takes precedence over client_access_token and
+  access_token when more than one is configured.
+- `client_access_token` (optional, secret, string); Fallback TickTick OAuth access token, used only
+  when bearer_token is not configured. Sent as a Bearer token. Never logged. Takes precedence over
+  access_token when both are configured.
+- `project_id` (optional, string); TickTick project id the 'tasks' stream reads (GET
+  /project/{project_id}/data). Required for the 'tasks' stream.
+
+Secret fields are redacted in logs and write previews: `access_token`, `bearer_token`,
+`client_access_token`.
+
+Default configuration values: `base_url=https://api.ticktick.com/open/v1`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.bearer_token` when `{{ secrets.bearer_token }}`.
+- Bearer token authentication using `secrets.client_access_token` when `{{
+  secrets.client_access_token }}`.
+- Bearer token authentication using `secrets.access_token` when `{{ secrets.access_token }}`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/project`.
 
 ## Streams notes
 
-`projects` (`GET /project`, records at the JSON response root `.`) has no pagination — TickTick's
-project-list endpoint returns every project in one call, matching legacy's single unpaginated
-`Do` request (`ticktick.go:81`). `tasks` (`GET /project/{project_id}/data`, records at the
-`tasks` envelope key) requires `project_id` (the TickTick project id to scope reads to), matching
-legacy's own hard requirement (`ticktick.go:125-129`: "ticktick tasks stream requires config
-project_id") — the engine's path-interpolation hard-errors identically when `project_id` is
-unset, with no special-casing needed. Both streams declare primary key `["id"]`.
+Default pagination: single request; no pagination.
 
-Both streams declare `"projection": "passthrough"` (conventions.md §8 rule 1): legacy's `Read`
-emitted records verbatim with no field-building step, and the schemas below now declare the full
-documented field set of TickTick's own `Project`/`Task` OpenAPI schemas (not just legacy's
-narrower catalog list) — `projects` adds `closed`/`groupId`/`viewMode`/`permission`/`kind`;
-`tasks` adds `isAllDay`/`completedTime`/`desc`/`dueDate`/`priority`/`reminders`/`repeatFlag`/
-`sortOrder`/`startDate`/`timeZone`. Passthrough mode means any other real field TickTick returns
-(beyond even this fuller declared set) still survives unfiltered. Two documented boolean-shaped
-fields (`projects.closed`, `tasks.isAllDay`) are typed `string` (not `boolean`) because TickTick's
-own OpenAPI document declares them as string-valued `"true"`/`"false"`, not JSON booleans — this is
-the real documented wire shape, not a widening workaround. `tasks.priority`/`sortOrder`/`status`
-and `projects.sortOrder` are typed `integer`, matching the OpenAPI document's `int32`/`int64`
-fields exactly (no string-ification).
-
-The single-project detail endpoint (`GET /project/{projectId}`) is not modeled as its own stream:
-its response is a strict subset of the same `Project` schema returned by the `projects` list
-stream, so it would duplicate already-covered data (`api_surface.json`, `duplicate_of`).
+- `projects`: GET `/project` - records path `.`; emits passthrough records.
+- `tasks`: GET `/project/{{ config.project_id }}/data` - records path `tasks`; emits passthrough
+  records.
 
 ## Write actions & risks
 
-- **`create_task`** (`POST /task`) creates a new task in the caller's TickTick account — in the
-  given `projectId`, or the default Inbox if omitted. Low-risk external mutation; no approval
-  required.
-- **`complete_task`** (`POST /project/{projectId}/task/{id}/complete`) marks an existing task
-  completed. A completed task is removed from active task lists/reminders for every collaborator
-  on the project.
-- **`delete_task`** (`DELETE /project/{projectId}/task/{id}`) permanently removes a task;
-  irreversible via the API (idempotent: a 404 on an already-deleted task counts as written, not
-  failed).
+Overall write risk: external TickTick API mutation: creates a task, marks a task complete, or
+permanently deletes a task.
 
-No project-mutation write (create/update/delete project) or task-update write is implemented:
-TickTick's own published Open API document declares no such operations at all (see
-`api_surface.json`'s scope note) — only unofficial, uncorroborated community references describe
-them, and this migration does not fabricate a write shape against a real user's TickTick account
-without a corroborated source.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_task`: POST `/task` - kind `create`; body type `json`; required record fields `title`;
+  accepted fields `content`, `desc`, `dueDate`, `isAllDay`, `priority`, `projectId`, `reminders`,
+  `repeatFlag`, `sortOrder`, `startDate`, `timeZone`, `title`; risk: creates a new task in the
+  caller's TickTick account (in the given projectId, or the default Inbox if omitted); low-risk
+  external mutation, no approval required.
+- `complete_task`: POST `/project/{{ record.projectId }}/task/{{ record.id }}/complete` - kind
+  `update`; body type `none`; path fields `projectId`, `id`; required record fields `projectId`,
+  `id`; accepted fields `id`, `projectId`; risk: marks an existing task as completed; a completed
+  task is removed from active task lists/reminders for every collaborator on the project.
+- `delete_task`: DELETE `/project/{{ record.projectId }}/task/{{ record.id }}` - kind `delete`; body
+  type `none`; path fields `projectId`, `id`; required record fields `projectId`, `id`; accepted
+  fields `id`, `projectId`; missing records treated as success for status `404`; risk: permanently
+  removes a task from the given project; irreversible, no undo via the API.
 
 ## Known limits
 
-- **`tasks` has no incremental/cursor support**, matching legacy exactly — TickTick's
-  `project/{id}/data` endpoint returns the full project snapshot (tasks + columns) on every call
-  with no server-side filter parameter; this bundle declares no `incremental` block for either
-  stream, an honest 1:1 match of the API's own behavior, not a scope narrowing.
-- **Only one `project_id` can be read per sync.** TickTick's Open API has no "all tasks across all
-  projects" endpoint; a caller wanting every project's tasks must run one sync per `project_id`.
-- **No task-update write.** TickTick's official Open API document exposes create/complete/delete
-  for tasks but no update-in-place operation; a caller wanting to change an existing task's fields
-  must currently do so outside this connector (e.g. in the TickTick app/website).
-- **No project-mutation writes** (create/update/delete). See `api_surface.json`'s `out_of_scope`
-  exclusions — these operations are absent from TickTick's own published Open API document.
-- **Kanban `columns` are not a standalone stream.** Column data for a project is already returned
-  inline on the `tasks` stream's `/project/{id}/data` response (`ProjectData.columns`); the Open
-  API exposes no endpoint to list columns independently of a project.
-- **Tags, habits, and focus/pomodoro stats are out of scope.** These are exposed only by TickTick's
-  unofficial internal web API (V2), never by the public Open API (V1) this bundle authenticates
-  against (`api_surface.json`, `requires_elevated_scope`).
+- Batch defaults: read_page_size=100.
+- API coverage includes 2 stream-backed endpoint group(s), 3 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=2, out_of_scope=4, requires_elevated_scope=3.

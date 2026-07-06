@@ -1,117 +1,171 @@
 # Overview
 
-Pabbly Subscriptions Billing started as a read-only declarative migration of
-`internal/connectors/pabbly-subscriptions-billing` (legacy Go connector) and has been expanded to
-full documented API-surface coverage in Pass B. It reads customers, subscriptions, plans,
-invoices, and products, and writes customer/subscription/product/plan/coupon/payment-method/addon/
-addon-category/license mutations through the real Pabbly Subscriptions Billing REST API
-(`https://payments.pabbly.com/api/v1`). Legacy only ever implemented the 4 read streams; every
-write action and the `products` stream are new Pass-B capability, not a legacy port — legacy stays
-registered and unchanged until wave6's registry flip.
+Reads Pabbly customers, subscriptions, plans, and invoices, and writes customer/product/plan
+mutations and subscription cancellations through the Pabbly Subscriptions Billing REST API.
 
-## API surface (Pass B)
+Readable streams: `customers`, `subscriptions`, `plans`, `invoices`, `products`.
 
-The bundle's `docs_url` (`https://www.pabbly.com/subscriptions/api/`) now redirects to
-`apidocs.pabbly.com`, a marketing shell with no endpoint content behind it ("Failed to load
-products" — confirmed live). The real, complete endpoint list (base URL
-`https://payments.pabbly.com/api/v1`, Basic auth with an `apikey`/`secretkey` pair) was recovered
-from a Wayback Machine capture of the same docs page
-(`https://web.archive.org/web/20211128152246/https://www.pabbly.com/subscriptions/api/`) — see
-`api_surface.json` for the full 40-endpoint breakdown. Every endpoint is now `covered_by` a
-stream/write action or `excluded` with a specific reason; there are no blanket "Pass B" exclusions
-left. Most exclusions are `duplicate_of` (single-resource-by-id GETs with no id-enumeration source,
-already superseded by their list-endpoint counterpart) or `requires_elevated_scope` (per-parent
-sub-resource lists — coupons, payment methods, checkout pages, transactions, refunds, custom
-fields, addons/addon-categories by product — that would need a `fan_out` over a parent id list this
-bundle does not yet model); `verifyhosted`/`portal_sessions` are `out_of_scope` (customer-facing
-token flows, not data mutations); the 3 reporting/stats endpoints
-(`getdashboardstats`/`revenuetransaction`/`mrrsubscription`) are `non_data_endpoint` (aggregate
-snapshots with no stable per-record identity).
+Write actions: `create_customer`, `update_customer`, `create_subscription`, `update_subscription`,
+`create_coupon`, `create_payment_method`, `update_payment_method`, `create_addon`, `update_addon`,
+`delete_addon`, `create_addon_category`, `update_addon_category`, `delete_addon_category`,
+`create_license`, `update_license`, `cancel_subscription`, `create_product`, `update_product`,
+`create_plan`, `update_plan`.
+
+Service API documentation: https://www.pabbly.com/subscriptions/api/.
 
 ## Auth setup
 
-Provide a Pabbly account `username` (config) and `password` (secret); they are sent via HTTP Basic
-auth (`auth: [{"mode": "basic", "username": "{{ config.username }}", "password": "{{
-secrets.password }}"}]`) exactly like legacy's `connsdk.Basic(username, password)`. Legacy
-hard-errors when either value is unset (`pabbly-subscriptions-billing connector requires config
-username and secret password`), matching this bundle's `required: ["username", "password"]`. The
-real Pabbly API documents this same Basic-auth pair as `apikey`/`secretkey`; this bundle keeps
-legacy's `username`/`password` spec field names for config-surface stability rather than renaming
-them (same credential shape, no behavior change).
+Connection fields:
+
+- `base_url` (optional, string); default `https://www.pabbly.com/subscriptions/api`; format `uri`;
+  Pabbly Subscriptions Billing API base URL override for tests or proxies.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-500).
+- `password` (required, secret, string); Pabbly Subscriptions Billing account password. Sent via
+  HTTP Basic auth; never logged.
+- `username` (required, string); Pabbly Subscriptions Billing account username. Sent via HTTP Basic
+  auth.
+
+Secret fields are redacted in logs and write previews: `password`.
+
+Default configuration values: `base_url=https://www.pabbly.com/subscriptions/api`, `page_size=100`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `config.username`, `secrets.password`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/customers`.
 
 ## Streams notes
 
-All 4 legacy-parity streams (`customers`, `subscriptions`, `plans`, `invoices`) share the identical
-shape: `GET` against the Pabbly list endpoint, records at `data`, primary key `["id"]`. `customers`,
-`subscriptions`, and `invoices` declare `x-cursor-field: created_at` on their schemas (matching
-legacy's catalog-only `CursorFields` declaration on those 3 streams); `plans` declares none
-(legacy's `plans` stream carries no `CursorFields` either). No stream declares a `streams.json`
-`incremental` block: legacy's `Read`/`harvest` never applies a server-side or client-side
-incremental filter for any of the 4 streams — the `CursorFields` catalog metadata is descriptive
-only, never wired into an actual request parameter — so this bundle matches that real behavior
-exactly rather than inventing an incremental filter legacy never had.
+Default pagination: cursor pagination; cursor parameter `page`; next token from `next_page`.
 
-Pagination for the 4 legacy-parity streams follows legacy's own `next_page`-in-body convention: the
-first request sends `page=1`, and the response body's `next_page` field carries the literal value
-of the NEXT `page` query parameter to send — modeled as `pagination.type: cursor` with
-`token_path: next_page` and `cursor_param: page`.
-Pagination stops when `next_page` is absent or empty, identical to legacy's
-`strings.TrimSpace(next) == ""` check; no `stop_path` is declared since legacy has no separate
-boolean stop signal beyond the token itself. `per_page` is sent on every request from the
-`page_size` config value (default `100`, matching legacy's `defaultPageSize`) via each stream's
-`query.per_page` object-form entry (`default: "100"`).
+Pagination by stream: cursor: `customers`, `subscriptions`, `plans`, `invoices`; none: `products`.
 
-`products` (new Pass-B stream, `GET /products`) is a `passthrough`-projected, single-page stream
-(`pagination.type: none`) matching the real documented response shape (`{"status", "message",
-"data": [...]}`, one page of every product with no pagination parameters documented for this
-endpoint at all).
+- `customers`: GET `/customers` - records path `data`; query `page`=`1`; `per_page` from template
+  `{{ config.page_size }}`, default `100`; cursor pagination; cursor parameter `page`; next token
+  from `next_page`.
+- `subscriptions`: GET `/subscriptions` - records path `data`; query `page`=`1`; `per_page` from
+  template `{{ config.page_size }}`, default `100`; cursor pagination; cursor parameter `page`; next
+  token from `next_page`.
+- `plans`: GET `/plans` - records path `data`; query `page`=`1`; `per_page` from template `{{
+  config.page_size }}`, default `100`; cursor pagination; cursor parameter `page`; next token from
+  `next_page`.
+- `invoices`: GET `/invoices` - records path `data`; query `page`=`1`; `per_page` from template `{{
+  config.page_size }}`, default `100`; cursor pagination; cursor parameter `page`; next token from
+  `next_page`.
+- `products`: GET `/products` - records path `data`; emits passthrough records.
 
 ## Write actions & risks
 
-Pass B adds 13 write actions on top of the pre-existing 7 (`create_customer`/`update_customer`/
-`cancel_subscription`/`create_product`/`update_product`/`create_plan`/`update_plan`):
-`create_subscription` (assigns a plan to an existing customer and starts recurring billing),
-`update_subscription` (changes an existing subscription's plan/payment terms),
-`create_coupon` (creates a discount coupon scoped to a product),
-`create_payment_method`/`update_payment_method` (stores/replaces a customer's card on file via the
-connected payment gateway), `create_addon`/`update_addon`/`delete_addon` (sellable plan add-ons),
-`create_addon_category`/`update_addon_category`/`delete_addon_category` (add-on organizing
-categories), and `create_license`/`update_license` (license-key pools for a product's plan).
-`delete_addon` and `delete_addon_category` are `kind: "delete"` with `confirm: "destructive"`,
-matching `cancel_subscription`'s existing destructive-confirm pattern. `metadata.json` now declares
-`capabilities.write: true` (previously incorrectly left `false` even though `writes.json` already
-carried the original 7 actions — a stale leftover from before this bundle's write surface was
-added, fixed as part of this pass).
+Overall write risk: external mutation; creates/updates billing customers, products, and plans, and
+cancels live subscriptions (stops future billing).
+
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_customer`: POST `/customer` - kind `create`; body type `json`; required record fields
+  `first_name`, `last_name`, `email_id`; accepted fields `billing_address`, `company_name`,
+  `email_id`, `first_name`, `last_name`, `phone`, `shipping_address`, `website`; risk: external
+  mutation; creates a billing customer record in Pabbly Subscriptions; approval required.
+- `update_customer`: PUT `/customer/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `billing_address`, `company_name`,
+  `first_name`, `id`, `last_name`, `phone`, `shipping_address`, `website`; risk: external mutation;
+  updates a billing customer record in Pabbly Subscriptions; approval required.
+- `create_subscription`: POST `/subscription/{{ record.customer_id }}` - kind `create`; body type
+  `json`; path fields `customer_id`; required record fields `customer_id`, `plan_id`,
+  `gateway_type`, `gateway_id`, `method_id`; accepted fields `customer_id`, `gateway_id`,
+  `gateway_type`, `method_id`, `plan_id`, `redirect_to`; risk: external mutation; creates a live
+  billing subscription for an existing customer and starts recurring charges; approval required.
+- `update_subscription`: PUT `/subscription/{{ record.id }}/update` - kind `update`; body type
+  `json`; path fields `id`; required record fields `id`, `plan_id`, `customer_id`; accepted fields
+  `activated_at_val`, `customer_id`, `id`, `payment_term`, `plan_id`; risk: external mutation;
+  changes an existing subscription's plan/payment terms, altering future customer billing; approval
+  required.
+- `create_coupon`: POST `/coupon/{{ record.product_id }}` - kind `create`; body type `json`; path
+  fields `product_id`; required record fields `coupon_name`, `coupon_code`, `discount`,
+  `discount_type`, `redemption_type`; accepted fields `apply_to`, `associate_plans`, `coupon_code`,
+  `coupon_name`, `discount`, `discount_type`, `maximum_redemption`, `plans_array`, `product_id`,
+  `redemption_cycle`, `redemption_type`, `status`, `valid_upto`; risk: external mutation; creates a
+  discount coupon that lowers future billing amounts for any customer who redeems it; approval
+  required.
+- `create_payment_method`: POST `/paymentmethod/{{ record.customer_id }}` - kind `create`; body type
+  `json`; path fields `customer_id`; required record fields `customer_id`, `gateway_type`,
+  `first_name`, `last_name`, `email`, `card_number`, `month`, `year`, `cvv`; accepted fields
+  `card_number`, `city`, `country`, `customer_id`, `cvv`, `email`, `first_name`, `gateway_type`,
+  `last_name`, `month`, `state`, `street`, `year`, `zip_code`; risk: external mutation; stores a new
+  payment card on file for an existing customer via the connected payment gateway; approval
+  required.
+- `update_payment_method`: PUT `/paymentmethod/{{ record.customer_id }}` - kind `update`; body type
+  `json`; path fields `customer_id`; required record fields `customer_id`, `card_number`, `month`,
+  `year`, `cvv`, `mid`; accepted fields `card_number`, `customer_id`, `cvv`, `mid`, `month`, `year`;
+  risk: external mutation; replaces the card an existing customer's future recurring billing charges
+  against; approval required.
+- `create_addon`: POST `/addon/{{ record.product_id }}` - kind `create`; body type `json`; path
+  fields `product_id`; required record fields `product_id`, `name`, `code`, `price`,
+  `billing_cycle`, `billing_period`; accepted fields `associate_plans`, `billing_cycle`,
+  `billing_period`, `billing_period_num`, `category_array`, `code`, `description`, `name`,
+  `plans_array`, `price`, `product_id`, `status`; risk: external mutation; creates a sellable add-on
+  that customers can attach to a plan, adding to their bill; approval required.
+- `update_addon`: PUT `/addon/{{ record.addon_id }}` - kind `update`; body type `json`; path fields
+  `addon_id`; required record fields `addon_id`, `product_id`; accepted fields `addon_id`,
+  `associate_plans`, `billing_cycle`, `billing_period`, `billing_period_num`, `category_array`,
+  `code`, `description`, `name`, `plans_array`, `price`, `product_id`, `status`; risk: external
+  mutation; updates an existing sellable add-on's price/billing terms, changing future charges for
+  customers who have it attached; approval required.
+- `delete_addon`: DELETE `/addon/{{ record.addon_id }}` - kind `delete`; body type `none`; path
+  fields `addon_id`; required record fields `addon_id`; accepted fields `addon_id`; confirmation
+  `destructive`; risk: external mutation; permanently deletes a sellable add-on; approval required.
+- `create_addon_category`: POST `/addoncategory` - kind `create`; body type `json`; required record
+  fields `category_name`, `product_id`; accepted fields `category_name`, `product_id`; risk:
+  external mutation; creates an add-on category used to organize sellable add-ons in Pabbly
+  Subscriptions; approval required.
+- `update_addon_category`: PUT `/addoncategory/{{ record.category_id }}` - kind `update`; body type
+  `json`; path fields `category_id`; required record fields `category_id`, `category_name`; accepted
+  fields `category_id`, `category_name`; risk: external mutation; renames an existing add-on
+  category; approval required.
+- `delete_addon_category`: DELETE `/addoncategory/{{ record.category_id }}` - kind `delete`; body
+  type `none`; path fields `category_id`; required record fields `category_id`; accepted fields
+  `category_id`; confirmation `destructive`; risk: external mutation; permanently deletes an add-on
+  category; approval required.
+- `create_license`: POST `/products/{{ record.product_id }}/licenses` - kind `create`; body type
+  `json`; path fields `product_id`; required record fields `product_id`, `name`, `plan_id`,
+  `method`, `license_codes`, `status`; accepted fields `license_codes`, `method`, `name`, `plan_id`,
+  `product_id`, `status`; risk: external mutation; creates a license-key pool for a product's plan
+  in Pabbly Subscriptions; approval required.
+- `update_license`: PUT `/products/{{ record.product_id }}/licenses/{{ record.license_id }}` - kind
+  `update`; body type `json`; path fields `product_id`, `license_id`; required record fields
+  `product_id`, `license_id`; accepted fields `license_codes`, `license_id`, `method`, `name`,
+  `plan_id`, `product_id`, `status`; risk: external mutation; updates an existing license-key pool
+  (may add/replace codes) in Pabbly Subscriptions; approval required.
+- `cancel_subscription`: POST `/subscription/{{ record.id }}/cancel` - kind `update`; body type
+  `json`; path fields `id`; required record fields `id`, `cancel_at_end`; accepted fields
+  `cancel_at_end`, `id`; confirmation `destructive`; risk: external mutation; cancels a live billing
+  subscription (immediately or at term end) and stops future customer billing; approval required.
+- `create_product`: POST `/product/create` - kind `create`; body type `json`; required record fields
+  `product_name`; accepted fields `description`, `product_name`, `redirect_url`; risk: external
+  mutation; creates a sellable product in Pabbly Subscriptions; approval required.
+- `update_product`: PUT `/product/update/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`; accepted fields `description`, `id`, `product_name`,
+  `redirect_url`; risk: external mutation; updates a sellable product in Pabbly Subscriptions;
+  approval required.
+- `create_plan`: POST `/plan/create` - kind `create`; body type `json`; required record fields
+  `product_id`, `plan_name`, `plan_code`, `billing_cycle`, `price`, `billing_period`,
+  `billing_period_num`, `plan_active`; accepted fields `billing_cycle`, `billing_cycle_num`,
+  `billing_period`, `billing_period_num`, `currency_code`, `plan_active`, `plan_code`,
+  `plan_description`, `plan_name`, `price`, `product_id`, `redirect_url`, `setup_fee`,
+  `trial_period`; risk: external mutation; creates a billing plan under a product in Pabbly
+  Subscriptions; approval required.
+- `update_plan`: PUT `/plan/update/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`, `product_id`, `currency_code`; accepted fields `billing_cycle`,
+  `billing_cycle_num`, `billing_period`, `billing_period_num`, `currency_code`, `id`, `plan_active`,
+  `plan_code`, `plan_description`, `plan_name`, `price`, `product_id`, `redirect_url`, `setup_fee`;
+  risk: external mutation; updates a billing plan in Pabbly Subscriptions; approval required.
 
 ## Known limits
 
-- `page_size` config validation (legacy's numeric range parsing) is not reproduced at the
-  bundle-config level; the engine treats `page_size` as an opaque string substituted directly into
-  the `per_page` query param. This never changes emitted record DATA for any legacy-valid input; it
-  only narrows client-side input validation.
-- `max_pages` is not runtime-configurable in this bundle. `PaginationSpec.MaxPages` is static rather
-  than config-templated, so declaring a `max_pages` spec key would be dead config.
-- No `incremental` block is declared on any stream, matching legacy's real (lack of) incremental
-  filtering behavior exactly — not a narrowing. `x-cursor-field` remains declared on 3 of the 4
-  legacy-parity schemas purely as catalog/candidate-cursor metadata, mirroring legacy's own
-  `CursorFields` field.
-- **`base_url` still points at the legacy-parity host (`https://www.pabbly.com/subscriptions/api`),
-  not the real documented API host (`https://payments.pabbly.com/api/v1`).** The 4 pre-existing
-  streams' paths (`/customers`, `/subscriptions`, `/plans`, `/invoices`) were themselves modeled
-  against the legacy Go connector's own base URL and path shape, not the real Pabbly docs (which
-  were unreachable at migration time and only recovered via the Wayback Machine for this Pass B
-  research pass). Migrating the base_url and all paths to the real host is a bigger, riskier change
-  than this capability-expansion pass should make silently — it would require re-verifying every
-  existing stream's pagination/record-envelope assumptions against the real API rather than
-  legacy's, which may not match (e.g. real `GET /customers` returns `{"status","message","data":
-  [...]}` with no visible pagination fields in the documented example, unlike legacy's assumed
-  `next_page` cursor). New Pass-B write actions and the `products` stream use the REAL documented
-  paths/host implicitly through the same `{{ config.base_url }}` templating, so a caller who
-  overrides `base_url` to the real host gets correct write behavior; the default `base_url` is
-  unchanged to avoid breaking existing legacy-parity read behavior. Reconciling the two hosts is
-  flagged for a follow-up increment, not silently patched over here.
-- The `requires_elevated_scope`-excluded per-parent sub-resource lists (coupons, payment methods,
-  checkout pages, transactions, refunds, custom fields, per-product addons/addon-categories) are a
-  real, documented gap: this dialect's `fan_out` mechanism could close them (iterating the
-  `customers`/`products` streams' ids), but that is additional stream work beyond this pass's
-  write-action focus and is tracked in `api_surface.json` rather than silently modeled.
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s), 20 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=9, non_data_endpoint=3, out_of_scope=2, requires_elevated_scope=10.

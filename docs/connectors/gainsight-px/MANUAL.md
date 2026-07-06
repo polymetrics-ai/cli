@@ -12,20 +12,45 @@ SYNOPSIS
 DESCRIPTION
   Reads Gainsight PX accounts, users, features, and segments through the aptrinsic REST API (read-only).
 
+ICON
+  asset: icons/gainsight-px.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://support.gainsight.com/PX/API_for_Developers/02Usage_of_Different_APIs
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  api_key (secret)
+
+ETL STREAMS
+  accounts:
+    primary key: id
+    fields: createDate(), id(), industry(), lastModifiedDate(), lastSeenDate(), location(), name(), numberOfEmployees(), numberOfUsers(), plan(), sfdcId(), trackedSubscriptionId(), website()
+  users:
+    primary key: id
+    fields: accountId(), aptrinsicId(), createDate(), email(), firstName(), id(), lastModifiedDate(), lastName(), lastSeenDate(), numberOfVisits(), role(), score(), signUpDate(), title(), type()
+  feature:
+    primary key: id
+    fields: id(), name(), parentFeatureId(), propertyKey(), status(), type()
+  segments:
+    primary key: id
+    fields: createdBy(), createdDate(), description(), id(), modifiedBy(), modifiedDate(), name(), priority(), productId(), productName(), status()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Gainsight PX (aptrinsic) API read of account, user, feature, and segment data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

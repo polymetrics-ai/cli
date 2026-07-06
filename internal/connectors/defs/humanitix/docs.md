@@ -1,72 +1,73 @@
 # Overview
 
-Humanitix is a wave2 fan-out declarative-HTTP migration. It reads Humanitix events, tags, orders,
-and tickets through the Humanitix public REST API (`GET https://api.humanitix.com/v1/...`). This
-bundle is a capability-parity port of the hand-written connector at
-`internal/connectors/humanitix` (`humanitix.go`/`streams.go`), which stays registered and
-unchanged until wave6's registry flip.
+Reads Humanitix events, orders, tickets, and tags through the Humanitix public REST API.
+
+Readable streams: `events`, `tags`, `orders`, `tickets`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developers.humanitix.com/.
 
 ## Auth setup
 
-Provide a Humanitix API key via the `api_key` secret; it is sent as the `x-api-key` header
-(`streams.json`'s `base.auth`, `mode: api_key_header`), matching legacy's
-`connsdk.APIKeyHeader("x-api-key", secret, "")` (`humanitix.go:242`). `base_url` defaults to
-`https://api.humanitix.com/v1` and may be overridden for tests/proxies (legacy's own
-`humanitixBaseURL` validates scheme+host the same way; the engine's base-URL resolution has no
-equivalent runtime validation, but every parity/conformance fixture only ever points at an
-httptest server, so this is not exercised differently on either side).
+Connection fields:
+
+- `api_key` (required, secret, string); Humanitix API key, sent as the x-api-key header. Never
+  logged.
+- `base_url` (optional, string); default `https://api.humanitix.com/v1`; format `uri`; Humanitix API
+  base URL override for tests or proxies.
+- `event_id` (optional, string); Humanitix event id the 'orders' and 'tickets' streams are scoped to
+  (required for those two streams; substituted into the event-scoped path).
+- `page_size` (optional, integer); default `100`; Page size for the pageSize query parameter
+  (1-100).
+- `since` (optional, string); Optional ISO-8601 lower bound for the 'events' stream's incremental
+  `since` filter; the stream's own state cursor takes precedence once a sync has run once.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.humanitix.com/v1`, `page_size=100`.
+
+Authentication behavior:
+
+- API key authentication in `x-api-key` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/events` with query `page`=`1`; `pageSize`=`1`.
 
 ## Streams notes
 
-`events` and `tags` are account-scoped list endpoints (`GET /events`, `GET /tags`); records live
-at the top-level key matching the stream name. Both use `page_number` pagination
-(`page`/`pageSize` query params, 1-based `start_page`, `page_size: 100`), matching legacy's
-`connsdk.PageNumberPaginator{PageParam:"page", SizeParam:"pageSize", StartPage:1, PageSize:
-pageSize}` (`humanitix.go:156-161`) and its short-page stop rule.
+Default pagination: page-number pagination; page parameter `page`; size parameter `pageSize`; starts
+at 1; page size 100.
 
-`orders` and `tickets` are event-scoped sub-resources: the path templates
-`/events/{{ config.event_id }}/orders` and `/events/{{ config.event_id }}/tickets` substitute the
-required `event_id` config value (urlencoded by `InterpolatePath`'s per-segment default, matching
-legacy's own `url.PathEscape(eventID)` in `Read`, `humanitix.go:146`); an absent `event_id`
-hard-errors on both sides (legacy: `"humanitix stream %q requires config event_id"`; engine: an
-unresolved `config.event_id` path-template key — same failure classification, different literal
-text, per conventions.md §5's precedent for config-validation parity).
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-`events` carries legacy's `since` incremental filter (`humanitixEventFields`'s cursor field
-`updatedAt`, legacy's `incrementalLowerBound` helper at `humanitix.go:250-255`): the stream
-declares `incremental.cursor_field: updatedAt`, `request_param: since`, `start_config_key: since`,
-and the `since` query param is wired through the opt-in optional-query dialect
-(`{{ incremental.lower_bound }}` with `omit_when_absent: true`) so it is sent only once a lower
-bound resolves (a state cursor from a prior sync, or the `since` config on a first run) — omitted
-entirely on a from-scratch full sync, exactly matching legacy's `if since := ...; since != ""`
-gate. `tags`, `orders`, and `tickets` carry the identical incremental filter: legacy publishes
-`CursorFields: ["updatedAt"]` for all four streams (`streams.go:39,46,53,60`) and applies
-`base.Set("since", since)` stream-agnostically in the shared `Read` path (`humanitix.go:152-154`),
-so each of the three declares the same `incremental` block (`cursor_field: updatedAt`,
-`request_param: since`, `start_config_key: since`) and the same opt-in `since` query param.
+- `events`: GET `/events` - records path `events`; query `since` from template `{{
+  incremental.lower_bound }}`, omitted when absent; page-number pagination; page parameter `page`;
+  size parameter `pageSize`; starts at 1; page size 100; incremental cursor `updatedAt`; sent as
+  `since`; formatted as `rfc3339`; initial lower bound from `since`.
+- `tags`: GET `/tags` - records path `tags`; query `since` from template `{{ incremental.lower_bound
+  }}`, omitted when absent; page-number pagination; page parameter `page`; size parameter
+  `pageSize`; starts at 1; page size 100; incremental cursor `updatedAt`; sent as `since`; formatted
+  as `rfc3339`; initial lower bound from `since`.
+- `orders`: GET `/events/{{ config.event_id }}/orders` - records path `orders`; query `since` from
+  template `{{ incremental.lower_bound }}`, omitted when absent; page-number pagination; page
+  parameter `page`; size parameter `pageSize`; starts at 1; page size 100; incremental cursor
+  `updatedAt`; sent as `since`; formatted as `rfc3339`; initial lower bound from `since`.
+- `tickets`: GET `/events/{{ config.event_id }}/tickets` - records path `tickets`; query `since`
+  from template `{{ incremental.lower_bound }}`, omitted when absent; page-number pagination; page
+  parameter `page`; size parameter `pageSize`; starts at 1; page size 100; incremental cursor
+  `updatedAt`; sent as `since`; formatted as `rfc3339`; initial lower bound from `since`.
 
 ## Write actions & risks
 
-None. The Humanitix public API exposes no safe reverse-ETL writes (legacy's own package doc: "no
-safe reverse-ETL writes, so Capabilities.Write is false"); `capabilities.write` is `false` and this
-bundle ships no `writes.json`, matching legacy's `Write` returning
-`connectors.ErrUnsupportedOperation`.
+This connector is read-only. Read behavior: external Humanitix API read of event, order, ticket, and
+tag data.
 
 ## Known limits
 
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
-  when `config.mode == "fixture"`, a credential-free conformance-harness affordance) stamps an
-  extra `previous_cursor` field (echoing a prior cursor when set) onto fixture-mode records
-  (`humanitix.go:216-219`). This bundle's schemas and fixtures target the live record shape only;
-  the engine's own conformance/fixture-replay harness (`internal/connectors/conformance`) provides
-  the credential-free test affordance legacy's fixture mode existed for, so no fixture-mode
-  equivalent is needed here.
-- **`max_pages` is not modeled as a bundle-level config knob.** Legacy exposes `max_pages` as a
-  config override (`humanitixMaxPages`, `humanitix.go:300-313`, accepting an integer, `all`, or
-  `unlimited`). The engine's `page_number` paginator has no config-driven `max_pages` override
-  wired to a spec property — pagination is bounded only by the short-page stop signal, matching
-  Humanitix's own real termination behavior (the same "unbounded by default" outcome as legacy's
-  `max_pages` unset/`0`/`all`/`unlimited` case). A future capability-expansion pass could wire a
-  `spec.json` `max_pages` property into `streams.json`'s pagination block once/if the engine grows
-  a config-driven `MaxPages` template reference; not modeled here to avoid declaring dead config
-  (F6, REVIEW.md).
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=2.

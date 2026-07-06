@@ -12,20 +12,52 @@ SYNOPSIS
 DESCRIPTION
   Reads Klarna settlement payouts and transactions through the Klarna Settlements API.
 
+ICON
+  asset: icons/klarna.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.klarna.com/api/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  payment_references
+  summary_currency_code
+  summary_end_date
+  summary_start_date
+  password (secret)
+  username (secret)
+
+ETL STREAMS
+  payouts:
+    primary key: payout_reference
+    fields: currency_code(), merchant_settlement_type(), payment_reference(), payout_reference(), settlement_amount(), totals()
+  transactions:
+    primary key: transaction_id
+    fields: amount(), capture_date(), capture_id(), currency_code(), merchant_reference1(), merchant_reference2(), order_id(), payout_reference(), sale_date(), short_order_id(), transaction_id(), type()
+  payout_details:
+    primary key: payment_reference
+    fields: currency_code(), currency_code_of_registration_country(), merchant_id(), merchant_settlement_type(), payment_reference(), payout_date(), totals(), transactions()
+  payout_summaries:
+    primary key: summary_settlement_currency, summary_payout_date_start, summary_payout_date_end
+    fields: summary_payout_date_end(), summary_payout_date_start(), summary_settlement_currency(), summary_total_commission_amount(), summary_total_commission_reversal_amount(), summary_total_fee_amount(), summary_total_fee_correction_amount(), summary_total_holdback_amount(), summary_total_release_amount(), summary_total_repay_amount(), summary_total_return_amount(), summary_total_reversal_amount(), summary_total_sale_amount(), summary_total_settlement_amount(), summary_total_tax_amount()
+  payout_summary:
+    primary key: payout_reference
+    fields: currency_code(), fee_amount(), payout_reference(), return_amount(), sale_amount(), settlement_amount()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Klarna Settlements API read of payout and transaction data
+  approval: none; read-only source
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

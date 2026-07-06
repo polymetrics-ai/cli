@@ -12,20 +12,50 @@ SYNOPSIS
 DESCRIPTION
   Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipelines, custom fields, and form submissions for a location through the HighLevel REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  api_version
+  base_url
+  location_id
+  api_key (secret)
+
+ETL STREAMS
+  pipelines:
+    primary key: id
+    fields: dateAdded(), dateUpdated(), id(), locationId(), name(), stages()
+  contacts:
+    primary key: id
+    cursor: dateUpdated
+    fields: contactName(), dateAdded(), dateUpdated(), email(), firstName(), id(), lastName(), locationId(), phone(), source(), type()
+  opportunities:
+    primary key: id
+    cursor: dateUpdated
+    fields: assignedTo(), contactId(), dateAdded(), dateUpdated(), id(), monetaryValue(), name(), pipelineId(), pipelineStageId(), source(), status()
+  custom_fields:
+    primary key: id
+    fields: dataType(), fieldKey(), id(), model(), name(), position()
+  form_submissions:
+    primary key: id
+    cursor: createdAt
+    fields: contactId(), createdAt(), email(), formId(), id(), locationId(), name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external HighLevel (LeadConnector) API read of contact, opportunity, pipeline, custom field, and form submission data for a configured location
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

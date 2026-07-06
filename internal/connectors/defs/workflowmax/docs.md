@@ -1,110 +1,94 @@
 # Overview
 
-WorkflowMax reads and writes jobs, clients, and client contacts through the real WorkflowMax
-API v2 (`https://api.workflowmax2.com/v2/...`, documented at
-[api-docs.workflowmax.com](https://api-docs.workflowmax.com/)). This bundle was originally
-migrated from `internal/connectors/workflowmax` (the hand-written connector); this Pass B pass
-researched the real, currently-documented v2 API (WorkflowMax's own docs note the legacy XML v1
-API has been superseded by a JSON v2 API) and corrected the bundle's paths/auth/query surface to
-match it, while keeping the same 3 legacy-parity resource families (jobs, clients, contacts) and
-adding writes. `capabilities.write` is now `true`.
+Reads and writes WorkflowMax jobs, clients, and client contacts through the real WorkflowMax API v2
+(api.workflowmax2.com/v2).
+
+Readable streams: `jobs`, `clients`.
+
+Write actions: `create_client`, `update_client`, `delete_client`, `create_job`, `delete_job`,
+`create_client_contact`, `update_client_contact`, `delete_client_contact`.
+
+Service API documentation: https://api-docs.workflowmax.com/.
 
 ## Auth setup
 
-Provide a WorkflowMax API v2 OAuth2 access token via the `access_token` secret; it is sent as a
-Bearer token on every request (`mode: bearer`). WorkflowMax v2 additionally **requires** an
-`account-id` header on every request identifying the Xero/WorkflowMax organisation — provide it
-via the required `account_id` config property (`streams.json`'s `base.headers` sends
-`account-id: {{ config.account_id }}` on every read AND write request, matching Stripe's
-`Stripe-Account`-header golden pattern in `docs/migration/conventions.md` §3). `base_url` defaults
-to `https://api.workflowmax2.com` (matching legacy's own `defaultBaseURL`, which correctly names
-the real v2 host) and may be overridden for test proxies.
+Connection fields:
+
+- `access_token` (required, secret, string); WorkflowMax API v2 OAuth2 access token, sent as a
+  Bearer token on every request. Never logged.
+- `account_id` (required, string); WorkflowMax/Xero organisation identifier, sent as the required
+  account-id header on every v2 request (api-docs.workflowmax.com Authentication).
+- `base_url` (optional, string); default `https://api.workflowmax2.com`; format `uri`; WorkflowMax
+  API base URL. Defaults to the production v2 endpoint; override for test proxies.
+- `mode` (optional, string).
+- `updated_since` (optional, string); Optional YYYY-MM-DD lower bound for the jobs/clients
+  updatedSince filter.
+
+Secret fields are redacted in logs and write previews: `access_token`.
+
+Default configuration values: `base_url=https://api.workflowmax2.com`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.access_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/v2/jobs` with query `pageSize`=`1`.
 
 ## Streams notes
 
-`jobs` (`GET /v2/jobs`) and `clients` (`GET /v2/clients`) share the identical envelope (records at
-the top-level `data` array, matching legacy's `recordsPath: "data"`) and `page_number` pagination
-(`page`/`pageSize` query params — the real v2 parameter name is `pageSize`, not legacy's
-`page_size`). The bundle sends a static `pageSize=100` and caps reads at one page, matching
-legacy's own default `page_size=100` and unset-`max_pages` behavior. Legacy's optional runtime
-`page_size`/`max_pages` overrides are not declared because the engine pagination block is static.
-Both streams declare an optional `updatedSince` query param
-(`{{ config.updated_since }}`, `omit_when_absent: true`) wired to the real v2 `updatedSince`
-date-range filter documented for both endpoints — this is a genuinely new, real server-side filter
-neither legacy nor the pre-Pass-B bundle modeled; it is deliberately NOT wired as an `incremental`
-block (no state-cursor-driven auto-advance), since legacy itself never issued any server-side
-filter and adding automatic cursor-driven filtering here would be new sync-mode behavior beyond
-Pass B's full-surface-coverage scope, not a parity port. Leaving `updated_since` unset (the
-default) reproduces legacy's exact always-full-read behavior.
+Default pagination: page-number pagination; page parameter `page`; size parameter `pageSize`; starts
+at 1; page size 100; maximum 1 page(s).
 
-`jobs` ships a single default-read conformance fixture page at the real `pageSize: 100`; the
-static `max_pages: 1` cap stops there to match legacy's default read. `clients` ships a single
-fixture page (2 records, an honestly short final page under a 100 page size).
-
-`jobs` emits the real v2 field set: `uuid` (primary key), `jobNumber`, `name`, `clientUUID`,
-`clientContactUUID`, `description`, `clientOrderNumber`, `budget`, `jobStatusUUID`,
-`jobCategoryUUID`, `priority`, `startDate`, `dueDate`, `completedDate`. `clients` emits `uuid`
-(primary key), `name`, `exportCode`, `clientManagerUUID`, `jobManagerUUID`, `referralSource`,
-`prospect`, `archived`, `favorite`. Both streams declare `"projection": "passthrough"` (matching
-legacy's verbatim-emit behavior and the post-wave2 §8 rule 1) so every real v2 field survives, not
-just the ones enumerated in each schema. Both schemas declare `x-cursor-field: updated_at` for
-legacy catalog parity (`CursorFields: []string{"updated_at"}`), but neither stream declares an
-`incremental` block: the real v2 list responses do not surface a per-item `updatedAt` cursor field
-in the base (no `includes=`) response shape this bundle reads, so `updatedSince` remains a plain
-optional config filter (above) rather than a stateful cursor.
-
-**`contacts` is no longer a stream.** The pre-Pass-B bundle declared a `GET /contacts` stream, but
-WorkflowMax v2 has **no bare list endpoint for client contacts at all** — verified against
-api-docs.workflowmax.com's full `client-contact` endpoint set, which is exactly `POST
-/v2/clients/contacts` (create), `GET /v2/clients/contacts/{uuid}` (get by id), `PUT
-/v2/clients/contacts/{uuid}` (update), and `DELETE /v2/clients/contacts/{uuid}` (delete) — never a
-collection GET. `legacy`'s `GET /contacts` path does not correspond to any endpoint in the real,
-currently-documented v2 API (nor the deprecated v1 XML API, which this bundle does not target).
-Client contacts are exposed through the `create_client_contact`/`update_client_contact`/
-`delete_client_contact` write actions instead; per-client contact data is also visible nested
-inside a `clients` stream record's real API response when the (not-yet-modeled) `includes=contacts`
-query is added in a future pass. See Known limits.
+- `jobs`: GET `/v2/jobs` - records path `data`; query `updatedSince` from template `{{
+  config.updated_since }}`, omitted when absent; page-number pagination; page parameter `page`; size
+  parameter `pageSize`; starts at 1; page size 100; maximum 1 page(s); emits passthrough records.
+- `clients`: GET `/v2/clients` - records path `data`; query `updatedSince` from template `{{
+  config.updated_since }}`, omitted when absent; page-number pagination; page parameter `page`; size
+  parameter `pageSize`; starts at 1; page size 100; maximum 1 page(s); emits passthrough records.
 
 ## Write actions & risks
 
-`capabilities.write` is now `true` (previously `false`). Eight actions, all requiring the same
-Bearer + `account-id` header pair as reads:
+Overall write risk: external mutation of WorkflowMax jobs, clients, and client contacts
+(create/update/delete); approval required.
 
-- `create_client` (`POST /v2/clients`) / `update_client` (`PUT /v2/clients/{uuid}`) /
-  `delete_client` (`DELETE /v2/clients/{uuid}`) — creates, updates, or permanently deletes a
-  WorkflowMax client record.
-- `create_job` (`POST /v2/jobs`) / `delete_job` (`DELETE /v2/jobs/{identifier}`) — creates or
-  permanently deletes a WorkflowMax job. `update_job` (`PUT /v2/jobs/{identifier}`) is
-  **excluded** (see `api_surface.json`): its real request body accepts a large partial-update
-  surface (status/category/priority/staff-assignment/custom-field transitions) not modeled by this
-  pass.
-- `create_client_contact` (`POST /v2/clients/contacts`) / `update_client_contact` (`PUT
-  /v2/clients/contacts/{uuid}`) / `delete_client_contact` (`DELETE /v2/clients/contacts/{uuid}`).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-All eight risk-annotated as external mutations requiring approval (`delete_*` further flagged as
-permanent deletes). `delete_client`/`delete_job`/`delete_client_contact` use `body_type: "none"`
-(pure path-parameterized DELETE, no body); the rest use `body_type: "json"`.
+- `create_client`: POST `/v2/clients` - kind `create`; body type `json`; accepted fields
+  `clientManagerUuid`, `email`, `exportCode`, `favorite`, `firstName`, `jobManagerUuid`, `lastName`,
+  `name`, `phone`, `referralSource`, `website`; risk: creates a WorkflowMax client record; approval
+  required.
+- `update_client`: PUT `/v2/clients/{{ record.uuid }}` - kind `update`; body type `json`; path
+  fields `uuid`; required record fields `uuid`; accepted fields `clientManagerUUID`, `email`,
+  `exportCode`, `favorite`, `firstName`, `jobManagerUUID`, `lastName`, `name`, `phone`,
+  `referralSource`, `uuid`, `website`; risk: updates a WorkflowMax client record; approval required.
+- `delete_client`: DELETE `/v2/clients/{{ record.uuid }}` - kind `delete`; body type `none`; path
+  fields `uuid`; required record fields `uuid`; accepted fields `uuid`; risk: permanently deletes a
+  WorkflowMax client record; approval required.
+- `create_job`: POST `/v2/jobs` - kind `create`; body type `json`; required record fields
+  `clientUUID`, `jobName`, `statusUUID`, `startDate`, `dueDate`, `priority`; accepted fields
+  `budget`, `clientManagerUUID`, `clientOrderNumber`, `clientUUID`, `contactUUID`, `description`,
+  `dueDate`, `jobCategoryUUID`, `jobManagerUUID`, `jobName`, `jobNumber`, `priority`, `startDate`,
+  `statusUUID`; risk: creates a WorkflowMax job; approval required.
+- `delete_job`: DELETE `/v2/jobs/{{ record.uuid }}` - kind `delete`; body type `none`; path fields
+  `uuid`; required record fields `uuid`; accepted fields `uuid`; risk: permanently deletes a
+  WorkflowMax job; approval required.
+- `create_client_contact`: POST `/v2/clients/contacts` - kind `create`; body type `json`; required
+  record fields `firstName`; accepted fields `email`, `favourite`, `firstName`, `lastName`,
+  `mobile`, `phone`, `salutation`; risk: creates a WorkflowMax client-contact record (not attached
+  to any client until linked); approval required.
+- `update_client_contact`: PUT `/v2/clients/contacts/{{ record.uuid }}` - kind `update`; body type
+  `json`; path fields `uuid`; required record fields `uuid`; accepted fields `email`, `firstName`,
+  `lastName`, `mobile`, `phone`, `uuid`; risk: updates a WorkflowMax client-contact record; approval
+  required.
+- `delete_client_contact`: DELETE `/v2/clients/contacts/{{ record.uuid }}` - kind `delete`; body
+  type `none`; path fields `uuid`; required record fields `uuid`; accepted fields `uuid`; risk:
+  permanently deletes a WorkflowMax client-contact record; approval required.
 
 ## Known limits
 
-- **Legacy's paths did not correspond to the real API.** Legacy's `GET /jobs`, `GET /clients`, and
-  `GET /contacts` (no `/v2` prefix, no `account-id` header) do not match any endpoint in
-  WorkflowMax's real, currently-documented v2 API — the real v2 surface requires `/v2/<resource>`
-  paths and a mandatory `account-id` header, and has no bare `GET /contacts` at all. This Pass B
-  pass corrects the bundle to the real, working v2 surface (documented above) rather than
-  preserving legacy's non-functional paths; this is a genuine bug-fix, not a parity-narrowing
-  deviation, since legacy's original paths would 404/401 against the real live API.
-- **`page_size`/`max_pages` config-driven per-request overrides are not modeled.** The engine's
-  `page_number` paginator reads `page_size`/`max_pages` from the static `streams.json`
-  pagination block only, so the bundle uses legacy's default `pageSize=100` and one-page cap and
-  does not declare ignored runtime config keys for those overrides.
-- **`updated_since` is a plain optional filter, not a stateful `incremental` block** — see Streams
-  notes above for the reasoning; a future pass could add a real `incremental` block once a stable
-  per-item cursor field is confirmed in the live response shape.
-- **Client contacts have no list/sync stream** (see Streams notes above) — only get-by-id (used
-  internally to validate updates) and the three write actions are covered; a bare contacts list
-  simply does not exist in the real API.
-- The remaining real WorkflowMax v2 surface (staff, billable tasks, costs, custom fields/rates,
-  leads, quotes, quote-variations, invoices, payments, purchase orders, suppliers/supplier-contacts,
-  timesheets, capacity-plan, and all binary document-upload endpoints) is out of scope for this
-  migration; see `api_surface.json`'s `excluded` entries for the full per-endpoint accounting.
+- Batch defaults: read_page_size=100.
+- API coverage includes 2 stream-backed endpoint group(s), 8 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=8, duplicate_of=6, non_data_endpoint=3, out_of_scope=83.

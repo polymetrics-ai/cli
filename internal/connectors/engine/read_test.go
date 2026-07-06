@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"reflect"
 	"strconv"
 	"sync"
 	"testing"
@@ -1090,6 +1091,81 @@ func TestReadComputedFieldsCoalescePreservesNativeType(t *testing.T) {
 	}
 	if _, ok := recs[3]["best_count"]; ok {
 		t.Fatalf("record 3 best_count = %#v, want omitted when every coalesce path is absent/null", recs[3]["best_count"])
+	}
+}
+
+func TestApplyComputedFieldsCoalesceSkipsOnlyEmptyStrings(t *testing.T) {
+	tests := []struct {
+		name     string
+		raw      map[string]any
+		template string
+		want     any
+		wantSet  bool
+	}{
+		{
+			name:     "empty string falls through",
+			raw:      map[string]any{"first": "", "second": "fallback"},
+			template: "{{ coalesce record.first record.second }}",
+			want:     "fallback",
+			wantSet:  true,
+		},
+		{
+			name:     "zero is retained",
+			raw:      map[string]any{"first": 0, "second": "fallback"},
+			template: "{{ coalesce record.first record.second }}",
+			want:     0,
+			wantSet:  true,
+		},
+		{
+			name:     "false is retained",
+			raw:      map[string]any{"first": false, "second": "fallback"},
+			template: "{{ coalesce record.first record.second }}",
+			want:     false,
+			wantSet:  true,
+		},
+		{
+			name:     "empty array is retained",
+			raw:      map[string]any{"first": []any{}, "second": "fallback"},
+			template: "{{ coalesce record.first record.second }}",
+			want:     []any{},
+			wantSet:  true,
+		},
+		{
+			name:     "empty object is retained",
+			raw:      map[string]any{"first": map[string]any{}, "second": "fallback"},
+			template: "{{ coalesce record.first record.second }}",
+			want:     map[string]any{},
+			wantSet:  true,
+		},
+		{
+			name:     "all absent null or empty string omits field",
+			raw:      map[string]any{"first": "", "second": nil},
+			template: "{{ coalesce record.missing record.first record.second }}",
+			wantSet:  false,
+		},
+		{
+			name:     "missing nested path falls through",
+			raw:      map[string]any{"type": map[string]any{"id": "container"}, "fallback": "name"},
+			template: "{{ coalesce record.type.name record.fallback }}",
+			want:     "name",
+			wantSet:  true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			projected := map[string]any{"chosen": "stale"}
+			if err := applyComputedFields(projected, tt.raw, nil, map[string]string{"chosen": tt.template}); err != nil {
+				t.Fatalf("applyComputedFields: %v", err)
+			}
+			got, ok := projected["chosen"]
+			if ok != tt.wantSet {
+				t.Fatalf("chosen presence = %v, want %v (value %#v)", ok, tt.wantSet, got)
+			}
+			if tt.wantSet && !reflect.DeepEqual(got, tt.want) {
+				t.Fatalf("chosen = %#v (%T), want %#v (%T)", got, got, tt.want, tt.want)
+			}
+		})
 	}
 }
 

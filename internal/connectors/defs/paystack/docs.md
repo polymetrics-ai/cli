@@ -1,53 +1,76 @@
 # Overview
 
-Paystack is a read-only declarative-HTTP connector for the Paystack REST API. It reads customers,
-transactions, subscriptions, invoices (payment requests), and disputes. This bundle migrates
-`internal/connectors/paystack` (the hand-written connector); the legacy package stays registered
-and unchanged until wave6's registry flip.
+Reads Paystack customers, transactions, subscriptions, invoices, and disputes through the Paystack
+REST API.
+
+Readable streams: `customers`, `transactions`, `subscriptions`, `invoices`, `disputes`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://paystack.com/docs/api/.
 
 ## Auth setup
 
-Provide a Paystack secret key (`sk_...`) via the `secret_key` secret; it is used only for Bearer
-auth (`Authorization: Bearer <secret_key>`) and is never logged.
+Connection fields:
+
+- `base_url` (optional, string); default `https://api.paystack.co`; format `uri`; Paystack API base
+  URL override for tests or proxies.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-100).
+- `secret_key` (required, secret, string); Paystack secret key (sk_...). Used only for Bearer auth;
+  never logged.
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; sent as the `from`
+  filter on a fresh sync with no persisted cursor.
+
+Secret fields are redacted in logs and write previews: `secret_key`.
+
+Default configuration values: `base_url=https://api.paystack.co`, `max_pages=0`, `page_size=100`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.secret_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/customer` with query `perPage`=`1`.
 
 ## Streams notes
 
-All 5 streams (`customers`, `transactions`, `subscriptions`, `invoices`, `disputes`) share the same
-shape: `GET` against the Paystack list endpoint (`/customer`, `/transaction`, `/subscription`,
-`/paymentrequest`, `/dispute`), records at `data`, primary key `["id"]` (a bare JSON integer,
-matching Paystack's real wire shape — `id` and `createdAt`-derived cursors keep their real types,
-not stringified), incremental cursor field `createdAt`. Pagination follows Paystack's
-`meta.next`-page-number convention (`pagination.type: cursor` with `cursor_param: page` and
-`token_path: meta.next`): the next request's `page` query param is read verbatim from the response
-body's `meta.next` field (an integer page number, or `null` on the last page — `null` resolves to
-an empty token via the engine's `StringAt` extraction, which stops pagination exactly like
-legacy's `parseNextPage("null") -> false`). Every request sends the configured `perPage`
-(`config.page_size`, default `100`, matching legacy's `paystackDefaultPageSize`/
-`paystackMaxPageSize`, both 100). Incremental reads send a `from` query param carrying the RFC3339
-lower bound (persisted cursor, or the `start_date` config on a fresh sync) via the engine's
-`stream.Query` optional-query dialect (`omit_when_absent: true`) — present only when a lower bound
-resolves, matching legacy's `incrementalLowerBound` exactly (legacy sends `from` verbatim as
-RFC3339, no unit conversion, so no `param_format` override is declared).
+Default pagination: cursor pagination; cursor parameter `page`; next token from `meta.next`.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `customers`: GET `/customer` - records path `data`; query `from` from template `{{
+  incremental.lower_bound }}`, omitted when absent; `perPage`=`{{ config.page_size }}`; cursor
+  pagination; cursor parameter `page`; next token from `meta.next`; incremental cursor `createdAt`;
+  formatted as `rfc3339`; initial lower bound from `start_date`.
+- `transactions`: GET `/transaction` - records path `data`; query `from` from template `{{
+  incremental.lower_bound }}`, omitted when absent; `perPage`=`{{ config.page_size }}`; cursor
+  pagination; cursor parameter `page`; next token from `meta.next`; incremental cursor `createdAt`;
+  formatted as `rfc3339`; initial lower bound from `start_date`.
+- `subscriptions`: GET `/subscription` - records path `data`; query `from` from template `{{
+  incremental.lower_bound }}`, omitted when absent; `perPage`=`{{ config.page_size }}`; cursor
+  pagination; cursor parameter `page`; next token from `meta.next`; incremental cursor `createdAt`;
+  formatted as `rfc3339`; initial lower bound from `start_date`.
+- `invoices`: GET `/paymentrequest` - records path `data`; query `from` from template `{{
+  incremental.lower_bound }}`, omitted when absent; `perPage`=`{{ config.page_size }}`; cursor
+  pagination; cursor parameter `page`; next token from `meta.next`; incremental cursor `createdAt`;
+  formatted as `rfc3339`; initial lower bound from `start_date`.
+- `disputes`: GET `/dispute` - records path `data`; query `from` from template `{{
+  incremental.lower_bound }}`, omitted when absent; `perPage`=`{{ config.page_size }}`; cursor
+  pagination; cursor parameter `page`; next token from `meta.next`; incremental cursor `createdAt`;
+  formatted as `rfc3339`; initial lower bound from `start_date`.
 
 ## Write actions & risks
 
-Not applicable — this connector is read-only (`capabilities.write: false`), matching legacy
-exactly (legacy's own doc comment: "the API has no obviously-safe reverse-ETL write actions for the
-core streams").
+This connector is read-only. Read behavior: external Paystack API read of customer and payment data.
 
 ## Known limits
 
-- Full Paystack API surface (transfers, refunds, plans, products, settlements) is out of scope for
-  this wave; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B
-  capability expansion"}` entries.
-- Documented parity deviation: legacy's `harvest` loop falls back to a short-page stop check
-  (`len(records) < pageSize`) ONLY when `meta.next` is absent/unparseable — a defensive path for a
-  malformed or undocumented response shape. This bundle's `cursor`+`token_path` paginator relies
-  solely on `meta.next` (present on every real Paystack list response per its documented API
-  contract, and on every fixture page in this bundle) and does not reproduce the short-page
-  fallback, since the declarative pagination dialect's `token_path` variant has no secondary
-  short-page stop condition. This never changes emitted data for any input Paystack's documented,
-  well-formed API actually returns (the two stop conditions coincide for every conforming
-  response); it would only diverge if Paystack's real API ever omitted `meta.next` on a full page,
-  which its documented contract does not allow. See `docs/migration/conventions.md`'s
-  parity-deviation ledger.
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  non_data_endpoint=1, out_of_scope=4.

@@ -20,7 +20,7 @@
       "records": { "path": "channel.item" },
       "incremental": { "cursor_field": "published_at" },
       "schema": "schemas/items.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GET + custom RSS/XML decode via encoding/xml — the engine's declarative read path only decodes JSON response bodies, connectorgen validate/engine/read.go has no XML support); hook-covered, proven live by internal/connectors/hooks/rss/hooks_test.go and internal/connectors/paritytest/rss/parity_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GET + custom RSS/XML decode via encoding/xml — the engine's declarative read path only decodes JSON response bodies, connectorgen validate/engine/read.go has no XML support); hook-covered, proven live by internal/connectors/hooks/rss/hooks_test.go and archived parity evidence for rss" }
     },
     {
       "name": "channel",
@@ -28,7 +28,7 @@
       "path": "",
       "records": { "path": "channel" },
       "schema": "schemas/channel.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GET + custom RSS/XML decode via encoding/xml — the engine's declarative read path only decodes JSON response bodies); hook-covered, proven live by internal/connectors/hooks/rss/hooks_test.go and internal/connectors/paritytest/rss/parity_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GET + custom RSS/XML decode via encoding/xml — the engine's declarative read path only decodes JSON response bodies); hook-covered, proven live by internal/connectors/hooks/rss/hooks_test.go and archived parity evidence for rss" }
     }
   ]
 }

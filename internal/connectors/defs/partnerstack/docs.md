@@ -1,45 +1,60 @@
 # Overview
 
-PartnerStack is a read-only declarative-HTTP connector for the PartnerStack REST API v2. It reads
-partnerships, customers, transactions, and groups. This bundle migrates
-`internal/connectors/partnerstack` (the hand-written connector); the legacy package stays
-registered and unchanged until wave6's registry flip.
+Reads PartnerStack partnerships, customers, transactions, and groups through the REST API.
+
+Readable streams: `partnerships`, `customers`, `transactions`, `groups`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.partnerstack.com/docs/api-overview.
 
 ## Auth setup
 
-Provide a PartnerStack API key via the `api_key` secret; it is used only for Bearer auth
-(`Authorization: Bearer <api_key>`) and is never logged.
+Connection fields:
+
+- `api_key` (required, secret, string); PartnerStack API key. Used only for Bearer auth; never
+  logged.
+- `base_url` (optional, string); default `https://api.partnerstack.com/api/v2`; format `uri`;
+  PartnerStack API base URL override for tests or proxies.
+- `limit` (optional, string); default `100`; Records per page (1-250).
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.partnerstack.com/api/v2`, `limit=100`,
+`max_pages=0`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/partnerships` with query `limit`=`1`.
 
 ## Streams notes
 
-All 4 streams (`partnerships`, `customers`, `transactions`, `groups`) share the identical shape:
-`GET` against the PartnerStack list endpoint, records at `data`, primary key `["id"]`. Pagination
-follows PartnerStack's cursor-token convention (`pagination.type: cursor` with
-`cursor_param: cursor` and `token_path: pagination.next`): the next page's `cursor` query param is
-read from the response body's `pagination.next` field, and pagination stops when that field is
-absent or empty — identical to legacy's `harvestCursor` loop. Every request sends the configured
-`limit` (`config.limit`, default `100`, matching legacy's `partnerStackDefaultLimit`; legacy caps
-this at 250, documented here as an operator-enforced bound since the engine does not itself
-validate config value ranges). Every stream carries `created_at` as its catalog cursor field
-(matching legacy's `CursorFields`), but — matching legacy exactly — no stream declares a
-server-side incremental filter: legacy's `Read` never sends a date-range filter regardless of
-`req.State`, so no `incremental` block is declared in `streams.json` either (declaring one would
-add filtering behavior legacy never had).
+Default pagination: cursor pagination; cursor parameter `cursor`; next token from `pagination.next`.
+
+- `partnerships`: GET `/partnerships` - records path `data`; query `limit`=`{{ config.limit }}`;
+  cursor pagination; cursor parameter `cursor`; next token from `pagination.next`.
+- `customers`: GET `/customers` - records path `data`; query `limit`=`{{ config.limit }}`; cursor
+  pagination; cursor parameter `cursor`; next token from `pagination.next`.
+- `transactions`: GET `/transactions` - records path `data`; query `limit`=`{{ config.limit }}`;
+  cursor pagination; cursor parameter `cursor`; next token from `pagination.next`.
+- `groups`: GET `/groups` - records path `data`; query `limit`=`{{ config.limit }}`; cursor
+  pagination; cursor parameter `cursor`; next token from `pagination.next`.
 
 ## Write actions & risks
 
-Not applicable — this connector is read-only (`capabilities.write: false`), matching legacy
-exactly.
+This connector is read-only. Read behavior: external PartnerStack API read of partnership and
+referral-customer data.
 
 ## Known limits
 
-- Full PartnerStack API surface (rewards, leads, deals, links, custom fields) is out of scope for
-  this wave; see `api_surface.json`'s `excluded: {category: out_of_scope, reason: "Pass B
-  capability expansion"}` entries.
-- No incremental sync mode is wired for any stream (see Streams notes) — this mirrors legacy's own
-  full-refresh-only behavior, not a capability gap introduced by migration.
-- Legacy validates `limit` is between 1 and 250 and `max_pages` is a non-negative integer or
-  `all`/`unlimited` at read time; this bundle's `spec.json` declares the same defaults but the
-  engine does not perform bundle-declared numeric-range validation, so an out-of-range `limit`
-  would be sent to the API as-is rather than rejected client-side before the request. This does not
-  change accepted-input behavior for any value legacy itself would accept.
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=3.

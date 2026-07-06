@@ -41,7 +41,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-slot="button"
         type={asChild ? undefined : type}
         className={cn(
-          'inline-flex shrink-0 items-center justify-center border font-square font-semibold uppercase tracking-normal transition-colors outline-none',
+          'inline-flex shrink-0 items-center justify-center border font-mono font-medium uppercase tracking-wider transition-colors outline-none',
           'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-cta-primary',
           'disabled:pointer-events-none disabled:opacity-50',
           '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-3.5',

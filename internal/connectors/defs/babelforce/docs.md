@@ -1,20 +1,65 @@
 # Overview
 
-Babelforce is a Tier-2 quarantine migration of `internal/connectors/babelforce`. The bundle mirrors the legacy catalog stream names, primary keys, cursor fields, and field list; the runtime read/check behavior is owned by `internal/connectors/hooks/babelforce` during the pre-cutover period.
+Reads Babelforce call reporting, recordings, numbers, and users through the Babelforce v2 REST API.
+
+Readable streams: `calls`, `calls_extended`, `recordings`, `numbers`, `users`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://api.babelforce.com/.
 
 ## Auth setup
 
-Use the same configuration and secret names accepted by the legacy `babelforce` connector. Secret-shaped fields are marked with `x-secret` in `spec.json`; the hook delegates to the legacy connector so credential handling remains unchanged and secret values are never logged by the bundle.
+Connection fields:
+
+- `access_key_id` (required, secret, string); The Babelforce access key ID.
+- `access_token` (required, secret, string); The Babelforce access token.
+- `base_url` (optional, string).
+- `date_created_from` (optional, string); Timestamp in Unix the replication from Babelforce API will
+  start from. For example 1651363200 which corresponds to 2022-05-01 00:00:00.
+- `date_created_to` (optional, string); Timestamp in Unix the replication from Babelforce will be up
+  to. For example 1651363200 which corresponds to 2022-05-01 00:00:00.
+- `mode` (optional, string).
+- `region` (required, string); Babelforce region.
+
+Secret fields are redacted in logs and write previews: `access_key_id`, `access_token`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks use a connector-managed request.
 
 ## Streams notes
 
-The declared streams are static shadows used for schema, catalog, and surface validation. The Tier-2 hook handles reads and checks by calling the legacy connector, preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The declarative paths under `/__legacy_hook/` are not live API endpoints.
+Default pagination: single request; no pagination.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `calls`: GET connector-managed request path - records path `data`; incremental cursor
+  `dateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `calls_extended`: GET connector-managed request path - records path `data`; incremental cursor
+  `dateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `recordings`: GET connector-managed request path - records path `data`; incremental cursor
+  `dateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `numbers`: GET connector-managed request path - records path `data`; incremental cursor
+  `dateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `users`: GET connector-managed request path - records path `data`; incremental cursor
+  `dateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
 
 ## Write actions & risks
 
-None. This migration preserves the legacy read-only surface and does not add reverse-ETL actions.
+This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- This is a quarantine bridge: hook code currently depends on `internal/connectors/babelforce` staying present until the wave 6 cutover replaces or absorbs the delegated behavior.
-- Dynamic conformance replay is skipped because the declarative shadow path does not model the connector-specific auth, request body, pagination, or record explosion that caused quarantine; hook unit tests and legacy connector tests are the behavioral proof for this bridge.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Client-side incremental filtering is used for: `calls`, `calls_extended`, `recordings`, `numbers`,
+  `users`.

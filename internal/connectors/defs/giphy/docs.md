@@ -1,57 +1,72 @@
 # Overview
 
-Giphy is a read-only declarative-HTTP connector migrated from `internal/connectors/giphy` (legacy
-wave2 fan-out). It reads GIFs, stickers, and clips from the Giphy search and trending REST
-endpoints. This bundle is capability-parity with the legacy hand-written connector; the legacy
-package stays registered and unchanged until wave6's registry flip.
+Reads GIFs, stickers, and clips from the Giphy search and trending REST endpoints. Read-only.
+
+Readable streams: `gif_search`, `sticker_search`, `clip_search`, `trending_gifs`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developers.giphy.com/docs/api/.
 
 ## Auth setup
 
-Provide a Giphy API key via the `api_key` secret; it is sent as the `api_key` query parameter on
-every request (`auth: [{"mode": "api_key_query", "param": "api_key", ...}]`) and is never logged.
-`base_url` defaults to `https://api.giphy.com/v1` and may be overridden for tests or proxies.
+Connection fields:
+
+- `api_key` (required, secret, string); Giphy API key. Sent as the api_key query parameter on every
+  request; never logged.
+- `base_url` (optional, string); default `https://api.giphy.com/v1`; format `uri`; Giphy API base
+  URL override for tests or proxies.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `25`; Records per page (1-50; Giphy caps limit at 50).
+- `query_for_clips` (optional, string); Search terms for the clip_search stream (required for that
+  stream).
+- `query_for_gif` (optional, string); Search terms for the gif_search stream (required for that
+  stream).
+- `query_for_stickers` (optional, string); Search terms for the sticker_search stream (required for
+  that stream).
+- `rating` (optional, string); Optional content rating filter (y, g, pg, pg-13, r) applied to every
+  search/trending request.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.giphy.com/v1`, `max_pages=0`, `page_size=25`.
+
+Authentication behavior:
+
+- API key authentication in query parameter `api_key` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/gifs/trending` with query `limit`=`1`.
 
 ## Streams notes
 
-4 streams: `gif_search` (`GET /gifs/search`), `sticker_search` (`GET /stickers/search`),
-`clip_search` (`GET /clips/search`), and `trending_gifs` (`GET /gifs/trending`). All 4 share the
-same record shape (Giphy's media object) and primary key `["id"]`; records live at `data` in every
-response. Pagination is `offset_limit` (`offset`/`limit` query params, default page size 25) —
-Giphy's real stop signal combines a short page AND a `pagination.total_count` bound, but the
-engine's `offset_limit` paginator's short-page stop rule (fewer than `page_size` records returned)
-is the exact SAME primary check legacy's own `harvest` loop applies first (legacy checks the short
-page before consulting `total_count`), so no behavior is lost porting to the declarative paginator.
+Default pagination: offset/limit pagination; offset parameter `offset`; limit parameter `limit`;
+page size 25.
 
-The 3 search streams each require a non-empty search query: `gif_search` reads `query_for_gif`,
-`sticker_search` reads `query_for_stickers`, `clip_search` reads `query_for_clips` — matching
-legacy's per-stream `queryConfigKey`. `trending_gifs` requires no query. An optional `rating`
-config value (content rating filter: y/g/pg/pg-13/r) is sent as a `rating` query param on every
-stream's request when set (`omit_when_absent: true`), omitted entirely otherwise — matching
-legacy's conditional `if rating := ...; rating != "" { base.Set("rating", rating) }`.
-
-Legacy additionally falls back to a generic `query` config key when a stream-specific query key
-(`query_for_gif`/`query_for_stickers`/`query_for_clips`) is unset. The engine's templating dialect
-resolves exactly one config key per field with no fallback-chain primitive, so this bundle declares
-only the stream-specific keys (legacy's primary/first-checked key per stream) in `spec.json`; the
-generic `query` fallback alias is dropped. See Known limits.
+- `gif_search`: GET `/gifs/search` - records path `data`; query `q`=`{{ config.query_for_gif }}`;
+  `rating` from template `{{ config.rating }}`, omitted when absent; offset/limit pagination; offset
+  parameter `offset`; limit parameter `limit`; page size 25.
+- `sticker_search`: GET `/stickers/search` - records path `data`; query `q`=`{{
+  config.query_for_stickers }}`; `rating` from template `{{ config.rating }}`, omitted when absent;
+  offset/limit pagination; offset parameter `offset`; limit parameter `limit`; page size 25.
+- `clip_search`: GET `/clips/search` - records path `data`; query `q`=`{{ config.query_for_clips
+  }}`; `rating` from template `{{ config.rating }}`, omitted when absent; offset/limit pagination;
+  offset parameter `offset`; limit parameter `limit`; page size 25.
+- `trending_gifs`: GET `/gifs/trending` - records path `data`; query `rating` from template `{{
+  config.rating }}`, omitted when absent; offset/limit pagination; offset parameter `offset`; limit
+  parameter `limit`; page size 25.
 
 ## Write actions & risks
 
-None. The Giphy API is a read-only search/trending source with no sensible reverse-ETL target in
-legacy (`capabilities.write: false`, matching exactly); there is no `writes.json`.
+This connector is read-only. Read behavior: external Giphy API read of public media search/trending
+results.
 
 ## Known limits
 
-- Only the 4 legacy-parity read streams are implemented; other Giphy endpoints (get-by-id, random,
-  translate, categories, stickers/clips trending) are out of scope for this migration wave — see
-  `api_surface.json` for concrete exclusion reasons
-  entries.
-- The legacy generic `query` config alias (fallback when a stream-specific query key is unset) is
-  dropped; only the stream-specific keys (`query_for_gif`/`query_for_stickers`/`query_for_clips`)
-  are declared. ACCEPTABLE per the parity-deviation meta-rule: never changes behavior for any
-  caller using the stream-specific key, only removes an alternate generic-key fallback.
-- `gif_search`/`sticker_search`/`clip_search` have no `required` enforcement on their query config
-  key at the `spec.json` level (legacy raises a runtime error only at Read time if the resolved
-  query is empty, not at config-validation time) — the engine's `Interpolate` similarly hard-errors
-  at read time when the referenced `config.query_for_*` key is entirely absent from the caller's
-  RuntimeConfig, matching legacy's runtime (not upfront) enforcement point.
+- Batch defaults: read_page_size=25.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=5.

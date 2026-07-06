@@ -12,25 +12,19 @@
       "tours": [
         {
           "id": "t_fixture_1",
-          "name": "Fixture Tour 1",
-          "style": "auto",
-          "position": 0,
-          "segment_ids": [],
-          "tag_ids": [],
-          "published_at": "2026-01-02T00:00:00Z",
-          "dashboard_url": "https://app.chameleon.io/data/tours/t_fixture_1",
+          "title": "Fixture Tour 1",
+          "type": "tour",
+          "state": "published",
+          "is_live": true,
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-02T00:00:00Z"
         },
         {
           "id": "t_fixture_2",
-          "name": "Fixture Tour 2",
-          "style": "manual",
-          "position": 1,
-          "segment_ids": [],
-          "tag_ids": [],
-          "published_at": "2026-01-03T00:00:00Z",
-          "dashboard_url": "https://app.chameleon.io/data/tours/t_fixture_2",
+          "title": "Fixture Tour 2",
+          "type": "tour",
+          "state": "draft",
+          "is_live": false,
           "created_at": "2026-01-01T00:00:00Z",
           "updated_at": "2026-01-03T00:00:00Z"
         }

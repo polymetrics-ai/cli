@@ -1,141 +1,222 @@
 # Overview
 
-BigMailer is a wave2 fan-out declarative-HTTP migration, expanded to full API-surface coverage
-(reads and writes) in Pass B. It reads BigMailer brands, account users, connections, and
-brand-scoped contacts, lists, custom fields, message types, segments, senders, templates,
-suppression lists, and campaign metadata (bulk/RSS/transactional/test) through the BigMailer REST
-API (`GET https://api.bigmailer.io/v1/<resource>`), and writes brands, contacts, lists, fields,
-message types, segments, senders, templates, and account users. This bundle is migrated from
-`internal/connectors/bigmailer` (the hand-written connector); the legacy package stays registered
-and unchanged until wave6's registry flip. The original 5 legacy streams (`brands`, `users`,
-`contacts`, `lists`, `fields`) use the engine's `fan_out` dialect (S4 engine mini-wave item 2) for
-the 3 brand-scoped substreams — the `ENGINE_GAP` that previously blocked them is closed. Pass B
-adds 10 more streams (`connections` top-level; `message_types`/`segments`/`senders`/`templates`/
-`suppression_lists`/`bulk_campaigns`/`rss_campaigns`/`transactional_campaigns`/`test_campaigns`
-brand-scoped, same `fan_out` shape) and a full `writes.json` (`capabilities.write` flips to
-`true`).
+Reads and writes BigMailer brands, account users, and brand-scoped contacts, lists, custom fields,
+message types, segments, senders, templates, suppression lists, and campaigns through the BigMailer
+REST API.
+
+Readable streams: `brands`, `users`, `contacts`, `lists`, `fields`, `connections`, `message_types`,
+`segments`, `senders`, `templates`, `suppression_lists`, `bulk_campaigns`, `rss_campaigns`,
+`transactional_campaigns`, `test_campaigns`.
+
+Write actions: `create_brand`, `update_brand`, `create_contact`, `update_contact`, `upsert_contact`,
+`delete_contact`, `create_list`, `update_list`, `delete_list`, `create_field`, `update_field`,
+`delete_field`, `create_message_type`, `update_message_type`, `delete_message_type`,
+`create_segment`, `update_segment`, `delete_segment`, `create_sender`, `update_sender`,
+`delete_sender`, `create_template`, `update_template`, `delete_template`, `create_user`,
+`update_user`, `delete_user`.
+
+Service API documentation: https://www.bigmailer.io/api.
 
 ## Auth setup
 
-Provide a BigMailer API key via the `api_key` secret; it is sent as the `X-API-Key` header
-(`streams.json` `base.auth`'s `api_key_header` mode), matching legacy's
-`connsdk.APIKeyHeader(bigmailerAuthHeader, secret, "")` (`bigmailer.go:311`). Never logged.
-`base_url` defaults to `https://api.bigmailer.io/v1` and may be overridden for tests/proxies.
+Connection fields:
+
+- `api_key` (required, secret, string); BigMailer API key, sent as the X-API-Key header. Never
+  logged.
+- `base_url` (optional, string); default `https://api.bigmailer.io/v1`; format `uri`; BigMailer API
+  base URL override for tests or proxies.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.bigmailer.io/v1`.
+
+Authentication behavior:
+
+- API key authentication in `X-API-Key` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/brands` with query `limit`=`1`.
 
 ## Streams notes
 
-`brands` (`GET /brands`) and `users` (`GET /users`) are top-level collections read directly;
-records live at the `data` key, matching legacy's `connsdk.RecordsAt(resp.Body, "data")`. Neither
-stream is incremental — legacy declares no `CursorFields` for either (BigMailer's list API supports
-only cursor pagination, not a time-based incremental filter), and neither schema declares
-`x-cursor-field`.
+Default pagination: cursor pagination; cursor parameter `cursor`; next token from `cursor`; stop
+flag `has_more`.
 
-Pagination is `cursor` (`token_path: cursor`, `stop_path: has_more`): the next page is requested
-with `cursor=<value>` from the response body's `cursor` field, and pagination stops when
-`has_more` is not literally `"true"` OR the returned `cursor` is empty — reproducing legacy's exact
-`hasMore != "true" || strings.TrimSpace(next) == ""` stop rule (`bigmailer.go:187`) via the
-engine's `stop_path`-on-`tokenPathCursor` mechanism (conventions.md §3).
-
-`connections` (`GET /connections`) is a new top-level collection, identical shape to `brands`/
-`users` (records at `data`, `cursor` pagination, no incremental filter — BigMailer's list API
-supports only cursor pagination).
-
-`message_types`, `segments`, `senders`, `templates`, `suppression_lists`, `bulk_campaigns`,
-`rss_campaigns`, `transactional_campaigns`, and `test_campaigns` are new brand-scoped substreams,
-following the identical `fan_out` shape documented below for `contacts`/`lists`/`fields`: list
-every brand id via `GET /brands`, then paginate `GET /brands/{brand_id}/<resource>` once per
-brand, stamping `brand_id` onto every emitted record. The 4 campaign streams
-(`bulk_campaigns`/`rss_campaigns`/`transactional_campaigns`/`test_campaigns`) declare
-`x-cursor-field: created` (a genuine Unix-seconds creation timestamp on every campaign object) but
-no `incremental` block — BigMailer's campaign list endpoints support only cursor pagination, no
-server-side time filter, matching every other stream in this bundle. RSS campaigns' auto-generated
-per-feed-update sub-resource (`GET .../rss-campaigns/{id}/updates`) is not modeled as a further
-fan-out level (`api_surface.json`: `non_data_endpoint` — those records are derived campaign
-instances, not independently authored data).
-
-`contacts`, `lists`, and `fields` are brand-scoped substreams: legacy's `harvestSubstream`
-(`bigmailer.go:195-214`) first lists every brand id (`listBrandIDs`, bounded defensively by
-`bigmailerMaxBrands = 1000`), then paginates `GET /brands/{brand_id}/<resource>` once per brand,
-stamping `brand_id` onto every emitted record. This bundle expresses the identical sequence via
-`streams.json`'s `fan_out` block: `ids_from.request` issues a preliminary `GET /brands` (paginated
-to exhaustion using the SAME base `cursor` pagination spec every other stream uses — the
-id-listing request declares no pagination block of its own, conventions.md §3), extracts `id` off
-every returned brand record, then `into.path_var: "brand_id"` threads each resolved id into
-`/brands/{{ fanout.id }}/<resource>`'s path, and `stamp_field: "brand_id"` writes it onto every
-emitted record after projection — matching legacy's stamped `brand_id` field exactly. The one
-documented, non-blocking divergence: legacy caps the brand-id fan-out at `bigmailerMaxBrands =
-1000` as a defensive bound against a runaway crawl; the engine's `fan_out.ids_from.request` has no
-equivalent cap (only `PaginationSpec.MaxPages`, applied per sub-sequence, not to the id-listing
-request) — an account with more than 1000 brands would fan out over all of them here versus being
-capped at 1000 in legacy. This is accepted as a parity deviation (§5): it never changes emitted
-record DATA for any account legacy itself would fully sync (mid-cap accounts are identical;
-over-cap accounts get MORE data here, never less or wrong), and no such account exists in the
-fixture/conformance surface.
+- `brands`: GET `/brands` - records path `data`; query `limit`=`100`; cursor pagination; cursor
+  parameter `cursor`; next token from `cursor`; stop flag `has_more`.
+- `users`: GET `/users` - records path `data`; query `limit`=`100`; cursor pagination; cursor
+  parameter `cursor`; next token from `cursor`; stop flag `has_more`.
+- `contacts`: GET `/brands/{{ fanout.id }}/contacts` - records path `data`; query `limit`=`100`;
+  cursor pagination; cursor parameter `cursor`; next token from `cursor`; stop flag `has_more`;
+  fan-out; ids from request `/brands`; id-list records path `data`; id field `id`; id inserted into
+  the request path; stamps `brand_id`.
+- `lists`: GET `/brands/{{ fanout.id }}/lists` - records path `data`; query `limit`=`100`; cursor
+  pagination; cursor parameter `cursor`; next token from `cursor`; stop flag `has_more`; fan-out;
+  ids from request `/brands`; id-list records path `data`; id field `id`; id inserted into the
+  request path; stamps `brand_id`.
+- `fields`: GET `/brands/{{ fanout.id }}/fields` - records path `data`; query `limit`=`100`; cursor
+  pagination; cursor parameter `cursor`; next token from `cursor`; stop flag `has_more`; fan-out;
+  ids from request `/brands`; id-list records path `data`; id field `id`; id inserted into the
+  request path; stamps `brand_id`.
+- `connections`: GET `/connections` - records path `data`; query `limit`=`100`; cursor pagination;
+  cursor parameter `cursor`; next token from `cursor`; stop flag `has_more`.
+- `message_types`: GET `/brands/{{ fanout.id }}/message-types` - records path `data`; query
+  `limit`=`100`; cursor pagination; cursor parameter `cursor`; next token from `cursor`; stop flag
+  `has_more`; fan-out; ids from request `/brands`; id-list records path `data`; id field `id`; id
+  inserted into the request path; stamps `brand_id`.
+- `segments`: GET `/brands/{{ fanout.id }}/segments` - records path `data`; query `limit`=`100`;
+  cursor pagination; cursor parameter `cursor`; next token from `cursor`; stop flag `has_more`;
+  fan-out; ids from request `/brands`; id-list records path `data`; id field `id`; id inserted into
+  the request path; stamps `brand_id`.
+- `senders`: GET `/brands/{{ fanout.id }}/senders` - records path `data`; query `limit`=`100`;
+  cursor pagination; cursor parameter `cursor`; next token from `cursor`; stop flag `has_more`;
+  fan-out; ids from request `/brands`; id-list records path `data`; id field `id`; id inserted into
+  the request path; stamps `brand_id`.
+- `templates`: GET `/brands/{{ fanout.id }}/templates` - records path `data`; query `limit`=`100`;
+  cursor pagination; cursor parameter `cursor`; next token from `cursor`; stop flag `has_more`;
+  fan-out; ids from request `/brands`; id-list records path `data`; id field `id`; id inserted into
+  the request path; stamps `brand_id`.
+- `suppression_lists`: GET `/brands/{{ fanout.id }}/suppression-lists` - records path `data`; query
+  `limit`=`100`; cursor pagination; cursor parameter `cursor`; next token from `cursor`; stop flag
+  `has_more`; fan-out; ids from request `/brands`; id-list records path `data`; id field `id`; id
+  inserted into the request path; stamps `brand_id`.
+- `bulk_campaigns`: GET `/brands/{{ fanout.id }}/bulk-campaigns` - records path `data`; query
+  `limit`=`100`; cursor pagination; cursor parameter `cursor`; next token from `cursor`; stop flag
+  `has_more`; fan-out; ids from request `/brands`; id-list records path `data`; id field `id`; id
+  inserted into the request path; stamps `brand_id`.
+- `rss_campaigns`: GET `/brands/{{ fanout.id }}/rss-campaigns` - records path `data`; query
+  `limit`=`100`; cursor pagination; cursor parameter `cursor`; next token from `cursor`; stop flag
+  `has_more`; fan-out; ids from request `/brands`; id-list records path `data`; id field `id`; id
+  inserted into the request path; stamps `brand_id`.
+- `transactional_campaigns`: GET `/brands/{{ fanout.id }}/transactional-campaigns` - records path
+  `data`; query `limit`=`100`; cursor pagination; cursor parameter `cursor`; next token from
+  `cursor`; stop flag `has_more`; fan-out; ids from request `/brands`; id-list records path `data`;
+  id field `id`; id inserted into the request path; stamps `brand_id`.
+- `test_campaigns`: GET `/brands/{{ fanout.id }}/test-campaigns` - records path `data`; query
+  `limit`=`100`; cursor pagination; cursor parameter `cursor`; next token from `cursor`; stop flag
+  `has_more`; fan-out; ids from request `/brands`; id-list records path `data`; id field `id`; id
+  inserted into the request path; stamps `brand_id`.
 
 ## Write actions & risks
 
-BigMailer's legacy connector was read-only, but Pass B's full-surface research found BigMailer's
-CRUD mutation surface for every covered resource is plain-JSON-bodied and fully dialect-expressible
-— `capabilities.write` now flips to `true` and this bundle ships a full `writes.json`. Every action
-requires operator approval (external mutation) per its own `risk` string:
+Overall write risk: external mutation of BigMailer brands, contacts, lists, custom fields, message
+types, segments, senders, templates, and account users; can send real emails indirectly (e.g. via a
+sender/template referenced by a later campaign) but issues no send action itself.
 
-- `create_brand` / `update_brand` — creates/updates a BigMailer brand (sending identity). Does not
-  itself send email.
-- `create_contact` / `update_contact` / `upsert_contact` / `delete_contact` — full contact CRUD in
-  a brand. `delete_contact` is idempotent (`missing_ok_status: [404]`).
-- `create_list` / `update_list` / `delete_list` — contact list CRUD. Deleting a list does not
-  delete its contacts (BigMailer's own semantics).
-- `create_field` / `update_field` / `delete_field` — custom contact field CRUD.
-- `create_message_type` / `update_message_type` / `delete_message_type` — message-type (unsubscribe
-  category) CRUD.
-- `create_segment` / `update_segment` / `delete_segment` — contact segment CRUD.
-- `create_sender` / `update_sender` / `delete_sender` — sender domain/email identity CRUD. Does not
-  perform DNS verification (see Known limits).
-- `create_template` / `update_template` / `delete_template` — campaign template CRUD.
-- `create_user` / `update_user` / `delete_user` — account user CRUD (invites/removes BigMailer
-  console users, not contacts).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-Every path-parameterized action (all except `create_user`) requires the record to carry `brand_id`
-(and, for update/delete, the resource's own `id`) as ordinary record fields — the engine's
-`path_fields` mechanism excludes them from the request body automatically, matching every other
-two-path-var write in this repo (e.g. webflow's `update_collection_item`).
-
-**Not modeled — see `api_surface.json` for the full per-endpoint breakdown**: campaign
-create/update/send actions (bulk/RSS/transactional/test campaigns) are `destructive_admin` —
-BigMailer campaigns dispatch real outbound email to real recipients once scheduled/sent, and this
-is the one write shape a data-integration connector should never expose without a human explicitly
-composing and reviewing the send in BigMailer's own console. RSS campaign pause/unpause are the
-same class (immediately affects a live recurring send schedule). Contact-batch upload and
-suppression-list upload are `requires_elevated_scope` (multipart file upload, no async-job-polling
-mechanism in the write dialect). Sender/bounce-domain DNS verification are `requires_elevated_scope`
-(external DNS side effects with no data record to write).
+- `create_brand`: POST `/brands` - kind `create`; body type `json`; required record fields `name`,
+  `from_name`, `from_email`, `connection_id`; accepted fields `bounce_danger_percent`,
+  `connection_id`, `contact_limit`, `from_email`, `from_name`, `logo`, `max_soft_bounces`, `name`,
+  `unsubscribe_text`, `url`; risk: external mutation; creates a new BigMailer brand (sending
+  identity); approval required.
+- `update_brand`: POST `/brands/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `bounce_danger_percent`, `connection_id`,
+  `contact_limit`, `from_email`, `from_name`, `id`, `logo`, `max_soft_bounces`, `name`,
+  `unsubscribe_text`, `url`; risk: external mutation; approval required.
+- `create_contact`: POST `/brands/{{ record.brand_id }}/contacts` - kind `create`; body type `json`;
+  path fields `brand_id`; required record fields `brand_id`, `email`; accepted fields `brand_id`,
+  `email`, `field_values`, `list_ids`, `unsubscribe_all`, `unsubscribe_ids`; risk: external
+  mutation; creates a contact in a BigMailer brand; approval required.
+- `update_contact`: POST `/brands/{{ record.brand_id }}/contacts/{{ record.id }}` - kind `update`;
+  body type `json`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `email`, `field_values`, `id`, `list_ids`, `unsubscribe_all`,
+  `unsubscribe_ids`; risk: external mutation; approval required.
+- `upsert_contact`: POST `/brands/{{ record.brand_id }}/contacts/upsert` - kind `upsert`; body type
+  `json`; path fields `brand_id`; required record fields `brand_id`, `email`; accepted fields
+  `brand_id`, `email`, `field_values`, `list_ids`, `unsubscribe_all`, `unsubscribe_ids`; risk:
+  external mutation; creates the contact if the email is new, otherwise updates the existing
+  contact; approval required.
+- `delete_contact`: DELETE `/brands/{{ record.brand_id }}/contacts/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `id`; missing records treated as success for status `404`; risk: permanently
+  removes a contact from a brand; irreversible; approval required.
+- `create_list`: POST `/brands/{{ record.brand_id }}/lists` - kind `create`; body type `json`; path
+  fields `brand_id`; required record fields `brand_id`, `name`; accepted fields `brand_id`, `name`;
+  risk: external mutation; creates a contact list in a BigMailer brand; approval required.
+- `update_list`: POST `/brands/{{ record.brand_id }}/lists/{{ record.id }}` - kind `update`; body
+  type `json`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `id`, `name`; risk: external mutation; approval required.
+- `delete_list`: DELETE `/brands/{{ record.brand_id }}/lists/{{ record.id }}` - kind `delete`; body
+  type `none`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `id`; missing records treated as success for status `404`; risk: permanently
+  removes a list from a brand (contacts in the list are NOT deleted); irreversible; approval
+  required.
+- `create_field`: POST `/brands/{{ record.brand_id }}/fields` - kind `create`; body type `json`;
+  path fields `brand_id`; required record fields `brand_id`, `name`, `type`; accepted fields
+  `brand_id`, `merge_tag_name`, `name`, `sample_value`, `type`; risk: external mutation; creates a
+  custom contact field in a BigMailer brand; approval required.
+- `update_field`: POST `/brands/{{ record.brand_id }}/fields/{{ record.id }}` - kind `update`; body
+  type `json`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `id`, `merge_tag_name`, `name`, `sample_value`; risk: external mutation;
+  approval required.
+- `delete_field`: DELETE `/brands/{{ record.brand_id }}/fields/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `id`; missing records treated as success for status `404`; risk: permanently
+  removes a custom contact field from a brand; irreversible; approval required.
+- `create_message_type`: POST `/brands/{{ record.brand_id }}/message-types` - kind `create`; body
+  type `json`; path fields `brand_id`; required record fields `brand_id`, `name`; accepted fields
+  `brand_id`, `name`; risk: external mutation; creates a message type (unsubscribe category) in a
+  BigMailer brand; approval required.
+- `update_message_type`: POST `/brands/{{ record.brand_id }}/message-types/{{ record.id }}` - kind
+  `update`; body type `json`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`;
+  accepted fields `brand_id`, `id`, `name`; risk: external mutation; approval required.
+- `delete_message_type`: DELETE `/brands/{{ record.brand_id }}/message-types/{{ record.id }}` - kind
+  `delete`; body type `none`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`;
+  accepted fields `brand_id`, `id`; missing records treated as success for status `404`; risk:
+  permanently removes a message type from a brand; irreversible; approval required.
+- `create_segment`: POST `/brands/{{ record.brand_id }}/segments` - kind `create`; body type `json`;
+  path fields `brand_id`; required record fields `brand_id`, `name`, `operator`, `conditions`;
+  accepted fields `brand_id`, `conditions`, `name`, `operator`; risk: external mutation; creates a
+  contact segment in a BigMailer brand; approval required.
+- `update_segment`: POST `/brands/{{ record.brand_id }}/segments/{{ record.id }}` - kind `update`;
+  body type `json`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `conditions`, `id`, `name`, `operator`; risk: external mutation; approval
+  required.
+- `delete_segment`: DELETE `/brands/{{ record.brand_id }}/segments/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `id`; missing records treated as success for status `404`; risk: permanently
+  removes a segment from a brand; irreversible; approval required.
+- `create_sender`: POST `/brands/{{ record.brand_id }}/senders` - kind `create`; body type `json`;
+  path fields `brand_id`; required record fields `brand_id`, `identity`; accepted fields `brand_id`,
+  `identity`, `identity_type`, `share_type`; risk: external mutation; adds a sender domain/email
+  identity to a BigMailer brand; approval required.
+- `update_sender`: POST `/brands/{{ record.brand_id }}/senders/{{ record.id }}` - kind `update`;
+  body type `json`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `id`, `share_type`; risk: external mutation; approval required.
+- `delete_sender`: DELETE `/brands/{{ record.brand_id }}/senders/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `id`; missing records treated as success for status `404`; risk: permanently
+  removes a sender identity from a brand; irreversible; approval required.
+- `create_template`: POST `/brands/{{ record.brand_id }}/templates` - kind `create`; body type
+  `json`; path fields `brand_id`; required record fields `brand_id`, `name`, `type`, `html`;
+  accepted fields `brand_id`, `html`, `name`, `shared_with_account`, `type`; risk: external
+  mutation; creates a campaign template in a BigMailer brand; approval required.
+- `update_template`: POST `/brands/{{ record.brand_id }}/templates/{{ record.id }}` - kind `update`;
+  body type `json`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`; accepted
+  fields `brand_id`, `html`, `id`, `name`, `shared_with_account`, `type`; risk: external mutation;
+  approval required.
+- `delete_template`: DELETE `/brands/{{ record.brand_id }}/templates/{{ record.id }}` - kind
+  `delete`; body type `none`; path fields `brand_id`, `id`; required record fields `brand_id`, `id`;
+  accepted fields `brand_id`, `id`; missing records treated as success for status `404`; risk:
+  permanently removes a template from a brand; irreversible; approval required.
+- `create_user`: POST `/users` - kind `create`; body type `json`; required record fields `email`,
+  `role`; accepted fields `allowed_brands`, `email`, `invitation_message`, `role`; risk: external
+  mutation; invites a new user into the BigMailer account; approval required.
+- `update_user`: POST `/users/{{ record.id }}` - kind `update`; body type `json`; path fields `id`;
+  required record fields `id`; accepted fields `allowed_brands`, `email`, `id`, `role`; risk:
+  external mutation; approval required.
+- `delete_user`: DELETE `/users/{{ record.id }}` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; missing records treated as success for
+  status `404`; risk: permanently removes a user from the BigMailer account; irreversible; approval
+  required.
 
 ## Known limits
 
-- **`contacts`/`lists`/`fields` fan-out has no brand-count cap.** Legacy's `listBrandIDs` bounds
-  the brand-id fan-out at `bigmailerMaxBrands = 1000` as a defensive measure. The engine's
-  `fan_out.ids_from.request` fully paginates the id-listing request to exhaustion with no
-  equivalent cap. Documented parity deviation (§5, ACCEPTABLE): never changes emitted data for any
-  account legacy itself would fully sync; only affects the hypothetical >1000-brand account, where
-  this bundle emits strictly more (never wrong or missing) data than legacy's capped crawl.
-- **`page_size`/`max_pages` config overrides are not modeled.** Legacy exposes `page_size`
-  (1-100, default 100) and `max_pages` (0/all/unlimited default) as config-driven overrides
-  (`bigmailerPageSize`/`bigmailerMaxPages`, `bigmailer.go:344-372`). The engine's `cursor`
-  paginator has no page-size-equivalent knob at all (BigMailer's `limit` query param is a static
-  per-stream `query` literal here, matching stripe's `limit=100` static-query precedent), and
-  `PaginationSpec.MaxPages` is a fixed bundle-time int, never `config.*`-templated
-  (`docs/migration/conventions.md`'s searxng/bitly precedent). `limit=100` (legacy's own default)
-  is baked into each stream's static `query`; neither `page_size` nor `max_pages` is declared in
-  `spec.json` (F6, REVIEW.md).
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only
-  reached when `config.mode == "fixture"`) is a synthetic, non-live-shape fixture generator, not a
-  representation of BigMailer's real wire format for `brands`/`users` — this bundle's schemas and
-  fixtures instead use the real `{data:[...], has_more, cursor}` envelope legacy's live `harvest`
-  path actually decodes.
-- **Every campaign send/lifecycle action, contact-batch upload, suppression-list upload, and
-  sender/bounce-domain DNS verification is out of scope** (`api_surface.json`: `destructive_admin`
-  / `requires_elevated_scope`). See "Write actions & risks" above for the full reasoning per
-  action.
-- **Brand `properties` (an account-configuration key/value namespace) is not modeled as a
-  stream or write surface.** It is settings metadata, not a contact/CRM/campaign data resource
-  meaningfully synced alongside the rest of this bundle.
+- Batch defaults: read_page_size=100.
+- API coverage includes 15 stream-backed endpoint group(s), 27 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=10, duplicate_of=15, non_data_endpoint=2, out_of_scope=5,
+  requires_elevated_scope=6.

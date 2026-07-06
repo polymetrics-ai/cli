@@ -1,65 +1,72 @@
 # Overview
 
-OpenWeather's One Call API 3.0 returns one JSON document per geographic coordinate pair, with
-`current`/`hourly`/`daily`/`alerts` sections. This bundle reads all four sections as four streams
-for a single configured location. It is migrated from `internal/connectors/openweather` (the
-hand-written connector this bundle replaces at parity); the legacy package stays registered and
-unchanged until wave6's registry flip.
+Reads current weather, hourly and daily forecasts, and government alerts for a configured geographic
+location from the OpenWeather One Call API 3.0.
+
+Readable streams: `current`, `hourly`, `daily`, `alerts`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://openweathermap.org/api.
 
 ## Auth setup
 
-Provide an OpenWeather API key via the `appid` secret; it is sent as the `appid` query parameter
-(`auth: [{"mode": "api_key_query", "param": "appid", ...}]`) and is never logged.
+Connection fields:
+
+- `appid` (required, secret, string); OpenWeather API key, sent as the appid query parameter; never
+  logged.
+- `base_url` (optional, string); default `https://api.openweathermap.org/data/3.0`; format `uri`;
+  OpenWeather API base URL override for tests or proxies.
+- `lang` (optional, string); Optional two-letter language code for weather condition text. Absent
+  when unset.
+- `lat` (required, string); Latitude of the location to read (e.g. "33.44").
+- `lon` (required, string); Longitude of the location to read (e.g. "-94.04").
+- `mode` (optional, string).
+- `units` (optional, string); Optional unit system: standard, metric, or imperial. Absent when unset
+  (OpenWeather's own default, standard/Kelvin, applies).
+
+Secret fields are redacted in logs and write previews: `appid`.
+
+Default configuration values: `base_url=https://api.openweathermap.org/data/3.0`.
+
+Authentication behavior:
+
+- API key authentication in query parameter `appid` using `secrets.appid`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/onecall?lat={{ config.lat }}&lon={{ config.lon
+}}&exclude=minutely,hourly,daily,alerts`.
 
 ## Streams notes
 
-Each stream (`current`, `hourly`, `daily`, `alerts`) issues a `GET /onecall?lat=...&lon=...`
-request (no pagination — the One Call endpoint is not paginated) and extracts its section from the
-single response document: `current` is a single object (`records.path: "current"`, one record),
-`hourly`/`daily`/`alerts` are arrays. `lat`/`lon` are required config values stamped onto every
-record via `computed_fields` so rows stay location-identifiable, matching legacy's `annotate`.
-The response-level `timezone` sibling is stamped onto every extracted record via
-`response_fields`, also matching legacy's `annotate`.
-Optional `units` (`standard`/`metric`/`imperial`) and `lang` query parameters are wired via the
-`omit_when_absent` optional-query dialect, matching legacy's conditional `query.Set`. `daily`'s
-nested `temp: {day, min, max}` object is flattened into `temp_day`/`temp_min`/`temp_max` via
-dotted-path `computed_fields` (`{{ record.temp.day }}` etc.), matching legacy's `mapDaily`.
-`dt` (Unix seconds) is both the primary-key tiebreaker and incremental cursor for the three
-time-series streams; `alerts` uses `start` as its cursor, matching legacy's `CursorFields`.
+Default pagination: single request; no pagination.
+
+- `current`: GET `/onecall` - records path `current`; query `lang` from template `{{ config.lang
+  }}`, omitted when absent; `lat`=`{{ config.lat }}`; `lon`=`{{ config.lon }}`; `units` from
+  template `{{ config.units }}`, omitted when absent; computed output fields `lat`, `lon`;
+  response-level fields copied to records `timezone`.
+- `hourly`: GET `/onecall` - records path `hourly`; query `lang` from template `{{ config.lang }}`,
+  omitted when absent; `lat`=`{{ config.lat }}`; `lon`=`{{ config.lon }}`; `units` from template `{{
+  config.units }}`, omitted when absent; computed output fields `lat`, `lon`; response-level fields
+  copied to records `timezone`.
+- `daily`: GET `/onecall` - records path `daily`; query `lang` from template `{{ config.lang }}`,
+  omitted when absent; `lat`=`{{ config.lat }}`; `lon`=`{{ config.lon }}`; `units` from template `{{
+  config.units }}`, omitted when absent; computed output fields `lat`, `lon`, `temp_day`,
+  `temp_max`, `temp_min`; response-level fields copied to records `timezone`.
+- `alerts`: GET `/onecall` - records path `alerts`; query `lang` from template `{{ config.lang }}`,
+  omitted when absent; `lat`=`{{ config.lat }}`; `lon`=`{{ config.lon }}`; `units` from template `{{
+  config.units }}`, omitted when absent; computed output fields `lat`, `lon`; response-level fields
+  copied to records `timezone`.
 
 ## Write actions & risks
 
-None. OpenWeather is a read-only weather API; `capabilities.write` is `false` and no
-`writes.json` is shipped, matching legacy's `ErrUnsupportedOperation` `Write` stub.
+This connector is read-only. Read behavior: external OpenWeather API read of public weather forecast
+data.
 
 ## Known limits
 
-- **Multi-location fan-out is out of scope (documented scope narrowing).** Legacy accepted either
-  a single `lat`/`lon` pair OR a semicolon-separated `locations` list (`"lat1,lon1;lat2,lon2"`),
-  issuing one `/onecall` request per location and emitting records from every location in a single
-  `Read` call. The engine's declarative read path issues exactly one request (or one paginated
-  series of requests) per `Read` call with no config-driven multi-request fan-out primitive — this
-  is exactly the "sub-resource fan-out reads" Tier-2 `StreamHook` trigger named in
-  `docs/migration/conventions.md` §1's Tier-2 table. This bundle instead requires a single `lat`
-  and `lon` (both `required` in `spec.json`); a caller previously configuring exactly one location
-  (the common case, and legacy's own single-location code path) sees byte-identical behavior. A
-  caller relying on the `locations` multi-value convenience must configure one connector instance
-  per location instead (or a future Tier-2 hook wave can add a `StreamHook` for the fan-out without
-  changing this bundle's single-location shape).
-- **`weather[0]`-derived scalar fields (`weather_main`, `weather_description`, `weather_icon`) are
-  dropped from parity (documented scope narrowing, not silently wrong).** Legacy's `addWeather`
-  lifts the first element of the raw `weather` array into three scalar columns on every
-  `current`/`hourly`/`daily` record. The engine's `computed_fields`/schema-projection dialect has
-  no array-index dereference (`resolveRecordPathValue`/`selectPath` walk `map[string]any` only; a
-  dotted path segment into a JSON array is unsupported, confirmed against
-  `internal/connectors/engine/interpolate.go`) — there is no declarative way to reach
-  `record.weather.0.main`. Each stream's schema instead retains the raw `weather` array field
-  verbatim (schema-projection default), preserving 100% of the underlying data (nothing is lost,
-  only the derived scalar convenience columns); a downstream consumer can still recover
-  `weather[0].main`/`.description`/`.icon` from the array. This is an `ENGINE_GAP` candidate (no
-  array-index primitive exists anywhere in the dialect) — if a future engine increment adds one,
-  re-tighten these three fields back in.
-- The wider OpenWeather product surface (5-day/3-hour forecast, air pollution, geocoding,
-  historical weather via `/onecall/timemachine`) is out of scope for this wave; see
-  `api_surface.json`'s `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}`
-  entries.
+- Batch defaults: read_page_size=1.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=5.

@@ -12,20 +12,49 @@ SYNOPSIS
 DESCRIPTION
   Reads Nexio Pay card tokens, payout recipients, spendbacks, payment types, terminals, and the API user via the Nexio REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  api_key (secret)
+  username (secret)
+
+ETL STREAMS
+  card_tokens:
+    primary key: key
+    fields: cardHolderName(), cardType(), createdDate(), currency(), expirationMonth(), expirationYear(), key(), lastFour()
+  recipients:
+    primary key: recipientId
+    fields: createdDate(), currency(), email(), name(), recipientId(), status(), updatedDate()
+  spendbacks:
+    primary key: id
+    fields: amount(), createdDate(), currency(), id(), recipientId(), status()
+  payment_types:
+    primary key: id
+    fields: displayName(), enabled(), id(), name()
+  terminal_list:
+    primary key: terminalId
+    fields: merchantId(), name(), status(), terminalId()
+  user:
+    primary key: accountId
+    fields: accountId(), email(), merchantId(), role(), username()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Nexio Pay API read of card tokens, payout, and account data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

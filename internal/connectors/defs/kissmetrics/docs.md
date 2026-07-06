@@ -1,49 +1,66 @@
 # Overview
 
-Kissmetrics reads products, reports, events, and properties through the Kissmetrics query API
-(`https://query.kissmetrics.io/v3`) using HTTP Basic authentication. This bundle migrates
-`internal/connectors/kissmetrics` (the hand-written connector) to a declarative defs bundle at
-capability parity; the legacy package stays registered and unchanged until wave6's registry flip.
-Kissmetrics exposes a read-only query API, so `capabilities.write` is `false` and this bundle ships
-no `writes.json`.
+Reads Kissmetrics products, reports, events, and properties through the Kissmetrics query API using
+HTTP Basic authentication.
+
+Readable streams: `products`, `reports`, `events`, `properties`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://support.kissmetrics.io/reference.
 
 ## Auth setup
 
-Provide a Kissmetrics API key/username via the `username` config value and its matching secret via
-the `password` secret; both flow only into HTTP Basic auth (`Authorization: Basic
-base64(username:password)`) and the password is never logged, matching legacy's
-`connsdk.Basic(username, password)` wiring exactly. `base_url` defaults to
-`https://query.kissmetrics.io/v3` (legacy's `kissmetricsDefaultBaseURL`).
+Connection fields:
+
+- `base_url` (optional, string); default `https://query.kissmetrics.io/v3`; format `uri`;
+  Kissmetrics query API base URL override for tests or proxies.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `50`; Records per page (1-200).
+- `password` (required, secret, string); Kissmetrics API secret, sent via HTTP Basic auth. Never
+  logged.
+- `product_id` (optional, string); Kissmetrics product (account) id. Required for the reports,
+  events, and properties streams, which are scoped to a single product partition
+  (products/{product_id}/<resource>).
+- `username` (required, string); Kissmetrics API key/username, sent via HTTP Basic auth.
+
+Secret fields are redacted in logs and write previews: `password`.
+
+Default configuration values: `base_url=https://query.kissmetrics.io/v3`, `max_pages=0`,
+`page_size=50`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `config.username`, `secrets.password`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/products` with query `limit`=`1`; `offset`=`0`.
 
 ## Streams notes
 
-The top-level `products` stream lists every product (account) visible to the authenticated user at
-`GET /products`. `reports`, `events`, and `properties` are nested under a product partition
-(`GET /products/{product_id}/<resource>`) and therefore require the `product_id` config value — this
-matches legacy's `streamPath` helper exactly, including using the identical path escaping
-(`url.PathEscape` in legacy; the engine's `InterpolatePath` urlencodes path segments by default).
-Attempting to read a nested stream without `product_id` configured hard-errors, matching legacy's own
-`kissmetrics stream %q requires config product_id` error.
+Default pagination: offset/limit pagination; offset parameter `offset`; limit parameter `limit`;
+page size 50.
 
-All 4 streams share records at the response body's `data` array and `offset_limit` pagination
-(`limit_param: limit`, `offset_param: offset`, `page_size: 50`, matching legacy's
-`kissmetricsDefaultPageSize`/`OffsetPaginator`); the engine stops once a page returns fewer than
-`page_size` records. `max_pages` defaults to `0` (unlimited), matching legacy's `kissmetricsMaxPages`
-default. No stream declares an `incremental` block or `x-cursor-field`: legacy's
-`kissmetricsStreams()` catalog publishes no `CursorFields` for any stream (the API supports full
-refresh only), so this bundle matches that exactly.
+- `products`: GET `/products` - records path `data`; offset/limit pagination; offset parameter
+  `offset`; limit parameter `limit`; page size 50.
+- `reports`: GET `/products/{{ config.product_id }}/reports` - records path `data`; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 50.
+- `events`: GET `/products/{{ config.product_id }}/events` - records path `data`; offset/limit
+  pagination; offset parameter `offset`; limit parameter `limit`; page size 50.
+- `properties`: GET `/products/{{ config.product_id }}/properties` - records path `data`;
+  offset/limit pagination; offset parameter `offset`; limit parameter `limit`; page size 50.
 
 ## Write actions & risks
 
-None. Kissmetrics is a read-only query source for pm; `capabilities.write` is `false` and no
-`writes.json` is shipped, matching legacy's `Write` stub (`connectors.ErrUnsupportedOperation`).
+This connector is read-only. Read behavior: external Kissmetrics query API read of product analytics
+metadata.
 
 ## Known limits
 
-- **`product_id` is a single shared config value, not per-stream.** Legacy's own design has the same
-  limitation: one connector configuration can only scope `reports`/`events`/`properties` reads to one
-  product at a time. Reading multiple products' nested resources requires separate connector
-  configurations, identical to legacy.
-- Full Kissmetrics API surface (report result data, ad-hoc queries) is out of scope for this wave;
-  see `api_surface.json`'s `excluded: {category: out_of_scope}` entries. Only the 4 legacy-parity
-  read streams are implemented.
+- Batch defaults: read_page_size=50.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=2.

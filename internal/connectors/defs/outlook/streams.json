@@ -31,7 +31,7 @@
       "schema": "schemas/messages.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination; the declarative next_url pagination type reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" -- see docs.md's Streams notes); hook-covered, proven live by internal/connectors/paritytest/outlook and internal/connectors/hooks/outlook/hooks_test.go."
+        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination; the declarative next_url pagination type reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" -- see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for outlook and internal/connectors/hooks/outlook/hooks_test.go."
       }
     },
     {
@@ -41,7 +41,7 @@
       "schema": "schemas/mail_folders.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination; the declarative next_url pagination type reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" -- see docs.md's Streams notes); hook-covered, proven live by internal/connectors/paritytest/outlook and internal/connectors/hooks/outlook/hooks_test.go."
+        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination; the declarative next_url pagination type reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" -- see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for outlook and internal/connectors/hooks/outlook/hooks_test.go."
       }
     },
     {
@@ -51,7 +51,7 @@
       "schema": "schemas/events.json",
       "conformance": {
         "skip_dynamic": true,
-        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination; the declarative next_url pagination type reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" -- see docs.md's Streams notes); hook-covered, proven live by internal/connectors/paritytest/outlook and internal/connectors/hooks/outlook/hooks_test.go."
+        "reason": "StreamHook-handled (@odata.nextLink absolute-URL pagination; the declarative next_url pagination type reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" -- see docs.md's Streams notes); hook-covered, proven live by archived parity evidence for outlook and internal/connectors/hooks/outlook/hooks_test.go."
       }
     }
   ]

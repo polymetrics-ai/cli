@@ -1,88 +1,105 @@
 # Overview
 
-Salesloft is a fresh declarative-HTTP migration. It reads Salesloft people, accounts, cadences,
-users, and emails through the Salesloft REST API v2. This bundle is engine-vs-legacy
-parity-tested against `internal/connectors/salesloft` (the hand-written connector it migrates);
-the legacy package stays registered and unchanged until the registry flip. It is read-only:
-`capabilities.write` is `false` and this bundle ships no `writes.json`, matching legacy exactly
-(legacy has no `write.go` and reports `Capabilities.Write: false`).
+Reads Salesloft people, accounts, cadences, users, and emails through the Salesloft REST API v2.
+
+Readable streams: `people`, `accounts`, `cadences`, `users`, `emails`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developers.salesloft.com/docs/api.
 
 ## Auth setup
 
-Salesloft accepts three credential shapes, and legacy tries them in a fixed precedence: an API key
-wins when configured, regardless of what else is present. This bundle's `streams.json` `base.auth`
-candidate list reproduces that exact precedence (declaration order is load-bearing, per
-conventions.md §3's dual-auth rule):
+Connection fields:
 
-1. `api_key` secret, sent as `Authorization: Bearer <api_key>` (`mode: bearer`, `when:
-   {{ secrets.api_key }}`) — tried first, matching legacy's `authenticator()`'s first check.
-2. A full OAuth2 refresh-token-grant triple (`client_id`+`client_secret`+`refresh_token`) — tried
-   second (`mode: custom`, `hook: salesloft`, `when: {{ secrets.refresh_token }}`). The engine's
-   declarative `oauth2_client_credentials` auth mode only performs a `grant_type=client_credentials`
-   exchange, never `grant_type=refresh_token`, so this is a genuine Tier-2 `AuthHook` trigger
-   (token-exchange auth, conventions.md §1); the exchange lives in
-   `internal/connectors/hooks/salesloft/hooks.go` (~290 lines, one hook interface). Unlike
-   Pinterest's token endpoint, Salesloft's authenticates the client via FORM-ENCODED
-   `client_id`/`client_secret` fields, not HTTP Basic — this bundle's hook preserves that exact wire
-   shape. The hook also rotates the refresh token whenever a token response carries a new one
-   (legacy `auth.go:113-116`), and honors a pre-existing `access_token` secret exactly once before
-   any network refresh call when a full OAuth triple is ALSO configured (legacy's `seedToken`
-   behavior, `auth.go:63-69`) — the seed value is read directly from `secrets.access_token`.
-3. A standalone `access_token` secret (no refresh triple configured), sent directly as
-   `Authorization: Bearer <access_token>` (`mode: bearer`, `when: {{ secrets.access_token }}`) —
-   the fallback candidate.
+- `access_token` (optional, secret, string); A Salesloft OAuth2 access token. Used directly as a
+  Bearer token when no api_key is set and no refresh_token+client_id+client_secret triple is
+  configured.
+- `api_key` (optional, secret, string); Salesloft API key, sent as a Bearer token.
+- `base_url` (optional, string); default `https://api.salesloft.com/v2`; format `uri`; Salesloft
+  REST API v2 base URL override for tests or proxies.
+- `client_id` (optional, secret, string); Salesloft OAuth2 client ID, used only in the
+  refresh-token-grant token request form.
+- `client_secret` (optional, secret, string); Salesloft OAuth2 client secret, used only in the
+  refresh-token-grant token request form.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-100).
+- `refresh_token` (optional, secret, string); Long-lived Salesloft OAuth2 refresh token. Exchanged
+  for a short-lived access token at token_url (grant_type=refresh_token) when
+  client_id/client_secret are also configured and no api_key is set.
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; only objects updated at
+  or after this time are read, on a fresh sync with no persisted cursor.
+- `token_url` (optional, string); default `https://accounts.salesloft.com/oauth/token`; format
+  `uri`; Salesloft OAuth2 token endpoint override. MUST be http(s) with a host; the hook fails
+  closed on an invalid value to prevent exfiltrating the refresh token/client secret to an
+  attacker-chosen endpoint.
 
-`base_url` defaults to `https://api.salesloft.com/v2`; `token_url` defaults to
-`https://accounts.salesloft.com/oauth/token`. Both accept an override for tests/proxies and are
-validated as well-formed `http(s)://` URLs with a host before use.
+Secret fields are redacted in logs and write previews: `access_token`, `api_key`, `client_id`,
+`client_secret`, `refresh_token`.
+
+Default configuration values: `base_url=https://api.salesloft.com/v2`, `max_pages=0`,
+`page_size=100`, `token_url=https://accounts.salesloft.com/oauth/token`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.api_key` when `{{ secrets.api_key }}`.
+- Connector-specific authentication using `secrets.refresh_token`, `config.token_url`,
+  `secrets.client_id`, `secrets.client_secret` when `{{ secrets.refresh_token }}`.
+- Bearer token authentication using `secrets.access_token` when `{{ secrets.access_token }}`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/users` with query `per_page`=`1`.
 
 ## Streams notes
 
-All 5 streams share Salesloft's list-endpoint shape: `GET`, records at `data`, page-number
-pagination read from the response body (`pagination.type: cursor` with `token_path:
-metadata.paging.next_page`/`cursor_param: page` — the next page is requested with `?page=<N>`;
-pagination stops when `metadata.paging.next_page` is absent/null, matching legacy's `harvest` loop
-via the SAME `connsdk.StringAt`-based stop-on-empty-token mechanism every `token_path` cursor
-stream uses: a JSON `null` decodes to Go `nil`, which `stringify` renders as `""`). Legacy also
-defensively treats a literal `"0"` next_page as a stop signal; the engine's stock `token_path`
-cursor paginator does not special-case `"0"` as additionally falsy (only empty string stops it) —
-see Known limits.
+Default pagination: cursor pagination; cursor parameter `page`; next token from
+`metadata.paging.next_page`.
 
-`per_page` is sent via each stream's static `{{ config.page_size }}` query template (default `100`,
-matching legacy's `salesloftDefaultPageSize`). Every stream is incremental on `updated_at`
-(`incremental.request_param: updated_at[gte]`, `param_format: rfc3339`, `start_config_key:
-start_date`) — the resolved lower bound (persisted cursor, or `start_date` on a fresh sync) is sent
-verbatim as an RFC3339 string, matching legacy's `incrementalLowerBound`. `sort_by=updated_at` and
-`sort_direction=ASC` are sent in the SAME branch as the incremental filter, via the opt-in
-optional-query dialect's `{{ incremental.lower_bound | const:... }}` pattern (`omit_when_absent:
-true` on both) — present only when the lower bound resolves, matching legacy's `harvest`, which
-sets `updated_at[gte]`/`sort_by`/`sort_direction` together in one `if updatedSince != ""` branch and
-never partially.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-`people` and `accounts` additionally declare `computed_fields` (`account_id`/`owner_id` for
-`people`, `owner_id` for `accounts`) that extract the nested Salesloft relationship object's `id`
-(a bare `{{ record.account.id }}`/`{{ record.owner.id }}` reference — the typed-extraction rule,
-conventions.md §3, preserves the raw integer type), matching legacy's `relationID` helper
-byte-for-byte. `cadences`/`users`/`emails` have no relationship fields to flatten.
+- `people`: GET `/people` - records path `data`; query `per_page`=`{{ config.page_size }}`;
+  `sort_by` from template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent;
+  `sort_direction` from template `{{ incremental.lower_bound | const:ASC }}`, omitted when absent;
+  cursor pagination; cursor parameter `page`; next token from `metadata.paging.next_page`;
+  incremental cursor `updated_at`; sent as `updated_at[gte]`; formatted as `rfc3339`; initial lower
+  bound from `start_date`; computed output fields `account_id`, `owner_id`.
+- `accounts`: GET `/accounts` - records path `data`; query `per_page`=`{{ config.page_size }}`;
+  `sort_by` from template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent;
+  `sort_direction` from template `{{ incremental.lower_bound | const:ASC }}`, omitted when absent;
+  cursor pagination; cursor parameter `page`; next token from `metadata.paging.next_page`;
+  incremental cursor `updated_at`; sent as `updated_at[gte]`; formatted as `rfc3339`; initial lower
+  bound from `start_date`; computed output fields `owner_id`.
+- `cadences`: GET `/cadences` - records path `data`; query `per_page`=`{{ config.page_size }}`;
+  `sort_by` from template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent;
+  `sort_direction` from template `{{ incremental.lower_bound | const:ASC }}`, omitted when absent;
+  cursor pagination; cursor parameter `page`; next token from `metadata.paging.next_page`;
+  incremental cursor `updated_at`; sent as `updated_at[gte]`; formatted as `rfc3339`; initial lower
+  bound from `start_date`.
+- `users`: GET `/users` - records path `data`; query `per_page`=`{{ config.page_size }}`; `sort_by`
+  from template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent;
+  `sort_direction` from template `{{ incremental.lower_bound | const:ASC }}`, omitted when absent;
+  cursor pagination; cursor parameter `page`; next token from `metadata.paging.next_page`;
+  incremental cursor `updated_at`; sent as `updated_at[gte]`; formatted as `rfc3339`; initial lower
+  bound from `start_date`.
+- `emails`: GET `/emails` - records path `data`; query `per_page`=`{{ config.page_size }}`;
+  `sort_by` from template `{{ incremental.lower_bound | const:updated_at }}`, omitted when absent;
+  `sort_direction` from template `{{ incremental.lower_bound | const:ASC }}`, omitted when absent;
+  cursor pagination; cursor parameter `page`; next token from `metadata.paging.next_page`;
+  incremental cursor `updated_at`; sent as `updated_at[gte]`; formatted as `rfc3339`; initial lower
+  bound from `start_date`.
 
 ## Write actions & risks
 
-None. Legacy `internal/connectors/salesloft` is read-only end to end (`Capabilities.Write: false`,
-no `write.go`); `capabilities.write` is `false` here and this bundle ships no `writes.json`.
+This connector is read-only. Read behavior: external Salesloft API read of people, accounts,
+cadences, users, and email data.
 
 ## Known limits
 
-- **`next_page: "0"` as an additional stop signal is not modeled.** Legacy's `harvest` loop stops
-  on `next == "" || next == "0"`; the engine's stock `token_path` cursor paginator stops only on an
-  empty/absent token, not a literal `"0"`. Salesloft's real API returns `next_page: null` (never a
-  literal `0`) on the terminal page in practice — a `0` value would be a nonsensical 0-indexed page
-  number for a 1-based pagination scheme legacy itself never expected to see — so this is a
-  defensive-only divergence with no observed real-world trigger; documented as a parity deviation
-  rather than silently dropped. ACCEPTABLE per conventions.md §5's meta-rule: it never changes
-  emitted record data for any input the real Salesloft API would send.
-- Full Salesloft v2 API surface (calls, meetings, notes, tasks, action items, imports, etc.) is out
-  of scope — legacy itself only ever implemented the 5 streams this bundle migrates; see
-  `api_surface.json`'s `excluded: {category: out_of_scope}` entries.
-- `max_pages` (config) is enforced as a hard request-count cap by the engine's declarative read
-  path independent of page fullness, matching legacy's own `salesloftMaxPages`-driven loop bound
-  (`0`/`all`/`unlimited` all mean unbounded on both sides).
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  non_data_endpoint=1, out_of_scope=6.

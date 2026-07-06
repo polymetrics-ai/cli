@@ -1,9 +1,8 @@
 # Polymetrics Connector Architecture v2 — Design Document
 
 Status: approved (2026-07-02). Program PRD: `docs/plans/universal-programming-loop-prd.md`.
-Validated against `connectors.go`, `manifest.go`, `slug.go`, `catalog.go`, `connsdk/*`, `github/*`,
-`aircall/*`, `registryset/registry_gen.go`, `cmd/registrygen/main.go`, `native_conformance.go`,
-`internal/app/sync_modes.go`, `internal/app/types.go`.
+Validated against `connectors.go`, `defs/*`, `engine/*`, `connsdk/*`, `hooks/*`, `native/*`,
+`conformance/*`, `internal/app/sync_modes.go`, and `internal/app/types.go`.
 
 ## 0. Executive summary
 
@@ -311,7 +310,7 @@ internal/connectors/
   hooks/                 // NEW: per-connector Go hooks, only where needed (~15 dirs)
     github/hooks.go
   native/                // full custom connectors (non-HTTP): postgres, warehouse, file, sample, outbox, ...
-  conformance/           // conformance v2 (replaces native_conformance.go)
+  conformance/           // conformance v2
 cmd/
   connectorgen/          // replaces registrygen + pm-cataloggen: validate | gen | new
 ```
@@ -545,9 +544,7 @@ func NewRegistry() *Registry {
     for _, b := range bundles {
         r.Register(engine.New(b, hooks.For(b.Name)))
     }
-    for _, entry := range registeredFactories() {    // Tier-3 natives override/extend
-        r.Register(entry.factory())
-    }
+    nativeset.RegisterInto(r)                        // Tier-3 natives override/extend explicitly
     return r
 }
 ```
@@ -555,11 +552,12 @@ func NewRegistry() *Registry {
 Deleted from `connectors.go`: `NewLiveRegistry`, `isLiveFactory`, `liveFactoryNamesCache`,
 `RegisterNativeLive`, `nativeLiveNames`, the enabled-catalog-alias loop, `CatalogAliasConnector`.
 **Every loaded connector is live** — the enablement ladder collapses because conformance v2 gates
-merge, not runtime exposure. `RegisterFactory`/`registeredFactories` survive for Tier-3 only.
+merge, not runtime exposure. Tier-3 natives are wired explicitly by `native/nativeset`; the legacy
+process-global `RegisterFactory` path is gone.
 
 ### C.3 Generators
 
-- `cmd/registrygen` → **`cmd/connectorgen`** with three subcommands:
+- `cmd/connectorgen` owns bundle validation and generated hook/native wiring:
   - `validate` — loads every bundle: draft-07-compiles all schemas, resolves every `{{ }}` against
     spec properties, checks `schema` refs exist, PK fields exist in schema, cursor fields exist,
     write `path_fields ⊆ record_schema.required∪properties`, api_surface coverage (§E). Run in CI
@@ -593,7 +591,7 @@ parsing.
 | `catalog_data.json`, `ConnectorDefinitionBySlug`, `ConnectorCatalog()` | delete; replace with `Registry.CatalogEntries()` |
 | `CatalogAliasConnector`, `NativeCatalogConnector`, `native_catalog_connector.go`, `native_port.go` | delete |
 | `RegisterNativeLive`, `NewLiveRegistry`, live-name cache | delete |
-| `registryset/` package + `cmd/registrygen` | delete; replaced by hookset/nativeset + `cmd/connectorgen` |
+| legacy generated registry package/command | delete; replaced by hookset/nativeset + `cmd/connectorgen` |
 | `cmd/pm-cataloggen` | delete |
 | `Manifest`/`ManifestProvider`/`ConfigField`/`SecretField`/`AuthModeSpec`/`PaginationSpec`/`WriteActionSpec` in `manifest.go` | delete; `Definition` replaces |
 | CLI: any `source-`/`destination-` acceptance, `--type source|destination` filters | bare names only; direction filters become `--capability read|write|cdc|query` |
@@ -691,9 +689,8 @@ means enabled.
 porting guide rewrite.
 
 **Removed**: 556 connector Go packages (~250k+ lines), `catalog_data.json`, legacy catalog types,
-`slug.go`, `native_catalog_connector.go`, `native_port.go`, `native_conformance.go`,
-`manifest.go`, `registryset/`, `cmd/registrygen`, `cmd/pm-cataloggen`, live-registry split,
-`ImplementationStatus` ladder.
+legacy name parsing/catalog wrappers, v1 native conformance, legacy generated registry wiring,
+legacy catalog importer, live-registry split, and the `ImplementationStatus` ladder.
 
 **Sequencing** (each phase leaves the tree green): (1) engine + loader + conformance v2 alongside
 legacy; (2) reference ports github/stripe/aircall with engine-vs-legacy parity tests; (3) bulk

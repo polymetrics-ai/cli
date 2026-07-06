@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -72,6 +73,9 @@ func parseEndpoint(raw string) (app.EndpointConfig, error) {
 	}
 	if err := safety.ValidateIdentifier(connector, "connector"); err != nil {
 		return app.EndpointConfig{}, validationErrorf("%v", err)
+	}
+	if err := connectors.RejectLegacyConnectorName(connector); err != nil {
+		return app.EndpointConfig{}, err
 	}
 	if err := safety.ValidateIdentifier(credential, "credential"); err != nil {
 		return app.EndpointConfig{}, validationErrorf("%v", err)

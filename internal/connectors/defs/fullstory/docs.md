@@ -1,94 +1,85 @@
 # Overview
 
-FullStory is a digital-experience analytics platform. This bundle reads FullStory segments, users,
-events, and user-scoped sessions through the FullStory Server API (`https://api.fullstory.com`) and
-can write server-side user attributes and custom events. It migrates
-`internal/connectors/fullstory` (the hand-written legacy connector, which stays registered and
-unchanged until wave6's registry flip) to a declarative bundle and expands the Pass B surface where
-the API shape is ordinary JSON.
+Reads FullStory segments, users, events, and user-scoped sessions; writes server-side user and
+custom event data through the FullStory Server API.
+
+Readable streams: `segments`, `users`, `events`, `sessions`.
+
+Write actions: `create_user`, `update_user`, `create_event`.
+
+Service API documentation: https://developer.fullstory.com/reference.
 
 ## Auth setup
 
-Provide a FullStory API key via the `api_key` secret. It is sent as `Authorization: Basic
-<api_key>` (`auth: [{"mode": "api_key_header", "header": "Authorization", "value": "{{
-secrets.api_key }}", "prefix": "Basic "}]`) — matching legacy's `connsdk.APIKeyHeader("Authorization",
-apiKey, "Basic ")`, i.e. the raw key with a static `"Basic "` prefix, NOT RFC 7617 base64-encoded
-Basic auth. The `api_key` value is never logged. See Known limits for the `uid` secret (declared,
-not wired).
+Connection fields:
+
+- `api_key` (required, secret, string); FullStory API key. Sent as 'Authorization: Basic <api_key>';
+  never logged.
+- `base_url` (optional, string); default `https://api.fullstory.com`; format `uri`; FullStory API
+  base URL override for tests or proxies.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `200`; Records per page (1-1000).
+- `session_email` (optional, string); Optional user email filter for the sessions stream.
+  FullStory's sessions endpoint requires uid and/or email.
+- `session_uid` (optional, string); Optional user uid filter for the sessions stream. FullStory's
+  sessions endpoint requires uid and/or email.
+- `uid` (optional, secret, string); Optional FullStory user id sent as the FS-Uid header. Not
+  currently wired into any request (see docs.md Known limits: the engine's header dialect always
+  hard-errors on an absent secret rather than omitting the header, so an optional secret-sourced
+  header cannot be expressed safely).
+
+Secret fields are redacted in logs and write previews: `api_key`, `uid`.
+
+Default configuration values: `base_url=https://api.fullstory.com`, `max_pages=0`, `page_size=200`.
+
+Authentication behavior:
+
+- API key authentication in `Authorization` with prefix `Basic` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/segments/v2`.
 
 ## Streams notes
 
-Four streams are declared:
+Default pagination: cursor pagination; cursor parameter `pageToken`; next token from
+`next_page_token`.
 
-- `segments` — saved session filters. The legacy connector uses `/segments/v2`; the current
-  FullStory docs publish the same list/get segment family under `/segments/v1`, so
-  `api_surface.json` records both the documented and legacy path forms.
-- `users` — identified users, records at `results`.
-- `events` — captured/custom events, records at `results`.
-- `sessions` — recent session replay URLs for a supplied `session_uid` and/or `session_email`;
-  FullStory documents that this endpoint is user-scoped and returns a single page.
+Pagination by stream: cursor: `segments`, `users`, `events`; none: `sessions`.
 
-All streams are `GET` and emit records from the top-level `results` array. `segments`/`users`
-cursor field is `created`; `events`' cursor field is `event_time` — both informational only,
-matching legacy (FullStory's analytics API supports only full-refresh sync; no `incremental` block
-is declared, so no server-side filter is ever applied). The `sessions` stream has no cursor field
-because it is a point lookup/list for a caller-supplied user identity.
-
-The three legacy streams follow FullStory's `next_page_token`/`pageToken` convention
-(`pagination.type: cursor` with `token_path: next_page_token`, `cursor_param: pageToken`):
-the next page's `pageToken` is read from the current response body's `next_page_token`, and
-pagination stops when that field is empty — identical to legacy's `harvest` loop. Every request
-sends `limit=200` (matches legacy's default `page_size`).
-
-The `sessions` stream overrides pagination to `none`, matching FullStory's own statement that the
-session lookup endpoint does not paginate.
+- `segments`: GET `/segments/v2` - records path `results`; query `limit`=`200`; cursor pagination;
+  cursor parameter `pageToken`; next token from `next_page_token`.
+- `users`: GET `/v2/users` - records path `results`; query `limit`=`200`; cursor pagination; cursor
+  parameter `pageToken`; next token from `next_page_token`.
+- `events`: GET `/v2/events` - records path `results`; query `limit`=`200`; cursor pagination;
+  cursor parameter `pageToken`; next token from `next_page_token`.
+- `sessions`: GET `/v2/sessions` - records path `results`; query `email` from template `{{
+  config.session_email }}`, omitted when absent; `limit`=`200`; `uid` from template `{{
+  config.session_uid }}`, omitted when absent.
 
 ## Write actions & risks
 
-Three write actions are exposed because they are documented as ordinary JSON server-side capture
-operations:
+Overall write risk: creates or updates FullStory server-side user attributes and custom events used
+for analytics segmentation.
 
-- `create_user` — `POST /v2/users`; creates or upserts a FullStory user profile by `uid`.
-- `update_user` — `POST /v2/users/{{ record.id }}`; updates display fields or custom properties
-  for an existing user id.
-- `create_event` — `POST /v2/events`; creates a custom event with optional `user`, `session`, and
-  `properties` objects.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-These writes enrich FullStory analytics dimensions and require the normal reverse-ETL plan,
-preview, and approval flow. Destructive user deletion, async batch/stream imports, and generated
-AI/session-summary endpoints are not exposed as writes; each is explicitly excluded in
-`api_surface.json`.
+- `create_user`: POST `/v2/users` - kind `upsert`; body type `json`; required record fields `uid`;
+  accepted fields `display_name`, `email`, `properties`, `uid`; risk: creates or upserts a FullStory
+  user profile and associated custom user properties.
+- `update_user`: POST `/v2/users/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`; accepted fields `display_name`, `email`, `id`, `properties`;
+  risk: updates a FullStory user profile's display fields or custom properties.
+- `create_event`: POST `/v2/events` - kind `create`; body type `json`; required record fields
+  `name`; accepted fields `name`, `properties`, `session`, `timestamp`, `user`; risk: creates a
+  custom FullStory event that becomes part of analytics/session context.
 
 ## Known limits
 
-- **`uid` secret is declared but NOT wired into any request (documented scope narrowing)**: legacy
-  optionally sends an `FS-Uid` header sourced from the `uid` secret, `DefaultHeaders["FS-Uid"] =
-  uid` only when `uid` is non-empty; when unset (the common case, and the only case any legacy test
-  exercises — no test in `fullstory_test.go` asserts the `FS-Uid` header at all), no header is
-  sent. The engine's header-resolution dialect
-  (`internal/connectors/engine/read.go`'s `classifyHeaderResolutionError`) makes an unresolved
-  `secrets.*` reference in a declared header ALWAYS a hard error — never silently omitted, by
-  design (F4: sending a request unauthenticated instead of failing loudly is the exact failure mode
-  the engine deliberately rejects). There is no dialect mechanism to express "send this header only
-  when this secret happens to be set, otherwise omit it entirely" (unlike `auth`'s `when` clause,
-  which DOES tolerate absent-secret-is-falsy — but `when` only gates `auth` candidates, not
-  arbitrary `streams.json` headers). Declaring `FS-Uid: {{ secrets.uid }}` in `base.headers` would
-  make every read hard-fail whenever `uid` is unset, which is a regression for the overwhelmingly
-  common case; this bundle instead omits the header entirely, matching legacy's own
-  `uid`-unset behavior exactly and diverging only when an operator sets a `uid` (in which case the
-  FS-Uid header would be sent by legacy but not by this bundle). This is an honest, ledgered scope
-  narrowing per `docs/migration/conventions.md` §5, not silently faked; closing it fully would need
-  a dialect extension (an optional per-header `when`/`omit_when_absent` clause mirroring
-  `stream.Query`'s object form) — an `ENGINE_GAP` if `uid` usage becomes load-bearing.
-- No incremental sync: FullStory's REST API has no documented server-side "created/updated since"
-  filter for these endpoints, matching legacy (`InitialState` always returns an empty cursor).
-  `client_filtered` incremental was considered and rejected: adding client-side cursor filtering
-  here would be new behavior legacy never had, not a migration.
-- `sessions` is not a global account-wide session stream. FullStory requires a `uid` and/or
-  `email` query to retrieve recent sessions for one user; this bundle wires optional
-  `session_uid`/`session_email` config values for that documented lookup. Calling the stream
-  without either value will send an unfiltered request and the live API may reject it.
-- Async import/export workflows, raw file downloads, privacy/settings administration, beta
-  element/extraction rule management, and AI-generated context/summary endpoints are enumerated in
-  `api_surface.json` but excluded. They require job polling, binary/download handling, elevated
-  administrative scope, or generated-output semantics beyond this connector's sync/write surface.
+- Batch defaults: read_page_size=200, write_batch_size=1.
+- API coverage includes 4 stream-backed endpoint group(s), 3 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=2, deprecated=2, destructive_admin=4, duplicate_of=7, non_data_endpoint=13,
+  out_of_scope=11, requires_elevated_scope=20.

@@ -76,10 +76,8 @@ var hookRegistry = struct {
 // RegisterHooks registers a hook-set factory under name. It is intended to
 // be called from a hooks/<name> package's init(); the generated
 // hooks/hookset/hookset_gen.go blank-imports each hooks package to run those
-// init() side effects (mirrors connectors.RegisterFactory). Re-registering
-// an existing name overwrites its factory: the most recently registered
-// factory wins, matching connectors.RegisterFactory's documented overwrite
-// semantics.
+// init() side effects. Re-registering an existing name overwrites its factory:
+// the most recently registered factory wins.
 func RegisterHooks(name string, factory func() Hooks) {
 	hookRegistry.mu.Lock()
 	defer hookRegistry.mu.Unlock()
@@ -103,7 +101,7 @@ func HooksFor(name string) Hooks {
 
 // unregisterHooks removes a previously registered hook factory. It exists
 // for test cleanup so process-global registration does not leak between
-// tests (mirrors connectors.unregisterFactory).
+// tests.
 func unregisterHooks(name string) {
 	hookRegistry.mu.Lock()
 	defer hookRegistry.mu.Unlock()

@@ -10,22 +10,48 @@ SYNOPSIS
   pm credentials add <name> --connector jamf-pro [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf Pro REST API using token-based authentication.
+  Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf Pro REST API using Basic-credential token-exchange authentication.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  username
+  password (secret)
+
+ETL STREAMS
+  buildings:
+    primary key: id
+    fields: city(), country(), id(), name(), stateProvince(), streetAddress1(), streetAddress2(), zipPostalCode()
+  departments:
+    primary key: id
+    fields: id(), name()
+  categories:
+    primary key: id
+    fields: id(), name(), priority()
+  scripts:
+    primary key: id
+    fields: categoryId(), categoryName(), id(), info(), name(), notes(), osRequirements(), priority()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Jamf Pro API read of MDM configuration data (buildings, departments, categories, scripts)
+  approval: none; read-only, no reverse-ETL write surface
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

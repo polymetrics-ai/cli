@@ -1,20 +1,62 @@
 # Overview
 
-Bunny, Inc. is a Tier-2 quarantine migration of `internal/connectors/bunny-inc`. The bundle mirrors the legacy catalog stream names, primary keys, cursor fields, and field list; the runtime read/check behavior is owned by `internal/connectors/hooks/bunny-inc` during the pre-cutover period.
+Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, subscriptions) from
+the per-tenant Bunny GraphQL API.
+
+Readable streams: `accounts`, `contacts`, `invoices`, `payments`, `subscriptions`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.bunny.net/reference/bunnynet-api-overview.
 
 ## Auth setup
 
-Use the same configuration and secret names accepted by the legacy `bunny-inc` connector. Secret-shaped fields are marked with `x-secret` in `spec.json`; the hook delegates to the legacy connector so credential handling remains unchanged and secret values are never logged by the bundle.
+Connection fields:
+
+- `apikey` (required, secret, string).
+- `base_url` (optional, string).
+- `mode` (optional, string).
+- `start_date` (optional, string).
+- `subdomain` (required, string); The subdomain specific to your Bunny account or service.
+
+Secret fields are redacted in logs and write previews: `apikey`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks use a connector-managed request.
 
 ## Streams notes
 
-The declared streams are static shadows used for schema, catalog, and surface validation. The Tier-2 hook handles reads and checks by calling the legacy connector, preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The declarative paths under `/__legacy_hook/` are not live API endpoints.
+Default pagination: single request; no pagination.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `accounts`: GET connector-managed request path - records path `data`; incremental cursor
+  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `contacts`: GET connector-managed request path - records path `data`; incremental cursor
+  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `invoices`: GET connector-managed request path - records path `data`; incremental cursor
+  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `payments`: GET connector-managed request path - records path `data`; incremental cursor
+  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `subscriptions`: GET connector-managed request path - records path `data`; incremental cursor
+  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
 
 ## Write actions & risks
 
-None. This migration preserves the legacy read-only surface and does not add reverse-ETL actions.
+This connector is read-only. Read behavior: external Bunny, Inc.
 
 ## Known limits
 
-- This is a quarantine bridge: hook code currently depends on `internal/connectors/bunny-inc` staying present until the wave 6 cutover replaces or absorbs the delegated behavior.
-- Dynamic conformance replay is skipped because the declarative shadow path does not model the connector-specific auth, request body, pagination, or record explosion that caused quarantine; hook unit tests and legacy connector tests are the behavioral proof for this bridge.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Client-side incremental filtering is used for: `accounts`, `contacts`, `invoices`, `payments`,
+  `subscriptions`.

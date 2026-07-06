@@ -10,22 +10,542 @@ SYNOPSIS
   pm credentials add <name> --connector smartsheets [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Smartsheet sheet metadata and rows. Read-only.
+  Reads and writes Smartsheet sheets, rows, folders, reports, dashboards, users, webhooks, attachments, discussions, proofs, update requests, and workspace metadata.
+
+ICON
+  asset: icons/smartsheet.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://smartsheet.redoc.ly/
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  alternate_email_id
+  asset_id
+  asset_type
+  attachment_id
+  automation_rule_id
+  base_url
+  column_id
+  comment_id
+  config_spreadsheet_id
+  contact_id
+  cross_sheet_reference_id
+  discussion_id
+  favorite_id
+  favorite_type
+  field_id
+  folder_id
+  group_id
+  page_size
+  plan_id
+  proof_id
+  report_id
+  row_id
+  sent_update_request_id
+  share_id
+  sheet_id
+  sight_id
+  spreadsheet_id
+  update_request_id
+  user_id
+  webhook_id
+  workspace_id
+  access_token (secret)
+
+ETL STREAMS
+  sheets:
+    primary key: id
+    fields: id(), modifiedAt(), name(), permalink()
+  sheet_rows:
+    primary key: row_id
+    cursor: modified_at
+    fields: cells(), modified_at(), row_id(), row_number(), sheet_id(), sheet_name()
+  contacts:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  contact:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  events:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  favorites:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  favorite:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  folder_metadata:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  folder_children:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  folder_path:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  home_contents:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  groups:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  group:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  home_folders:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  reports:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  report:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  report_path:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  report_publish:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  asset_shares:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  asset_share:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_attachments:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_attachment:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_attachment_versions:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_automation_rules:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_automation_rule:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_columns:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_column:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_comment:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_cross_sheet_references:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_cross_sheet_reference:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_discussions:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_discussion:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_discussion_attachments:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_path:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_proofs:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_proof:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_proof_attachments:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_proof_discussions:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_proof_request_actions:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_proof_versions:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_publish:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_row:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_row_attachments:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_cell_history:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_row_discussions:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_sent_update_requests:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_sent_update_request:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_summary:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_summary_fields:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_update_requests:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_update_request:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  sheet_version:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  dashboards:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  dashboard:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  dashboard_path:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  dashboard_publish:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  users:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  current_user:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  org_sheets:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  user:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  user_alternate_emails:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  user_alternate_email:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  user_plans:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  webhooks:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  webhook:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  workspaces:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  workspace_metadata:
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+  workspace_children:
+    primary key: id
+    fields: createdAt(), data(), email(), enabled(), folders(), id(), items(), modifiedAt(), name(), permalink(), readOnly(), reports(), sheets(), sights(), templates(), title(), type()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+REVERSE ETL ACTIONS
+  add_favorites:
+    endpoint: POST /favorites
+    risk: adds one or more favorites
+  delete_favorite:
+    endpoint: DELETE /favorites/{{ record.favorite_type }}/{{ record.favorite_id }}
+    required fields: favorite_type, favorite_id
+    risk: removes one favorite
+  update_folder:
+    endpoint: PUT /folders/{{ record.folder_id }}
+    required fields: folder_id
+    risk: updates folder metadata
+  copy_folder:
+    endpoint: POST /folders/{{ record.folder_id }}/copy
+    required fields: folder_id
+    risk: copies a folder to a destination
+  create_folder_in_folder:
+    endpoint: POST /folders/{{ record.folder_id }}/folders
+    required fields: folder_id
+    risk: creates a child folder
+  move_folder:
+    endpoint: POST /folders/{{ record.folder_id }}/move
+    required fields: folder_id
+    risk: moves a folder to a destination
+  create_sheet_in_folder:
+    endpoint: POST /folders/{{ record.folder_id }}/sheets
+    required fields: folder_id
+    risk: creates a sheet in a folder
+  create_group:
+    endpoint: POST /groups
+    risk: creates an organization group
+  update_group:
+    endpoint: PUT /groups/{{ record.group_id }}
+    required fields: group_id
+    risk: updates an organization group
+  add_group_members:
+    endpoint: POST /groups/{{ record.group_id }}/members
+    required fields: group_id
+    risk: adds members to a group
+  delete_group_member:
+    endpoint: DELETE /groups/{{ record.group_id }}/members/{{ record.user_id }}
+    required fields: group_id, user_id
+    risk: removes a member from a group
+  create_home_folder:
+    endpoint: POST /home/folders
+    risk: creates a folder in home
+  create_report:
+    endpoint: POST /reports
+    risk: creates a report
+  add_report_columns:
+    endpoint: POST /reports/{{ record.report_id }}/columns
+    required fields: report_id
+    risk: adds columns to a report
+  update_report_definition:
+    endpoint: PUT /reports/{{ record.report_id }}/definition
+    required fields: report_id
+    risk: updates a report definition
+  set_report_publish:
+    endpoint: PUT /reports/{{ record.report_id }}/publish
+    required fields: report_id
+    risk: updates report publish settings
+  add_report_scope:
+    endpoint: POST /reports/{{ record.report_id }}/scope
+    required fields: report_id
+    risk: adds sheets to a report scope
+  remove_report_scope:
+    endpoint: DELETE /reports/{{ record.report_id }}/scope
+    required fields: report_id
+    risk: removes sheets from a report scope
+  create_sheet:
+    endpoint: POST /sheets
+    risk: creates a sheet in the Sheets folder
+  update_sheet:
+    endpoint: PUT /sheets/{{ record.sheet_id }}
+    required fields: sheet_id
+    risk: updates sheet metadata
+  attach_url_to_sheet:
+    endpoint: POST /sheets/{{ record.sheet_id }}/attachments
+    required fields: sheet_id
+    risk: adds a URL attachment to a sheet
+  delete_sheet_attachment:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/attachments/{{ record.attachment_id }}
+    required fields: sheet_id, attachment_id
+    risk: deletes a sheet attachment
+  delete_sheet_attachment_versions:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/attachments/{{ record.attachment_id }}/versions
+    required fields: sheet_id, attachment_id
+    risk: deletes all versions of a sheet attachment
+  update_automation_rule:
+    endpoint: PUT /sheets/{{ record.sheet_id }}/automationrules/{{ record.automation_rule_id }}
+    required fields: sheet_id, automation_rule_id
+    risk: updates an automation rule
+  delete_automation_rule:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/automationrules/{{ record.automation_rule_id }}
+    required fields: sheet_id, automation_rule_id
+    risk: deletes an automation rule
+  add_sheet_columns:
+    endpoint: POST /sheets/{{ record.sheet_id }}/columns
+    required fields: sheet_id
+    risk: adds columns to a sheet
+  update_sheet_column:
+    endpoint: PUT /sheets/{{ record.sheet_id }}/columns/{{ record.column_id }}
+    required fields: sheet_id, column_id
+    risk: updates a sheet column
+  delete_sheet_column:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/columns/{{ record.column_id }}
+    required fields: sheet_id, column_id
+    risk: deletes a sheet column
+  update_comment:
+    endpoint: PUT /sheets/{{ record.sheet_id }}/comments/{{ record.comment_id }}
+    required fields: sheet_id, comment_id
+    risk: edits a comment
+  delete_comment:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/comments/{{ record.comment_id }}
+    required fields: sheet_id, comment_id
+    risk: deletes a comment
+  attach_url_to_comment:
+    endpoint: POST /sheets/{{ record.sheet_id }}/comments/{{ record.comment_id }}/attachments
+    required fields: sheet_id, comment_id
+    risk: adds a URL attachment to a comment
+  copy_sheet:
+    endpoint: POST /sheets/{{ record.sheet_id }}/copy
+    required fields: sheet_id
+    risk: copies a sheet
+  create_cross_sheet_reference:
+    endpoint: POST /sheets/{{ record.sheet_id }}/crosssheetreferences
+    required fields: sheet_id
+    risk: creates cross-sheet references
+  create_sheet_discussion:
+    endpoint: POST /sheets/{{ record.sheet_id }}/discussions
+    required fields: sheet_id
+    risk: creates a sheet discussion
+  delete_sheet_discussion:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/discussions/{{ record.discussion_id }}
+    required fields: sheet_id, discussion_id
+    risk: deletes a sheet discussion
+  create_discussion_comment:
+    endpoint: POST /sheets/{{ record.sheet_id }}/discussions/{{ record.discussion_id }}/comments
+    required fields: sheet_id, discussion_id
+    risk: adds a comment to a discussion
+  move_sheet:
+    endpoint: POST /sheets/{{ record.sheet_id }}/move
+    required fields: sheet_id
+    risk: moves a sheet
+  update_proof:
+    endpoint: PUT /sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}
+    required fields: sheet_id, proof_id
+    risk: updates proof status
+  delete_proof:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}
+    required fields: sheet_id, proof_id
+    risk: deletes a proof
+  create_proof_discussion:
+    endpoint: POST /sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}/discussions
+    required fields: sheet_id, proof_id
+    risk: creates a proof discussion
+  create_proof_request:
+    endpoint: POST /sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}/requests
+    required fields: sheet_id, proof_id
+    risk: creates proof requests
+  delete_proof_requests:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}/requests
+    required fields: sheet_id, proof_id
+    risk: deletes proof requests
+  create_proof_version:
+    endpoint: POST /sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}/versions
+    required fields: sheet_id, proof_id
+    risk: creates a proof version from JSON metadata
+  delete_proof_version:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/proofs/{{ record.proof_id }}/versions
+    required fields: sheet_id, proof_id
+    risk: deletes a proof version
+  set_sheet_publish:
+    endpoint: PUT /sheets/{{ record.sheet_id }}/publish
+    required fields: sheet_id
+    risk: updates sheet publish settings
+  add_sheet_rows:
+    endpoint: POST /sheets/{{ record.sheet_id }}/rows
+    required fields: sheet_id
+    risk: adds rows to a sheet
+  update_sheet_rows:
+    endpoint: PUT /sheets/{{ record.sheet_id }}/rows
+    required fields: sheet_id
+    risk: updates rows in a sheet
+  copy_rows:
+    endpoint: POST /sheets/{{ record.sheet_id }}/rows/copy
+    required fields: sheet_id
+    risk: copies rows to another sheet
+  move_rows:
+    endpoint: POST /sheets/{{ record.sheet_id }}/rows/move
+    required fields: sheet_id
+    risk: moves rows to another sheet
+  attach_url_to_row:
+    endpoint: POST /sheets/{{ record.sheet_id }}/rows/{{ record.row_id }}/attachments
+    required fields: sheet_id, row_id
+    risk: adds a URL attachment to a row
+  create_row_discussion:
+    endpoint: POST /sheets/{{ record.sheet_id }}/rows/{{ record.row_id }}/discussions
+    required fields: sheet_id, row_id
+    risk: creates a row discussion
+  delete_sent_update_request:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/sentupdaterequests/{{ record.sent_update_request_id }}
+    required fields: sheet_id, sent_update_request_id
+    risk: deletes a sent update request
+  add_summary_fields:
+    endpoint: POST /sheets/{{ record.sheet_id }}/summary/fields
+    required fields: sheet_id
+    risk: adds sheet summary fields
+  update_summary_fields:
+    endpoint: PUT /sheets/{{ record.sheet_id }}/summary/fields
+    required fields: sheet_id
+    risk: updates sheet summary fields
+  create_update_request:
+    endpoint: POST /sheets/{{ record.sheet_id }}/updaterequests
+    required fields: sheet_id
+    risk: creates an update request
+  delete_update_request:
+    endpoint: DELETE /sheets/{{ record.sheet_id }}/updaterequests/{{ record.update_request_id }}
+    required fields: sheet_id, update_request_id
+    risk: deletes an update request
+  sort_sheet_rows:
+    endpoint: POST /sheets/{{ record.sheet_id }}/sort
+    required fields: sheet_id
+    risk: sorts rows in a sheet
+  update_dashboard:
+    endpoint: PUT /sights/{{ record.sight_id }}
+    required fields: sight_id
+    risk: updates dashboard metadata
+  copy_dashboard:
+    endpoint: POST /sights/{{ record.sight_id }}/copy
+    required fields: sight_id
+    risk: copies a dashboard
+  move_dashboard:
+    endpoint: POST /sights/{{ record.sight_id }}/move
+    required fields: sight_id
+    risk: moves a dashboard
+  set_dashboard_publish:
+    endpoint: PUT /sights/{{ record.sight_id }}/publish
+    required fields: sight_id
+    risk: updates dashboard publish settings
+  add_alternate_emails:
+    endpoint: POST /users/{{ record.user_id }}/alternateemails
+    required fields: user_id
+    risk: adds alternate email addresses to a user
+  delete_alternate_email:
+    endpoint: DELETE /users/{{ record.user_id }}/alternateemails/{{ record.alternate_email_id }}
+    required fields: user_id, alternate_email_id
+    risk: deletes an alternate email address
+  make_alternate_email_primary:
+    endpoint: POST /users/{{ record.user_id }}/alternateemails/{{ record.alternate_email_id }}/makeprimary
+    required fields: user_id, alternate_email_id
+    risk: makes an alternate email primary
+  create_webhook:
+    endpoint: POST /webhooks
+    risk: creates a webhook
+  update_webhook:
+    endpoint: PUT /webhooks/{{ record.webhook_id }}
+    required fields: webhook_id
+    risk: updates a webhook
+  delete_webhook:
+    endpoint: DELETE /webhooks/{{ record.webhook_id }}
+    required fields: webhook_id
+    risk: deletes a webhook
+  create_workspace:
+    endpoint: POST /workspaces
+    risk: creates a workspace
+  update_workspace:
+    endpoint: PUT /workspaces/{{ record.workspace_id }}
+    required fields: workspace_id
+    risk: updates a workspace
+  copy_workspace:
+    endpoint: POST /workspaces/{{ record.workspace_id }}/copy
+    required fields: workspace_id
+    risk: copies a workspace
+  create_workspace_folder:
+    endpoint: POST /workspaces/{{ record.workspace_id }}/folders
+    required fields: workspace_id
+    risk: creates a folder in a workspace
+  create_sheet_in_workspace:
+    endpoint: POST /workspaces/{{ record.workspace_id }}/sheets
+    required fields: workspace_id
+    risk: creates a sheet in a workspace
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Smartsheet API read of sheets, rows, folders, reports, dashboards, users, shares, webhooks, attachments, discussions, proofs, update requests, workspaces, and event metadata
+  write risk: creates, updates, copies, moves, publishes, shares, and deletes Smartsheet business objects including rows, sheets, reports, folders, comments, attachments, proofs, update requests, webhooks, and workspaces; destructive deletes require approval
+  approval: reverse ETL writes require plan preview and approval token
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES
@@ -39,6 +559,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect smartsheets before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

@@ -12,20 +12,44 @@ SYNOPSIS
 DESCRIPTION
   Reads Slack workspace users, channels, and channel messages through the Slack Web API. Read-only.
 
+ICON
+  asset: icons/slack.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://api.slack.com/changelog
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  channel_id
+  max_pages
+  page_size
+  access_token (secret)
+  api_token (secret)
+
+ETL STREAMS
+  users:
+    primary key: id
+    fields: deleted(), display_name(), email(), id(), is_admin(), is_bot(), name(), real_name(), team_id(), tz(), updated()
+  channels:
+    primary key: id
+    fields: created(), creator(), id(), is_archived(), is_channel(), is_general(), is_group(), is_private(), name(), num_members(), purpose(), topic()
+  channel_messages:
+    primary key: ts
+    fields: reply_count(), subtype(), team(), text(), thread_ts(), ts(), type(), user()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Slack Web API read of workspace members/channels/channel message history
+  approval: none; read-only, no reverse-ETL write surface
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

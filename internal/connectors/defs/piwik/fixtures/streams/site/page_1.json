@@ -12,9 +12,9 @@
   "response": {
     "status": 200,
     "body": {
-      "idsite": "1",
+      "idSite": "1",
       "name": "Fixture Site One",
-      "main_url": "https://fixture1.example.com",
+      "mainUrl": "https://fixture1.example.com",
       "timezone": "UTC",
       "currency": "USD"
     }

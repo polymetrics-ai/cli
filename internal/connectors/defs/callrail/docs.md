@@ -1,154 +1,263 @@
 # Overview
 
-CallRail reads and writes CallRail call tracking, contact, and account-configuration data through
-the CallRail v3 REST API (`https://api.callrail.com/v3/...`). This bundle targets capability parity
-with `internal/connectors/callrail` (the hand-written connector it migrates); the legacy package
-stays registered and unchanged until wave6's registry flip.
+Reads and writes CallRail call tracking data (calls, companies, users, tags, trackers, form
+submissions, text messages, notifications, integrations, and more) through the CallRail v3 REST API.
 
-**Pass B full-surface expansion** (`api_surface.json`, reviewed 2026-07-04 against the live
-apidocs.callrail.com docs site): every documented resource category is now accounted for. Beyond
-the original 4 legacy streams (`calls`, `companies`, `users`, `text_messages`), this bundle adds 13
-more: `accounts`, `tags`, `trackers`, `form_submissions`, `integrations`, `integration_filters`,
-`notifications`, `caller_ids`, `sms_threads`, `message_flows`, `leads`, and 2 fan-out sub-resource
-streams (`page_views` per-call, `lead_timeline` per-lead) — 17 streams total. `capabilities.write`
-is now `true`, with 27 write actions covering tags, companies, users, calls (metadata +
-outbound-call placement), text messages, integrations, integration filters, notifications, caller
-ids, message flows, SMS threads, and tracker reconfiguration. See `api_surface.json` for the full
-endpoint-by-endpoint accounting, including every deliberate exclusion and its real,
-closed-vocabulary reason.
+Readable streams: `calls`, `companies`, `users`, `text_messages`, `accounts`, `tags`, `trackers`,
+`form_submissions`, `integrations`, `integration_filters`, `notifications`, `caller_ids`,
+`sms_threads`, `message_flows`, `leads`, `page_views`, `lead_timeline`.
+
+Write actions: `create_tag`, `update_tag`, `delete_tag`, `create_company`, `update_company`,
+`create_user`, `update_user`, `delete_user`, `update_call`, `create_outbound_call`,
+`send_text_message`, `create_integration`, `update_integration`, `disable_integration`,
+`create_integration_filter`, `update_integration_filter`, `delete_integration_filter`,
+`create_notification`, `update_notification`, `delete_notification`, `create_caller_id`,
+`delete_caller_id`, `update_sms_thread`, `update_tracker`, `create_message_flow`,
+`update_message_flow`, `delete_message_flow`.
+
+Service API documentation: https://apidocs.callrail.com/.
 
 ## Auth setup
 
-Provide a CallRail API key via the `api_key` secret; it is sent as `Authorization: Token
-token="<api_key>"` (with the value itself quoted inside the header, matching legacy's
-`fmt.Sprintf("Token token=%q", apiKey)` at `callrail.go:254`) via `auth.mode: api_key_header` with
-`prefix: "Token token="` and a `value` template (`"\"{{ secrets.api_key }}\""`) that supplies the
-surrounding literal quotes; the secret itself is never logged. The required `account_id` config
-value is substituted into every request path (`/a/{{ config.account_id }}/...`, urlencoded by
-`InterpolatePath`'s per-segment default, matching legacy's own `url.PathEscape(account)` in
-`accountPath`). `base_url` defaults to `https://api.callrail.com/v3` and may be overridden for
-tests/proxies.
+Connection fields:
+
+- `account_id` (required, string); CallRail account id; substituted into every request path (a/{{
+  config.account_id }}/...).
+- `api_key` (required, secret, string); CallRail API key. Sent as Authorization: Token
+  token="<api_key>". Never logged.
+- `base_url` (optional, string); default `https://api.callrail.com/v3`; format `uri`; CallRail API
+  base URL override for tests or proxies.
+- `company_id` (optional, string); Optional CallRail company id filter, applied to the integrations,
+  integration_filters, caller_ids, message_flows, and leads streams' company_id query parameter.
+  Omitted from each request entirely when unset (stream.Query's omit_when_absent dialect).
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; only records at or after
+  this date are read on a fresh sync.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.callrail.com/v3`.
+
+Authentication behavior:
+
+- API key authentication in `Authorization` with prefix `Token token=` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/a/{{ config.account_id }}/companies.json` with query `per_page`=`1`.
 
 ## Streams notes
 
-All 4 streams (`calls`, `companies`, `users`, `text_messages`) share the same pagination shape:
-CallRail's page-number convention (`pagination.type: page_number`, `page_param: page`,
-`size_param: per_page`) — a page shorter than `page_size` stops pagination, which is functionally
-equivalent to legacy's own primary stop signal (`total_pages` reached) for every real CallRail
-response (the last page is never longer than `per_page`); the one edge case where a result set is
-an exact multiple of `per_page` costs one extra, empty-page request on the engine side that legacy's
-`total <= page` check would have avoided, never a data difference (both sides stop after emitting
-the same records). `page_size` is `100`, matching legacy's own default (see Known limits for why it
-is not runtime-configurable).
+Default pagination: page-number pagination; page parameter `page`; size parameter `per_page`; starts
+at 1; page size 100.
 
-Each of the 4 legacy streams sends `start_date` (`param_format: date`, converting a resolved RFC3339
-lower bound to `YYYY-MM-DD` for the wire) computed either from the sync's persisted cursor or, on a
-fresh sync, from the `start_date` config value — matching legacy's `startDateParam`/`dateOnly`
-exactly for the RFC3339-input case (see Known limits for the accepted-input narrowing this
-requires). Per-stream cursor fields match legacy's own `CursorFields` declarations: `calls` ->
-`start_time`, `companies`/`users` -> `created_at`, `text_messages` -> `last_message_at`.
+Pagination by stream: none: `page_views`, `lead_timeline`; page_number: `calls`, `companies`,
+`users`, `text_messages`, `accounts`, `tags`, `trackers`, `form_submissions`, `integrations`,
+`integration_filters`, `notifications`, `caller_ids`, `sms_threads`, `message_flows`, `leads`.
 
-**New Pass B streams**: `accounts` (`GET /a.json`, account-scoped path segment not needed), `tags`,
-`trackers`, `notifications`, `sms_threads`, `caller_ids` are unpaginated-incrementally-useful lists
-sharing the base page_number pagination; `tags`/`trackers` additionally declare
-`incremental.cursor_field: created_at` off a `start_date`-driven state cursor (client-tracked, since
-CallRail's tags/trackers list endpoints document no server-side date filter param — the engine has
-no incremental `request_param` for these two, matching how legacy never implemented them either).
-`form_submissions` reuses the same `start_date`/`param_format: date` request-param shape as the
-4 legacy streams, cursor field `submitted_at`. `integrations`, `integration_filters`, `caller_ids`,
-`message_flows`, and `leads` support an optional `company_id` query filter (`stream.Query`'s
-`omit_when_absent` dialect, config key `company_id`) matching each endpoint's documented optional
-company-scoping parameter — omitted entirely when unset. `trackers`' nested `company: {id, name}`
-object is flattened via `computed_fields` into `company_id`/`company_name`;
-`integration_filters`' nested `integration: {id, type}` is flattened into `integration_type`
-the same way.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-`page_views` and `lead_timeline` are **fan-out sub-resource streams** (`stream.fan_out`, matching
-campayn's established pattern): `page_views` first lists every call id (`ids_from.request` against
-`/calls.json`), then issues `GET /calls/{{ fanout.id }}/page_views.json` per call id, stamping the
-parent `call_id` onto every emitted page-view record (page views have no `id` field of their own,
-so the schema's primary key is the composite `[call_id, created_at]`). `lead_timeline` follows the
-identical shape off `/leads.json` -> `GET /leads/{{ fanout.id }}/timeline.json`; the endpoint returns
-a single JSON object (not an array) at the `lead` path, so `records.path: "lead"` naturally yields
-exactly one record per lead id via `connsdk.RecordsAt`'s bare-object-is-one-record behavior.
+- `calls`: GET `/a/{{ config.account_id }}/calls.json` - records path `calls`; page-number
+  pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size 100;
+  incremental cursor `start_time`; sent as `start_date`; formatted as YYYY-MM-DD date; initial lower
+  bound from `start_date`.
+- `companies`: GET `/a/{{ config.account_id }}/companies.json` - records path `companies`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100; incremental cursor `created_at`; sent as `start_date`; formatted as YYYY-MM-DD date; initial
+  lower bound from `start_date`.
+- `users`: GET `/a/{{ config.account_id }}/users.json` - records path `users`; page-number
+  pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size 100;
+  incremental cursor `created_at`; sent as `start_date`; formatted as YYYY-MM-DD date; initial lower
+  bound from `start_date`.
+- `text_messages`: GET `/a/{{ config.account_id }}/text-messages.json` - records path
+  `text_messages`; page-number pagination; page parameter `page`; size parameter `per_page`; starts
+  at 1; page size 100; incremental cursor `last_message_at`; sent as `start_date`; formatted as
+  YYYY-MM-DD date; initial lower bound from `start_date`.
+- `accounts`: GET `/a.json` - records path `accounts`; page-number pagination; page parameter
+  `page`; size parameter `per_page`; starts at 1; page size 100.
+- `tags`: GET `/a/{{ config.account_id }}/tags.json` - records path `tags`; page-number pagination;
+  page parameter `page`; size parameter `per_page`; starts at 1; page size 100; incremental cursor
+  `created_at`; formatted as `rfc3339`; initial lower bound from `start_date`.
+- `trackers`: GET `/a/{{ config.account_id }}/trackers.json` - records path `trackers`; page-number
+  pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size 100;
+  incremental cursor `created_at`; formatted as `rfc3339`; initial lower bound from `start_date`;
+  computed output fields `company_id`, `company_name`.
+- `form_submissions`: GET `/a/{{ config.account_id }}/form_submissions.json` - records path
+  `form_submissions`; page-number pagination; page parameter `page`; size parameter `per_page`;
+  starts at 1; page size 100; incremental cursor `submitted_at`; sent as `start_date`; formatted as
+  YYYY-MM-DD date; initial lower bound from `start_date`.
+- `integrations`: GET `/a/{{ config.account_id }}/integrations.json` - records path `integrations`;
+  query `company_id` from template `{{ config.company_id }}`, omitted when absent; page-number
+  pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size 100.
+- `integration_filters`: GET `/a/{{ config.account_id }}/integration_triggers.json` - records path
+  `integration_criteria`; query `company_id` from template `{{ config.company_id }}`, omitted when
+  absent; page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1;
+  page size 100; computed output fields `integration_type`.
+- `notifications`: GET `/a/{{ config.account_id }}/notifications.json` - records path
+  `notifications`; page-number pagination; page parameter `page`; size parameter `per_page`; starts
+  at 1; page size 100.
+- `caller_ids`: GET `/a/{{ config.account_id }}/caller_ids.json` - records path `caller_ids`; query
+  `company_id` from template `{{ config.company_id }}`, omitted when absent; page-number pagination;
+  page parameter `page`; size parameter `per_page`; starts at 1; page size 100.
+- `sms_threads`: GET `/a/{{ config.account_id }}/sms-threads.json` - records path `sms_threads`;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100.
+- `message_flows`: GET `/a/{{ config.account_id }}/message-flows.json` - records path
+  `message-flows`; query `company_id` from template `{{ config.company_id }}`, omitted when absent;
+  page-number pagination; page parameter `page`; size parameter `per_page`; starts at 1; page size
+  100.
+- `leads`: GET `/a/{{ config.account_id }}/leads.json` - records path `leads`; query `company_id`
+  from template `{{ config.company_id }}`, omitted when absent; page-number pagination; page
+  parameter `page`; size parameter `per_page`; starts at 1; page size 100; incremental cursor
+  `created_at`; formatted as `rfc3339`; initial lower bound from `start_date`.
+- `page_views`: GET `/a/{{ config.account_id }}/calls/{{ fanout.id }}/page_views.json` - records
+  path `page_views`; fan-out; ids from request `/a/{{ config.account_id }}/calls.json`; id-list
+  records path `calls`; id field `id`; id inserted into the request path; stamps `call_id`.
+- `lead_timeline`: GET `/a/{{ config.account_id }}/leads/{{ fanout.id }}/timeline.json` - records
+  path `lead`; fan-out; ids from request `/a/{{ config.account_id }}/leads.json`; id-list records
+  path `leads`; id field `id`; id inserted into the request path; stamps `lead_id`.
 
 ## Write actions & risks
 
-`capabilities.write` is now `true` (Pass B). 27 actions, grouped by resource:
+Overall write risk: external mutation of CallRail account configuration (tags, companies, users,
+notifications, outbound caller ids, message flows, integration filters), call/lead metadata (call
+tags, lead status, value), and outbound communications (placing outbound calls, sending SMS).
 
-- **Tags**: `create_tag`, `update_tag` (low risk), `delete_tag` (irreversible — removes the tag from
-  every call/text it was ever applied to; approval recommended).
-- **Companies**: `create_company`, `update_company` (setting `status: disabled` deactivates all of a
-  company's tracking numbers — approval recommended for status changes specifically). CallRail has
-  no true company DELETE (the docs call it "Disabling a Company"), so `update_company` is the only
-  covered mutation; see `api_surface.json`.
-- **Users**: `create_user`/`update_user` (administrator-scoped API key required by CallRail itself;
-  approval recommended), `delete_user` (irreversible, approval required).
-- **Calls**: `update_call` (tags/note/lead_status/value/customer_name metadata; this is also how
-  CallRail applies tags to a call — there is no separate tagging endpoint), `create_outbound_call`
-  (places a REAL phone call between two numbers; US/Canada only; approval required — a genuine
-  real-world side effect, not just a CallRail data mutation).
-- **Text messages**: `send_text_message` (sends a REAL SMS/MMS; approval required; the `media_url`
-  variant is covered, direct multipart file-upload MMS is not — see Known limits).
-- **Integrations**: `create_integration`/`update_integration` (Webhooks/Custom types only, matching
-  what the API itself allows creating), `disable_integration` (the docs' own term; not a true
-  delete).
-- **Integration filters**: `create_integration_filter`, `update_integration_filter`,
-  `delete_integration_filter` (all low risk — these narrow which calls trigger an existing
-  integration, they don't touch the integration itself).
-- **Notifications**: `create_notification`, `update_notification`, `delete_notification` (all low
-  risk, user-alert-subscription config).
-- **Outbound caller IDs**: `create_caller_id` (triggers a REAL verification phone call to the
-  registered number; approval required), `delete_caller_id` (low risk).
-- **SMS threads**: `update_sms_thread` (notes/value/tags/lead_qualification metadata; low risk).
-- **Trackers**: `update_tracker` only (reconfigures an already-provisioned tracker's call flow,
-  whisper message, SMS setting, or source rules) — tracker CREATE and the docs' own "Disabling a
-  Tracker" DELETE both provision/deprovision a real, billable phone number and are excluded as
-  `requires_elevated_scope`/`destructive_admin` respectively; see `api_surface.json`.
-- **Message flows**: `create_message_flow`, `update_message_flow` (the docs' own PUT endpoint takes
-  no `{message_flow_id}` path segment — the flow is identified purely by the body's `id` field, so
-  this action declares no `path_fields`), `delete_message_flow`.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_tag`: POST `/a/{{ config.account_id }}/tags.json` - kind `create`; body type `json`;
+  required record fields `name`; accepted fields `color`, `company_id`, `name`, `tag_level`; risk:
+  creates a new call/text tag definition visible account- or company-wide; low-risk external
+  mutation, no approval required.
+- `update_tag`: PUT `/a/{{ config.account_id }}/tags/{{ record.id }}.json` - kind `update`; body
+  type `json`; path fields `id`; required record fields `id`; accepted fields `color`, `disabled`,
+  `id`, `name`; risk: renames/recolors/disables a tag; renaming changes the tag everywhere it is
+  currently assigned; low-risk external mutation, no approval required.
+- `delete_tag`: DELETE `/a/{{ config.account_id }}/tags/{{ record.id }}.json` - kind `delete`; body
+  type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: permanently removes a tag, including from every
+  call/text interaction it has been applied to; irreversible, approval recommended.
+- `create_company`: POST `/a/{{ config.account_id }}/companies.json` - kind `create`; body type
+  `json`; required record fields `name`; accepted fields `name`, `time_zone`; risk: creates a new
+  company (a billable tracking entity) within the account; approval recommended.
+- `update_company`: PUT `/a/{{ config.account_id }}/companies/{{ record.id }}.json` - kind `update`;
+  body type `json`; path fields `id`; required record fields `id`; accepted fields
+  `callscore_enabled`, `callscribe_enabled`, `id`, `name`, `status`, `swap_landing_override`,
+  `swap_ppc_override`, `time_zone`; risk: updates company configuration; setting status to disabled
+  deactivates all of the company's tracking numbers and its dynamic-number-insertion script -
+  approval recommended for status changes.
+- `create_user`: POST `/a/{{ config.account_id }}/users.json` - kind `create`; body type `json`;
+  required record fields `first_name`, `last_name`, `email`, `role`; accepted fields `companies`,
+  `email`, `first_name`, `last_name`, `role`; risk: creates a new CallRail user and emails them a
+  password-setup prompt; requires an administrator-scoped API key; approval recommended.
+- `update_user`: PUT `/a/{{ config.account_id }}/users/{{ record.id }}.json` - kind `update`; body
+  type `json`; path fields `id`; required record fields `id`; accepted fields `companies`, `email`,
+  `first_name`, `id`, `last_name`, `role`; risk: updates a user's profile/role/company access;
+  name/email changes are restricted to the API key's own owning user by CallRail; approval
+  recommended for role/company changes.
+- `delete_user`: DELETE `/a/{{ config.account_id }}/users/{{ record.id }}.json` - kind `delete`;
+  body type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing
+  records treated as success for status `404`; risk: permanently removes a user's access to the
+  account; requires an administrator-scoped API key; irreversible, approval required.
+- `update_call`: PUT `/a/{{ config.account_id }}/calls/{{ record.id }}.json` - kind `update`; body
+  type `json`; path fields `id`; required record fields `id`; accepted fields `append_tags`,
+  `customer_name`, `id`, `lead_status`, `note`, `tags`, `value`; risk: applies
+  tags/notes/lead-status/value/customer-name metadata to an existing call record; low-risk external
+  mutation, no approval required.
+- `create_outbound_call`: POST `/a/{{ config.account_id }}/calls.json` - kind `create`; body type
+  `json`; required record fields `caller_id`, `business_phone_number`, `customer_phone_number`;
+  accepted fields `business_phone_number`, `caller_id`, `customer_phone_number`,
+  `outbound_greeting_recording_url`, `outbound_greeting_text`, `recording_enabled`; risk: places a
+  real outbound phone call connecting a business and a customer number (US/Canada only); a
+  real-world side effect outside the CallRail account itself, approval required.
+- `send_text_message`: POST `/a/{{ config.account_id }}/text-messages.json` - kind `create`; body
+  type `json`; required record fields `company_id`, `customer_phone_number`, `tracking_number`,
+  `content`; accepted fields `company_id`, `content`, `customer_phone_number`, `media_url`,
+  `tracking_number`; risk: sends a real SMS/MMS text message to a customer's phone (subject to 10DLC
+  business-registration compliance rules); a real-world side effect outside the CallRail account
+  itself, approval required. Direct file-upload MMS (multipart media_file) is out of scope - see
+  api_surface.json/docs.md; the media_url variant covers publicly-hosted-image MMS instead.
+- `create_integration`: POST `/a/{{ config.account_id }}/integrations.json` - kind `create`; body
+  type `json`; required record fields `type`, `company_id`; accepted fields `company_id`, `config`,
+  `type`; risk: creates and activates a Webhooks or Custom-cookie-capture integration for a company
+  (the only 2 integration types the API can create); approval recommended since Webhooks
+  integrations push call data to an external URL.
+- `update_integration`: PUT `/a/{{ config.account_id }}/integrations/{{ record.id }}.json` - kind
+  `update`; body type `json`; path fields `id`; required record fields `id`; accepted fields
+  `config`, `id`, `state`; risk: updates an integration's active/disabled state or its
+  webhook/cookie-capture configuration; approval recommended.
+- `disable_integration`: DELETE `/a/{{ config.account_id }}/integrations/{{ record.id }}.json` -
+  kind `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields
+  `id`; missing records treated as success for status `404`; risk: disables (the docs' own term; not
+  a hard delete) an integration; stops any external data flow it previously drove; approval
+  recommended.
+- `create_integration_filter`: POST `/a/{{ config.account_id }}/integration_triggers.json` - kind
+  `create`; body type `json`; required record fields `company_id`, `integration_id`; accepted fields
+  `call_type`, `company_id`, `integration_id`, `lead_status`, `max_duration`, `min_duration`,
+  `tracker_ids`; risk: adds a filter narrowing which calls trigger an existing integration; low-risk
+  external mutation, no approval required.
+- `update_integration_filter`: PUT `/a/{{ config.account_id }}/integration_triggers/{{ record.id
+  }}.json` - kind `update`; body type `json`; path fields `id`; required record fields `id`;
+  accepted fields `call_type`, `id`, `lead_status`, `max_duration`, `min_duration`, `tracker_ids`;
+  risk: updates an integration filter's trigger criteria; low-risk external mutation, no approval
+  required.
+- `delete_integration_filter`: DELETE `/a/{{ config.account_id }}/integration_triggers/{{ record.id
+  }}.json` - kind `delete`; body type `none`; path fields `id`; required record fields `id`;
+  accepted fields `id`; missing records treated as success for status `404`; risk: removes a filter;
+  the parent integration keeps firing for every call, unfiltered, once this is removed; low-risk, no
+  approval required.
+- `create_notification`: POST `/a/{{ config.account_id }}/notifications.json` - kind `create`; body
+  type `json`; accepted fields `alert_type`, `call_enabled`, `company_id`, `email`, `send_desktop`,
+  `send_email`, `send_push`, `sms_enabled`, `tracker_id`, `user_id`; risk: creates a call/text alert
+  subscription for a user; low-risk external mutation, no approval required.
+- `update_notification`: PUT `/a/{{ config.account_id }}/notifications/{{ record.id }}.json` - kind
+  `update`; body type `json`; path fields `id`; required record fields `id`; accepted fields
+  `alert_type`, `call_enabled`, `company_id`, `id`, `sms_enabled`, `tracker_id`; risk: updates an
+  existing notification's scope/channel settings; low-risk external mutation, no approval required.
+- `delete_notification`: DELETE `/a/{{ config.account_id }}/notifications/{{ record.id }}.json` -
+  kind `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields
+  `id`; missing records treated as success for status `404`; risk: permanently removes a
+  notification subscription (restricted to notifications managed by the current user); irreversible,
+  low-risk, no approval required.
+- `create_caller_id`: POST `/a/{{ config.account_id }}/caller_ids.json` - kind `create`; body type
+  `json`; required record fields `company_id`, `phone_number`, `name`; accepted fields `company_id`,
+  `name`, `phone_number`; risk: registers an outbound caller-id number and immediately triggers a
+  real verification phone call to it; a real-world side effect, approval required.
+- `delete_caller_id`: DELETE `/a/{{ config.account_id }}/caller_ids/{{ record.id }}.json` - kind
+  `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  missing records treated as success for status `404`; risk: removes an outbound caller id from the
+  company; irreversible, low-risk, no approval required.
+- `update_sms_thread`: PUT `/a/{{ config.account_id }}/sms-threads/{{ record.id }}.json` - kind
+  `update`; body type `json`; path fields `id`; required record fields `id`; accepted fields
+  `append_tags`, `id`, `lead_qualification`, `notes`, `tags`, `value`; risk: applies
+  notes/value/tags/lead-qualification metadata to an existing SMS thread; low-risk external
+  mutation, no approval required.
+- `update_tracker`: PUT `/a/{{ config.account_id }}/trackers/{{ record.id }}.json` - kind `update`;
+  body type `json`; path fields `id`; required record fields `id`; accepted fields `call_flow`,
+  `campaign_name`, `id`, `name`, `replace_tracking_number`, `sms_enabled`, `source`, `swap_targets`,
+  `whisper_message`; risk: reconfigures an existing (already-provisioned) session or source
+  tracker's call flow, whisper message, SMS setting, or source rules; does not provision/deprovision
+  a phone number itself, unlike create/disable; low-risk external mutation, no approval required.
+- `create_message_flow`: POST `/a/{{ config.account_id }}/message-flows.json` - kind `create`; body
+  type `json`; required record fields `company_id`, `name`, `initial_step_id`, `steps`; accepted
+  fields `company_id`, `initial_step_id`, `name`, `steps`; risk: creates a new automated SMS message
+  flow (a step-graph of tag/response actions) for a company; low-risk external mutation, no approval
+  required.
+- `update_message_flow`: PUT `/a/{{ config.account_id }}/message-flows.json` - kind `update`; body
+  type `json`; required record fields `id`, `initial_step_id`, `steps`; accepted fields `id`,
+  `initial_step_id`, `steps`; risk: replaces an existing message flow's step graph; the docs' own
+  endpoint takes no {message_flow_id} path segment, identifying the flow purely via the body's id
+  field; low-risk external mutation, no approval required.
+- `delete_message_flow`: DELETE `/a/{{ config.account_id }}/message-flows/{{ record.id }}.json` -
+  kind `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields
+  `id`; missing records treated as success for status `404`; risk: permanently removes a message
+  flow; any tracker still referencing it stops running the automated SMS steps; irreversible,
+  approval recommended.
 
 ## Known limits
 
-- **`start_date` config input is narrowed to RFC3339 (or bare Unix-seconds), no longer bare
-  `YYYY-MM-DD`.** Legacy's `startDateParam` (`callrail.go:266-282`) accepts EITHER a bare
-  `YYYY-MM-DD` value or full RFC3339 for the `start_date` config value, narrowing either to a date
-  string itself before sending it as the `start_date` query param. The engine's `param_format: date`
-  conversion (`formatParam`/`parseLowerBoundTime`) only accepts an all-digits (Unix-seconds) value or
-  a full RFC3339 timestamp — a bare `"2026-01-01"` fails to parse as RFC3339 and hard-errors. This
-  bundle's `spec.json` therefore declares `start_date` as `format: date-time` (RFC3339 only), a
-  documented config-surface narrowing versus legacy's more permissive YYYY-MM-DD-or-RFC3339
-  acceptance; any RFC3339 `start_date` value (e.g. `"2026-01-01T00:00:00Z"`) still produces the exact
-  same `YYYY-MM-DD` wire value legacy would send for the equivalent date.
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config overrides
-  (`callrailPageSize`/`callrailMaxPages`, `callrail.go:348-376`, `page_size` defaulting to 100,
-  capped at 250). The engine's `page_number` paginator's `PageSize` is a static bundle-authored int
-  (not templated), and there is no `MaxPages`-equivalent config-driven knob either; `max_pages` is
-  unbounded (matching legacy's own `max_pages=0`/`all`/`unlimited` default). `page_size` is fixed at
-  `100` to match legacy's own default exactly; the conformance fixture for `calls` is a single page
-  of 3 records (all `total_records`) — a short page relative to `page_size: 100` — so
-  `pagination_terminates` observes exactly one request, matching the real one-request-in-production
-  behavior for any result set under 100 records; `companies`/`users`/`text_messages` are likewise
-  single fixture pages.
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
-  when `config.mode == "fixture"`) stamps a `previous_cursor` field onto every fixture-mode record
-  when a prior cursor happens to be set (`callrail.go:206-239`); this is not part of the live record
-  shape. This bundle's schemas and fixtures target the live path only.
-- **`send_text_message` does not cover multipart-form MMS file upload.** The docs show 3 ways to
-  send an MMS: a publicly-hosted `media_url` (covered), or a multipart `-F media_file=@path` upload
-  (not covered — the engine's write dialect has no multipart/binary-payload body type; this would
-  be a `binary_payload`-category exclusion if enumerated as its own endpoint, but since it is a body
-  variant of the same `POST /text-messages.json` endpoint already covered by `send_text_message`,
-  it is documented here rather than as a separate `api_surface.json` line).
-- **`tags`/`trackers` incremental cursoring is client-tracked, not server-filtered.** Neither
-  endpoint documents a server-side date-range filter query parameter (unlike `calls`/
-  `form_submissions`, which send `start_date`), so `incremental.cursor_field: created_at` on these
-  2 streams relies purely on the engine's persisted-cursor comparison against each stream's own
-  `created_at` field; every page is still fetched and filtered client-side implicitly by the cursor
-  advancing, not by a narrower request. This is not a deviation — legacy never implemented these two
-  streams at all, so there is no prior behavior to diverge from.
-- Every remaining known CallRail endpoint is either covered or excluded with a specific reason; see
-  `api_surface.json`'s `excluded` entries for the full, closed-vocabulary accounting (analytics
-  aggregates, phone-number-provisioning actions, and admin-config surfaces judged out of scope for
-  this pass).
+- Batch defaults: read_page_size=100.
+- API coverage includes 17 stream-backed endpoint group(s), 27 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  deprecated=1, destructive_admin=1, duplicate_of=13, non_data_endpoint=5, out_of_scope=7,
+  requires_elevated_scope=4.

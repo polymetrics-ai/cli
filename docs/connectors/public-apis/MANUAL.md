@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector public-apis [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads public API directory entries and categories. Read-only and credential-free.
+  Reads public API directory entries and categories from the api.publicapis.org directory API. Read-only and credential-free.
+
+ICON
+  asset: icons/public-apis.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://github.com/public-apis/public-apis
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -20,12 +26,20 @@ AUTHENTICATION
   No secret authentication is required for this connector.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+
+ETL STREAMS
+  entries:
+    primary key: id
+    fields: api(), auth(), category(), cors(), description(), https(), id(), link()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external public-apis.org directory read of API listing metadata
+  approval: none; read-only, credential-free public directory API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

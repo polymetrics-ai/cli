@@ -1,125 +1,115 @@
 # Overview
 
-SendPulse is a Pass B full-surface expansion of the wave2 fan-out migration. This bundle reads
-SendPulse address books, campaigns, senders, per-book subscriber emails, and the account-wide
-email blacklist, and writes address-book/email-membership/campaign/sender/blacklist lifecycle
-mutations, through the SendPulse REST API. It migrates `internal/connectors/sendpulse` (the legacy
-hand-written connector, which stays registered and unchanged until wave6's registry flip); legacy
-was read-only (`Write` always returned `connectors.ErrUnsupportedOperation`), so every write action
-here is genuinely new capability, not a ported behavior.
+Reads SendPulse address books, campaigns, senders, per-book emails, and the account blacklist, and
+writes address-book/sender/blacklist lifecycle mutations and campaign create/cancel actions through
+the SendPulse API.
+
+Readable streams: `addressbooks`, `campaigns`, `senders`, `blacklist`, `emails_in_book`.
+
+Write actions: `create_addressbook`, `update_addressbook`, `delete_addressbook`,
+`add_emails_to_book`, `remove_emails_from_book`, `create_campaign`, `cancel_campaign`, `add_sender`,
+`remove_sender`, `add_to_blacklist`, `remove_from_blacklist`.
+
+Service API documentation: https://sendpulse.com/integrations/api.
 
 ## Auth setup
 
-Provide `client_id`/`client_secret` secrets (SendPulse API app credentials); the bundle exchanges
-them for a bearer token via OAuth2 client-credentials (`auth.mode: oauth2_client_credentials`)
-against `token_url`, matching legacy's `connsdk.OAuth2ClientCredentials`. `token_url` defaults to
-`https://api.sendpulse.com/oauth/access_token` (legacy's own hardcoded literal-append default);
-`base_url` independently defaults to `https://api.sendpulse.com`. See Known limits for the
-narrowed case where only one of the two is overridden.
+Connection fields:
+
+- `base_url` (optional, string); default `https://api.sendpulse.com`; format `uri`; SendPulse API
+  base URL override for tests or proxies.
+- `client_id` (required, secret, string); SendPulse API client ID (OAuth2 client-credentials). Never
+  logged.
+- `client_secret` (required, secret, string); SendPulse API client secret (OAuth2
+  client-credentials). Never logged.
+- `token_url` (optional, string); default `https://api.sendpulse.com/oauth/access_token`; format
+  `uri`.
+
+Secret fields are redacted in logs and write previews: `client_id`, `client_secret`.
+
+Default configuration values: `base_url=https://api.sendpulse.com`,
+`token_url=https://api.sendpulse.com/oauth/access_token`.
+
+Authentication behavior:
+
+- OAuth 2.0 client credentials authentication using `config.token_url`, `secrets.client_id`,
+  `secrets.client_secret`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/addressbooks`.
 
 ## Streams notes
 
-`addressbooks`, `campaigns`, `senders` (the original 3 legacy-parity streams): unchanged shape,
-all declare `"projection": "passthrough"` (legacy's `Read` emits every raw decoded field verbatim
-via `connsdk.Harvest`, with no `mapRecord`-style field-building — schema-mode projection would
-silently drop any undeclared field, a parity regression). `GET` against the SendPulse list
-endpoint, records at the JSON body root (`records.path: "."`). Pagination is `page_number`
-(`page_param: page`, `size_param: limit`, `start_page: 1`, `page_size: 100`, `max_pages: 1`),
-matching legacy's default one-page cap. Primary keys: `addressbooks`/`campaigns` use `id`,
-`senders` uses `email`.
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 100; maximum 1 page(s).
 
-`blacklist` (`GET /blacklist`) is a new top-level list stream. SendPulse's real blacklist endpoint
-takes NO pagination parameters at all (confirmed against the official PHP client's
-`getBlackList(): return $this->get('blacklist');` — no `limit`/`offset`/`page` argument exists),
-so this stream declares a `pagination: {"type": "none"}` override rather than inheriting the base
-`page_number` spec — the base spec's `page`/`limit` params would be genuinely-dead query noise
-SendPulse's real API silently ignores, and declaring `pagination: none` is the honest
-representation instead of sending parameters that do nothing.
+Pagination by stream: none: `blacklist`; page_number: `addressbooks`, `campaigns`, `senders`,
+`emails_in_book`.
 
-`emails_in_book` (`GET /addressbooks/{{ fanout.id }}/emails`) is a sub-resource fan-out over
-`addressbooks`: SendPulse's real per-subscriber-email data is only reachable scoped to a single
-address book id, with no cross-book list endpoint (see Known limits for the excluded cross-book
-`/emails/{email}` global-lookup variant). `fan_out.ids_from.request` issues the SAME paginated `GET
-/addressbooks` request the `addressbooks` stream itself uses (`records_path: "."`, `id_field:
-"id"`, reusing this stream's effective pagination — the base `page_number` spec with `max_pages:
-1`, since `emails_in_book` declares no pagination override of its own), then `into.path_var: "id"`
-threads each discovered book id into `/addressbooks/{{ fanout.id }}/emails`, and `stamp_field:
-"book_id"` writes the source book id (always a STRING — see sendowl's docs.md for the identical
-fan_out-dialect-wide constraint) onto every emitted subscriber record after projection.
-
-None of the 5 streams are incremental: neither legacy nor SendPulse's real list endpoints for any
-of these resources support a server-side updated-since filter.
+- `addressbooks`: GET `/addressbooks` - records path `.`; page-number pagination; page parameter
+  `page`; size parameter `limit`; starts at 1; page size 100; maximum 1 page(s); emits passthrough
+  records.
+- `campaigns`: GET `/campaigns` - records path `.`; page-number pagination; page parameter `page`;
+  size parameter `limit`; starts at 1; page size 100; maximum 1 page(s); emits passthrough records.
+- `senders`: GET `/senders` - records path `.`; page-number pagination; page parameter `page`; size
+  parameter `limit`; starts at 1; page size 100; maximum 1 page(s); emits passthrough records.
+- `blacklist`: GET `/blacklist` - records path `.`; emits passthrough records.
+- `emails_in_book`: GET `/addressbooks/{{ fanout.id }}/emails` - records path `.`; page-number
+  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; maximum 1
+  page(s); fan-out; ids from request `/addressbooks`; id-list records path `.`; id field `id`; id
+  inserted into the request path; stamps `book_id`; emits passthrough records.
 
 ## Write actions & risks
 
-10 write actions, none of which existed in legacy:
+Overall write risk: external SendPulse API mutation, including creating email campaigns that may
+send to real subscribers.
 
-- **`create_addressbook`/`update_addressbook`/`delete_addressbook`** (`POST /addressbooks`, `PUT
-  /addressbooks/{{ record.id }}`, `DELETE /addressbooks/{{ record.id }}`, `body_type: json`
-  throughout — SendPulse's real API sends a JSON body on every POST/PUT/DELETE request, confirmed
-  against the official PHP client's `sendRequest`, which sets `Content-Type: application/json` and
-  `json_encode`s the body for every non-GET method including DELETE): address-book lifecycle.
-  `delete_addressbook` is `idempotent`/`missing_ok_status: [404]`.
-- **`add_emails_to_book`/`remove_emails_from_book`** (`POST`/`DELETE
-  /addressbooks/{{ record.id }}/emails`, `body_fields: ["emails"]`): subscribe/unsubscribe email
-  addresses to/from a book. `emails` is declared a bare `"type": "array"` with no `items`
-  constraint: SendPulse's real `addEmails` accepts EITHER a bare email string or a `{email,
-  variables}` object per array entry (confirmed against the PHP client's `addEmails`, which passes
-  the caller's array through unmodified) — a `items: {"type": "object"}` constraint would wrongly
-  reject the plain-string shape.
-- **`create_campaign`** (`POST /campaigns`, `body_type: json`): creates a new email campaign
-  against a real address book. Depending on account send-scheduling settings this may trigger an
-  actual send to real subscribers — the highest-impact action in this bundle.
-- **`cancel_campaign`** (`DELETE /campaigns/{{ record.id }}`): cancels a scheduled/in-progress
-  campaign (SendPulse's real cancel endpoint is `DELETE`, not a `PATCH`/status-field update,
-  confirmed against the PHP client's `cancelCampaign`).
-- **`add_sender`/`remove_sender`** (`POST`/`DELETE /senders`, no path id — SendPulse identifies the
-  sender to remove by an `email` BODY field on the DELETE request, not a path segment, confirmed
-  against the PHP client's `removeSender`): sender-identity lifecycle. `add_sender` triggers a
-  real activation email SendPulse sends to the new sender address.
-  `remove_sender` breaks any campaign still referencing that sender.
-- **`add_to_blacklist`/`remove_from_blacklist`** (`POST`/`DELETE /blacklist`, `emails` as a
-  BASE64-ENCODED STRING body field, not a plain string or array — confirmed against the PHP
-  client's `addToBlackList`/`removeFromBlackList`, both of which `base64_encode()` the caller's
-  raw address(es) before sending): account-wide send-suppression lifecycle. The bundle's
-  `record_schema` declares `emails` as a plain `"type": "string"` (the caller is responsible for
-  supplying the already-base64-encoded value, matching what the real wire body actually carries —
-  this dialect has no `base64`-encoding filter usable on write-body fields, only on
-  `computed_fields`/interpolated read-side templates, so the encoding step cannot be performed
-  declaratively on the write path).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_addressbook`: POST `/addressbooks` - kind `create`; body type `json`; required record
+  fields `bookName`; accepted fields `bookName`; risk: creates a new address book (mailing list);
+  external mutation, approval required.
+- `update_addressbook`: PUT `/addressbooks/{{ record.id }}` - kind `update`; body type `json`; path
+  fields `id`; required record fields `id`, `name`; accepted fields `id`, `name`; risk: renames an
+  existing address book.
+- `delete_addressbook`: DELETE `/addressbooks/{{ record.id }}` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: permanently removes an address book and all its subscriber
+  associations; irreversible.
+- `add_emails_to_book`: POST `/addressbooks/{{ record.id }}/emails` - kind `update`; body type
+  `json`; path fields `id`; body fields `emails`; required record fields `id`, `emails`; accepted
+  fields `emails`, `id`; risk: subscribes new email addresses to an address book; each add may
+  trigger a double opt-in confirmation email depending on account settings.
+- `remove_emails_from_book`: DELETE `/addressbooks/{{ record.id }}/emails` - kind `delete`; body
+  type `json`; path fields `id`; body fields `emails`; required record fields `id`, `emails`;
+  accepted fields `emails`, `id`; missing records treated as success for status `404`; risk:
+  unsubscribes the given email addresses from an address book; irreversible without re-adding them.
+- `create_campaign`: POST `/campaigns` - kind `create`; body type `json`; required record fields
+  `sender_name`, `sender_email`, `subject`, `body`, `list_id`; accepted fields `body`, `list_id`,
+  `name`, `sender_email`, `sender_name`, `subject`.
+- `cancel_campaign`: DELETE `/campaigns/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: cancels a scheduled/in-progress campaign; stops further sends but does not
+  un-send already-delivered emails.
+- `add_sender`: POST `/senders` - kind `create`; body type `json`; required record fields `email`,
+  `name`; accepted fields `email`, `name`; risk: registers a new sender email address, which
+  SendPulse will send an activation email to; low-risk external mutation.
+- `remove_sender`: DELETE `/senders` - kind `delete`; body type `json`; body fields `email`;
+  required record fields `email`; accepted fields `email`; missing records treated as success for
+  status `404`; risk: removes a sender email address; any campaign still referencing it as its
+  sender will fail to send.
+- `add_to_blacklist`: POST `/blacklist` - kind `create`; body type `json`; required record fields
+  `emails`; accepted fields `comment`, `emails`; risk: permanently suppresses future sends to the
+  given address(es) account-wide.
+- `remove_from_blacklist`: DELETE `/blacklist` - kind `delete`; body type `json`; body fields
+  `emails`; required record fields `emails`; accepted fields `emails`; missing records treated as
+  success for status `404`; risk: removes an address from the account-wide suppression list; future
+  campaigns can reach it again.
 
 ## Known limits
 
-- **Dynamic (fixture-replay) conformance checks are marked `skip_dynamic` at the bundle level**
-  (unchanged from the prior wave2 shape — see `metadata.json`'s `conformance` block).
-  `oauth2_client_credentials` auth requires a real `token_url`; conformance's synthetic
-  non-secret config value is not a resolvable URL, so every auth-resolving dynamic check,
-  including `write_request_shape:*` for the 10 new write actions, is skipped for the identical
-  reason as the original 3 read streams. The write actions are net-new capability with no legacy
-  behavior to structurally compare against at all; their request-shape correctness is instead
-  documented by `fixtures/writes/*.json` (each recording the real SendPulse wire shape per the
-  official PHP client) and asserted statically by `connectorgen validate`'s
-  `write_schemas_valid`/`write_path_fields` checks.
-- **`blacklist` and `emails_in_book`'s own per-id requests are declared with NO pagination**
-  (`blacklist` explicitly via `pagination: {"type": "none"}`; `emails_in_book`'s per-book request
-  inherits the base `page_number` spec, unbounded) — matching each endpoint's REAL documented
-  parameter set rather than blanket-applying the base spec to every new stream.
-- **`max_pages` is static.** The bundle sets `base.pagination.max_pages: 1`, matching legacy's
-  default hard request-count cap. Legacy also accepted a runtime `max_pages` override (including
-  `0` for unbounded), but `PaginationSpec.MaxPages` cannot be config-templated, so this bundle does
-  not declare a dead `max_pages` spec key. The static cap also governs `emails_in_book`'s
-  address-book id-listing request and each per-book sub-sequence.
-- `token_url`'s default is a fixed literal, not a `base_url`-derived value — unchanged from the
-  prior wave2 shape; see that section's original rationale (a caller overriding `base_url` alone
-  must also override `token_url` to match).
-- **`emails` on `add_to_blacklist`/`remove_from_blacklist` must be pre-base64-encoded by the
-  caller.** This dialect's write-body construction has no encoding-filter mechanism (the `base64`
-  interpolation filter only applies to `{{ }}` template resolution on read-side
-  paths/headers/query/computed_fields, never to a write action's `record_schema`-validated body
-  fields) — a caller must supply the value already encoded, matching exactly what the real
-  SendPulse wire body expects, so no data-parity gap exists, only an authoring-ergonomics one.
-- Full SendPulse API surface still has documented exclusions beyond what's covered here (the
-  entire SMTP/transactional-email, bulk-SMS, web-push, and Automation-360-event product surfaces,
-  plus narrower per-record variable/analytics sub-endpoints) — see `api_surface.json`'s
-  per-endpoint `excluded` entries, each with a specific closed-vocabulary category and reason (no
-  blanket "Pass B capability expansion" placeholders remain).
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s), 11 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  duplicate_of=4, non_data_endpoint=9, out_of_scope=38.

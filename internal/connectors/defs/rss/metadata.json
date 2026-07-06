@@ -22,6 +22,6 @@
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "StreamHook/CheckHook-handled: every read AND the health check decode an RSS/XML response body (encoding/xml), which the engine's declarative fixture-replay path cannot express (it only decodes JSON bodies, engine/read.go); hook-covered, proven live by internal/connectors/hooks/rss/hooks_test.go and internal/connectors/paritytest/rss/parity_test.go"
+    "reason": "StreamHook/CheckHook-handled: every read AND the health check decode an RSS/XML response body (encoding/xml), which the engine's declarative fixture-replay path cannot express (it only decodes JSON bodies, engine/read.go); hook-covered, proven live by internal/connectors/hooks/rss/hooks_test.go and archived parity evidence for rss"
   }
 }

@@ -1,203 +1,264 @@
 # Overview
 
-Gmail started as a wave1-pilot Tier-2 (AuthHook) migration (PLAN.md P-10, SPEC.md §5.7) and is now
-a **Pass B full-surface expansion** (measure-first probe): every documented Gmail API v1 REST
-endpoint (79 total, per the live Discovery document at
-`https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest`) is enumerated in `api_surface.json`,
-with 10 practical GET list/detail resources implemented as streams and every expressible mutation
-implemented as a `writes.json` action (35 actions). Auth is still the Google OAuth 2.0
-**refresh-token grant** only — the 3-legged consent/acquisition dance is out of scope (the refresh
-token arrives as a pre-issued secret; the credentials layer already owns acquisition/storage). The
-wave1-pilot read-only streams (`messages`/`threads`/`drafts`/`labels`) remain engine-vs-legacy
-parity-tested against `internal/connectors/gmail` (the hand-written connector this bundle
-originally migrated); the legacy package stays registered and unchanged until wave6's registry
-flip. **This bundle is no longer read-only**: `capabilities.write` is now `true` and `writes.json`
-declares 35 actions across messages/threads/drafts/labels/filters/send-as aliases/delegates/
-forwarding addresses/account settings — legacy's own `gmail.go:191-192` (`ErrUnsupportedOperation`
-from every `Write` call) describes the ORIGINAL pilot scope, not this connector's current surface;
-`paritytest/gmail`'s write-parity assertions against that legacy behavior were updated alongside
-this expansion (see Write actions & risks).
+Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases, delegates,
+forwarding addresses, and mailbox profile, and writes approved reverse-ETL mutations
+(send/insert/import/modify/trash/delete messages and threads; draft and label lifecycle; filter,
+send-as, delegate, and forwarding-address management; vacation/language/IMAP/POP/auto-forwarding
+settings) via the Google OAuth 2.0 refresh-token grant.
+
+Readable streams: `messages`, `threads`, `drafts`, `labels`, `history`, `filters`, `send_as`,
+`delegates`, `forwarding_addresses`, `profile`.
+
+Write actions: `send_message`, `insert_message`, `import_message`, `modify_message`,
+`trash_message`, `untrash_message`, `delete_message`, `modify_thread`, `trash_thread`,
+`untrash_thread`, `delete_thread`, `create_draft`, `update_draft`, `send_draft`, `delete_draft`,
+`create_label`, `update_label`, `patch_label`, `delete_label`, `create_filter`, `delete_filter`,
+`create_send_as`, `update_send_as`, `patch_send_as`, `delete_send_as`, `verify_send_as`,
+`create_delegate`, `delete_delegate`, `create_forwarding_address`, `delete_forwarding_address`,
+`update_auto_forwarding`, `update_vacation`, `update_language`, `update_imap`, `update_pop`.
+
+Service API documentation: https://developers.google.com/gmail/api/reference/rest.
 
 ## Auth setup
 
-Provide three secrets: `client_id`, `client_secret` (optional for some OAuth client types — see
-below), and `client_refresh_token` (long-lived; never logged). `hooks/gmail/hooks.go` implements
-`AuthHook`, mirroring legacy `gmail/auth.go`'s `oauthRefreshAuth`: it POSTs
-`grant_type=refresh_token` + `refresh_token` + `client_id` [+ `client_secret`, `scope`] to
-`token_url` (default `https://oauth2.googleapis.com/token`, config-overridable), caches the
-resulting access token until 60 seconds before its declared expiry, and sets
-`Authorization: Bearer <access_token>` on every request. `client_secret` is omitted from the
-token-request form when unset (matches legacy's `if a.clientSecret != ""` guard) — some Google
-OAuth client types (e.g. installed-app/native clients) issue refresh tokens that don't require a
-client secret at token-refresh time.
+Connection fields:
 
-`token_url` MUST resolve to an `https://` URL (THREAT-MODEL.md Delta 2): the hook fails closed on
-a non-https or unparseable override rather than sending the refresh token/client secret to an
-attacker-chosen endpoint. This is the one new SSRF-adjacent surface this phase adds, mirroring
-legacy's `validatedURL` (gmail.go:339) but tightened to https-only in the hook (legacy's
-`validatedURL` also accepted plain `http`; the hook narrows this specifically for the token
-endpoint that receives secret material — see Known limits).
+- `base_url` (optional, string); default `https://gmail.googleapis.com/gmail/v1`; format `uri`;
+  Gmail API base URL override for tests or proxies.
+- `client_id` (required, secret, string); Google OAuth 2.0 client ID for the refresh-token grant.
+  Used only in the token-request form; never logged.
+- `client_refresh_token` (required, secret, string); Long-lived Google OAuth 2.0 refresh token.
+  Exchanged for a short-lived access token at token_url; never logged. The 3-legged
+  consent/acquisition dance is out of scope for this connector (credentials layer already owns it).
+- `client_secret` (optional, secret, string); Google OAuth 2.0 client secret (optional for some
+  client types). Used only in the token-request form; never logged.
+- `include_spam_and_trash` (optional, string); When 'true', includes SPAM and TRASH in list results
+  (includeSpamTrash=true).
+- `page_size` (optional, string); default `100`; Records per page (1-500, maxResults).
+- `scopes` (optional, string); default `https://mail.google.com/`; OAuth scope requested on the
+  token-refresh grant.
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; translated to a Gmail
+  search query 'after:<unix-seconds>' filter.
+- `start_history_id` (optional, string); Gmail historyId lower bound for the history stream's
+  incremental sync (users.history.list's required startHistoryId). Unlike messages/threads/drafts,
+  history genuinely publishes a server-recognized, monotonically-increasing cursor (historyId) --
+  see Streams notes in docs.md. Obtain an initial value from any message/thread/label/profile
+  record's historyId field.
+- `token_url` (optional, string); default `https://oauth2.googleapis.com/token`; format `uri`;
+  Google OAuth 2.0 token endpoint override. MUST be https in production; the hook fails closed on a
+  non-https or unparseable value to prevent exfiltrating the refresh token to an attacker-chosen
+  endpoint.
+- `user_id` (optional, string); default `me`; Gmail user ID path segment (email address for
+  delegated access, or 'me').
 
-The bundle's `base.auth` declares exactly one candidate: `{"mode": "custom", "hook": "gmail", ...}`
-— legacy has no alternate auth path (no static API key, no public/no-auth fallback), so there is no
-`when`-gated bearer-token bypass to declare, unlike github's token-OR-app-JWT "auto" resolution.
+Secret fields are redacted in logs and write previews: `client_id`, `client_refresh_token`,
+`client_secret`.
 
-**`scopes` default widened for Pass B**: the wave1-pilot default was the read-only
-`https://www.googleapis.com/auth/gmail.readonly` scope. Since this bundle now declares mutating
-write actions, `spec.json`'s `scopes` default is now the full-mailbox
-`https://mail.google.com/` scope — narrow this back to a read-only scope string in `config.scopes`
-if only this bundle's streams are ever exercised for a given credential.
+Default configuration values: `base_url=https://gmail.googleapis.com/gmail/v1`, `page_size=100`,
+`scopes=https://mail.google.com/`, `token_url=https://oauth2.googleapis.com/token`, `user_id=me`.
+
+Authentication behavior:
+
+- Connector-specific authentication using `secrets.client_refresh_token`, `config.token_url`,
+  `secrets.client_id`, `secrets.client_secret`, `config.scopes`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/users/{{ config.user_id }}/labels`.
 
 ## Streams notes
 
-**10 streams total.** `messages`, `threads`, `drafts` (all three paginated via Gmail's
-`pageToken`/`nextPageToken` cursor convention — `pagination.type: cursor` with
-`token_path: nextPageToken`, `cursor_param: pageToken`), `labels`, `filters`, `send_as`,
-`delegates`, `forwarding_addresses`, and `profile` are unpaginated (labels/filters/send_as/
-delegates/forwarding_addresses all return their full collection in one response; `profile` is a
-single-record mailbox-identity resource, not a collection at all — `records.path: ""` selects the
-whole response body as one record). `history` is paginated via the same `pageToken`/
-`nextPageToken` cursor convention as messages/threads/drafts.
+Default pagination: cursor pagination; cursor parameter `pageToken`; next token from
+`nextPageToken`.
 
-Every paginated stream sends `maxResults` per `config.page_size` (default 100) except `labels`,
-which takes no page-size query param at all (matches legacy exactly — `applyListFilters`/
-pagination params only apply to the paginated branch, gmail.go:155-177).
+Pagination by stream: cursor: `messages`, `threads`, `drafts`, `history`; none: `labels`, `filters`,
+`send_as`, `delegates`, `forwarding_addresses`, `profile`.
 
-`computed_fields` rename each stream's camelCase raw fields to the schema's snake_case names
-(`threadId` -> `thread_id`, `historyId` -> `history_id`, `messageListVisibility` ->
-`message_list_visibility`, `delegateEmail` -> `delegate_email`, `forwardingEmail` ->
-`forwarding_email`, `sendAsEmail` -> `send_as_email`, `emailAddress` -> `email_address`, etc.) and,
-for `drafts`, reach into the nested raw `message` object (`record.message.id` -> `message_id`,
-`record.message.threadId` -> `thread_id`) exactly like legacy `draftRecord`'s type-asserted nested
-read (streams.go:116-127); a draft with no nested `message` object silently omits those two fields
-for that record (computed_fields' documented absent-source-path tolerance), matching legacy's own
-`nil`-default behavior for a missing/malformed `message` object. `filters`' `action`/`criteria`
-fields require no rename (the raw API keys already match the schema's field names exactly).
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
 
-**`labels`' 4 numeric count fields, `history`'s array fields, and `profile`'s counts preserve their
-native JSON type.** `labels`' `messagesTotal`/`messagesUnread`/`threadsTotal`/`threadsUnread`,
-`profile`'s `messagesTotal`/`threadsTotal`, and `history`'s `messagesAdded`/`messagesDeleted`/
-`labelsAdded`/`labelsRemoved` are all sourced via a BARE single `{{ record.<camelCaseField> }}`
-reference (no filter, no surrounding literal text) — the engine's typed `computed_fields`
-extraction (gap-loop cycle-1, REVIEW-A.md adjudication A1) copies the raw JSON value straight
-through for exactly this template shape instead of stringifying it via `Interpolate`, so these
-fields emit as native `json.Number`/array types, matching Gmail's real wire shape. Schema types are
-declared `["integer", "null"]`/`["array", "null"]` accordingly (their real wire type) — see
-`paritytest/gmail`'s `TestParityGmail_ComputedFieldsPreserveLabelCountFieldsNativeType`.
-
-**`history` is genuinely incremental** (unlike messages/threads/drafts): `incremental.cursor_field:
-id`, `incremental.request_param: startHistoryId`, `incremental.start_config_key:
-start_history_id`. Gmail's `users.history.list` requires a `startHistoryId` obtained from any
-message/thread/label/profile record's `historyId` field and returns only changes since that point
-— a genuine server-recognized cursor, unlike the newest-first, no-cursor `messages`/`threads`/
-`drafts` list endpoints. `config.start_history_id` is the seed value for a connector's first
-incremental sync (obtain it from an initial `profile` read's `history_id`, or any message/thread's
-own `historyId`); the engine's own state-cursor persistence drives every subsequent incremental
-read from there. A stale/expired `startHistoryId` (Google documents these as valid "typically at
-least a week") surfaces as an HTTP 404 from Gmail — the connector does not special-case this into
-an automatic full-resync; the operator must re-seed `start_history_id` (or trigger a fresh full
-sync of `messages`/`threads` instead) per Google's own documented recovery guidance.
-
-**No incremental sync mode for `messages`/`threads`/`drafts`/`labels`**: legacy's own doc comment
-(streams.go:31-34) states these list endpoints are newest-first with no publishable cursor field,
-so none of these 4 streams declare an `incremental` block — full_refresh only, matching legacy
-(`InitialState` always seeds an empty cursor for them). The `start_date` config value is NOT
-modeled as pagination/incremental for these 4 streams: it was legacy's own client-side Gmail
-search-query filter (`after:<unix-seconds>`, applied via the `q` query param, gmail.go:282-296)
-rather than the engine's `incremental.request_param` machinery. The bundle wires the same
-`q=after:<unix-seconds>` query template via the engine's `unix_seconds` filter and also wires
-legacy's `includeSpamTrash` filter for `messages`/`threads`/`drafts`/`labels`.
+- `messages`: GET `/users/{{ config.user_id }}/messages` - records path `messages`; query
+  `includeSpamTrash` from template `{{ config.include_spam_and_trash }}`, omitted when absent;
+  `maxResults`=`{{ config.page_size }}`; `q` from template `after:{{ config.start_date |
+  unix_seconds }}`, omitted when absent; cursor pagination; cursor parameter `pageToken`; next token
+  from `nextPageToken`; computed output fields `thread_id`.
+- `threads`: GET `/users/{{ config.user_id }}/threads` - records path `threads`; query
+  `includeSpamTrash` from template `{{ config.include_spam_and_trash }}`, omitted when absent;
+  `maxResults`=`{{ config.page_size }}`; `q` from template `after:{{ config.start_date |
+  unix_seconds }}`, omitted when absent; cursor pagination; cursor parameter `pageToken`; next token
+  from `nextPageToken`; computed output fields `history_id`.
+- `drafts`: GET `/users/{{ config.user_id }}/drafts` - records path `drafts`; query
+  `includeSpamTrash` from template `{{ config.include_spam_and_trash }}`, omitted when absent;
+  `maxResults`=`{{ config.page_size }}`; `q` from template `after:{{ config.start_date |
+  unix_seconds }}`, omitted when absent; cursor pagination; cursor parameter `pageToken`; next token
+  from `nextPageToken`; computed output fields `message_id`, `thread_id`.
+- `labels`: GET `/users/{{ config.user_id }}/labels` - records path `labels`; query
+  `includeSpamTrash` from template `{{ config.include_spam_and_trash }}`, omitted when absent; `q`
+  from template `after:{{ config.start_date | unix_seconds }}`, omitted when absent; computed output
+  fields `label_list_visibility`, `message_list_visibility`, `messages_total`, `messages_unread`,
+  `threads_total`, `threads_unread`.
+- `history`: GET `/users/{{ config.user_id }}/history` - records path `history`; query
+  `maxResults`=`{{ config.page_size }}`; `startHistoryId` from template `{{ config.start_history_id
+  }}`, omitted when absent; cursor pagination; cursor parameter `pageToken`; next token from
+  `nextPageToken`; incremental cursor `id`; sent as `startHistoryId`; formatted as `rfc3339`;
+  initial lower bound from `start_history_id`; computed output fields `labels_added`,
+  `labels_removed`, `messages_added`, `messages_deleted`.
+- `filters`: GET `/users/{{ config.user_id }}/settings/filters` - records path `filter`.
+- `send_as`: GET `/users/{{ config.user_id }}/settings/sendAs` - records path `sendAs`; computed
+  output fields `display_name`, `is_default`, `is_primary`, `reply_to_address`, `send_as_email`,
+  `treat_as_alias`, `verification_status`.
+- `delegates`: GET `/users/{{ config.user_id }}/settings/delegates` - records path `delegates`;
+  computed output fields `delegate_email`, `verification_status`.
+- `forwarding_addresses`: GET `/users/{{ config.user_id }}/settings/forwardingAddresses` - records
+  path `forwardingAddresses`; computed output fields `forwarding_email`, `verification_status`.
+- `profile`: GET `/users/{{ config.user_id }}/profile` - records at response root; computed output
+  fields `email_address`, `history_id`, `messages_total`, `threads_total`.
 
 ## Write actions & risks
 
-**35 write actions across 8 resources.** Every action executes exactly one HTTP request per
-record (design §B.5); none require a Tier-2 `WriteHook` (all are single, direct REST calls — no
-compound multi-request sequences, unlike github's `create_pull_request`).
+Overall write risk: external Gmail API mutation, including sending real outbound email, permanently
+deleting messages/threads/drafts, granting mailbox delegation, and changing account-wide
+forwarding/vacation/IMAP/POP settings.
 
-- **Messages** (7): `send_message` (send a new RFC 2822 message), `insert_message` (insert without
-  sending/no SMTP delivery), `import_message` (bulk-migration insert, bypasses default spam
-  classification), `modify_message` (add/remove label IDs), `trash_message`/`untrash_message`,
-  `delete_message` (**permanent, bypasses Trash** — `confirm: "destructive"`,
-  `delete.missing_ok_status: [404]` for idempotent re-delete).
-- **Threads** (4): `modify_thread`, `trash_thread`/`untrash_thread`, `delete_thread` (**permanent,
-  bypasses Trash** — `confirm: "destructive"`, idempotent 404).
-- **Drafts** (4): `create_draft`, `update_draft` (PUT, full replace), `send_draft` (sends an
-  existing draft; body is `{"id": "<draftId>"}` per Gmail's `drafts.send` contract), `delete_draft`
-  (idempotent 404).
-- **Labels** (4): `create_label`, `update_label` (PUT, full replace), `patch_label` (PATCH, partial
-  update), `delete_label` (idempotent 404; Gmail itself rejects deleting a system label).
-- **Filters** (2): `create_filter`, `delete_filter` (idempotent 404). Filters can auto-forward mail
-  externally (`action.forward`) — a filter that does so is a standing, unattended mail-exfiltration
-  risk if misconfigured.
-- **Send-as aliases** (6): `create_send_as` (triggers a verification email from Google before the
-  new alias can send), `update_send_as` (PUT), `patch_send_as` (PATCH), `delete_send_as` (idempotent
-  404; the account's primary address cannot be deleted — Gmail rejects that request), `verify_send_as`
-  (re-sends the pending verification email).
-- **Delegates** (2): `create_delegate` (grants another account read/send/delete access to this
-  mailbox — Google Workspace accounts only; a significant access-control change), `delete_delegate`
-  (idempotent 404).
-- **Forwarding addresses** (2): `create_forwarding_address` (proposes a new address; requires
-  owner-side email verification before use), `delete_forwarding_address` (idempotent 404).
-- **Account settings singletons** (5, none path-parameterized — one PUT per mailbox):
-  `update_auto_forwarding` (enabling this silently copies all future incoming mail externally),
-  `update_vacation`, `update_language`, `update_imap` (disabling breaks any connected external IMAP
-  client), `update_pop`.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-None of these actions were present in the original wave1-pilot legacy `gmail.Connector` (which is
-entirely read-only, `gmail.go:191-192`); they are new, Pass-B-only surface with no legacy Go
-counterpart to port from, authored directly from the Gmail API v1 Discovery document. Every action
-was chosen because it maps to exactly one documented REST endpoint with a well-defined non-batch
-request/response shape — see `api_surface.json` for the 15 `duplicate_of`-excluded batch/
-detail-GET endpoints this reasoning does not extend to.
+- `send_message`: POST `/users/{{ config.user_id }}/messages/send` - kind `create`; body type
+  `json`; required record fields `raw`; accepted fields `raw`, `threadId`; risk: sends a real
+  outbound email on behalf of the mailbox owner; irreversible once delivered.
+- `insert_message`: POST `/users/{{ config.user_id }}/messages` - kind `create`; body type `json`;
+  required record fields `raw`; accepted fields `labelIds`, `raw`, `threadId`; risk: inserts a
+  message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still
+  a real, visible mailbox mutation.
+- `import_message`: POST `/users/{{ config.user_id }}/messages/import` - kind `create`; body type
+  `json`; required record fields `raw`; accepted fields `labelIds`, `raw`, `threadId`.
+- `modify_message`: POST `/users/{{ config.user_id }}/messages/{{ record.id }}/modify` - kind
+  `update`; body type `json`; path fields `id`; required record fields `id`; accepted fields
+  `addLabelIds`, `id`, `removeLabelIds`; risk: changes label state on an existing message (e.g.
+  moving in/out of INBOX/TRASH/UNREAD), visible to the mailbox owner.
+- `trash_message`: POST `/users/{{ config.user_id }}/messages/{{ record.id }}/trash` - kind
+  `update`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  risk: moves a message to Trash; auto-purged by Gmail after 30 days.
+- `untrash_message`: POST `/users/{{ config.user_id }}/messages/{{ record.id }}/untrash` - kind
+  `update`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  risk: restores a trashed message back to its prior labels.
+- `delete_message`: DELETE `/users/{{ config.user_id }}/messages/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing
+  records treated as success for status `404`; confirmation `destructive`; risk: permanently deletes
+  a message immediately, bypassing Trash; irreversible.
+- `modify_thread`: POST `/users/{{ config.user_id }}/threads/{{ record.id }}/modify` - kind
+  `update`; body type `json`; path fields `id`; required record fields `id`; accepted fields
+  `addLabelIds`, `id`, `removeLabelIds`; risk: changes label state on every message in an existing
+  thread.
+- `trash_thread`: POST `/users/{{ config.user_id }}/threads/{{ record.id }}/trash` - kind `update`;
+  body type `none`; path fields `id`; required record fields `id`; accepted fields `id`; risk: moves
+  an entire thread to Trash; auto-purged by Gmail after 30 days.
+- `untrash_thread`: POST `/users/{{ config.user_id }}/threads/{{ record.id }}/untrash` - kind
+  `update`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  risk: restores a trashed thread back to its prior labels.
+- `delete_thread`: DELETE `/users/{{ config.user_id }}/threads/{{ record.id }}` - kind `delete`;
+  body type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing
+  records treated as success for status `404`; confirmation `destructive`; risk: permanently deletes
+  every message in a thread immediately, bypassing Trash; irreversible.
+- `create_draft`: POST `/users/{{ config.user_id }}/drafts` - kind `create`; body type `json`;
+  required record fields `message`; accepted fields `message`; risk: creates a new unsent draft,
+  visible to the mailbox owner.
+- `update_draft`: PUT `/users/{{ config.user_id }}/drafts/{{ record.id }}` - kind `update`; body
+  type `json`; path fields `id`; required record fields `id`, `message`; accepted fields `id`,
+  `message`; risk: replaces the entire content of an existing draft.
+- `send_draft`: POST `/users/{{ config.user_id }}/drafts/send` - kind `custom`; body type `json`;
+  required record fields `id`; accepted fields `id`; risk: sends a real outbound email from an
+  existing draft on behalf of the mailbox owner; irreversible once delivered.
+- `delete_draft`: DELETE `/users/{{ config.user_id }}/drafts/{{ record.id }}` - kind `delete`; body
+  type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: permanently deletes a draft; irreversible.
+- `create_label`: POST `/users/{{ config.user_id }}/labels` - kind `create`; body type `json`;
+  required record fields `name`; accepted fields `color`, `labelListVisibility`,
+  `messageListVisibility`, `name`; risk: creates a new custom label visible in the mailbox owner's
+  label list.
+- `update_label`: PUT `/users/{{ config.user_id }}/labels/{{ record.id }}` - kind `update`; body
+  type `json`; path fields `id`; required record fields `id`, `name`; accepted fields `color`, `id`,
+  `labelListVisibility`, `messageListVisibility`, `name`; risk: replaces the full definition of an
+  existing label (name/visibility/color); a system label's name cannot actually be changed by Gmail
+  even though the request is accepted.
+- `patch_label`: PATCH `/users/{{ config.user_id }}/labels/{{ record.id }}` - kind `update`; body
+  type `json`; path fields `id`; required record fields `id`; accepted fields `color`, `id`,
+  `labelListVisibility`, `messageListVisibility`, `name`; risk: partially updates an existing
+  label's fields, leaving unset fields unchanged.
+- `delete_label`: DELETE `/users/{{ config.user_id }}/labels/{{ record.id }}` - kind `delete`; body
+  type `none`; path fields `id`; required record fields `id`; accepted fields `id`; missing records
+  treated as success for status `404`; risk: removes a user label from the account and from every
+  message/thread that carried it; system labels reject deletion with an error.
+- `create_filter`: POST `/users/{{ config.user_id }}/settings/filters` - kind `create`; body type
+  `json`; required record fields `criteria`; accepted fields `action`, `criteria`; risk: creates a
+  mail filter that automatically acts on future incoming messages matching its criteria (may
+  auto-forward mail externally).
+- `delete_filter`: DELETE `/users/{{ config.user_id }}/settings/filters/{{ record.id }}` - kind
+  `delete`; body type `none`; path fields `id`; required record fields `id`; accepted fields `id`;
+  missing records treated as success for status `404`; risk: removes an existing mail filter; future
+  messages stop being auto-actioned by it.
+- `create_send_as`: POST `/users/{{ config.user_id }}/settings/sendAs` - kind `create`; body type
+  `json`; required record fields `sendAsEmail`; accepted fields `displayName`, `replyToAddress`,
+  `sendAsEmail`, `signature`, `smtpMsa`, `treatAsAlias`; risk: adds a new custom From: alias; Google
+  emails a verification link to the new address before it can send mail.
+- `update_send_as`: PUT `/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}` -
+  kind `update`; body type `json`; path fields `sendAsEmail`; required record fields `sendAsEmail`;
+  accepted fields `displayName`, `isDefault`, `replyToAddress`, `sendAsEmail`, `signature`,
+  `smtpMsa`, `treatAsAlias`; risk: replaces the full send-as alias configuration, including which
+  alias is the account default.
+- `patch_send_as`: PATCH `/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}` -
+  kind `update`; body type `json`; path fields `sendAsEmail`; required record fields `sendAsEmail`;
+  accepted fields `displayName`, `isDefault`, `replyToAddress`, `sendAsEmail`, `signature`,
+  `smtpMsa`, `treatAsAlias`; risk: partially updates an existing send-as alias, leaving unset fields
+  unchanged.
+- `delete_send_as`: DELETE `/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}` -
+  kind `delete`; body type `none`; path fields `sendAsEmail`; required record fields `sendAsEmail`;
+  accepted fields `sendAsEmail`; missing records treated as success for status `404`; risk: removes
+  a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that
+  request).
+- `verify_send_as`: POST `/users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail
+  }}/verify` - kind `custom`; body type `none`; path fields `sendAsEmail`; required record fields
+  `sendAsEmail`; accepted fields `sendAsEmail`; risk: re-sends the verification email for a pending
+  custom From: alias.
+- `create_delegate`: POST `/users/{{ config.user_id }}/settings/delegates` - kind `create`; body
+  type `json`; required record fields `delegateEmail`; accepted fields `delegateEmail`; risk: grants
+  another account read/send/delete access to this mailbox (Google Workspace accounts only); a
+  significant access-control change.
+- `delete_delegate`: DELETE `/users/{{ config.user_id }}/settings/delegates/{{ record.delegateEmail
+  }}` - kind `delete`; body type `none`; path fields `delegateEmail`; required record fields
+  `delegateEmail`; accepted fields `delegateEmail`; missing records treated as success for status
+  `404`; risk: revokes another account's delegated access to this mailbox.
+- `create_forwarding_address`: POST `/users/{{ config.user_id }}/settings/forwardingAddresses` -
+  kind `create`; body type `json`; required record fields `forwardingEmail`; accepted fields
+  `forwardingEmail`; risk: proposes a new external forwarding address; Google emails a verification
+  link before it can be used by update_auto_forwarding.
+- `delete_forwarding_address`: DELETE `/users/{{ config.user_id }}/settings/forwardingAddresses/{{
+  record.forwardingEmail }}` - kind `delete`; body type `none`; path fields `forwardingEmail`;
+  required record fields `forwardingEmail`; accepted fields `forwardingEmail`; missing records
+  treated as success for status `404`; risk: removes a forwarding address; if it is the account's
+  current auto-forwarding target, forwarding stops.
+- `update_auto_forwarding`: PUT `/users/{{ config.user_id }}/settings/autoForwarding` - kind
+  `update`; body type `json`; required record fields `enabled`; accepted fields `disposition`,
+  `emailAddress`, `enabled`; risk: changes the account-wide auto-forwarding singleton; when enabled,
+  silently copies all future incoming mail to an external address.
+- `update_vacation`: PUT `/users/{{ config.user_id }}/settings/vacation` - kind `update`; body type
+  `json`; accepted fields `enableAutoReply`, `endTime`, `responseBodyHtml`, `responseBodyPlainText`,
+  `responseSubject`, `restrictToContacts`, `restrictToDomain`, `startTime`; risk: changes the
+  account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the
+  configured message.
+- `update_language`: PUT `/users/{{ config.user_id }}/settings/language` - kind `update`; body type
+  `json`; required record fields `displayLanguage`; accepted fields `displayLanguage`; risk: changes
+  the Gmail web interface display language for the account.
+- `update_imap`: PUT `/users/{{ config.user_id }}/settings/imap` - kind `update`; body type `json`;
+  accepted fields `autoExpunge`, `enabled`, `expungeBehavior`, `maxFolderSize`; risk: changes the
+  account-wide IMAP-access singleton; disabling breaks any external IMAP client currently connected.
+- `update_pop`: PUT `/users/{{ config.user_id }}/settings/pop` - kind `update`; body type `json`;
+  accepted fields `accessWindow`, `disposition`; risk: changes the account-wide POP-access
+  singleton, including what happens to mail after it is fetched via POP.
 
 ## Known limits
 
-- **`start_date` invalid-value handling is stricter than legacy's silent ignore**: legacy parsed
-  `config.start_date` as RFC3339 and, if parsing failed, simply omitted the `q=after:<unix-seconds>`
-  filter (gmail.go:288-296). The declarative bundle uses the engine's `unix_seconds` interpolation
-  filter, so a malformed `start_date` fails the read instead of degrading to an unfiltered full read.
-  For valid RFC3339 values, the emitted-data filter matches legacy.
-- **Explicit `include_spam_and_trash=false` is sent as `includeSpamTrash=false` instead of being
-  omitted**: when unset, the param is omitted exactly like legacy's false default; when set to
-  `"true"`, it sends legacy's `includeSpamTrash=true`. The query dialect has no value-equality gate,
-  so an explicitly configured `"false"` is sent as the API-equivalent false value rather than being
-  omitted.
-- **`token_url` https-only enforcement is stricter than legacy's `validatedURL`** (which accepted
-  plain `http` too, gmail.go:342-357): the hook only accepts `https://` overrides. This is
-  documented as a parity deviation (never stricter for any *production* Google OAuth endpoint,
-  which is always https; strictly safer for the one new SSRF-adjacent secret-bearing surface this
-  phase introduces). See the parity-deviation ledger in `docs/migration/conventions.md` §5.
-- **Batch endpoints (`messages.batchModify`, `messages.batchDelete`) are excluded, not
-  implemented** — the engine's write dialect is one-request-per-record; the identical outcome is
-  reached by calling `modify_message`/`delete_message` once per id. See `api_surface.json`'s
-  `duplicate_of` exclusions.
-- **Attachments, S/MIME certificates, and Client-Side Encryption (CSE) key management are
-  excluded** — attachment bytes are a `binary_payload`, not a syncable record; S/MIME and CSE
-  require the elevated `https://mail.google.com/` scope plus (for CSE) a Google Workspace
-  Enterprise/Education Plus add-on with organization-admin enablement, well outside an ordinary
-  OAuth refresh-token grant's reach. See `api_surface.json`'s `requires_elevated_scope`/
-  `binary_payload`/`destructive_admin` exclusions for the full per-endpoint reasoning (14 + 2 + 1
-  endpoints respectively).
-- **`watch`/`stop` (Cloud Pub/Sub push notification control) are excluded as `non_data_endpoint`** —
-  they register/cancel a push subscription, a control-plane side effect with no record data of its
-  own to read or write.
-- **`TestConformance/gmail`'s dynamic READ (fixture-replay) checks are genuinely `skip_dynamic`'d,
-  NOT because conformance is hook-blind; WRITE checks (`write_request_shape`/`delete_semantics`)
-  are NOT skipped and run for real against every one of the 35 write-action fixtures.**
-  `internal/connectors/conformance/dynamic.go`'s bundle-level skip-marker branch
-  (`runDynamicChecks`) explicitly still calls `checkWriteRequestShape`/`checkDeleteSemantics` even
-  when every read-side dynamic check is skipped — write checks are never gated by the read-side
-  auth-resolution problem described below, since `fixtures/writes/*.json` supply the record/expect
-  shape directly rather than depending on a live/replay auth handshake. gmail's `metadata.json`
-  still carries a genuine, honest `skip_dynamic` marker for READS: its *sole* auth candidate is
-  `mode: custom` (legacy has no fallback auth path to declare a `when`-gated alternative), and
-  conformance's synthetic config can never carry a real `https` `token_url` — the AuthHook's own
-  https-only guard means no synthetic secret value can ever satisfy it, so every auth-resolving
-  dynamic READ check would fail identically and uninformatively regardless of hook wiring. (github's
-  `custom` candidate never hits this: its declarative bearer-token candidate is tried FIRST and
-  conformance's synthetic token secret satisfies it before `custom` is ever reached — not evidence
-  of a repo-wide hook-blindness gap, just a different candidate-ordering outcome.) `paritytest/gmail`
-  (which wires the real `AuthHook` via `engine.HooksFor("gmail")`, matching monday's precedent)
-  remains the authoritative parity/correctness bar for this connector's auth path — `TestConformance/gmail`
-  still passes today (the marker-skip path for reads, combined with real dynamic write checks, not a
-  bypassed/expected-fail path for either).
+- Batch defaults: read_page_size=100.
+- API coverage includes 10 stream-backed endpoint group(s), 35 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=2, destructive_admin=1, duplicate_of=15, non_data_endpoint=2,
+  requires_elevated_scope=14.

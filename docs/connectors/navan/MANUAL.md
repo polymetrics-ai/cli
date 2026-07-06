@@ -10,22 +10,50 @@ SYNOPSIS
   pm credentials add <name> --connector navan [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Navan travel bookings (flight, hotel, car, and rail) through the Navan REST API using OAuth2 client-credentials authentication.
+  Reads Navan flight, hotel, car, and rail travel bookings through the Navan REST API using OAuth2 client-credentials authentication.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  start_date
+  client_id (secret)
+  client_secret (secret)
+
+ETL STREAMS
+  bookings:
+    primary key: uuid
+    cursor: last_modified
+    fields: approval_status(), base_price(), booking_fee(), booking_id(), booking_method(), booking_status(), booking_type(), cancelled_at(), confirmation_number(), created(), currency(), destination(), domestic(), end_date(), expensed(), grand_total(), last_modified(), start_date(), uuid()
+  hotel_bookings:
+    primary key: uuid
+    cursor: last_modified
+    fields: approval_status(), base_price(), booking_fee(), booking_id(), booking_method(), booking_status(), booking_type(), cancelled_at(), confirmation_number(), created(), currency(), destination(), domestic(), end_date(), expensed(), grand_total(), last_modified(), start_date(), uuid()
+  car_bookings:
+    primary key: uuid
+    cursor: last_modified
+    fields: approval_status(), base_price(), booking_fee(), booking_id(), booking_method(), booking_status(), booking_type(), cancelled_at(), confirmation_number(), created(), currency(), destination(), domestic(), end_date(), expensed(), grand_total(), last_modified(), start_date(), uuid()
+  rail_bookings:
+    primary key: uuid
+    cursor: last_modified
+    fields: approval_status(), base_price(), booking_fee(), booking_id(), booking_method(), booking_status(), booking_type(), cancelled_at(), confirmation_number(), created(), currency(), destination(), domestic(), end_date(), expensed(), grand_total(), last_modified(), start_date(), uuid()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Navan API read of travel booking data (flight, hotel, car, rail)
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

@@ -12,20 +12,42 @@ SYNOPSIS
 DESCRIPTION
   Reads Pivotal Tracker projects, stories, iterations, and epics through API v5.
 
+ICON
+  asset: icons/pivotal-tracker.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  project_id
+  api_token (secret)
+
+ETL STREAMS
+  projects:
+    primary key: id
+    fields: id(), name(), state(), updated_at()
+  stories:
+    primary key: id
+    fields: id(), name(), state(), updated_at()
+  iterations:
+    primary key: id
+    fields: id(), name(), state(), updated_at()
+  epics:
+    primary key: id
+    fields: id(), name(), state(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Pivotal Tracker API read of project, story, iteration, and epic data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

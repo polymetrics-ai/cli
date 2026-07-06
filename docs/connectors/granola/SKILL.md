@@ -7,7 +7,14 @@ description: Granola connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Granola meeting notes and full note detail (summaries, owners, attendees, calendar events) through the Granola public API.
+Reads Granola meeting notes metadata and full note detail (summary, owner, attendees, calendar event) through the Granola public API (read-only).
+
+## Icon
+
+- asset: icons/source-granola.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+- review_url: https://docs.granola.ai/introduction
 
 ## Capabilities
 
@@ -16,17 +23,34 @@ Reads Granola meeting notes and full note detail (summaries, owners, attendees, 
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- mode
+- page_size
+- start_date
+- api_key (secret)
+
+## ETL Streams
+
+- notes:
+  - primary key: id
+  - cursor: created_at
+  - fields: created_at(), id(), object(), owner_email(), owner_name(), title(), updated_at()
+- detailed_notes:
+  - primary key: id
+  - cursor: created_at
+  - fields: attendees(), calendar_event(), created_at(), folders(), id(), object(), owner_email(), owner_name(), summary(), title(), transcript(), updated_at()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Granola API read of meeting notes metadata
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands
@@ -48,4 +72,3 @@ pm connectors inspect granola --json
 - Run pm connectors inspect granola before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
-

@@ -22,6 +22,6 @@
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "Every stream is StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all — see docs.md's Streams notes and docs/migration/quarantine.json's microsoft-entra-id ENGINE_GAP entry). hook-covered; proven live by internal/connectors/paritytest/microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
+    "reason": "Every stream is StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination reads its cursor via connsdk.StringAt's dotted-path parser, which cannot address the literal dotted key \"@odata.nextLink\" at all — see docs.md's Streams notes and docs/migration/quarantine.json's microsoft-entra-id ENGINE_GAP entry). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
   }
 }

@@ -1,74 +1,74 @@
 # Overview
 
-Mention is a social listening and media monitoring tool. This bundle reads Mention app metadata,
-accounts, alerts (monitored queries), mentions matched by an alert, alert tags, alert shares, alert
-preferences, and alert tasks through the Mention REST API (`https://api.mention.net/api`). It is
-migrated from `internal/connectors/mention` (read-only; `Capabilities.Write` is false there and
-here).
+Reads Mention app metadata, accounts, alerts, mentions, alert tags, alert shares, alert preferences,
+and alert tasks from the Mention social listening REST API.
+
+Readable streams: `app_data`, `account_me`, `account`, `alert`, `mention`, `alert_tag`,
+`alert_share`, `alert_preferences`, `alert_task`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://dev.mention.com/.
 
 ## Auth setup
 
-Provide a Mention API key via the `api_key` secret. It is sent as the RAW `Authorization` header
-value (no `Bearer` prefix) via an `api_key_header` auth spec with an empty `prefix` — matching
-legacy's `connsdk.APIKeyHeader("Authorization", secret, "")`. Never logged.
+Connection fields:
+
+- `account_id` (required, string); Mention account id.
+- `alert_id` (optional, string); Mention alert id, required only by the 'mention' and 'alert_tag'
+  streams (used to build their path: accounts/{account_id}/alerts/{alert_id}/mentions|tags).
+- `api_key` (required, secret, string); Mention API key, sent as the raw Authorization header value
+  (no Bearer prefix). Never logged.
+- `base_url` (optional, string); default `https://api.mention.net/api`; format `uri`; Mention API
+  base URL override for tests or proxies.
+- `mode` (optional, string).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.mention.net/api`.
+
+Authentication behavior:
+
+- API key authentication in `Authorization` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/accounts/me`.
 
 ## Streams notes
 
-- `app_data` (`GET app/data`) is an unpaginated singleton configuration object with languages,
-  tones, sources, countries, folders, actions, integrations, and day names.
-- `account_me` (`GET accounts/me`) and `account` (`GET accounts/{account_id}`) are unpaginated,
-  single-object reads; primary key `["id"]`.
-- `alert` (`GET accounts/{account_id}/alerts`), primary key `["id"]`, is paginated: Mention's list
-  responses carry the next cursor at `_links.more.params.cursor` (absent on the final page), sent
-  back as the `cursor` query param on the next request — expressed here as `pagination.type:
-  cursor` with `token_path: "_links.more.params.cursor"` and `cursor_param: "cursor"` (no
-  `stop_path` needed; legacy's own loop stops purely on an empty/repeated cursor token, which is
-  the paginator's default behavior when `stop_path` is omitted). `limit` is sent as the static
-  literal `100`, matching legacy's default `mentionDefaultPageSize`.
-- `mention` (`GET accounts/{account_id}/alerts/{alert_id}/mentions`) uses the identical cursor
-  pagination shape; primary key `["id"]`.
-- `alert_tag` (`GET accounts/{account_id}/alerts/{alert_id}/tags`) is unpaginated, matching
-  legacy's `paginated: false` for this endpoint; primary key `["id"]`.
-- `alert_share`, `alert_preferences`, and `alert_task` read the documented alert-scoped shares,
-  preferences singleton, and alert task list using the same required `account_id`/`alert_id`
-  path inputs as `mention` and `alert_tag`.
-- None of Mention's streams expose an incremental/updated-since filter in the API surface legacy
-  itself reads, so every stream here is full-refresh only, matching legacy exactly (legacy never
-  declared `CursorFields` either).
+Default pagination: single request; no pagination.
+
+Pagination by stream: cursor: `alert`, `mention`; none: `app_data`, `account_me`, `account`,
+`alert_tag`, `alert_share`, `alert_preferences`, `alert_task`.
+
+- `app_data`: GET `/app/data` - single-object response; records at response root.
+- `account_me`: GET `/accounts/me` - records path `account`.
+- `account`: GET `/accounts/{{ config.account_id }}` - records path `account`.
+- `alert`: GET `/accounts/{{ config.account_id }}/alerts` - records path `alerts`; query
+  `limit`=`100`; cursor pagination; cursor parameter `cursor`; next token from
+  `_links.more.params.cursor`.
+- `mention`: GET `/accounts/{{ config.account_id }}/alerts/{{ config.alert_id }}/mentions` - records
+  path `mentions`; query `limit`=`100`; cursor pagination; cursor parameter `cursor`; next token
+  from `_links.more.params.cursor`.
+- `alert_tag`: GET `/accounts/{{ config.account_id }}/alerts/{{ config.alert_id }}/tags` - records
+  path `tags`.
+- `alert_share`: GET `/accounts/{{ config.account_id }}/alerts/{{ config.alert_id }}/shares` -
+  records path `shares`.
+- `alert_preferences`: GET `/accounts/{{ config.account_id }}/alerts/{{ config.alert_id
+  }}/preferences` - single-object response; records path `preferences`.
+- `alert_task`: GET `/accounts/{{ config.account_id }}/alerts/{{ config.alert_id }}/tasks` - records
+  path `tasks`.
 
 ## Write actions & risks
 
-Not applicable — Mention is read-only (`capabilities.write: false`, no `writes.json`), matching
-legacy's `Write` returning `connectors.ErrUnsupportedOperation` unconditionally. Mention's
-documented create/update/delete endpoints mutate alerts, accounts, shares, tags, tasks, mention
-curation/read state, and alert preferences, so they remain excluded in `api_surface.json`.
+This connector is read-only. Read behavior: external Mention API read of app metadata, account,
+alert, mention, tag, share, preference, and task data.
 
 ## Known limits
 
-- **Documented scope narrowing (account_id auto-discovery dropped):** legacy's `resolveAccountID`
-  auto-discovers the account id from a pre-flight `GET accounts/me` call when `config.account_id` is
-  unset. The engine's path-templating dialect has no mechanism to derive a path segment from a
-  PRIOR response within the same read (no substream/pre-flight-lookup primitive exists in
-  `streams.json`'s dialect) — expressing this would require a `StreamHook` (Tier-2/forbidden this
-  wave). This bundle instead **requires** `account_id` in `spec.json` (`required: ["account_id"]`).
-  This never changes emitted record data for any caller that already supplies `account_id`
-  explicitly (the common case for any automated/scheduled sync); it only removes the
-  interactive-convenience fallback for a caller that omitted it and expected auto-discovery. A
-  caller relying on the auto-discovery convenience must now resolve and supply `account_id`
-  themselves (e.g. via a one-time `GET accounts/me` call before configuring the connector).
-- **`alert_id` required for `mention`/`alert_tag` streams**: matches legacy's own hard error
-  (`"mention config alert_id is required for the mention and alert_tag streams"`) when unset for
-  those two streams; declared as an optional `spec.json` property (not globally required) since
-  `account_me`/`account`/`alert` don't need it, exactly mirroring legacy's per-stream requirement.
-- **`page_size`/`max_pages` runtime overrides are not modeled**: legacy accepts `config.page_size`
-  (1-1000, default 100) and `config.max_pages` (0/`all`/`unlimited` for unbounded, else a positive
-  integer hard cap). The engine's pagination fields are fixed values baked into `streams.json`, not
-  per-request templated config values, so `spec.json` intentionally does not declare dead,
-  unwireable config properties. The bundle matches legacy defaults: `limit=100` and unbounded
-  cursor pagination.
-- Fixtures use Mention's real wire shape for every field. The 2-page `alert`/`mention` fixtures set
-  `_links.more.params.cursor` on page 1 and an empty `_links` object on page 2 (no `more` key),
-  matching the paginator's stop-on-absent-token behavior exactly.
-- Statistics require repeated query-array filters such as `alerts[]`, and mention children/authors
-  require extra mention IDs or time/filter selectors. They are documented as excluded API surface
-  rather than adding dead or globally required config that legacy did not expose for every stream.
+- Batch defaults: read_page_size=100.
+- API coverage includes 9 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, duplicate_of=2, non_data_endpoint=1, out_of_scope=3,
+  requires_elevated_scope=4.

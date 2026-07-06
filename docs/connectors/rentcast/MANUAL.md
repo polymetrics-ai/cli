@@ -10,22 +10,57 @@ SYNOPSIS
   pm credentials add <name> --connector rentcast [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads RentCast properties, sale listings, rental listings, and market data. Read-only.
+  Reads RentCast properties, sale listings, rental listings, market data, and value/rental estimates through the RentCast REST API. Read-only.
+
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  address
+  base_url
+  city
+  property_type
+  state
+  zip_code
+  api_key (secret)
+
+ETL STREAMS
+  properties:
+    primary key: id
+    cursor: last_seen_date
+    fields: address(), city(), id(), last_seen_date(), property_type(), state(), zip_code()
+  sale_listings:
+    primary key: id
+    cursor: last_seen_date
+    fields: address(), id(), last_seen_date(), price(), property_type()
+  rental_listings:
+    primary key: id
+    cursor: last_seen_date
+    fields: address(), id(), last_seen_date(), property_type(), rent()
+  markets:
+    primary key: id
+    fields: city(), id(), state(), zip_code()
+  value_estimates:
+    primary key: id
+    fields: address(), id(), price()
+  rental_estimates:
+    primary key: id
+    fields: address(), id(), rent()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external RentCast API read of property, listing, market, and valuation data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

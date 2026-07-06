@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads Invoice Ninja clients, invoices, products, payments, and quotes through the Invoice Ninja v5 REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  max_pages
+  mode
+  page_size
+  api_key (secret)
+
+ETL STREAMS
+  clients:
+    primary key: id
+    fields: archived_at(), balance(), created_at(), currency_id(), display_name(), id(), is_deleted(), name(), number(), paid_to_date(), phone(), updated_at(), vat_number(), website()
+  invoices:
+    primary key: id
+    fields: amount(), balance(), client_id(), created_at(), currency_id(), date(), due_date(), id(), is_deleted(), number(), paid_to_date(), status_id(), updated_at()
+  products:
+    primary key: id
+    fields: cost(), created_at(), id(), is_deleted(), notes(), price(), product_key(), quantity(), tax_name1(), tax_rate1(), updated_at()
+  payments:
+    primary key: id
+    fields: amount(), applied(), client_id(), created_at(), currency_id(), date(), id(), is_deleted(), number(), refunded(), status_id(), transaction_reference(), updated_at()
+  quotes:
+    primary key: id
+    fields: amount(), balance(), client_id(), created_at(), currency_id(), date(), due_date(), id(), is_deleted(), number(), status_id(), updated_at(), valid_until()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Invoice Ninja API read of client and billing data
+  approval: none; read-only, no reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

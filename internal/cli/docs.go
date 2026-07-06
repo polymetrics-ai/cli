@@ -167,11 +167,9 @@ DESCRIPTION
 CATALOG
   The connector catalog is generated from local connector metadata. The current
   runtime catalog has 551 bare-name entries: 547 declarative bundles plus the
-  local sample, file, warehouse, and outbox primitives. Of the bundle-backed
-  connectors, 223 writable connectors out of 547 declare reverse ETL write
-  actions. Use --all or the catalog subcommand when an agent needs to discover
-  the complete connector universe. Use --capability read, write, cdc, or query
-  to filter by executable surface.
+  local sample, file, warehouse, and outbox primitives. Use --all or the catalog
+  subcommand when an agent needs to discover the complete connector universe.
+  Use --capability read, write, cdc, or query to filter by executable surface.
 
 GITHUB AUTHENTICATION
   public

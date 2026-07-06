@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/connectors/registryset"
+	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/vault"
@@ -110,7 +110,7 @@ func Open(root string) (*App, error) {
 		statePath:  statePath,
 		store:      newStateStore(statePath),
 		vault:      v,
-		registry:   registryset.New(),
+		registry:   bundleregistry.New(),
 	}
 	a.sqlEngine = newSQLEngine(a)
 	if err := a.load(); err != nil {
@@ -130,6 +130,9 @@ func (a *App) Connectors() []connectors.Metadata {
 }
 
 func (a *App) Connector(name string) (connectors.Metadata, error) {
+	if err := connectors.RejectLegacyConnectorName(name); err != nil {
+		return connectors.Metadata{}, err
+	}
 	c, ok := a.registry.Get(name)
 	if !ok {
 		return connectors.Metadata{}, fmt.Errorf("connector %q not found", name)
@@ -169,6 +172,9 @@ func newStateStore(path string) statestore.JSONStore[state] {
 func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (CredentialMeta, error) {
 	if strings.TrimSpace(req.Name) == "" {
 		return CredentialMeta{}, errors.New("credential name is required")
+	}
+	if err := connectors.RejectLegacyConnectorName(req.Connector); err != nil {
+		return CredentialMeta{}, err
 	}
 	if _, ok := a.registry.Get(req.Connector); !ok {
 		return CredentialMeta{}, fmt.Errorf("connector %q not found", req.Connector)
@@ -819,8 +825,14 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 }
 
 func (a *App) resolveEndpoint(ctx context.Context, endpoint EndpointConfig) (connectors.Connector, connectors.RuntimeConfig, error) {
+	if err := connectors.RejectLegacyConnectorName(endpoint.Connector); err != nil {
+		return nil, connectors.RuntimeConfig{}, err
+	}
 	cred, runtime, err := a.resolveCredential(ctx, endpoint.Credential, endpoint.Config)
 	if err != nil {
+		return nil, connectors.RuntimeConfig{}, err
+	}
+	if err := connectors.RejectLegacyConnectorName(cred.Connector); err != nil {
 		return nil, connectors.RuntimeConfig{}, err
 	}
 	if endpoint.Connector != "" && endpoint.Connector != cred.Connector {

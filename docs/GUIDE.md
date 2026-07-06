@@ -364,28 +364,29 @@ Details: [docs/runtime/SETUP.md](runtime/SETUP.md).
 
 Adding a connector is the highest-leverage contribution. The pattern:
 
-1. **Copy a template** — `internal/connectors/stripe/` (declarative HTTP) or
-   `internal/connectors/postgres/` (database). Each is a `package <name>` exposing
-   `func New() connectors.Connector` and self-registering via
-   `connectors.RegisterFactory("<name>", New)` in `init()`.
-2. **Build on `connsdk`** — `internal/connectors/connsdk/` gives you an HTTP `Requester`
-   (retry/backoff), authenticators (Bearer/API-key/Basic/OAuth2), paginators
-   (offset/page/cursor/Link-header), record extraction, schema inference, and cursor state.
-3. **Implement `Check`, `Catalog`, `Read`** (and `Write` + `WriteValidator` if the API has
-   safe mutations). Add a `mode=fixture` path so it conforms without live credentials.
-4. **Test first** — write an `httptest`-backed `_test.go`, confirm it fails, then implement.
+1. **Author a bundle** — add `internal/connectors/defs/<name>/` with `metadata.json`,
+   `spec.json`, `api_surface.json`, `streams.json`, schemas, fixtures, and docs. Prefer
+   declarative streams/writes.
+2. **Use hooks only for real gaps** — add `internal/connectors/hooks/<name>/` when auth,
+   pagination, fan-out, or write behavior cannot be represented declaratively.
+3. **Promote full protocols to native** — use `internal/connectors/native/<name>/` only when
+   a connector is inherently dynamic or too large for a hook. Native connectors are wired by
+   `native/nativeset`, not package `init()` side effects.
+4. **Test first** — use bundle validation, conformance fixtures, and focused hook/native tests.
 5. **Add the icon release artifact** — connector icons are registry-backed and validated.
    Run `PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate` to seed icons from an upstream registry. If the seeded icon is stale,
    compare it against the vendor website or official documentation, replace the SVG under
    `docs/connectors/icons/`, and update the icon entry in `internal/connectors/icon_data.json`
    with `review_status` set to `official_verified` or `manual_override`.
-6. **Wire it in** — `go run ./cmd/registrygen` regenerates the registry from the connector
-   directories (no shared file to hand-edit), then `make verify`.
+6. **Validate and regenerate generated sets** — `go run ./cmd/connectorgen validate internal/connectors/defs`
+   must report zero findings. Run `go run ./cmd/connectorgen gen` if hook/native package sets
+   changed, then `make verify`.
 
 ```bash
 PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate
-go run ./cmd/registrygen   # derive the registry from internal/connectors/*/
-make verify                # must stay green
+go run ./cmd/connectorgen validate internal/connectors/defs
+go run ./cmd/connectorgen gen   # only when hook/native package sets change
+make verify                     # must stay green
 ```
 
 Optional local hook setup:

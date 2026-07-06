@@ -10,22 +10,45 @@ SYNOPSIS
   pm credentials add <name> --connector secoda [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Secoda catalog metadata through the Secoda API.
+  Reads Secoda catalog metadata (tables, documents, collections, questions) through the Secoda API.
+
+ICON
+  asset: icons/secoda.svg
+  source: official
+  review_status: official_verified
+  review_url: https://docs.secoda.co/api.md
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  api_key (secret)
+
+ETL STREAMS
+  tables:
+    primary key: id
+    fields: id(), name(), updated_at()
+  documents:
+    primary key: id
+    fields: id(), name(), updated_at()
+  collections:
+    primary key: id
+    fields: id(), name(), updated_at()
+  questions:
+    primary key: id
+    fields: id(), name(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Secoda API read of data-catalog metadata
+  approval: none; read-only, no reverse-ETL writes implemented by legacy
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

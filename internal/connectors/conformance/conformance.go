@@ -1,10 +1,7 @@
 // Package conformance implements conformance v2 (design §E.2): static
 // structural/policy checks plus dynamic fixture-backed replay checks that
 // exercise the REAL engine (internal/connectors/engine) against recorded
-// fixture pages. It replaces the synthetic mode=fixture record shortcut of
-// the legacy internal/connectors/native_conformance.go (untouched,
-// out of scope, kept only as a reference for the report-shape/accumulator
-// pattern this package mirrors).
+// fixture pages.
 package conformance
 
 import (
@@ -14,12 +11,11 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-// CheckResult is one named conformance check's outcome, mirroring
-// native_conformance.go's NativeConformanceTest{Name, Passed, Error} shape
-// plus Skipped: a check that could not run at all (e.g. every check after a
-// Load failure, or a dynamic check whose bundle declares no fixtures for
-// that stream/action) is reported Skipped rather than silently omitted, so
-// the check list is always complete and machine-readable.
+// CheckResult is one named conformance check's outcome. A check that could not
+// run at all (e.g. every check after a Load failure, or a dynamic check whose
+// bundle declares no fixtures for that stream/action) is reported Skipped
+// rather than silently omitted, so the check list is always complete and
+// machine-readable.
 type CheckResult struct {
 	Name    string `json:"name"`
 	Passed  bool   `json:"passed"`
@@ -28,10 +24,8 @@ type CheckResult struct {
 }
 
 // Report is the aggregate conformance result for one connector bundle:
-// {Connector, Checks: [...], Passed}, per the dispatch brief's report-shape
-// note (mirrors native_conformance.go's NativeConformanceReport, generalized
-// to a flat check list since conformance v2 has no fixture-vs-live capability
-// axis of its own — that distinction lives in certify, not here).
+// {Connector, Checks: [...], Passed}. Conformance v2 uses a flat check list;
+// fixture-vs-live capability distinctions live in certify, not here.
 type Report struct {
 	Connector string        `json:"connector"`
 	Checks    []CheckResult `json:"checks"`

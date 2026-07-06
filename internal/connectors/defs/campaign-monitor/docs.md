@@ -1,110 +1,183 @@
 # Overview
 
-Campaign Monitor reads and writes Campaign Monitor clients, campaigns, subscriber lists,
-subscribers, segments, and templates through the createsend.com v3.3 REST API
-(`https://api.createsend.com/api/v3.3/...`). This bundle targets capability parity with
-`internal/connectors/campaign-monitor` (the hand-written connector it migrates, Go package
-`campaignmonitor`); the legacy package stays registered and unchanged until wave6's registry flip.
+Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscribers, segments, and
+templates through the createsend.com v3.3 REST API.
 
-**Pass B full-surface expansion** (`api_surface.json`, reviewed 2026-07-04 against the live
-campaignmonitor.com/api/ docs across its Account/Clients/Campaigns/Lists/Subscribers/Segments/
-Templates/Transactional sections): beyond the 4 legacy streams (`clients`, `campaigns`, `lists`,
-`suppressionlist`), this bundle adds 9 more: `segments` and `templates` (fanned out per client),
-`list_custom_fields` and `list_webhooks` (fanned out per list), and 5 subscriber-state streams
-(`active_subscribers`, `unconfirmed_subscribers`, `unsubscribed_subscribers`, `bounced_subscribers`,
-`deleted_subscribers`, likewise fanned out per list). `capabilities.write` is now `true`, with 13
-write actions covering list/subscriber/segment/campaign lifecycle. Transactional (a genuinely
-separate Campaign Monitor product for single-recipient triggered email, not bulk marketing
-campaigns) and every agency-administrative surface (admins, billing, client provisioning, sending
-domains) are out of scope — see `api_surface.json` for the full accounting.
+Readable streams: `clients`, `campaigns`, `lists`, `suppressionlist`, `segments`, `templates`,
+`list_custom_fields`, `list_webhooks`, `active_subscribers`, `unconfirmed_subscribers`,
+`unsubscribed_subscribers`, `bounced_subscribers`, `deleted_subscribers`.
+
+Write actions: `create_list`, `update_list`, `delete_list`, `add_subscriber`, `update_subscriber`,
+`unsubscribe_subscriber`, `delete_subscriber`, `create_segment`, `update_segment`, `delete_segment`,
+`create_campaign`, `send_campaign`, `unschedule_campaign`, `delete_campaign`.
+
+Service API documentation: https://www.campaignmonitor.com/api/.
 
 ## Auth setup
 
-Campaign Monitor authenticates with HTTP Basic auth: the account/client API key is the username,
-and the password may be blank or a dummy value. Provide the API key via the `username` config value
-(required). An optional `password` secret is sent as the Basic auth password when set (`auth`
-candidate 1: `when: "{{ secrets.password }}"`); when `password` is unset, the second candidate
-(`mode: basic`, no `when`, always matches) sends the literal dummy password `"x"` instead — matching
-legacy's own `cmDefaultDummyPasswrd` fallback (`campaign_monitor.go:258-262`) exactly via the
-dual-auth-candidate first-match-wins pattern (`docs/migration/conventions.md` §3's zendesk-support
-precedent). `base_url` defaults to `https://api.createsend.com/api/v3.3` and may be overridden for
-tests/proxies.
+Connection fields:
+
+- `base_url` (optional, string); default `https://api.createsend.com/api/v3.3`; format `uri`;
+  Campaign Monitor API base URL override for tests or proxies.
+- `client_id` (optional, string); Campaign Monitor client id, required for every client-scoped
+  stream ('campaigns', 'lists', 'suppressionlist', 'segments', 'templates') and every list-scoped
+  fan-out stream ('list_custom_fields', 'list_webhooks', 'active_subscribers',
+  'unconfirmed_subscribers', 'unsubscribed_subscribers', 'bounced_subscribers',
+  'deleted_subscribers'), which fan out over this client's own lists.
+- `password` (optional, secret, string); HTTP Basic auth password. Campaign Monitor allows this to
+  be blank or a dummy value alongside the API key username; never logged.
+- `username` (required, string); Campaign Monitor API key, sent as the HTTP Basic auth username.
+
+Secret fields are redacted in logs and write previews: `password`.
+
+Default configuration values: `base_url=https://api.createsend.com/api/v3.3`.
+
+Authentication behavior:
+
+- HTTP Basic authentication using `config.username`, `secrets.password` when `{{ secrets.password
+  }}`.
+- HTTP Basic authentication using `config.username`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/clients.json`.
 
 ## Streams notes
 
-`clients` (`GET /clients.json`) and `lists` (`GET /clients/{{ config.client_id }}/lists.json`) are
-bare top-level JSON arrays with no pagination (`pagination.type: none`), matching legacy's
-`endpoint.paged == false` / `readArray` branch. `campaigns` and `suppressionlist` use Campaign
-Monitor's page/`NumberOfPages` envelope (`{Results:[...], PageNumber, NumberOfPages}`) —
-`pagination.type: page_number` with `page_param: page`, `size_param: pagesize`, `page_size: 100`;
-records live at `Results`. A page shorter than 100 records stops pagination, functionally equivalent
-to legacy's own `current >= numberOfPages` stop check for every real response (the last page is
-never longer than the requested `pagesize`); an exact-multiple-of-100 result set costs one extra,
-empty-page request on the engine side that legacy's page-count check would have avoided, never a
-data difference.
+Default pagination: page-number pagination; page parameter `page`; size parameter `pagesize`; starts
+at 1; page size 100.
 
-`lists` and `campaigns` (as well as `suppressionlist`) are scoped under `/clients/{{ config.client_id
-}}/...`; `client_id` is urlencoded into the path by `InterpolatePath`'s per-segment default, matching
-legacy's own `url.PathEscape(clientID)` in `resolveResource`. An absent `client_id` hard-errors on
-both sides (legacy: `"campaign-monitor config client_id is required for this stream"`; engine: an
-unresolved `config.client_id` path-template key). Cursor fields match legacy's own declarations:
-`campaigns` -> `SentDate`, `suppressionlist` -> `Date`; `clients`/`lists` have none (full refresh),
-matching legacy's `CursorFields: nil` for both.
+Pagination by stream: none: `clients`, `lists`, `segments`, `templates`, `list_custom_fields`,
+`list_webhooks`; page_number: `campaigns`, `suppressionlist`, `active_subscribers`,
+`unconfirmed_subscribers`, `unsubscribed_subscribers`, `bounced_subscribers`, `deleted_subscribers`.
 
-**New Pass B streams**: `segments` and `templates` fan out per CLIENT (`fan_out.ids_from.request`
-against `/clients.json`, `into.path_var: "client_id"`, `stamp_field: "OwningClientID"` — the docs'
-own client-scoped GETs return no client-identifying field of their own, so the fan-out id is stamped
-onto every record so the partition is recoverable downstream); both are unpaginated bare arrays
-(`pagination.type: none`), matching their documented shape. `list_custom_fields`, `list_webhooks`,
-and the 5 subscriber-state streams (`active_subscribers`/`unconfirmed_subscribers`/
-`unsubscribed_subscribers`/`bounced_subscribers`/`deleted_subscribers`) fan out per LIST instead
-(`ids_from.request` against `/clients/{{ config.client_id }}/lists.json`, `into.path_var:
-"list_id"`, `stamp_field: "ListID"`) — the 5 subscriber-state streams additionally paginate
-(`page_number`, `page_param: page`, `size_param: pagesize`, `page_size: 1000` matching the docs'
-own default `PageSize`) and remain full-refresh, all sharing one `schemas/subscribers.json`
-(identical `Subscriber` record shape across every state, per the docs);
-`list_custom_fields`/`list_webhooks` are unpaginated bare arrays like segments/templates.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `clients`: GET `/clients.json` - records at response root.
+- `campaigns`: GET `/clients/{{ config.client_id }}/campaigns.json` - records path `Results`;
+  page-number pagination; page parameter `page`; size parameter `pagesize`; starts at 1; page size
+  100; incremental cursor `SentDate`; formatted as `rfc3339`.
+- `lists`: GET `/clients/{{ config.client_id }}/lists.json` - records at response root.
+- `suppressionlist`: GET `/clients/{{ config.client_id }}/suppressionlist.json` - records path
+  `Results`; page-number pagination; page parameter `page`; size parameter `pagesize`; starts at 1;
+  page size 100; incremental cursor `Date`; formatted as `rfc3339`.
+- `segments`: GET `/clients/{{ fanout.id }}/segments.json` - records at response root; fan-out; ids
+  from request `/clients.json`; id field `ClientID`; id inserted into the request path; stamps
+  `OwningClientID`.
+- `templates`: GET `/clients/{{ fanout.id }}/templates.json` - records at response root; fan-out;
+  ids from request `/clients.json`; id field `ClientID`; id inserted into the request path; stamps
+  `OwningClientID`.
+- `list_custom_fields`: GET `/lists/{{ fanout.id }}/customfields.json` - records at response root;
+  fan-out; ids from request `/clients/{{ config.client_id }}/lists.json`; id field `ListID`; id
+  inserted into the request path; stamps `ListID`.
+- `list_webhooks`: GET `/lists/{{ fanout.id }}/webhooks.json` - records at response root; fan-out;
+  ids from request `/clients/{{ config.client_id }}/lists.json`; id field `ListID`; id inserted into
+  the request path; stamps `ListID`.
+- `active_subscribers`: GET `/lists/{{ fanout.id }}/active.json` - records path `Results`;
+  page-number pagination; page parameter `page`; size parameter `pagesize`; starts at 1; page size
+  1000; fan-out; ids from request `/clients/{{ config.client_id }}/lists.json`; id field `ListID`;
+  id inserted into the request path; stamps `ListID`.
+- `unconfirmed_subscribers`: GET `/lists/{{ fanout.id }}/unconfirmed.json` - records path `Results`;
+  page-number pagination; page parameter `page`; size parameter `pagesize`; starts at 1; page size
+  1000; fan-out; ids from request `/clients/{{ config.client_id }}/lists.json`; id field `ListID`;
+  id inserted into the request path; stamps `ListID`.
+- `unsubscribed_subscribers`: GET `/lists/{{ fanout.id }}/unsubscribed.json` - records path
+  `Results`; page-number pagination; page parameter `page`; size parameter `pagesize`; starts at 1;
+  page size 1000; fan-out; ids from request `/clients/{{ config.client_id }}/lists.json`; id field
+  `ListID`; id inserted into the request path; stamps `ListID`.
+- `bounced_subscribers`: GET `/lists/{{ fanout.id }}/bounced.json` - records path `Results`;
+  page-number pagination; page parameter `page`; size parameter `pagesize`; starts at 1; page size
+  1000; fan-out; ids from request `/clients/{{ config.client_id }}/lists.json`; id field `ListID`;
+  id inserted into the request path; stamps `ListID`.
+- `deleted_subscribers`: GET `/lists/{{ fanout.id }}/deleted.json` - records path `Results`;
+  page-number pagination; page parameter `page`; size parameter `pagesize`; starts at 1; page size
+  1000; fan-out; ids from request `/clients/{{ config.client_id }}/lists.json`; id field `ListID`;
+  id inserted into the request path; stamps `ListID`.
 
 ## Write actions & risks
 
-`capabilities.write` is now `true` (Pass B). 14 actions:
+Overall write risk: external mutation of Campaign Monitor lists, subscribers
+(add/update/unsubscribe/delete), segments, and draft campaigns; sending a campaign delivers real
+email to real recipients.
 
-- **Lists**: `create_list`, `update_list` (low risk), `delete_list` (irreversible — removes the
-  list and everything under it: subscribers, segments; approval required).
-- **Subscribers**: `add_subscriber`, `update_subscriber` (identified by `CurrentEmailAddress`, sent
-  as a query parameter rather than a body field per the docs — declared as a `path_fields` entry so
-  it is excluded from the JSON body and instead appended to the path template as `?email=...`),
-  `unsubscribe_subscriber` (low risk), `delete_subscriber` (permanently removes the subscriber
-  record, distinct from unsubscribing; approval recommended).
-- **Segments**: `create_segment`, `update_segment` (replaces the full `RuleGroups` rule set — not
-  a partial patch), `delete_segment` (all low risk).
-- **Campaigns**: `create_campaign` (creates a DRAFT only — no delivery side effect on its own),
-  `send_campaign` (delivers real email to every targeted recipient; irreversible once sent, approval
-  required), `unschedule_campaign` (reverts a scheduled campaign back to draft; low risk),
-  `delete_campaign` (approval recommended).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+
+- `create_list`: POST `/lists/{{ config.client_id }}.json` - kind `create`; body type `json`;
+  required record fields `Title`; accepted fields `ConfirmationSuccessPage`, `ConfirmedOptIn`,
+  `Title`, `UnsubscribePage`, `UnsubscribeSetting`; risk: creates a new subscriber list under the
+  configured client; low-risk external mutation, no approval required.
+- `update_list`: PUT `/lists/{{ record.ListID }}.json` - kind `update`; body type `json`; path
+  fields `ListID`; required record fields `ListID`; accepted fields `AddUnsubscribesToSuppList`,
+  `ConfirmationSuccessPage`, `ConfirmedOptIn`, `ListID`, `ScrubActiveWithSuppList`, `Title`,
+  `UnsubscribePage`, `UnsubscribeSetting`; risk: updates list settings; enabling
+  ScrubActiveWithSuppList/AddUnsubscribesToSuppList changes subscriber state for existing contacts;
+  low-risk external mutation, no approval required.
+- `delete_list`: DELETE `/lists/{{ record.ListID }}.json` - kind `delete`; body type `none`; path
+  fields `ListID`; required record fields `ListID`; accepted fields `ListID`; missing records
+  treated as success for status `404`; risk: permanently removes a subscriber list and all of its
+  subscribers/segments; irreversible, approval required.
+- `add_subscriber`: POST `/subscribers/{{ record.ListID }}.json` - kind `create`; body type `json`;
+  path fields `ListID`; required record fields `ListID`, `EmailAddress`; accepted fields
+  `ConsentToSendSms`, `ConsentToTrack`, `CustomFields`, `EmailAddress`, `ListID`, `MobileNumber`,
+  `Name`, `RestartSubscriptionBasedAutoresponders`, `Resubscribe`; risk: adds a new subscriber to a
+  list; low-risk external mutation, no approval required.
+- `update_subscriber`: PUT `/subscribers/{{ record.ListID }}.json?email={{
+  record.CurrentEmailAddress | urlencode }}` - kind `update`; body type `json`; path fields
+  `ListID`, `CurrentEmailAddress`; required record fields `ListID`, `CurrentEmailAddress`,
+  `EmailAddress`; accepted fields `ConsentToSendSms`, `ConsentToTrack`, `CurrentEmailAddress`,
+  `CustomFields`, `EmailAddress`, `ListID`, `MobileNumber`, `Name`,
+  `RestartSubscriptionBasedAutoresponders`, `Resubscribe`; risk: updates an existing subscriber's
+  profile/consent fields on a list, identified by their current email (CurrentEmailAddress, kept out
+  of the body via path_fields since the API takes it as a query param, not a body field); low-risk
+  external mutation, no approval required.
+- `unsubscribe_subscriber`: POST `/subscribers/{{ record.ListID }}/unsubscribe.json` - kind
+  `update`; body type `json`; path fields `ListID`; required record fields `ListID`, `EmailAddress`;
+  accepted fields `EmailAddress`, `ListID`; risk: unsubscribes a contact from a list; low-risk
+  external mutation, no approval required.
+- `delete_subscriber`: DELETE `/subscribers/{{ record.ListID }}.json?email={{ record.EmailAddress |
+  urlencode }}` - kind `delete`; body type `none`; path fields `ListID`, `EmailAddress`; required
+  record fields `ListID`, `EmailAddress`; accepted fields `EmailAddress`, `ListID`; missing records
+  treated as success for status `404`; risk: permanently removes a subscriber's record from a list
+  (distinct from unsubscribing - this deletes the record entirely); irreversible, approval
+  recommended.
+- `create_segment`: POST `/segments/{{ record.ListID }}.json` - kind `create`; body type `json`;
+  path fields `ListID`; required record fields `ListID`, `Title`, `RuleGroups`; accepted fields
+  `ListID`, `RuleGroups`, `Title`; risk: creates a new subscriber segment (a saved rule-based
+  filter) on a list; low-risk external mutation, no approval required.
+- `update_segment`: PUT `/segments/{{ record.SegmentID }}.json` - kind `update`; body type `json`;
+  path fields `SegmentID`; required record fields `SegmentID`, `Title`, `RuleGroups`; accepted
+  fields `RuleGroups`, `SegmentID`, `Title`; risk: replaces a segment's name and full rule set;
+  low-risk external mutation, no approval required.
+- `delete_segment`: DELETE `/segments/{{ record.SegmentID }}.json` - kind `delete`; body type
+  `none`; path fields `SegmentID`; required record fields `SegmentID`; accepted fields `SegmentID`;
+  missing records treated as success for status `404`; risk: permanently removes a segment; any
+  campaign scheduled to send to it loses that targeting; irreversible, low-risk, no approval
+  required.
+- `create_campaign`: POST `/campaigns/{{ config.client_id }}.json` - kind `create`; body type
+  `json`; required record fields `Name`, `Subject`, `FromName`, `FromEmail`, `ReplyTo`, `HtmlUrl`,
+  `ListIDs`; accepted fields `FromEmail`, `FromName`, `HtmlUrl`, `InlineCss`, `ListIDs`, `Name`,
+  `ReplyTo`, `SegmentIDs`, `Subject`; risk: creates a new DRAFT campaign under the configured
+  client; drafts are not sent until send_campaign is separately invoked, so this alone has no
+  delivery side effect; low-risk, no approval required.
+- `send_campaign`: POST `/campaigns/{{ record.CampaignID }}/send.json` - kind `update`; body type
+  `json`; path fields `CampaignID`; required record fields `CampaignID`, `ConfirmationEmail`,
+  `SendDate`; accepted fields `CampaignID`, `ConfirmationEmail`, `SendDate`; risk: delivers a real
+  email campaign to every subscriber on its targeted lists/segments; irreversible once sent,
+  approval required.
+- `unschedule_campaign`: POST `/campaigns/{{ record.CampaignID }}/unschedule.json` - kind `update`;
+  body type `none`; path fields `CampaignID`; required record fields `CampaignID`; accepted fields
+  `CampaignID`; risk: cancels a scheduled-but-not-yet-sent campaign, reverting it to a draft;
+  low-risk, no approval required.
+- `delete_campaign`: DELETE `/campaigns/{{ record.CampaignID }}.json` - kind `delete`; body type
+  `none`; path fields `CampaignID`; required record fields `CampaignID`; accepted fields
+  `CampaignID`; missing records treated as success for status `404`; risk: permanently removes a
+  draft or sent campaign's record from Campaign Monitor; irreversible, approval recommended.
 
 ## Known limits
 
-- **`page_size`/`max_pages` are not runtime-configurable.** Legacy exposes both as config overrides
-  (`cmPageSize`/`cmMaxPages`, `campaign_monitor.go:318-346`). The engine's `page_number` paginator's
-  `PageSize` is a static bundle-authored int (not templated), and there is no `MaxPages`-equivalent
-  config-driven knob either; `page_size` is fixed at legacy's own default (100) in `streams.json`'s
-  base pagination block, and `max_pages` is unbounded (matching legacy's own
-  `max_pages=0`/`all`/`unlimited` default), following bitly's identical documented scope-narrowing
-  precedent (`docs/migration/conventions.md`).
-- **Legacy's fixture-mode-only fields are not modeled.** Legacy's `readFixture` path (only reached
-  when `config.mode == "fixture"`) synthesizes deterministic records with no network access
-  (`campaign_monitor.go:216-244`); this bundle's schemas and fixtures target the live path only.
-- **`update_subscriber`'s identifying email is a query parameter, not a path segment.** The docs'
-  `PUT /subscribers/{listid}.json?email={email}` shape identifies the subscriber to update via a
-  query string, not a `{subscriber_id}`-style path segment like every other update action in this
-  bundle. `CurrentEmailAddress` is declared as a `path_fields` entry purely to exclude it from the
-  JSON body (matching the docs, which never show the current email echoed back in the body); the
-  actual value is embedded directly in the `path` template as a literal `?email={{ record.
-  CurrentEmailAddress | urlencode }}` suffix (conformance's `write_request_shape` check only asserts
-  `r.URL.Path`, which excludes the query string, so fixtures assert the bare path only — this is a
-  fixture/test-harness scoping note, not a behavioral gap in the actual outgoing request).
-- Every remaining known Campaign Monitor endpoint is either covered or excluded with a specific
-  reason; see `api_surface.json`'s `excluded` entries for the full accounting (agency-administrative
-  surfaces, the separate Transactional product, bulk/import variants of already-covered per-record
-  writes, and analytics/event-log endpoints judged out of scope for this pass).
+- Batch defaults: read_page_size=100.
+- API coverage includes 13 stream-backed endpoint group(s), 14 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, duplicate_of=13, non_data_endpoint=7, out_of_scope=54,
+  requires_elevated_scope=4.

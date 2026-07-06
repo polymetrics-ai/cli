@@ -20,7 +20,7 @@
       "path": "",
       "records": { "path": "result.data" },
       "schema": "schemas/domain_keywords.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (JSON-RPC-over-HTTP POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/serpstat and internal/connectors/hooks/serpstat/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (JSON-RPC-over-HTTP POST + in-body page-number pagination); hook-covered, proven live by archived parity evidence for serpstat and internal/connectors/hooks/serpstat/hooks_test.go" }
     },
     {
       "name": "domain_competitors",
@@ -28,7 +28,7 @@
       "path": "",
       "records": { "path": "result.data" },
       "schema": "schemas/domain_competitors.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (JSON-RPC-over-HTTP POST + in-body page-number pagination); hook-covered, proven live by internal/connectors/paritytest/serpstat and internal/connectors/hooks/serpstat/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (JSON-RPC-over-HTTP POST + in-body page-number pagination); hook-covered, proven live by archived parity evidence for serpstat and internal/connectors/hooks/serpstat/hooks_test.go" }
     },
     {
       "name": "domain_urls",

@@ -6,7 +6,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
-	legacy "polymetrics.ai/internal/connectors/google-analytics-data-api"
+	native "polymetrics.ai/internal/connectors/native/google-analytics-data-api"
 )
 
 func TestHooksRegistered(t *testing.T) {
@@ -26,7 +26,7 @@ func TestHooksRegistered(t *testing.T) {
 }
 
 func TestHooksDelegateFixtureCheckAndRead(t *testing.T) {
-	h := Hooks{Connector: legacy.New()}
+	h := Hooks{Connector: native.New()}
 	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
 	handled, err := h.Check(context.Background(), cfg, nil)
 	if err != nil {

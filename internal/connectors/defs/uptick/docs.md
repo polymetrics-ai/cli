@@ -1,41 +1,117 @@
 # Overview
 
-Uptick is a Tier-2 AuthHook connector for Uptick field service management tenants. It reads the
-legacy five streams from `internal/connectors/uptick` (tasks, clients, properties, invoices, and
-assets) plus the additional statically known Uptick REST list resources named in the existing bundle
-surface: quotes, purchase orders, forms, users, teams, and stock items. The API is per tenant and the
-public Uptick docs describe the v2 API as REST plus JsonAPI, with `/api/v2.x/` exposing the tenant's
-endpoint list and each endpoint exposing `OPTIONS` metadata for available fields.
+Reads Uptick field service management data through the Uptick REST API using OAuth2 password-grant
+auth.
+
+Readable streams: `tasks`, `clients`, `properties`, `invoices`, `assets`, `quotes`,
+`purchaseorders`, `forms`, `users`, `teams`, `stockitems`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation:
+https://support.uptickhq.com/en/articles/6728314-uptick-api-overview-and-patch-notes.
 
 ## Auth setup
 
-Provide `base_url` for the tenant, `username`, and secrets `client_id`, `client_secret`, and
-`password`. The custom `uptick` AuthHook exchanges those values at
-`{base_url}/api/oauth2/token/` using the OAuth2 password grant and attaches the resulting bearer
-token to API requests. The hook mirrors the legacy connector's password-grant path and keeps the
-same validated per-tenant base URL behavior.
+Connection fields:
+
+- `base_url` (required, string); format `uri`; Uptick tenant base URL (per-tenant instance, e.g.
+  https://demo-fire.onuptick.com). Required; must be an absolute http(s) URL with a host to bound
+  SSRF risk.
+- `client_id` (required, secret, string); Uptick OAuth 2.0 client ID for the password grant. Used
+  only in the token-request form; never logged.
+- `client_secret` (required, secret, string); Uptick OAuth 2.0 client secret. Used only in the
+  token-request form; never logged.
+- `page_size` (optional, string); default `100`; Records per page (1-200), sent as the page_size
+  query param.
+- `password` (required, secret, string); Uptick account password for the OAuth 2.0 password grant.
+  Used only in the token-request form; never logged.
+- `start_date` (optional, string); RFC3339 lower bound for the updatedsince query param on a fresh
+  (no-cursor) sync. Optional; omitted entirely when unset (full sync).
+- `username` (required, string); Uptick OAuth 2.0 Resource Owner Password Credentials grant username
+  (e.g. an operator email). Not a secret; sent alongside the password in the token-request form.
+
+Secret fields are redacted in logs and write previews: `client_id`, `client_secret`, `password`.
+
+Default configuration values: `page_size=100`.
+
+Authentication behavior:
+
+- Connector-specific authentication using `config.username`, `secrets.password`, `config.base_url`,
+  `secrets.client_id`, `secrets.client_secret`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/api/v2.14/clients/` with query
+`fields[Client]`=`id,created,updated,ref,name,is_active,contact_name,contact_email,contact_phone_bh,address,notes`;
+`page_size`=`1`.
 
 ## Streams notes
 
-All streams read `/api/v2.14/<resource>/`, use `links.next` next-url pagination, and extract records
-from `data`. The legacy streams keep their exact sparse `fields[...]` lists, `ordering=-updated`,
-and `updatedsince` incremental filter to preserve legacy record data and cursor behavior. The Pass B
-streams use passthrough projection with permissive schemas because the complete field list is
-tenant-discovered through live `OPTIONS` responses rather than static public documentation.
+Default pagination: follows a next-page URL from the response body; URL path `links.next`; next URLs
+stay on the configured API host.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `tasks`: GET `/api/v2.14/tasks/` - records path `data`; query
+  `fields[Task]`=`id,created,updated,deleted,ref,description,is_active,name,due,status,client,property,priority`;
+  `ordering`=`-updated`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from the
+  response body; URL path `links.next`; next URLs stay on the configured API host; incremental
+  cursor `updated`; sent as `updatedsince`; formatted as `rfc3339`; initial lower bound from
+  `start_date`.
+- `clients`: GET `/api/v2.14/clients/` - records path `data`; query
+  `fields[Client]`=`id,created,updated,ref,name,is_active,contact_name,contact_email,contact_phone_bh,address,notes`;
+  `ordering`=`-updated`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from the
+  response body; URL path `links.next`; next URLs stay on the configured API host; incremental
+  cursor `updated`; sent as `updatedsince`; formatted as `rfc3339`; initial lower bound from
+  `start_date`.
+- `properties`: GET `/api/v2.14/properties/` - records path `data`; query
+  `fields[Property]`=`id,created,updated,name,ref,address,timezone,status,coords`;
+  `ordering`=`-updated`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from the
+  response body; URL path `links.next`; next URLs stay on the configured API host; incremental
+  cursor `updated`; sent as `updatedsince`; formatted as `rfc3339`; initial lower bound from
+  `start_date`.
+- `invoices`: GET `/api/v2.14/invoices/` - records path `data`; query
+  `fields[Invoice]`=`id,created,updated,number,ref,description,currency,date,due_date,status,subtotal,gst,total,is_overdue,is_sent,property,task`;
+  `ordering`=`-updated`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from the
+  response body; URL path `links.next`; next URLs stay on the configured API host; incremental
+  cursor `updated`; sent as `updatedsince`; formatted as `rfc3339`; initial lower bound from
+  `start_date`.
+- `assets`: GET `/api/v2.14/assets/` - records path `data`; query
+  `fields[Asset]`=`id,created,updated,deleted,is_active,ref,uptick_ref,label,location,status,make,model,size,barcode,serviced_date,property,type,variant`;
+  `ordering`=`-updated`; `page_size`=`{{ config.page_size }}`; follows a next-page URL from the
+  response body; URL path `links.next`; next URLs stay on the configured API host; incremental
+  cursor `updated`; sent as `updatedsince`; formatted as `rfc3339`; initial lower bound from
+  `start_date`.
+- `quotes`: GET `/api/v2.14/quotes/` - records path `data`; query `page_size`=`{{ config.page_size
+  }}`; follows a next-page URL from the response body; URL path `links.next`; next URLs stay on the
+  configured API host; emits passthrough records.
+- `purchaseorders`: GET `/api/v2.14/purchaseorders/` - records path `data`; query `page_size`=`{{
+  config.page_size }}`; follows a next-page URL from the response body; URL path `links.next`; next
+  URLs stay on the configured API host; emits passthrough records.
+- `forms`: GET `/api/v2.14/forms/` - records path `data`; query `page_size`=`{{ config.page_size
+  }}`; follows a next-page URL from the response body; URL path `links.next`; next URLs stay on the
+  configured API host; emits passthrough records.
+- `users`: GET `/api/v2.14/users/` - records path `data`; query `page_size`=`{{ config.page_size
+  }}`; follows a next-page URL from the response body; URL path `links.next`; next URLs stay on the
+  configured API host; emits passthrough records.
+- `teams`: GET `/api/v2.14/teams/` - records path `data`; query `page_size`=`{{ config.page_size
+  }}`; follows a next-page URL from the response body; URL path `links.next`; next URLs stay on the
+  configured API host; emits passthrough records.
+- `stockitems`: GET `/api/v2.14/stockitems/` - records path `data`; query `page_size`=`{{
+  config.page_size }}`; follows a next-page URL from the response body; URL path `links.next`; next
+  URLs stay on the configured API host; emits passthrough records.
 
 ## Write actions & risks
 
-None. `capabilities.write` remains `false` and there is no `writes.json`. Uptick's public docs make
-write request bodies endpoint- and tenant-specific through `OPTIONS` metadata, and the legacy Go
-connector is read-only. Declaring generic POST/PUT/PATCH/DELETE writes without those concrete
-schemas would create an unsafe broad write surface.
+This connector is read-only. Read behavior: external Uptick field service management API reads for
+tasks, clients, properties, invoices, assets, quotes, purchase orders, forms, users, teams, and
+stock items.
 
 ## Known limits
 
-- Dynamic conformance remains skipped because this bundle's only auth mode is the custom Uptick
-  OAuth2 password-grant hook, which cannot be exercised with the conformance harness's synthetic
-  credentials.
-- No config-driven `max_pages` runtime override is declared. The engine's next-url paginator still
-  terminates on absent `links.next` and protects against repeated next URLs.
-- Tenant-specific endpoints, fields, and write bodies exposed only through live `OPTIONS` metadata
-  are not statically materialized in this JSON bundle.
+- Batch defaults: read_page_size=100.
+- API coverage includes 11 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, out_of_scope=4.

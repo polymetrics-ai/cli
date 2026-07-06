@@ -12,20 +12,54 @@ SYNOPSIS
 DESCRIPTION
   Reads Microsoft Dataverse accounts, contacts, leads, opportunities, and users through the Web API.
 
+ICON
+  asset: icons/microsoftdataverse.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  login_base_url
+  max_pages
+  mode
+  page_size
+  scope
+  token_url
+  client_id (secret)
+  client_secret (secret)
+  tenant_id (secret)
+
+ETL STREAMS
+  accounts:
+    primary key: id
+    fields: created_on(), email(), id(), modified_on(), name()
+  contacts:
+    primary key: id
+    fields: created_on(), email(), id(), modified_on(), name()
+  leads:
+    primary key: id
+    fields: created_on(), email(), id(), modified_on(), name()
+  opportunities:
+    primary key: id
+    fields: created_on(), email(), id(), modified_on(), name()
+  systemusers:
+    primary key: id
+    fields: created_on(), email(), id(), modified_on(), name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Microsoft Dataverse Web API read of CRM records
+  approval: none; read-only OAuth2 client-credentials API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

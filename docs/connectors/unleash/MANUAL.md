@@ -12,20 +12,45 @@ SYNOPSIS
 DESCRIPTION
   Reads Unleash projects, feature toggles, environments, and segments through admin API list endpoints.
 
+ICON
+  asset: icons/unleash.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://docs.getunleash.io/reference/api/unleash
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  project_id
+  api_token (secret)
+
+ETL STREAMS
+  projects:
+    primary key: id
+    fields: id(), name()
+  features:
+    primary key: name
+    fields: enabled(), name(), project(), type()
+  environments:
+    primary key: id
+    fields: id(), name()
+  segments:
+    primary key: id
+    fields: id(), name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Unleash admin API read of project, feature toggle, environment, and segment data
+  approval: none; read-only, no obviously-safe reverse-ETL writes
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

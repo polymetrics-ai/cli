@@ -1,66 +1,62 @@
 # Overview
 
-Gainsight PX (aptrinsic) is a product-experience analytics platform. This bundle reads Gainsight
-PX accounts, users, features, and segments through the aptrinsic REST API
-(`https://api.aptrinsic.com/v1`), migrating `internal/connectors/gainsight-px` (the hand-written
-legacy connector, which stays registered and unchanged until wave6's registry flip) to a
-declarative bundle at capability parity. Gainsight PX is read-only here — no write actions.
+Reads Gainsight PX accounts, users, features, and segments through the aptrinsic REST API
+(read-only).
+
+Readable streams: `accounts`, `users`, `feature`, `segments`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation:
+https://support.gainsight.com/PX/API_for_Developers/02Usage_of_Different_APIs.
 
 ## Auth setup
 
-Provide a Gainsight PX (aptrinsic) API key via the `api_key` secret. It is sent as the
-`X-APTRINSIC-API-KEY` header (`auth: [{"mode": "api_key_header", "header":
-"X-APTRINSIC-API-KEY", "value": "{{ secrets.api_key }}"}]`) and is never logged.
+Connection fields:
+
+- `api_key` (required, secret, string); Gainsight PX (aptrinsic) REST API key. Sent as the
+  X-APTRINSIC-API-KEY header; never logged.
+- `base_url` (optional, string); default `https://api.aptrinsic.com/v1`; format `uri`; Gainsight PX
+  API base URL override for tests or proxies.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-500).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Default configuration values: `base_url=https://api.aptrinsic.com/v1`, `max_pages=0`,
+`page_size=100`.
+
+Authentication behavior:
+
+- API key authentication in `X-APTRINSIC-API-KEY` using `secrets.api_key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/accounts`.
 
 ## Streams notes
 
-Four streams, each following the aptrinsic list-endpoint shape but with per-stream path/records-key
-quirks preserved exactly from legacy:
+Default pagination: cursor pagination; cursor parameter `scrollId`; next token from `scrollId`.
 
-| stream | request path | records key |
-|---|---|---|
-| `accounts` | `/accounts` | `accounts` |
-| `users` | `/users` | `users` |
-| `feature` | `/feature` (singular) | `features` (plural) |
-| `segments` | `/segment` (singular) | `segments` (plural) |
-
-Every stream's primary key is `["id"]`; no `x-cursor-field`/incremental cursor is declared,
-matching legacy's `gainsightStreams()` (no `CursorFields` published — the API supports only
-full-refresh sync).
-
-Pagination is aptrinsic's `scrollId` cursor convention (`pagination.type: cursor` with
-`cursor_param: scrollId`, `token_path: scrollId`): the next page's `scrollId` query param is read
-from the current response body's own `scrollId` field, and pagination stops when that field is
-empty — identical to legacy's `harvest` loop, whose own fixture-backed test
-(`gainsightpx_test.go`) uses exactly this empty-`scrollId` stop signal as its terminal case. Every
-request sends `pageSize=100` (matches legacy's default `page_size`).
+- `accounts`: GET `/accounts` - records path `accounts`; query `pageSize`=`100`; cursor pagination;
+  cursor parameter `scrollId`; next token from `scrollId`.
+- `users`: GET `/users` - records path `users`; query `pageSize`=`100`; cursor pagination; cursor
+  parameter `scrollId`; next token from `scrollId`.
+- `feature`: GET `/feature` - records path `features`; query `pageSize`=`100`; cursor pagination;
+  cursor parameter `scrollId`; next token from `scrollId`.
+- `segments`: GET `/segment` - records path `segments`; query `pageSize`=`100`; cursor pagination;
+  cursor parameter `scrollId`; next token from `scrollId`.
 
 ## Write actions & risks
 
-None. Gainsight PX is exposed read-only (`capabilities.write: false`), matching legacy's
-`Capabilities{Write: false}` and its `Write` method returning `connectors.ErrUnsupportedOperation`
-unconditionally.
+This connector is read-only. Read behavior: external Gainsight PX (aptrinsic) API read of account,
+user, feature, and segment data.
 
 ## Known limits
 
-- **`scrollId`-present-with-zero-records edge case (data-safe, unexercised by legacy's own tests)**:
-  legacy's `harvest` loop stops on the FIRST of three conditions: an empty `scrollId`, an empty
-  page (`len(records) == 0`), or a repeated `scrollId` value. The engine's `cursor` pagination
-  type (`token_path` variant) checks only the token's own emptiness and a repeated-token loop
-  guard — it does not additionally stop on a zero-record page that still carries a non-empty
-  `scrollId`. Every real aptrinsic response observed in legacy's own test fixtures returns an
-  empty `scrollId` exactly on the terminal (possibly-empty) page, so this corner case does not
-  arise in practice; if the live API ever did return a non-empty token alongside zero records,
-  the engine would issue one additional (likely also-empty) request rather than stopping
-  immediately — this never omits, duplicates, or reorders emitted records, so it is data-safe
-  under `docs/migration/conventions.md` §5's meta-rule, not a blocker. Fully closing this would
-  need the `cursor`/`token_path` paginator to also accept a record-count-based stop signal (there
-  is no boolean "has more" field in this API to use as `stop_path`), which is not needed for any
-  observed real response shape.
-- Full Gainsight PX API surface (custom events ingest, engagements, journeys, NPS surveys,
-  webhooks) is out of scope for this wave; see `api_surface.json`'s `excluded` entries.
-- No incremental sync: none of the four streams declares an `incremental` block, matching legacy
-  (`InitialState` is not overridden by a stateful-cursor mechanism; the upstream Gainsight PX API
-  has no documented "updated since" filter for these list endpoints). `client_filtered`
-  incremental was considered and rejected: adding client-side cursor filtering here would be new
-  behavior legacy never had, not a migration.
+- Batch defaults: read_page_size=100.
+- API coverage includes 4 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=5.

@@ -73,8 +73,7 @@
         "ids_from": {
           "request": { "path": "/events", "records_path": "events", "id_field": "id" }
         },
-        "into": { "path_var": "event_id" },
-        "stamp_field": "event_id"
+        "into": { "path_var": "event_id" }
       },
       "schema": "schemas/transactions.json"
     }

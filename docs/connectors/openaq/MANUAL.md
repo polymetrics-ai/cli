@@ -12,20 +12,48 @@ SYNOPSIS
 DESCRIPTION
   Reads OpenAQ air quality reference data (countries, parameters, locations, instruments, and manufacturers) from the OpenAQ v3 REST API.
 
+ICON
+  asset: icons/openaq.svg
+  source: official
+  review_status: official_verified
+  review_url: https://docs.openaq.org/
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  countries_id
+  mode
+  api_key (secret)
+
+ETL STREAMS
+  countries:
+    primary key: id
+    fields: code(), datetimeFirst(), datetimeLast(), id(), name(), parameters()
+  parameters:
+    primary key: id
+    fields: description(), displayName(), id(), name(), units()
+  locations:
+    primary key: id
+    fields: coordinates(), country(), datetimeFirst(), datetimeLast(), id(), isMobile(), isMonitor(), locality(), name(), owner(), provider(), sensors(), timezone()
+  instruments:
+    primary key: id
+    fields: id(), isMonitor(), manufacturer(), name()
+  manufacturers:
+    primary key: id
+    fields: id(), instruments(), name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external OpenAQ API read of public air-quality reference data
+  approval: none; read-only public reference API
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

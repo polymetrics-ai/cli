@@ -1,20 +1,56 @@
 # Overview
 
-Lokalise is a Tier-2 quarantine migration of `internal/connectors/lokalise`. The bundle mirrors the legacy catalog stream names, primary keys, cursor fields, and field list; the runtime read/check behavior is owned by `internal/connectors/hooks/lokalise` during the pre-cutover period.
+Reads Lokalise project keys, languages, translations, contributors, and comments through the
+Lokalise REST API.
+
+Readable streams: `keys`, `languages`, `translations`, `contributors`, `comments`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://developers.lokalise.com/reference/api-introduction.
 
 ## Auth setup
 
-Use the same configuration and secret names accepted by the legacy `lokalise` connector. Secret-shaped fields are marked with `x-secret` in `spec.json`; the hook delegates to the legacy connector so credential handling remains unchanged and secret values are never logged by the bundle.
+Connection fields:
+
+- `api_key` (required, secret, string); Lokalise API Key with read-access. Available at Profile
+  settings > API tokens. See <a
+  href="https://docs.lokalise.com/en/articles/1929556-api-tokens">here</a>.
+- `base_url` (optional, string).
+- `mode` (optional, string).
+- `project_id` (required, string); Lokalise project ID. Available at Project Settings > General.
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks use a connector-managed request.
 
 ## Streams notes
 
-The declared streams are static shadows used for schema, catalog, and surface validation. The Tier-2 hook handles reads and checks by calling the legacy connector, preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The declarative paths under `/__legacy_hook/` are not live API endpoints.
+Default pagination: single request; no pagination.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `keys`: GET connector-managed request path - records path `data`; incremental cursor
+  `modified_at_timestamp`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `languages`: GET connector-managed request path - records path `data`.
+- `translations`: GET connector-managed request path - records path `data`; incremental cursor
+  `modified_at_timestamp`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `contributors`: GET connector-managed request path - records path `data`.
+- `comments`: GET connector-managed request path - records path `data`.
 
 ## Write actions & risks
 
-None. This migration preserves the legacy read-only surface and does not add reverse-ETL actions.
+This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- This is a quarantine bridge: hook code currently depends on `internal/connectors/lokalise` staying present until the wave 6 cutover replaces or absorbs the delegated behavior.
-- Dynamic conformance replay is skipped because the declarative shadow path does not model the connector-specific auth, request body, pagination, or record explosion that caused quarantine; hook unit tests and legacy connector tests are the behavioral proof for this bridge.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Client-side incremental filtering is used for: `keys`, `translations`.

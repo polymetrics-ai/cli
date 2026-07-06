@@ -1,20 +1,65 @@
 # Overview
 
-Alpha Vantage is a Tier-2 quarantine migration of `internal/connectors/alpha-vantage`. The bundle mirrors the legacy catalog stream names, primary keys, cursor fields, and field list; the runtime read/check behavior is owned by `internal/connectors/hooks/alpha-vantage` during the pre-cutover period.
+Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus the latest global
+quote for a configured stock symbol.
+
+Readable streams: `time_series_daily`, `time_series_weekly`, `time_series_monthly`,
+`time_series_intraday`, `global_quote`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://www.alphavantage.co/documentation/.
 
 ## Auth setup
 
-Use the same configuration and secret names accepted by the legacy `alpha-vantage` connector. Secret-shaped fields are marked with `x-secret` in `spec.json`; the hook delegates to the legacy connector so credential handling remains unchanged and secret values are never logged by the bundle.
+Connection fields:
+
+- `adjusted` (optional, string); Whether to return adjusted data. Only applicable to intraday
+  endpoints.
+- `api_key` (required, secret, string); API Key.
+- `base_url` (optional, string).
+- `interval` (optional, string); Time-series data point interval. Required for intraday endpoints.
+- `mode` (optional, string).
+- `outputsize` (optional, string); Whether to return full or compact data (the last 100 data
+  points).
+- `symbol` (required, string); Stock symbol (with exchange code).
+
+Secret fields are redacted in logs and write previews: `api_key`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks use a connector-managed request.
 
 ## Streams notes
 
-The declared streams are static shadows used for schema, catalog, and surface validation. The Tier-2 hook handles reads and checks by calling the legacy connector, preserving the existing request shape, pagination behavior, record mapping, and fixture mode. The declarative paths under `/__legacy_hook/` are not live API endpoints.
+Default pagination: single request; no pagination.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `time_series_daily`: GET connector-managed request path - records path `data`; incremental cursor
+  `date`; formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
+- `time_series_weekly`: GET connector-managed request path - records path `data`; incremental cursor
+  `date`; formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
+- `time_series_monthly`: GET connector-managed request path - records path `data`; incremental
+  cursor `date`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `time_series_intraday`: GET connector-managed request path - records path `data`; incremental
+  cursor `date`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
+- `global_quote`: GET connector-managed request path - records path `data`; incremental cursor
+  `latest_trading_day`; formatted as `rfc3339`; records at or before the lower bound are filtered
+  client-side.
 
 ## Write actions & risks
 
-None. This migration preserves the legacy read-only surface and does not add reverse-ETL actions.
+This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- This is a quarantine bridge: hook code currently depends on `internal/connectors/alpha-vantage` staying present until the wave 6 cutover replaces or absorbs the delegated behavior.
-- Dynamic conformance replay is skipped because the declarative shadow path does not model the connector-specific auth, request body, pagination, or record explosion that caused quarantine; hook unit tests and legacy connector tests are the behavioral proof for this bridge.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Client-side incremental filtering is used for: `time_series_daily`, `time_series_weekly`,
+  `time_series_monthly`, `time_series_intraday`, `global_quote`.

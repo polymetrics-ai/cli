@@ -1,151 +1,136 @@
 # Overview
 
-AppFollow is a declarative-HTTP migration, Pass-B full-surface expanded. It reads AppFollow
-account users, app collections, app lists, reviews, review summaries, rating breakdowns/history,
-ASO keywords, rankings, and version/what's-new metadata through the AppFollow REST API v2
-(`https://api.appfollow.io/api/v2/...`), and writes review replies/tags/notes, ASO keyword edits,
-and account user/app-collection/tracked-app management actions. This bundle originally targeted
-capability parity with `internal/connectors/appfollow` (the hand-written connector it migrates,
-covering 4 streams, read-only); Pass B (`docs/migration/conventions.md` §8, `api_surface.json`)
-researched AppFollow's full published API v2 reference
-(https://docs.api.appfollow.io/reference/overview, 44 documented operations) and expanded to 11
-streams + 11 writes covering every practical list/detail resource and every dialect-expressible
-mutation. The legacy package stays registered and unchanged until wave6's registry flip.
+Reads AppFollow account users, app collections, app lists, reviews, review summaries,
+ratings/ratings history, ASO keywords, rankings, and version/what's-new metadata through the
+AppFollow REST API v2 (config-list-driven fan-out per app/collection); writes review
+replies/tags/notes, ASO keyword edits, and account user/app/collection management actions.
+
+Readable streams: `users`, `app_collections`, `app_lists`, `ratings`, `reviews`, `reviews_summary`,
+`keywords`, `rankings`, `versions`, `versions_whatsnew`, `ratings_history`.
+
+Write actions: `reply_to_review`, `update_review_tags`, `update_review_notes`, `edit_keywords`,
+`add_user`, `update_user`, `remove_user`, `add_collection`, `remove_collection`, `add_app`,
+`remove_app`.
+
+Service API documentation: https://docs.api.appfollow.io/reference/overview.
 
 ## Auth setup
 
-Provide an AppFollow API token via the `api_secret` secret; it is sent as the
-`X-AppFollow-API-Token` header and is never logged, matching legacy's
-`connsdk.APIKeyHeader(appfollowTokenHeader, secret, "")` (`appfollow.go:322`). `base_url` defaults
-to `https://api.appfollow.io/api/v2` and may be overridden for tests/proxies.
+Connection fields:
+
+- `api_secret` (required, secret, string); AppFollow API token, sent as the X-AppFollow-API-Token
+  header. Never logged.
+- `app_collection_ids` (optional, string); Comma-separated list of AppFollow app collection ids to
+  fan out over for the app_lists stream (one GET /account/apps/app request per id, forwarded as
+  apps_id).
+- `base_url` (optional, string); default `https://api.appfollow.io/api/v2`; format `uri`; AppFollow
+  API base URL override for tests or proxies.
+- `ext_ids` (optional, string); Comma-separated list of AppFollow app external ids (ext_id) to fan
+  out over for the
+  ratings/reviews/reviews_summary/keywords/rankings/versions/versions_whatsnew/ratings_history
+  streams (one request per id, forwarded as ext_id). Required for all of those streams.
+- `report_country` (optional, string); default `us`; Two-letter store country code for the versions
+  stream's required country filter.
+- `report_from` (optional, string); format `date`; Start date (YYYY-MM-DD) for the reviews and
+  reviews_summary streams' required from/to date-range filter.
+- `report_store` (optional, string); default `itunes`; Store code (itunes/google_play) for the
+  ratings_history stream's required store filter.
+- `report_to` (optional, string); format `date`; End date (YYYY-MM-DD) for the reviews and
+  reviews_summary streams' required from/to date-range filter.
+
+Secret fields are redacted in logs and write previews: `api_secret`.
+
+Default configuration values: `base_url=https://api.appfollow.io/api/v2`, `report_country=us`,
+`report_store=itunes`.
+
+Authentication behavior:
+
+- API key authentication in `X-AppFollow-API-Token` using `secrets.api_secret`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/account/users`.
 
 ## Streams notes
 
-`users` and `app_collections` are single-request, unpaginated `GET` endpoints (`pagination`
-omitted; legacy's reporting endpoints return their full result in one body, matching
-`readSimple`):
+Default pagination: single request; no pagination.
 
-- `users` — `GET /account/users`, records at the response root (`records.path: ""`), primary key
-  `["id"]`.
-- `app_collections` — `GET /account/apps`, records at the `apps` array, primary key `["id"]`.
-
-`app_lists` and `ratings` are sub-resource fan-out reads, now expressible via the S4 engine
-mini-wave's `stream.fan_out` primitive (`docs/migration/conventions.md` §3):
-
-- `app_lists` — `GET /account/apps/app`, one request per `app_collection_ids` config entry
-  (`fan_out.ids_from.config_key`), forwarded as the `apps_id` query parameter
-  (`fan_out.into.query_param`), records at `apps_app`, primary key `["app_id"]`. The fan-out id is
-  stamped onto every emitted record's `app_collection_id` field (`fan_out.stamp_field`), matching
-  legacy's `readAppLists` (`appfollow.go:157`) `if rec["app_collection_id"] == nil { rec[...] = id
-  }` injection.
-- `ratings` — `GET /meta/ratings`, one request per `ext_ids` config entry, forwarded as the
-  `ext_id` query parameter, records at `ratings.list` (the dotted-path convention selects straight
-  into the nested rows array, no special-casing needed), primary key
-  `["ext_id", "date", "country"]`. The fan-out id is stamped onto every row's `ext_id` field,
-  matching legacy's `readRatings` (`appfollow.go:205`) ext_id injection.
-
-Both fan-out streams require their respective config list (`app_collection_ids` for `app_lists`,
-`ext_ids` for `ratings`) — comma-separated, split/trimmed/empty-entries-dropped, matching legacy's
-`splitList`.
-
-**Pass B additions** — 7 new streams, all fanning out over `ext_ids` (the same config list
-`ratings` already requires; every one of these is scoped per tracked app, exactly like `ratings`):
-
-- `reviews` — `GET /reviews`, requires `report_from`/`report_to` config (AppFollow's own `from`/
-  `to` query params are hard-required per its OpenAPI spec), records at the response root, primary
-  key `["id"]`.
-- `reviews_summary` — `GET /reviews/summary`, aggregate per-date/country/version review stats,
-  primary key `["ext_id", "date", "country"]`.
-- `keywords` — `GET /aso/keywords`, tracked ASO keyword positions, primary key
-  `["ext_id", "country", "device", "date"]`.
-- `rankings` — `GET /meta/rankings`, category ranking positions, primary key
-  `["ext_id", "country", "device", "genre_id", "date"]`.
-- `versions` — `GET /meta/versions`, requires `report_country` config (hard-required by the API;
-  defaults to `us`), version/release history, primary key `["ext_id", "version", "country"]`.
-- `versions_whatsnew` — `GET /meta/versions/whatsnew`, release-notes-only variant of `versions`,
-  primary key `["ext_id", "version", "country"]`.
-- `ratings_history` — `GET /meta/ratings/history`, requires `report_store` config (hard-required;
-  defaults to `itunes`), a fuller per-date rating history than the pre-existing `ratings` stream's
-  snapshot, primary key `["ext_id", "date", "country", "version"]`.
-
-None of the 11 streams are incremental — AppFollow's v2 API has no server-side cursor filter
-legacy uses (no `CursorFields` declared on any legacy stream), and the newly-researched endpoints'
-own filters are `from`/`to` explicit date-range parameters, not a repeat-sync cursor contract.
+- `users`: GET `/account/users` - records at response root.
+- `app_collections`: GET `/account/apps` - records path `apps`.
+- `app_lists`: GET `/account/apps/app` - records path `apps_app`; fan-out; ids from config field
+  `app_collection_ids`; id sent as query parameter `apps_id`; stamps `app_collection_id`.
+- `ratings`: GET `/meta/ratings` - records path `ratings.list`; response-level fields copied to
+  records `store`; fan-out; ids from config field `ext_ids`; id sent as query parameter `ext_id`;
+  stamps `ext_id`.
+- `reviews`: GET `/reviews` - records at response root; query `from`=`{{ config.report_from }}`;
+  `to`=`{{ config.report_to }}`; fan-out; ids from config field `ext_ids`; id sent as query
+  parameter `ext_id`; stamps `ext_id`.
+- `reviews_summary`: GET `/reviews/summary` - records at response root; query `from` from template
+  `{{ config.report_from }}`, omitted when absent; `to` from template `{{ config.report_to }}`,
+  omitted when absent; fan-out; ids from config field `ext_ids`; id sent as query parameter
+  `ext_id`; stamps `ext_id`.
+- `keywords`: GET `/aso/keywords` - records at response root; fan-out; ids from config field
+  `ext_ids`; id sent as query parameter `ext_id`; stamps `ext_id`.
+- `rankings`: GET `/meta/rankings` - records at response root; fan-out; ids from config field
+  `ext_ids`; id sent as query parameter `ext_id`; stamps `ext_id`.
+- `versions`: GET `/meta/versions` - records at response root; query `country`=`{{
+  config.report_country }}`; fan-out; ids from config field `ext_ids`; id sent as query parameter
+  `ext_id`; stamps `ext_id`.
+- `versions_whatsnew`: GET `/meta/versions/whatsnew` - records at response root; fan-out; ids from
+  config field `ext_ids`; id sent as query parameter `ext_id`; stamps `ext_id`.
+- `ratings_history`: GET `/meta/ratings/history` - records at response root; query `store`=`{{
+  config.report_store }}`; fan-out; ids from config field `ext_ids`; id sent as query parameter
+  `ext_id`; stamps `ext_id`.
 
 ## Write actions & risks
 
-Pass B added 11 write actions (`capabilities.write` is now `true`); every action's `risk` field in
-`writes.json` states whether it is externally visible (a public review reply the app-store shows
-end users) or irreversible (account/collection/app/user removal) — approval is required for all of
-them:
+Overall write risk: external mutations: posts public review replies, edits review
+tags/notes/custom-status, replaces tracked ASO keyword sets, and adds/updates/removes account users,
+app collections, and tracked apps.
 
-- `reply_to_review` (`POST /reviews/reply`) — posts a **public** developer reply to a live
-  app-store review; cannot be unsent programmatically once posted.
-- `update_review_tags` (`POST /reviews/tags`) — overwrites a review's tag set.
-- `update_review_notes` (`POST /reviews/notes`) — overwrites a review's internal note.
-- `edit_keywords` (`POST /aso/keywords`) — replaces the tracked ASO keyword list for a
-  country/device pair.
-- `add_user` / `update_user` / `remove_user` (`POST`/`PATCH`/`DELETE /account/users`) — account
-  user management; `remove_user` is irreversible.
-- `add_collection` / `remove_collection` (`POST`/`DELETE /account/apps`) — app-collection
-  management; `remove_collection` irreversibly drops every app tracked under it.
-- `add_app` / `remove_app` (`POST`/`DELETE /account/apps/app`) — tracked-app management within a
-  collection; `remove_app` is irreversible.
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-All 4 `DELETE` actions (`remove_user`, `remove_collection`, `remove_app`) and `remove_app` send a
-JSON request body carrying the identifying fields (AppFollow's real DELETE endpoints take a body,
-not path parameters) — modeled via `body_fields` (an explicit allow-list) since there is no
-`{{ record.id }}`-shaped path segment to exclude via `path_fields`; `kind: "delete"` is declared for
-audit/risk classification even though none of them declare `missing_ok_status` (AppFollow's DELETE
-endpoints are not documented as returning a distinguishable "already gone" 404 the way idempotent
-REST deletes typically do, so no missing-ok status code is asserted — an unexpected non-2xx is
-always treated as a genuine write failure, the safe default).
+- `reply_to_review`: POST `/reviews/reply` - kind `create`; body type `json`; required record fields
+  `ext_id`, `review_id`, `answer_text`; accepted fields `answer_text`, `ext_id`, `login`,
+  `review_id`; risk: external mutation; posts a public reply to a live app-store review, cannot be
+  unsent programmatically; approval required.
+- `update_review_tags`: POST `/reviews/tags` - kind `update`; body type `json`; required record
+  fields `ext_id`, `review_id`, `tags`; accepted fields `apps_id`, `ext_id`, `review_id`, `tags`;
+  risk: external mutation; overwrites a review's tag set; approval required.
+- `update_review_notes`: POST `/reviews/notes` - kind `update`; body type `json`; required record
+  fields `ext_id`, `review_id`, `content`; accepted fields `content`, `ext_id`, `review_id`; risk:
+  external mutation; overwrites a review's internal note; approval required.
+- `edit_keywords`: POST `/aso/keywords` - kind `update`; body type `json`; required record fields
+  `country`, `device`, `keywords`; accepted fields `apps_id`, `country`, `device`, `keywords`; risk:
+  external mutation; replaces the tracked ASO keyword list for a country/device pair; approval
+  required.
+- `add_user`: POST `/account/users` - kind `create`; body type `json`; required record fields
+  `name`, `role`, `email`; accepted fields `collections`, `email`, `name`, `role`; risk: external
+  mutation; grants AppFollow account access to a new user; approval required.
+- `update_user`: PATCH `/account/users` - kind `update`; body type `json`; required record fields
+  `id`, `name`, `role`, `email`; accepted fields `collections`, `email`, `id`, `name`, `role`; risk:
+  external mutation; changes an existing account user's role/access; approval required.
+- `remove_user`: DELETE `/account/users` - kind `delete`; body type `json`; body fields `id`,
+  `email`; required record fields `id`; accepted fields `email`, `id`; risk: irreversible external
+  mutation; revokes an AppFollow account user's access; approval required.
+- `add_collection`: POST `/account/apps` - kind `create`; body type `json`; required record fields
+  `title`, `countries`; accepted fields `appUpdates`, `countries`, `dashboard`, `default_country`,
+  `email`, `keywords`, `ranks`, `reviews`, `title`; risk: external mutation; creates a new billable
+  app collection; approval required.
+- `remove_collection`: DELETE `/account/apps` - kind `delete`; body type `json`; body fields
+  `apps_id`; required record fields `apps_id`; accepted fields `apps_id`; risk: irreversible
+  external deletion; removes an app collection and every app tracked under it; approval required.
+- `add_app`: POST `/account/apps/app` - kind `create`; body type `json`; required record fields
+  `store`, `ext_id`, `apps_id`, `locale`; accepted fields `apps_id`, `ext_id`, `locale`, `store`,
+  `user_id`; risk: external mutation; adds a tracked app to an existing collection; approval
+  required.
+- `remove_app`: DELETE `/account/apps/app` - kind `delete`; body type `json`; body fields `store`,
+  `ext_id`, `apps_id`, `user_id`; required record fields `store`, `ext_id`, `apps_id`; accepted
+  fields `apps_id`, `ext_id`, `store`, `user_id`; risk: irreversible external deletion; stops
+  tracking an app under a collection; approval required.
 
 ## Known limits
 
-- **Pass B streams' schemas are field-name-accurate but response-envelope-unconfirmed (documented
-  research gap, not a guess).** AppFollow's public OpenAPI reference declares every 200 response as
-  a bare `"schema": {}` for all 7 new streams — the vendor genuinely does not publish response
-  bodies in its machine-readable spec. Field names for `reviews` (`title`/`store`/`is_answer`/
-  `was_changed`/`user_id`/`ext_id`/`review_id`/`dt`/`created`/`content`/`app_version`/`updated`/
-  `app_id`/`time`/`rating`/`date`/`locale`/`rating_prev`/`author`/`id`) and `keywords`
-  (`date`/`store`/`device`/`total`/`ext_id`/`country`/`page`/`no_pos`/`pos`/`popularity`) and
-  `ratings_history` (`from`/`to`/`store`/`ext_id`/`version`/`country`/`period`/`offset`/`limit`/
-  `total`/`date`/`stars`/`stars1..5`/`avg_rating`) come from AppFollow's own published "Response
-  Body Parameters" reference pages (a field-glossary the docs site ships alongside, but not inside,
-  the OpenAPI operation) — these are real, vendor-documented field names, not invented ones.
-  `rankings`/`versions`/`versions_whatsnew` have no equivalent published field-glossary page at
-  all; their schemas here use the same field vocabulary AppFollow uses elsewhere in its docs
-  (`position`/`category`/`genre_id`/`release_date`/`whats_new`/`last_modified`) as the
-  best-available, still-undocumented-exact-shape approximation. `records.path: ""` (response root)
-  is assumed uniformly for all 7 new streams by analogy with `users`' and `app_lists`' sibling
-  `GET`-list conventions; none of this could be confirmed against a live response since the
-  connector was authored credential-free. A capability-expansion agent with live AppFollow
-  credentials should verify the actual response envelope/field set against a real account and
-  correct `schemas/*.json`/`records.path` if it differs — this is flagged here specifically so that
-  correction is a schema/fixture edit, not a rediscovery.
-- **`ratings` sibling metadata is stamped before projection.** AppFollow's `/meta/ratings`
-  response nests each day's rating breakdown under `ratings.list`, with `ext_id`/`store` as
-  siblings of `list`. `fan_out.stamp_field` restores legacy's `ext_id` fallback from the request id,
-  and `response_fields.store` restores legacy's `ratings.store` copy onto every emitted row.
-- **`app_lists`'s `app_collection_id` is typed as `string`, not legacy's `integer` (ACCEPTABLE,
-  documented deviation).** `fan_out.stamp_field` always writes the fan-out id as the STRING split
-  out of `app_collection_ids` (matching every other `stamp_field`-using bundle in this repo, e.g.
-  cisco-meraki's `organizationId`, metricool's `blogId` — see `docs/migration/conventions.md` §3),
-  whereas legacy's raw API response and `appListRecord` mapping carry `app_collection_id` as a
-  JSON integer. The emitted VALUE is identical (the same collection id), only its JSON type
-  differs (`"11"` vs `11`); every downstream consumer that treats ids as opaque strings is
-  unaffected, but a warehouse column-type comparison would see `string` here vs `integer` in
-  legacy's schema. Widening/retyping avoids silently emitting a value that would fail the
-  declared schema, per the meta-rule (`docs/migration/conventions.md` §5) — this is the identical
-  class of deviation already accepted for every other `fan_out`-migrated bundle's stamped id field.
-- **Config-driven collection-id auto-discovery is not modeled.** Legacy's `app_lists` stream falls
-  back to auto-discovering collection ids from `/account/apps` when `app_collection_ids` is unset
-  (`discoverCollectionIDs`, `appfollow.go:185`). `fan_out.ids_from` supports this shape too (the
-  `request` variant — a preliminary GET, fully paginated, extracting an `id_field` off each
-  record), and `/account/apps`'s `apps` array does carry an `id` field per collection, so this
-  fallback IS expressible with the dialect as it stands today; it was intentionally left out of
-  this migration to keep `app_lists`'s required config surface explicit and mirror this bundle's
-  existing `ext_ids`-required (no-fallback) precedent for `ratings`. A future capability-expansion
-  pass MAY add the `request`-based `ids_from` variant as an alternative when `app_collection_ids`
-  is unset, without needing any further engine changes.
+- API coverage includes 11 stream-backed endpoint group(s), 11 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=1, duplicate_of=6, out_of_scope=15.

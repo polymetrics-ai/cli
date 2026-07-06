@@ -10,22 +10,64 @@ SYNOPSIS
   pm credentials add <name> --connector mailjet-sms [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads outbound SMS messages and SMS counts from the Mailjet SMS API (full refresh, read-only).
+  Reads Mailjet SMS messages, message counts, and export job status; writes SMS send and export-request actions.
+
+ICON
+  asset: icons/mailjetsms.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://dev.mailjet.com/sms/reference/
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  end_date
+  export_job_id
+  mode
+  recipient
+  sms_id
+  sms_ids
+  start_date
+  status_code
+  token (secret)
+
+ETL STREAMS
+  sms:
+    primary key: ID
+    cursor: CreationTS
+    fields: CreationTS(), From(), ID(), MessageId(), SMSCount(), SentTS(), To(), cost_currency(), cost_value(), status_code(), status_description(), status_name()
+  sms_count:
+    fields: Count()
+  sms_message:
+    primary key: MessageID
+    cursor: CreationTS
+    fields: CreationTS(), From(), MessageID(), SMSCount(), SentTS(), To(), cost_currency(), cost_value(), status_code(), status_description(), status_name()
+  sms_export:
+    primary key: ID
+    cursor: CreationTS
+    fields: CreationTS(), ExpirationTS(), ID(), URL(), status_code(), status_description(), status_name()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+REVERSE ETL ACTIONS
+  send_sms:
+    endpoint: POST /sms-send
+    risk: external mutation; sends an SMS message; approval required
+  request_sms_export:
+    endpoint: POST /sms/export
+    risk: external mutation; creates an asynchronous SMS export job; approval required
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Mailjet SMS API read of outbound SMS message data
+  write risk: external Mailjet SMS API mutation; may send SMS messages or request asynchronous SMS exports
+  approval: required for all write actions
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES
@@ -39,6 +81,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect mailjet-sms before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

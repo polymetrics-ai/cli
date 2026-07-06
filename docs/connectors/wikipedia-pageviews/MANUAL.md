@@ -10,7 +10,13 @@ SYNOPSIS
   pm credentials add <name> --connector wikipedia-pageviews [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Wikimedia pageview metrics for articles and top-article reports.
+  Reads Wikimedia pageview metrics for articles and top-article reports through the public Wikimedia REST API.
+
+ICON
+  asset: icons/wikipedia-pageviews.svg
+  source: upstream_registry
+  review_status: upstream_seeded
+  review_url: https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
@@ -20,12 +26,32 @@ AUTHENTICATION
   No secret authentication is required for this connector.
 
 CONFIGURATION
-  No connector-specific config fields.
+  access
+  agent
+  article
+  base_url
+  country
+  day
+  end
+  month
+  project
+  start
+  year
+
+ETL STREAMS
+  pageviews:
+    primary key: id
+    cursor: timestamp
+    fields: access(), agent(), article(), granularity(), id(), project(), timestamp(), views()
+  top_articles:
+    primary key: id
+    fields: access(), articles(), country(), day(), id(), month(), project(), year()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Wikimedia public API read of aggregate pageview metrics; no authentication, no PII
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

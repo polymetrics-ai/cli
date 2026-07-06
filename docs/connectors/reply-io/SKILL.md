@@ -1,0 +1,1183 @@
+---
+name: pm-reply-io
+description: Reply.io connector knowledge and safe action guide.
+---
+
+# pm-reply-io
+
+## Purpose
+
+Reads Reply.io legacy v1 objects and current v3 API resources; writes supported v3 mutations through the REST API.
+
+## Icon
+
+- asset: icons/reply-io.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+
+## Capabilities
+
+- check=true catalog=true read=true write=true query=false
+- Integration type: api
+
+## Authentication
+
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
+
+## Configuration
+
+- base_url
+- calendarId
+- contact_id
+- created_after
+- document_id
+- email
+- email_account_id
+- id
+- jobId
+- knowledge_base_id
+- link_id
+- linkedInAccountId
+- media_id
+- playbook_id
+- reengagement_card_id
+- reply_handler_id
+- sequence_id
+- status
+- step_id
+- style_file_id
+- tagId
+- updated_after
+- variant_id
+- api_key (secret)
+- bearer_token (secret)
+
+## ETL Streams
+
+- people:
+  - primary key: id
+  - cursor: updated_at
+  - fields: email(), first_name(), id(), last_name(), status(), stream(), updated_at()
+- campaigns:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), id(), name(), status(), stream(), updated_at()
+- tasks:
+  - primary key: id
+  - cursor: updated_at
+  - fields: due_date(), id(), status(), stream(), type(), updated_at()
+- email_accounts:
+  - primary key: id
+  - cursor: updated_at
+  - fields: email(), id(), name(), status(), stream(), updated_at()
+- list_knowledge_bases:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_knowledge_base:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_knowledge_base_links:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_knowledge_base_documents:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_reply_handlers:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_reply_handler:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_reengagement_cards:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_reengagement_card:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_offers:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_offer:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_playbooks:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_playbook:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_accounts:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_account_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_account_contacts:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_account_lists:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_account_list_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_background_jobs:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_background_job_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contacts:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_sequences:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_activities:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_statuses:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_blacklist_domain_rules:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_blacklist_domain_rule_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_blacklist_email_rules:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_blacklist_email_rule_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_blacklist_email_exception_rules:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_blacklist_email_exception_rule_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_lists:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_list_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_contact_lists_for_contact:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_custom_fields:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_custom_field_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_email_accounts:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_email_account:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- connect_gmail_account:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- connect_office365_account:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_email_account_tags:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_email_templates:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_email_template:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_email_template_variables:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_email_template_folders:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_email_template_folder:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_holiday_calendars:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_holiday_calendar:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_inbox_threads:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_inbox_thread:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_inbox_thread_messages:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_inbox_categories:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_inbox_category:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_linked_in_accounts:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_linked_in_account:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_pending_linked_in_accounts:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_schedules:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_schedule:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_schedule_holiday_calendars:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequences:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_contacts:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_contact_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_contacts_state:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_email_accounts:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_folders:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_folder_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_folder_sequences:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_linked_in_accounts:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_steps:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_step_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_step_variants:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_condition_properties:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_sequence_templates:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_settings:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_tasks:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_task_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- whoami:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- list_webhooks:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_webhook_events:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_webhook_by_id:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+- get_webhook_logs:
+  - primary key: id
+  - fields: created(), id(), name(), status(), updated()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
+## Reverse ETL Actions
+
+- create_knowledge_base:
+  - endpoint: POST /v3/ai-sdr/knowledge-bases
+  - optional fields: name, instructions
+  - risk: POST /v3/ai-sdr/knowledge-bases (Create a knowledge base) mutates Reply.io data; review records before execution
+- update_knowledge_base:
+  - endpoint: PATCH /v3/ai-sdr/knowledge-bases/{{ record.id }}
+  - required fields: id
+  - optional fields: name, instructions
+  - risk: PATCH /v3/ai-sdr/knowledge-bases/{id} (Update a knowledge base) mutates Reply.io data; review records before execution
+- delete_knowledge_base:
+  - endpoint: DELETE /v3/ai-sdr/knowledge-bases/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/ai-sdr/knowledge-bases/{id} (Delete a knowledge base) mutates Reply.io data; review records before execution
+- duplicate_knowledge_base:
+  - endpoint: POST /v3/ai-sdr/knowledge-bases/{{ record.id }}/duplicate
+  - required fields: id
+  - risk: POST /v3/ai-sdr/knowledge-bases/{id}/duplicate (Duplicate a knowledge base) mutates Reply.io data; review records before execution
+- add_knowledge_base_link:
+  - endpoint: POST /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/links
+  - required fields: knowledge_base_id
+  - optional fields: url
+  - risk: POST /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/links (Add a link) mutates Reply.io data; review records before execution
+- delete_knowledge_base_link:
+  - endpoint: DELETE /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/links/{{ record.link_id }}
+  - required fields: knowledge_base_id, link_id
+  - risk: DELETE /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/links/{link_id} (Delete a link) mutates Reply.io data; review records before execution
+- delete_knowledge_base_document:
+  - endpoint: DELETE /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/documents/{{ record.document_id }}
+  - required fields: knowledge_base_id, document_id
+  - risk: DELETE /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/documents/{document_id} (Delete a document) mutates Reply.io data; review records before execution
+- create_reply_handler:
+  - endpoint: POST /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/reply-handlers
+  - required fields: knowledge_base_id
+  - optional fields: typeOfQuestion, instructions, sampleAnswer, toneOfVoice, responseLength, links, isAutoSend
+  - risk: POST /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers (Create a reply handler) mutates Reply.io data; review records before execution
+- update_reply_handler:
+  - endpoint: PATCH /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/reply-handlers/{{ record.reply_handler_id }}
+  - required fields: knowledge_base_id, reply_handler_id
+  - optional fields: typeOfQuestion, instructions, sampleAnswer, toneOfVoice, responseLength, links, isAutoSend
+  - risk: PATCH /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers/{reply_handler_id} (Update a reply handler) mutates Reply.io data; review records before execution
+- delete_reply_handler:
+  - endpoint: DELETE /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/reply-handlers/{{ record.reply_handler_id }}
+  - required fields: knowledge_base_id, reply_handler_id
+  - risk: DELETE /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers/{reply_handler_id} (Delete a reply handler) mutates Reply.io data; review records before execution
+- delete_reply_handler_media:
+  - endpoint: DELETE /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/reply-handlers/{{ record.reply_handler_id }}/media/{{ record.media_id }}
+  - required fields: knowledge_base_id, reply_handler_id, media_id
+  - risk: DELETE /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reply-handlers/{reply_handler_id}/media/{media_id} (Delete reply handler media) mutates Reply.io data; review records before execution
+- create_reengagement_card:
+  - endpoint: POST /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/reengagement-cards
+  - required fields: knowledge_base_id
+  - optional fields: name, instructions, sendAfter, sampleAnswer, toneOfVoice, responseLength, links, isEnabled
+  - risk: POST /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards (Create a reengagement card) mutates Reply.io data; review records before execution
+- update_reengagement_card:
+  - endpoint: PATCH /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/reengagement-cards/{{ record.reengagement_card_id }}
+  - required fields: knowledge_base_id, reengagement_card_id
+  - optional fields: name, instructions, sampleAnswer, sendAfter, toneOfVoice, responseLength, links, isEnabled
+  - risk: PATCH /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards/{reengagement_card_id} (Update a reengagement card) mutates Reply.io data; review records before execution
+- delete_reengagement_card:
+  - endpoint: DELETE /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/reengagement-cards/{{ record.reengagement_card_id }}
+  - required fields: knowledge_base_id, reengagement_card_id
+  - risk: DELETE /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards/{reengagement_card_id} (Delete a reengagement card) mutates Reply.io data; review records before execution
+- delete_reengagement_card_media:
+  - endpoint: DELETE /v3/ai-sdr/knowledge-bases/{{ record.knowledge_base_id }}/reengagement-cards/{{ record.reengagement_card_id }}/media/{{ record.media_id }}
+  - required fields: knowledge_base_id, reengagement_card_id, media_id
+  - risk: DELETE /v3/ai-sdr/knowledge-bases/{knowledge_base_id}/reengagement-cards/{reengagement_card_id}/media/{media_id} (Delete reengagement card media) mutates Reply.io data; review records before execution
+- create_offer:
+  - endpoint: POST /v3/ai-sdr/offers
+  - optional fields: name, companyName, companyDescription, icp, reasonForOutreach, caseStudies, painPoints, proofPoints
+  - risk: POST /v3/ai-sdr/offers (Create an offer) mutates Reply.io data; review records before execution
+- update_offer:
+  - endpoint: PATCH /v3/ai-sdr/offers/{{ record.id }}
+  - required fields: id
+  - optional fields: name, companyName, companyDescription, icp, reasonForOutreach, caseStudies, painPoints, proofPoints
+  - risk: PATCH /v3/ai-sdr/offers/{id} (Update an offer) mutates Reply.io data; review records before execution
+- delete_offer:
+  - endpoint: DELETE /v3/ai-sdr/offers/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/ai-sdr/offers/{id} (Delete an offer) mutates Reply.io data; review records before execution
+- create_playbook:
+  - endpoint: POST /v3/ai-sdr/playbooks
+  - optional fields: name, description, body, type
+  - risk: POST /v3/ai-sdr/playbooks (Create a playbook) mutates Reply.io data; review records before execution
+- update_playbook:
+  - endpoint: PATCH /v3/ai-sdr/playbooks/{{ record.id }}
+  - required fields: id
+  - optional fields: name, description, body
+  - risk: PATCH /v3/ai-sdr/playbooks/{id} (Update a playbook) mutates Reply.io data; review records before execution
+- delete_playbook:
+  - endpoint: DELETE /v3/ai-sdr/playbooks/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/ai-sdr/playbooks/{id} (Delete a playbook) mutates Reply.io data; review records before execution
+- delete_playbook_style_file:
+  - endpoint: DELETE /v3/ai-sdr/playbooks/{{ record.playbook_id }}/style-files/{{ record.style_file_id }}
+  - required fields: playbook_id, style_file_id
+  - risk: DELETE /v3/ai-sdr/playbooks/{playbook_id}/style-files/{style_file_id} (Delete a style file) mutates Reply.io data; review records before execution
+- create_contact_account:
+  - endpoint: POST /v3/contact-accounts
+  - optional fields: name, description, domainName, domainSecondary, industry, companySize, country, state
+  - risk: POST /v3/contact-accounts (Create an account) mutates Reply.io data; review records before execution
+- update_contact_account:
+  - endpoint: PUT /v3/contact-accounts/{{ record.id }}
+  - required fields: id
+  - optional fields: name, description, domainName, domainSecondary, industry, companySize, country, state
+  - risk: PUT /v3/contact-accounts/{id} (Update an account) mutates Reply.io data; review records before execution
+- delete_contact_account:
+  - endpoint: DELETE /v3/contact-accounts/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/contact-accounts/{id} (Delete an account) mutates Reply.io data; review records before execution
+- bulk_create_contact_accounts:
+  - endpoint: POST /v3/contact-accounts/bulk
+  - optional fields: items
+  - risk: POST /v3/contact-accounts/bulk (Bulk create accounts) mutates Reply.io data; review records before execution
+- bulk_delete_contact_accounts:
+  - endpoint: POST /v3/contact-accounts/bulk-delete
+  - optional fields: ids
+  - risk: POST /v3/contact-accounts/bulk-delete (Bulk delete accounts) mutates Reply.io data; review records before execution
+- update_contact_account_owner:
+  - endpoint: PUT /v3/contact-accounts/{{ record.id }}/owner
+  - required fields: id
+  - optional fields: userId
+  - risk: PUT /v3/contact-accounts/{id}/owner (Update account owner) mutates Reply.io data; review records before execution
+- bulk_add_contacts_to_contact_account:
+  - endpoint: POST /v3/contact-accounts/{{ record.id }}/contact-links/bulk
+  - required fields: id
+  - optional fields: contactIds
+  - risk: POST /v3/contact-accounts/{id}/contact-links/bulk (Bulk add contacts to an account) mutates Reply.io data; review records before execution
+- bulk_remove_contacts_from_contact_account:
+  - endpoint: POST /v3/contact-accounts/{{ record.id }}/contact-links/bulk-delete
+  - required fields: id
+  - optional fields: contactIds
+  - risk: POST /v3/contact-accounts/{id}/contact-links/bulk-delete (Bulk remove contacts from an account) mutates Reply.io data; review records before execution
+- create_contact_account_list:
+  - endpoint: POST /v3/contact-account-lists
+  - optional fields: name
+  - risk: POST /v3/contact-account-lists (Create an account list) mutates Reply.io data; review records before execution
+- update_contact_account_list:
+  - endpoint: PUT /v3/contact-account-lists/{{ record.id }}
+  - required fields: id
+  - optional fields: name
+  - risk: PUT /v3/contact-account-lists/{id} (Update an account list) mutates Reply.io data; review records before execution
+- delete_contact_account_list:
+  - endpoint: DELETE /v3/contact-account-lists/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/contact-account-lists/{id} (Delete an account list) mutates Reply.io data; review records before execution
+- move_accounts_to_contact_account_list:
+  - endpoint: POST /v3/contact-account-lists/{{ record.id }}/move-accounts
+  - required fields: id
+  - optional fields: accountIds
+  - risk: POST /v3/contact-account-lists/{id}/move-accounts (Move accounts to an account list) mutates Reply.io data; review records before execution
+- add_accounts_to_contact_account_list:
+  - endpoint: POST /v3/contact-account-lists/{{ record.id }}/add-accounts
+  - required fields: id
+  - optional fields: accountIds
+  - risk: POST /v3/contact-account-lists/{id}/add-accounts (Add accounts to an account list) mutates Reply.io data; review records before execution
+- cancel_background_job:
+  - endpoint: POST /v3/background-jobs/{{ record.jobId }}/cancel
+  - required fields: jobId
+  - optional fields: reason
+  - risk: POST /v3/background-jobs/{jobId}/cancel (Cancel a background job) mutates Reply.io data; review records before execution
+- create_contact:
+  - endpoint: POST /v3/contacts
+  - optional fields: email, firstName, lastName, phone, phone2, title, company, companySize
+  - risk: POST /v3/contacts (Create a contact) mutates Reply.io data; review records before execution
+- update_contact:
+  - endpoint: PATCH /v3/contacts/{{ record.id }}
+  - required fields: id
+  - optional fields: email, firstName, lastName, phone, phone2, title, company, companySize
+  - risk: PATCH /v3/contacts/{id} (Update a contact) mutates Reply.io data; review records before execution
+- delete_contact:
+  - endpoint: DELETE /v3/contacts/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/contacts/{id} (Delete a contact) mutates Reply.io data; review records before execution
+- import_contacts:
+  - endpoint: POST /v3/contacts/import
+  - optional fields: items, options
+  - risk: POST /v3/contacts/import (Import contacts) mutates Reply.io data; review records before execution
+- bulk_delete_contacts:
+  - endpoint: POST /v3/contacts/bulk-delete
+  - optional fields: ids
+  - risk: POST /v3/contacts/bulk-delete (Bulk delete contacts) mutates Reply.io data; review records before execution
+- set_contacts_replied:
+  - endpoint: POST /v3/contacts/set-replied
+  - optional fields: contactIds, isReplied
+  - risk: POST /v3/contacts/set-replied (Mark or unmark contacts as replied) mutates Reply.io data; review records before execution
+- set_contacts_bounced:
+  - endpoint: POST /v3/contacts/set-bounced
+  - optional fields: contactIds, isBounced, resendEmails
+  - risk: POST /v3/contacts/set-bounced (Mark or unmark contacts as bounced) mutates Reply.io data; review records before execution
+- set_contacts_status_in_sequence:
+  - endpoint: POST /v3/contacts/set-status-in-sequence
+  - optional fields: contactIds, statusInSequence
+  - risk: POST /v3/contacts/set-status-in-sequence (Set contacts' in-sequence status) mutates Reply.io data; review records before execution
+- change_contacts_owner:
+  - endpoint: PUT /v3/contacts/owner
+  - optional fields: contactIds, userId, reassignTasks
+  - risk: PUT /v3/contacts/owner (Change contacts owner) mutates Reply.io data; review records before execution
+- add_contact_note:
+  - endpoint: POST /v3/contacts/{{ record.id }}/notes
+  - required fields: id
+  - optional fields: notes
+  - risk: POST /v3/contacts/{id}/notes (Add a note to a contact) mutates Reply.io data; review records before execution
+- move_contact_to_sequence:
+  - endpoint: POST /v3/contacts/{{ record.id }}/move-to-sequence
+  - required fields: id
+  - optional fields: sequenceId, removeFromExisting, startStepId, ignoreStepDelay, startFrom
+  - risk: POST /v3/contacts/{id}/move-to-sequence (Move a contact to a sequence) mutates Reply.io data; review records before execution
+- create_blacklist_domain_rule:
+  - endpoint: POST /v3/contact-blacklist-rules/domains
+  - optional fields: pattern
+  - risk: POST /v3/contact-blacklist-rules/domains (Create a domain blacklist rule) mutates Reply.io data; review records before execution
+- update_blacklist_domain_rule:
+  - endpoint: PUT /v3/contact-blacklist-rules/domains/{{ record.id }}
+  - required fields: id
+  - optional fields: pattern
+  - risk: PUT /v3/contact-blacklist-rules/domains/{id} (Update a domain blacklist rule) mutates Reply.io data; review records before execution
+- delete_blacklist_domain_rule:
+  - endpoint: DELETE /v3/contact-blacklist-rules/domains/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/contact-blacklist-rules/domains/{id} (Delete a domain blacklist rule) mutates Reply.io data; review records before execution
+- bulk_delete_blacklist_domain_rules:
+  - endpoint: POST /v3/contact-blacklist-rules/domains/bulk-delete
+  - optional fields: ids
+  - risk: POST /v3/contact-blacklist-rules/domains/bulk-delete (Bulk delete domain blacklist rules) mutates Reply.io data; review records before execution
+- create_blacklist_email_rule:
+  - endpoint: POST /v3/contact-blacklist-rules/emails
+  - optional fields: pattern
+  - risk: POST /v3/contact-blacklist-rules/emails (Create an email blacklist rule) mutates Reply.io data; review records before execution
+- update_blacklist_email_rule:
+  - endpoint: PUT /v3/contact-blacklist-rules/emails/{{ record.id }}
+  - required fields: id
+  - optional fields: pattern
+  - risk: PUT /v3/contact-blacklist-rules/emails/{id} (Update an email blacklist rule) mutates Reply.io data; review records before execution
+- delete_blacklist_email_rule:
+  - endpoint: DELETE /v3/contact-blacklist-rules/emails/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/contact-blacklist-rules/emails/{id} (Delete an email blacklist rule) mutates Reply.io data; review records before execution
+- bulk_delete_blacklist_email_rules:
+  - endpoint: POST /v3/contact-blacklist-rules/emails/bulk-delete
+  - optional fields: ids
+  - risk: POST /v3/contact-blacklist-rules/emails/bulk-delete (Bulk delete email blacklist rules) mutates Reply.io data; review records before execution
+- create_blacklist_email_exception_rule:
+  - endpoint: POST /v3/contact-blacklist-rules/email-exceptions
+  - optional fields: pattern
+  - risk: POST /v3/contact-blacklist-rules/email-exceptions (Create an email exception blacklist rule) mutates Reply.io data; review records before execution
+- update_blacklist_email_exception_rule:
+  - endpoint: PUT /v3/contact-blacklist-rules/email-exceptions/{{ record.id }}
+  - required fields: id
+  - optional fields: pattern
+  - risk: PUT /v3/contact-blacklist-rules/email-exceptions/{id} (Update an email exception blacklist rule) mutates Reply.io data; review records before execution
+- delete_blacklist_email_exception_rule:
+  - endpoint: DELETE /v3/contact-blacklist-rules/email-exceptions/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/contact-blacklist-rules/email-exceptions/{id} (Delete an email exception blacklist rule) mutates Reply.io data; review records before execution
+- bulk_delete_blacklist_email_exception_rules:
+  - endpoint: POST /v3/contact-blacklist-rules/email-exceptions/bulk-delete
+  - optional fields: ids
+  - risk: POST /v3/contact-blacklist-rules/email-exceptions/bulk-delete (Bulk delete email exception blacklist rules) mutates Reply.io data; review records before execution
+- create_contact_list:
+  - endpoint: POST /v3/contact-lists
+  - optional fields: name, isShared
+  - risk: POST /v3/contact-lists (Create a contact list) mutates Reply.io data; review records before execution
+- update_contact_list:
+  - endpoint: PUT /v3/contact-lists/{{ record.id }}
+  - required fields: id
+  - optional fields: name
+  - risk: PUT /v3/contact-lists/{id} (Update a contact list) mutates Reply.io data; review records before execution
+- delete_contact_list:
+  - endpoint: DELETE /v3/contact-lists/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/contact-lists/{id} (Delete a contact list) mutates Reply.io data; review records before execution
+- share_contact_list:
+  - endpoint: POST /v3/contact-lists/{{ record.id }}/share
+  - required fields: id
+  - risk: POST /v3/contact-lists/{id}/share (Share a contact list) mutates Reply.io data; review records before execution
+- unshare_contact_list:
+  - endpoint: POST /v3/contact-lists/{{ record.id }}/unshare
+  - required fields: id
+  - risk: POST /v3/contact-lists/{id}/unshare (Unshare a contact list) mutates Reply.io data; review records before execution
+- move_contacts_to_contact_list:
+  - endpoint: POST /v3/contact-lists/{{ record.id }}/move-contacts
+  - required fields: id
+  - optional fields: contactIds
+  - risk: POST /v3/contact-lists/{id}/move-contacts (Move contacts to a contact list) mutates Reply.io data; review records before execution
+- add_contacts_to_contact_list:
+  - endpoint: POST /v3/contact-lists/{{ record.id }}/add-contacts
+  - required fields: id
+  - optional fields: contactIds
+  - risk: POST /v3/contact-lists/{id}/add-contacts (Add contacts to a contact list) mutates Reply.io data; review records before execution
+- create_custom_field:
+  - endpoint: POST /v3/custom-fields
+  - optional fields: title, fieldType, metadata, orgWide
+  - risk: POST /v3/custom-fields (Create a custom field) mutates Reply.io data; review records before execution
+- update_custom_field:
+  - endpoint: PUT /v3/custom-fields/{{ record.id }}
+  - required fields: id
+  - optional fields: title, fieldType, metadata
+  - risk: PUT /v3/custom-fields/{id} (Update a custom field) mutates Reply.io data; review records before execution
+- delete_custom_field:
+  - endpoint: DELETE /v3/custom-fields/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/custom-fields/{id} (Delete a custom field) mutates Reply.io data; review records before execution
+- send_direct_email:
+  - endpoint: POST /v3/contacts/{{ record.id }}/send-direct-email
+  - required fields: id
+  - optional fields: subject, body, emailAccountId
+  - risk: POST /v3/contacts/{id}/send-direct-email (Send a direct email to a contact) mutates Reply.io data; review records before execution
+- send_direct_linked_in_connect:
+  - endpoint: POST /v3/contacts/{{ record.id }}/send-direct-linkedin-connect
+  - required fields: id
+  - optional fields: linkedInAccountId, message
+  - risk: POST /v3/contacts/{id}/send-direct-linkedin-connect (Send a LinkedIn connection request to a contact) mutates Reply.io data; review records before execution
+- send_direct_linked_in_in_mail:
+  - endpoint: POST /v3/contacts/{{ record.id }}/send-direct-linkedin-inmail
+  - required fields: id
+  - optional fields: linkedInAccountId, subject, body
+  - risk: POST /v3/contacts/{id}/send-direct-linkedin-inmail (Send a LinkedIn InMail to a contact) mutates Reply.io data; review records before execution
+- send_direct_linked_in_message:
+  - endpoint: POST /v3/contacts/{{ record.id }}/send-direct-linkedin-message
+  - required fields: id
+  - optional fields: linkedInAccountId, message
+  - risk: POST /v3/contacts/{id}/send-direct-linkedin-message (Send a LinkedIn message to a contact) mutates Reply.io data; review records before execution
+- send_direct_linked_in_voice:
+  - endpoint: POST /v3/contacts/{{ record.id }}/send-direct-linkedin-voice
+  - required fields: id
+  - optional fields: linkedInAccountId, voiceAttachmentId
+  - risk: POST /v3/contacts/{id}/send-direct-linkedin-voice (Send a LinkedIn voice message to a contact) mutates Reply.io data; review records before execution
+- send_direct_linked_in_ai_voice:
+  - endpoint: POST /v3/contacts/{{ record.id }}/send-direct-linkedin-ai-voice
+  - required fields: id
+  - optional fields: linkedInAccountId, script
+  - risk: POST /v3/contacts/{id}/send-direct-linkedin-ai-voice (Send an AI-generated LinkedIn voice message to a contact) mutates Reply.io data; review records before execution
+- create_email_account:
+  - endpoint: POST /v3/email-accounts
+  - optional fields: connection, safety, signature, optOut, rampUp, tags
+  - risk: POST /v3/email-accounts (Create an email account) mutates Reply.io data; review records before execution
+- update_email_account:
+  - endpoint: PATCH /v3/email-accounts/{{ record.id }}
+  - required fields: id
+  - optional fields: connection, safety, signature, optOut, rampUp, tags
+  - risk: PATCH /v3/email-accounts/{id} (Update an email account) mutates Reply.io data; review records before execution
+- delete_email_account:
+  - endpoint: DELETE /v3/email-accounts/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/email-accounts/{id} (Delete an email account) mutates Reply.io data; review records before execution
+- set_default_email_account:
+  - endpoint: POST /v3/email-accounts/{{ record.id }}/set-default
+  - required fields: id
+  - risk: POST /v3/email-accounts/{id}/set-default (Set default email account) mutates Reply.io data; review records before execution
+- resume_sending:
+  - endpoint: POST /v3/email-accounts/{{ record.id }}/resume-sending
+  - required fields: id
+  - risk: POST /v3/email-accounts/{id}/resume-sending (Resume sending) mutates Reply.io data; review records before execution
+- bulk_delete_email_accounts:
+  - endpoint: POST /v3/email-accounts/bulk-delete
+  - optional fields: ids
+  - risk: POST /v3/email-accounts/bulk-delete (Bulk delete email accounts) mutates Reply.io data; review records before execution
+- update_email_account_tag:
+  - endpoint: PUT /v3/email-accounts/tags/{{ record.tagId }}
+  - required fields: tagId
+  - optional fields: name, colorId
+  - risk: PUT /v3/email-accounts/tags/{tagId} (Update a tag) mutates Reply.io data; review records before execution
+- add_tags_to_email_account:
+  - endpoint: POST /v3/email-accounts/{{ record.id }}/tags
+  - required fields: id
+  - optional fields: tags
+  - risk: POST /v3/email-accounts/{id}/tags (Add tags to an email account) mutates Reply.io data; review records before execution
+- remove_tags_from_email_account:
+  - endpoint: DELETE /v3/email-accounts/{{ record.id }}/tags
+  - required fields: id
+  - optional fields: tags
+  - risk: DELETE /v3/email-accounts/{id}/tags (Remove tags from an email account) mutates Reply.io data; review records before execution
+- create_email_template:
+  - endpoint: POST /v3/email-templates
+  - optional fields: name, body, folderType, subject, folderId, attachmentIds
+  - risk: POST /v3/email-templates (Create an email template) mutates Reply.io data; review records before execution
+- update_email_template:
+  - endpoint: PUT /v3/email-templates/{{ record.id }}
+  - required fields: id
+  - optional fields: name, body, subject, attachmentIds
+  - risk: PUT /v3/email-templates/{id} (Update an email template) mutates Reply.io data; review records before execution
+- delete_email_template:
+  - endpoint: DELETE /v3/email-templates/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/email-templates/{id} (Delete an email template) mutates Reply.io data; review records before execution
+- clone_email_template:
+  - endpoint: POST /v3/email-templates/{{ record.id }}/clone
+  - required fields: id
+  - risk: POST /v3/email-templates/{id}/clone (Clone an email template) mutates Reply.io data; review records before execution
+- move_email_template:
+  - endpoint: POST /v3/email-templates/{{ record.id }}/move
+  - required fields: id
+  - optional fields: folderId, folderType
+  - risk: POST /v3/email-templates/{id}/move (Move an email template) mutates Reply.io data; review records before execution
+- render_email_template:
+  - endpoint: POST /v3/email-templates/{{ record.id }}/render
+  - required fields: id
+  - optional fields: contactId, sequenceId, emailAccountId
+  - risk: POST /v3/email-templates/{id}/render (Render an email template) mutates Reply.io data; review records before execution
+- send_test_email_template:
+  - endpoint: POST /v3/email-templates/{{ record.id }}/send-test
+  - required fields: id
+  - optional fields: email, emailAccountId
+  - risk: POST /v3/email-templates/{id}/send-test (Send a test email) mutates Reply.io data; review records before execution
+- create_email_template_folder:
+  - endpoint: POST /v3/email-template-folders
+  - optional fields: name, folderType
+  - risk: POST /v3/email-template-folders (Create an email template folder) mutates Reply.io data; review records before execution
+- share_email_template_folder:
+  - endpoint: POST /v3/email-template-folders/{{ record.id }}/share
+  - required fields: id
+  - risk: POST /v3/email-template-folders/{id}/share (Share an email template folder) mutates Reply.io data; review records before execution
+- estimate_email_validation:
+  - endpoint: POST /v3/email-validations/estimate
+  - optional fields: contactIds, acceptPartial
+  - risk: POST /v3/email-validations/estimate (Estimate email validation) mutates Reply.io data; review records before execution
+- schedule_email_validation:
+  - endpoint: POST /v3/email-validations/schedule
+  - optional fields: contactIds, acceptPartial
+  - risk: POST /v3/email-validations/schedule (Schedule email validation) mutates Reply.io data; review records before execution
+- create_holiday_calendar:
+  - endpoint: POST /v3/holiday-calendars
+  - optional fields: name, repeatEveryYear, holidays
+  - risk: POST /v3/holiday-calendars (Create a holiday calendar) mutates Reply.io data; review records before execution
+- update_holiday_calendar:
+  - endpoint: PUT /v3/holiday-calendars/{{ record.id }}
+  - required fields: id
+  - optional fields: name, repeatEveryYear, holidays
+  - risk: PUT /v3/holiday-calendars/{id} (Update a holiday calendar) mutates Reply.io data; review records before execution
+- delete_holiday_calendar:
+  - endpoint: DELETE /v3/holiday-calendars/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/holiday-calendars/{id} (Delete a holiday calendar) mutates Reply.io data; review records before execution
+- delete_inbox_thread:
+  - endpoint: DELETE /v3/inbox/threads/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/inbox/threads/{id} (Delete inbox thread) mutates Reply.io data; review records before execution
+- bulk_delete_inbox_threads:
+  - endpoint: POST /v3/inbox/threads/bulk-delete
+  - optional fields: threadIds
+  - risk: POST /v3/inbox/threads/bulk-delete (Bulk-delete inbox threads) mutates Reply.io data; review records before execution
+- mark_inbox_threads_as_read:
+  - endpoint: POST /v3/inbox/threads/mark-as-read
+  - optional fields: threadIds
+  - risk: POST /v3/inbox/threads/mark-as-read (Mark threads as read) mutates Reply.io data; review records before execution
+- mark_inbox_threads_as_unread:
+  - endpoint: POST /v3/inbox/threads/mark-as-unread
+  - optional fields: threadIds
+  - risk: POST /v3/inbox/threads/mark-as-unread (Mark threads as unread) mutates Reply.io data; review records before execution
+- send_inbox_thread_message:
+  - endpoint: POST /v3/inbox/threads/{{ record.id }}/messages
+  - required fields: id
+  - optional fields: channel, message, attachmentIds, cc, bcc, applySignature
+  - risk: POST /v3/inbox/threads/{id}/messages (Send a reply within a thread) mutates Reply.io data; review records before execution
+- set_inbox_thread_category:
+  - endpoint: PUT /v3/inbox/threads/{{ record.id }}/category
+  - required fields: id
+  - optional fields: categoryId
+  - risk: PUT /v3/inbox/threads/{id}/category (Assign or clear a thread's category) mutates Reply.io data; review records before execution
+- set_inbox_thread_meeting_intent:
+  - endpoint: PUT /v3/inbox/threads/{{ record.id }}/meeting-intent
+  - required fields: id
+  - optional fields: hasMeetingIntent
+  - risk: PUT /v3/inbox/threads/{id}/meeting-intent (Toggle thread meeting-intent) mutates Reply.io data; review records before execution
+- create_inbox_category:
+  - endpoint: POST /v3/inbox/threads/categories
+  - optional fields: name, color
+  - risk: POST /v3/inbox/threads/categories (Create inbox category) mutates Reply.io data; review records before execution
+- update_inbox_category:
+  - endpoint: PUT /v3/inbox/threads/categories/{{ record.id }}
+  - required fields: id
+  - optional fields: name, color
+  - risk: PUT /v3/inbox/threads/categories/{id} (Update inbox category) mutates Reply.io data; review records before execution
+- delete_inbox_category:
+  - endpoint: DELETE /v3/inbox/threads/categories/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/inbox/threads/categories/{id} (Delete inbox category) mutates Reply.io data; review records before execution
+- assign_threads_to_inbox_category:
+  - endpoint: POST /v3/inbox/threads/categories/{{ record.id }}/thread-links/bulk
+  - required fields: id
+  - optional fields: threadIds
+  - risk: POST /v3/inbox/threads/categories/{id}/thread-links/bulk (Assign threads to a category) mutates Reply.io data; review records before execution
+- unassign_threads_from_inbox_category:
+  - endpoint: POST /v3/inbox/threads/categories/{{ record.id }}/thread-links/bulk-delete
+  - required fields: id
+  - optional fields: threadIds
+  - risk: POST /v3/inbox/threads/categories/{id}/thread-links/bulk-delete (Unassign threads from a category) mutates Reply.io data; review records before execution
+- delete_linked_in_account:
+  - endpoint: DELETE /v3/linkedin-accounts/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/linkedin-accounts/{id} (Delete a LinkedIn account) mutates Reply.io data; review records before execution
+- bulk_delete_linked_in_accounts:
+  - endpoint: POST /v3/linkedin-accounts/bulk-delete
+  - optional fields: ids, force
+  - risk: POST /v3/linkedin-accounts/bulk-delete (Bulk delete LinkedIn accounts) mutates Reply.io data; review records before execution
+- toggle_linked_in_account_status:
+  - endpoint: POST /v3/linkedin-accounts/{{ record.id }}/toggle-status
+  - required fields: id
+  - risk: POST /v3/linkedin-accounts/{id}/toggle-status (Toggle LinkedIn account status) mutates Reply.io data; review records before execution
+- update_linked_in_account_limits:
+  - endpoint: PUT /v3/linkedin-accounts/{{ record.id }}/limits
+  - required fields: id
+  - optional fields: limitsMode, rangeMin, rangeMax, fixedMax
+  - risk: PUT /v3/linkedin-accounts/{id}/limits (Update LinkedIn account limits) mutates Reply.io data; review records before execution
+- update_linked_in_account_revoke_settings:
+  - endpoint: PUT /v3/linkedin-accounts/{{ record.id }}/revoke-settings
+  - required fields: id
+  - optional fields: enabled, periodDays
+  - risk: PUT /v3/linkedin-accounts/{id}/revoke-settings (Update LinkedIn account revoke settings) mutates Reply.io data; review records before execution
+- create_linked_in_connection_link:
+  - endpoint: POST /v3/linkedin-accounts/connection-link
+  - optional fields: name
+  - risk: POST /v3/linkedin-accounts/connection-link (Create a connection link) mutates Reply.io data; review records before execution
+- create_direct_linked_in_connection_link:
+  - endpoint: POST /v3/linkedin-accounts/connect
+  - risk: POST /v3/linkedin-accounts/connect (Create a direct connection link) mutates Reply.io data; review records before execution
+- reconnect_linked_in_account:
+  - endpoint: POST /v3/linkedin-accounts/{{ record.id }}/reconnect
+  - required fields: id
+  - risk: POST /v3/linkedin-accounts/{id}/reconnect (Reconnect a LinkedIn account) mutates Reply.io data; review records before execution
+- delete_pending_linked_in_account:
+  - endpoint: DELETE /v3/linkedin-accounts/pending/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/linkedin-accounts/pending/{id} (Delete a pending LinkedIn account) mutates Reply.io data; review records before execution
+- get_team_performance_overview:
+  - endpoint: POST /v3/reporting/team-performance/overview
+  - optional fields: filters
+  - risk: POST /v3/reporting/team-performance/overview (Get team performance overview) mutates Reply.io data; review records before execution
+- get_channel_efficiency_overview:
+  - endpoint: POST /v3/reporting/channel-efficiency/overview
+  - optional fields: filters
+  - risk: POST /v3/reporting/channel-efficiency/overview (Get channel efficiency overview) mutates Reply.io data; review records before execution
+- get_emails_list:
+  - endpoint: POST /v3/reporting/emails
+  - optional fields: filters
+  - risk: POST /v3/reporting/emails (List email activity) mutates Reply.io data; review records before execution
+- get_calls_list:
+  - endpoint: POST /v3/reporting/calls
+  - optional fields: filters
+  - risk: POST /v3/reporting/calls (List call activity) mutates Reply.io data; review records before execution
+- get_tasks_list:
+  - endpoint: POST /v3/reporting/tasks
+  - optional fields: filters
+  - risk: POST /v3/reporting/tasks (List task activity) mutates Reply.io data; review records before execution
+- get_linked_in_list:
+  - endpoint: POST /v3/reporting/linkedin
+  - optional fields: filters
+  - risk: POST /v3/reporting/linkedin (List LinkedIn activity) mutates Reply.io data; review records before execution
+- get_meetings_list:
+  - endpoint: POST /v3/reporting/team-performance/meetings
+  - optional fields: filters
+  - risk: POST /v3/reporting/team-performance/meetings (List meetings) mutates Reply.io data; review records before execution
+- create_schedule:
+  - endpoint: POST /v3/schedules
+  - optional fields: name, timezoneId, excludeHolidays, useProspectTimezone, useFollowUpSchedule, mainTimings, followUpTimings
+  - risk: POST /v3/schedules (Create a schedule) mutates Reply.io data; review records before execution
+- update_schedule:
+  - endpoint: PUT /v3/schedules/{{ record.id }}
+  - required fields: id
+  - optional fields: name, timezoneId, excludeHolidays, useProspectTimezone, useFollowUpSchedule, mainTimings, followUpTimings
+  - risk: PUT /v3/schedules/{id} (Update a schedule) mutates Reply.io data; review records before execution
+- delete_schedule:
+  - endpoint: DELETE /v3/schedules/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/schedules/{id} (Delete a schedule) mutates Reply.io data; review records before execution
+- set_default_schedule:
+  - endpoint: POST /v3/schedules/{{ record.id }}/set-default
+  - required fields: id
+  - risk: POST /v3/schedules/{id}/set-default (Set default schedule) mutates Reply.io data; review records before execution
+- link_holiday_calendar_to_schedule:
+  - endpoint: POST /v3/schedules/{{ record.id }}/holiday-calendar-links
+  - required fields: id
+  - optional fields: calendarId
+  - risk: POST /v3/schedules/{id}/holiday-calendar-links (Link a holiday calendar to a schedule) mutates Reply.io data; review records before execution
+- unlink_holiday_calendar_from_schedule:
+  - endpoint: DELETE /v3/schedules/{{ record.id }}/holiday-calendar-links/{{ record.calendarId }}
+  - required fields: id, calendarId
+  - risk: DELETE /v3/schedules/{id}/holiday-calendar-links/{calendarId} (Unlink a holiday calendar from a schedule) mutates Reply.io data; review records before execution
+- create_sequence:
+  - endpoint: POST /v3/sequences
+  - optional fields: name, scheduleId, settings, emailAccounts, linkedInAccounts, steps
+  - risk: POST /v3/sequences (Create a sequence) mutates Reply.io data; review records before execution
+- update_sequence:
+  - endpoint: PATCH /v3/sequences/{{ record.id }}
+  - required fields: id
+  - optional fields: name, scheduleId, settings, emailAccounts, linkedInAccounts
+  - risk: PATCH /v3/sequences/{id} (Update a sequence) mutates Reply.io data; review records before execution
+- delete_sequence:
+  - endpoint: DELETE /v3/sequences/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/sequences/{id} (Delete a sequence) mutates Reply.io data; review records before execution
+- start_sequence:
+  - endpoint: POST /v3/sequences/{{ record.id }}/start
+  - required fields: id
+  - risk: POST /v3/sequences/{id}/start (Start a sequence) mutates Reply.io data; review records before execution
+- pause_sequence:
+  - endpoint: POST /v3/sequences/{{ record.id }}/pause
+  - required fields: id
+  - risk: POST /v3/sequences/{id}/pause (Pause a sequence) mutates Reply.io data; review records before execution
+- archive_sequence:
+  - endpoint: POST /v3/sequences/{{ record.id }}/archive
+  - required fields: id
+  - risk: POST /v3/sequences/{id}/archive (Archive a sequence) mutates Reply.io data; review records before execution
+- update_sequence_owner:
+  - endpoint: PUT /v3/sequences/{{ record.id }}/owner
+  - required fields: id
+  - optional fields: userId
+  - risk: PUT /v3/sequences/{id}/owner (Change sequence owner) mutates Reply.io data; review records before execution
+- bulk_start_sequences:
+  - endpoint: POST /v3/sequences/start
+  - optional fields: ids
+  - risk: POST /v3/sequences/start (Bulk start sequences) mutates Reply.io data; review records before execution
+- bulk_pause_sequences:
+  - endpoint: POST /v3/sequences/pause
+  - optional fields: ids
+  - risk: POST /v3/sequences/pause (Bulk pause sequences) mutates Reply.io data; review records before execution
+- bulk_archive_sequences:
+  - endpoint: POST /v3/sequences/archive
+  - optional fields: ids
+  - risk: POST /v3/sequences/archive (Bulk archive sequences) mutates Reply.io data; review records before execution
+- bulk_delete_sequences:
+  - endpoint: POST /v3/sequences/bulk-delete
+  - optional fields: ids
+  - risk: POST /v3/sequences/bulk-delete (Bulk delete sequences) mutates Reply.io data; review records before execution
+- bulk_change_sequence_owner:
+  - endpoint: POST /v3/sequences/batch/owner
+  - optional fields: ids, userId
+  - risk: POST /v3/sequences/batch/owner (Bulk change sequence owner) mutates Reply.io data; review records before execution
+- save_sequence_as_template:
+  - endpoint: POST /v3/sequences/{{ record.id }}/save-as-template
+  - required fields: id
+  - optional fields: name, description, scope
+  - risk: POST /v3/sequences/{id}/save-as-template (Save a sequence as a template) mutates Reply.io data; review records before execution
+- create_sequence_from_template:
+  - endpoint: POST /v3/sequences/create-from-template
+  - optional fields: templateId, sequenceFolderId
+  - risk: POST /v3/sequences/create-from-template (Create a sequence from a template) mutates Reply.io data; review records before execution
+- remove_contact_from_sequence:
+  - endpoint: DELETE /v3/sequences/{{ record.id }}/contact-links/{{ record.contact_id }}
+  - required fields: id, contact_id
+  - risk: DELETE /v3/sequences/{id}/contact-links/{contact_id} (Remove contact from sequence) mutates Reply.io data; review records before execution
+- bulk_add_contacts_to_sequence:
+  - endpoint: POST /v3/sequences/{{ record.id }}/contact-links/bulk
+  - required fields: id
+  - optional fields: contactIds, removeFromExisting, startStepId, ignoreStepDelay, startFrom
+  - risk: POST /v3/sequences/{id}/contact-links/bulk (Bulk add contacts to sequence) mutates Reply.io data; review records before execution
+- bulk_remove_contacts_from_sequence:
+  - endpoint: POST /v3/sequences/{{ record.id }}/contact-links/bulk-delete
+  - required fields: id
+  - optional fields: contactIds
+  - risk: POST /v3/sequences/{id}/contact-links/bulk-delete (Bulk remove contacts from sequence) mutates Reply.io data; review records before execution
+- set_sequence_contacts_status_in_sequence:
+  - endpoint: POST /v3/sequences/{{ record.id }}/contacts/set-status-in-sequence
+  - required fields: id
+  - optional fields: contactIds, statusInSequence
+  - risk: POST /v3/sequences/{id}/contacts/set-status-in-sequence (Set contacts' status in this sequence) mutates Reply.io data; review records before execution
+- set_sequence_contacts_replied:
+  - endpoint: POST /v3/sequences/{{ record.id }}/contacts/set-replied
+  - required fields: id
+  - optional fields: contactIds, isReplied
+  - risk: POST /v3/sequences/{id}/contacts/set-replied (Mark or unmark contacts as replied in this sequence) mutates Reply.io data; review records before execution
+- set_sequence_contacts_bounced:
+  - endpoint: POST /v3/sequences/{{ record.id }}/contacts/set-bounced
+  - required fields: id
+  - optional fields: contactIds, isBounced, resendEmails
+  - risk: POST /v3/sequences/{id}/contacts/set-bounced (Mark or unmark contacts as bounced in this sequence) mutates Reply.io data; review records before execution
+- assign_email_account_to_sequence:
+  - endpoint: POST /v3/sequences/{{ record.id }}/email-account-links
+  - required fields: id
+  - optional fields: emailAccountId
+  - risk: POST /v3/sequences/{id}/email-account-links (Assign email account to sequence) mutates Reply.io data; review records before execution
+- set_sequence_email_accounts:
+  - endpoint: PUT /v3/sequences/{{ record.id }}/email-account-links
+  - required fields: id
+  - optional fields: emailAccountIds
+  - risk: PUT /v3/sequences/{id}/email-account-links (Set sequence email accounts) mutates Reply.io data; review records before execution
+- remove_email_account_from_sequence:
+  - endpoint: DELETE /v3/sequences/{{ record.id }}/email-account-links/{{ record.email_account_id }}
+  - required fields: id, email_account_id
+  - risk: DELETE /v3/sequences/{id}/email-account-links/{email_account_id} (Remove email account from sequence) mutates Reply.io data; review records before execution
+- create_sequence_folder:
+  - endpoint: POST /v3/sequence-folders
+  - optional fields: name
+  - risk: POST /v3/sequence-folders (Create a sequence folder) mutates Reply.io data; review records before execution
+- update_sequence_folder:
+  - endpoint: PUT /v3/sequence-folders/{{ record.id }}
+  - required fields: id
+  - optional fields: name
+  - risk: PUT /v3/sequence-folders/{id} (Update a sequence folder) mutates Reply.io data; review records before execution
+- delete_sequence_folder:
+  - endpoint: DELETE /v3/sequence-folders/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/sequence-folders/{id} (Delete a sequence folder) mutates Reply.io data; review records before execution
+- bulk_assign_sequences_to_folder:
+  - endpoint: POST /v3/sequence-folders/{{ record.id }}/sequence-links/bulk
+  - required fields: id
+  - optional fields: sequenceIds
+  - risk: POST /v3/sequence-folders/{id}/sequence-links/bulk (Bulk assign sequences to a folder) mutates Reply.io data; review records before execution
+- bulk_unassign_sequences_from_folder:
+  - endpoint: POST /v3/sequence-folders/{{ record.id }}/sequence-links/bulk-delete
+  - required fields: id
+  - optional fields: sequenceIds
+  - risk: POST /v3/sequence-folders/{id}/sequence-links/bulk-delete (Bulk unassign sequences from a folder) mutates Reply.io data; review records before execution
+- assign_linked_in_account_to_sequence:
+  - endpoint: POST /v3/sequences/{{ record.id }}/linkedin-account-links
+  - required fields: id
+  - optional fields: linkedInAccountId
+  - risk: POST /v3/sequences/{id}/linkedin-account-links (Assign a LinkedIn account to a sequence) mutates Reply.io data; review records before execution
+- remove_linked_in_account_from_sequence:
+  - endpoint: DELETE /v3/sequences/{{ record.id }}/linkedin-account-links/{{ record.linkedInAccountId }}
+  - required fields: id, linkedInAccountId
+  - risk: DELETE /v3/sequences/{id}/linkedin-account-links/{linkedInAccountId} (Remove a LinkedIn account from a sequence) mutates Reply.io data; review records before execution
+- create_sequence_step:
+  - endpoint: POST /v3/sequences/{{ record.id }}/steps
+  - required fields: id
+  - optional fields: type, delayInMinutes, executionMode, variants, parentId, ifConditionPositive
+  - risk: POST /v3/sequences/{id}/steps (Create a sequence step) mutates Reply.io data; review records before execution
+- update_sequence_step:
+  - endpoint: PUT /v3/sequences/{{ record.id }}/steps/{{ record.step_id }}
+  - required fields: id, step_id
+  - optional fields: type, delayInMinutes, executionMode, variants, parentId, ifConditionPositive
+  - risk: PUT /v3/sequences/{id}/steps/{step_id} (Update a sequence step) mutates Reply.io data; review records before execution
+- delete_sequence_step:
+  - endpoint: DELETE /v3/sequences/{{ record.id }}/steps/{{ record.step_id }}
+  - required fields: id, step_id
+  - risk: DELETE /v3/sequences/{id}/steps/{step_id} (Delete a sequence step) mutates Reply.io data; review records before execution
+- bulk_delete_sequence_steps:
+  - endpoint: POST /v3/sequences/{{ record.id }}/steps/bulk-delete
+  - required fields: id
+  - optional fields: ids
+  - risk: POST /v3/sequences/{id}/steps/bulk-delete (Bulk delete sequence steps) mutates Reply.io data; review records before execution
+- enable_sequence_step_variants:
+  - endpoint: POST /v3/sequences/{{ record.id }}/steps/{{ record.step_id }}/enable
+  - required fields: id, step_id
+  - optional fields: variantIds
+  - risk: POST /v3/sequences/{id}/steps/{step_id}/enable (Enable step variants) mutates Reply.io data; review records before execution
+- disable_sequence_step_variants:
+  - endpoint: POST /v3/sequences/{{ record.id }}/steps/{{ record.step_id }}/disable
+  - required fields: id, step_id
+  - optional fields: variantIds
+  - risk: POST /v3/sequences/{id}/steps/{step_id}/disable (Disable step variants) mutates Reply.io data; review records before execution
+- create_sequence_step_variant:
+  - endpoint: POST /v3/sequences/{{ record.id }}/steps/{{ record.step_id }}/variants
+  - required fields: id, step_id
+  - optional fields: message, subject, isEnabled, attachmentIds
+  - risk: POST /v3/sequences/{id}/steps/{step_id}/variants (Create a step variant) mutates Reply.io data; review records before execution
+- bulk_delete_sequence_step_variants:
+  - endpoint: POST /v3/sequences/{{ record.id }}/steps/{{ record.step_id }}/variants/bulk-delete
+  - required fields: id, step_id
+  - optional fields: ids
+  - risk: POST /v3/sequences/{id}/steps/{step_id}/variants/bulk-delete (Bulk delete step variants) mutates Reply.io data; review records before execution
+- update_sequence_step_variant:
+  - endpoint: PUT /v3/sequences/{{ record.id }}/steps/{{ record.step_id }}/variants/{{ record.variant_id }}
+  - required fields: id, step_id, variant_id
+  - optional fields: message, subject, isEnabled, attachmentIds
+  - risk: PUT /v3/sequences/{id}/steps/{step_id}/variants/{variant_id} (Update a step variant) mutates Reply.io data; review records before execution
+- delete_sequence_step_variant:
+  - endpoint: DELETE /v3/sequences/{{ record.id }}/steps/{{ record.step_id }}/variants/{{ record.variant_id }}
+  - required fields: id, step_id, variant_id
+  - risk: DELETE /v3/sequences/{id}/steps/{step_id}/variants/{variant_id} (Delete a step variant) mutates Reply.io data; review records before execution
+- delete_sequence_template:
+  - endpoint: DELETE /v3/sequence-templates/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/sequence-templates/{id} (Delete a sequence template) mutates Reply.io data; review records before execution
+- update_settings:
+  - endpoint: PATCH /v3/settings
+  - optional fields: account, emails, linkedIn, calls, contacts, beta
+  - risk: PATCH /v3/settings (Update settings) mutates Reply.io data; review records before execution
+- create_task:
+  - endpoint: POST /v3/tasks
+  - optional fields: taskType, startAt, dueTo, template, contactId, linkedInTaskType
+  - risk: POST /v3/tasks (Create a task) mutates Reply.io data; review records before execution
+- update_task:
+  - endpoint: PUT /v3/tasks/{{ record.id }}
+  - required fields: id
+  - optional fields: taskType, startAt, dueTo, template, contactId, linkedInTaskType
+  - risk: PUT /v3/tasks/{id} (Update a task) mutates Reply.io data; review records before execution
+- delete_task:
+  - endpoint: DELETE /v3/tasks/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/tasks/{id} (Delete a task) mutates Reply.io data; review records before execution
+- assign_task:
+  - endpoint: PUT /v3/tasks/{{ record.id }}/assigned-user
+  - required fields: id
+  - optional fields: userId
+  - risk: PUT /v3/tasks/{id}/assigned-user (Reassign a task) mutates Reply.io data; review records before execution
+- complete_task:
+  - endpoint: POST /v3/tasks/{{ record.id }}/complete
+  - required fields: id
+  - optional fields: callResolution, finishProspectInSequence
+  - risk: POST /v3/tasks/{id}/complete (Complete a task) mutates Reply.io data; review records before execution
+- execute_task:
+  - endpoint: POST /v3/tasks/{{ record.id }}/execute
+  - required fields: id
+  - optional fields: content, emailAccountId
+  - risk: POST /v3/tasks/{id}/execute (Execute and complete a task) mutates Reply.io data; review records before execution
+- bulk_delete_tasks:
+  - endpoint: POST /v3/tasks/bulk-delete
+  - optional fields: ids
+  - risk: POST /v3/tasks/bulk-delete (Bulk delete tasks) mutates Reply.io data; review records before execution
+- batch_assign_tasks:
+  - endpoint: POST /v3/tasks/batch/assign
+  - optional fields: ids, userId
+  - risk: POST /v3/tasks/batch/assign (Batch reassign tasks) mutates Reply.io data; review records before execution
+- batch_complete_tasks:
+  - endpoint: POST /v3/tasks/batch/complete
+  - optional fields: ids
+  - risk: POST /v3/tasks/batch/complete (Batch complete tasks) mutates Reply.io data; review records before execution
+- create_webhook:
+  - endpoint: POST /v3/webhooks
+  - optional fields: eventType, url, scope, enabled, payloadConfig
+  - risk: POST /v3/webhooks (Create a webhook subscription) mutates Reply.io data; review records before execution
+- update_webhook:
+  - endpoint: PUT /v3/webhooks/{{ record.id }}
+  - required fields: id
+  - optional fields: eventType, url, scope, payloadConfig
+  - risk: PUT /v3/webhooks/{id} (Update a webhook subscription) mutates Reply.io data; review records before execution
+- delete_webhook:
+  - endpoint: DELETE /v3/webhooks/{{ record.id }}
+  - required fields: id
+  - risk: DELETE /v3/webhooks/{id} (Delete a webhook subscription) mutates Reply.io data; review records before execution
+- test_webhook:
+  - endpoint: POST /v3/webhooks/{{ record.id }}/test
+  - required fields: id
+  - risk: POST /v3/webhooks/{id}/test (Send a test payload) mutates Reply.io data; review records before execution
+- enable_webhook:
+  - endpoint: POST /v3/webhooks/{{ record.id }}/enable
+  - required fields: id
+  - risk: POST /v3/webhooks/{id}/enable (Enable a webhook subscription) mutates Reply.io data; review records before execution
+- disable_webhook:
+  - endpoint: POST /v3/webhooks/{{ record.id }}/disable
+  - required fields: id
+  - risk: POST /v3/webhooks/{id}/disable (Disable a webhook subscription) mutates Reply.io data; review records before execution
+
+## Security
+
+- read risk: external Reply.io API read of outreach people, campaign, task, and email account data
+- write risk: external Reply.io API mutations for contacts, accounts, sequences, templates, tasks, settings, webhooks, and related v3 resources
+- approval: writes require explicit reverse-ETL plan, preview, approval, execute flow
+- Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Commands
+
+### Inspect as a manual
+
+```bash
+pm connectors inspect reply-io
+```
+
+### Inspect as structured JSON
+
+```bash
+pm connectors inspect reply-io --json
+```
+
+## Agent Rules
+
+- Run pm connectors inspect reply-io before creating credentials or plans.
+- Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+- Never ask the user to paste secret values into chat.
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

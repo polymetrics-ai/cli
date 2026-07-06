@@ -196,8 +196,8 @@
         "type": "none"
       },
       "computed_fields": {
-        "site_id": "{{ record.idsite }}",
-        "main_url": "{{ record.main_url }}"
+        "site_id": "{{ coalesce record.idsite record.idSite record.site_id }}",
+        "main_url": "{{ coalesce record.main_url record.mainUrl }}"
       },
       "schema": "schemas/site.json"
     },
@@ -218,8 +218,8 @@
         "type": "none"
       },
       "computed_fields": {
-        "site_id": "{{ record.idsite }}",
-        "main_url": "{{ record.main_url }}"
+        "site_id": "{{ coalesce record.idsite record.idSite record.site_id }}",
+        "main_url": "{{ coalesce record.main_url record.mainUrl }}"
       },
       "schema": "schemas/sites_manager_sites_with_at_least_view_access.json"
     },
@@ -240,8 +240,8 @@
         "type": "none"
       },
       "computed_fields": {
-        "site_id": "{{ record.idsite }}",
-        "main_url": "{{ record.main_url }}"
+        "site_id": "{{ coalesce record.idsite record.idSite record.site_id }}",
+        "main_url": "{{ coalesce record.main_url record.mainUrl }}"
       },
       "schema": "schemas/sites_manager_sites_with_view_access.json"
     },
@@ -262,8 +262,8 @@
         "type": "none"
       },
       "computed_fields": {
-        "site_id": "{{ record.idsite }}",
-        "main_url": "{{ record.main_url }}"
+        "site_id": "{{ coalesce record.idsite record.idSite record.site_id }}",
+        "main_url": "{{ coalesce record.main_url record.mainUrl }}"
       },
       "schema": "schemas/sites_manager_sites_with_admin_access.json"
     },

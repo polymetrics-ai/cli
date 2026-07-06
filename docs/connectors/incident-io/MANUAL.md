@@ -12,20 +12,51 @@ SYNOPSIS
 DESCRIPTION
   Reads incident.io incidents, severities, incident roles, users, and follow-ups through the incident.io REST API.
 
+ICON
+  asset: icons/pm-sample.svg
+  source: polymetrics
+  review_status: polymetrics
+
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  page_size
+  api_key (secret)
+
+ETL STREAMS
+  incidents:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), id(), mode(), name(), reference(), severity_id(), severity_name(), status_category(), status_id(), status_name(), summary(), updated_at(), visibility()
+  severities:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), description(), id(), name(), rank(), updated_at()
+  incident_roles:
+    primary key: id
+    cursor: updated_at
+    fields: created_at(), description(), id(), instructions(), name(), role_type(), shortform(), updated_at()
+  users:
+    primary key: id
+    fields: base_role_id(), base_role_name(), email(), id(), name(), role(), slack_user_id()
+  follow_ups:
+    primary key: id
+    cursor: updated_at
+    fields: assignee_id(), assignee_name(), completed_at(), created_at(), description(), id(), incident_id(), status(), title(), updated_at()
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external incident.io API read of incidents, severities, roles, users, and follow-ups
+  approval: none; read-only source
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

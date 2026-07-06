@@ -20,7 +20,7 @@
       "path": "/graphql",
       "records": { "path": "data.products" },
       "schema": "schemas/products.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by internal/connectors/paritytest/stigg and internal/connectors/hooks/stigg/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by archived parity evidence for stigg and internal/connectors/hooks/stigg/hooks_test.go" }
     },
     {
       "name": "plans",
@@ -28,7 +28,7 @@
       "path": "/graphql",
       "records": { "path": "data.plans" },
       "schema": "schemas/plans.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by internal/connectors/paritytest/stigg and internal/connectors/hooks/stigg/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by archived parity evidence for stigg and internal/connectors/hooks/stigg/hooks_test.go" }
     },
     {
       "name": "customers",
@@ -36,7 +36,7 @@
       "path": "/graphql",
       "records": { "path": "data.customers" },
       "schema": "schemas/customers.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by internal/connectors/paritytest/stigg and internal/connectors/hooks/stigg/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by archived parity evidence for stigg and internal/connectors/hooks/stigg/hooks_test.go" }
     },
     {
       "name": "subscriptions",
@@ -44,7 +44,7 @@
       "path": "/graphql",
       "records": { "path": "data.subscriptions" },
       "schema": "schemas/subscriptions.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by internal/connectors/paritytest/stigg and internal/connectors/hooks/stigg/hooks_test.go" }
+      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (GraphQL POST with no in-body pagination); hook-covered, proven live by archived parity evidence for stigg and internal/connectors/hooks/stigg/hooks_test.go" }
     }
   ]
 }

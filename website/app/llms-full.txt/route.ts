@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { BLOG_POSTS } from '@/lib/blog';
 import { CONNECTOR_CATALOG } from '@/lib/connectors.catalog.generated';
 import { DOCS_PAGES } from '@/lib/docs.generated';
 
@@ -15,19 +14,6 @@ export async function GET() {
     } else {
       sections.push(`# ${page.title}\n\n_Content not available._`);
     }
-  }
-
-  for (const post of BLOG_POSTS) {
-    const body = post.sections
-      .map((section) => {
-        const paragraphs = section.body.join('\n\n');
-        const points = section.points ? `\n\n${section.points.map((point) => `- ${point}`).join('\n')}` : '';
-        const code = section.code ? `\n\n\`\`\`bash\n${section.code}\n\`\`\`` : '';
-        return `## ${section.heading}\n\n${paragraphs}${points}${code}`;
-      })
-      .join('\n\n');
-
-    sections.push(`# ${post.title}\n\n${post.description}\n\n${body}`);
   }
 
   // Compact connector index

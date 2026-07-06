@@ -1,69 +1,75 @@
-# Linkrunner
+# Overview
 
-## Overview
+Reads Linkrunner mobile attribution campaigns and attributed users from the Linkrunner Data API.
 
-Reads Linkrunner mobile attribution campaigns and attributed users from the Linkrunner Data API
-(`https://api.linkrunner.io/api/v1`). Read-only: Linkrunner has no approved reverse-ETL write
-surface, matching the legacy `internal/connectors/linkrunner` package. Pass B also reviewed
-Linkrunner's SDK-less API reference; those documented endpoints are client-device telemetry calls,
-not server-side sync resources.
+Readable streams: `campaigns`, `attributed_users`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://docs.linkrunner.io/sdk-less/api-reference.
 
 ## Auth setup
 
-An API key (`secrets.linkrunner-key`) is sent on every request as the `linkrunner-key` header (a
-custom API-key-header scheme, not Bearer/Basic), matching legacy's `connsdk.APIKeyHeader` usage
-exactly.
+Connection fields:
+
+- `base_url` (optional, string); default `https://api.linkrunner.io/api/v1`; format `uri`;
+  Linkrunner Data API base URL override for tests or proxies.
+- `channel` (optional, string); Optional campaigns stream channel filter passed through as-is.
+- `display_id` (optional, string); Campaign display_id to scope the attributed_users stream.
+  Required when reading attributed_users.
+- `end_timestamp` (optional, string); Optional attributed_users stream upper-bound timestamp filter.
+- `filter` (optional, string); Optional campaigns stream filter passed through as-is.
+- `linkrunner-key` (required, secret, string); Linkrunner API key, sent as the linkrunner-key
+  request header. Never logged.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `page_size` (optional, string); default `100`; Records per page (1-100).
+- `start_timestamp` (optional, string); Optional attributed_users stream lower-bound timestamp
+  filter.
+- `timezone` (optional, string); Optional attributed_users stream timezone for timestamp filters.
+
+Secret fields are redacted in logs and write previews: `linkrunner-key`.
+
+Default configuration values: `base_url=https://api.linkrunner.io/api/v1`, `max_pages=0`,
+`page_size=100`.
+
+Authentication behavior:
+
+- API key authentication in `linkrunner-key` using `secrets.linkrunner-key`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/campaigns`.
 
 ## Streams notes
 
-`campaigns` reads `/campaigns` and emits records from the `data.campaigns` array; the optional
-`config.filter`/`config.channel` values are forwarded as query params only when set
-(`omit_when_absent`), matching legacy's conditional filter passthrough. `attributed_users` reads
-`/attributed-users` (`data.users` array) and **requires** `config.display_id` to scope the read —
-declared as a plain (always-resolved) query template, so a missing `display_id` hard-errors exactly
-as legacy's own `errors.New("linkrunner attributed_users stream requires config display_id")` does;
-`config.start_timestamp`/`config.end_timestamp`/`config.timezone` are optional passthrough filters
-(`omit_when_absent`), matching legacy.
+Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
+1; page size 100.
 
-Both streams use page/limit pagination (`page` starting at 1, `limit` page size); a page shorter
-than the declared size stops the read, matching legacy's `harvest` loop exactly. Legacy performs no
-automated incremental filtering for either stream (a full sync always re-reads every campaign/user
-from page 1); each schema still declares its natural cursor field (`update_at`/`attributed_at`) for
-downstream state tracking, but no `request_param` is sent — this mirrors legacy's own behavior, not
-a narrowing.
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `campaigns`: GET `/campaigns` - records path `data.campaigns`; query `channel` from template `{{
+  config.channel }}`, omitted when absent; `filter` from template `{{ config.filter }}`, omitted
+  when absent; page-number pagination; page parameter `page`; size parameter `limit`; starts at 1;
+  page size 100; incremental cursor `update_at`; formatted as `rfc3339`.
+- `attributed_users`: GET `/attributed-users` - records path `data.users`; query `display_id`=`{{
+  config.display_id }}`; `end_timestamp` from template `{{ config.end_timestamp }}`, omitted when
+  absent; `start_timestamp` from template `{{ config.start_timestamp }}`, omitted when absent;
+  `timezone` from template `{{ config.timezone }}`, omitted when absent; page-number pagination;
+  page parameter `page`; size parameter `limit`; starts at 1; page size 100; incremental cursor
+  `attributed_at`; formatted as `rfc3339`.
 
 ## Write actions & risks
 
-None. Linkrunner is read-only in pm (`capabilities.write: false`), matching legacy.
-The documented SDK-less POST endpoints (`/api/client/init`, `/api/client/attribution-data`,
-`/api/client/trigger`, `/api/client/set-user-data`, `/api/client/capture-event`,
-`/api/client/capture-payment`, `/api/client/remove-captured-payment`,
-`/api/client/update-push-token`, `/api/client/integrations`, and
-`/api/client/handle-deeplink`) all require a project token in the JSON body plus device/install
-context. The current declarative write dialect cannot safely inject secrets into JSON bodies, and
-these calls represent client telemetry, attribution, or payment/revenue side effects rather than
-ordinary reverse-ETL object mutations.
+This connector is read-only. Read behavior: external Linkrunner API read of mobile attribution
+campaign and user data.
 
 ## Known limits
 
-- **`page_size`/`max_pages` config overrides are not modeled.** `streams.json`'s
-  `base.pagination.page_size` is set to legacy's real production default, `100` (legacy:
-  `linkrunnerDefaultPageSize = 100`) — this is the actual value a live deployment's paginator
-  sends; it is not a fixture convenience. `config.page_size`/`config.max_pages` are declared in
-  `spec.json` for parity with legacy's config surface but, like stripe's documented
-  `page_size`/`limit_param` deviation (conventions.md §5 item 3), are not wired into the engine's
-  fixed pagination block. The mandatory 2-page conformance fixture
-  (`fixtures/streams/campaigns/{page_1,page_2}.json`) is sized to match: page 1 returns a full
-  100-record page (so the paginator continues to page 2), page 2 returns the 1-record remainder —
-  matching aviationstack's and awin-advertiser's identical repaired precedent
-  (`docs/migration/conventions.md`, wave2 sweep class C3). The `attributed_users` single-page
-  fixture requests `limit=100` to match.
-- Linkrunner's public docs (`docs.linkrunner.io/sdk-less/api-reference`) describe the client SDK
-  surface, not this connector's Data API endpoints (`/campaigns`, `/attributed-users`); the legacy
-  Go connector and its test suite are the authoritative source for this bundle's Data API
-  request/response shapes, per migration convention (legacy is ground truth over docs when the
-  public docs omit the legacy API).
-- Pass B did not add SDK-less writes because they require body-carried secrets and device context
-  that would either leak credentials through write records or create client-telemetry side effects
-  from a server-side ETL connector. Each documented SDK-less endpoint is accounted for in
-  `api_surface.json`.
+- Published rate limit metadata: requests_per_minute=60.
+- Batch defaults: read_page_size=100.
+- API coverage includes 2 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  destructive_admin=1, non_data_endpoint=2, out_of_scope=6, requires_elevated_scope=1.

@@ -1,52 +1,72 @@
 # Overview
 
-FreshBooks is an accounting platform. This bundle reads FreshBooks clients, invoices, expenses,
-payments, and items through the FreshBooks accounting REST API (`https://api.freshbooks.com`). It
-is read-only, matching legacy `internal/connectors/freshbooks` exactly (no reverse-ETL writes).
+Reads FreshBooks clients, invoices, expenses, payments, and items through the FreshBooks accounting
+REST API.
+
+Readable streams: `clients`, `invoices`, `expenses`, `payments`, `items`.
+
+This connector is read-only; no write actions are declared.
+
+Service API documentation: https://www.freshbooks.com/api/start.
 
 ## Auth setup
 
-Provide a FreshBooks OAuth2 access token via the `oauth_access_token` secret; it is sent as
-`Authorization: Bearer <oauth_access_token>` and is never logged. The refresh token / client id /
-client secret used for the broader OAuth dance are not consumed directly by this connector, exactly
-as in legacy. A FreshBooks `account_id` config value is required — every accounting list endpoint
-is scoped under `/accounting/account/{account_id}/`.
+Connection fields:
+
+- `account_id` (required, string); FreshBooks account id; every accounting list endpoint is scoped
+  under /accounting/account/{account_id}/.
+- `base_url` (optional, string); default `https://api.freshbooks.com`; format `uri`; FreshBooks API
+  base URL override for tests or proxies.
+- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
+  the stream.
+- `mode` (optional, string).
+- `oauth_access_token` (required, secret, string); FreshBooks OAuth2 access token. Sent as
+  Authorization: Bearer <oauth_access_token>; never logged. The refresh token / client id / secret
+  used for the OAuth dance itself are not consumed directly by this connector.
+- `page_size` (optional, string); default `100`; Records per page (1-100).
+
+Secret fields are redacted in logs and write previews: `oauth_access_token`.
+
+Default configuration values: `base_url=https://api.freshbooks.com`, `max_pages=0`, `page_size=100`.
+
+Authentication behavior:
+
+- Bearer token authentication using `secrets.oauth_access_token`.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/accounting/account/{{ config.account_id }}/users/clients` with query
+`per_page`=`1`.
 
 ## Streams notes
 
-All 5 streams (`clients`, `invoices`, `expenses`, `payments`, `items`) share the same shape: `GET`
-against `/accounting/account/{account_id}/<resource>`, records at
-`response.result.<array_key>` (e.g. `response.result.clients`), primary key `["id"]`, and the
-`x-cursor-field` set to `updated` (matching legacy's `CursorFields: ["updated"]` on every stream) —
-no `incremental` request param is declared because legacy itself applies none server-side for any
-FreshBooks stream (full refresh only; `x-cursor-field` here exists solely for
-`incremental_append_deduped` sync-mode eligibility, exactly mirroring legacy's own stream catalog
-declaration without any actual server-side filter).
+Default pagination: page-number pagination; page parameter `page`; size parameter `per_page`; starts
+at 1; page size 100.
 
-Pagination is `page_number` (`page`/`per_page`, `start_page: 1`, `page_size: 100`), stopping on a
-short page. Legacy's `harvest` loop primarily stops using the response's own authoritative
-`response.result.pages` count (`page >= total`), falling back to short-page detection only when
-that count is unparseable. The engine's `page_number` paginator stops purely via short-page
-detection (`recordCount < page_size`). **Documented parity deviation**: for the extremely unusual
-case of a final page that is exactly full-sized (`total` records is an exact multiple of
-`page_size`) AND `page >= total` pages, legacy would stop one request earlier via the authoritative
-`pages` count while this bundle would issue one additional request that returns 0 records before
-stopping — no records are ever duplicated, dropped, or reordered by this difference; it is a
-request-count-only divergence, never a data divergence, so it is scoped ACCEPTABLE per this file's
-meta-rule. See `docs/migration/conventions.md` §5.
+- `clients`: GET `/accounting/account/{{ config.account_id }}/users/clients` - records path
+  `response.result.clients`; page-number pagination; page parameter `page`; size parameter
+  `per_page`; starts at 1; page size 100.
+- `invoices`: GET `/accounting/account/{{ config.account_id }}/invoices/invoices` - records path
+  `response.result.invoices`; page-number pagination; page parameter `page`; size parameter
+  `per_page`; starts at 1; page size 100.
+- `expenses`: GET `/accounting/account/{{ config.account_id }}/expenses/expenses` - records path
+  `response.result.expenses`; page-number pagination; page parameter `page`; size parameter
+  `per_page`; starts at 1; page size 100.
+- `payments`: GET `/accounting/account/{{ config.account_id }}/payments/payments` - records path
+  `response.result.payments`; page-number pagination; page parameter `page`; size parameter
+  `per_page`; starts at 1; page size 100.
+- `items`: GET `/accounting/account/{{ config.account_id }}/items/items` - records path
+  `response.result.items`; page-number pagination; page parameter `page`; size parameter `per_page`;
+  starts at 1; page size 100.
 
 ## Write actions & risks
 
-None. FreshBooks is exposed read-only, matching legacy's `Capabilities{Write: false}` and its
-`Write` method, which always returns `connectors.ErrUnsupportedOperation`.
+This connector is read-only. Read behavior: external FreshBooks API read of accounting data
+(clients, invoices, expenses, payments, items).
 
 ## Known limits
 
-- Full FreshBooks API surface (estimates, time entries, projects, staff, bills, journal entries,
-  webhooks, etc.) is out of scope for this wave; see `api_surface.json`'s
-  `excluded: {category: out_of_scope, reason: "not implemented in this bundle"}` entries. Only the 5
-  legacy-parity read streams are implemented.
-- The page-count stop-signal deviation described above under Streams notes (request-count only,
-  never a data divergence).
-- `account_id` is required config (not optional), matching legacy's own hard requirement
-  (`freshbooksAccountID` errors when unset).
+- Batch defaults: read_page_size=100.
+- API coverage includes 5 stream-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  out_of_scope=6.

@@ -30,7 +30,7 @@
 // connector's fixed 3-stream catalog is actually schema-discovered at
 // runtime from anywhere (see docs.md's Known limits).
 //
-// NO init()/RegisterFactory/RegisterNativeLive call exists in this package
+// NO init()/RegisterFactory call exists in this package
 // (enforced by a grep-guard test, faker_test.go TestNoInitRegistration) — the
 // registration flip that wires native/faker into the production registry is
 // a wave6 change; this wave only builds and tests the package standalone.

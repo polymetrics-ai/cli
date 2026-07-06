@@ -1,113 +1,185 @@
 # Overview
 
-Visma e-conomic is a Danish/Nordic accounting SaaS. This bundle reads customers, suppliers,
-products, booked and draft invoices, draft and sent orders, draft and sent quotes, departments,
-payment terms, units, VAT types, VAT zones, accounts, customer groups, and product groups from the
-e-conomic REST API (`{base_url}`), and writes customers, suppliers, products, units, and payment
-terms. It migrates `internal/connectors/visma-economic` (the hand-written legacy connector, which
-stays registered and unchanged until wave6's registry flip) and, per Pass B, expands well beyond
-legacy's single read-only `customers` stream to the connector's full declared core-commercial
-surface — see `api_surface.json` for the complete endpoint-by-endpoint accounting.
+Reads customers, suppliers, products, invoices, orders, quotes, departments, payment terms, units,
+and accounts from the Visma e-conomic REST API, and writes customers, suppliers, products, units,
+and payment terms.
+
+Readable streams: `customers`, `suppliers`, `products`, `invoices_booked`, `invoices_drafts`,
+`orders_drafts`, `orders_sent`, `quotes_drafts`, `quotes_sent`, `departments`, `payment_terms`,
+`units`, `vat_types`, `vat_zones`, `accounts`, `customer_groups`, `product_groups`.
+
+Write actions: `create_customer`, `update_customer`, `delete_customer`, `create_supplier`,
+`update_supplier`, `delete_supplier`, `create_product`, `update_product`, `delete_product`,
+`create_unit`, `update_unit`, `delete_unit`, `create_payment_term`, `update_payment_term`,
+`delete_payment_term`.
+
+Service API documentation: https://restdocs.e-conomic.com/.
 
 ## Auth setup
 
-Two secrets are required: `app_secret_token` and `agreement_grant_token`, e-conomic's own
-two-token app authentication scheme. Both are sent as static request headers
-(`X-AppSecretToken` / `X-AgreementGrantToken`) on every request via `streams.json`'s `base.headers`
-— e-conomic does not use a Bearer/Basic/API-key-query scheme, so `base.auth` is declared as a single
-unconditional `{"mode": "none"}` (the credentials flow entirely through the two headers, not
-through the `auth` dispatch). Both secrets are required in `spec.json`; an absent header-templated
-secret is always a hard validate/runtime error (per the engine's header-resolution rule), matching
-legacy's own `Check`/`requester` validation that rejects an empty `app_secret_token` or
-`agreement_grant_token`.
+Connection fields:
 
-`base_url` defaults to `https://restapi.e-conomic.com`, matching legacy's `defaultBaseURL` constant,
-materialized via `spec.json`'s `"default"` value.
+- `agreement_grant_token` (required, secret, string); e-conomic agreement grant token, sent as the
+  X-AgreementGrantToken header on every request.
+- `app_secret_token` (required, secret, string); e-conomic app secret token, sent as the
+  X-AppSecretToken header on every request.
+- `base_url` (optional, string); default `https://restapi.e-conomic.com`; format `uri`; Visma
+  e-conomic REST API base URL. Defaults to the public e-conomic API host.
+- `start_date` (optional, string); format `date-time`; Optional RFC3339 lower-bound value used to
+  seed the initial incremental filter (lastUpdated$gte:<date>) on streams that support it, when no
+  persisted cursor state exists yet.
+
+Secret fields are redacted in logs and write previews: `agreement_grant_token`, `app_secret_token`.
+
+Default configuration values: `base_url=https://restapi.e-conomic.com`.
+
+Provide the secret fields listed above. Authentication is applied by the connector-specific
+implementation for this service.
+
+Requests use the configured `base_url` value after applying defaults.
+
+Connection checks call GET `/customers`.
 
 ## Streams notes
 
-All 17 streams share the same `collection` envelope. The legacy-parity `customers` stream keeps
-legacy's single unpaginated, unfiltered request shape; the expanded non-legacy streams use the
-documented e-conomic list pagination and filters where applicable:
+Default pagination: page-number pagination; page parameter `skippages`; size parameter `pagesize`;
+starts at 0; page size 100.
 
-- **Records envelope**: every list endpoint returns its collection under a top-level `collection`
-  array (e-conomic's uniform list envelope) — `records.path: "collection"` on every stream.
-- **Pagination**: `base.pagination` declares `page_number` with `page_param: skippages`,
-  `size_param: pagesize`, `start_page: 0` (e-conomic's `skippages` is 0-indexed — the number of
-  PAGES to skip, not a record offset), `page_size: 100`. Expanded streams inherit this default.
-  `customers` overrides it with `pagination.type: none` to match legacy's `GET customers` call.
-- **Incremental filtering**: e-conomic supports a uniform `lastUpdated$gte:<ISO8601>` query filter
-  (its own documented `filter` parameter grammar) on every resource whose object carries a
-  `lastUpdated` field. Streams whose real wire objects expose `lastUpdated`
-  (`suppliers`/`products`/`invoices_booked`/`invoices_drafts`/`orders_drafts`/
-  `orders_sent`/`quotes_drafts`/`quotes_sent`) declare `incremental.cursor_field: lastUpdated` +
-  `request_param: filter`, gated by `omit_when_absent` (§3's optional-query dialect) so a full-refresh
-  read sends no `filter` param at all — matching e-conomic's own "omit for unfiltered" contract, not
-  an empty-string filter. Static reference/master-data collections with no `lastUpdated` field on
-  their own object (`departments`/`payment_terms`/`units`/`vat_types`/`vat_zones`/`accounts`/
-  `customer_groups`/`product_groups`) and legacy-parity `customers` declare no `incremental` block.
-- **id derivation**: every stream stamps `id` via `computed_fields` from that resource's own
-  `<resource>Number` field (e-conomic's own primary-key convention — `customerNumber`,
-  `supplierNumber`, `productNumber`, `bookedInvoiceNumber`, `draftInvoiceNumber`, `orderNumber`,
-  `quoteNumber`, `departmentNumber`, `paymentTermsNumber`, `unitNumber`, `vatTypeNumber`,
-  `vatZoneNumber`, `accountNumber`, `customerGroupNumber`, `productGroupNumber`). `customers` keeps
-  legacy's exact stringified-id behavior via the `last_path_segment` filter (forces string output,
-  reproducing legacy's `fmt.Sprint(item["customerNumber"])`); every other stream uses a bare
-  `{{ record.<field> }}` reference, which the engine's typed-extraction rule copies through as the
-  raw JSON type (an integer for every numeric `<resource>Number`, a string for `products`'
-  alphanumeric `productNumber`) — this is a genuine, honest type per resource, not a parity
-  requirement, since none of these streams existed in legacy to have an established output type.
-- `orders_drafts`/`orders_sent` and `quotes_drafts`/`quotes_sent` are modeled as four separate
-  streams (not one `orders`/`quotes` stream with a status field) because e-conomic itself exposes
-  them as two structurally separate top-level collections (`/orders/drafts` vs `/orders/sent`,
-  `/quotes/drafts` vs `/quotes/sent`) with independent pagination/incremental state — matching the
-  API's own resource boundaries, the same reasoning `invoices_booked`/`invoices_drafts` already
-  follow.
+Pagination by stream: none: `customers`; page_number: `suppliers`, `products`, `invoices_booked`,
+`invoices_drafts`, `orders_drafts`, `orders_sent`, `quotes_drafts`, `quotes_sent`, `departments`,
+`payment_terms`, `units`, `vat_types`, `vat_zones`, `accounts`, `customer_groups`, `product_groups`.
+
+Incremental streams use their declared cursor fields and send lower-bound parameters only when a
+lower bound is available.
+
+- `customers`: GET `/customers` - records path `collection`; computed output fields `id`.
+- `suppliers`: GET `/suppliers` - records path `collection`; query `filter` from template
+  `lastUpdated$gte:{{ incremental.lower_bound }}`, omitted when absent; page-number pagination; page
+  parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100; incremental cursor
+  `lastUpdated`; sent as `filter`; formatted as `rfc3339`; initial lower bound from `start_date`;
+  computed output fields `id`.
+- `products`: GET `/products` - records path `collection`; query `filter` from template
+  `lastUpdated$gte:{{ incremental.lower_bound }}`, omitted when absent; page-number pagination; page
+  parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100; incremental cursor
+  `lastUpdated`; sent as `filter`; formatted as `rfc3339`; initial lower bound from `start_date`;
+  computed output fields `id`.
+- `invoices_booked`: GET `/invoices/booked` - records path `collection`; query `filter` from
+  template `lastUpdated$gte:{{ incremental.lower_bound }}`, omitted when absent; page-number
+  pagination; page parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100;
+  incremental cursor `lastUpdated`; sent as `filter`; formatted as `rfc3339`; initial lower bound
+  from `start_date`; computed output fields `id`.
+- `invoices_drafts`: GET `/invoices/drafts` - records path `collection`; query `filter` from
+  template `lastUpdated$gte:{{ incremental.lower_bound }}`, omitted when absent; page-number
+  pagination; page parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100;
+  incremental cursor `lastUpdated`; sent as `filter`; formatted as `rfc3339`; initial lower bound
+  from `start_date`; computed output fields `id`.
+- `orders_drafts`: GET `/orders/drafts` - records path `collection`; query `filter` from template
+  `lastUpdated$gte:{{ incremental.lower_bound }}`, omitted when absent; page-number pagination; page
+  parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100; incremental cursor
+  `lastUpdated`; sent as `filter`; formatted as `rfc3339`; initial lower bound from `start_date`;
+  computed output fields `id`.
+- `orders_sent`: GET `/orders/sent` - records path `collection`; query `filter` from template
+  `lastUpdated$gte:{{ incremental.lower_bound }}`, omitted when absent; page-number pagination; page
+  parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100; incremental cursor
+  `lastUpdated`; sent as `filter`; formatted as `rfc3339`; initial lower bound from `start_date`;
+  computed output fields `id`.
+- `quotes_drafts`: GET `/quotes/drafts` - records path `collection`; query `filter` from template
+  `lastUpdated$gte:{{ incremental.lower_bound }}`, omitted when absent; page-number pagination; page
+  parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100; incremental cursor
+  `lastUpdated`; sent as `filter`; formatted as `rfc3339`; initial lower bound from `start_date`;
+  computed output fields `id`.
+- `quotes_sent`: GET `/quotes/sent` - records path `collection`; query `filter` from template
+  `lastUpdated$gte:{{ incremental.lower_bound }}`, omitted when absent; page-number pagination; page
+  parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100; incremental cursor
+  `lastUpdated`; sent as `filter`; formatted as `rfc3339`; initial lower bound from `start_date`;
+  computed output fields `id`.
+- `departments`: GET `/departments` - records path `collection`; page-number pagination; page
+  parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100; computed output
+  fields `id`.
+- `payment_terms`: GET `/payment-terms` - records path `collection`; page-number pagination; page
+  parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100; computed output
+  fields `id`.
+- `units`: GET `/units` - records path `collection`; page-number pagination; page parameter
+  `skippages`; size parameter `pagesize`; starts at 0; page size 100; computed output fields `id`.
+- `vat_types`: GET `/vat-types` - records path `collection`; page-number pagination; page parameter
+  `skippages`; size parameter `pagesize`; starts at 0; page size 100; computed output fields `id`.
+- `vat_zones`: GET `/vat-zones` - records path `collection`; page-number pagination; page parameter
+  `skippages`; size parameter `pagesize`; starts at 0; page size 100; computed output fields `id`.
+- `accounts`: GET `/accounts` - records path `collection`; page-number pagination; page parameter
+  `skippages`; size parameter `pagesize`; starts at 0; page size 100; computed output fields `id`.
+- `customer_groups`: GET `/customer-groups` - records path `collection`; page-number pagination;
+  page parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100; computed output
+  fields `id`.
+- `product_groups`: GET `/product-groups` - records path `collection`; page-number pagination; page
+  parameter `skippages`; size parameter `pagesize`; starts at 0; page size 100; computed output
+  fields `id`.
 
 ## Write actions & risks
 
-15 actions across 5 resources — every one a real, external mutation requiring approval:
+Overall write risk: external mutation of Visma e-conomic customers, suppliers, products, units, and
+payment terms; approval required.
 
-- **Customers**: `create_customer` (POST `/customers`, requires `name`/`currency`/`paymentTerms`/
-  `customerGroup`/`vatZone` per e-conomic's own required-field contract), `update_customer` (PUT
-  `/customers/{id}`), `delete_customer` (DELETE, `missing_ok_status: [404]` — idempotent delete).
-- **Suppliers**: `create_supplier`, `update_supplier`, `delete_supplier` — identical shape to
-  customers, using supplier's own `group`/`paymentTerms`/`vatZone` required references.
-- **Products**: `create_product` (requires `productNumber`/`name`/`salesPrice`/`productGroup`),
-  `update_product`, `delete_product`.
-- **Units**: `create_unit`, `update_unit`, `delete_unit` — e-conomic's simplest master-data
-  resource, a bare `name` string.
-- **Payment terms**: `create_payment_term`, `update_payment_term`, `delete_payment_term` — requires
-  `name`/`paymentTermsType` (e-conomic's own terms-type enum, e.g. `netCash`, `currentMonth`).
+Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
-**Not migrated** (see `api_surface.json` for the full per-endpoint accounting): invoice/order/quote
-draft creation and update (`POST`/`PUT /invoices/drafts`, `/orders/drafts`, `/quotes/drafts`) require
-composing a line-items sub-array (product/quantity/account references) with e-conomic's own
-totals/VAT computation contract — a shape this dialect's flat-record write body cannot express
-without risking a request that silently diverges from what a real e-conomic client sends;
-`POST /invoices/booked` (booking a draft) is a two-step compound sequence (fetch a
-booking-instructions template, then POST it) that needs a WriteHook, out of this connector's Pass B
-scope. Department/customer-group/product-group create/update mutations are lower-priority
-master-data writes left for a future wave.
+- `create_customer`: POST `/customers` - kind `create`; body type `json`; required record fields
+  `name`, `currency`, `paymentTerms`, `customerGroup`, `vatZone`; accepted fields `address`, `city`,
+  `country`, `currency`, `customerGroup`, `email`, `name`, `paymentTerms`, `vatZone`, `zip`; risk:
+  external mutation; approval required.
+- `update_customer`: PUT `/customers/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`, `name`, `currency`, `paymentTerms`, `customerGroup`, `vatZone`;
+  accepted fields `address`, `barred`, `city`, `country`, `currency`, `customerGroup`, `email`,
+  `id`, `name`, `paymentTerms`, `vatZone`, `zip`; risk: external mutation; approval required.
+- `delete_customer`: DELETE `/customers/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: destructive external mutation (deletes a customer permanently); approval
+  required.
+- `create_supplier`: POST `/suppliers` - kind `create`; body type `json`; required record fields
+  `name`, `currency`, `paymentTerms`, `group`, `vatZone`; accepted fields `address`, `city`,
+  `country`, `currency`, `email`, `group`, `name`, `paymentTerms`, `vatZone`, `zip`; risk: external
+  mutation; approval required.
+- `update_supplier`: PUT `/suppliers/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`, `name`, `currency`, `paymentTerms`, `group`, `vatZone`;
+  accepted fields `address`, `city`, `country`, `currency`, `email`, `group`, `id`, `name`,
+  `paymentTerms`, `vatZone`, `zip`; risk: external mutation; approval required.
+- `delete_supplier`: DELETE `/suppliers/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: destructive external mutation (deletes a supplier permanently); approval
+  required.
+- `create_product`: POST `/products` - kind `create`; body type `json`; required record fields
+  `productNumber`, `name`, `salesPrice`, `productGroup`; accepted fields `barred`, `costPrice`,
+  `description`, `name`, `productGroup`, `productNumber`, `salesPrice`, `unit`; risk: external
+  mutation; approval required.
+- `update_product`: PUT `/products/{{ record.id }}` - kind `update`; body type `json`; path fields
+  `id`; required record fields `id`, `name`, `salesPrice`, `productGroup`; accepted fields `barred`,
+  `costPrice`, `description`, `id`, `name`, `productGroup`, `salesPrice`, `unit`; risk: external
+  mutation; approval required.
+- `delete_product`: DELETE `/products/{{ record.id }}` - kind `delete`; body type `none`; path
+  fields `id`; required record fields `id`; accepted fields `id`; missing records treated as success
+  for status `404`; risk: destructive external mutation (deletes a product permanently); approval
+  required.
+- `create_unit`: POST `/units` - kind `create`; body type `json`; required record fields `name`;
+  accepted fields `name`; risk: external mutation; approval required.
+- `update_unit`: PUT `/units/{{ record.id }}` - kind `update`; body type `json`; path fields `id`;
+  required record fields `id`, `name`; accepted fields `id`, `name`; risk: external mutation;
+  approval required.
+- `delete_unit`: DELETE `/units/{{ record.id }}` - kind `delete`; body type `none`; path fields
+  `id`; required record fields `id`; accepted fields `id`; missing records treated as success for
+  status `404`; risk: destructive external mutation (deletes a unit permanently); approval required.
+- `create_payment_term`: POST `/payment-terms` - kind `create`; body type `json`; required record
+  fields `name`, `paymentTermsType`; accepted fields `duration`, `name`, `paymentTermsType`; risk:
+  external mutation; approval required.
+- `update_payment_term`: PUT `/payment-terms/{{ record.id }}` - kind `update`; body type `json`;
+  path fields `id`; required record fields `id`, `name`, `paymentTermsType`; accepted fields
+  `duration`, `id`, `name`, `paymentTermsType`; risk: external mutation; approval required.
+- `delete_payment_term`: DELETE `/payment-terms/{{ record.id }}` - kind `delete`; body type `none`;
+  path fields `id`; required record fields `id`; accepted fields `id`; missing records treated as
+  success for status `404`; risk: destructive external mutation (deletes a payment term
+  permanently); approval required.
 
 ## Known limits
 
-- Invoice/order/quote line items are read-only structure within each record, not an independently
-  writable sub-collection — see "Write actions & risks" above.
-- Booking a draft invoice, and moving a draft order/quote to sent status, are not migrated (both
-  are compound multi-request sequences beyond a single declarative write action) — see
-  `api_surface.json`'s `requires_elevated_scope` entries for `POST /invoices/booked`,
-  `POST /orders/sent`, `POST /quotes/sent`.
-- Accounting-ledger-internal resources (accounting years, journal entries, vouchers, layouts,
-  templates, employees, app-roles, projects, cost-types, payment-types, currencies) are
-  intentionally out of scope — this connector's declared surface is customers/suppliers/products/
-  invoicing/quoting plus the master-data collections those resources directly reference, not
-  general-ledger bookkeeping.
-- No parent-scoped sub-resource streams (customer contacts, customer delivery locations,
-  per-customer/per-group invoice/customer sub-listings) — each would need a `fan_out` block keyed
-  to every already-read customer/group id, which is a heavier read pattern than this pass's core
-  list-endpoint scope; the equivalent unfiltered top-level collection (e.g. `invoices_booked`) is
-  already covered.
-- PDF rendering (`GET /invoices/booked/{n}/pdf`) and file-attachment upload
-  (`POST /orders/{n}/attachment/file`) are binary-payload endpoints this dialect's JSON-only
-  schema/write model cannot express.
+- Batch defaults: read_page_size=100.
+- API coverage includes 17 stream-backed endpoint group(s), 15 write-backed endpoint group(s).
+- Other documented endpoints are not exposed by this connector where they are classified as
+  binary_payload=2, duplicate_of=21, non_data_endpoint=4, out_of_scope=23,
+  requires_elevated_scope=10.

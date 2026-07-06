@@ -16,14 +16,14 @@
       "pagination": { "type": "page_number", "page_param": "page", "start_page": 1, "page_size": 1 },
       "incremental": { "cursor_field": "updated_at", "request_param": "since", "param_format": "rfc3339", "start_config_key": "start_date" },
       "schema": "schemas/widgets.json",
-      "conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by internal/connectors/paritytest/acme-all-streams-marked (self-test marker: every stream's fixture is deliberately unreplayable via the declarative path, to prove the marker -- not the fixture -- is why none of them fail)" }
+      "conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by archived parity evidence for acme-all-streams-marked (self-test marker: every stream's fixture is deliberately unreplayable via the declarative path, to prove the marker -- not the fixture -- is why none of them fail)" }
     },
     {
       "name": "notes",
       "path": "/notes",
       "records": { "path": "data" },
       "schema": "schemas/notes.json",
-      "conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by internal/connectors/paritytest/acme-all-streams-marked (self-test marker: every stream's fixture is deliberately unreplayable via the declarative path, to prove the marker -- not the fixture -- is why none of them fail)" }
+      "conformance": { "skip_dynamic": true, "reason": "hook-covered; proven live by archived parity evidence for acme-all-streams-marked (self-test marker: every stream's fixture is deliberately unreplayable via the declarative path, to prove the marker -- not the fixture -- is why none of them fail)" }
     }
   ]
 }
