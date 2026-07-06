@@ -30,6 +30,7 @@ body:
         - cross-connector
         - review
         - coderabbit-review
+        - automated-review-routing
     validations:
       required: true
   - type: textarea
@@ -41,6 +42,7 @@ body:
         - AGENTS.md
         - .agents/agentic-delivery/contracts/issue-agent-contract.md
         - .agents/agentic-delivery/contracts/parent-orchestrator-contract.md
+        - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
         - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
         - .agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md
         - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
@@ -58,7 +60,8 @@ body:
         - Parent PR:
         - Orchestrator:
         - Worker handoff template: .agents/agentic-delivery/contracts/worker-handoff-template.md
-        - CodeRabbit coverage route:
+        - Automated review coverage route:
+        - Copilot fallback route:
     validations:
       required: false
   - type: textarea

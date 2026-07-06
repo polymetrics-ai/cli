@@ -19,6 +19,7 @@ inputs:
     - parent issue and parent PR when the issue is part of a stacked roadmap
     - AGENTS.md
     - .agents/agentic-delivery/contracts/issue-agent-contract.md
+    - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
     - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
 outputs:
   required:
@@ -27,7 +28,7 @@ outputs:
     - verification summary
     - worker handoff when assigned by a parent issue orchestrator
     - PR body containing Closes or Refs issue number
-    - CodeRabbit disposition summary before merge
+    - automated review disposition summary before merge
 permissions:
   allowed_paths:
     - cmd/**
@@ -59,10 +60,12 @@ workflow:
   - run_issue_verification
   - commit_and_push_green_slice_after_green_gates
   - prepare_pr_with_issue_link
+  - choose_automated_review_route
   - wait_for_automatic_coderabbit_review_or_record_fallback
   - confirm_coderabbit_review_was_not_only_skipped
+  - request_copilot_backup_when_coderabbit_is_blocked_and_enabled
   - route_non_main_base_review_to_parent_pr_when_needed
-  - disposition_coderabbit_findings
+  - disposition_automated_review_findings
   - ensure_fix_commits_are_coderabbit_reviewed
   - report_worker_handoff_to_orchestrator_when_assigned
 guardrails:
@@ -78,8 +81,10 @@ guardrails:
     - no secrets in artifacts
     - PR body must reference issue
     - skipped CodeRabbit review status must not be counted as review completion
+    - CodeRabbit rate-limit comments must be recorded as blockers, not clean reviews
+    - Copilot backup review must not be treated as approval
     - non-main-base sub-PRs require parent-PR review coverage when CodeRabbit skips the sub-PR
-    - every actionable CodeRabbit finding must be answered before resolve
+    - every actionable automated review finding must be answered before resolve
 verification:
   required:
     - targeted tests for changed packages
@@ -87,7 +92,7 @@ verification:
     - GSD plan, TDD ledger, and verification checklist updated
     - green-slice commits pushed to the active issue/PR branch
     - git diff --check
-    - CodeRabbit automatic review observed, manual review requested only when needed, or blocker recorded
+    - CodeRabbit automatic review observed, Copilot backup requested under fallback policy, or blocker recorded
 adapters:
   codex:
     note: Convert this YAML to a thread prompt plus local tool execution.

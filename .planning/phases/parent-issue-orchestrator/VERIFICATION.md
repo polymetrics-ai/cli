@@ -40,3 +40,8 @@ fallback described in `PLAN.md`.
 CodeRabbit usage policy was corrected after the first PR comment showed a review-limit warning from
 an unnecessary manual `@coderabbitai full review` command. Future non-draft PRs targeting `main`
 should wait for automatic CodeRabbit review.
+
+The reviewer routing policy now records GitHub Copilot as a backup route only when CodeRabbit is
+rate-limited, skipped, disabled, paused, or unavailable and review coverage is blocking progress.
+Copilot review comments are dispositioned like CodeRabbit comments, but Copilot review is not
+approval and does not replace human approval for parent PRs into `main`.

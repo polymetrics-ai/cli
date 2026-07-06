@@ -22,6 +22,8 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `matrices/task-skill-matrix.yaml`: required skills and capabilities by task type.
 - `workflows/coderabbit-review-loop.md`: post-implementation CodeRabbit review and disposition
   loop.
+- `workflows/automated-review-routing-loop.md`: routing policy for CodeRabbit primary review,
+  Copilot backup review, and human fallback.
 - `workflows/parent-issue-orchestration-loop.md`: full parent issue execution loop across workers,
   sub-PRs, parent PR review, and human readiness.
 - `workflows/stacked-parent-subissue-workflow.md`: parent branch and sub-PR workflow for large
@@ -29,6 +31,8 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `references/issue-roadmap-best-practices.md`: source-backed GitHub and Atlassian planning
   guidance.
 - `references/coderabbit-review-best-practices.md`: source-backed CodeRabbit review practices.
+- `references/automated-review-routing-best-practices.md`: source-backed CodeRabbit-to-Copilot
+  fallback policy.
 - `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
 - `schemas/orchestration-state.schema.yaml`: field contract for parent issue state ledgers.
@@ -48,7 +52,7 @@ the `.agents/` YAML and Markdown contracts instead of copying policy.
 - Large goals use parent issues with sub-issues. Sub-PRs may merge into a parent branch without
   human approval only when all automated gates pass and no human gate is triggered.
 - A parent issue orchestrator owns shared parent artifacts, parent PR state, sub-PR merge
-  arbitration, CodeRabbit coverage routing, and final readiness. Worker agents implement one
+  arbitration, automated review coverage routing, and final readiness. Worker agents implement one
   assigned sub-issue and report back through the worker handoff template.
 - Stacked work must have a parent PR from the parent branch to `main` before sub-issues are treated
   as executable. If the parent branch has no useful file diff, use a deliberate seed commit to open
@@ -65,9 +69,15 @@ the `.agents/` YAML and Markdown contracts instead of copying policy.
   automatic review. Follow-up fix commits should rely on automatic incremental review when active;
   manual review commands are only a fallback for paused, disabled, skipped, rate-limited, or
   auto-paused review states.
+- CodeRabbit automatic review is the primary automated review route. GitHub Copilot review is
+  fallback-only when CodeRabbit is rate-limited, skipped, disabled, paused, or unavailable and
+  review coverage is blocking progress.
 - A skipped CodeRabbit review is not approval. For sub-PRs whose base is not `main`, the
   orchestrator must record sub-PR review coverage or route the integrated commit range through the
   parent PR review fallback.
+- GitHub Copilot review is a backup route when CodeRabbit is rate-limited, skipped, disabled,
+  paused, or unavailable. Copilot comments must be dispositioned like CodeRabbit comments, but
+  Copilot review is not approval and must not bypass human gates.
 - Secrets, auth scope changes, destructive actions, dependencies, and quality-gate reductions are
   human-gated.
 - Parent PRs into `main` are always human-gated.

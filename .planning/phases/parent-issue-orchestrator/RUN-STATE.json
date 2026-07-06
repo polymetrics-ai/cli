@@ -8,5 +8,10 @@
     "yaml_parse_passed",
     "git_diff_check_passed",
     "prissueguard_tests_passed"
-  ]
+  ],
+  "review_routing": {
+    "primary": "coderabbit_auto",
+    "fallback": "copilot_backup_when_coderabbit_blocked",
+    "human_gate": "parent_pr_merge_to_main"
+  }
 }

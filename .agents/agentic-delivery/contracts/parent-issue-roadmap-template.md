@@ -17,6 +17,7 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 - Project:
 - Orchestrator:
 - Orchestration workflow: `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
+- Automated review routing: `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
 
 ## Sub-issues
 
@@ -26,9 +27,9 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 
 ## Orchestration state
 
-| Issue | Worker | Branch | PR | Latest SHA | Verification | CodeRabbit coverage | Merge state | Blocker |
+| Issue | Worker | Branch | PR | Latest SHA | Verification | Automated review coverage | Merge state | Blocker |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| #N | `<agent>` | `<branch>` | `<url>` | `<sha>` | Pending | `<sub_pr|parent_pr_fallback|blocked>` | Planned | None |
+| #N | `<agent>` | `<branch>` | `<url>` | `<sha>` | Pending | `<sub_pr|parent_pr_fallback|copilot_backup|blocked>` | Planned | None |
 
 ## Branch and PR policy
 
@@ -53,8 +54,9 @@ true:
 - branch name and PR title checks pass
 - PR body references the sub-issue and parent issue
 - targeted tests and issue verification pass
-- CodeRabbit review loop is complete and comments are resolved
-- CodeRabbit coverage exists through the sub-PR or parent PR fallback
+- automated review loop is complete and comments are resolved
+- automated review coverage exists through the sub-PR or parent PR fallback, or Copilot/human
+  fallback is explicitly recorded because CodeRabbit is blocked
 - no human gate is triggered
 - no requested-changes review is open
 - the parent branch is current enough that the sub-PR diff is reviewable

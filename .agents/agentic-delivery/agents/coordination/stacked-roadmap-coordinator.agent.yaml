@@ -57,7 +57,7 @@ guardrails:
   output:
     - parent PR must exist before sub-issues are treated as executable
     - sub-PR auto-merge policy must exclude human-gated changes
-    - stacked sub-PR review skips must route to parent-PR CodeRabbit review coverage
+    - stacked sub-PR review skips must route to parent-PR automated review coverage or recorded fallback
     - runtime worker spawning and merge arbitration belong to parent-issue-orchestrator
     - parent PR merge to main must require human approval
 verification:

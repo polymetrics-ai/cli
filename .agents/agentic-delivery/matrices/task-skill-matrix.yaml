@@ -69,6 +69,7 @@ skills:
   review_disposition:
     capabilities:
       - CodeRabbit automatic/manual review mode selection
+      - Copilot backup review routing when CodeRabbit is blocked
       - review comment triage
       - disposition replies
       - follow-up issue routing
@@ -78,6 +79,7 @@ skills:
       - go-engineering
     required_for:
       - coderabbit-review
+      - automated-review-routing
       - stacked-pr
       - parent-orchestration
   orchestration:
@@ -86,7 +88,7 @@ skills:
       - Codex subagent task decomposition
       - worker write-scope isolation
       - sub-PR merge arbitration
-      - parent PR CodeRabbit coverage routing
+      - parent PR automated review coverage routing
       - human gate escalation
     preferred_local_skills:
       - github-issue-first-delivery
@@ -147,4 +149,7 @@ task_types:
     primary_agent: adversarial-review-agent
   coderabbit-review:
     required_skill_groups: [github_planning, security_review, go_tdd, review_disposition]
+    primary_agent: coderabbit-disposition-agent
+  automated-review-routing:
+    required_skill_groups: [github_planning, security_review, review_disposition]
     primary_agent: coderabbit-disposition-agent

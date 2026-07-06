@@ -37,9 +37,11 @@ Head SHA:
 
 Result: <pass | fail | blocked>
 
-## CodeRabbit
+## Automated Review
 
-- Review route: <sub_pr | parent_pr_fallback | blocked>
+- Primary route: <coderabbit_auto | coderabbit_auto_incremental | coderabbit_manual_fallback | copilot_backup | human>
+- Fallback route: <copilot_backup | human | none>
+- Review route: <sub_pr | parent_pr_fallback | copilot_backup | blocked>
 - Review status: <pending | clean | comments_addressed | skipped | blocked>
 - Review URL:
 - Disposition summary:
@@ -57,5 +59,6 @@ Result: <pass | fail | blocked>
 
 - Do not include secrets or credential values.
 - Do not claim CodeRabbit approval from a skipped-review status.
+- Do not claim GitHub Copilot review as approval.
 - Use `provisional_parent_integration` when parent PR fallback coverage is still pending.
 - Name blockers explicitly instead of weakening verification.

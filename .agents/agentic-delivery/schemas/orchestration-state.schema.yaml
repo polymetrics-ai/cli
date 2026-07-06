@@ -33,7 +33,7 @@ field_contract:
       - status
       - write_scope
       - verification
-      - coderabbit
+      - automated_review
   subissue_status_values:
     - planned
     - worker_ready
@@ -46,16 +46,21 @@ field_contract:
     - parent_review_clean
     - blocked
     - complete
-  coderabbit:
+  automated_review:
     type: object
     required:
-      - route
+      - primary_route
       - status
       - head_sha
       - reviewed_range
+      - fallback_route
       - disposition_url
-    route_values: [sub_pr, parent_pr_fallback, blocked]
+    primary_route_values: [coderabbit_auto, coderabbit_auto_incremental, coderabbit_manual_fallback, copilot_backup, human, blocked]
+    fallback_route_values: [copilot_backup, human, none]
+    coverage_route_values: [sub_pr, parent_pr_fallback, copilot_backup, blocked]
     status_values: [pending, clean, comments_addressed, skipped, blocked]
+  coderabbit:
+    deprecated_alias_for: automated_review
   human_gates:
     type: list
     examples:

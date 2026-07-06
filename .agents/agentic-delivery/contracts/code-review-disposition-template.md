@@ -1,8 +1,8 @@
 # Code review disposition template
 
-Use this template for CodeRabbit comments and any other automated PR review comments. Reply directly
-to the inline thread when possible. If the review item is a top-level PR comment, use a top-level
-disposition summary and identify the original comment.
+Use this template for CodeRabbit, GitHub Copilot, and any other automated PR review comments. Reply
+directly to the inline thread when possible. If the review item is a top-level PR comment, use a
+top-level disposition summary and identify the original comment.
 
 ```markdown
 Disposition: Accepted | Accepted with modification | Declined | Deferred | Needs human
@@ -30,3 +30,7 @@ Follow-up:
   is active; request manual `@coderabbitai review` only for new unreviewed commits when automatic
   review is paused, disabled, skipped, or due after a rate-limit or auto-pause window. Do not post
   `@coderabbitai full review` for a normal non-draft PR targeting the default branch.
+- Use GitHub Copilot review as fallback input only when CodeRabbit is rate-limited, skipped,
+  disabled, paused, or unavailable and review coverage is blocking progress. Copilot comments
+  require dispositions, but Copilot review is not approval.
+- Do not ask both CodeRabbit and Copilot for repeated fresh reviews in the same blocker window.

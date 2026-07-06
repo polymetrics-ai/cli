@@ -18,6 +18,7 @@ The issue must provide:
 - verification commands
 - safety notes
 - source links
+- automated review route expectations
 
 If any of these are missing and the task is not trivial, update the issue or create a planning PR
 before implementation.
@@ -54,16 +55,24 @@ before implementation.
 14. Open a PR with a Conventional Commit title and `Closes #N` or `Refs #N` in the body.
     - Use `Refs #N` for sub-PRs that target a parent branch.
     - Use `Closes #N` only for PRs that target the default branch and complete the issue.
-15. After implementation and local verification, run the CodeRabbit review loop in
+15. After implementation and local verification, choose the automated review route using
+    `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`, then run the CodeRabbit
+    review loop in
     `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`.
 16. Confirm that CodeRabbit actually produced review records or that the stacked-PR parent-review
-    fallback covers the sub-issue. A skipped-review status on a non-default-base PR is not approval.
-17. Reply to every actionable CodeRabbit item with the disposition template before resolving it.
-18. Ensure accepted fix commits have been reviewed. Prefer CodeRabbit's automatic incremental review
+    fallback covers the sub-issue. A skipped-review status, rate-limit notice, or processing-only
+    comment is not approval.
+17. If CodeRabbit is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
+    blocking progress, request GitHub Copilot review once as a backup when enabled. Copilot
+    comments are dispositioned like CodeRabbit comments, but Copilot review is not approval.
+18. Reply to every actionable automated review item with the disposition template before resolving
+    it.
+19. Ensure accepted fix commits have been reviewed. Prefer CodeRabbit's automatic incremental review
     when active; request manual `@coderabbitai review` only when automatic review is paused,
     disabled, skipped, rate-limit retry is due, or the configured automatic pause threshold was
     reached.
-19. Ping the human coordinator only after no actionable CodeRabbit findings remain.
+20. Ping the human coordinator only after no actionable automated review findings remain or a
+    recorded human review blocker remains.
 
 ## Hard stops
 
@@ -84,8 +93,8 @@ Stop and ask for human approval before:
 
 Use `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md` when the issue belongs
 to a parent roadmap. A sub-PR may be merged into the parent branch without human approval only after
-all automated checks pass, CodeRabbit comments are resolved, CodeRabbit coverage exists through the
-sub-PR or main-targeted parent PR, and no human gate is triggered.
+all automated checks pass, automated review comments are resolved, review coverage exists through
+the sub-PR, main-targeted parent PR, or an approved fallback route, and no human gate is triggered.
 
 For parent issues with multiple workers, use
 `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`. The parent orchestrator owns
@@ -107,4 +116,5 @@ Every implementation PR must include:
 - verification commands and results
 - safety notes for auth, secrets, writes, or data movement
 - follow-up issues for work intentionally deferred
-- CodeRabbit disposition summary, including accepted, declined, deferred, and human-gated findings
+- automated review disposition summary, including accepted, declined, deferred, and human-gated
+  findings, plus the CodeRabbit and Copilot route status

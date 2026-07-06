@@ -8,7 +8,7 @@ Mode: manual GSD fallback; `scripts/programming-loop.mjs` is not present in this
 
 Add a generic parent issue orchestrator to `.agents/agentic-delivery` so large issue hierarchies can
 run through a single parent issue, parent PR, parallel sub-issue workers, controlled sub-PR
-integration, CodeRabbit coverage, and final human approval.
+integration, automated review coverage, and final human approval.
 
 ## Scope
 
@@ -19,6 +19,8 @@ integration, CodeRabbit coverage, and final human approval.
 - Keep `.agents/` as the generic source of truth and describe runtime-specific agents as thin
   adapters.
 - Add only short cross-agent pointers in `AGENTS.md` and `CLAUDE.md`.
+- Add CodeRabbit-to-Copilot fallback routing so CodeRabbit rate limits do not cause repeated manual
+  review commands or unreviewed PRs.
 
 ## Non-Goals
 
@@ -42,13 +44,18 @@ integration, CodeRabbit coverage, and final human approval.
    - `schemas/agent-spec.schema.yaml`
    - `workflows/stacked-parent-subissue-workflow.md`
    - `workflows/coderabbit-review-loop.md`
+   - `workflows/automated-review-routing-loop.md`
    - `contracts/issue-agent-contract.md`
    - `contracts/issue-prompt-template.md`
    - `contracts/parent-issue-roadmap-template.md`
-3. Add short source-of-truth pointers in `AGENTS.md` and `CLAUDE.md`.
-4. Validate YAML and whitespace.
-5. Commit, push, open PR with `Closes #50`, then wait for automatic CodeRabbit review because the
-   PR targets `main` and is not draft. Manual review commands are fallback-only.
+3. Add source-backed automated review routing references for CodeRabbit primary review, Copilot
+   backup review, and human fallback.
+4. Add short source-of-truth pointers in `AGENTS.md` and `CLAUDE.md`.
+5. Validate YAML, whitespace, JSON, and focused PR guard tests.
+6. Commit, push, open PR with `Closes #50`, then wait for automatic CodeRabbit review because the
+   PR targets `main` and is not draft. Manual CodeRabbit review commands are fallback-only; if
+   CodeRabbit is rate-limited and review coverage blocks progress, request GitHub Copilot review
+   once as backup when enabled.
 
 ## Human Gates
 

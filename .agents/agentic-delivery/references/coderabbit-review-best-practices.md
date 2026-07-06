@@ -14,6 +14,7 @@ Accessed: 2026-07-06
 - GitHub pull-request review comments REST API: https://docs.github.com/en/rest/pulls/comments
 - GitHub issue comments REST API: https://docs.github.com/en/rest/issues/comments
 - GitHub pull-request GraphQL mutations: https://docs.github.com/en/graphql/reference/pulls
+- GitHub Copilot code review: https://docs.github.com/en/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review
 
 ## Workflow findings
 
@@ -36,6 +37,9 @@ Accessed: 2026-07-06
 - Manual review commands consume PR review allowance when they run. If CodeRabbit reports a review
   limit or fair-usage delay, do not retry immediately. Record the blocker, wait for the reported
   window, and prefer the next automatic review triggered by a pushed commit.
+- If CodeRabbit is rate-limited, skipped, disabled, paused, or unavailable and automated review
+  coverage is blocking progress, route to GitHub Copilot backup review using
+  `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`.
 - Use `@coderabbitai resolve` only after CodeRabbit feedback has actually been addressed.
 - Use `@coderabbitai approve` only when the repository enables CodeRabbit's request-changes
   workflow and approval is desired.
@@ -65,3 +69,4 @@ merge:
 
 The disposition must include a reason and evidence. Accepted fixes require tests or a documented
 docs-only rationale. Deferred work requires a follow-up issue or explicit coordinator approval.
+Copilot backup comments use the same disposition template, but Copilot review is not approval.

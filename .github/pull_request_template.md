@@ -38,16 +38,19 @@ docs: update install guide
 
 <!-- Include commands run, screenshots for UI changes, or why verification was not possible. -->
 
-## CodeRabbit Review
+## Automated Review
 
 <!-- For non-draft PRs targeting main, wait for CodeRabbit's automatic review instead of posting a
 manual review command. For fix commits, wait for automatic incremental review when active. Use
 manual @coderabbitai review/full review only when automatic review is paused, disabled, skipped,
-rate-limit retry is due, or the auto-pause threshold was reached. For every actionable CodeRabbit
-item, reply with Accepted, Accepted with modification, Declined, Deferred, or Needs human, plus the
-reason and evidence. -->
+rate-limit retry is due, or the auto-pause threshold was reached. If CodeRabbit is rate-limited,
+skipped, disabled, paused, or unavailable and review coverage is blocking progress, request GitHub
+Copilot review once as backup when enabled. For every actionable CodeRabbit or Copilot item, reply
+with Accepted, Accepted with modification, Declined, Deferred, or Needs human, plus the reason and
+evidence. Copilot review is not approval. -->
 
-- Review mode:
+- Primary route:
+- Fallback route:
 - PR base/default branch:
 - Latest reviewed commit:
 - Reviewed range:
@@ -60,8 +63,8 @@ reason and evidence. -->
 
 - [ ] Tests or docs updated for behavior changes
 - [ ] `make verify` passes locally, or the skipped checks are explained
-- [ ] CodeRabbit automatic review completed, fallback was justified, or review blocker was recorded
-- [ ] Every actionable CodeRabbit finding has a reasoned disposition reply
+- [ ] CodeRabbit automatic review completed, Copilot fallback was justified, or review blocker was recorded
+- [ ] Every actionable automated review finding has a reasoned disposition reply
 - [ ] Sub-PR merge into parent branch is allowed by the stacked workflow, or this PR targets `main`
 - [ ] Branch name follows `<type>/<description>` such as `feat/new-connector` or `fix/api-pagination`
 - [ ] PR title follows Conventional Commits
