@@ -8,7 +8,8 @@ Adds the issue-first agentic delivery foundation for connector CLI parity:
   direct-read, GraphQL, sensitive/admin, and rollout work
 - GitHub agent task issue form
 - PR issue guard command and GitHub Actions workflow
-- isolated `.agents/` and `.codex/agents/` layout for agent conventions and role specs
+- isolated `.agents/` layout for agent conventions and role specs, grouped by function and type
+- migration of pre-existing `.codex/agents` TOML specs into `.agents/connector-migration/`
 
 Closes #43
 
@@ -17,7 +18,7 @@ Closes #43
 ```bash
 go test ./internal/coordination/issueguard
 go test ./cmd/prissueguard ./internal/coordination/issueguard
-ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f) }' .agents/connector-cli-parity/*.yaml .codex/agents/connector-cli-parity/*.agent.yaml .github/ISSUE_TEMPLATE/agent_task.yml .github/workflows/pr-issue-guard.yml
+find .agents .github/ISSUE_TEMPLATE .github/workflows -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 | xargs -0 ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f) }'
 git diff --check
 make verify
 ```

@@ -1,28 +1,29 @@
 apiVersion: polymetrics.ai/agent/v1
 kind: Agent
 metadata:
-  id: github-cli-surface-agent
-  name: GitHub CLI Surface Agent
+  id: provider-cli-surface-agent
+  name: Provider CLI Surface Agent
   version: 1
-  summary: Promotes GitHub CLI surface research into validated connector metadata.
-  tags: [github, cli-surface, docs, schema]
+  summary: Promotes provider CLI surface research into validated connector metadata.
+  tags: [provider-cli, cli-surface, docs, schema]
 role: implementation
-objective: Add generic CLI surface metadata and validation using GitHub as the pilot.
+objective: Add generic CLI surface metadata and validation for one assigned provider connector.
 skills:
   required_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
   preferred_local_skills: [github-issue-first-delivery, go-engineering, web-design-guidelines]
 inputs:
   required:
-    - GitHub CLI parity issue
-    - docs/research/connector-cli-parity/github/cli_surface.draft.json
-    - docs/research/connector-cli-parity/github/parity-matrix.json
+    - provider CLI surface issue
+    - connector name
+    - cli_surface draft path from the issue
+    - parity matrix path from the issue
 outputs:
   required:
     - validated cli_surface metadata
     - reference validation tests
     - no runtime command dispatch unless issue explicitly asks
 permissions:
-  allowed_paths: [internal/connectors/defs/github/**, internal/connectors/**, cmd/connectorgen/**, docs/**, .planning/**]
+  allowed_paths: [internal/connectors/defs/<connector>/**, internal/connectors/**, cmd/connectorgen/**, docs/**, .planning/**]
 workflow:
   - validate_research_json
   - add_failing_reference_tests
@@ -33,5 +34,5 @@ guardrails:
 verification:
   required:
     - go test targeted packages
-    - go run ./cmd/connectorgen validate internal/connectors/defs/github
+    - go run ./cmd/connectorgen validate internal/connectors/defs/<connector>
     - secret-looking literal scan

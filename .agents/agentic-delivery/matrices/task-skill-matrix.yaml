@@ -1,6 +1,6 @@
 version: 1
 default_rules:
-  - Read AGENTS.md and issue-agent-contract.md before work.
+  - Read AGENTS.md and .agents/agentic-delivery/contracts/issue-agent-contract.md before work.
   - Use test-first implementation for behavior changes.
   - Keep PR scope to one primary issue.
   - Stop for human gates before auth, secrets, dependencies, destructive actions, deploys, or gate reductions.
@@ -79,7 +79,7 @@ task_types:
     primary_agent: operation-ledger-architect
   cli-surface:
     required_skill_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
-    primary_agent: github-cli-surface-agent
+    primary_agent: provider-cli-surface-agent
   help-renderer:
     required_skill_groups: [go_tdd, docs_and_ux]
     primary_agent: help-renderer-agent

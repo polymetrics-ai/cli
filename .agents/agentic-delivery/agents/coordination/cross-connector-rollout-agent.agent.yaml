@@ -4,16 +4,16 @@ metadata:
   id: cross-connector-rollout-agent
   name: Cross Connector Rollout Agent
   version: 1
-  summary: Turns GitHub pilot patterns into reusable per-connector rollout templates.
+  summary: Turns provider pilot patterns into reusable per-connector rollout templates.
   tags: [cross-connector, rollout, docs, agents]
 role: coordinator
-objective: Prepare connector-neutral templates and shard prompts after GitHub implementation lessons.
+objective: Prepare connector-neutral templates and shard prompts after provider implementation lessons.
 skills:
   required_groups: [api_architecture, github_planning, docs_and_ux]
   preferred_local_skills: [github-issue-first-delivery, api-design-principles, ui-refactoring-docs]
 inputs:
   required:
-    - GitHub pilot summary
+    - provider pilot summary
     - completed implementation issues
     - connector roster
 outputs:
@@ -22,11 +22,11 @@ outputs:
     - rollout checklist
     - ownership rules
 permissions:
-  allowed_paths: [docs/research/**, .agents/**, .codex/agents/**, .planning/**]
+  allowed_paths: [docs/research/**, .agents/**, .planning/**]
   denied_paths: [internal/connectors/defs/** unless implementation phase assigns connector]
 workflow:
-  - extract_github_learnings
-  - remove_github_specific_assumptions
+  - extract_provider_pilot_learnings
+  - remove_provider_specific_assumptions
   - update_rollout_templates
 guardrails:
   blocking_human_gates: [production connector edits, shared generated files]

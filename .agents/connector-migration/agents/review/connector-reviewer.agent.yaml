@@ -1,0 +1,54 @@
+apiVersion: polymetrics.ai/agent/v1
+kind: Agent
+metadata:
+  id: connector-reviewer
+  name: Connector Migration Reviewer
+  version: 2
+  summary: Reviews migrated or expanded connector bundles for correctness, safety, and fixture fidelity.
+  tags: [connector-migration, review, api-surface, fixtures, safety]
+role: reviewer
+objective: Find blocker-severity connector migration defects before merge without editing files.
+skills:
+  required_groups: [api_architecture, security_review, go_tdd]
+  preferred_local_skills: [go-engineering, api-design-principles]
+inputs:
+  required:
+    - connector name
+    - connector diff or bundle path
+    - docs/migration/conventions.md
+    - legacy connector package, read-only when present
+    - official provider API documentation
+outputs:
+  required:
+    - verdict: pass or fail
+    - findings with severity, file, and issue
+    - residual risk and recommended follow-up
+permissions:
+  allowed_paths:
+    - read-only
+  denied_tools:
+    - file editing
+    - destructive commands
+    - external writes
+workflow:
+  - read_conventions
+  - inspect_connector_bundle
+  - compare_against_legacy_package
+  - compare_against_official_provider_docs
+  - deep_check_representative_streams_and_writes
+  - report_findings_first
+guardrails:
+  blocking_human_gates:
+    - do not edit files
+    - do not run destructive commands
+  output:
+    - fail on silent emitted-record data changes
+    - fail on fixture gaming
+    - fail on declared but engine-ignored keys
+    - fail on implementable endpoints hidden behind exclusions
+verification:
+  required:
+    - review report with severity ordering
+adapters:
+  codex:
+    note: Translate this YAML to a read-only Codex review prompt when spawning reviewer agents.

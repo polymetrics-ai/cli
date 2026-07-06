@@ -7,13 +7,13 @@ go test ./internal/coordination/issueguard
 go run ./cmd/prissueguard --title 'feat(github): add cli surface metadata' --body 'Closes #123'
 go run ./cmd/prissueguard --title 'add cli surface metadata' --body 'no issue'
 go test ./cmd/prissueguard ./internal/coordination/issueguard
-ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f); puts f }' .agents/connector-cli-parity/*.yaml .codex/agents/connector-cli-parity/*.agent.yaml .github/ISSUE_TEMPLATE/agent_task.yml .github/workflows/pr-issue-guard.yml
+find .agents .github/ISSUE_TEMPLATE .github/workflows -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 | xargs -0 ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f); puts f }'
 git diff --check
 make verify
 ```
 
-Also ran the standard secret-looking literal scan over the new `.agents`, `.codex/agents`, phase,
-workflow, template, and guard files.
+Also ran the standard secret-looking literal scan over the new `.agents`, phase, workflow, template,
+and guard files.
 
 ## Expected failure checks
 

@@ -35,8 +35,8 @@ body:
       description: List files, issues, docs, and source URLs the agent must read first.
       value: |
         - AGENTS.md
-        - .agents/connector-cli-parity/issue-agent-contract.md
-        - .agents/connector-cli-parity/task-skill-matrix.yaml
+        - .agents/agentic-delivery/contracts/issue-agent-contract.md
+        - .agents/agentic-delivery/matrices/task-skill-matrix.yaml
     validations:
       required: true
   - type: textarea

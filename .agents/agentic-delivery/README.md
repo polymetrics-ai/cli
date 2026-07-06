@@ -11,16 +11,16 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 
 ## Files
 
-- `issue-agent-contract.md`: generic contract every implementation agent must follow.
-- `issue-prompt-template.md`: issue section template that points at the generic contract.
-- `task-skill-matrix.yaml`: required skills and capabilities by task type.
-- `yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
-- `agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
-- `.codex/agents/connector-cli-parity/*.agent.yaml`: reusable role definitions.
+- `contracts/issue-agent-contract.md`: generic contract every implementation agent must follow.
+- `contracts/issue-prompt-template.md`: issue section template that points at the generic contract.
+- `matrices/task-skill-matrix.yaml`: required skills and capabilities by task type.
+- `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
+- `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
+- `agents/<type>/*.agent.yaml`: reusable role definitions grouped by agent type.
 
-The `.agents/connector-cli-parity/` directory holds shared contracts and conventions. Runtime-facing
-agent role definitions live under `.codex/agents/connector-cli-parity/` so they are isolated from
-research docs and can be discovered by repo-local agent tooling.
+The `.agents/agentic-delivery/` directory holds shared contracts, conventions, and role specs.
+Specialized agent families can live beside it under `.agents/<functional-area>/` while reusing the
+same schema and issue-to-PR contract.
 
 ## Design principles
 

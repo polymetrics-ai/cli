@@ -51,13 +51,18 @@ cutover plan for approval.
   decoder). Leave the live `START_REPLICATION` wiring behind the `pglogrepl` human gate.
 
 ### C. Expansion review (Codex reviewer agent or Claude) — read-only
-Once a batch of Pass B connectors is committed, run the `connector-reviewer` agent over a 15–20%
-sample vs legacy + real API docs; repair fails.
+Once a batch of Pass B connectors is committed, run the `connector-reviewer` agent spec over a
+15-20% sample vs legacy + real API docs; repair fails.
 
-## Launching Codex
+## Launching Agents
 
-Agents are defined in `.codex/agents/passb-expander.toml` and `.codex/agents/connector-reviewer.toml`
-(project-scoped; Codex auto-loads them). Non-interactive, headless:
+Agent specs are runner-neutral YAML files:
+
+- `.agents/connector-migration/agents/implementation/passb-expander.agent.yaml`
+- `.agents/connector-migration/agents/review/connector-reviewer.agent.yaml`
+
+Translate the relevant YAML spec into the runner prompt for Codex, Claude, OpenCode, or another
+agent runtime. Non-interactive Codex example:
 
 ```bash
 # in a dedicated worktree for the workstream
@@ -71,8 +76,9 @@ CODEX_API_KEY=... codex exec --sandbox workspace-write \
    branch; do not push. End with a cutover plan."
 ```
 
-For the expansion/quarantine agents, spawn per-connector so Codex parallelises (default
-`agents.max_threads = 6`): ask the session to "spawn the passb-expander agent for each of: <list>".
+For expansion/review agents, spawn one task per connector so the runtime can parallelize safely.
+Use the `passb-expander` spec for implementation work and the `connector-reviewer` spec for
+read-only review.
 
 ## Pushing (Claude/coordinator only)
 

@@ -1,0 +1,75 @@
+apiVersion: polymetrics.ai/agent/v1
+kind: Agent
+metadata:
+  id: passb-expander
+  name: Pass B Connector Surface Expander
+  version: 2
+  summary: Expands one connector JSON bundle to its full documented API surface.
+  tags: [connector-migration, pass-b, api-surface, implementation]
+role: implementation
+objective: Expand exactly one connector definition bundle to cover practical documented API reads and writes.
+skills:
+  required_groups: [api_architecture, go_tdd, security_review]
+  preferred_local_skills: [go-engineering, api-design-principles, github-issue-first-delivery]
+inputs:
+  required:
+    - connector name
+    - AGENTS.md
+    - docs/migration/HANDOFF-CODEX.md
+    - docs/migration/conventions.md
+    - docs/architecture/connector-architecture-v2-design.md
+    - internal/connectors/defs/<connector>/metadata.json
+    - official provider API documentation
+outputs:
+  required:
+    - expanded internal/connectors/defs/<connector>/api_surface.json
+    - new streams, writes, schemas, fixtures, and docs for implemented capabilities
+    - typed blocker notes when the engine cannot honestly model an endpoint
+permissions:
+  allowed_paths:
+    - internal/connectors/defs/<connector>/**
+  denied_paths:
+    - internal/connectors/hooks/**
+    - internal/connectors/native/**
+    - internal/connectors/hooks/hookset/**
+    - internal/connectors/native/nativeset/**
+    - go.mod
+    - go.sum
+    - .github/**
+    - .agents/**
+    - .planning/**
+  denied_tools:
+    - unrestricted HTTP write
+    - unrestricted SQL write
+    - generic shell write to external systems
+workflow:
+  - read_connector_handoff_and_conventions
+  - inspect_existing_connector_bundle
+  - inspect_legacy_connector_read_only
+  - research_official_provider_api_docs
+  - expand_api_surface_with_covered_or_excluded_rows
+  - implement_practical_streams_and_dialect_expressible_writes
+  - add_schemas_fixtures_docs_and_risk_notes
+  - record_typed_blockers_for_engine_gaps
+  - run_connector_validation
+guardrails:
+  input:
+    - exactly one connector must be assigned
+  blocking_human_gates:
+    - new dependencies
+    - new hook packages
+    - shared generated files
+    - auth scope changes
+    - secrets
+    - destructive external actions
+  output:
+    - no Pass B placeholder exclusions remain for reviewed endpoints
+    - no secret-looking literals in fixtures or docs
+    - no commits from the agent
+verification:
+  required:
+    - go run ./cmd/connectorgen validate internal/connectors/defs
+    - go test ./internal/connectors/conformance -count=1 -run 'TestConformance/<connector>$' -v
+adapters:
+  codex:
+    note: Translate this YAML to a connector-specific Codex prompt; do not rely on .codex/agents TOML.

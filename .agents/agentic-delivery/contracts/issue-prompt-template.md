@@ -6,7 +6,7 @@ Add this section to implementation issues.
 ## Agent execution contract
 
 Follow the generic issue-to-PR contract:
-`.agents/connector-cli-parity/issue-agent-contract.md`
+`.agents/agentic-delivery/contracts/issue-agent-contract.md`
 
 Task type: `<task-type-from-task-skill-matrix>`
 
@@ -14,7 +14,7 @@ Required skills:
 - `<skill capability or local skill name>`
 
 Primary agent:
-`.codex/agents/connector-cli-parity/<agent>.agent.yaml`
+`.agents/<functional-area>/agents/<type>/<agent>.agent.yaml`
 
 Hard stops:
 - Do not change auth scopes.

@@ -16,7 +16,7 @@ inputs:
     - github_issue_url
     - issue body with acceptance criteria
     - AGENTS.md
-    - .agents/connector-cli-parity/issue-agent-contract.md
+    - .agents/agentic-delivery/contracts/issue-agent-contract.md
 outputs:
   required:
     - code or docs changes scoped to the issue
@@ -30,7 +30,6 @@ permissions:
     - docs/**
     - .github/**
     - .agents/**
-    - .codex/agents/**
     - .planning/**
   denied_paths:
     - go.mod unless issue explicitly approves dependencies

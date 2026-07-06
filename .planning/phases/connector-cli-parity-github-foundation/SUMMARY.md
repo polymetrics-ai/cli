@@ -9,9 +9,11 @@
   - `.github/pull_request_template.md`
 - Added a GitHub issue form for agent implementation tasks:
   - `.github/ISSUE_TEMPLATE/agent_task.yml`
-- Added agent-neutral delivery contracts under `.agents/connector-cli-parity/`, including a generic
+- Added agent-neutral delivery contracts under `.agents/agentic-delivery/`, including a generic
   issue-to-PR contract, task skill matrix, YAML agent spec guidance, and prompt template.
-- Added repo-local YAML agent definitions under `.codex/agents/connector-cli-parity/`.
+- Added YAML agent definitions grouped by functional area and type under `.agents/`.
+- Converted the pre-existing `.codex/agents` Pass B expander and connector reviewer TOML files into
+  `.agents/connector-migration/` YAML specs and removed the obsolete TOML files.
 - Linked the PR slice to live issue #43.
 
 ## Out Of Scope
