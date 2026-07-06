@@ -108,6 +108,10 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 	return Read(ctx, c.bundle, req, c.hooks, emit)
 }
 
+func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
+	return DirectRead(ctx, c.bundle, req, c.hooks)
+}
+
 // InitialState satisfies connectors.StatefulReader by delegating to the
 // package-level engine.InitialState.
 func (c *Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
@@ -353,6 +357,7 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			SourceURL:     cmd.SourceURL,
 			Flags:         flags,
 			Examples:      append([]string(nil), cmd.Examples...),
+			APISurface:    commandSurfaceEndpointRefs(cmd.APISurface),
 			Risk:          cmd.Risk,
 			Approval:      cmd.Approval,
 			Notes:         cmd.Notes,
@@ -363,6 +368,14 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			Name:    topic.Name,
 			Summary: topic.Summary,
 		})
+	}
+	return out
+}
+
+func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.CommandSurfaceEndpointRef {
+	out := make([]connectors.CommandSurfaceEndpointRef, 0, len(refs))
+	for _, ref := range refs {
+		out = append(out, connectors.CommandSurfaceEndpointRef{Method: ref.Method, Path: ref.Path})
 	}
 	return out
 }

@@ -11,17 +11,19 @@ import (
 )
 
 type Request struct {
-	Path   []string
-	Flags  map[string][]string
-	Config connectors.RuntimeConfig
-	Limit  int
+	Path     []string
+	Flags    map[string][]string
+	Config   connectors.RuntimeConfig
+	Limit    int
+	MaxBytes int
 }
 
 type Result struct {
-	Connector string `json:"connector"`
-	Command   string `json:"command"`
-	Stream    string `json:"stream"`
-	Count     int    `json:"count"`
+	Connector  string                       `json:"connector"`
+	Command    string                       `json:"command"`
+	Stream     string                       `json:"stream,omitempty"`
+	Count      int                          `json:"count,omitempty"`
+	DirectRead *connectors.DirectReadResult `json:"direct_read,omitempty"`
 }
 
 type BlockedCommandError struct {
@@ -63,6 +65,9 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	if !ok {
 		return Result{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
+	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+		return runDirectRead(ctx, connector, cmd, req)
+	}
 	if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream == "" {
 		return Result{}, &BlockedCommandError{
 			Connector:    connector.Name(),
@@ -96,6 +101,72 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 		return Result{}, err
 	}
 	return result, nil
+}
+
+func runDirectRead(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
+	reader, ok := connector.(connectors.DirectReader)
+	if !ok {
+		return Result{}, &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "connector does not support direct reads",
+		}
+	}
+	if len(cmd.APISurface) != 1 {
+		return Result{}, &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "direct_read commands require exactly one api_surface endpoint",
+		}
+	}
+	endpoint := cmd.APISurface[0]
+	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+	if method != "GET" {
+		return Result{}, &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       fmt.Sprintf("direct_read commands require GET api_surface endpoints, got %s", method),
+		}
+	}
+	if isAbsoluteHTTPURL(endpoint.Path) {
+		return Result{}, &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "direct_read commands must not reference an absolute URL",
+		}
+	}
+	pathParams, query, err := directReadOverrides(cmd, req.Flags)
+	if err != nil {
+		return Result{}, err
+	}
+	maxBytes := req.MaxBytes
+	if maxBytes <= 0 {
+		maxBytes = 1 << 20
+	}
+	direct, err := reader.DirectRead(ctx, connectors.DirectReadRequest{
+		Method:     method,
+		Path:       endpoint.Path,
+		Config:     req.Config,
+		PathParams: pathParams,
+		Query:      query,
+		MaxBytes:   maxBytes,
+	})
+	if err != nil {
+		return Result{}, err
+	}
+	return Result{
+		Connector:  connector.Name(),
+		Command:    cmd.Path,
+		DirectRead: &direct,
+	}, nil
 }
 
 func commandPath(path []string) string {
@@ -208,4 +279,63 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
 		}
 	}
+}
+
+func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, error) {
+	allowed := map[string]connectors.CommandSurfaceFlag{}
+	for _, flag := range cmd.Flags {
+		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
+			return nil, nil, err
+		}
+		allowed[flag.Name] = flag
+	}
+
+	pathParams := map[string]string{}
+	query := map[string]string{}
+	for name, values := range flags {
+		if len(values) == 0 {
+			continue
+		}
+		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
+			return nil, nil, err
+		}
+		flag, ok := allowed[name]
+		if !ok {
+			return nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+		}
+		value := values[len(values)-1]
+		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
+			return nil, nil, err
+		}
+		if err := validateFlagValue(flag, value); err != nil {
+			return nil, nil, err
+		}
+		switch {
+		case strings.HasPrefix(flag.MapsTo, "path."):
+			target := strings.TrimPrefix(flag.MapsTo, "path.")
+			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
+				return nil, nil, err
+			}
+			pathParams[target] = value
+		case strings.HasPrefix(flag.MapsTo, "query."):
+			target := strings.TrimPrefix(flag.MapsTo, "query.")
+			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
+				return nil, nil, err
+			}
+			query[target] = value
+		default:
+			return nil, nil, &BlockedCommandError{
+				Command:      cmd.Path,
+				Intent:       cmd.Intent,
+				Availability: cmd.Availability,
+				Reason:       fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo),
+			}
+		}
+	}
+	return pathParams, query, nil
+}
+
+func isAbsoluteHTTPURL(raw string) bool {
+	lower := strings.ToLower(strings.TrimSpace(raw))
+	return strings.HasPrefix(lower, "http://") || strings.HasPrefix(lower, "https://")
 }

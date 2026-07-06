@@ -89,6 +89,27 @@ type ReadRequest struct {
 	Limit  int
 }
 
+type DirectReadRequest struct {
+	Method     string
+	Path       string
+	Config     RuntimeConfig
+	PathParams map[string]string
+	Query      map[string]string
+	MaxBytes   int
+}
+
+type DirectReadResult struct {
+	Connector string `json:"connector"`
+	Method    string `json:"method"`
+	Path      string `json:"path"`
+	Status    int    `json:"status"`
+	Body      any    `json:"body"`
+}
+
+type DirectReader interface {
+	DirectRead(context.Context, DirectReadRequest) (DirectReadResult, error)
+}
+
 var ErrReadLimitReached = errors.New("connector read limit reached")
 
 func LimitEmitter(limit int, emit func(Record) error) func(Record) error {

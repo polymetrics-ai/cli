@@ -759,6 +759,15 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 				Message:   fmt.Sprintf("implemented reverse ETL command %d (%q) must reference write action", i, cmd.Path),
 			}}
 		}
+	case "direct_read":
+		if len(cmd.APISurface) == 0 {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference api_surface", i, cmd.Path),
+			}}
+		}
 	default:
 		return []Finding{{
 			Connector: b.Name,
@@ -817,7 +826,10 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
-		if state.excluded || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
+		if cmd.Intent == "direct_read" && state.operation != nil && state.operation.Model == "direct_read" {
+			continue
+		}
+		if state.excluded || state.operation != nil || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
@@ -855,6 +867,7 @@ func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceE
 		endpoints[surfaceEndpointKey(ep.Method, ep.Path)] = cliSurfaceEndpointState{
 			coveredBy: ep.CoveredBy,
 			excluded:  ep.Excluded != nil,
+			operation: ep.Operation,
 		}
 	}
 	return endpoints
@@ -863,6 +876,7 @@ func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceE
 type cliSurfaceEndpointState struct {
 	coveredBy *engine.SurfaceCoverage
 	excluded  bool
+	operation *engine.SurfaceOperation
 }
 
 func surfaceEndpointKey(method, path string) string {

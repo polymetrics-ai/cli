@@ -45,9 +45,15 @@ type CommandSurfaceCommand struct {
 	SourceURL     string
 	Flags         []CommandSurfaceFlag
 	Examples      []string
+	APISurface    []CommandSurfaceEndpointRef
 	Risk          string
 	Approval      string
 	Notes         string
+}
+
+type CommandSurfaceEndpointRef struct {
+	Method string
+	Path   string
 }
 
 type CommandSurfaceHelpTopic struct {

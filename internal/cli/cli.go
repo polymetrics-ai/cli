@@ -636,6 +636,13 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if limit > maxConnectorCommandLimit {
 		limit = maxConnectorCommandLimit
 	}
+	maxBytes, err := parseIntFlag("max-bytes", flags.first("max-bytes"), 1<<20)
+	if err != nil {
+		return err
+	}
+	if maxBytes <= 0 {
+		maxBytes = 1 << 20
+	}
 	connector, cfg, err := a.ResolveConnectorCredential(ctx, connectorName, credential, config)
 	if err != nil {
 		return err
@@ -644,7 +651,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	commandFlags := map[string][]string{}
 	for name, values := range flags.values {
 		switch name {
-		case "_", "credential", "connection", "config", "limit":
+		case "_", "credential", "connection", "config", "limit", "max-bytes":
 			continue
 		default:
 			commandFlags[name] = values
@@ -653,10 +660,11 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 
 	rows := make([]connectors.Record, 0, limit)
 	result, err := commandrunner.Run(ctx, connector, commandrunner.Request{
-		Path:   path,
-		Flags:  commandFlags,
-		Config: cfg,
-		Limit:  limit,
+		Path:     path,
+		Flags:    commandFlags,
+		Config:   cfg,
+		Limit:    limit,
+		MaxBytes: maxBytes,
 	}, func(record connectors.Record) error {
 		rows = append(rows, record)
 		return nil
@@ -672,6 +680,22 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 			}
 		}
 		return err
+	}
+	if result.DirectRead != nil {
+		if jsonOut {
+			return writeJSON(stdout, envelope{
+				"kind":      "ConnectorCommandDirectRead",
+				"connector": result.Connector,
+				"command":   result.Command,
+				"method":    result.DirectRead.Method,
+				"path":      result.DirectRead.Path,
+				"status":    result.DirectRead.Status,
+				"response":  result.DirectRead.Body,
+			})
+		}
+		b, _ := json.MarshalIndent(result.DirectRead.Body, "", "  ")
+		fmt.Fprintln(stdout, string(b))
+		return nil
 	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{
