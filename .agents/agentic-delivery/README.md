@@ -26,6 +26,8 @@ skills, guardrails, YAML agent definitions, and handoff rules.
   guidance.
 - `references/coderabbit-review-best-practices.md`: source-backed CodeRabbit review practices.
 - `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
+- `learnings/github-cli-surface-metadata.md`: first-slice lessons for gh-inspired connector command
+  metadata, validation, docs, and agent guardrails.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
 - `agents/<type>/*.agent.yaml`: reusable role definitions grouped by agent type.
 

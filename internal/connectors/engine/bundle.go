@@ -17,17 +17,18 @@ var namePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
-	Name     string
-	Metadata Metadata
-	Spec     *Schema                  // compiled spec.json; SecretKeys() from x-secret
-	RawSpec  json.RawMessage          // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
-	HTTP     HTTPBase                 // streams.json "base"; zero value when no streams.json
-	Streams  []StreamSpec             // streams.json "streams"
-	Writes   []WriteAction            // writes.json "actions"; nil when writes.json absent
-	Schemas  map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
-	Surface  *APISurface              // api_surface.json
-	Docs     string                   // docs.md
-	Fixtures fs.FS                    // fixtures/ subtree; nil when absent
+	Name       string
+	Metadata   Metadata
+	Spec       *Schema                  // compiled spec.json; SecretKeys() from x-secret
+	RawSpec    json.RawMessage          // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
+	HTTP       HTTPBase                 // streams.json "base"; zero value when no streams.json
+	Streams    []StreamSpec             // streams.json "streams"
+	Writes     []WriteAction            // writes.json "actions"; nil when writes.json absent
+	Schemas    map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
+	Surface    *APISurface              // api_surface.json
+	CLISurface *CLISurface              // cli_surface.json
+	Docs       string                   // docs.md
+	Fixtures   fs.FS                    // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -416,11 +417,78 @@ type SurfaceExclusion struct {
 	Reason   string `json:"reason,omitempty"`
 }
 
+// CLISurface is the parsed cli_surface.json. It is docs/help metadata only:
+// it maps provider-style command paths to existing streams, write actions,
+// API-surface rows, or explicit unsupported/planned classifications.
+type CLISurface struct {
+	Tagline     string            `json:"tagline"`
+	Usage       string            `json:"usage"`
+	SourceCLI   *CLISourceCLI     `json:"source_cli,omitempty"`
+	Groups      []CLICommandGroup `json:"groups,omitempty"`
+	GlobalFlags []CLIFlag         `json:"global_flags,omitempty"`
+	Commands    []CLICommand      `json:"commands"`
+	HelpTopics  []CLIHelpTopic    `json:"help_topics,omitempty"`
+}
+
+// CLISourceCLI names the external provider CLI used as a parity reference.
+type CLISourceCLI struct {
+	Name      string `json:"name"`
+	Docs      string `json:"docs,omitempty"`
+	Reference string `json:"reference,omitempty"`
+	Source    string `json:"source,omitempty"`
+}
+
+// CLICommandGroup is a rendered help grouping.
+type CLICommandGroup struct {
+	ID       string   `json:"id"`
+	Title    string   `json:"title"`
+	Commands []string `json:"commands"`
+}
+
+// CLIFlag describes one command or global flag.
+type CLIFlag struct {
+	Name    string   `json:"name"`
+	Type    string   `json:"type"`
+	Summary string   `json:"summary,omitempty"`
+	Values  []string `json:"values,omitempty"`
+	MapsTo  string   `json:"maps_to,omitempty"`
+}
+
+// CLICommand is one provider-inspired command path.
+type CLICommand struct {
+	Path          string                  `json:"path"`
+	Summary       string                  `json:"summary"`
+	Intent        string                  `json:"intent"`
+	Availability  string                  `json:"availability"`
+	Stream        string                  `json:"stream,omitempty"`
+	Write         string                  `json:"write,omitempty"`
+	SourceCLIPath string                  `json:"source_cli_path,omitempty"`
+	SourceURL     string                  `json:"source_url,omitempty"`
+	Flags         []CLIFlag               `json:"flags,omitempty"`
+	Examples      []string                `json:"examples,omitempty"`
+	APISurface    []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
+	Risk          string                  `json:"risk,omitempty"`
+	Approval      string                  `json:"approval,omitempty"`
+	Notes         string                  `json:"notes,omitempty"`
+}
+
+// CLISurfaceEndpointRef points from a command to a tracked api_surface row.
+type CLISurfaceEndpointRef struct {
+	Method string `json:"method"`
+	Path   string `json:"path"`
+}
+
+// CLIHelpTopic is one rendered help topic.
+type CLIHelpTopic struct {
+	Name    string `json:"name"`
+	Summary string `json:"summary"`
+}
+
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, spec, streams, writes, apiSurface *Schema
-	err                                         error
+	metadata, spec, streams, writes, apiSurface, cliSurface *Schema
+	err                                                     error
 }{}
 
 func init() {
@@ -440,6 +508,7 @@ func init() {
 	metaSchemas.streams = compileMeta(streamsSchemaJSON)
 	metaSchemas.writes = compileMeta(writesSchemaJSON)
 	metaSchemas.apiSurface = compileMeta(apiSurfaceSchemaJSON)
+	metaSchemas.cliSurface = compileMeta(cliSurfaceSchemaJSON)
 }
 
 // requiredFiles lists the bundle files that must always exist relative to a
@@ -592,6 +661,11 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		return Bundle{}, err
 	}
 
+	cliSurface, err := loadCLISurface(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
+
 	docs, err := readFileString(sub, "docs.md")
 	if err != nil {
 		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
@@ -600,17 +674,18 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	fixtures := loadFixtures(sub)
 
 	return Bundle{
-		Name:     dirName,
-		Metadata: metadata,
-		Spec:     spec,
-		RawSpec:  rawSpec,
-		HTTP:     httpBase,
-		Streams:  streams,
-		Writes:   writes,
-		Schemas:  schemas,
-		Surface:  surface,
-		Docs:     docs,
-		Fixtures: fixtures,
+		Name:       dirName,
+		Metadata:   metadata,
+		Spec:       spec,
+		RawSpec:    rawSpec,
+		HTTP:       httpBase,
+		Streams:    streams,
+		Writes:     writes,
+		Schemas:    schemas,
+		Surface:    surface,
+		CLISurface: cliSurface,
+		Docs:       docs,
+		Fixtures:   fixtures,
 	}, nil
 }
 
@@ -743,6 +818,24 @@ func loadAPISurface(sub fs.FS, dirName string) (*APISurface, error) {
 	var surface APISurface
 	if err := strictDecode(raw, &surface); err != nil {
 		return nil, fmt.Errorf("load bundle %s: api_surface.json: %w", dirName, err)
+	}
+	return &surface, nil
+}
+
+func loadCLISurface(sub fs.FS, dirName string) (*CLISurface, error) {
+	if !fileExists(sub, "cli_surface.json") {
+		return nil, nil
+	}
+	raw, err := readFile(sub, "cli_surface.json")
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.cliSurface.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
+	}
+	var surface CLISurface
+	if err := strictDecode(raw, &surface); err != nil {
+		return nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
 	}
 	return &surface, nil
 }

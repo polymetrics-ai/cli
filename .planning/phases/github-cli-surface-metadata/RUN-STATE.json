@@ -1,0 +1,14 @@
+{
+  "phase": "github-cli-surface-metadata",
+  "issue": 34,
+  "parent_issue": 44,
+  "status": "verified_pending_commit_pr",
+  "notes": [
+    "Manual GSD fallback is in use because scripts/programming-loop.mjs and scripts/tdd-gate.mjs are not present.",
+    "This slice is docs/schema only and must not add runtime command dispatch.",
+    "Focused CLI-surface tests and full connector bundle validation are green.",
+    "Subagent review findings for embedded runtime metadata, endpoint safety, reverse ETL safety text, and website wording were fixed.",
+    "Website data generation, typecheck, and build are green.",
+    "go test ./... and make verify passed."
+  ]
+}

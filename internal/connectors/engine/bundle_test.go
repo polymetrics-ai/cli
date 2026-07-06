@@ -173,6 +173,107 @@ func TestBundleLoadOptionalFilesAbsent(t *testing.T) {
 	if b.Fixtures != nil {
 		t.Fatalf("Fixtures should be nil when fixtures/ absent")
 	}
+	if b.CLISurface != nil {
+		t.Fatalf("CLISurface should be nil when cli_surface.json is absent")
+	}
+}
+
+func TestBundleLoadParsesCLISurface(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"tagline": "Work with Acme from the command line.",
+		"usage": "pm acme <command> [flags]",
+		"source_cli": {
+			"name": "acmectl",
+			"docs": "https://example.com/acmectl",
+			"reference": "https://example.com/acmectl/reference"
+		},
+		"groups": [
+			{ "id": "core", "title": "Core Commands", "commands": ["widget"] }
+		],
+		"global_flags": [
+			{ "name": "json", "type": "boolean", "summary": "Write machine-readable JSON output." }
+		],
+		"commands": [
+			{
+				"path": "widget list",
+				"summary": "List widgets",
+				"intent": "etl",
+				"availability": "implemented",
+				"stream": "widgets",
+				"source_cli_path": "acmectl widget list",
+				"flags": [
+					{ "name": "state", "type": "string", "summary": "Filter by state.", "maps_to": "query.state" }
+				],
+				"examples": ["pm acme widget list --json"],
+				"api_surface": [
+					{ "method": "GET", "path": "/widgets" }
+				]
+			}
+		],
+		"help_topics": [
+			{ "name": "authentication", "summary": "Credential setup and supported auth modes." }
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("CLISurface is nil")
+	}
+	if b.CLISurface.Tagline != "Work with Acme from the command line." {
+		t.Fatalf("Tagline = %q", b.CLISurface.Tagline)
+	}
+	if len(b.CLISurface.Commands) != 1 || b.CLISurface.Commands[0].Path != "widget list" {
+		t.Fatalf("Commands = %+v", b.CLISurface.Commands)
+	}
+	if b.CLISurface.Commands[0].Stream != "widgets" {
+		t.Fatalf("Command stream = %q", b.CLISurface.Commands[0].Stream)
+	}
+}
+
+func TestBundleLoadEmbeddedGitHubCLISurface(t *testing.T) {
+	b, err := Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("GitHub CLISurface is nil; defs.FS must embed cli_surface.json")
+	}
+	if b.CLISurface.Usage != "pm github <command> <subcommand> [flags]" {
+		t.Fatalf("GitHub CLISurface usage = %q", b.CLISurface.Usage)
+	}
+	if len(b.CLISurface.Commands) == 0 {
+		t.Fatalf("GitHub CLISurface has no commands")
+	}
+}
+
+func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"tagline": "Work with Acme from the command line.",
+		"usage": "pm acme <command> [flags]",
+		"commands": [
+			{
+				"path": "widget list",
+				"summary": "List widgets",
+				"intent": "etl",
+				"availability": "implemented",
+				"stream": "widgets",
+				"surprise": true
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected an error for unknown cli_surface command key")
+	}
+	if !strings.Contains(err.Error(), "cli_surface.json") || !strings.Contains(err.Error(), "surprise") {
+		t.Fatalf("Load error = %q, want it to name cli_surface.json and surprise", err.Error())
+	}
 }
 
 func TestBundleLoadStreamsOptionalIffDynamicSchema(t *testing.T) {
