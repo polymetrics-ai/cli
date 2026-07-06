@@ -85,6 +85,7 @@ type ReadRequest struct {
 	Stream string
 	Config RuntimeConfig
 	State  map[string]string
+	Query  map[string]string
 	Limit  int
 }
 
