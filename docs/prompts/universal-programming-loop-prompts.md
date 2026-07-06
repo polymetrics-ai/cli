@@ -54,8 +54,7 @@ Canonical prompts for the GSD Universal Programming Loop roles in this milestone
 
 | Role | Model |
 |---|---|
-| gsd-loop-coordinator, gsd-loop-planner, gsd-loop-reviewer, gsd-planner | `fable` |
-| gsd-loop-backend, gsd-loop-tester, gsd-loop-security, gsd-loop-reliability-observability, gsd-plan-checker, gsd-verifier, gsd-executor, gsd-debugger | `sonnet` (Sonnet 5) |
+| all GSD loop roles | `gpt-5.5` with `xhigh` reasoning effort |
 
 Overrides live in `.planning/config.json` `model_overrides`.
 
@@ -148,4 +147,3 @@ ROLE: Capability expansion executor (gsd-loop-backend, model=sonnet). For connec
 Run the GSD Universal Programming Loop using the repo PRD
 (`docs/plans/universal-programming-loop-prd.md`), this prompt library, the strict TDD gate, local
 verification (`make verify` + golangci-lint), and committed phase traces.
-

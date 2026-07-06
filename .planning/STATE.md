@@ -15,8 +15,8 @@ parity (stripe/searxng/postgres), connectorgen, conformance v2, certify source s
 migration recipe + schemas, inventory (557 connectors S137/M388/L31/XL1 → ~77 Pass A bundle
 agents). Reviewer GO after 1 gap-loop cycle. See .planning/phases/wave0-engine-harness/SUMMARY.md.
 
-Model policy (user directive): coordinator/planner/reviewer roles → `fable`; backend/tester/
-security/reliability roles → `sonnet` (Sonnet 5); Go work applies cc-skills-golang skills.
+Model policy (user directive): all GSD loop roles use Codex `gpt-5.5` with `xhigh` reasoning
+effort for this GitHub CLI parity implementation track; Go work applies cc-skills-golang skills.
 
 Previous phase: wave1-http-api-longtail-complete-opencode (completed)
 

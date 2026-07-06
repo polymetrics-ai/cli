@@ -6,20 +6,26 @@
     "plan_check": true,
     "commit_docs": true
   },
-  "model_profile": "quality",
+  "model_profile": "codex-5.5-extra-high",
+  "model_policy": {
+    "provider": "codex",
+    "model": "gpt-5.5",
+    "reasoning_effort": "xhigh",
+    "service_tier": "priority"
+  },
   "model_overrides": {
-    "gsd-loop-coordinator": "fable",
-    "gsd-loop-planner": "fable",
-    "gsd-loop-reviewer": "fable",
-    "gsd-loop-backend": "sonnet",
-    "gsd-loop-tester": "sonnet",
-    "gsd-loop-security": "sonnet",
-    "gsd-loop-reliability-observability": "sonnet",
-    "gsd-loop-frontend": "sonnet",
-    "gsd-planner": "fable",
-    "gsd-plan-checker": "sonnet",
-    "gsd-verifier": "sonnet",
-    "gsd-executor": "sonnet",
-    "gsd-debugger": "sonnet"
+    "gsd-loop-coordinator": "gpt-5.5:xhigh",
+    "gsd-loop-planner": "gpt-5.5:xhigh",
+    "gsd-loop-reviewer": "gpt-5.5:xhigh",
+    "gsd-loop-backend": "gpt-5.5:xhigh",
+    "gsd-loop-tester": "gpt-5.5:xhigh",
+    "gsd-loop-security": "gpt-5.5:xhigh",
+    "gsd-loop-reliability-observability": "gpt-5.5:xhigh",
+    "gsd-loop-frontend": "gpt-5.5:xhigh",
+    "gsd-planner": "gpt-5.5:xhigh",
+    "gsd-plan-checker": "gpt-5.5:xhigh",
+    "gsd-verifier": "gpt-5.5:xhigh",
+    "gsd-executor": "gpt-5.5:xhigh",
+    "gsd-debugger": "gpt-5.5:xhigh"
   }
 }
