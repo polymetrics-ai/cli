@@ -14,6 +14,7 @@ import (
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
@@ -93,7 +94,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	case "worker":
 		err = runWorker(ctx, rest, stdout, jsonOut)
 	default:
-		err = usageErrorf("unknown command %q", cmd)
+		err = runMaybeConnectorCommand(ctx, root, cmd, rest, stdout, jsonOut)
 	}
 	if err != nil {
 		return writeError(stdout, stderr, err, jsonOut)
@@ -586,6 +587,102 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 	default:
 		return errUsage
 	}
+}
+
+func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
+	if err := safety.ValidateIdentifier(connectorName, "connector"); err != nil {
+		return usageErrorf("unknown command %q", connectorName)
+	}
+	if err := connectors.RejectLegacyConnectorName(connectorName); err != nil {
+		return err
+	}
+	registry := appRegistry()
+	connector, ok := registry.Get(connectorName)
+	if !ok {
+		return usageErrorf("unknown command %q", connectorName)
+	}
+	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || surfaceProvider.CommandSurface() == nil {
+		return usageErrorf("unknown command %q", connectorName)
+	}
+	return withApp(root, func(a *app.App) error {
+		return runConnectorCommand(ctx, a, connectorName, args, stdout, jsonOut)
+	})
+}
+
+func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
+	flags := parseFlags(args)
+	path := flags.values["_"]
+	if len(path) == 0 {
+		return usageErrorf("missing connector command path")
+	}
+	credential := flags.first("credential")
+	if credential == "" {
+		credential = flags.first("connection")
+	}
+	config, err := keyValues(flags.values["config"])
+	if err != nil {
+		return err
+	}
+	limit, err := parseIntFlag("limit", flags.first("limit"), 100)
+	if err != nil {
+		return err
+	}
+	if limit <= 0 {
+		limit = 100
+	}
+	connector, cfg, err := a.ResolveConnectorCredential(ctx, connectorName, credential, config)
+	if err != nil {
+		return err
+	}
+
+	commandFlags := map[string][]string{}
+	for name, values := range flags.values {
+		switch name {
+		case "_", "credential", "connection", "config", "limit":
+			continue
+		default:
+			commandFlags[name] = values
+		}
+	}
+
+	rows := make([]connectors.Record, 0, limit)
+	result, err := commandrunner.Run(ctx, connector, commandrunner.Request{
+		Path:   path,
+		Flags:  commandFlags,
+		Config: cfg,
+		Limit:  limit,
+	}, func(record connectors.Record) error {
+		rows = append(rows, record)
+		return nil
+	})
+	if err != nil {
+		var blocked *commandrunner.BlockedCommandError
+		if errors.As(err, &blocked) {
+			return &cliError{
+				category: categoryPolicy,
+				code:     "connector_command_blocked",
+				message:  err.Error(),
+				err:      err,
+			}
+		}
+		return err
+	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{
+			"kind":      "ConnectorCommandRead",
+			"connector": result.Connector,
+			"command":   result.Command,
+			"stream":    result.Stream,
+			"count":     result.Count,
+			"records":   rows,
+		})
+	}
+	for _, row := range rows {
+		b, _ := json.Marshal(row)
+		fmt.Fprintln(stdout, string(b))
+	}
+	return nil
 }
 
 func directConnector(a *app.App, args []string) (connectors.Connector, connectors.RuntimeConfig, error) {

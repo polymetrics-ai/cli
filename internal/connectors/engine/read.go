@@ -645,6 +645,9 @@ func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Value
 	if formattedLower != "" && stream.Incremental.RequestParam != "" {
 		q.Set(stream.Incremental.RequestParam, formattedLower)
 	}
+	for k, v := range req.Query {
+		q.Set(k, v)
+	}
 	return q, nil
 }
 

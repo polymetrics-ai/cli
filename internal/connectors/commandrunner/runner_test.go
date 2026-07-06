@@ -73,6 +73,47 @@ func TestRunImplementedStreamCommand(t *testing.T) {
 	}
 }
 
+func TestRunCoreStreamMappings(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{Path: "pr list", Intent: "etl", Availability: "implemented", Stream: "pull_requests"},
+			{Path: "release list", Intent: "etl", Availability: "implemented", Stream: "releases"},
+			{Path: "workflow list", Intent: "etl", Availability: "implemented", Stream: "workflows"},
+		},
+	}}
+
+	tests := []struct {
+		name   string
+		path   []string
+		stream string
+	}{
+		{name: "pull requests", path: []string{"pr", "list"}, stream: "pull_requests"},
+		{name: "releases", path: []string{"release", "list"}, stream: "releases"},
+		{name: "workflows", path: []string{"workflow", "list"}, stream: "workflows"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var records []connectors.Record
+			result, err := Run(context.Background(), connector, Request{Path: tt.path, Limit: 1}, func(record connectors.Record) error {
+				records = append(records, record)
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			if result.Stream != tt.stream {
+				t.Fatalf("stream = %q, want %q", result.Stream, tt.stream)
+			}
+			if connector.readReq.Stream != tt.stream {
+				t.Fatalf("read stream = %q, want %q", connector.readReq.Stream, tt.stream)
+			}
+			if len(records) != 1 {
+				t.Fatalf("records = %d, want 1", len(records))
+			}
+		})
+	}
+}
+
 func TestRunBlocksNonStreamCommands(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
