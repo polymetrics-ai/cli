@@ -9,4 +9,3 @@ Accessed: 2026-07-06
 - GitHub GraphQL API docs: https://docs.github.com/en/graphql
 - Issue #34: https://github.com/polymetrics-ai/cli/issues/34
 - Parent issue #44: https://github.com/polymetrics-ai/cli/issues/44
-

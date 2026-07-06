@@ -29,4 +29,3 @@ reads, GraphQL, sensitive/admin policy, and cross-connector rollout.
 - No auth scope changes.
 - No production deployment.
 - No destructive external actions.
-
