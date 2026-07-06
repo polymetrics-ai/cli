@@ -5,80 +5,80 @@ import (
 	"testing"
 )
 
-func TestValidatePRBodyAcceptsClosingKeyword(t *testing.T) {
-	result := ValidatePRBody("feat(github): add cli surface metadata", "Implements the first slice.\n\nCloses #123\n")
+func TestValidatePRAcceptsClosingKeyword(t *testing.T) {
+	result := ValidatePR("feat(github): add cli surface metadata", "Implements the first slice.\n\nCloses #123\n")
 	if !result.OK {
-		t.Fatalf("ValidatePRBody() OK = false, violations = %v", result.Violations)
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
 	}
 	if len(result.Issues) != 1 || result.Issues[0].Number != 123 || !result.Issues[0].Closing {
-		t.Fatalf("ValidatePRBody() issues = %#v", result.Issues)
+		t.Fatalf("ValidatePR() issues = %#v", result.Issues)
 	}
 }
 
-func TestValidatePRBodyRejectsMissingIssue(t *testing.T) {
-	result := ValidatePRBody("feat(github): add cli surface metadata", "No linked issue yet.")
+func TestValidatePRRejectsMissingIssue(t *testing.T) {
+	result := ValidatePR("feat(github): add cli surface metadata", "No linked issue yet.")
 	if result.OK {
-		t.Fatal("ValidatePRBody() OK = true, want false")
+		t.Fatal("ValidatePR() OK = true, want false")
 	}
 	if !containsViolation(result.Violations, "PR body must reference an issue") {
-		t.Fatalf("ValidatePRBody() violations = %v", result.Violations)
+		t.Fatalf("ValidatePR() violations = %v", result.Violations)
 	}
 }
 
-func TestValidatePRBodyRejectsTitleOnlyReference(t *testing.T) {
-	result := ValidatePRBody("feat(github): add cli surface metadata fixes #123", "Body explains work but omits linkage.")
+func TestValidatePRRejectsTitleOnlyReference(t *testing.T) {
+	result := ValidatePR("feat(github): add cli surface metadata fixes #123", "Body explains work but omits linkage.")
 	if result.OK {
-		t.Fatal("ValidatePRBody() OK = true, want false")
+		t.Fatal("ValidatePR() OK = true, want false")
 	}
 	if !containsViolation(result.Violations, "PR body must reference an issue") {
-		t.Fatalf("ValidatePRBody() violations = %v", result.Violations)
+		t.Fatalf("ValidatePR() violations = %v", result.Violations)
 	}
 }
 
-func TestValidatePRBodyAllowsNonClosingReferenceForStackedIncrement(t *testing.T) {
-	result := ValidatePRBody("test(github): add guard coverage", "Part of a stacked implementation.\n\nRefs #456\n")
+func TestValidatePRAllowsNonClosingReferenceForStackedIncrement(t *testing.T) {
+	result := ValidatePR("test(github): add guard coverage", "Part of a stacked implementation.\n\nRefs #456\n")
 	if !result.OK {
-		t.Fatalf("ValidatePRBody() OK = false, violations = %v", result.Violations)
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
 	}
 	if len(result.Issues) != 1 || result.Issues[0].Number != 456 || result.Issues[0].Closing {
-		t.Fatalf("ValidatePRBody() issues = %#v", result.Issues)
+		t.Fatalf("ValidatePR() issues = %#v", result.Issues)
 	}
 }
 
-func TestValidatePRBodyRejectsAmbiguousIssueRelationship(t *testing.T) {
+func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 	tests := []string{
 		"Related to #123\n",
 		"Issue #123\n",
 		"References #123\n",
 	}
 	for _, body := range tests {
-		result := ValidatePRBody("feat(github): add cli surface metadata", body)
+		result := ValidatePR("feat(github): add cli surface metadata", body)
 		if result.OK {
-			t.Fatalf("ValidatePRBody(%q) OK = true, want false", body)
+			t.Fatalf("ValidatePR(%q) OK = true, want false", body)
 		}
 		if !containsViolation(result.Violations, "PR body must reference an issue") {
-			t.Fatalf("ValidatePRBody(%q) violations = %v", body, result.Violations)
+			t.Fatalf("ValidatePR(%q) violations = %v", body, result.Violations)
 		}
 	}
 }
 
-func TestValidatePRBodyRejectsNonConventionalTitle(t *testing.T) {
-	result := ValidatePRBody("add cli surface metadata", "Closes #123\n")
+func TestValidatePRRejectsNonConventionalTitle(t *testing.T) {
+	result := ValidatePR("add cli surface metadata", "Closes #123\n")
 	if result.OK {
-		t.Fatal("ValidatePRBody() OK = true, want false")
+		t.Fatal("ValidatePR() OK = true, want false")
 	}
 	if !containsViolation(result.Violations, "PR title must use Conventional Commits") {
-		t.Fatalf("ValidatePRBody() violations = %v", result.Violations)
+		t.Fatalf("ValidatePR() violations = %v", result.Violations)
 	}
 }
 
-func TestValidatePRBodyRejectsTitleAcceptedByOldLooseScopePattern(t *testing.T) {
-	result := ValidatePRBody("feat(/github): add cli surface metadata", "Closes #123\n")
+func TestValidatePRRejectsTitleAcceptedByOldLooseScopePattern(t *testing.T) {
+	result := ValidatePR("feat(/github): add cli surface metadata", "Closes #123\n")
 	if result.OK {
-		t.Fatal("ValidatePRBody() OK = true, want false")
+		t.Fatal("ValidatePR() OK = true, want false")
 	}
 	if !containsViolation(result.Violations, "PR title must use Conventional Commits") {
-		t.Fatalf("ValidatePRBody() violations = %v", result.Violations)
+		t.Fatalf("ValidatePR() violations = %v", result.Violations)
 	}
 }
 

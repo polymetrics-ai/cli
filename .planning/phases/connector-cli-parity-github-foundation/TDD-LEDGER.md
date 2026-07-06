@@ -11,7 +11,7 @@ go test ./internal/coordination/issueguard
 Expected failure:
 
 ```text
-undefined: ValidatePRBody
+undefined: ValidatePR
 ```
 
 Reason: tests were added before the issue-first PR guard implementation.

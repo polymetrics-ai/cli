@@ -23,7 +23,9 @@ outputs:
     - ownership rules
 permissions:
   allowed_paths: [docs/research/**, .agents/**, .planning/**]
-  denied_paths: [internal/connectors/defs/** unless implementation phase assigns connector]
+  conditional_denied_paths:
+    - path: internal/connectors/defs/**
+      unless: implementation phase assigns connector
 workflow:
   - extract_provider_pilot_learnings
   - remove_provider_specific_assumptions

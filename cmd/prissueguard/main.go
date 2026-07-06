@@ -26,7 +26,7 @@ func main() {
 		body = string(data)
 	}
 
-	result := issueguard.ValidatePRBody(title, body)
+	result := issueguard.ValidatePR(title, body)
 	if result.OK {
 		fmt.Printf("issueguard: ok (%d linked issue%s)\n", len(result.Issues), plural(len(result.Issues)))
 		return

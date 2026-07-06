@@ -23,7 +23,9 @@ outputs:
     - migration notes
 permissions:
   allowed_paths: [cmd/connectorgen/**, internal/connectors/**, docs/research/**, .planning/**]
-  denied_paths: [internal/connectors/defs/** unless issue assigns concrete connector]
+  conditional_denied_paths:
+    - path: internal/connectors/defs/**
+      unless: issue assigns concrete connector
 workflow:
   - inventory_existing_schema
   - write_seeded_invalid_tests

@@ -9,7 +9,7 @@
 - [x] Isolate agent-neutral contracts under `.agents/agentic-delivery/`.
 - [x] Group YAML agents by functional area and type under `.agents/`.
 - [x] Convert pre-existing `.codex/agents` TOML specs into `.agents/connector-migration/`.
-- [ ] Run targeted and relevant broad verification.
+- [x] Run targeted and relevant broad verification.
 
 ## Implementation sequence
 
