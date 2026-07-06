@@ -91,7 +91,7 @@ for the blocker window and record it.
 Record all automated review routes in the PR body, parent issue state ledger, or phase artifact:
 
 - primary route: `coderabbit_auto`, `coderabbit_auto_incremental`,
-  `coderabbit_manual_fallback`, `copilot_backup`, or `human`
+  `coderabbit_manual_fallback`, `copilot_backup`, `human`, or `blocked`
 - primary route status
 - fallback route, if any
 - fallback status

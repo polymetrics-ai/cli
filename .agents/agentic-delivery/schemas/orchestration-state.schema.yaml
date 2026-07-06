@@ -55,6 +55,7 @@ field_contract:
       - reviewed_range
       - coverage_route
       - fallback_route
+      - disposition_summary
       - disposition_url
     primary_route_values: [coderabbit_auto, coderabbit_auto_incremental, coderabbit_manual_fallback, copilot_backup, human, blocked]
     fallback_route_values: [copilot_backup, human, none]
