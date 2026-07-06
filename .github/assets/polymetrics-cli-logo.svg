@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 324 96" role="img" aria-labelledby="title desc">
+  <title id="title">Polymetrics CLI logo</title>
+  <desc id="desc">A PM command line mark where the M transitions into an underscore cursor.</desc>
+  <style>
+    .label {
+      fill: #092b20;
+      font: 500 22px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .sub {
+      fill: #789285;
+      font: 500 10px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: 3.2px;
+    }
+
+    .letter {
+      fill: #fff;
+      font: 700 27px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: -1.4px;
+      text-rendering: geometricPrecision;
+    }
+
+    .m {
+      opacity: 0;
+      animation: pm-m 1.08s ease-in-out infinite;
+    }
+
+    .cursor {
+      opacity: 1;
+      animation: pm-cursor 1.08s ease-in-out infinite;
+    }
+
+    @keyframes pm-m {
+      0%, 42% { opacity: 1; transform: translateY(0); }
+      48%, 90% { opacity: 0; transform: translateY(-1.4px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pm-cursor {
+      0%, 42% { opacity: 0; transform: translateY(1.4px); }
+      48%, 90% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(1.4px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .m,
+      .cursor {
+        animation: none;
+      }
+
+      .m {
+        opacity: 1;
+      }
+
+      .cursor {
+        opacity: 0;
+      }
+    }
+  </style>
+  <rect x="1" y="1" width="322" height="94" fill="#f4faf6" rx="0"/>
+  <rect x="1" y="1" width="322" height="94" fill="none" stroke="#c7ddcf"/>
+  <rect x="31" y="28" width="40" height="40" fill="#065f46"/>
+  <text class="letter" x="39" y="55">P</text>
+  <text class="letter m" x="55" y="55">M</text>
+  <text class="letter cursor" x="55" y="55">_</text>
+  <text class="label" x="91" y="48">Polymetrics CLI</text>
+  <text class="sub" x="92" y="65">COMMAND LINE INTERFACE</text>
+</svg>

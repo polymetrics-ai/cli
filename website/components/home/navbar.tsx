@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Bot,
   Cable,
@@ -9,6 +10,7 @@ import {
   Database,
   ExternalLink,
   Menu,
+  Newspaper,
   Repeat2,
   Rocket,
   X,
@@ -33,20 +35,18 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
+import { PmLogoMark } from '@/components/brand/pm-logo-mark';
 import { CONNECTOR_CATALOG_COUNT } from '@/lib/connectors.generated';
 
 /* ─── Product dropdown items ──────────────────────────────────────────── */
 const PRODUCT_ITEMS = [
-  { label: 'Connector Catalog', desc: `${CONNECTOR_CATALOG_COUNT} connector pages`, href: '/docs/connectors', icon: Cable },
-  { label: 'SQL Queries',       desc: 'Local SQL over warehouse data', href: '/docs/query', icon: Database },
-  { label: 'Reverse ETL',       desc: 'Plan, preview, approve, then write back', href: '/docs/reverse-etl', icon: Repeat2 },
-  { label: 'Agent Mode',        desc: 'JSON contracts and approval gates', href: '/docs/agent-guide', icon: Bot },
-  { label: 'Quickstart',        desc: 'Install pm and run the loop in 60 seconds', href: '/docs/quickstart', icon: Rocket },
+  { label: 'Connector Catalog', desc: `${CONNECTOR_CATALOG_COUNT} connector pages`, href: '/docs/connectors', icon: Cable, shortcutKey: '1' },
+  { label: 'SQL Queries',       desc: 'Local SQL over warehouse data', href: '/docs/query', icon: Database, shortcutKey: '2' },
+  { label: 'Reverse ETL',       desc: 'Plan, preview, approve, then write back', href: '/docs/reverse-etl', icon: Repeat2, shortcutKey: '3' },
+  { label: 'Agent Mode',        desc: 'JSON contracts and approval gates', href: '/docs/agent-guide', icon: Bot, shortcutKey: '4' },
+  { label: 'Quickstart',        desc: 'Install pm and run the loop in 60 seconds', href: '/docs/quickstart', icon: Rocket, shortcutKey: '5' },
+  { label: 'Blog',              desc: 'Engineering notes on the data loop', href: '/blog', icon: Newspaper, shortcutKey: '6' },
 ];
-
-/* ─── Exact nav-trigger typography (from Langfuse NavLinks.tsx) ─────── */
-const navTriggerCls =
-  'flex items-center gap-1 py-1.5 whitespace-nowrap font-sans text-[13px] font-[430] leading-[1.2] tracking-[-0.26px] text-text-tertiary hover:text-text-secondary transition-colors focus:outline-none';
 
 /* ─── Hover corner brackets (from Langfuse corner-box.tsx) ──────────── */
 function HoverCorners() {
@@ -62,21 +62,76 @@ function Kbd({ k, variant }: { k: string; variant: 'primary' | 'secondary' }) {
   return (
     <kbd
       aria-hidden
-      className={`flex justify-center items-center not-italic shrink-0 w-[20px] h-[20px] font-mono text-[11px] font-[450] leading-none tracking-[-0.06px] ${cls}`}
+      className={`flex justify-center items-center not-italic shrink-0 w-[20px] h-[20px] font-mono text-[11px] font-[450] leading-none tracking-normal ${cls}`}
     >
       {k.toUpperCase()}
     </kbd>
   );
 }
 
+function shouldIgnoreShortcutTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return false;
+  const tag = target.tagName;
+  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable;
+}
+
+function useShortcutAction(kbdKey: string | undefined, action: () => void) {
+  const actionRef = useRef(action);
+
+  useEffect(() => {
+    actionRef.current = action;
+  }, [action]);
+
+  useEffect(() => {
+    if (!kbdKey) return;
+    const key = kbdKey.toLowerCase();
+
+    function handler(e: KeyboardEvent) {
+      if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key.toLowerCase() !== key) return;
+      if (shouldIgnoreShortcutTarget(e.target)) return;
+      e.preventDefault();
+      actionRef.current();
+    }
+
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [kbdKey]);
+}
+
+function useKeyboardShortcut<T extends HTMLElement>(kbdKey?: string) {
+  const ref = useRef<T>(null);
+
+  useEffect(() => {
+    if (!kbdKey) return;
+    const key = kbdKey.toLowerCase();
+
+    function handler(e: KeyboardEvent) {
+      if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key.toLowerCase() !== key) return;
+      if (shouldIgnoreShortcutTarget(e.target)) return;
+      e.preventDefault();
+      ref.current?.click();
+    }
+
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [kbdKey]);
+
+  return ref;
+}
+
 /* ─── CTA button — exact Langfuse button.tsx structure ───────────────── */
 const btnBase =
-  'inline-flex w-full min-w-0 max-w-full items-center justify-start no-underline gap-[6px] overflow-hidden py-0.5 shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] rounded-[2px] border transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer font-sans text-[12px] font-[450] leading-[150%] tracking-[-0.06px] whitespace-nowrap';
+  'inline-flex w-full min-w-0 max-w-full items-center justify-start no-underline gap-[6px] overflow-hidden py-0.5 shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] rounded-[2px] border transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer font-square text-[12px] font-semibold leading-[150%] tracking-normal whitespace-nowrap';
 
 const btnVariants = {
   primary:   'border-emerald-900 bg-emerald-800 text-white h-[26px] pl-[8px] pr-[3px]',
   secondary: 'border-line-structure bg-surface-bg text-text-secondary group-hover:border-line-cta h-[26px] pl-[8px] pr-[3px]',
 };
+
+const navChipCls =
+  'inline-flex h-[26px] items-center justify-center gap-[6px] overflow-hidden border border-emerald-900 bg-emerald-800 py-0.5 pl-[8px] pr-[3px] font-square text-[12px] font-semibold leading-[150%] tracking-normal text-white shadow-sm [box-shadow:0_4px_8px_0_rgba(0,0,0,0.05),0_4px_4px_0_rgba(0,0,0,0.03)] transition-opacity group-hover:opacity-90 whitespace-nowrap';
 
 function NavBtn({
   href,
@@ -91,25 +146,7 @@ function NavBtn({
   children: React.ReactNode;
   external?: boolean;
 }) {
-  const btnRef = useRef<HTMLAnchorElement>(null);
-
-  /* keyboard shortcut — presses the button when user types the key */
-  useEffect(() => {
-    if (!kbdKey) return;
-    const key = kbdKey.toLowerCase();
-    function handler(e: KeyboardEvent) {
-      if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
-      if (e.key.toLowerCase() !== key) return;
-      const active = document.activeElement;
-      const tag = active?.tagName ?? '';
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-      if ((active as HTMLElement)?.isContentEditable) return;
-      e.preventDefault();
-      btnRef.current?.click();
-    }
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [kbdKey]);
+  const btnRef = useKeyboardShortcut<HTMLAnchorElement>(kbdKey);
 
   const innerContent = (
     <>
@@ -137,19 +174,9 @@ function NavBtn({
   );
 }
 
-/* ─── Logo mark — terminal CLI: PM_ (blinking cursor) on emerald square ── */
-function PmLogoMark() {
-  return (
-    <span className="flex items-center justify-center h-[26px] min-w-[26px] px-1 bg-emerald-800 select-none">
-      <span className="font-mono font-bold text-[13px] leading-none text-white tracking-tight">PM</span>
-      <span aria-hidden className="font-mono font-bold text-[13px] leading-none text-white cursor-blink">_</span>
-    </span>
-  );
-}
-
 /* ─── Product dropdown panel item ────────────────────────────────────── */
-function DropdownItem({ href, icon: Icon, label, desc }: {
-  href: string; icon: LucideIcon; label: string; desc: string;
+function DropdownItem({ href, icon: Icon, label, desc, shortcutKey }: {
+  href: string; icon: LucideIcon; label: string; desc: string; shortcutKey: string;
 }) {
   return (
     <DropdownMenuItem
@@ -158,31 +185,73 @@ function DropdownItem({ href, icon: Icon, label, desc }: {
     >
       <Link
         href={href}
-        className="group/link relative flex items-start gap-3 px-2.5 py-2 no-underline transition-colors hover:bg-surface-bg"
+        className="group/link relative grid grid-cols-[2rem_minmax(0,1fr)_1.25rem] items-start gap-3 px-2.5 py-2 no-underline transition-colors hover:bg-surface-bg"
       >
         <HoverCorners />
         <span className="relative z-[1] mt-0.5 flex size-8 shrink-0 items-center justify-center border border-line-structure bg-surface-bg text-line-cta transition-colors group-hover/link:border-line-cta">
           <Icon className="size-4" aria-hidden="true" />
         </span>
         <div className="relative z-[1] min-w-0">
-          <div className="font-sans text-[13px] font-medium leading-[1.2] text-text-secondary transition-colors group-hover/link:text-text-primary">
+          <div className="font-square text-[13px] font-semibold leading-[1.2] text-text-secondary transition-colors group-hover/link:text-text-primary">
             {label}
           </div>
           <div className="mt-1 text-[12px] leading-snug text-text-tertiary">{desc}</div>
         </div>
+        <Kbd k={shortcutKey} variant="secondary" />
       </Link>
     </DropdownMenuItem>
   );
 }
 
 /* ─── Product menu — shadcn primitive, Boxy surface ───────────────────── */
-function ProductDropdown() {
+function ProductDropdown({ kbdKey }: { kbdKey?: string }) {
+  const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
+
+  useShortcutAction(kbdKey, () => {
+    setOpen(true);
+    window.requestAnimationFrame(() => triggerRef.current?.focus());
+  });
+
+  useEffect(() => {
+    if (!open) return;
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.repeat || event.metaKey || event.ctrlKey || event.altKey) return;
+      if (shouldIgnoreShortcutTarget(event.target)) return;
+
+      const key = event.key.toLowerCase();
+      const item = PRODUCT_ITEMS.find((candidate) => candidate.shortcutKey.toLowerCase() === key);
+      const targetHref = item?.href ?? (key === 'd' ? '/docs' : '');
+      if (!targetHref) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      setOpen(false);
+      router.push(targetHref);
+    }
+
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [open, router]);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <button type="button" className={`${navTriggerCls} group`} aria-label="Open product navigation">
-          Product
-          <ChevronDown className="size-3.5 opacity-60 transition-transform duration-150 ease-in-out group-data-[state=open]:rotate-180" />
+        <button
+          ref={triggerRef}
+          type="button"
+          className="button-wrapper relative flex max-h-[34px] cursor-pointer items-center p-1 group focus:outline-none"
+          aria-label="Open product navigation"
+          aria-expanded={open}
+        >
+          <HoverCorners />
+          <span className={navChipCls}>
+            Product
+            {kbdKey && <Kbd k={kbdKey} variant="primary" />}
+            <ChevronDown className={`size-3.5 opacity-60 transition-transform duration-150 ease-in-out ${open ? 'rotate-180' : ''}`} />
+          </span>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -202,9 +271,10 @@ function ProductDropdown() {
         <DropdownMenuItem asChild className="cursor-pointer p-0 focus:bg-surface-bg">
           <Link
             href="/docs"
-            className="flex items-center justify-between px-2.5 py-2 font-mono text-[11px] uppercase tracking-wider text-text-secondary hover:text-text-primary"
+            className="flex items-center justify-between px-2.5 py-2 font-square text-[11px] font-semibold uppercase tracking-normal text-text-secondary hover:text-text-primary"
           >
             Browse all documentation
+            <Kbd k="D" variant="secondary" />
             <ExternalLink className="size-3.5" aria-hidden="true" />
           </Link>
         </DropdownMenuItem>
@@ -214,11 +284,31 @@ function ProductDropdown() {
 }
 
 /* ─── Plain nav link ──────────────────────────────────────────────────── */
-function NavLink({ href, children, external }: { href: string; children: React.ReactNode; external?: boolean }) {
-  const cls = `${navTriggerCls} px-0`;
+function NavLink({
+  href,
+  children,
+  external,
+  kbdKey,
+}: {
+  href: string;
+  children: React.ReactNode;
+  external?: boolean;
+  kbdKey?: string;
+}) {
+  const linkRef = useKeyboardShortcut<HTMLAnchorElement>(kbdKey);
+  const cls = 'button-wrapper relative flex max-h-[34px] cursor-pointer items-center p-1 group no-underline';
+  const content = (
+    <>
+      <HoverCorners />
+      <span className={navChipCls}>
+        {children}
+        {kbdKey && <Kbd k={kbdKey} variant="primary" />}
+      </span>
+    </>
+  );
   return external
-    ? <a href={href} target="_blank" rel="noreferrer" className={cls}>{children}</a>
-    : <Link href={href} className={cls}>{children}</Link>;
+    ? <a ref={linkRef} href={href} target="_blank" rel="noreferrer" className={cls}>{content}</a>
+    : <Link ref={linkRef} href={href} className={cls}>{content}</Link>;
 }
 
 /* ─── Mobile menu ─────────────────────────────────────────────────────── */
@@ -260,7 +350,7 @@ function MobileMenu({ open, onOpenChange }: { open: boolean; onOpenChange: (open
           <SheetClose key={item.href} asChild>
             <Link
               href={item.href}
-              className="flex items-start gap-3 border border-transparent px-2 py-2.5 font-sans text-[14px] font-medium text-text-secondary transition-colors hover:border-line-cta hover:bg-surface-1 hover:text-text-primary"
+              className="flex items-start gap-3 border border-transparent px-2 py-2.5 font-square text-[14px] font-semibold text-text-secondary transition-colors hover:border-line-cta hover:bg-surface-1 hover:text-text-primary"
             >
               <span className="flex size-8 shrink-0 items-center justify-center border border-line-structure bg-surface-1 text-line-cta">
                 <item.icon className="size-4" aria-hidden="true" />
@@ -274,18 +364,21 @@ function MobileMenu({ open, onOpenChange }: { open: boolean; onOpenChange: (open
         ))}
         <div className="mt-3 pt-3 border-t border-line-structure flex flex-col gap-0.5">
           <SheetClose asChild>
-            <Link href="/docs" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Docs</Link>
+            <Link href="/docs" className="py-2 font-square text-[14px] font-semibold text-text-secondary hover:text-text-primary transition-colors">Docs</Link>
           </SheetClose>
           <SheetClose asChild>
-            <Link href="/changelog" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Changelog</Link>
+            <Link href="/blog" className="py-2 font-square text-[14px] font-semibold text-text-secondary hover:text-text-primary transition-colors">Blog</Link>
           </SheetClose>
-          <a href="https://github.com/polymetrics-ai/cli" target="_blank" rel="noreferrer" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">GitHub</a>
+          <SheetClose asChild>
+            <Link href="/changelog" className="py-2 font-square text-[14px] font-semibold text-text-secondary hover:text-text-primary transition-colors">Changelog</Link>
+          </SheetClose>
+          <a href="https://github.com/polymetrics-ai/cli" target="_blank" rel="noreferrer" className="py-2 font-square text-[14px] font-semibold text-text-secondary hover:text-text-primary transition-colors">GitHub</a>
         </div>
         <div className="mt-4 flex flex-col gap-2">
           <SheetClose asChild>
             <Link
               href="/docs"
-              className="flex items-center justify-center border border-line-cta bg-line-cta px-4 py-2.5 font-sans text-[13px] font-medium text-surface-bg"
+              className="flex items-center justify-center border border-line-cta bg-line-cta px-4 py-2.5 font-square text-[13px] font-semibold text-surface-bg"
             >
               Get Started
             </Link>
@@ -321,7 +414,7 @@ export function SiteNavbar() {
               className="flex items-center gap-2 group/logo shrink-0"
               aria-label="PM homepage"
             >
-              <PmLogoMark />
+              <PmLogoMark decorative className="h-[26px] w-[26px] shrink-0 select-none" />
               <span className="navbar-by-tag font-square text-[11px] font-light uppercase tracking-[0.14em] leading-none text-text-tertiary/70 whitespace-nowrap hover:text-text-tertiary transition-colors">
                 command line interface
               </span>
@@ -331,15 +424,15 @@ export function SiteNavbar() {
 
         {/* ── CENTER: navigation links ── */}
         <div className={`${outerPanel} navbar-desktop-nav flex-1 px-0`}>
-          <div className="grid flex-1 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-2.5 rounded-none bg-surface-1">
-            <span aria-hidden="true" />
-            <div className="flex items-center justify-center gap-4">
-              <ProductDropdown />
-              <NavLink href="/docs">Docs</NavLink>
-              <NavLink href="/changelog">Changelog</NavLink>
-              <NavLink href="https://github.com/polymetrics-ai/cli" external>GitHub</NavLink>
+          <div className="flex flex-1 min-w-0 items-center justify-center gap-2 px-2 rounded-none bg-surface-1">
+            <div className="flex min-w-0 shrink-0 items-center justify-center gap-0">
+              <ProductDropdown kbdKey="P" />
+              <NavLink href="/docs" kbdKey="D">Docs</NavLink>
+              <NavLink href="/blog" kbdKey="B">Blog</NavLink>
+              <NavLink href="/changelog" kbdKey="C">Changelog</NavLink>
+              <NavLink href="https://github.com/polymetrics-ai/cli" kbdKey="H" external>GitHub</NavLink>
             </div>
-            <div className="navbar-desktop-search min-w-0 justify-self-end">
+            <div className="navbar-desktop-search min-w-0 shrink-0">
               <DocsSearch variant="navbar" />
             </div>
           </div>
