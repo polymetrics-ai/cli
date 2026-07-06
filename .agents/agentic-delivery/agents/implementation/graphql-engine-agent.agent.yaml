@@ -26,9 +26,11 @@ permissions:
   allowed_paths: [internal/connectors/engine/**, internal/connectors/connsdk/**, docs/**, .planning/**]
 workflow:
   - load_gsd_programming_loop
+  - create_or_update_gsd_plan
   - add_fake_graphql_server_tests
   - implement_fixed_document_body_builder
   - keep_arbitrary_query_text_blocked
+  - commit_and_push_green_slice_when_policy_allows
 guardrails:
   blocking_human_gates: [arbitrary GraphQL escape hatch, live mutations, dependency changes]
 verification:

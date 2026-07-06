@@ -43,6 +43,10 @@ PR body must include one of:
 Before merge:
 - confirm `gsd-programming-loop` was loaded and followed for implementation or behavior-changing
   work, or record the manual-GSD fallback when local GSD scripts are unavailable
+- confirm the GSD plan, TDD ledger, and verification checklist were created or updated before
+  production edits
+- commit and push coherent green slices to the active issue/PR branch when repo policy permits;
+  never push to `main`, and record coordinator handoff when direct push is not allowed
 - request CodeRabbit review after implementation
 - reply to every actionable CodeRabbit item with accepted, accepted_with_modification, declined,
   deferred, or needs_human

@@ -9,6 +9,7 @@
     "CodeRabbit follow-up review now waits for automatic incremental review when active and uses manual review only for new unreviewed commits when automatic review is paused, disabled, skipped, rate-limit retry is due, or auto-paused.",
     "Root AGENTS.md and CLAUDE.md now point agents at the same issue-first and CodeRabbit review rules.",
     "gsd-programming-loop is mandatory for implementation and behavior-changing agent work, with manual-GSD fallback recording only when local GSD scripts are unavailable.",
+    "Implementation agents must plan with GSD before production edits and commit/push coherent green slices to the active branch when repo policy permits.",
     "Parent issue and stacked sub-PR planning is now part of the workflow for large tasks.",
     "Live issue #44 now has issues #34-#42 attached as sub-issues.",
     "Targeted checks, YAML parsing, secret-looking literal scan, git diff --check, and make verify passed."

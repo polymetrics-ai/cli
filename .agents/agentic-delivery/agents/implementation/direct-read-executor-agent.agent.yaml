@@ -29,9 +29,11 @@ permissions:
     - unrestricted SQL write
 workflow:
   - load_gsd_programming_loop
+  - create_or_update_gsd_plan
   - add_rejection_tests_for_full_urls_and_mutations
   - add_httptest_read_success_case
   - implement_executor
+  - commit_and_push_green_slice_when_policy_allows
 guardrails:
   blocking_human_gates: [mutation execution, raw arbitrary API, auth changes]
 verification:

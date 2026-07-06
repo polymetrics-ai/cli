@@ -15,6 +15,7 @@ Adds the issue-first agentic delivery foundation for connector CLI parity:
 - root `AGENTS.md` plus Claude Code `CLAUDE.md` guidance for the same issue-first and CodeRabbit
   follow-up review rules
 - mandatory `gsd-programming-loop` requirement for implementation and behavior-changing agents
+- GSD planning plus regular green-slice commit/push checkpoints for implementation agents
 
 Closes #43
 

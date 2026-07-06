@@ -33,6 +33,8 @@ specific agent vendor.
   and CodeRabbit follow-up review rules.
 - Make `gsd-programming-loop` a mandatory skill for implementation and behavior-changing agent
   work, with a recorded manual-GSD fallback only when local GSD scripts are unavailable.
+- Require implementation agents to plan with GSD before production edits and commit/push coherent
+  green slices to the active branch when repo policy permits.
 
 ## Non-goals
 
@@ -58,6 +60,8 @@ specific agent vendor.
 - Root `AGENTS.md` and `CLAUDE.md` point agents at the shared issue-first and CodeRabbit review
   contracts.
 - Implementation and behavior-changing agents require `gsd-programming-loop` before coding.
+- Implementation agents create or update GSD plans before production edits and record commit/push
+  checkpoints for green slices.
 - `make verify` passes.
 
 ## TDD plan

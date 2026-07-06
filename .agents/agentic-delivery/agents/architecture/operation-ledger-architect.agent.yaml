@@ -29,10 +29,12 @@ permissions:
       unless: issue assigns concrete connector
 workflow:
   - load_gsd_programming_loop
+  - create_or_update_gsd_plan
   - inventory_existing_schema
   - write_seeded_invalid_tests
   - implement_validator_slice
   - document_migration_path
+  - commit_and_push_green_slice_when_policy_allows
 guardrails:
   blocking_human_gates: [runtime dispatch, raw API execution, dependency changes]
   output: [metadata does not grant execution permission]

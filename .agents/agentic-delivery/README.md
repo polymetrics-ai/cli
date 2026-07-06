@@ -43,6 +43,8 @@ same schema and issue-to-PR contract.
 - Guardrails are explicit hard stops, not prose suggestions.
 - Production behavior changes require `gsd-programming-loop`; if local GSD scripts are unavailable,
   agents must record a manual-GSD fallback and still provide test-first evidence.
+- Implementation agents must plan before production edits, keep GSD/TDD/verification artifacts
+  current, and commit/push coherent green slices to the active branch when repo policy permits.
 - CodeRabbit review is a post-implementation gate. Every actionable review item must receive a
   reasoned disposition before it is resolved. Follow-up fix commits should rely on automatic
   incremental review when active; manual `@coderabbitai review` is only a fallback for paused,

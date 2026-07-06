@@ -33,6 +33,8 @@
   same issue-first and CodeRabbit review rules without duplicating the full workflow.
 - Made `gsd-programming-loop` mandatory for implementation and behavior-changing agent work, with a
   required manual-GSD fallback note only when local GSD scripts are unavailable.
+- Required implementation agents to plan with GSD before production edits and commit/push coherent
+  green slices to the active branch when repo policy permits.
 - Updated GitHub CLI feature parity planning so issue #44 is the parent roadmap and issues #34-#42
   are the sub-issue implementation slices.
 - Updated live issue #44 and attached issues #34-#42 as GitHub sub-issues through the REST API.

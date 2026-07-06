@@ -51,6 +51,8 @@ issueguard: blocked
   `AGENTS.md` for Claude Code.
 - `gsd-programming-loop` is now a required local skill for implementation and behavior-changing
   agents, with manual-GSD fallback recording only when local GSD scripts are unavailable.
+- Implementation agents now require a GSD plan before production edits and commit/push checkpoint
+  recording for green slices.
 - Sub-PR merge without human approval applies only to parent-branch integration after automated
   gates pass; parent PR merge to `main` remains human-approved.
 - Live issue #44 was updated and GitHub reports #34-#42 as sub-issues.

@@ -31,9 +31,11 @@ permissions:
     - secret value read/print
 workflow:
   - load_gsd_programming_loop
+  - create_or_update_gsd_plan
   - add_redaction_tests
   - add_policy_validation_tests
   - implement_schema_only_first
+  - commit_and_push_green_slice_when_policy_allows
 guardrails:
   blocking_human_gates: [reading secrets, live secret writes, auth scope changes, destructive actions]
 verification:

@@ -26,9 +26,11 @@ permissions:
   allowed_paths: [cmd/**, internal/**, docs/**, website/**, .planning/**]
 workflow:
   - load_gsd_programming_loop
+  - create_or_update_gsd_plan
   - add_golden_red_test
   - implement_renderer
   - check_mobile_or_docs_rendering_if_website_changes
+  - commit_and_push_green_slice_when_policy_allows
 guardrails:
   blocking_human_gates: [new frontend dependencies, generated website rewrites]
 verification:

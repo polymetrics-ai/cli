@@ -48,11 +48,13 @@ workflow:
   - read_required_context
   - load_required_skills
   - load_gsd_programming_loop
+  - create_or_update_gsd_plan
   - write_red_test_for_behavior_change
   - implement_minimal_slice
   - run_targeted_tests
   - refactor
   - run_issue_verification
+  - commit_and_push_green_slice_when_policy_allows
   - prepare_pr_with_issue_link
   - request_coderabbit_full_review
   - disposition_coderabbit_findings
@@ -74,6 +76,8 @@ verification:
   required:
     - targeted tests for changed packages
     - broader command from issue
+    - GSD plan, TDD ledger, and verification checklist updated
+    - green-slice commits pushed or coordinator-owned push handoff recorded
     - git diff --check
     - CodeRabbit automatic review observed, manual review requested only when needed, or blocker recorded
 adapters:

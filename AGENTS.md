@@ -36,6 +36,12 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
   coding, follow its TDD/programming lifecycle, and record GSD/TDD evidence in the phase or PR
   artifacts. If the local GSD scripts are unavailable, run the manual GSD loop and record that
   fallback explicitly; do not skip test-first implementation.
+- Plan before coding. Create or update the issue's GSD plan, TDD ledger, and verification checklist
+  before production edits, then keep them current as the implementation changes.
+- Commit and push regularly to the active issue/PR branch after each coherent green slice: plan
+  checkpoint, red-test checkpoint when useful, implementation checkpoint, and review-fix checkpoint.
+  Never push to `main`; if the current program says a coordinator owns pushes, commit locally and
+  hand off the branch instead of pushing.
 - PR bodies must use `Closes #N` for completed default-branch work or `Refs #N` for stacked or
   incremental work. PR titles must follow Conventional Commits.
 - After implementation and local verification, follow
