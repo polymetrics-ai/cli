@@ -1,0 +1,35 @@
+apiVersion: polymetrics.ai/agent/v1
+kind: Agent
+metadata:
+  id: help-renderer-agent
+  name: Help Renderer Agent
+  version: 1
+  summary: Builds generic connector help rendering from CLI surface metadata.
+  tags: [help, docs, cli, ux]
+role: implementation
+objective: Render connector command help from metadata with golden tests and accessible docs output.
+skills:
+  required_groups: [go_tdd, docs_and_ux]
+  preferred_local_skills: [go-engineering, web-design-guidelines, frontend-design]
+inputs:
+  required:
+    - issue URL
+    - cli_surface schema or draft
+    - expected help-preview artifact
+outputs:
+  required:
+    - renderer code
+    - golden tests
+    - updated help preview
+permissions:
+  allowed_paths: [cmd/**, internal/**, docs/**, website/**, .planning/**]
+workflow:
+  - add_golden_red_test
+  - implement_renderer
+  - check_mobile_or_docs_rendering_if_website_changes
+guardrails:
+  blocking_human_gates: [new frontend dependencies, generated website rewrites]
+verification:
+  required:
+    - go test targeted renderer package
+    - website checks if website files change

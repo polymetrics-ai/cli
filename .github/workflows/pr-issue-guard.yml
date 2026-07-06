@@ -1,0 +1,31 @@
+name: PR Issue Guard
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  require-linked-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.11'
+          cache: false
+
+      - name: Require issue-first PR body
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          body_file="$RUNNER_TEMP/pr-body.md"
+          printf '%s' "$PR_BODY" > "$body_file"
+          go run ./cmd/prissueguard --title "$PR_TITLE" --body-file "$body_file"

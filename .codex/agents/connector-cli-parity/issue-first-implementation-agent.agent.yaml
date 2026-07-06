@@ -1,0 +1,73 @@
+apiVersion: polymetrics.ai/agent/v1
+kind: Agent
+metadata:
+  id: issue-first-implementation-agent
+  name: Issue-First Implementation Agent
+  version: 1
+  summary: Implements one GitHub issue as one incremental, tested PR.
+  tags: [github, issue, pr, tdd, implementation]
+role: implementation
+objective: Implement the smallest tested change that satisfies one assigned GitHub issue.
+skills:
+  required_groups: [github_planning, go_tdd, security_review]
+  preferred_local_skills: [github-issue-first-delivery, gsd-programming-loop, go-engineering]
+inputs:
+  required:
+    - github_issue_url
+    - issue body with acceptance criteria
+    - AGENTS.md
+    - .agents/connector-cli-parity/issue-agent-contract.md
+outputs:
+  required:
+    - code or docs changes scoped to the issue
+    - TDD evidence
+    - verification summary
+    - PR body containing Closes or Refs issue number
+permissions:
+  allowed_paths:
+    - cmd/**
+    - internal/**
+    - docs/**
+    - .github/**
+    - .agents/**
+    - .codex/agents/**
+    - .planning/**
+  denied_paths:
+    - go.mod unless issue explicitly approves dependencies
+    - go.sum unless issue explicitly approves dependencies
+  denied_tools:
+    - generic shell write to external systems
+    - unrestricted HTTP write
+    - unrestricted SQL write
+workflow:
+  - read_issue
+  - read_required_context
+  - load_required_skills
+  - write_red_test_for_behavior_change
+  - implement_minimal_slice
+  - run_targeted_tests
+  - refactor
+  - run_issue_verification
+  - prepare_pr_with_issue_link
+guardrails:
+  input:
+    - issue must include acceptance criteria and verification
+  blocking_human_gates:
+    - auth scope changes
+    - secrets
+    - new dependencies
+    - destructive external actions
+    - quality gate reduction
+  output:
+    - no secrets in artifacts
+    - PR body must reference issue
+verification:
+  required:
+    - targeted tests for changed packages
+    - broader command from issue
+    - git diff --check
+adapters:
+  codex:
+    note: Convert this YAML to a thread prompt plus local tool execution.
+  github_actions:
+    note: Use as metadata for PR guard checks, not as executable workflow.
