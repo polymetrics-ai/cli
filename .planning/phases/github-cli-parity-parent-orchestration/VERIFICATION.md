@@ -8,10 +8,14 @@
 - `go test ./cmd/connectorgen ./internal/connectors/engine`
 - `go run ./cmd/connectorgen validate internal/connectors/defs`
 - `pnpm --filter cli-polymetrics-ai test`
+- `pnpm --filter cli-polymetrics-ai build`
+- `go vet ./...`
+- `go test ./...`
+- `go build ./cmd/pm`
+- `make verify`
 
 ## Pending
 
-- `pnpm --filter cli-polymetrics-ai build`
 - broader verification required by #44 before parent PR human gate
 
 ## Notes
