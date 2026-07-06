@@ -102,6 +102,29 @@ func TestReadStaticQuery(t *testing.T) {
 	}
 }
 
+func TestReadRequestQueryOverridesStaticQuery(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Query: map[string]QueryParam{"sort": {Template: "asc"}, "state": {Template: "all"}}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Query:  map[string]string{"state": "closed"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if got := gotQuery.Get("state"); got != "closed" {
+		t.Fatalf("state query = %q, want closed", got)
+	}
+	if got := gotQuery.Get("sort"); got != "asc" {
+		t.Fatalf("sort query = %q, want asc", got)
+	}
+}
+
 // --- optional-query dialect (gap-loop item 3, REVIEW-B.md adjudication 2) ---
 
 // TestReadOptionalQueryOmittedWhenConfigAbsent proves an object-form query

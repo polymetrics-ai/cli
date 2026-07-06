@@ -2,10 +2,12 @@
 
 ## Red
 
-- Pending: engine query override test.
-- Pending: command runner stream command test.
-- Pending: command runner blocked command tests.
-- Pending: CLI GitHub command integration tests.
+- `go test ./internal/connectors/engine -run QueryOverride` fails because
+  `connectors.ReadRequest` has no `Query` field.
+- `go test ./internal/connectors/commandrunner` fails because the command runner package/API does
+  not exist and `ReadRequest.Query` is missing.
+- `go test ./internal/cli -run GitHubCommandSurface` fails because `pm github ...` is currently an
+  unknown command.
 
 ## Green
 
