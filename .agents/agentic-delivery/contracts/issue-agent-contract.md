@@ -37,6 +37,9 @@ before implementation.
 7. Start a branch that includes the issue number when practical.
    - If the issue is a sub-issue in a parent roadmap, branch from the parent branch.
    - If the issue is a parent issue, branch from `main` and keep the parent PR human-gated.
+   - If the issue is a sub-issue, confirm the parent PR from the parent branch to the default
+     branch exists before treating the sub-issue as executable. Create a draft parent PR when it is
+     missing and no human gate blocks creation.
 8. For behavior changes, write or update a failing test before production code.
 9. Implement the smallest slice that satisfies the issue.
 10. Run targeted tests, then broader verification from the issue.
@@ -51,12 +54,14 @@ before implementation.
     - Use `Closes #N` only for PRs that target the default branch and complete the issue.
 15. After implementation and local verification, run the CodeRabbit review loop in
     `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`.
-16. Reply to every actionable CodeRabbit item with the disposition template before resolving it.
-17. Ensure accepted fix commits have been reviewed. Prefer CodeRabbit's automatic incremental review
+16. Confirm that CodeRabbit actually produced review records or that the stacked-PR parent-review
+    fallback covers the sub-issue. A skipped-review status on a non-default-base PR is not approval.
+17. Reply to every actionable CodeRabbit item with the disposition template before resolving it.
+18. Ensure accepted fix commits have been reviewed. Prefer CodeRabbit's automatic incremental review
     when active; request manual `@coderabbitai review` only when automatic review is paused,
     disabled, skipped, rate-limit retry is due, or the configured automatic pause threshold was
     reached.
-18. Ping the human coordinator only after no actionable CodeRabbit findings remain.
+19. Ping the human coordinator only after no actionable CodeRabbit findings remain.
 
 ## Hard stops
 
@@ -77,8 +82,9 @@ Stop and ask for human approval before:
 
 Use `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md` when the issue belongs
 to a parent roadmap. A sub-PR may be merged into the parent branch without human approval only after
-all automated checks pass, CodeRabbit comments are resolved, and no human gate is triggered. The
-parent PR into `main` always requires human approval.
+all automated checks pass, CodeRabbit comments are resolved, CodeRabbit coverage exists through the
+sub-PR or main-targeted parent PR, and no human gate is triggered. The parent PR into `main` always
+requires human approval.
 
 ## Output requirements
 

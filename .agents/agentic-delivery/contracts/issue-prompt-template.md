@@ -26,6 +26,9 @@ Primary agent:
 Parent issue:
 - `<parent issue URL or "None">`
 
+Parent PR:
+- `<parent PR URL, "create draft before implementation", or "None">`
+
 Branch policy:
 - parent branch: `<type>/<parent-issue>-<slug>` or `None`
 - PR base: `main` for parent PRs, parent branch for sub-PRs
@@ -54,6 +57,10 @@ Before merge:
 - ensure accepted fix commits are CodeRabbit-reviewed; wait for automatic incremental review when
   active, and use manual `@coderabbitai review` only when automatic review is paused, disabled,
   skipped, rate-limit retry is due, or the automatic pause threshold was reached
+- confirm CodeRabbit actually produced review records; do not count `Review skipped` or
+  `reviews are disabled` status comments as approval
+- for sub-PRs whose base is not `main`, route skipped CodeRabbit review coverage through the parent
+  PR to `main` and record the parent PR review link
 - merge sub-PRs into parent branches only when all automated gates pass and no human gate is
   triggered
 - require human approval before merging parent PRs into `main`

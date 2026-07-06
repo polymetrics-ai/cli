@@ -665,7 +665,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 				})
 			}
 		}
-		if len(endpoints) > 0 {
+		if b.Surface != nil {
 			for _, ep := range cmd.APISurface {
 				state, ok := endpoints[surfaceEndpointKey(ep.Method, ep.Path)]
 				if !ok {

@@ -1,6 +1,6 @@
 # CodeRabbit review best practices
 
-Accessed: 2026-07-06
+Accessed: 2026-07-07
 
 ## Primary sources
 
@@ -15,6 +15,8 @@ Accessed: 2026-07-06
 ## Workflow findings
 
 - Use `@coderabbitai full review` for the first complete pass over a ready PR.
+- CodeRabbit's command reference distinguishes `@coderabbitai review` as an incremental review of
+  new changes and `@coderabbitai full review` as a complete review of all files from scratch.
 - CodeRabbit automatically reviews new PRs by default and updates its review when new commits are
   pushed.
 - CodeRabbit's `reviews.auto_review.auto_incremental_review` setting defaults to enabled. When it
@@ -42,6 +44,16 @@ Accessed: 2026-07-06
 - Treat CodeRabbit's incremental-review note as informational. Update local process state instead
   of replying with another review command unless there are new unreviewed commits and automatic
   review is paused or unavailable.
+- Treat skipped-review status comments as review-routing events, not approval. In PR #48,
+  CodeRabbit reported that auto reviews were disabled on base/target branches other than the
+  default branch, while a manually requested full review still produced an actionable review record.
+  Agents must inspect both the comments and the review records before deciding whether CodeRabbit
+  coverage exists.
+- For stacked sub-PRs against a non-default parent branch, require one of:
+  - CodeRabbit review records on the sub-PR that cover the relevant commits.
+  - CodeRabbit review records on the parent PR to the default branch after the sub-issue commits are
+    integrated into the parent branch.
+  - A recorded blocker approved by the human coordinator.
 
 ## Project policy
 

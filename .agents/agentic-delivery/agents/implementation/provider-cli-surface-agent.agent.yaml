@@ -9,15 +9,16 @@ metadata:
 role: implementation
 objective: Add generic CLI surface metadata and validation for one assigned provider connector.
 skills:
-  required_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
+  required_groups: [github_planning, api_architecture, go_tdd, docs_and_ux, review_disposition]
   required_local_skills: [gsd-programming-loop]
-  preferred_local_skills: [github-issue-first-delivery, go-engineering, web-design-guidelines]
+  preferred_local_skills: [github-issue-first-delivery, go-engineering, gsd-code-review, web-design-guidelines]
 inputs:
   required:
     - provider CLI surface issue
     - connector name
     - cli_surface draft path from the issue
     - parity matrix path from the issue
+    - parent PR URL when the issue is part of a stacked roadmap
 outputs:
   required:
     - validated cli_surface metadata
@@ -33,10 +34,17 @@ workflow:
   - implement_schema_or_metadata_slice
   - run_connectorgen_validation
   - commit_and_push_green_slice_when_policy_allows
+  - request_or_confirm_coderabbit_review
+  - disposition_coderabbit_findings
+  - confirm_review_records_or_parent_pr_fallback
 guardrails:
-  blocking_human_gates: [runtime dispatch, auth changes, secret examples]
+  blocking_human_gates: [runtime dispatch, auth changes, secret examples, missing_parent_pr_for_stacked_work]
+  output:
+    - skipped CodeRabbit status is not review completion
+    - actionable CodeRabbit findings are fixed, deferred, declined, or escalated with reasons
 verification:
   required:
     - go test targeted packages
     - go run ./cmd/connectorgen validate internal/connectors/defs/<connector>
     - secret-looking literal scan
+    - CodeRabbit coverage on the sub-PR or parent PR, or a recorded human-approved blocker

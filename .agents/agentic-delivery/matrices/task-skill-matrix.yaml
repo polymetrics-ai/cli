@@ -7,6 +7,8 @@ default_rules:
   - Plan before production edits and keep the GSD plan, TDD ledger, and verification checklist current.
   - Commit and push coherent green slices to the active issue/PR branch after local green gates.
   - Keep PR scope to one primary issue.
+  - Confirm CodeRabbit review records exist, or record the stacked-parent review fallback, before calling a PR review-complete.
+  - Treat CodeRabbit skipped-review status as informational, not approval.
   - Stop for human gates before auth, secrets, dependencies, destructive actions, deploys, or gate reductions.
 skills:
   github_planning:
@@ -69,6 +71,8 @@ skills:
   review_disposition:
     capabilities:
       - CodeRabbit automatic/manual review mode selection
+      - skipped-review detection
+      - stacked parent PR review routing
       - review comment triage
       - disposition replies
       - follow-up issue routing
@@ -106,7 +110,7 @@ task_types:
     required_skill_groups: [api_architecture, go_tdd, security_review]
     primary_agent: operation-ledger-architect
   cli-surface:
-    required_skill_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
+    required_skill_groups: [github_planning, api_architecture, go_tdd, docs_and_ux, review_disposition]
     primary_agent: provider-cli-surface-agent
   help-renderer:
     required_skill_groups: [go_tdd, docs_and_ux]

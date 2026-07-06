@@ -25,7 +25,10 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 ## Branch and PR policy
 
 - Parent branch starts from `main`.
-- Parent PR targets `main` and contains `Closes #<parent-issue>`.
+- Parent PR targets `main` and is created as a draft when the parent branch is created.
+- Draft parent PRs use `Refs #<parent-issue>` while sub-issues are still landing.
+- Final parent PRs use `Closes #<parent-issue>` only after all acceptance criteria are complete and
+  the PR is ready for human approval.
 - Sub-issue branches start from the parent branch.
 - Sub-PRs target the parent branch and use `Refs #<sub-issue>` and `Refs #<parent-issue>`.
 - Sub-PRs do not use closing keywords because they do not target the default branch.
@@ -41,6 +44,8 @@ true:
 - PR body references the sub-issue and parent issue
 - targeted tests and issue verification pass
 - CodeRabbit review loop is complete and comments are resolved
+- skipped CodeRabbit status on a non-default-base sub-PR is covered by CodeRabbit review on the
+  parent PR to `main`
 - no human gate is triggered
 - no requested-changes review is open
 - the parent branch is current enough that the sub-PR diff is reviewable

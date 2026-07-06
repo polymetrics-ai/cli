@@ -24,6 +24,7 @@ outputs:
     - sub-issue roster
     - milestone mapping
     - branch and PR plan
+    - parent PR URL or explicit parent PR blocker
     - human gate summary
 permissions:
   allowed_paths:
@@ -40,6 +41,8 @@ workflow:
   - define_parent_issue
   - split_into_subissues
   - map_milestones_dependencies_and_branches
+  - create_or_confirm_parent_branch
+  - create_or_confirm_draft_parent_pr_to_main
   - create_or_update_local_issue_bodies
   - create_or_update_live_issues_when_authorized
   - record_project_scope_blockers
@@ -53,10 +56,13 @@ guardrails:
     - dependency additions
     - secrets
   output:
+    - parent PR must exist before sub-issues are treated as executable
     - sub-PR auto-merge policy must exclude human-gated changes
+    - stacked sub-PR review skips must route to parent-PR CodeRabbit review coverage
     - parent PR merge to main must require human approval
 verification:
   required:
     - markdown review
     - YAML parse checks
     - issue body references current agent contracts
+    - live or planned parent PR link recorded on the parent issue

@@ -28,6 +28,8 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
 - `learnings/github-cli-surface-metadata.md`: first-slice lessons for gh-inspired connector command
   metadata, validation, docs, and agent guardrails.
+- `learnings/stacked-coderabbit-review-gap.md`: postmortem and corrected rules for stacked PRs,
+  parent PR review coverage, and CodeRabbit skipped-review handling.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
 - `agents/<type>/*.agent.yaml`: reusable role definitions grouped by agent type.
 
@@ -41,6 +43,9 @@ same schema and issue-to-PR contract.
 - Issues remain the unit of work. PRs must reference issues.
 - Large goals use parent issues with sub-issues. Sub-PRs may merge into a parent branch without
   human approval only when all automated gates pass and no human gate is triggered.
+- Stacked work must have a parent PR from the parent branch to `main` as soon as the parent branch
+  exists. The parent PR stays draft until all sub-issues are integrated and final verification is
+  ready for human approval.
 - Skills are declared by capability, with preferred local skill names when available.
 - Guardrails are explicit hard stops, not prose suggestions.
 - Production behavior changes require `gsd-programming-loop`; if local GSD scripts are unavailable,
@@ -52,6 +57,9 @@ same schema and issue-to-PR contract.
   reasoned disposition before it is resolved. Follow-up fix commits should rely on automatic
   incremental review when active; manual `@coderabbitai review` is only a fallback for paused,
   disabled, skipped, rate-limited, or auto-paused review states.
+- A CodeRabbit skipped-review status is never approval. When a sub-PR targets a non-`main` parent
+  branch and CodeRabbit skips that base, the parent PR to `main` must carry the CodeRabbit review
+  coverage for the integrated sub-issue before the parent PR can be marked ready.
 - Secrets, auth scope changes, destructive actions, dependencies, and quality-gate reductions are
   human-gated.
 - Parent PRs into `main` are always human-gated.

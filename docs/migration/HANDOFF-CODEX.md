@@ -95,6 +95,11 @@ Required push rules:
 - Run the issue's local verification before pushing a green slice.
 - Do not push commits that contain real secrets, private keys, authorization headers, or
   secret-looking fixtures.
+- For stacked work, create or confirm the parent PR from the parent branch to `main` before
+  treating sub-issues as executable.
+- Do not treat a green CodeRabbit status as review completion when CodeRabbit also reports that the
+  review was skipped or disabled for a non-default base branch. The sub-PR must have CodeRabbit
+  review records, or the parent PR to `main` must review the integrated commit range.
 - Stop for the human gates in `AGENTS.md`: auth scope changes, secrets, dependencies, destructive
   external actions, production deploys, quality gate reductions, generic write tools, or parent PR
   merge to `main`.

@@ -168,6 +168,20 @@ func TestValidate_CLISurfaceAPIRefMustMatchStreamOrWrite(t *testing.T) {
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
+func TestValidate_CLISurfaceAPIRefFailsWhenSurfaceHasZeroEndpoints(t *testing.T) {
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"endpoints": []
+	}`)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceUnknownTarget)
+}
+
 func TestValidate_CLISurfaceReverseETLRequiresRiskAndApproval(t *testing.T) {
 	cliSurface := strings.ReplaceAll(validCLISurfaceJSON(), `
 				"risk": "creates a widget",

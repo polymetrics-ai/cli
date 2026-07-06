@@ -14,6 +14,11 @@
   - `availability=implemented` with `raw_api` or `direct_write` intent should fail.
 - Embedded runtime regression:
   - `engine.Load(defs.FS, "github")` must load non-nil `CLISurface`.
+- CodeRabbit review regression:
+  - `go test ./cmd/connectorgen -run TestValidate_CLISurfaceAPIRefFailsWhenSurfaceHasZeroEndpoints -count=1`
+  - Initial failure: a present `api_surface.json` with `endpoints: []` reported only
+    `surface_incomplete`; the `cli_surface.json` endpoint references were skipped because
+    validation was guarded by `len(endpoints) > 0`.
 
 ## Green Tests
 
@@ -23,6 +28,9 @@
   - Passed.
 - `go test ./cmd/connectorgen -run CLISurface`
   - Passed.
+- `go test ./cmd/connectorgen -run TestValidate_CLISurfaceAPIRefFailsWhenSurfaceHasZeroEndpoints -count=1`
+  - Passed after changing CLI endpoint-reference validation to run whenever `b.Surface != nil`,
+    including an intentionally empty endpoint set.
 - `go test ./cmd/connectorgen ./internal/connectors/engine`
   - Passed.
 - `go test ./internal/connectors/conformance -run 'TestConformance/github'`

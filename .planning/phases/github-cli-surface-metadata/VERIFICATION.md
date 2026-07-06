@@ -1,6 +1,6 @@
 # Verification: GitHub CLI Surface Metadata
 
-Date: 2026-07-06
+Date: 2026-07-07
 
 ## Commands
 
@@ -8,6 +8,7 @@ Date: 2026-07-06
 jq empty internal/connectors/defs/github/cli_surface.json .planning/phases/github-cli-surface-metadata/RUN-STATE.json
 go test ./internal/connectors/engine -run CLISurface
 go test ./cmd/connectorgen -run CLISurface
+go test ./cmd/connectorgen -run TestValidate_CLISurfaceAPIRefFailsWhenSurfaceHasZeroEndpoints -count=1
 go test ./cmd/connectorgen ./internal/connectors/engine
 go test ./internal/connectors/conformance -run 'TestConformance/github'
 go vet ./...
@@ -25,6 +26,7 @@ make verify
 
 - JSON parse checks passed.
 - Focused engine and connectorgen CLI-surface tests passed.
+- Review-driven zero-endpoint API-surface regression passed.
 - Full engine and connectorgen package tests passed.
 - GitHub conformance passed.
 - Vet and `go build ./cmd/pm` passed.
@@ -36,6 +38,10 @@ make verify
 - `make verify` passed, including gofmt, tidy-check, vet, full tests, build, connector docs
   validation, smoke, lint, and connector definition validation.
 
-## Not Yet Run
+## Review Loop Notes
 
-- CodeRabbit review is pending until a PR is opened or updated.
+- CodeRabbit PR #48 produced one actionable finding: CLI-surface endpoint-reference validation was
+  skipped when `api_surface.json` existed but had zero endpoints.
+- Fixed with a red/green regression and the validator guard change.
+- Stacked PR review routing was hardened in `.agents/agentic-delivery/` so skipped CodeRabbit
+  statuses on non-`main` bases are not treated as review completion.

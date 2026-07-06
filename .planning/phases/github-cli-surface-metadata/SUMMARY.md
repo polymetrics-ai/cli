@@ -14,6 +14,10 @@
   implemented intents, requiring reverse ETL risk/approval metadata, rejecting excluded or
   mismatched endpoint references, and moving the website GitHub surface link out of the dispatched
   command map.
+- Fixed CodeRabbit review finding on PR #48 by ensuring CLI-surface API endpoint references are
+  validated whenever `api_surface.json` is present, including an intentionally empty endpoint list.
+- Hardened the agentic delivery system so stacked sub-PRs cannot count skipped CodeRabbit status as
+  approval and must be covered by sub-PR review records or parent-PR review records against `main`.
 
 ## Scope Control
 

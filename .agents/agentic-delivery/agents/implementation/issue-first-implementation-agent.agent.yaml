@@ -16,6 +16,7 @@ inputs:
   required:
     - github_issue_url
     - issue body with acceptance criteria
+    - parent issue and parent PR when the issue is part of a stacked roadmap
     - AGENTS.md
     - .agents/agentic-delivery/contracts/issue-agent-contract.md
     - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
@@ -48,6 +49,7 @@ workflow:
   - read_required_context
   - load_required_skills
   - load_gsd_programming_loop
+  - confirm_parent_pr_exists_for_stacked_issue
   - create_or_update_gsd_plan
   - write_red_test_for_behavior_change
   - implement_minimal_slice
@@ -57,6 +59,8 @@ workflow:
   - commit_and_push_green_slice_after_green_gates
   - prepare_pr_with_issue_link
   - request_coderabbit_full_review
+  - confirm_coderabbit_review_was_not_only_skipped
+  - route_non_main_base_review_to_parent_pr_when_needed
   - disposition_coderabbit_findings
   - ensure_fix_commits_are_coderabbit_reviewed
 guardrails:
@@ -71,6 +75,8 @@ guardrails:
   output:
     - no secrets in artifacts
     - PR body must reference issue
+    - skipped CodeRabbit review status must not be counted as review completion
+    - non-main-base sub-PRs require parent-PR review coverage when CodeRabbit skips the sub-PR
     - every actionable CodeRabbit finding must be answered before resolve
 verification:
   required:
