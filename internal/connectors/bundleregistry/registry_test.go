@@ -80,3 +80,29 @@ func TestRegistryCatalogEntriesComeFromDefinitions(t *testing.T) {
 		t.Fatalf("github definition missing bundle write capability/actions: %+v", github)
 	}
 }
+
+func TestGitHubGuideIncludesCLISurfaceHelp(t *testing.T) {
+	registry := New()
+	connector, ok := registry.Get("github")
+	if !ok {
+		t.Fatalf("github connector not found")
+	}
+
+	manual := connectors.RenderConnectorManual(connector)
+	for _, want := range []string{
+		"COMMAND SURFACE",
+		"Usage: pm github <command> <subcommand> [flags]",
+		"Core Commands",
+		"issue list - List issues",
+		"intent=etl availability=implemented stream=issues",
+		"issue create - Create an issue",
+		"intent=reverse_etl availability=implemented write=create_issue",
+		"approval: reverse ETL writes require plan, preview, approval, execute",
+		"unsupported local workflow",
+		"--json (boolean): Write machine-readable JSON output.",
+	} {
+		if !strings.Contains(manual, want) {
+			t.Fatalf("GitHub manual missing %q:\n%s", want, manual)
+		}
+	}
+}
