@@ -39,7 +39,9 @@ before implementation.
    - If the issue is a parent issue, branch from `main` and keep the parent PR human-gated.
    - If the issue is a sub-issue, confirm the parent PR from the parent branch to the default
      branch exists before treating the sub-issue as executable. Create a draft parent PR when it is
-     missing and no human gate blocks creation.
+     missing and no human gate blocks creation. When the parent branch has no diff yet, create a
+     deliberate parent seed commit first; use an empty commit only when a real scaffold file would be
+     noise.
 8. For behavior changes, write or update a failing test before production code.
 9. Implement the smallest slice that satisfies the issue.
 10. Run targeted tests, then broader verification from the issue.

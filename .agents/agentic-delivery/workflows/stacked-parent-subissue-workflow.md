@@ -24,6 +24,13 @@ and sub-PRs that merge into the parent branch before the parent PR goes to `main
   still landing. The parent PR may use `Refs #<parent-issue>` while incomplete; change it to
   `Closes #<parent-issue>` only when the parent issue acceptance criteria are complete and the PR is
   ready for human approval.
+- GitHub PRs compare commits on a head branch against a base branch. If the parent branch has no
+  diff yet, create a deliberate parent seed commit before opening the draft parent PR:
+  - Prefer a small roadmap/status scaffold commit when the repo needs one.
+  - Use an empty commit when the roadmap already exists and any file change would be noise.
+  - Example: `git commit --allow-empty -m "chore(github): open cli parity parent pr"`.
+  - The seed commit exists only to create the reviewable parent PR thread, checks surface, and
+    CodeRabbit/GitHub review target.
 - A missing parent PR is a workflow blocker for stacked sub-issues. Do not treat a sub-PR as
   complete when there is no parent PR to carry the main-branch review, final verification, and human
   approval gate.
@@ -60,7 +67,8 @@ keywords for PRs targeting the default branch.
 1. Read the sub-issue and parent issue.
 2. Confirm the sub-issue is still in scope and not blocked.
 3. Confirm the parent PR exists from the parent branch to `main`. Create a draft parent PR if it is
-   missing and no human gate blocks creation.
+   missing and no human gate blocks creation. If the parent branch has no diff against `main`, add
+   the parent seed commit described above first.
 4. Create the sub-issue branch from the parent branch.
 5. Follow the issue-to-PR contract and test-first loop.
 6. Open the sub-PR against the parent branch with `Refs #<sub-issue>` and `Refs #<parent-issue>`.

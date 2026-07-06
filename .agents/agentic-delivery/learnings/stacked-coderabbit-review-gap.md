@@ -32,6 +32,9 @@ CI passed, but the agentic workflow did not close the program loop correctly:
 - A CodeRabbit skipped-review status is informational, not approval.
 - Agents must inspect CodeRabbit comments and review records before marking review complete.
 - Stacked sub-issues require a parent PR to `main` before they are executable.
+- If the parent branch has no diff, create a deliberate parent seed commit so GitHub can open the
+  draft parent PR. Prefer a real roadmap/status scaffold only when it adds signal; otherwise use an
+  empty commit to avoid file churn.
 - If CodeRabbit skips a non-`main` sub-PR, the parent PR must carry CodeRabbit review coverage for
   the integrated commit range.
 - CLI-surface work requires review-disposition capability because it changes shared validation and

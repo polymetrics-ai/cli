@@ -52,6 +52,9 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
 - For stacked PRs whose base is not `main`, ensure the parent PR from the parent branch to `main`
   exists. If CodeRabbit skips the stacked sub-PR, the parent PR must receive CodeRabbit review for
   the commit range that includes the sub-issue before the sub-issue is considered integrated.
+- If a parent branch has no diff yet, create a draft parent PR with a deliberate parent seed commit.
+  Prefer a real roadmap/status scaffold when useful; otherwise use an empty commit to avoid noisy
+  file churn.
 - Use `@coderabbitai full review` for the first complete CodeRabbit pass on a ready PR, or when the
   coordinator explicitly asks for a fresh from-scratch pass.
 - Do not post `@coderabbitai review` after every push. For fix commits, wait for automatic

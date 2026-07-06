@@ -46,6 +46,9 @@ same schema and issue-to-PR contract.
 - Stacked work must have a parent PR from the parent branch to `main` as soon as the parent branch
   exists. The parent PR stays draft until all sub-issues are integrated and final verification is
   ready for human approval.
+- If the parent branch has no diff yet, create the draft parent PR with a deliberate seed commit.
+  Prefer a small roadmap/status scaffold when useful; otherwise use an empty commit to avoid
+  meaningless file churn.
 - Skills are declared by capability, with preferred local skill names when available.
 - Guardrails are explicit hard stops, not prose suggestions.
 - Production behavior changes require `gsd-programming-loop`; if local GSD scripts are unavailable,

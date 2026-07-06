@@ -26,6 +26,9 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 
 - Parent branch starts from `main`.
 - Parent PR targets `main` and is created as a draft when the parent branch is created.
+- If the parent branch has no diff yet, open the draft parent PR with a deliberate parent seed
+  commit. Prefer a real roadmap/status scaffold when useful; otherwise use an empty commit to avoid
+  file churn.
 - Draft parent PRs use `Refs #<parent-issue>` while sub-issues are still landing.
 - Final parent PRs use `Closes #<parent-issue>` only after all acceptance criteria are complete and
   the PR is ready for human approval.
