@@ -1,12 +1,17 @@
 # Verification: GitHub CLI Parity Parent Orchestration
 
-## Pending
+## Completed
 
 - `jq empty .planning/config.json`
 - YAML parse check for `.agents/`, `.github/ISSUE_TEMPLATE`, and `.github/workflows`
 - `git diff --check`
 - `go test ./cmd/connectorgen ./internal/connectors/engine`
-- website checks for the docs/catalog changes
+- `go run ./cmd/connectorgen validate internal/connectors/defs`
+- `pnpm --filter cli-polymetrics-ai test`
+
+## Pending
+
+- `pnpm --filter cli-polymetrics-ai build`
 - broader verification required by #44 before parent PR human gate
 
 ## Notes

@@ -17,18 +17,19 @@ var namePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
-	Name       string
-	Metadata   Metadata
-	Spec       *Schema                  // compiled spec.json; SecretKeys() from x-secret
-	RawSpec    json.RawMessage          // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
-	HTTP       HTTPBase                 // streams.json "base"; zero value when no streams.json
-	Streams    []StreamSpec             // streams.json "streams"
-	Writes     []WriteAction            // writes.json "actions"; nil when writes.json absent
-	Schemas    map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
-	Surface    *APISurface              // api_surface.json
-	CLISurface *CLISurface              // cli_surface.json
-	Docs       string                   // docs.md
-	Fixtures   fs.FS                    // fixtures/ subtree; nil when absent
+	Name          string
+	Metadata      Metadata
+	Spec          *Schema                  // compiled spec.json; SecretKeys() from x-secret
+	RawSpec       json.RawMessage          // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
+	HTTP          HTTPBase                 // streams.json "base"; zero value when no streams.json
+	Streams       []StreamSpec             // streams.json "streams"
+	Writes        []WriteAction            // writes.json "actions"; nil when writes.json absent
+	Schemas       map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
+	Surface       *APISurface              // api_surface.json
+	CLISurface    *CLISurface              // cli_surface.json
+	RawCLISurface json.RawMessage          // verbatim cli_surface.json bytes; nil when absent
+	Docs          string                   // docs.md
+	Fixtures      fs.FS                    // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -661,7 +662,7 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		return Bundle{}, err
 	}
 
-	cliSurface, err := loadCLISurface(sub, dirName)
+	cliSurface, rawCLISurface, err := loadCLISurface(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
 	}
@@ -674,18 +675,19 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	fixtures := loadFixtures(sub)
 
 	return Bundle{
-		Name:       dirName,
-		Metadata:   metadata,
-		Spec:       spec,
-		RawSpec:    rawSpec,
-		HTTP:       httpBase,
-		Streams:    streams,
-		Writes:     writes,
-		Schemas:    schemas,
-		Surface:    surface,
-		CLISurface: cliSurface,
-		Docs:       docs,
-		Fixtures:   fixtures,
+		Name:          dirName,
+		Metadata:      metadata,
+		Spec:          spec,
+		RawSpec:       rawSpec,
+		HTTP:          httpBase,
+		Streams:       streams,
+		Writes:        writes,
+		Schemas:       schemas,
+		Surface:       surface,
+		CLISurface:    cliSurface,
+		RawCLISurface: rawCLISurface,
+		Docs:          docs,
+		Fixtures:      fixtures,
 	}, nil
 }
 
@@ -822,22 +824,22 @@ func loadAPISurface(sub fs.FS, dirName string) (*APISurface, error) {
 	return &surface, nil
 }
 
-func loadCLISurface(sub fs.FS, dirName string) (*CLISurface, error) {
+func loadCLISurface(sub fs.FS, dirName string) (*CLISurface, json.RawMessage, error) {
 	if !fileExists(sub, "cli_surface.json") {
-		return nil, nil
+		return nil, nil, nil
 	}
 	raw, err := readFile(sub, "cli_surface.json")
 	if err != nil {
-		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+		return nil, nil, fmt.Errorf("load bundle %s: %w", dirName, err)
 	}
 	if err := metaSchemas.cliSurface.Validate(mustDecodeAny(raw)); err != nil {
-		return nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
+		return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
 	}
 	var surface CLISurface
 	if err := strictDecode(raw, &surface); err != nil {
-		return nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
+		return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
 	}
-	return &surface, nil
+	return &surface, json.RawMessage(raw), nil
 }
 
 func loadFixtures(sub fs.FS) fs.FS {

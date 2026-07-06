@@ -33,7 +33,7 @@ inputs:
   required:
   - github_issue_url
   - issue body with acceptance criteria
-  - parent issue and parent PR when the issue is part of a stacked roadmap
+  - parent issue and parent PR URL or explicit parent PR blocker when the issue is part of a stacked roadmap
   - AGENTS.md
   - .agents/agentic-delivery/references/gsd-pi-adapter.md
   - .agents/agentic-delivery/references/required-skills-routing.md
@@ -75,7 +75,7 @@ workflow:
 - read_required_context
 - load_required_skills
 - load_gsd_programming_loop
-- confirm_parent_pr_exists_for_stacked_issue
+- confirm_parent_pr_exists_or_create_when_missing_for_stacked_issue
 - create_or_update_gsd_plan
 - enforce_cli_help_docs_website_parity_when_cli_changes
 - write_red_test_for_behavior_change
@@ -124,8 +124,4 @@ adapters:
   github_actions:
     note: Use as metadata for PR guard checks, not as executable workflow.
   pi:
-    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
-      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
-      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
-      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
-      and keep runtime-backed services optional unless explicitly in scope.
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md and keep runtime-backed services optional unless explicitly in scope.

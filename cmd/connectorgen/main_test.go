@@ -212,6 +212,21 @@ func TestValidate_CLISurfaceImplementedDirectWriteIsBlocked(t *testing.T) {
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
+func TestValidate_CLISurfaceRejectsCommandWithStreamAndWrite(t *testing.T) {
+	cliSurface := strings.Replace(
+		validCLISurfaceJSON(),
+		`"stream": "widgets",`,
+		`"stream": "widgets",
+				"write": "create_widget",`,
+		1,
+	)
+	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
 // TestValidate_EmptyTreeIsFine mirrors the loader contract: an empty defs/
 // tree (no bundle directories) passes with a zero connector count, so wave0's
 // bundle-less internal/connectors/defs/ tree does not fail CI.

@@ -232,6 +232,9 @@ func TestBundleLoadParsesCLISurface(t *testing.T) {
 	if b.CLISurface.Commands[0].Stream != "widgets" {
 		t.Fatalf("Command stream = %q", b.CLISurface.Commands[0].Stream)
 	}
+	if len(b.RawCLISurface) == 0 || !strings.Contains(string(b.RawCLISurface), `"widget list"`) {
+		t.Fatalf("RawCLISurface = %q, want verbatim cli_surface.json bytes", string(b.RawCLISurface))
+	}
 }
 
 func TestBundleLoadEmbeddedGitHubCLISurface(t *testing.T) {
