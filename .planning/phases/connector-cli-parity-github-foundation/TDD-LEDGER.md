@@ -35,6 +35,26 @@ Evidence:
 - Invalid PR title/body smoke check failed as expected.
 - Full `go test ./...` passed.
 
+## Copilot Review Follow-Up
+
+Added regression coverage after Copilot review:
+
+- reject Conventional Commit scopes accepted by the older loose local regex but rejected by the
+  repository `pr-title` workflow
+- reject ambiguous issue relationships such as `Related to #123`, `Issue #123`, and
+  `References #123`
+
+Command:
+
+```bash
+go test ./cmd/prissueguard ./internal/coordination/issueguard
+```
+
+Evidence:
+
+- Targeted guard tests passed.
+- `make verify` passed after the guard changes.
+
 ## Harness gap
 
 The GSD skill references `scripts/programming-loop.mjs` and `scripts/tdd-gate.mjs`, but this

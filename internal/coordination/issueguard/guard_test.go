@@ -45,8 +45,35 @@ func TestValidatePRBodyAllowsNonClosingReferenceForStackedIncrement(t *testing.T
 	}
 }
 
+func TestValidatePRBodyRejectsAmbiguousIssueRelationship(t *testing.T) {
+	tests := []string{
+		"Related to #123\n",
+		"Issue #123\n",
+		"References #123\n",
+	}
+	for _, body := range tests {
+		result := ValidatePRBody("feat(github): add cli surface metadata", body)
+		if result.OK {
+			t.Fatalf("ValidatePRBody(%q) OK = true, want false", body)
+		}
+		if !containsViolation(result.Violations, "PR body must reference an issue") {
+			t.Fatalf("ValidatePRBody(%q) violations = %v", body, result.Violations)
+		}
+	}
+}
+
 func TestValidatePRBodyRejectsNonConventionalTitle(t *testing.T) {
 	result := ValidatePRBody("add cli surface metadata", "Closes #123\n")
+	if result.OK {
+		t.Fatal("ValidatePRBody() OK = true, want false")
+	}
+	if !containsViolation(result.Violations, "PR title must use Conventional Commits") {
+		t.Fatalf("ValidatePRBody() violations = %v", result.Violations)
+	}
+}
+
+func TestValidatePRBodyRejectsTitleAcceptedByOldLooseScopePattern(t *testing.T) {
+	result := ValidatePRBody("feat(/github): add cli surface metadata", "Closes #123\n")
 	if result.OK {
 		t.Fatal("ValidatePRBody() OK = true, want false")
 	}
