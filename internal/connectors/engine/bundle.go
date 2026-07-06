@@ -391,11 +391,12 @@ type DeleteSpec struct {
 
 // APISurface is the parsed api_surface.json (conformance input only).
 type APISurface struct {
-	API        string            `json:"api"`
-	Docs       string            `json:"docs,omitempty"`
-	ReviewedAt string            `json:"reviewed_at,omitempty"`
-	Scope      string            `json:"scope,omitempty"`
-	Endpoints  []SurfaceEndpoint `json:"endpoints"`
+	API                    string            `json:"api"`
+	Docs                   string            `json:"docs,omitempty"`
+	ReviewedAt             string            `json:"reviewed_at,omitempty"`
+	OperationLedgerVersion int               `json:"operation_ledger_version,omitempty"`
+	Scope                  string            `json:"scope,omitempty"`
+	Endpoints              []SurfaceEndpoint `json:"endpoints"`
 }
 
 // SurfaceEndpoint is one api_surface.json endpoint entry.
@@ -404,6 +405,7 @@ type SurfaceEndpoint struct {
 	Path      string            `json:"path,omitempty"`
 	CoveredBy *SurfaceCoverage  `json:"covered_by,omitempty"`
 	Excluded  *SurfaceExclusion `json:"excluded,omitempty"`
+	Operation *SurfaceOperation `json:"operation,omitempty"`
 }
 
 // SurfaceCoverage names the stream or write action that covers an endpoint.
@@ -416,6 +418,19 @@ type SurfaceCoverage struct {
 type SurfaceExclusion struct {
 	Category string `json:"category"`
 	Reason   string `json:"reason,omitempty"`
+}
+
+// SurfaceOperation classifies a tracked endpoint that is not yet executable.
+// Operation rows are metadata only and must remain blocked by default.
+type SurfaceOperation struct {
+	Model            string `json:"model"`
+	Status           string `json:"status"`
+	Risk             string `json:"risk"`
+	BlockedByDefault bool   `json:"blocked_by_default"`
+	Reason           string `json:"reason"`
+	SourceURL        string `json:"source_url,omitempty"`
+	Notes            string `json:"notes,omitempty"`
+	DuplicateOf      string `json:"duplicate_of,omitempty"`
 }
 
 // CLISurface is the parsed cli_surface.json. It is docs/help metadata only:
