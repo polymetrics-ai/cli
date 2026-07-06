@@ -22,6 +22,8 @@ import (
 
 type envelope map[string]any
 
+const maxConnectorCommandLimit = 10000
+
 func Run(args []string, stdout, stderr io.Writer) int {
 	ctx := context.Background()
 	root, jsonOut, cleanArgs := parseGlobal(args)
@@ -630,6 +632,9 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	}
 	if limit <= 0 {
 		limit = 100
+	}
+	if limit > maxConnectorCommandLimit {
+		limit = maxConnectorCommandLimit
 	}
 	connector, cfg, err := a.ResolveConnectorCredential(ctx, connectorName, credential, config)
 	if err != nil {

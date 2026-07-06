@@ -987,6 +987,35 @@ func TestBundleLoadAPISurfaceOperationLedger(t *testing.T) {
 	}
 }
 
+func TestBundleLoadAPISurfaceOperationRejectsUnblockedDefault(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{
+				"method": "GET",
+				"path": "/widgets/{id}",
+				"operation": {
+					"model": "direct_read",
+					"status": "blocked",
+					"risk": "low",
+					"blocked_by_default": false,
+					"reason": "point lookup candidate, not yet modeled as a stream"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected api_surface.json schema error for blocked_by_default=false, got nil")
+	}
+	if !strings.Contains(err.Error(), "api_surface.json") || !strings.Contains(err.Error(), "enum") {
+		t.Fatalf("Load error = %q, want api_surface.json enum error", err.Error())
+	}
+}
+
 func TestBundleLoadRejectsUnknownMetadataTopLevelKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(`{

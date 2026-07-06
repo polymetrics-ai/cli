@@ -280,7 +280,7 @@ func TestValidate_APISurfaceOperationLedgerRejectsDualClassification(t *testing.
 	assertFindingRule(t, report, "cli-surface", ruleSurfaceCoverage)
 }
 
-func TestValidate_APISurfaceOperationLedgerRejectsUnblockedOperation(t *testing.T) {
+func TestValidate_APISurfaceOperationLedgerRejectsUnblockedOperationInSchema(t *testing.T) {
 	report, err := validateDir(operationLedgerBundleFS(strings.Replace(
 		validOperationLedgerAPISurface(),
 		`"blocked_by_default": true`,
@@ -290,7 +290,7 @@ func TestValidate_APISurfaceOperationLedgerRejectsUnblockedOperation(t *testing.
 	if err != nil {
 		t.Fatalf("validateDir: %v", err)
 	}
-	assertFindingRule(t, report, "cli-surface", ruleSurfaceOperation)
+	assertFindingRule(t, report, "cli-surface", ruleMetaSchema)
 }
 
 func TestValidate_APISurfaceOperationLedgerRequiresReason(t *testing.T) {

@@ -365,6 +365,30 @@ func TestReadIncrementalLowerBoundFromStateCursor(t *testing.T) {
 	}
 }
 
+func TestReadIncrementalRequestParamOverridesRequestQueryCollision(t *testing.T) {
+	var gotSince string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotSince = r.URL.Query().Get("since")
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Incremental: &IncrementalSpec{CursorField: "updated_at", RequestParam: "since", ParamFormat: "rfc3339"},
+	})
+
+	req := connectors.ReadRequest{
+		Stream: "widgets",
+		State:  map[string]string{"cursor": "2026-01-01T00:00:00Z"},
+		Query:  map[string]string{"since": "2025-01-01T00:00:00Z"},
+	}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotSince != "2026-01-01T00:00:00Z" {
+		t.Fatalf("since = %q, want cursor value to override request query collision", gotSince)
+	}
+}
+
 func TestReadIncrementalLowerBoundFallsBackToStartConfigKey(t *testing.T) {
 	var gotSince string
 	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {

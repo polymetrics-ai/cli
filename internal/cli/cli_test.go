@@ -3,6 +3,7 @@ package cli_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -382,6 +383,65 @@ func TestGitHubCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
 	}
 	if len(env.Records) != 1 || env.Records[0].State != "closed" || env.Records[0].Repository != "octocat/hello-world" || env.Records[0].UserLogin != "octocat" {
 		t.Fatalf("records = %+v, want projected GitHub issue record", env.Records)
+	}
+}
+
+func TestGitHubCommandSurfaceClampsOversizedLimit(t *testing.T) {
+	const wantLimit = 10000
+	var body strings.Builder
+	body.WriteByte('[')
+	for i := 1; i <= wantLimit+1; i++ {
+		if i > 1 {
+			body.WriteByte(',')
+		}
+		fmt.Fprintf(&body, `{
+			"id": %d,
+			"node_id": "I_%d",
+			"number": %d,
+			"state": "open",
+			"title": "issue %d",
+			"user": {"login": "octocat", "id": 1},
+			"updated_at": "2026-07-06T00:00:00Z"
+		}`, i, i, i, i)
+	}
+	body.WriteByte(']')
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(body.String()))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "owner=octocat",
+		"--config", "repo=hello-world",
+		"--config", "base_url=" + srv.URL,
+		"--config", "public_access=true",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"github", "issue", "list",
+		"--credential", "github-local",
+		"--limit", fmt.Sprint(wantLimit + 1),
+		"--root", root,
+		"--json",
+	})
+
+	var env struct {
+		Kind  string `json:"kind"`
+		Count int    `json:"count"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandRead" || env.Count != wantLimit {
+		t.Fatalf("envelope = %+v, want clamped ConnectorCommandRead count %d", env, wantLimit)
 	}
 }
 
