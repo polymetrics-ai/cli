@@ -6,6 +6,7 @@ default_rules:
   - If local GSD scripts are unavailable, record the manual GSD loop fallback and keep TDD evidence.
   - Plan before production edits and keep the GSD plan, TDD ledger, and verification checklist current.
   - Commit and push coherent green slices to the active issue/PR branch after local green gates.
+  - Never push to main; stop only for a human gate or explicit coordinator handoff.
   - Keep PR scope to one primary issue.
   - Stop for human gates before auth, secrets, dependencies, destructive actions, deploys, or gate reductions.
 skills:
@@ -78,8 +79,10 @@ skills:
       - gsd-code-review
       - go-engineering
     required_for:
+      - cli-surface
       - coderabbit-review
       - automated-review-routing
+      - parent-roadmap
       - stacked-pr
       - parent-orchestration
   orchestration:
@@ -127,7 +130,7 @@ task_types:
     required_skill_groups: [api_architecture, go_tdd, security_review]
     primary_agent: operation-ledger-architect
   cli-surface:
-    required_skill_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
+    required_skill_groups: [github_planning, api_architecture, go_tdd, docs_and_ux, review_disposition]
     primary_agent: provider-cli-surface-agent
   help-renderer:
     required_skill_groups: [go_tdd, docs_and_ux]

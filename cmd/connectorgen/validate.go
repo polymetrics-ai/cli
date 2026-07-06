@@ -203,7 +203,7 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkCLISurface(b)...)
 	findings = append(findings, checkDocsHeadings(b)...)
 	findings = append(findings, checkFixtureSecrets(b)...)
-	findings = append(findings, checkCLISurfaceSecrets(fsys, b)...)
+	findings = append(findings, checkCLISurfaceSecrets(b)...)
 	findings = append(findings, checkConformanceSkipReason(b)...)
 	findings = append(findings, checkDefaultTypeMismatch(b)...)
 	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
@@ -590,122 +590,176 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	for _, w := range b.Writes {
 		writes[w.Name] = true
 	}
-	endpoints := map[string]cliSurfaceEndpointState{}
-	if b.Surface != nil {
-		for _, ep := range b.Surface.Endpoints {
-			endpoints[surfaceEndpointKey(ep.Method, ep.Path)] = cliSurfaceEndpointState{
-				coveredBy: ep.CoveredBy,
-				excluded:  ep.Excluded != nil,
-			}
-		}
-	}
+	endpoints := cliSurfaceEndpointStates(b.Surface)
 
 	var findings []Finding
 	for i, cmd := range b.CLISurface.Commands {
-		if cmd.Stream != "" && !streams[cmd.Stream] {
+		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes)...)
+		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
+		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
+		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
+	}
+	return findings
+}
+
+func checkCLISurfaceReferences(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	streams map[string]bool,
+	writes map[string]bool,
+) []Finding {
+	var findings []Finding
+	if cmd.Stream != "" && cmd.Write != "" {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("command %d (%q) must not reference both stream and write", i, cmd.Path),
+		})
+	}
+	if cmd.Stream != "" && !streams[cmd.Stream] {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceUnknownTarget,
+			Message:   fmt.Sprintf("command %d (%q) references unknown stream %q", i, cmd.Path, cmd.Stream),
+		})
+	}
+	if cmd.Write != "" && !writes[cmd.Write] {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceUnknownTarget,
+			Message:   fmt.Sprintf("command %d (%q) references unknown write action %q", i, cmd.Path, cmd.Write),
+		})
+	}
+	return findings
+}
+
+func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
+	if cmd.Availability != "implemented" {
+		return nil
+	}
+
+	switch cmd.Intent {
+	case "etl":
+		if cmd.Stream == "" {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented ETL command %d (%q) must reference stream", i, cmd.Path),
+			}}
+		}
+	case "reverse_etl":
+		if cmd.Write == "" {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented reverse ETL command %d (%q) must reference write action", i, cmd.Path),
+			}}
+		}
+	default:
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented command %d (%q) has unsupported executable intent %q", i, cmd.Path, cmd.Intent),
+		}}
+	}
+	return nil
+}
+
+func checkCLISurfaceRiskApproval(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
+	if (cmd.Availability != "implemented" && cmd.Availability != "partial") || cmd.Intent != "reverse_etl" {
+		return nil
+	}
+
+	var findings []Finding
+	if strings.TrimSpace(cmd.Risk) == "" {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("reverse ETL command %d (%q) must declare risk text", i, cmd.Path),
+		})
+	}
+	if strings.TrimSpace(cmd.Approval) == "" {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("reverse ETL command %d (%q) must declare approval text", i, cmd.Path),
+		})
+	}
+	return findings
+}
+
+func checkCLISurfaceEndpointCoverage(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	endpoints map[string]cliSurfaceEndpointState,
+) []Finding {
+	if b.Surface == nil {
+		return nil
+	}
+
+	var findings []Finding
+	for _, ep := range cmd.APISurface {
+		state, ok := endpoints[surfaceEndpointKey(ep.Method, ep.Path)]
+		if !ok {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceUnknownTarget,
-				Message:   fmt.Sprintf("command %d (%q) references unknown stream %q", i, cmd.Path, cmd.Stream),
+				Message:   fmt.Sprintf("command %d (%q) references unknown api_surface endpoint %s %s", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
 			})
+			continue
 		}
-		if cmd.Write != "" && !writes[cmd.Write] {
+		if state.excluded || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
-				Rule:      ruleCLISurfaceUnknownTarget,
-				Message:   fmt.Sprintf("command %d (%q) references unknown write action %q", i, cmd.Path, cmd.Write),
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s that is not covered by a stream or write action", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
+			})
+			continue
+		}
+		if cmd.Stream != "" && state.coveredBy.Stream != cmd.Stream {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by stream %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Stream, cmd.Stream),
 			})
 		}
-		if cmd.Availability == "implemented" {
-			switch cmd.Intent {
-			case "etl":
-				if cmd.Stream == "" {
-					findings = append(findings, Finding{
-						Connector: b.Name,
-						File:      "cli_surface.json",
-						Rule:      ruleCLISurfaceMissingMapping,
-						Message:   fmt.Sprintf("implemented ETL command %d (%q) must reference stream", i, cmd.Path),
-					})
-				}
-			case "reverse_etl":
-				if cmd.Write == "" {
-					findings = append(findings, Finding{
-						Connector: b.Name,
-						File:      "cli_surface.json",
-						Rule:      ruleCLISurfaceMissingMapping,
-						Message:   fmt.Sprintf("implemented reverse ETL command %d (%q) must reference write action", i, cmd.Path),
-					})
-				}
-			default:
-				findings = append(findings, Finding{
-					Connector: b.Name,
-					File:      "cli_surface.json",
-					Rule:      ruleCLISurfaceSafety,
-					Message:   fmt.Sprintf("implemented command %d (%q) has unsupported executable intent %q", i, cmd.Path, cmd.Intent),
-				})
-			}
-		}
-		if (cmd.Availability == "implemented" || cmd.Availability == "partial") && cmd.Intent == "reverse_etl" {
-			if strings.TrimSpace(cmd.Risk) == "" {
-				findings = append(findings, Finding{
-					Connector: b.Name,
-					File:      "cli_surface.json",
-					Rule:      ruleCLISurfaceSafety,
-					Message:   fmt.Sprintf("reverse ETL command %d (%q) must declare risk text", i, cmd.Path),
-				})
-			}
-			if strings.TrimSpace(cmd.Approval) == "" {
-				findings = append(findings, Finding{
-					Connector: b.Name,
-					File:      "cli_surface.json",
-					Rule:      ruleCLISurfaceSafety,
-					Message:   fmt.Sprintf("reverse ETL command %d (%q) must declare approval text", i, cmd.Path),
-				})
-			}
-		}
-		if b.Surface != nil {
-			for _, ep := range cmd.APISurface {
-				state, ok := endpoints[surfaceEndpointKey(ep.Method, ep.Path)]
-				if !ok {
-					findings = append(findings, Finding{
-						Connector: b.Name,
-						File:      "cli_surface.json",
-						Rule:      ruleCLISurfaceUnknownTarget,
-						Message:   fmt.Sprintf("command %d (%q) references unknown api_surface endpoint %s %s", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
-					})
-					continue
-				}
-				if state.excluded || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
-					findings = append(findings, Finding{
-						Connector: b.Name,
-						File:      "cli_surface.json",
-						Rule:      ruleCLISurfaceSafety,
-						Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s that is not covered by a stream or write action", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
-					})
-					continue
-				}
-				if cmd.Stream != "" && state.coveredBy.Stream != cmd.Stream {
-					findings = append(findings, Finding{
-						Connector: b.Name,
-						File:      "cli_surface.json",
-						Rule:      ruleCLISurfaceSafety,
-						Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by stream %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Stream, cmd.Stream),
-					})
-				}
-				if cmd.Write != "" && state.coveredBy.Write != cmd.Write {
-					findings = append(findings, Finding{
-						Connector: b.Name,
-						File:      "cli_surface.json",
-						Rule:      ruleCLISurfaceSafety,
-						Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by write %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Write, cmd.Write),
-					})
-				}
-			}
+		if cmd.Write != "" && state.coveredBy.Write != cmd.Write {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by write %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Write, cmd.Write),
+			})
 		}
 	}
 	return findings
+}
+
+func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceEndpointState {
+	endpoints := map[string]cliSurfaceEndpointState{}
+	if surface == nil {
+		return endpoints
+	}
+	for _, ep := range surface.Endpoints {
+		endpoints[surfaceEndpointKey(ep.Method, ep.Path)] = cliSurfaceEndpointState{
+			coveredBy: ep.CoveredBy,
+			excluded:  ep.Excluded != nil,
+		}
+	}
+	return endpoints
 }
 
 type cliSurfaceEndpointState struct {
@@ -770,13 +824,8 @@ func checkFixtureSecrets(b engine.Bundle) []Finding {
 	return findings
 }
 
-func checkCLISurfaceSecrets(fsys fs.FS, b engine.Bundle) []Finding {
-	sub, err := fs.Sub(fsys, b.Name)
-	if err != nil || !fsFileExists(sub, "cli_surface.json") {
-		return nil
-	}
-	raw, err := fs.ReadFile(sub, "cli_surface.json")
-	if err != nil || !secretLiteralPattern.Match(raw) {
+func checkCLISurfaceSecrets(b engine.Bundle) []Finding {
+	if len(b.RawCLISurface) == 0 || !secretLiteralPattern.Match(b.RawCLISurface) {
 		return nil
 	}
 	return []Finding{{
@@ -785,11 +834,6 @@ func checkCLISurfaceSecrets(fsys fs.FS, b engine.Bundle) []Finding {
 		Rule:      ruleSecretLiteral,
 		Message:   "cli_surface.json contains a secret-shaped literal",
 	}}
-}
-
-func fsFileExists(fsys fs.FS, name string) bool {
-	info, err := fs.Stat(fsys, name)
-	return err == nil && !info.IsDir()
 }
 
 // checkConformanceSkipReason enforces R3's skip-marker contract (docs/

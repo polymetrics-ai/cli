@@ -8,8 +8,12 @@
 - GitHub CLI surface metadata, validation, website docs, and #34 phase artifacts remain in the
   parent branch.
 - GSD model policy now records Codex `gpt-5.5` with `xhigh` reasoning effort.
+- CodeRabbit review fixes are applied locally for PR #49: stale parent-review fallback wording,
+  agent-task grouping, raw CLI-surface bytes, CLI command stream/write ambiguity, agent matrix
+  review-disposition coverage, issue-first parent PR blocker wording, and catalog JSON
+  serialization.
 
 ## Next
 
-Push the rebased parent branch, resolve PR #49 CodeRabbit comments through the review-disposition
-loop, then continue #44 subissues in dependency order.
+Push the rebased parent branch, wait for automatic CodeRabbit review on the new commits, then
+continue #44 subissues in dependency order.

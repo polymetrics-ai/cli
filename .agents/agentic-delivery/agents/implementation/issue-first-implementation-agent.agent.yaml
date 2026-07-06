@@ -16,7 +16,7 @@ inputs:
   required:
     - github_issue_url
     - issue body with acceptance criteria
-    - parent issue and parent PR when the issue is part of a stacked roadmap
+    - parent issue and parent PR URL or explicit parent PR blocker when the issue is part of a stacked roadmap
     - AGENTS.md
     - .agents/agentic-delivery/contracts/issue-agent-contract.md
     - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
@@ -51,7 +51,7 @@ workflow:
   - read_required_context
   - load_required_skills
   - load_gsd_programming_loop
-  - confirm_parent_pr_exists_for_stacked_issue
+  - confirm_parent_pr_exists_or_create_when_missing_for_stacked_issue
   - create_or_update_gsd_plan
   - write_red_test_for_behavior_change
   - implement_minimal_slice

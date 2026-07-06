@@ -166,13 +166,14 @@ const body =
   `  return BY_SLUG[slug];\n}\n`;
 
 mkdirSync(dirname(OUT), { recursive: true });
-writeFileSync(JSON_OUT, `${JSON.stringify(all, null, 0)}\n`, 'utf8');
+const catalogJson = JSON.stringify(all, null, 0);
+writeFileSync(JSON_OUT, `${catalogJson}\n`, 'utf8');
 writeFileSync(OUT, body, 'utf8');
 
 console.log(
   `Wrote ${all.length} connectors to lib/connectors.catalog.generated.ts and ` +
     `lib/connectors.catalog.data.generated.json ` +
-    `(${((body.length + JSON.stringify(all, null, 0).length) / 1024).toFixed(0)} KB).\n` +
+    `(${((body.length + catalogJson.length) / 1024).toFixed(0)} KB).\n` +
     `Categories: ${JSON.stringify(categoryCounts)}\n` +
     `Capabilities: ${JSON.stringify(capabilityCounts)}\n` +
     `Featured: ${all.filter((c) => c.featured).length}`,

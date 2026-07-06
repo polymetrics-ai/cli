@@ -55,8 +55,9 @@ true:
 - PR body references the sub-issue and parent issue
 - targeted tests and issue verification pass
 - automated review loop is complete and comments are resolved
-- automated review coverage exists through the sub-PR or parent PR fallback, or Copilot/human
-  fallback is explicitly recorded because CodeRabbit is blocked
+- automated review coverage exists through the sub-PR, through a parent PR fallback review that
+  covers the newly integrated commit range, or through an explicitly recorded Copilot/human fallback
+  because CodeRabbit is blocked
 - no human gate is triggered
 - no requested-changes review is open
 - the parent branch is current enough that the sub-PR diff is reviewable
