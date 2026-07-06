@@ -123,7 +123,7 @@ func (s *sigV4Signer) payloadHash(req *http.Request) string {
 	if err != nil {
 		return hashHex([]byte{})
 	}
-	defer body.Close()
+	defer func() { _ = body.Close() }()
 	buf := make([]byte, 0, 1024)
 	tmp := make([]byte, 4096)
 	for {

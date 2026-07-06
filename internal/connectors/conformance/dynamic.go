@@ -589,16 +589,9 @@ func checkResultFromErr(name string, err error) CheckResult {
 	return c
 }
 
-// readRawRecords is the shared engine.Read driver used by every dynamic
-// read-based check: build a fresh replay server for streamName (tracker may
-// be nil), point a bundle copy at it, and run the real engine, invoking
-// onRecord for every emitted record.
-func readRawRecords(b engine.Bundle, streamName string, tracker *hitTracker, onRecord func(map[string]any) error) error {
-	readReplay := newReusableStreamReplayServer()
-	defer readReplay.Close()
-	return readRawRecordsWithReplay(b, streamName, tracker, readReplay, onRecord)
-}
-
+// readRawRecordsWithReplay is the shared engine.Read driver used by every
+// dynamic read-based check. It points a bundle copy at readReplay and runs the
+// real engine, invoking onRecord for every emitted record.
 func readRawRecordsWithReplay(b engine.Bundle, streamName string, tracker *hitTracker, readReplay *reusableStreamReplayServer, onRecord func(map[string]any) error) error {
 	pages, err := loadFixturePages(b.Fixtures, streamName)
 	if err != nil {

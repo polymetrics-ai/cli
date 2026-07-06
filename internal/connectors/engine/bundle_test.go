@@ -233,14 +233,27 @@ func TestBundleLoadBadNameRegex(t *testing.T) {
 
 func TestBundleLoadMissingRequiredFile(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
-	delete(fsys, "acme/api_surface.json")
+	delete(fsys, "acme/metadata.json")
 
 	_, err := Load(fsys, "acme")
 	if err == nil {
 		t.Fatalf("expected missing required file error")
 	}
-	if !strings.Contains(err.Error(), "api_surface.json") {
+	if !strings.Contains(err.Error(), "metadata.json") {
 		t.Fatalf("error %q does not name the missing file", err.Error())
+	}
+}
+
+func TestBundleLoadAPISurfaceOptionalForRuntime(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	delete(fsys, "acme/api_surface.json")
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load without api_surface.json: %v", err)
+	}
+	if b.Surface != nil {
+		t.Fatalf("Surface = %+v, want nil when api_surface.json is absent", b.Surface)
 	}
 }
 

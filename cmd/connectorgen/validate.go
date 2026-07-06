@@ -460,7 +460,12 @@ func checkWritePathFields(b engine.Bundle) []Finding {
 //     zero non-excluded mutation/GET endpoints respectively.
 func checkAPISurface(b engine.Bundle) []Finding {
 	if b.Surface == nil {
-		return nil
+		return []Finding{{
+			Connector: b.Name,
+			File:      "api_surface.json",
+			Rule:      ruleMissingFile,
+			Message:   "api_surface.json is required for connector authoring and conformance",
+		}}
 	}
 	var findings []Finding
 

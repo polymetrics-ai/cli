@@ -1,13 +1,13 @@
 package conformance
 
 import (
-	"polymetrics.ai/internal/connectors/defs"
-	"polymetrics.ai/internal/connectors/engine"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestDumpCT(t *testing.T) {
-	bundles, _ := engine.LoadAll(defs.FS)
+	bundles, _ := engine.LoadAll(realDefsFS())
 	for _, b := range bundles {
 		if b.Name != "commercetools" {
 			continue

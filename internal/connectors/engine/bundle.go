@@ -444,7 +444,13 @@ func init() {
 
 // requiredFiles lists the bundle files that must always exist relative to a
 // bundle's directory, excepting streams.json (conditionally required).
-var requiredFiles = []string{"metadata.json", "spec.json", "api_surface.json", "docs.md"}
+//
+// api_surface.json is intentionally not required here. It is a
+// conformance/authoring artifact, not runtime input for check/read/write/catalog
+// execution, and production defs.FS excludes it to keep cmd/pm small. When the
+// file is present, loadAPISurface still parses and validates it so disk-backed
+// validation keeps the full coverage gate.
+var requiredFiles = []string{"metadata.json", "spec.json", "docs.md"}
 
 // LoadAllError is the structured error LoadAll returns whenever one or more
 // (but not necessarily all) bundle directories under fsys failed to load.
@@ -724,6 +730,9 @@ func loadStreamSchemas(sub fs.FS, dirName string, streams []StreamSpec) (map[str
 }
 
 func loadAPISurface(sub fs.FS, dirName string) (*APISurface, error) {
+	if !fileExists(sub, "api_surface.json") {
+		return nil, nil
+	}
 	raw, err := readFile(sub, "api_surface.json")
 	if err != nil {
 		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)

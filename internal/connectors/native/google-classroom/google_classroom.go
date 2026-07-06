@@ -343,7 +343,7 @@ func (a *refreshTokenAuth) accessToken(ctx context.Context) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("oauth2: token request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return "", fmt.Errorf("oauth2: token endpoint returned %s", resp.Status)
 	}

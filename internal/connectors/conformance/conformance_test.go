@@ -6,10 +6,11 @@ package conformance
 
 import (
 	"errors"
+	"io/fs"
 	"os"
 	"testing"
+	"testing/fstest"
 
-	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -52,9 +53,16 @@ func TestReportPassedTrueWhenNoFailures(t *testing.T) {
 	}
 }
 
-// --- TestConformance over defs.FS --------------------------------------
+// --- TestConformance over the on-disk defs tree ------------------------
 
-// TestConformance iterates defs.FS via engine.LoadAll with per-bundle
+func realDefsFS() fs.FS {
+	// Use the on-disk bundle tree for conformance so replay fixtures and
+	// api_surface.json remain covered without embedding those test-only files
+	// in the production cmd/pm binary.
+	return os.DirFS("../defs")
+}
+
+// TestConformance iterates the real defs tree via engine.LoadAll with per-bundle
 // subtests t.Run(name, ...). Zero bundles today (wave0 ships no goldens
 // yet) must pass trivially; goldens auto-join in Wave F. Later waves run
 // `go test ./internal/connectors/conformance -run 'TestConformance/<name>'`,
@@ -76,10 +84,10 @@ func TestReportPassedTrueWhenNoFailures(t *testing.T) {
 // (a bare t.Fatalf on the aggregate error, no subtests created); now every
 // bundle — loadable or not — gets a named, individually-inspectable result.
 func TestConformance(t *testing.T) {
-	bundles, err := engine.LoadAll(defs.FS)
+	bundles, err := engine.LoadAll(realDefsFS())
 	var loadErr *engine.LoadAllError
 	if err != nil && !errors.As(err, &loadErr) {
-		t.Fatalf("engine.LoadAll(defs.FS): %v", err)
+		t.Fatalf("engine.LoadAll(realDefsFS()): %v", err)
 	}
 	for _, f := range loadErr.GetFailures() {
 		f := f
@@ -101,12 +109,12 @@ func TestConformance(t *testing.T) {
 func TestConformance_EmptyDefsTreePassesTrivially(t *testing.T) {
 	// defs.FS ships zero bundles in wave0 (goldens land in Wave F); this
 	// locks in the "empty tree passes" contract independent of whatever
-	// defs.FS happens to contain when this runs (belt & suspenders on top
-	// of TestConformance itself, which already iterates whatever's there).
-	bundles, err := engine.LoadAll(defs.FS)
+	// the real defs tree happens to contain when this runs (belt & suspenders
+	// on top of TestConformance itself, which already iterates whatever's there).
+	bundles, err := engine.LoadAll(fstest.MapFS{})
 	var loadErr *engine.LoadAllError
 	if err != nil && !errors.As(err, &loadErr) {
-		t.Fatalf("engine.LoadAll(defs.FS): %v", err)
+		t.Fatalf("engine.LoadAll(empty FS): %v", err)
 	}
 	if len(bundles) != 0 {
 		t.Skip("defs.FS is no longer empty (Wave F goldens landed); covered by TestConformance subtests instead")

@@ -87,7 +87,7 @@ func (a *oauthRefreshAuth) accessToken(ctx context.Context) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("google-calendar oauth: token request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return "", fmt.Errorf("google-calendar oauth: token endpoint returned %s", resp.Status)
 	}
