@@ -15,6 +15,8 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 - Final target branch:
 - Milestones:
 - Project:
+- Orchestrator:
+- Orchestration workflow: `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
 
 ## Sub-issues
 
@@ -22,14 +24,25 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 | --- | --- | --- | --- | --- | --- |
 | #N | <milestone> | `<type>/<issue>-<slug>` | `<parent-branch>` | <one-slice outcome> | Backlog |
 
+## Orchestration state
+
+| Issue | Worker | Branch | PR | Latest SHA | Verification | CodeRabbit coverage | Merge state | Blocker |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| #N | `<agent>` | `<branch>` | `<url>` | `<sha>` | Pending | `<sub_pr|parent_pr_fallback|blocked>` | Planned | None |
+
 ## Branch and PR policy
 
 - Parent branch starts from `main`.
-- Parent PR targets `main` and contains `Closes #<parent-issue>`.
+- Parent PR targets `main` and is created as soon as the parent branch exists.
+- Parent PR stays draft and may use `Refs #<parent-issue>` until all required sub-issues are
+  integrated and final verification is ready.
+- Parent PR contains `Closes #<parent-issue>` only when it is ready for human approval.
 - Sub-issue branches start from the parent branch.
 - Sub-PRs target the parent branch and use `Refs #<sub-issue>` and `Refs #<parent-issue>`.
 - Sub-PRs do not use closing keywords because they do not target the default branch.
 - The final parent PR closes integrated sub-issues when the parent branch lands on `main`.
+- If the parent branch has no useful diff yet, create a deliberate parent seed commit so GitHub has
+  a parent PR thread, checks surface, and review target.
 
 ## Automated sub-PR merge policy
 
@@ -41,9 +54,11 @@ true:
 - PR body references the sub-issue and parent issue
 - targeted tests and issue verification pass
 - CodeRabbit review loop is complete and comments are resolved
+- CodeRabbit coverage exists through the sub-PR or parent PR fallback
 - no human gate is triggered
 - no requested-changes review is open
 - the parent branch is current enough that the sub-PR diff is reviewable
+- the parent issue orchestrator records the merge decision
 
 ## Human gates
 

@@ -1,0 +1,67 @@
+apiVersion: polymetrics.ai/orchestration-state/v1
+kind: OrchestrationStateSchema
+description: Machine-readable state ledger shape for parent issue orchestration.
+required_fields:
+  - parent_issue
+  - parent_branch
+  - parent_pr
+  - default_branch
+  - subissues
+  - human_gates
+  - updated_at
+field_contract:
+  parent_issue:
+    type: object
+    required: [number, url, title, state]
+  parent_branch:
+    type: string
+    example: feat/44-github-cli-parity
+  parent_pr:
+    type: object
+    required: [url, base, head, draft, state]
+  default_branch:
+    type: string
+    example: main
+  subissues:
+    type: list
+    item_required:
+      - number
+      - url
+      - branch
+      - pr_url
+      - worker
+      - status
+      - write_scope
+      - verification
+      - coderabbit
+  subissue_status_values:
+    - planned
+    - worker_ready
+    - worker_in_progress
+    - sub_pr_open
+    - sub_pr_green
+    - sub_pr_reviewed
+    - provisionally_integrated
+    - parent_review_pending
+    - parent_review_clean
+    - blocked
+    - complete
+  coderabbit:
+    type: object
+    required:
+      - route
+      - status
+      - head_sha
+      - reviewed_range
+      - disposition_url
+    route_values: [sub_pr, parent_pr_fallback, blocked]
+    status_values: [pending, clean, comments_addressed, skipped, blocked]
+  human_gates:
+    type: list
+    examples:
+      - parent PR merge to main
+      - auth scope changes
+      - new dependencies
+      - destructive external actions
+  updated_at:
+    type: RFC3339 timestamp

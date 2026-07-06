@@ -15,6 +15,7 @@ inputs:
   required:
     - github_pr_url
     - linked issue
+    - PR base branch and repository default branch
     - CodeRabbit review comments and top-level comments
     - local verification output
     - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
@@ -24,6 +25,7 @@ outputs:
     - disposition replies for each actionable CodeRabbit item
     - code or docs fixes for accepted in-scope findings
     - verification summary after fixes
+    - CodeRabbit coverage record for the reviewed commit range
     - follow-up issue references for deferred findings
 permissions:
   allowed_paths:
@@ -47,13 +49,17 @@ permissions:
 workflow:
   - read_issue_and_pr_scope
   - read_coderabbit_review_loop
+  - record_pr_base_and_default_branch
   - collect_coderabbit_issue_comments
   - collect_coderabbit_inline_review_comments
+  - detect_skipped_review_status_comments
+  - confirm_review_records_cover_relevant_commits
+  - route_stacked_pr_to_parent_review_when_base_is_not_default
   - classify_each_item
   - reply_with_disposition
   - implement_accepted_in_scope_fixes
   - run_targeted_verification
-  - commit_and_push_fix_batch_when_policy_allows
+  - commit_and_push_fix_batch_after_green_gates
   - ensure_fix_commits_are_coderabbit_reviewed
   - repeat_until_no_actionable_findings
   - request_coderabbit_resolve_after_all_findings_addressed
@@ -69,15 +75,18 @@ guardrails:
     - quality gate reduction
     - out-of-scope product or security decisions
   output:
+    - skipped review status is not treated as approval
+    - stacked sub-PRs require sub-PR review coverage, parent-PR review coverage, or a recorded blocker
     - every actionable finding has a disposition reply
     - declined and deferred findings include reasons
     - no CodeRabbit resolve command before all dispositions are posted
 verification:
   required:
     - disposition ledger or PR comment summary
+    - CodeRabbit coverage record
     - targeted tests for accepted fixes
     - broader verification when shared behavior changed
-    - fix-batch commits pushed or coordinator-owned push handoff recorded
+    - fix-batch commits pushed to the active issue/PR branch
     - automatic CodeRabbit review observed, manual review requested only when needed, or blocker recorded
 adapters:
   github:

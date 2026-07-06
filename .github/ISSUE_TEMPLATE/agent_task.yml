@@ -17,6 +17,7 @@ body:
       label: Task type
       description: Select the closest task type from the agentic delivery skill matrix.
       options:
+        - parent-orchestration
         - pr-guardrail
         - parent-roadmap
         - stacked-pr
@@ -39,11 +40,27 @@ body:
       value: |
         - AGENTS.md
         - .agents/agentic-delivery/contracts/issue-agent-contract.md
+        - .agents/agentic-delivery/contracts/parent-orchestrator-contract.md
         - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
+        - .agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md
         - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
         - .agents/agentic-delivery/matrices/task-skill-matrix.yaml
     validations:
       required: true
+  - type: textarea
+    id: orchestration
+    attributes:
+      label: Parent orchestration
+      description: Fill this for parent-roadmap, parent-orchestration, or stacked-pr work.
+      value: |
+        - Parent issue:
+        - Parent branch:
+        - Parent PR:
+        - Orchestrator:
+        - Worker handoff template: .agents/agentic-delivery/contracts/worker-handoff-template.md
+        - CodeRabbit coverage route:
+    validations:
+      required: false
   - type: textarea
     id: scope
     attributes:

@@ -18,6 +18,16 @@ sub-PRs into parent branches. Parent PRs into main remain human-gated. -->
 - PR base branch:
 - Sub-issue:
 
+## Parent Orchestration
+
+<!-- Fill this for parent issues, parent PRs, or sub-PRs managed by a parent issue orchestrator. -->
+
+- Orchestrator:
+- State ledger:
+- Worker handoff:
+- Merge owner:
+- Integration state:
+
 <!-- Title this PR with Conventional Commits, for example:
 feat(connector): add linear
 fix(github): repair pagination
@@ -38,7 +48,11 @@ Accepted, Accepted with modification, Declined, Deferred, or Needs human, plus t
 evidence. -->
 
 - Review mode:
+- PR base/default branch:
 - Latest reviewed commit:
+- Reviewed range:
+- Coverage route:
+- Coverage status:
 - Disposition summary:
 - Follow-up review status:
 

@@ -14,6 +14,10 @@ Follow the post-implementation CodeRabbit review loop:
 For parent issues, sub-issues, and stacked PRs, follow:
 `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
 
+For parent issues that spawn or assign multiple workers, follow:
+`.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
+`.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
+
 Task type: `<task-type-from-task-skill-matrix>`
 
 Required skills:
@@ -25,6 +29,13 @@ Primary agent:
 
 Parent issue:
 - `<parent issue URL or "None">`
+
+Orchestration:
+- spawned by: `<parent issue orchestrator or "None">`
+- state ledger: `<issue comment, PR body section, file path, or "None">`
+- worker handoff template: `.agents/agentic-delivery/contracts/worker-handoff-template.md`
+- merge owner: `<parent issue orchestrator | assigned coordinator | not applicable>`
+- CodeRabbit coverage route: `<sub_pr | parent_pr_fallback | blocked | not applicable>`
 
 Branch policy:
 - parent branch: `<type>/<parent-issue>-<slug>` or `None`
@@ -45,9 +56,11 @@ Before merge:
   work, or record the manual-GSD fallback when local GSD scripts are unavailable
 - confirm the GSD plan, TDD ledger, and verification checklist were created or updated before
   production edits
-- commit and push coherent green slices to the active issue/PR branch when repo policy permits;
-  never push to `main`, and record coordinator handoff when direct push is not allowed
+- commit and push coherent green slices to the active issue/PR branch after local green gates;
+  never push to `main`
 - request CodeRabbit review after implementation
+- confirm CodeRabbit actually reviewed the relevant commits, or record the parent PR fallback route
+  for stacked sub-PRs
 - reply to every actionable CodeRabbit item with accepted, accepted_with_modification, declined,
   deferred, or needs_human
 - rerun verification after accepted fixes

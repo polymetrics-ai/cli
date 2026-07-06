@@ -42,3 +42,13 @@ field_contract:
     type: required commands or evidence
   adapters:
     type: optional runner-specific mappings
+  state:
+    type: optional durable state schema reference for coordinators and orchestrators
+  handoffs:
+    type: optional worker handoff templates and required report fields
+  concurrency:
+    type: optional rules for parallel worker assignment and write-scope isolation
+  merge_policy:
+    type: optional branch, PR, and merge authority rules
+  coverage_policy:
+    type: optional external review coverage requirements and fallback routing

@@ -11,6 +11,7 @@ answered, and either fixed, deferred, declined, or escalated with a reason.
    - local targeted checks passed
    - broader verification requested by the issue passed or has a recorded blocker
    - no secrets or private data are present
+   - the PR base branch and default branch have been recorded
 2. Request the first complete review with a top-level PR comment when the PR is ready for its first
    complete external pass:
 
@@ -20,31 +21,53 @@ answered, and either fixed, deferred, declined, or escalated with a reason.
 
    Do not repeat this command for routine fix commits. Use it again only when the PR needs a fresh
    from-scratch review, such as after a major rewrite or when the coordinator explicitly asks.
-3. Collect CodeRabbit output:
+3. Confirm that a review actually ran. A green `CodeRabbit` status is not sufficient by itself.
+   Inspect CodeRabbit comments and review records:
+   - `Review skipped`, `reviews are disabled`, or similar skip/status comments are informational,
+     not a completed review gate.
+   - If the PR base is not the default branch and CodeRabbit skips automatic review for that base,
+     follow the stacked-PR fallback in
+     `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`.
+   - If a manual `@coderabbitai full review` or `@coderabbitai review` does produce review records,
+     continue with disposition on those records even when an earlier automatic status comment was a
+     skip.
+   - If no review records exist after the manual command and retry policy is exhausted, mark the PR
+     blocked on external review instead of treating the skipped status as approval.
+4. Record a coverage entry for the reviewed work:
+   - PR URL
+   - base branch
+   - head branch
+   - head SHA
+   - reviewed commit or commit range
+   - review route: `sub_pr`, `parent_pr_fallback`, or `blocked`
+   - review status: `pending`, `clean`, `comments_addressed`, `skipped`, or `blocked`
+   - disposition summary URL or comment
+5. Collect CodeRabbit output:
    - inline pull-request review comments
    - top-level CodeRabbit issue comments
    - CodeRabbit review summaries
    - generated task checkboxes or finishing-touch suggestions
-4. Ignore purely informational items only after recording why they are informational. Examples:
+6. Ignore purely informational items only after recording why they are informational. Examples:
    review-trigger acknowledgements, processing status comments, marketing footer text, or generated
-   summary text with no requested change.
-5. Triage every actionable comment into exactly one disposition:
+   summary text with no requested change. A skipped-review status is informational only after the
+   stacked-PR fallback or blocker is recorded.
+7. Triage every actionable comment into exactly one disposition:
    - `accepted`: the requested change is correct and will be implemented.
    - `accepted_with_modification`: the concern is valid, but the implementation should differ.
    - `declined`: the request is wrong, unsafe, already covered, or conflicts with project rules.
    - `deferred`: the request is valid but intentionally belongs in a follow-up issue or PR.
    - `needs_human`: the request crosses a human gate or requires product/security judgment.
-6. Reply to the review item before resolving it:
+8. Reply to the review item before resolving it:
    - reply directly to inline review comments whenever possible
    - use a top-level PR disposition summary for top-level CodeRabbit comments or generated tasks
    - explain the reason, not only the action
    - cite tests, source links, issue scope, or project rules when they decide the disposition
-7. Implement accepted fixes in the same PR only when they are in scope for the linked issue.
-8. For deferred work, create or reference a follow-up issue and explain why it is not part of this
+9. Implement accepted fixes in the same PR only when they are in scope for the linked issue.
+10. For deferred work, create or reference a follow-up issue and explain why it is not part of this
    PR.
-9. Rerun targeted verification after each fix batch, then rerun broader verification when review
+11. Rerun targeted verification after each fix batch, then rerun broader verification when review
    feedback changed behavior, guardrails, or shared contracts.
-10. Ensure the fix commits have been reviewed without posting redundant manual commands:
+12. Ensure the fix commits have been reviewed without posting redundant manual commands:
     - If automatic incremental review is active, push the fix commits and wait for CodeRabbit's
       automatic review on the new commits.
     - Do not post `@coderabbitai review` just because a commit was pushed. CodeRabbit incremental
@@ -56,8 +79,8 @@ answered, and either fixed, deferred, declined, or escalated with a reason.
     - If CodeRabbit is rate-limited or asks to wait before retrying, record the blocker and retry
       only after the reported window.
 
-11. Repeat triage, replies, fixes, and verification until no actionable CodeRabbit findings remain.
-12. Only then ask CodeRabbit to resolve its threads:
+13. Repeat triage, replies, fixes, and verification until no actionable CodeRabbit findings remain.
+14. Only then ask CodeRabbit to resolve its threads:
 
     ```text
     @coderabbitai resolve
@@ -65,7 +88,26 @@ answered, and either fixed, deferred, declined, or escalated with a reason.
 
     Use `@coderabbitai approve` only when the repository's CodeRabbit request-changes workflow is
     enabled and the coordinator wants CodeRabbit approval attempted.
-13. Ping the human coordinator for final approval before merge.
+15. Ping the human coordinator for final approval before merge.
+
+## Stacked PR Review Rules
+
+For a sub-PR whose base branch is not the default branch:
+
+- Record the default branch, parent branch, parent issue, and parent PR URL before requesting
+  CodeRabbit.
+- Request `@coderabbitai full review` on the sub-PR once it is ready.
+- If CodeRabbit produces actionable review comments on the sub-PR, disposition and fix them in the
+  sub-PR loop.
+- If CodeRabbit skips the sub-PR because reviews are disabled for the non-default base branch, do
+  not count the skip as success. The orchestrator must ensure a parent PR from the parent branch to
+  the default branch exists, then request or observe CodeRabbit review on that parent PR after the
+  sub-PR is integrated into the parent branch.
+- A sub-issue is not review-complete until either the sub-PR has CodeRabbit review records covering
+  its commits, or the parent PR has a CodeRabbit review covering the parent branch commit range that
+  includes that sub-issue.
+- A parent PR cannot be marked ready for human review while any integrated sub-issue lacks this
+  CodeRabbit coverage or an explicit human-approved blocker.
 
 ## Disposition reply format
 
