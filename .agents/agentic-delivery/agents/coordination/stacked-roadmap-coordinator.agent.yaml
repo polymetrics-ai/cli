@@ -4,10 +4,10 @@ metadata:
   id: stacked-roadmap-coordinator
   name: Stacked Roadmap Coordinator
   version: 1
-  summary: Plans parent issues, sub-issues, parent branches, and stacked sub-PR integration.
+  summary: Plans parent issues, sub-issues, parent branches, and stacked sub-PR integration before runtime orchestration.
   tags: [github, roadmap, sub-issues, stacked-pr, coordination]
 role: coordinator
-objective: Convert one large delivery goal into a parent issue, sub-issues, milestones, and stacked PR policy.
+objective: Convert one large delivery goal into a parent issue, sub-issues, milestones, and stacked PR policy, then hand runtime execution to the parent issue orchestrator.
 skills:
   required_groups: [github_planning, review_disposition, docs_and_ux]
   preferred_local_skills: [github-issue-first-delivery, gsd-plan-phase, gsd-code-review]
@@ -24,6 +24,7 @@ outputs:
     - sub-issue roster
     - milestone mapping
     - branch and PR plan
+    - parent issue orchestrator handoff
     - human gate summary
 permissions:
   allowed_paths:
@@ -43,6 +44,7 @@ workflow:
   - create_or_update_local_issue_bodies
   - create_or_update_live_issues_when_authorized
   - record_project_scope_blockers
+  - hand_off_runtime_execution_to_parent_issue_orchestrator
 guardrails:
   input:
     - do not create duplicate parent issues when an existing parent can be updated
@@ -53,7 +55,10 @@ guardrails:
     - dependency additions
     - secrets
   output:
+    - parent PR must exist before sub-issues are treated as executable
     - sub-PR auto-merge policy must exclude human-gated changes
+    - stacked sub-PR review skips must route to parent-PR automated review coverage or recorded fallback
+    - runtime worker spawning and merge arbitration belong to parent-issue-orchestrator
     - parent PR merge to main must require human approval
 verification:
   required:

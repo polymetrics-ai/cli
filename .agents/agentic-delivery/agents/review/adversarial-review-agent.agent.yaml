@@ -28,11 +28,11 @@ workflow:
   - inspect_diff
   - verify_tests_match_acceptance
   - check_guardrails
-  - check_coderabbit_dispositions
+  - check_automated_review_dispositions
   - report_findings_first
 guardrails:
   blocking_human_gates: [do not edit files, do not run destructive commands]
 verification:
   required:
     - review report with severity ordering
-    - CodeRabbit findings are dispositioned or explicitly pending
+    - automated review findings are dispositioned or explicitly pending

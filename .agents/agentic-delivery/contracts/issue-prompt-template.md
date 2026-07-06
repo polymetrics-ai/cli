@@ -11,8 +11,15 @@ Follow the generic issue-to-PR contract:
 Follow the post-implementation CodeRabbit review loop:
 `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
 
+Choose the automated review route before posting review commands:
+`.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
+
 For parent issues, sub-issues, and stacked PRs, follow:
 `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
+
+For parent issues that spawn or assign multiple workers, follow:
+`.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
+`.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
 
 Task type: `<task-type-from-task-skill-matrix>`
 
@@ -25,6 +32,14 @@ Primary agent:
 
 Parent issue:
 - `<parent issue URL or "None">`
+
+Orchestration:
+- spawned by: `<parent issue orchestrator or "None">`
+- state ledger: `<issue comment, PR body section, file path, or "None">`
+- worker handoff template: `.agents/agentic-delivery/contracts/worker-handoff-template.md`
+- merge owner: `<parent issue orchestrator | assigned coordinator | not applicable>`
+- Automated review coverage route: `<sub_pr | parent_pr_fallback | copilot_backup | blocked | not applicable>`
+- Copilot fallback route: `<copilot_backup | human | none | not applicable>`
 
 Branch policy:
 - parent branch: `<type>/<parent-issue>-<slug>` or `None`
@@ -45,11 +60,16 @@ Before merge:
   work, or record the manual-GSD fallback when local GSD scripts are unavailable
 - confirm the GSD plan, TDD ledger, and verification checklist were created or updated before
   production edits
-- commit and push coherent green slices to the active issue/PR branch when repo policy permits;
-  never push to `main`, and record coordinator handoff when direct push is not allowed
-- request CodeRabbit review after implementation
-- reply to every actionable CodeRabbit item with accepted, accepted_with_modification, declined,
-  deferred, or needs_human
+- commit and push coherent green slices to the active issue/PR branch after local green gates;
+  never push to `main`
+- observe automatic CodeRabbit review after implementation when the PR is non-draft and targets
+  `main`; do not post manual review commands unless the documented fallback conditions apply
+- confirm CodeRabbit actually reviewed the relevant commits, or record the parent PR, Copilot, or
+  human fallback route for stacked sub-PRs
+- if CodeRabbit is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
+  blocking progress, request GitHub Copilot review once as backup when it is enabled
+- reply to every actionable CodeRabbit or Copilot item with accepted, accepted_with_modification,
+  declined, deferred, or needs_human
 - rerun verification after accepted fixes
 - ensure accepted fix commits are CodeRabbit-reviewed; wait for automatic incremental review when
   active, and use manual `@coderabbitai review` only when automatic review is paused, disabled,

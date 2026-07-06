@@ -16,16 +16,19 @@ inputs:
   required:
     - github_issue_url
     - issue body with acceptance criteria
+    - parent issue and parent PR when the issue is part of a stacked roadmap
     - AGENTS.md
     - .agents/agentic-delivery/contracts/issue-agent-contract.md
+    - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
     - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
 outputs:
   required:
     - code or docs changes scoped to the issue
     - TDD evidence
     - verification summary
+    - worker handoff when assigned by a parent issue orchestrator
     - PR body containing Closes or Refs issue number
-    - CodeRabbit disposition summary before merge
+    - automated review disposition summary before merge
 permissions:
   allowed_paths:
     - cmd/**
@@ -48,17 +51,23 @@ workflow:
   - read_required_context
   - load_required_skills
   - load_gsd_programming_loop
+  - confirm_parent_pr_exists_for_stacked_issue
   - create_or_update_gsd_plan
   - write_red_test_for_behavior_change
   - implement_minimal_slice
   - run_targeted_tests
   - refactor
   - run_issue_verification
-  - commit_and_push_green_slice_when_policy_allows
+  - commit_and_push_green_slice_after_green_gates
   - prepare_pr_with_issue_link
-  - request_coderabbit_full_review
-  - disposition_coderabbit_findings
+  - choose_automated_review_route
+  - wait_for_automatic_coderabbit_review_or_record_fallback
+  - confirm_coderabbit_review_was_not_only_skipped
+  - request_copilot_backup_when_coderabbit_is_blocked_and_enabled
+  - route_non_main_base_review_to_parent_pr_when_needed
+  - disposition_automated_review_findings
   - ensure_fix_commits_are_coderabbit_reviewed
+  - report_worker_handoff_to_orchestrator_when_assigned
 guardrails:
   input:
     - issue must include acceptance criteria and verification
@@ -71,15 +80,19 @@ guardrails:
   output:
     - no secrets in artifacts
     - PR body must reference issue
-    - every actionable CodeRabbit finding must be answered before resolve
+    - skipped CodeRabbit review status must not be counted as review completion
+    - CodeRabbit rate-limit comments must be recorded as blockers, not clean reviews
+    - Copilot backup review must not be treated as approval
+    - non-main-base sub-PRs require parent-PR review coverage when CodeRabbit skips the sub-PR
+    - every actionable automated review finding must be answered before resolve
 verification:
   required:
     - targeted tests for changed packages
     - broader command from issue
     - GSD plan, TDD ledger, and verification checklist updated
-    - green-slice commits pushed or coordinator-owned push handoff recorded
+    - green-slice commits pushed to the active issue/PR branch
     - git diff --check
-    - CodeRabbit automatic review observed, manual review requested only when needed, or blocker recorded
+    - CodeRabbit automatic review observed, Copilot backup requested under fallback policy, or blocker recorded
 adapters:
   codex:
     note: Convert this YAML to a thread prompt plus local tool execution.

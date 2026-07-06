@@ -5,7 +5,7 @@ default_rules:
   - Use test-first implementation for behavior changes.
   - If local GSD scripts are unavailable, record the manual GSD loop fallback and keep TDD evidence.
   - Plan before production edits and keep the GSD plan, TDD ledger, and verification checklist current.
-  - Commit and push coherent green slices to the active issue/PR branch when repo policy permits.
+  - Commit and push coherent green slices to the active issue/PR branch after local green gates.
   - Keep PR scope to one primary issue.
   - Stop for human gates before auth, secrets, dependencies, destructive actions, deploys, or gate reductions.
 skills:
@@ -69,6 +69,7 @@ skills:
   review_disposition:
     capabilities:
       - CodeRabbit automatic/manual review mode selection
+      - Copilot backup review routing when CodeRabbit is blocked
       - review comment triage
       - disposition replies
       - follow-up issue routing
@@ -78,7 +79,24 @@ skills:
       - go-engineering
     required_for:
       - coderabbit-review
+      - automated-review-routing
       - stacked-pr
+      - parent-orchestration
+  orchestration:
+    capabilities:
+      - parent issue state machine ownership
+      - Codex subagent task decomposition
+      - worker write-scope isolation
+      - sub-PR merge arbitration
+      - parent PR automated review coverage routing
+      - human gate escalation
+    preferred_local_skills:
+      - github-issue-first-delivery
+      - gsd-programming-loop
+      - gsd-plan-phase
+      - gsd-code-review
+    required_for:
+      - parent-orchestration
   docs_and_ux:
     capabilities:
       - help rendering
@@ -93,6 +111,9 @@ skills:
       - website-docs
       - docs-preview
 task_types:
+  parent-orchestration:
+    required_skill_groups: [orchestration, github_planning, review_disposition, security_review]
+    primary_agent: parent-issue-orchestrator
   parent-roadmap:
     required_skill_groups: [github_planning, review_disposition, docs_and_ux]
     primary_agent: stacked-roadmap-coordinator
@@ -128,4 +149,7 @@ task_types:
     primary_agent: adversarial-review-agent
   coderabbit-review:
     required_skill_groups: [github_planning, security_review, go_tdd, review_disposition]
+    primary_agent: coderabbit-disposition-agent
+  automated-review-routing:
+    required_skill_groups: [github_planning, security_review, review_disposition]
     primary_agent: coderabbit-disposition-agent
