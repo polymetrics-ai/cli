@@ -15,7 +15,18 @@ Accessed: 2026-07-06
 ## Workflow findings
 
 - Use `@coderabbitai full review` for the first complete pass over a ready PR.
-- Use `@coderabbitai review` for incremental review after follow-up commits.
+- CodeRabbit automatically reviews new PRs by default and updates its review when new commits are
+  pushed.
+- CodeRabbit's `reviews.auto_review.auto_incremental_review` setting defaults to enabled. When it
+  is enabled, new pushes receive focused incremental review without manually posting a command.
+- Use `@coderabbitai review` only as a manual incremental trigger for new, unreviewed changes. It is
+  appropriate when automatic review is disabled, paused, skipped, or has reached the configured
+  automatic pause threshold.
+- Do not post `@coderabbitai review` after every push. If automatic review is active, wait for the
+  automatic review result instead. If the latest commit has already been reviewed, the command adds
+  noise and does not produce a new review of old commits.
+- Use `@coderabbitai full review` for a fresh review from scratch only when the PR has changed
+  substantially, the previous review is stale, or the coordinator asks for a complete pass.
 - Use `@coderabbitai resolve` only after CodeRabbit feedback has actually been addressed.
 - Use `@coderabbitai approve` only when the repository enables CodeRabbit's request-changes
   workflow and approval is desired.
@@ -28,6 +39,9 @@ Accessed: 2026-07-06
   must inspect both surfaces.
 - Creating comments can trigger notifications and secondary rate limiting, so batch disposition
   summaries for top-level informational comments instead of posting noisy one-line replies.
+- Treat CodeRabbit's incremental-review note as informational. Update local process state instead
+  of replying with another review command unless there are new unreviewed commits and automatic
+  review is paused or unavailable.
 
 ## Project policy
 

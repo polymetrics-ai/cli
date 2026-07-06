@@ -53,7 +53,7 @@ workflow:
   - reply_with_disposition
   - implement_accepted_in_scope_fixes
   - run_targeted_verification
-  - request_incremental_coderabbit_review
+  - ensure_fix_commits_are_coderabbit_reviewed
   - repeat_until_no_actionable_findings
   - request_coderabbit_resolve_after_all_findings_addressed
 guardrails:
@@ -76,7 +76,7 @@ verification:
     - disposition ledger or PR comment summary
     - targeted tests for accepted fixes
     - broader verification when shared behavior changed
-    - final CodeRabbit incremental review requested after fixes
+    - automatic CodeRabbit review observed, manual review requested only when needed, or blocker recorded
 adapters:
   github:
     note: Use REST for issue comments and review comments; use GraphQL only if resolving non-CodeRabbit GitHub review threads directly.

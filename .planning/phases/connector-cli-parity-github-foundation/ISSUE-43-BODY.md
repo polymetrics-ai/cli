@@ -20,6 +20,9 @@ specific agent vendor.
   renderer, direct-read, GraphQL, sensitive/admin, and rollout tasks.
 - Add a CodeRabbit review-disposition workflow so automated review findings are answered with
   accepted, accepted_with_modification, declined, deferred, or needs_human before resolution.
+- Make CodeRabbit follow-up review conditional: wait for automatic incremental review when active,
+  and use manual `@coderabbitai review` only for new unreviewed commits when automatic review is
+  paused, disabled, skipped, rate-limit retry is due, or auto-paused.
 - Add parent issue, sub-issue, and stacked parent-branch PR workflow rules for large implementation
   efforts such as GitHub CLI feature parity.
 - Add a GitHub issue form for agent implementation tasks.
@@ -44,6 +47,7 @@ specific agent vendor.
 - PR template and CI guard require issue linkage.
 - Guard tests pass and reject ambiguous references such as `Related to #123`.
 - CodeRabbit review loop is documented as a post-implementation gate.
+- CodeRabbit follow-up review rules avoid redundant manual incremental-review comments.
 - Every actionable CodeRabbit finding must receive a reasoned disposition reply before resolve.
 - Parent issue and stacked sub-PR workflow is documented and wired into reusable agents.
 - GitHub CLI feature parity parent issue #44 has a saved roadmap and sub-issue hierarchy.

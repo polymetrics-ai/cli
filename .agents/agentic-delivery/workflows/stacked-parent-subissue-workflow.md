@@ -53,7 +53,9 @@ keywords for PRs targeting the default branch.
 4. Follow the issue-to-PR contract and test-first loop.
 5. Open the sub-PR against the parent branch with `Refs #<sub-issue>` and `Refs #<parent-issue>`.
 6. Run targeted verification and broader issue verification.
-7. Run CodeRabbit review and reply to every actionable finding with a disposition.
+7. Run the CodeRabbit review loop and reply to every actionable finding with a disposition. For
+   fix commits, wait for automatic incremental review when active and use manual review commands
+   only under the conditions in `workflows/coderabbit-review-loop.md`.
 8. Merge the sub-PR into the parent branch without human approval only if every automated gate is
    green and no human gate is triggered.
 9. Comment on the sub-issue with the merged sub-PR, commit, verification, and parent PR status.
@@ -65,7 +67,7 @@ keywords for PRs targeting the default branch.
 1. Keep the parent PR draft while sub-issues are still landing into the parent branch.
 2. Rebase or merge `main` into the parent branch at planned checkpoints.
 3. After all required sub-issues are integrated, run full verification from the parent issue.
-4. Request CodeRabbit full review on the parent PR.
+4. Request CodeRabbit full review on the parent PR when it is ready for the complete parent pass.
 5. Resolve all automated review comments using the CodeRabbit review loop.
 6. Mark the parent PR ready for human review.
 7. Human approval is required before merging the parent PR into `main`.

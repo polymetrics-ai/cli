@@ -63,7 +63,7 @@ skills:
       - reverse-etl
   review_disposition:
     capabilities:
-      - CodeRabbit review command usage
+      - CodeRabbit automatic/manual review mode selection
       - review comment triage
       - disposition replies
       - follow-up issue routing

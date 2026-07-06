@@ -40,8 +40,11 @@ before implementation.
 11. After implementation and local verification, run the CodeRabbit review loop in
     `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`.
 12. Reply to every actionable CodeRabbit item with the disposition template before resolving it.
-13. Request incremental CodeRabbit review after accepted fixes, then ping the human coordinator only
-    after no actionable CodeRabbit findings remain.
+13. Ensure accepted fix commits have been reviewed. Prefer CodeRabbit's automatic incremental review
+    when active; request manual `@coderabbitai review` only when automatic review is paused,
+    disabled, skipped, rate-limit retry is due, or the configured automatic pause threshold was
+    reached.
+14. Ping the human coordinator only after no actionable CodeRabbit findings remain.
 
 ## Hard stops
 

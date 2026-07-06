@@ -30,19 +30,23 @@ docs: update install guide
 
 ## CodeRabbit Review
 
-<!-- After implementation and local verification, request CodeRabbit review. For every actionable
-CodeRabbit item, reply with Accepted, Accepted with modification, Declined, Deferred, or Needs human,
-plus the reason and evidence. -->
+<!-- After implementation and local verification, request the first CodeRabbit pass or record why it
+is unavailable. For fix commits, wait for automatic incremental review when active; use manual
+@coderabbitai review only when automatic review is paused, disabled, skipped, rate-limit retry is
+due, or the auto-pause threshold was reached. For every actionable CodeRabbit item, reply with
+Accepted, Accepted with modification, Declined, Deferred, or Needs human, plus the reason and
+evidence. -->
 
-- Review requested:
+- Review mode:
+- Latest reviewed commit:
 - Disposition summary:
-- Follow-up review requested after fixes:
+- Follow-up review status:
 
 ## Checklist
 
 - [ ] Tests or docs updated for behavior changes
 - [ ] `make verify` passes locally, or the skipped checks are explained
-- [ ] CodeRabbit review requested after implementation, or documented why unavailable
+- [ ] CodeRabbit review completed, manually requested when needed, or documented why unavailable
 - [ ] Every actionable CodeRabbit finding has a reasoned disposition reply
 - [ ] Sub-PR merge into parent branch is allowed by the stacked workflow, or this PR targets `main`
 - [ ] Branch name follows `<type>/<description>` such as `feat/new-connector` or `fix/api-pagination`

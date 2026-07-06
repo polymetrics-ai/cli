@@ -54,7 +54,7 @@ workflow:
   - prepare_pr_with_issue_link
   - request_coderabbit_full_review
   - disposition_coderabbit_findings
-  - request_coderabbit_incremental_review_after_fixes
+  - ensure_fix_commits_are_coderabbit_reviewed
 guardrails:
   input:
     - issue must include acceptance criteria and verification
@@ -73,7 +73,7 @@ verification:
     - targeted tests for changed packages
     - broader command from issue
     - git diff --check
-    - CodeRabbit review loop completed or explicitly pending
+    - CodeRabbit automatic review observed, manual review requested only when needed, or blocker recorded
 adapters:
   codex:
     note: Convert this YAML to a thread prompt plus local tool execution.

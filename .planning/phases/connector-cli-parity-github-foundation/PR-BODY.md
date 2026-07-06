@@ -37,10 +37,13 @@ After the PR exists:
 4. Reply with the disposition, reason, and evidence before resolving the item.
 5. Implement accepted in-scope fixes, then rerun targeted checks and `make verify` when behavior or
    shared contracts changed.
-6. Request an incremental CodeRabbit pass with `@coderabbitai review`.
-7. Repeat until CodeRabbit has no actionable findings.
-8. Post `@coderabbitai resolve` only after every actionable finding has been addressed.
-9. Ping the human coordinator for approval before merge.
+6. For fix commits, wait for automatic CodeRabbit incremental review when it is active.
+7. Use manual `@coderabbitai review` only when automatic review is paused, disabled, skipped,
+   rate-limit retry is due, or the automatic pause threshold was reached and there are new
+   unreviewed commits.
+8. Repeat until CodeRabbit has no actionable findings.
+9. Post `@coderabbitai resolve` only after every actionable finding has been addressed.
+10. Ping the human coordinator for approval before merge.
 
 ## CodeRabbit disposition status
 
@@ -54,8 +57,10 @@ After the PR exists:
 - Deferred findings: none.
 - Follow-up incremental review was requested after the fix commit, and CodeRabbit resolved the
   addressed comments.
-- A new incremental CodeRabbit review will be requested after this roadmap workflow commit is
-  pushed.
+- A later manual `@coderabbitai review` produced CodeRabbit's incremental-review note instead of a
+  new pass. The workflow has been updated so agents now wait for automatic review when active and
+  only use manual incremental review for new unreviewed commits when automatic review is paused,
+  disabled, skipped, rate-limit retry is due, or the automatic pause threshold was reached.
 
 ## Parent/sub-issue roadmap status
 
@@ -69,7 +74,7 @@ After the PR exists:
 
 - [x] Tests or docs updated for behavior changes
 - [x] `make verify` passes locally
-- [x] CodeRabbit review requested after implementation
+- [x] CodeRabbit review completed or manually requested only when needed
 - [x] Every actionable CodeRabbit finding has a reasoned disposition reply or summary
 - [x] Branch name follows `<type>/<description>`
 - [x] PR title follows Conventional Commits

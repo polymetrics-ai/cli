@@ -26,4 +26,6 @@ Follow-up:
 - Do not silently dismiss a finding as false positive. Explain why.
 - Do not accept a suggestion that crosses a hard stop. Mark it `Needs human`.
 - Create or reference a follow-up issue for valid work that is outside the current PR.
-- Request an incremental CodeRabbit review after accepted fixes are committed.
+- Ensure accepted fix commits are reviewed. Prefer automatic CodeRabbit incremental review when it
+  is active; request manual `@coderabbitai review` only for new unreviewed commits when automatic
+  review is paused, disabled, skipped, or due after a rate-limit or auto-pause window.

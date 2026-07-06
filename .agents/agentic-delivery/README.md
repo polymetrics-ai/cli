@@ -43,7 +43,9 @@ same schema and issue-to-PR contract.
 - Guardrails are explicit hard stops, not prose suggestions.
 - Production behavior changes require test-first evidence.
 - CodeRabbit review is a post-implementation gate. Every actionable review item must receive a
-  reasoned disposition before it is resolved.
+  reasoned disposition before it is resolved. Follow-up fix commits should rely on automatic
+  incremental review when active; manual `@coderabbitai review` is only a fallback for paused,
+  disabled, skipped, rate-limited, or auto-paused review states.
 - Secrets, auth scope changes, destructive actions, dependencies, and quality-gate reductions are
   human-gated.
 - Parent PRs into `main` are always human-gated.

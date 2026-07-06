@@ -44,7 +44,9 @@ Before merge:
 - reply to every actionable CodeRabbit item with accepted, accepted_with_modification, declined,
   deferred, or needs_human
 - rerun verification after accepted fixes
-- request incremental CodeRabbit review until no actionable findings remain
+- ensure accepted fix commits are CodeRabbit-reviewed; wait for automatic incremental review when
+  active, and use manual `@coderabbitai review` only when automatic review is paused, disabled,
+  skipped, rate-limit retry is due, or the automatic pause threshold was reached
 - merge sub-PRs into parent branches only when all automated gates pass and no human gate is
   triggered
 - require human approval before merging parent PRs into `main`

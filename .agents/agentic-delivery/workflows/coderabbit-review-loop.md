@@ -11,12 +11,15 @@ answered, and either fixed, deferred, declined, or escalated with a reason.
    - local targeted checks passed
    - broader verification requested by the issue passed or has a recorded blocker
    - no secrets or private data are present
-2. Request the first complete review with a top-level PR comment:
+2. Request the first complete review with a top-level PR comment when the PR is ready for its first
+   complete external pass:
 
    ```text
    @coderabbitai full review
    ```
 
+   Do not repeat this command for routine fix commits. Use it again only when the PR needs a fresh
+   from-scratch review, such as after a major rewrite or when the coordinator explicitly asks.
 3. Collect CodeRabbit output:
    - inline pull-request review comments
    - top-level CodeRabbit issue comments
@@ -41,11 +44,17 @@ answered, and either fixed, deferred, declined, or escalated with a reason.
    PR.
 9. Rerun targeted verification after each fix batch, then rerun broader verification when review
    feedback changed behavior, guardrails, or shared contracts.
-10. Request an incremental follow-up review after fix commits:
-
-    ```text
-    @coderabbitai review
-    ```
+10. Ensure the fix commits have been reviewed without posting redundant manual commands:
+    - If automatic incremental review is active, push the fix commits and wait for CodeRabbit's
+      automatic review on the new commits.
+    - Do not post `@coderabbitai review` just because a commit was pushed. CodeRabbit incremental
+      review is for new, unreviewed changes and does not re-review commits it already reviewed.
+    - Post `@coderabbitai review` only when automatic review is paused, disabled, skipped, or has
+      reached the configured automatic pause threshold, and there are new unreviewed commits.
+    - If the PR was intentionally paused with `@coderabbitai pause`, use `@coderabbitai resume` when
+      the desired state is ongoing automatic review.
+    - If CodeRabbit is rate-limited or asks to wait before retrying, record the blocker and retry
+      only after the reported window.
 
 11. Repeat triage, replies, fixes, and verification until no actionable CodeRabbit findings remain.
 12. Only then ask CodeRabbit to resolve its threads:

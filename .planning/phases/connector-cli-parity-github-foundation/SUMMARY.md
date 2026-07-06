@@ -26,6 +26,9 @@
 - Requested CodeRabbit review on PR #47.
 - Accepted and fixed all 7 CodeRabbit findings from the full review, including CLI exit-code test
   coverage and agent permission hardening.
+- Updated the CodeRabbit workflow after observing the incremental-review note so agents wait for
+  automatic incremental review when active and only request manual review for new unreviewed commits
+  when automatic review is paused, disabled, skipped, rate-limit retry is due, or auto-paused.
 - Updated GitHub CLI feature parity planning so issue #44 is the parent roadmap and issues #34-#42
   are the sub-issue implementation slices.
 - Updated live issue #44 and attached issues #34-#42 as GitHub sub-issues through the REST API.
