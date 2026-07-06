@@ -56,8 +56,8 @@ keywords for PRs targeting the default branch.
 7. Run the CodeRabbit review loop and reply to every actionable finding with a disposition. For
    fix commits, wait for automatic incremental review when active and use manual review commands
    only under the conditions in `workflows/coderabbit-review-loop.md`.
-8. Commit and push green sub-issue slices to the sub-issue branch when repo policy permits. If a
-   coordinator owns pushes, commit locally and record the handoff instead of pushing.
+8. Commit and push green sub-issue slices to the sub-issue branch after local green gates. Never
+   push to `main`; stop only when a human gate is triggered.
 9. Merge the sub-PR into the parent branch without human approval only if every automated gate is
    green and no human gate is triggered.
 10. Comment on the sub-issue with the merged sub-PR, commit, verification, and parent PR status.

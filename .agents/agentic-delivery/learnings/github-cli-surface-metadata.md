@@ -41,8 +41,8 @@ Scope: issue #34, first slice under the GitHub CLI parity parent issue #44.
   sources, verification, and run state current.
 - Red-green-refactor is mandatory for code slices. Capture at least one failing test before the
   implementation when the task changes Go behavior.
-- Commit coherent green slices regularly when repository push policy permits. In this repository,
-  pushes are coordinator-gated unless explicitly delegated.
+- Commit and push coherent green slices regularly to the active issue/PR branch after local green
+  gates. Never push to `main`; stop only when a human gate is triggered.
 - CodeRabbit review is a gate after implementation. Each review item needs a disposition comment:
   fixing now, deferring with reason, or declining with reason.
 - Never include real tokens, private keys, authorization headers, encrypted secret payloads, or

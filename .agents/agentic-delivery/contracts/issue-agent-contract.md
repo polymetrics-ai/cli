@@ -42,9 +42,9 @@ before implementation.
 10. Run targeted tests, then broader verification from the issue.
 11. Commit after each coherent green slice. Good checkpoints are plan-only, red-test, green
     implementation, refactor, and review-fix batches. Do not commit unrelated files.
-12. Push each committed checkpoint to the active issue/PR branch when repo policy permits so CI and
-    automatic review can run regularly. Never push to `main`. If a coordinator owns pushes, commit
-    locally and hand off the branch instead, recording the reason push was not performed.
+12. Push each committed checkpoint to the active issue/PR branch after the relevant green gates so
+    CI and automatic review can run regularly. Never push to `main`; stop only when a human gate is
+    triggered.
 13. Update phase or research artifacts when the issue asks for durable memory.
 14. Open a PR with a Conventional Commit title and `Closes #N` or `Refs #N` in the body.
     - Use `Refs #N` for sub-PRs that target a parent branch.
@@ -88,7 +88,7 @@ Every implementation PR must include:
 - summary of changes
 - red/green/refactor evidence when behavior changed
 - GSD programming-loop evidence or an explicit manual-GSD fallback note
-- commit/push checkpoint summary, including any coordinator-owned push handoff
+- commit/push checkpoint summary
 - verification commands and results
 - safety notes for auth, secrets, writes, or data movement
 - follow-up issues for work intentionally deferred

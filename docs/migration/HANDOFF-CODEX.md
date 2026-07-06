@@ -2,7 +2,7 @@
 
 Repo: `polymetrics-ai/cli`, branch `connector-architecture-v2` (open as **PR #27** → `main`).
 This document lets fresh **Codex** or **Claude** sessions pick up disjoint workstreams in parallel,
-then hand results back for validation by Claude. Read `docs/migration/conventions.md` and
+then hand results back for validation. Read `docs/migration/conventions.md` and
 `docs/architecture/connector-architecture-v2-design.md` before touching code.
 
 ## State (2026-07-04)
@@ -24,8 +24,9 @@ Two processes in ONE working tree corrupt each other (git index contention; the 
 in `defs/defs.go` breaks if any `defs/` dir is momentarily empty). Therefore every parallel session
 MUST: (1) work in its **own git worktree** — `git worktree add ../wtX connector-architecture-v2`
 then branch — and (2) take a workstream whose files are **disjoint** from `defs/` parity expansion.
-Commit locally; **do NOT push** — the primary Claude session owns pushes (history must route through
-a secret-scrubbed clone; see "Pushing" below). Hand branches back for Claude to merge + validate.
+Commit regularly after green verification, push only issue/PR branches, and never push to `main`.
+Historical scrubbed-history warnings are recorded in "Pushing and PR creation" below; they do not
+block verified issue-branch pushes or PR creation.
 
 ## Workstreams (disjoint — run in parallel)
 
@@ -80,13 +81,23 @@ For expansion/review agents, spawn one task per connector so the runtime can par
 Use the `passb-expander` spec for implementation work and the `connector-reviewer` spec for
 read-only review.
 
-## Pushing (Claude/coordinator only)
+## Pushing and PR creation
 
 The branch history was scrubbed of two fake Stripe-format fixture keys via `git filter-repo` in a
-clone at `<scratchpad>/scrub-clone` (origin points there). Direct pushes from the working repo's
-un-scrubbed history are blocked by GitHub secret-scanning. Protocol: fetch the feature branch into
-`scrub-clone`, `git cherry-pick 859b8e0e..FETCH_HEAD` onto scrubbed HEAD (skip empties), verify
-`git grep 'sk_test_deadbeef\|51Hxxxx'` is empty, then `git push origin connector-architecture-v2`.
+clone at `<scratchpad>/scrub-clone` during the connector-architecture-v2 migration. That history
+note is not a blanket ban on autonomous delivery. Agents should push committed, verified issue/PR
+branches and open linked PRs so CI and review automation can run.
+
+Required push rules:
+
+- Never push directly to `main`.
+- Push only the active issue/PR branch or the parent integration branch named by the issue plan.
+- Run the issue's local verification before pushing a green slice.
+- Do not push commits that contain real secrets, private keys, authorization headers, or
+  secret-looking fixtures.
+- Stop for the human gates in `AGENTS.md`: auth scope changes, secrets, dependencies, destructive
+  external actions, production deploys, quality gate reductions, generic write tools, or parent PR
+  merge to `main`.
 
 ## GSD loop
 

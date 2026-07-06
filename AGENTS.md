@@ -7,10 +7,10 @@ interpreted by a declarative engine (`internal/connectors/engine/`). If you are 
 work, read **`docs/migration/HANDOFF-CODEX.md`** first (parallel workstreams + collision rules),
 then `docs/migration/conventions.md` (the connector authoring recipe) and
 `docs/architecture/connector-architecture-v2-design.md`. Reusable agent specs live under
-`.agents/`; connector migration agents are in `.agents/connector-migration/`. Do NOT push directly
-— the branch history is scrubbed of fake secret-format fixtures; pushes route through the
-coordinator (see HANDOFF §Pushing). Legacy connector Go under `internal/connectors/<name>/*.go`
-stays until the human-gated wave 6 cutover.
+`.agents/`; connector migration agents are in `.agents/connector-migration/`. Agents may push
+committed, verified issue/PR branches and open PRs after local gates pass. Never push to `main`;
+the parent PR into `main` remains human-gated. Legacy connector Go under
+`internal/connectors/<name>/*.go` stays until the human-gated wave 6 cutover.
 
 ## Project
 
@@ -40,8 +40,7 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
   before production edits, then keep them current as the implementation changes.
 - Commit and push regularly to the active issue/PR branch after each coherent green slice: plan
   checkpoint, red-test checkpoint when useful, implementation checkpoint, and review-fix checkpoint.
-  Never push to `main`; if the current program says a coordinator owns pushes, commit locally and
-  hand off the branch instead of pushing.
+  Never push to `main`; stop only when a human gate is triggered.
 - PR bodies must use `Closes #N` for completed default-branch work or `Refs #N` for stacked or
   incremental work. PR titles must follow Conventional Commits.
 - After implementation and local verification, follow

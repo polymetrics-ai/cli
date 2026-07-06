@@ -45,8 +45,8 @@ Before merge:
   work, or record the manual-GSD fallback when local GSD scripts are unavailable
 - confirm the GSD plan, TDD ledger, and verification checklist were created or updated before
   production edits
-- commit and push coherent green slices to the active issue/PR branch when repo policy permits;
-  never push to `main`, and record coordinator handoff when direct push is not allowed
+- commit and push coherent green slices to the active issue/PR branch after local green gates;
+  never push to `main`, and stop only when a human gate is triggered
 - request CodeRabbit review after implementation
 - reply to every actionable CodeRabbit item with accepted, accepted_with_modification, declined,
   deferred, or needs_human

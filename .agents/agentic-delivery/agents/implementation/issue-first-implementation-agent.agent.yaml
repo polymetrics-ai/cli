@@ -54,7 +54,7 @@ workflow:
   - run_targeted_tests
   - refactor
   - run_issue_verification
-  - commit_and_push_green_slice_when_policy_allows
+  - commit_and_push_green_slice_after_green_gates
   - prepare_pr_with_issue_link
   - request_coderabbit_full_review
   - disposition_coderabbit_findings
@@ -77,7 +77,7 @@ verification:
     - targeted tests for changed packages
     - broader command from issue
     - GSD plan, TDD ledger, and verification checklist updated
-    - green-slice commits pushed or coordinator-owned push handoff recorded
+    - green-slice commits pushed to the active issue/PR branch
     - git diff --check
     - CodeRabbit automatic review observed, manual review requested only when needed, or blocker recorded
 adapters:
