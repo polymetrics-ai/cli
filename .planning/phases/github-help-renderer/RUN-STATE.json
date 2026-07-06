@@ -1,0 +1,10 @@
+{
+  "phase": "github-help-renderer",
+  "issue": 35,
+  "parent_issue": 44,
+  "branch": "feat/35-github-help-renderer",
+  "base": "feat/44-github-cli-parity",
+  "status": "in_progress",
+  "manual_gsd_fallback": true,
+  "human_gate": null
+}
