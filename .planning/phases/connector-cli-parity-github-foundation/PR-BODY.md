@@ -16,6 +16,7 @@ Adds the issue-first agentic delivery foundation for connector CLI parity:
   follow-up review rules
 - mandatory `gsd-programming-loop` requirement for implementation and behavior-changing agents
 - GSD planning plus regular green-slice commit/push checkpoints for implementation agents
+- root README restored to the pre-architecture-v2-migration version from `c18b43cb`
 
 Closes #43
 
@@ -27,6 +28,8 @@ go test ./cmd/prissueguard ./internal/coordination/issueguard
 find .agents .github/ISSUE_TEMPLATE .github/workflows -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 | xargs -0 ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f) }'
 jq empty .planning/phases/connector-cli-parity-github-foundation/GITHUB-CLI-PARITY-ISSUE-HIERARCHY.json
 test -f CLAUDE.md
+git show c18b43cb:README.md > /tmp/polymetrics-readme-pre-migration.md
+cmp /tmp/polymetrics-readme-pre-migration.md README.md
 git diff --check
 make verify
 ```

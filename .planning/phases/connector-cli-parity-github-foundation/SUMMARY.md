@@ -38,6 +38,8 @@
 - Updated GitHub CLI feature parity planning so issue #44 is the parent roadmap and issues #34-#42
   are the sub-issue implementation slices.
 - Updated live issue #44 and attached issues #34-#42 as GitHub sub-issues through the REST API.
+- Restored the root README to the stronger pre-architecture-v2-migration version from `c18b43cb`,
+  immediately before migration commit `605b006e`.
 
 ## Out Of Scope
 

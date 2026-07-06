@@ -9,6 +9,8 @@ go test ./cmd/prissueguard ./internal/coordination/issueguard
 find .agents .github/ISSUE_TEMPLATE .github/workflows -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 | xargs -0 ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f); puts f }'
 jq empty .planning/phases/connector-cli-parity-github-foundation/GITHUB-CLI-PARITY-ISSUE-HIERARCHY.json
 test -f CLAUDE.md
+git show c18b43cb:README.md > /tmp/polymetrics-readme-pre-migration.md
+cmp /tmp/polymetrics-readme-pre-migration.md README.md
 git diff --check
 make verify
 gh api repos/polymetrics-ai/cli/issues/47/comments --paginate
@@ -51,6 +53,8 @@ issueguard: blocked
   `AGENTS.md` for Claude Code.
 - `gsd-programming-loop` is now a required local skill for implementation and behavior-changing
   agents, with manual-GSD fallback recording only when local GSD scripts are unavailable.
+- `README.md` now matches the pre-architecture-v2-migration version from `c18b43cb`, which was the
+  README state immediately before `605b006e feat!: complete connector architecture v2 migration (#29)`.
 - Implementation agents now require a GSD plan before production edits and commit/push checkpoint
   recording for green slices.
 - Sub-PR merge without human approval applies only to parent-branch integration after automated

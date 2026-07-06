@@ -12,6 +12,7 @@
     "Implementation agents must plan with GSD before production edits and commit/push coherent green slices to the active branch when repo policy permits.",
     "Parent issue and stacked sub-PR planning is now part of the workflow for large tasks.",
     "Live issue #44 now has issues #34-#42 attached as sub-issues.",
+    "Root README.md was restored from c18b43cb, the README state immediately before architecture migration commit 605b006e.",
     "Targeted checks, YAML parsing, secret-looking literal scan, git diff --check, and make verify passed."
   ]
 }
