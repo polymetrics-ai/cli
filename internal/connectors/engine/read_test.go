@@ -5,11 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"reflect"
 	"strconv"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -122,6 +124,89 @@ func TestReadRequestQueryOverridesStaticQuery(t *testing.T) {
 	}
 	if got := gotQuery.Get("sort"); got != "asc" {
 		t.Fatalf("sort query = %q, want asc", got)
+	}
+}
+
+// --- GraphQL request body support ---
+
+func TestReadGraphQLBodySendsFixedDocumentAndVariables(t *testing.T) {
+	var gotMethod string
+	var gotContentType string
+	var gotBody map[string]any
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotMethod = r.Method
+		gotContentType = r.Header.Get("Content-Type")
+		raw, _ := io.ReadAll(r.Body)
+		if err := json.Unmarshal(raw, &gotBody); err != nil {
+			t.Fatalf("request body JSON: %v; raw=%q", err, string(raw))
+		}
+		_, _ = w.Write([]byte(`{"data":{"widgets":{"nodes":[{"id":"w1","name":"One","updated_at":"2026-07-07T00:00:00Z"}]}}}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Method: http.MethodPost,
+		Path:   "/graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "query ListWidgets($first: Int!) { widgets(first: $first) { nodes { id name updated_at } } }",
+			OperationName: "ListWidgets",
+			Variables: map[string]any{
+				"first": map[string]any{"template": "{{ config.page_size }}", "type": "integer"},
+			},
+		},
+		Records: RecordsSpec{Path: "data.widgets.nodes"},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Config: connectors.RuntimeConfig{Config: map[string]string{"page_size": "2"}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotMethod != http.MethodPost {
+		t.Fatalf("method = %q, want POST", gotMethod)
+	}
+	if !strings.HasPrefix(gotContentType, "application/json") {
+		t.Fatalf("content-type = %q, want application/json", gotContentType)
+	}
+	if gotBody["query"] != "query ListWidgets($first: Int!) { widgets(first: $first) { nodes { id name updated_at } } }" {
+		t.Fatalf("query = %v, want fixed bundle document", gotBody["query"])
+	}
+	if gotBody["operationName"] != "ListWidgets" {
+		t.Fatalf("operationName = %v, want ListWidgets", gotBody["operationName"])
+	}
+	vars, ok := gotBody["variables"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables = %#v, want object", gotBody["variables"])
+	}
+	if vars["first"] != float64(2) {
+		t.Fatalf("variables.first = %#v, want 2", vars["first"])
+	}
+	if len(records) != 1 || records[0]["id"] != "w1" {
+		t.Fatalf("records = %+v, want one GraphQL node", records)
+	}
+}
+
+func TestReadGraphQLErrorsFailClosed(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = io.Copy(io.Discard, r.Body)
+		_, _ = w.Write([]byte(`{"errors":[{"message":"rate limit"}],"data":{"widgets":{"nodes":[]}}}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Method: http.MethodPost,
+		Path:   "/graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "query ListWidgets { widgets { nodes { id } } }",
+			OperationName: "ListWidgets",
+		},
+		Records: RecordsSpec{Path: "data.widgets.nodes"},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err == nil {
+		t.Fatalf("Read: want GraphQL errors[] to fail closed")
+	}
+	if !strings.Contains(strings.ToLower(err.Error()), "graphql") || !strings.Contains(err.Error(), "rate limit") {
+		t.Fatalf("error = %q, want GraphQL error details", err.Error())
 	}
 }
 

@@ -100,6 +100,19 @@
           "path": { "type": "string" },
           "query": { "type": "object" },
           "body": { "type": "object" },
+          "graphql": {
+            "type": "object",
+            "required": ["document", "operation_name"],
+            "additionalProperties": false,
+            "properties": {
+              "document": { "type": "string" },
+              "operation_name": { "type": "string" },
+              "variables": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          },
           "records": {
             "type": "object",
             "additionalProperties": false,

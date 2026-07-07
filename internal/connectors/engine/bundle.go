@@ -14,6 +14,7 @@ import (
 // namePattern is the shared connector/stream/action naming rule (design §A,
 // design §F.3): dir name == metadata.name == registry key.
 var namePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
+var graphQLNamePattern = regexp.MustCompile(`^[_A-Za-z][_0-9A-Za-z]*$`)
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
@@ -211,6 +212,7 @@ type StreamSpec struct {
 	Path           string                `json:"path"`
 	Query          map[string]QueryParam `json:"query,omitempty"`
 	Body           map[string]any        `json:"body,omitempty"` // POST-body streams
+	GraphQL        *GraphQLRequestSpec   `json:"graphql,omitempty"`
 	Records        RecordsSpec           `json:"records"`
 	Pagination     *PaginationSpec       `json:"pagination,omitempty"` // overrides base
 	Incremental    *IncrementalSpec      `json:"incremental,omitempty"`
@@ -371,18 +373,28 @@ type IncrementalSpec struct {
 
 // WriteAction is one entry in writes.json's "actions" array.
 type WriteAction struct {
-	Name         string          `json:"name"`
-	Kind         string          `json:"kind"` // create|update|upsert|delete|custom
-	Method       string          `json:"method"`
-	Path         string          `json:"path"`
-	PathFields   []string        `json:"path_fields,omitempty"`
-	BodyType     string          `json:"body_type,omitempty"` // json (default) | form | none
-	BodyFields   []string        `json:"body_fields,omitempty"`
-	RecordSchema json.RawMessage `json:"record_schema"`
-	Delete       *DeleteSpec     `json:"delete,omitempty"`
-	Risk         string          `json:"risk"`
-	Confirm      string          `json:"confirm,omitempty"` // "" | "destructive"
-	Hook         string          `json:"hook,omitempty"`
+	Name         string              `json:"name"`
+	Kind         string              `json:"kind"` // create|update|upsert|delete|custom
+	Method       string              `json:"method"`
+	Path         string              `json:"path"`
+	PathFields   []string            `json:"path_fields,omitempty"`
+	BodyType     string              `json:"body_type,omitempty"` // json (default) | form | none | graphql
+	BodyFields   []string            `json:"body_fields,omitempty"`
+	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
+	RecordSchema json.RawMessage     `json:"record_schema"`
+	Delete       *DeleteSpec         `json:"delete,omitempty"`
+	Risk         string              `json:"risk"`
+	Confirm      string              `json:"confirm,omitempty"` // "" | "destructive"
+	Hook         string              `json:"hook,omitempty"`
+}
+
+// GraphQLRequestSpec describes a fixed GraphQL document whose variables are
+// filled from declared templates. It is intentionally not a raw query escape
+// hatch: Document is bundle metadata, never user input.
+type GraphQLRequestSpec struct {
+	Document      string         `json:"document"`
+	OperationName string         `json:"operation_name,omitempty"`
+	Variables     map[string]any `json:"variables,omitempty"`
 }
 
 // DeleteSpec describes idempotent-delete semantics for a delete write action.
@@ -870,6 +882,9 @@ func loadStreams(sub fs.FS, dirName string, metadata Metadata) (HTTPBase, []Stre
 	if err := strictDecode(raw, &doc); err != nil {
 		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
 	}
+	if err := validateStreamGraphQL(doc.Streams); err != nil {
+		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
+	}
 	return doc.Base, doc.Streams, nil
 }
 
@@ -890,7 +905,140 @@ func loadWrites(sub fs.FS, dirName string) ([]WriteAction, error) {
 	if err := strictDecode(raw, &doc); err != nil {
 		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
 	}
+	if err := validateWriteGraphQL(doc.Actions); err != nil {
+		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
+	}
 	return doc.Actions, nil
+}
+
+func validateStreamGraphQL(streams []StreamSpec) error {
+	for i, stream := range streams {
+		if stream.GraphQL == nil {
+			continue
+		}
+		if len(stream.Body) > 0 {
+			return fmt.Errorf("stream %d (%q) cannot declare both body and graphql", i, stream.Name)
+		}
+		if method := strings.ToUpper(methodOrDefault(stream.Method)); method != "POST" {
+			return fmt.Errorf("stream %d (%q) graphql stream method must be POST, got %s", i, stream.Name, method)
+		}
+		if err := validateGraphQLSpec(stream.GraphQL, "query"); err != nil {
+			return fmt.Errorf("stream %d (%q): %w", i, stream.Name, err)
+		}
+	}
+	return nil
+}
+
+func validateWriteGraphQL(actions []WriteAction) error {
+	for i, action := range actions {
+		bodyType := bodyTypeOf(action)
+		if action.GraphQL != nil && bodyType != "graphql" {
+			return fmt.Errorf("action %d (%q) declares graphql but body_type is %q", i, action.Name, bodyType)
+		}
+		if bodyType != "graphql" {
+			continue
+		}
+		if action.GraphQL == nil {
+			return fmt.Errorf("action %d (%q) body_type graphql requires graphql", i, action.Name)
+		}
+		if len(action.BodyFields) > 0 {
+			return fmt.Errorf("action %d (%q) body_type graphql cannot declare body_fields", i, action.Name)
+		}
+		if method := strings.ToUpper(methodOrDefault(action.Method)); method != "POST" {
+			return fmt.Errorf("action %d (%q) graphql action method must be POST, got %s", i, action.Name, method)
+		}
+		if err := validateGraphQLSpec(action.GraphQL, "mutation"); err != nil {
+			return fmt.Errorf("action %d (%q): %w", i, action.Name, err)
+		}
+	}
+	return nil
+}
+
+func validateGraphQLSpec(spec *GraphQLRequestSpec, operationKind string) error {
+	if spec == nil {
+		return fmt.Errorf("graphql is required")
+	}
+	doc := strings.TrimSpace(spec.Document)
+	if doc == "" {
+		return fmt.Errorf("graphql.document is required")
+	}
+	if strings.Contains(doc, "{{") || strings.Contains(doc, "}}") {
+		return fmt.Errorf("graphql.document must be fixed bundle metadata, not a template")
+	}
+	if operationKind != "" && !graphQLDocumentStartsWith(doc, operationKind) {
+		return fmt.Errorf("graphql.document must start with %s", operationKind)
+	}
+	opName := strings.TrimSpace(spec.OperationName)
+	if opName == "" {
+		return fmt.Errorf("graphql.operation_name is required")
+	}
+	if !graphQLNamePattern.MatchString(opName) {
+		return fmt.Errorf("graphql.operation_name %q is not a valid GraphQL name", opName)
+	}
+	for name := range spec.Variables {
+		if !graphQLNamePattern.MatchString(name) {
+			return fmt.Errorf("graphql variable %q is not a valid GraphQL name", name)
+		}
+	}
+	if err := validateGraphQLVariables(spec.Variables); err != nil {
+		return err
+	}
+	return nil
+}
+
+func graphQLDocumentStartsWith(doc, kind string) bool {
+	if !strings.HasPrefix(doc, kind) {
+		return false
+	}
+	if len(doc) == len(kind) {
+		return true
+	}
+	switch doc[len(kind)] {
+	case ' ', '\t', '\n', '\r', '(', '{':
+		return true
+	default:
+		return false
+	}
+}
+
+func validateGraphQLVariables(vars map[string]any) error {
+	for name, value := range vars {
+		if err := validateGraphQLVariableValue(name, value); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func validateGraphQLVariableValue(name string, value any) error {
+	obj, ok := value.(map[string]any)
+	if !ok {
+		return nil
+	}
+	if _, isTemplate := obj["template"]; isTemplate {
+		if _, ok := obj["template"].(string); !ok {
+			return fmt.Errorf("graphql variable %q template must be a string", name)
+		}
+		for key := range obj {
+			if key != "template" && key != "type" {
+				return fmt.Errorf("graphql variable %q template object has unsupported key %q", name, key)
+			}
+		}
+		if typ, ok := obj["type"].(string); ok {
+			switch typ {
+			case "", "string", "integer", "number", "boolean":
+			default:
+				return fmt.Errorf("graphql variable %q has unsupported type %q", name, typ)
+			}
+		}
+		return nil
+	}
+	for childName, childValue := range obj {
+		if err := validateGraphQLVariableValue(childName, childValue); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func loadOperations(sub fs.FS, dirName string) ([]OperationSpec, json.RawMessage, error) {
