@@ -201,6 +201,49 @@ func TestRunBlocksNonStreamCommands(t *testing.T) {
 	}
 }
 
+func TestBuildWriteCommandPlansReopenAndPRSharedCommands(t *testing.T) {
+	connector := reverseETLFakeConnector()
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}}
+
+	tests := []struct {
+		path     []string
+		flags    map[string][]string
+		write    string
+		resource string
+		record   connectors.Record
+	}{
+		{[]string{"issue", "reopen"}, map[string][]string{"issue-number": {"7"}}, "reopen_issue", "issue", connectors.Record{"issue_number": 7}},
+		{[]string{"pr", "reopen"}, map[string][]string{"pull-number": {"9"}}, "reopen_pull_request", "pr", connectors.Record{"pull_number": 9}},
+		{[]string{"pr", "comment"}, map[string][]string{"pull-number": {"9"}, "body": {"ship it"}}, "comment_issue", "pr", connectors.Record{"issue_number": 9, "body": "ship it"}},
+		{[]string{"pr", "lock"}, map[string][]string{"pull-number": {"9"}}, "lock_issue", "pr", connectors.Record{"issue_number": 9}},
+		{[]string{"pr", "unlock"}, map[string][]string{"pull-number": {"9"}}, "unlock_issue", "pr", connectors.Record{"issue_number": 9}},
+	}
+
+	for _, tt := range tests {
+		result, err := BuildWriteCommand(context.Background(), connector, Request{Path: tt.path, Flags: tt.flags, Config: cfg})
+		if err != nil {
+			t.Fatalf("BuildWriteCommand(%v): %v", tt.path, err)
+		}
+		if result.Write != tt.write {
+			t.Fatalf("%v: Write = %q, want %q", tt.path, result.Write, tt.write)
+		}
+		if result.TargetResource != tt.resource {
+			t.Fatalf("%v: TargetResource = %q, want %q", tt.path, result.TargetResource, tt.resource)
+		}
+		if !result.ApprovalRequired {
+			t.Fatalf("%v: ApprovalRequired = false, want true", tt.path)
+		}
+		if got := len(result.Record); got != len(tt.record) {
+			t.Fatalf("%v: record len = %d, want %d (%+v)", tt.path, got, len(tt.record), result.Record)
+		}
+		for k, v := range tt.record {
+			if result.Record[k] != v {
+				t.Fatalf("%v: record[%s] = %v, want %v", tt.path, k, result.Record[k], v)
+			}
+		}
+	}
+}
+
 func TestBuildWriteCommandPlansWithoutExecuting(t *testing.T) {
 	connector := reverseETLFakeConnector()
 
@@ -455,12 +498,73 @@ func reverseETLFakeConnector() *fakeConnector {
 						{Name: "key", Type: "string", MapsTo: "record.key"},
 					},
 				},
+				{
+					Path:         "issue reopen",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "reopen_issue",
+					Risk:         "reopens an issue",
+					Approval:     "approval required",
+					Flags: []connectors.CommandSurfaceFlag{
+						{Name: "issue-number", Type: "integer", MapsTo: "record.issue_number"},
+					},
+				},
+				{
+					Path:         "pr reopen",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "reopen_pull_request",
+					Risk:         "reopens a pull request",
+					Approval:     "approval required",
+					Flags: []connectors.CommandSurfaceFlag{
+						{Name: "pull-number", Type: "integer", MapsTo: "record.pull_number"},
+					},
+				},
+				{
+					Path:         "pr comment",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "comment_issue",
+					Risk:         "comments on a pull request",
+					Approval:     "approval required",
+					Flags: []connectors.CommandSurfaceFlag{
+						{Name: "pull-number", Type: "integer", MapsTo: "record.issue_number"},
+						{Name: "body", Type: "string", MapsTo: "record.body"},
+					},
+				},
+				{
+					Path:         "pr lock",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "lock_issue",
+					Risk:         "locks a pull request",
+					Approval:     "approval required",
+					Flags: []connectors.CommandSurfaceFlag{
+						{Name: "pull-number", Type: "integer", MapsTo: "record.issue_number"},
+					},
+				},
+				{
+					Path:         "pr unlock",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "unlock_issue",
+					Risk:         "unlocks a pull request",
+					Approval:     "approval required",
+					Flags: []connectors.CommandSurfaceFlag{
+						{Name: "pull-number", Type: "integer", MapsTo: "record.issue_number"},
+					},
+				},
 			},
 		},
 		manifest: connectors.Manifest{
 			WriteActions: []connectors.WriteActionSpec{
 				{Name: "create_issue", Method: "POST", Path: "/repos/{owner}/{repo}/issues", Risk: "creates issue"},
 				{Name: "close_issue", Method: "PATCH", Path: "/repos/{owner}/{repo}/issues/{issue_number}", Risk: "closes issue"},
+				{Name: "reopen_issue", Method: "PATCH", Path: "/repos/{owner}/{repo}/issues/{issue_number}", Risk: "reopens issue"},
+				{Name: "reopen_pull_request", Method: "PATCH", Path: "/repos/{owner}/{repo}/pulls/{pull_number}", Risk: "reopens pull request"},
+				{Name: "comment_issue", Method: "POST", Path: "/repos/{owner}/{repo}/issues/{issue_number}/comments", Risk: "comments on issue"},
+				{Name: "lock_issue", Method: "PUT", Path: "/repos/{owner}/{repo}/issues/{issue_number}/lock", Risk: "locks issue"},
+				{Name: "unlock_issue", Method: "DELETE", Path: "/repos/{owner}/{repo}/issues/{issue_number}/lock", Risk: "unlocks issue"},
 				{Name: "create_deploy_key", Method: "POST", Path: "/repos/{owner}/{repo}/keys", Risk: "adds deploy key"},
 			},
 		},

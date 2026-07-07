@@ -220,6 +220,10 @@ func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec
 		return true, closeResource(ctx, rt, "issues", "issue_number", rec)
 	case "close_pull_request":
 		return true, closeResource(ctx, rt, "pulls", "pull_number", rec)
+	case "reopen_issue":
+		return true, reopenResource(ctx, rt, "issues", "issue_number", rec)
+	case "reopen_pull_request":
+		return true, reopenResource(ctx, rt, "pulls", "pull_number", rec)
 	case "create_pull_request":
 		return true, createPullRequest(ctx, rt, rec)
 	case "update_pull_request":
@@ -274,10 +278,6 @@ func repoPath(rt *engine.Runtime) string {
 	return "/repos/" + url.PathEscape(owner) + "/" + url.PathEscape(repo)
 }
 
-// closeResource is close_issue/close_pull_request's shared shape: an
-// optional comment POST (always against the issues comments endpoint — a PR
-// IS an issue in GitHub's data model) then a state=closed PATCH against
-// resource ("issues" or "pulls").
 func closeResource(ctx context.Context, rt *engine.Runtime, resource, numberField string, rec connectors.Record) error {
 	number, err := requiredInt(rec, numberField, "number")
 	if err != nil {
@@ -294,6 +294,21 @@ func closeResource(ctx context.Context, rt *engine.Runtime, resource, numberFiel
 			payload["state_reason"] = reason
 		}
 	}
+	path := fmt.Sprintf("%s/%s/%d", repoPath(rt), resource, number)
+	_, err = rt.Requester.Do(ctx, http.MethodPatch, path, nil, payload)
+	return err
+}
+
+// reopenResource is reopen_issue/reopen_pull_request's shared shape: a
+// state=open PATCH against resource ("issues" or "pulls"). It intentionally
+// sends no state_reason (reopen has no reason surface in gh) and posts no
+// comment, mirroring `gh issue reopen` / `gh pr reopen`.
+func reopenResource(ctx context.Context, rt *engine.Runtime, resource, numberField string, rec connectors.Record) error {
+	number, err := requiredInt(rec, numberField, "number")
+	if err != nil {
+		return err
+	}
+	payload := map[string]any{"state": "open"}
 	path := fmt.Sprintf("%s/%s/%d", repoPath(rt), resource, number)
 	_, err = rt.Requester.Do(ctx, http.MethodPatch, path, nil, payload)
 	return err

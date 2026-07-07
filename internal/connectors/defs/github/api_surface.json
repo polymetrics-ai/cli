@@ -2,7 +2,7 @@
   "api": "GitHub REST API (https://api.github.com) plus selected GitHub GraphQL API operations",
   "docs": "https://docs.github.com/en/rest; https://docs.github.com/en/graphql",
   "reviewed_at": "2026-07-03",
-  "scope": "Pass B full-surface expansion: every repository-scoped endpoint (/repos/{owner}/{repo}/...) in GitHub REST API v3 1.1.4 is enumerated below (500 real operations, plus 2 close_issue/close_pull_request rows documenting write-action reuse of the update_issue/update_pull_request endpoint, plus the github_app AuthHook token-exchange endpoint). This surface also includes selected fixed GitHub GraphQL operations that back gh-inspired Projects and Discussions CLI commands. Org-level, user-level, enterprise-level, and Enterprise Cloud/Server admin surfaces remain out of scope unless represented by an explicit GraphQL command row below.",
+  "scope": "Pass B full-surface expansion: every repository-scoped endpoint (/repos/{owner}/{repo}/...) in GitHub REST API v3 1.1.4 is enumerated below (500 real operations, plus close_issue/close_pull_request and reopen_issue/reopen_pull_request rows documenting write-action reuse of the update_issue/update_pull_request endpoints, plus the github_app AuthHook token-exchange endpoint). This surface also includes selected fixed GitHub GraphQL operations that back gh-inspired Projects and Discussions CLI commands. Org-level, user-level, enterprise-level, and Enterprise Cloud/Server admin surfaces remain out of scope unless represented by an explicit GraphQL command row below.",
   "endpoints": [
     {
       "method": "POST",
@@ -2785,7 +2785,10 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/contents/{path}",
       "covered_by": {
-        "direct_reads": ["repo read-file", "repo read-dir"]
+        "direct_reads": [
+          "repo read-file",
+          "repo read-dir"
+        ]
       }
     },
     {
@@ -4135,6 +4138,13 @@
       }
     },
     {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/issues/{issue_number} (reopen)",
+      "covered_by": {
+        "write": "reopen_issue"
+      }
+    },
+    {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees",
       "covered_by": {
@@ -5014,6 +5024,13 @@
       "path": "/repos/{owner}/{repo}/pulls/{pull_number} (close)",
       "covered_by": {
         "write": "close_pull_request"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/{repo}/pulls/{pull_number} (reopen)",
+      "covered_by": {
+        "write": "reopen_pull_request"
       }
     },
     {

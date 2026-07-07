@@ -159,6 +159,30 @@
       "hook": "github"
     },
     {
+      "name": "reopen_issue",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}",
+      "path_fields": [
+        "issue_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_number"
+        ],
+        "properties": {
+          "issue_number": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "reopens a previously closed GitHub issue",
+      "hook": "github"
+    },
+    {
       "name": "create_pull_request",
       "kind": "create",
       "method": "POST",
@@ -320,6 +344,30 @@
         }
       },
       "risk": "closes existing GitHub pull request",
+      "hook": "github"
+    },
+    {
+      "name": "reopen_pull_request",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}",
+      "path_fields": [
+        "pull_number"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_number"
+        ],
+        "properties": {
+          "pull_number": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "reopens a previously closed GitHub pull request",
       "hook": "github"
     },
     {
