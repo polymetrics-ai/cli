@@ -2,19 +2,19 @@
 
 ## Scope
 
-TBD
+Ensure the phase has sufficient test coverage, local verification harnesses, and observability hooks. Verify conformance replay, engine tests, and smoke gates pass.
 
 ## Allowed Tools
 
-TBD
+read, bash, edit, write
 
 ## Inputs
 
-TBD
+TEST-PLAN.md, VERIFICATION.md, engine/connector test suites, and conformance fixtures.
 
 ## Outputs
 
-TBD
+Test additions or fixes, updated VERIFICATION.md/TEST-PLAN.md, evidence of passing gates, and residual risk notes.
 
 ## Human Gates
 

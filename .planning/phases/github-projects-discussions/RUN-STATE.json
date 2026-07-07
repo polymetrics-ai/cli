@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
   "phase": "github-projects-discussions",
-  "status": "review_fix_in_progress",
-  "reason": "PR #74 received CodeRabbit review comments; pi runtime audit found prompt-template and tool-allowlist gaps. Review-fix slice in progress.",
+  "status": "review_fix_local_verified",
+  "reason": "CodeRabbit review comments and pi runtime audit findings addressed; focused local gates pass. Full make verify timed out and should be re-run in CI before merge.",
   "details": {
     "lifecycle": [
       "load-project-context",

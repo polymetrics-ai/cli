@@ -2,19 +2,19 @@
 
 ## Scope
 
-TBD
+Read-only planning: refine acceptance criteria, identify risks, define verification steps, and produce a bounded implementation plan before any production edits.
 
 ## Allowed Tools
 
-TBD
+read, grep, find, ls
 
 ## Inputs
 
-TBD
+Issue/PR description, existing engine code, connector conventions (`docs/migration/conventions.md`), and prior phase summaries.
 
 ## Outputs
 
-TBD
+Phase PLAN.md updates, acceptance criteria, verification checklist, risk notes, and a recommended next worker role.
 
 ## Human Gates
 

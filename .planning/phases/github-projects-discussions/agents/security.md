@@ -2,19 +2,19 @@
 
 ## Scope
 
-TBD
+Review trust boundaries, secret handling, auth scope labeling, and generated fixtures for secret-shaped literals. Ensure the phase threat model is current.
 
 ## Allowed Tools
 
-TBD
+read, grep, find, ls, bash (for read-only secret-scan commands only)
 
 ## Inputs
 
-TBD
+THREAT-MODEL.md, changed code/fixtures, auth scope metadata, and connector conventions.
 
 ## Outputs
 
-TBD
+Security findings, hardening recommendations, updated THREAT-MODEL.md if needed, and confirmation that no secrets were committed.
 
 ## Human Gates
 

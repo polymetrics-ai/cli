@@ -2,19 +2,19 @@
 
 ## Scope
 
-TBD
+Own the live parent orchestration for the phase: build the ready queue, create/confirm the parent branch and PR, spawn read-only and mutating workers with isolated scopes, integrate handoffs, and drive review coverage until the phase is human-ready or blocked.
 
 ## Allowed Tools
 
-TBD
+read, bash (for git/gh status commands), edit (for state/ledger files only)
 
 ## Inputs
 
-TBD
+Parent issue, phase artifacts (PLAN.md, RUN-STATE.json, AGENT-ORCHESTRATION.json), AGENTS.md, and worker handoff templates.
 
 ## Outputs
 
-TBD
+Updated RUN-STATE.json, SUMMARY.md, merge/arbitration decisions, review-coverage records, and a final human-ready or blocked status.
 
 ## Human Gates
 

@@ -2,19 +2,19 @@
 
 ## Scope
 
-TBD
+Read-only adversarial review of code, tests, schemas, and docs for correctness, safety, maintainability, and conformance to `docs/migration/conventions.md`.
 
 ## Allowed Tools
 
-TBD
+read, grep, find, ls
 
 ## Inputs
 
-TBD
+Diffs, changed files, conventions.md, official API docs, and the phase acceptance criteria.
 
 ## Outputs
 
-TBD
+Review findings with file/line references, disposition recommendations, and a list of remaining test or safety gaps.
 
 ## Human Gates
 

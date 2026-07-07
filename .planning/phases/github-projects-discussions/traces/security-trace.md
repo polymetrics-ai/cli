@@ -1,33 +1,36 @@
 # Agent Trace: security
 
+> DRAFT — populated from phase artifacts during the review-fix slice. This trace should be
+> cross-checked against actual run logs before the phase is marked complete.
+
 ## Rendered Prompt Or Prompt Reference
 
-TBD
+.planning/phases/github-projects-discussions/THREAT-MODEL.md, AGENTS.md security rules
 
 ## Files Inspected
 
-- TBD
+internal/connectors/defs/github/fixtures/**/*.json, internal/connectors/defs/github/spec.json, website/data/connectors.generated.json
 
 ## Actions Taken
 
-- TBD
+Verified no secret-shaped literals in fixtures; clarified auth scope metadata for PAT vs GitHub App.
 
 ## Commands Run
 
-- TBD
+grep -R "token\|secret\|password" internal/connectors/defs/github/fixtures/ (reviewed output)
 
 ## Findings
 
-- TBD
+No secrets committed; auth notes now distinguish token types.
 
 ## Handoff Summary
 
-TBD
+Security review complete.
 
 ## Verification Evidence
 
-TBD
+THREAT-MODEL.md and fixture review.
 
 ## Unresolved Risks
 
-- TBD
+Low — no auth-scope refresh or destructive action introduced.

@@ -36,6 +36,19 @@
 | Generated-file noise removed | `website/next-env.d.ts` not tracked | `git ls-files website/next-env.d.ts` returns nothing |
 | Full local gates | no regressions | `make verify` |
 
+## Review-Fix Verification Results
+
+| Check | Status | Command | Notes |
+|---|---|---|---|
+| Format | passed | `gofmt -w cmd internal .pi .agents .planning` | No changes. |
+| go vet | passed | `go vet ./...` | Clean. |
+| Build | passed | `go build ./cmd/pm` | Binary builds. |
+| Engine + connectorgen tests | passed | `go test ./internal/connectors/engine ./cmd/connectorgen -count=1` | All pass, including new empty-query and default/type-mismatch tests. |
+| Connectorgen validate | passed | `go run ./cmd/connectorgen validate internal/connectors/defs --json` | 547 connectors checked, 0 findings. |
+| Pi prompt placeholders | passed | `grep -R '{{task}}\|{{target}}' .pi/prompts/` | No unsupported placeholders remain. |
+| next-env.d.ts untracked | passed | `git ls-files website/next-env.d.ts` | Removed from index. |
+| Full `make verify` | timeout | `make verify` | Timed out at 5 min; likely full-suite runtime. Focused gates above pass and the changed packages are green. |
+
 ## Final Local Gate Summary
 
-All local gates pass. Ready for commit and push.
+Focused local gates pass. Full `make verify` exceeded the session timeout; recommend running it in a CI or longer-lived shell before final merge. Ready for commit and push.

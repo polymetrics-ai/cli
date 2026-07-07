@@ -2,19 +2,19 @@
 
 ## Scope
 
-TBD
+Execute the phase test plan, capture pass/fail evidence, and report exact commands and output. Does not modify production code.
 
 ## Allowed Tools
 
-TBD
+read, bash
 
 ## Inputs
 
-TBD
+TEST-PLAN.md, VERIFICATION.md, built code, and fixture data.
 
 ## Outputs
 
-TBD
+Command log, pass/fail results, residual risk, and references to the exact behavior verified.
 
 ## Human Gates
 
