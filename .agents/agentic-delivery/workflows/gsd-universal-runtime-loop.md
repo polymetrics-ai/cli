@@ -24,9 +24,11 @@ Every runtime must run this lifecycle:
    spawning. A disjoint write scope is not enough if agents share one filesystem checkout.
 6. Spawn worker/reviewer subagents for independent tasks when the runtime exposes subagents and
    isolation is available for mutating workers.
-7. If subagents are unavailable and mode is `agents`, stop with `failed_runtime_capability`.
+7. If subagents are unavailable and mode is `agents`, stop with
+   `not_spawned_runtime_capability_missing`.
 8. If mutating worker isolation is unavailable and mode is `agents`, stop with
-   `failed_runtime_capability` or record `not_spawned_isolation_missing` in the parent ledger.
+   `not_spawned_runtime_capability_missing` or record `not_spawned_isolation_missing` in the
+   parent ledger.
 9. If subagents are unavailable or mutating isolation is unavailable and mode is `auto`, run the
    same roles inline or read-only and record fallback.
 10. For every cycle after preflight, write one explicit execution decision:

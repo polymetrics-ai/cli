@@ -70,7 +70,7 @@ guardrails:
     - no Pass B placeholder exclusions remain for reviewed endpoints
     - no secret-looking literals in fixtures or docs
     - GSD programming loop evidence exists for behavior-changing work
-    - no commits from the agent
+    - commit green slices only after local gates pass and the connector is assigned exclusively to this agent
 verification:
   required:
     - go run ./cmd/connectorgen validate internal/connectors/defs

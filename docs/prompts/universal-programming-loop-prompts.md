@@ -42,7 +42,8 @@ Rules:
 - For parent issues with ready sub-issues, keep orchestration active: spawn or assign all
   independent ready workers up to runtime limits, or record why no worker can run.
 - After the preflight script returns, the live agent must immediately make a spawn decision:
-  spawn/read-only-spawn/local-critical-path/`not_spawned_*`. A script status alone is not progress.
+  `spawned`, `read_only_spawned`, `local_critical_path`, or one `not_spawned_*` blocker. A script
+  status alone is not progress.
 - Start with a red test or validation artifact for behavior changes.
 - Keep Go code simple, explicit, context-aware, and testable.
 - Keep secrets out of logs, prompt output, JSON responses, and test fixtures.
