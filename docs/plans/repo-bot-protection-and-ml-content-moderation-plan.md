@@ -349,7 +349,147 @@ response the manual §0 cleanup approximated, but continuous and scalable.
 
 ---
 
-## 4. Rollout plan (phased, screenshot-able)
+## 4. AI moderation agent (pi-mono TS, self-hosted runner on the VPS)
+
+The ML models in §3 are wrapped by a **pi-mono agent written in TypeScript** that runs on a
+**self-hosted GitHub Actions runner on our VPS**, **scheduled daily** and **threshold-triggered**
+(when N new issue/comment/PR events accumulate), **skill-based**, and **action-taking**: it
+extracts the events + their associated actions, runs the ML tools, analyzes, **emails a recommended
+action digest**, and **acts via `gh`/git**.
+
+### 4.1 Why pi-mono
+
+`pi` is a TypeScript agent (source: `github.com/earendil-works/pi-mono`; package
+`@earendil-works/pi-coding-agent`). Its SDK exposes `createAgentSession()` for automated pipelines,
+custom tools, sub-agents, on-demand **skills** (the Agent Skills standard), and `session.prompt()`
+for non-interactive runs. We use pi as the orchestration brain: it loads a `moderation` skill,
+calls the Podman-hosted `/score` model tools, reasons over the results, drafts the email + the gh
+commands, and executes them. This is the same harness the GSD orchestrator uses — so the
+moderation agent is a first-class pi project agent, not bespoke glue.
+
+### 4.2 Architecture
+
+```
+   GitHub repo (issues/PRs/comments) ──► webhook/audit ──┐
+                                                          ▼
+        ┌────────────────────────────────────────────────────────┐
+        │ Self-hosted GitHub Actions runner (VPS, ephemeral)      │
+        │  - cron: daily  +  repository_dispatch: on threshold      │
+        │  - pi-mono TS agent (createAgentSession, headless)       │
+        │     • loads .pi/skills/moderation (skill-based)          │
+        │     • custom tools: fetch_events, ml_score, gh_act, mail │
+        │  - Podman: moderation container (/score) on localhost    │
+        └───────────────────────────┬────────────────────────────┘
+                                    │ 1) fetch_events (since cursor)
+                                    │ 2) ml_score (Models A/B/C)
+                                    │ 3) analyze (agent reasoning)
+                                    │ 4) mail (recommended actions)
+                                    │ 5) gh_act / git act (optional, gated)
+                                    ▼
+        maintainer inbox ◄── action digest   +   repo state mutated via gh/git
+```
+
+### 4.3 Triggering: daily + threshold
+
+- **Daily cron** (low-traffic days): every 06:00 UTC, fetch events since the last cursor, score,
+  send a digest. Cheap baseline.
+- **Threshold trigger**: a tiny `audit` workflow increments an issue/comment/PR event counter
+  (a repo variable or a cache key) on every `issues`/`issue_comment`/`pull_request` event. When
+  the counter crosses N (e.g. 20 new events, or 1 new non-collaborator attachment), it fires
+  `gh workflow run moderation.yml` (or `repository_dispatch`) so the pi agent wakes immediately.
+  This is the "after a certain number of events" gate the plan calls for.
+
+```yaml
+# .github/workflows/moderation.yml  (self-hosted runner on the VPS)
+name: moderation
+on:
+  schedule: [{ cron: '0 6 * * *' }]           # daily
+  workflow_dispatch:                          # threshold trigger + manual
+    inputs: { since: { required: false } }
+jobs:
+  run:
+    runs-on: [self-hosted, linux, vps]         # OUR runner, not GitHub-hosted
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: npm ci                          # TS agent build
+      - run: podman start moderation || podman run -d --name moderation -p 7788:7788 ...
+      - name: Run pi moderation agent
+        env:
+          GH_TOKEN: ${{ secrets.GH_MOD_TOKEN }}
+          MOD_URL: http://localhost:7788
+          MAIL_FROM: ${{ secrets.MOD_MAIL_FROM }}
+          MAIL_TO: ${{ secrets.MOD_MAIL_TO }}
+          OPENAI_API_KEY: ${{ secrets.PI_KEY }}
+        run: node dist/agent.js --since "${{ inputs.since || '24h' }}"
+```
+
+### 4.4 The TS agent (skill-based, custom tools)
+
+```typescript
+// agent/agent.ts  (pi-mono SDK)
+import { createAgentSession, type AgentTool } from "@earendil-works/pi-coding-agent";
+
+const tools: AgentTool[] = [
+  fetchEventsTool(),   // gh api: issues/comments/prs since cursor → JSONL
+  mlScoreTool(),       // POST localhost:7788/score → {spam, injection, bot, action}
+  ghActTool(),         // delete comment / lock issue / label / block (gated)
+  gitActTool(),        // revert a merged malicious PR on a throwaway branch
+  mailTool(),          // SMTP/Resend: recommended-action digest
+];
+
+const { session } = await createAgentSession({
+  tools,                                  // read + custom only; NO subagent recursion
+  cwd: process.cwd(),
+  model: gpt5_5,                          // reasoning for analysis
+  systemPromptFile: ".pi/skills/moderation/SKILL.md",
+});
+
+session.subscribe(logEvents);
+await session.prompt(
+  `You are the Polymetrics moderation agent. Fetch all issue/comment/PR events since
+   ${since}. For each, call ml_score. Then: (1) auto-act on high-confidence spam/
+   prompt-injection per the skill policy, (2) draft a markdown action digest of
+   low-confidence items needing a human, (3) email it via the mail tool. Summarize
+   counts and the worst 3 threats. Never print secrets; never act on the default
+   branch without the human-gate flag.`
+);
+await session.dispose();
+```
+
+### 4.5 The moderation skill (`.pi/skills/moderation/SKILL.md`)
+
+Skill-based means the heavy policy (thresholds, action policy, prompt-injection freeze rules,
+email template, false-positive guardrails) lives in a reviewable `SKILL.md` the agent loads —
+not in code. The skill encodes: `spam_score>0.9 && bot_score>0.5` → auto-hide+delete-attachment;
+`injection_score>0.7` → freeze the GSD orchestrator for that issue + label + alert;
+non-collaborator `.zip`/`.exe` attachment → immediate delete; everything else → digest only.
+
+### 4.6 Self-hosted runner safety on the VPS
+
+A self-hosted runner on a public repo is itself an attack surface (§2 #4). Mitigations:
+- **Ephemeral**: the runner job runs in a fresh Podman container or VM per run (not the host).
+- **No long-lived secrets on the runner**: use OIDC + short-lived tokens; `GH_MOD_TOKEN` is a
+  fine-grained PAT scoped to this repo, read+issue+comment only, **never** `repo`-full.
+- **Jail the pi agent**: `tools` excludes `subagent`; `gh_act`/`git_act` are allow-listed
+  (delete-comment, lock, label — never merge-to-main, never push to `main`).
+- **Audit log**: every agent action is appended to `docs/audit/moderation.log` (committed) so a
+  human can review what the bot did. Screenshot-friendly for the blog.
+- **Human gate**: any `git_act` on `main`/parent branches requires a `--allow-destructive` flag
+  the runner does not set; the agent emails the recommendation instead.
+
+### 4.7 Email digest ("forward a mail to take action")
+
+The `mail` tool sends a markdown digest: event counts, the top threats (with links), the actions
+the agent **already took** (auto-hide/block), the actions **recommended for a human** (e.g.
+"revert PR #X — supply-chain risk 0.92"), and one-click `gh` commands to execute them. The human
+runs the `gh`/git command locally — so the agent never needs destructive write scope.
+
+---
+
+## 5. Rollout plan (phased, screenshot-able)
 
 | Phase | Deliverable | Marketing artifact |
 |---|---|---|
@@ -358,37 +498,123 @@ response the manual §0 cleanup approximated, but continuous and scalable.
 | **P2 — Data pipeline** (2–3 days) | `pm` GitHub streams → feature store; label seed from §0 | Screenshot of `pm github comments` feeding the lake |
 | **P3 — Train models in Podman** (3–5 days) | Models A/B/C trained; `podman build` reproducible | Screenshot of `podman run` + training metrics (P/R/AUC) |
 | **P4 — Inference + Action** (2–3 days) | `/score` endpoint + `moderate.yml` auto-moderating live | Screenshot of the Action auto-hiding a test spam comment in <5s |
-| **P5 — Blog & launch** (1 day) | "We dogfooded Polymetrics to build a repo moderation ML model" | Architecture diagram + demo GIF + the `pm moderation score` CLI |
+| **P5 — pi-mono agent** (3–4 days) | TS agent on self-hosted runner; daily + threshold trigger; skill-based; emails digest | Screenshot of the agent's action-digest email + the audit log |
+| **P6 — Blog & launch** (1 day) | "We dogfooded Polymetrics + pi-mono to run a self-hosted repo-moderation agent" | Architecture diagram + demo GIF + the moderation-email screenshot |
 
 ---
 
-## 5. Blog / marketing narrative (the story we tell)
+---
+
+## 6. Blog / marketing narrative (the story we tell)
 
 > **"The CLI they never built — including the one that protects the repo."**
 >
 > When we launched the top-5 connector parity issues for Polymetrics, throwaway bot accounts
 > flooded the issues with malicious `.zip` "fixes" within minutes. Instead of reaching for a
 > paid moderation SaaS, we used **Polymetrics itself** — our GitHub connector pulled the comment
-> stream, our `pm` CLI materialized features, and a **Podman container** trained a 3-model
-> moderation stack (spam, prompt-injection, bot-account). A GitHub Action now auto-hides spam,
-> labels low-quality issues, and freezes AI agents on prompt-injection — in seconds.
+> stream, our `pm` CLI materialized features, a **Podman container** trained a 3-model
+> moderation stack (spam, prompt-injection, bot-account), and a **pi-mono TypeScript agent** on
+> a self-hosted GitHub runner on our VPS runs daily and on a threshold trigger, scores every
+> event, auto-hides spam, freezes AI agents on prompt-injection, and emails us a one-click action
+> digest.
 >
-> One platform, one CLI, one container: read → features → train → serve → moderate. No cloud ML
-> bill, no external dependency. That's the Polymetrics thesis, proven on our own repo.
+> One platform, one CLI, one container, one agent: read → features → train → serve → moderate →
+> email → act. No cloud ML bill, no external dependency. That's the Polymetrics thesis, proven
+> on our own repo.
 
 Screenshots to capture for the blog: (1) the spam comment wave, (2) the `gh api` deletion +
 interaction-limit commands, (3) the `pm github comments` → feature-store pipeline, (4) the
 `podman build/run` training run with metrics, (5) the `/score` JSON response, (6) the GitHub
-Action auto-hiding a live test spam comment, (7) the architecture diagram.
+Action auto-hiding a live test spam comment, (7) the pi-mono agent's action-digest email + audit
+log, (8) the architecture diagram, (9) the self-hosted runner job in GitHub Actions UI.
 
 ---
 
-## 6. Open follow-ups (issues to file)
+## 7. Real-world open-source attacks (blog evidence + outbound links for SEO)
+
+Cite these in the blog to ground the threat model with authoritative, link-checked sources. They
+map 1:1 to §2's vectors and the moderation model's targets.
+
+### Prompt injection against AI agents in CI (the vector most relevant to us)
+
+- **PromptPwnd — prompt injection inside GitHub Actions** (Aikido): new frontier of supply-chain
+  attacks against AI coding agents. https://www.aikido.dev/blog/promptpwnd-github-actions-ai-agents
+- **Cline supply-chain attack via prompt injection in GitHub Actions** (Snyk):
+  https://snyk.io/blog/cline-supply-chain-attack-prompt-injection-github-actions/
+- **MCP horror stories: GitHub prompt injection** (Docker):
+  https://www.docker.com/blog/mcp-horror-stories-github-prompt-injection/
+
+### Open-source backdoors & package compromise
+
+- **xz-utils backdoor (CVE-2024-3094)** — original disclosure (openwall, 2024):
+  https://www.openwall.com/lists/oss-security/2024/03/29/4
+- **xz-utils backdoor explained** (Ars Technica, 2024):
+  https://arstechnica.com/security/2024/03/backdoor-found-in-widely-used-linux-utility-breaks-encrypted-ssh-connections/
+- **event-stream** — the canonical 2018 npm compromise (GitHub issue):
+  https://github.com/dominictarr/event-stream/issues/116
+
+### CI secret exfiltration & GitHub-Action compromise (the §1.5 stakes)
+
+- **Codecov bash uploader breach** — CI credential exfiltration (2021):
+  https://about.codecov.io/security-update/
+- **tj-actions/changed-files** — widely-used GitHub Action compromised, CI secrets exfiltrated
+  (March 2025): https://github.com/tj-actions/changed-files/security/advisories
+- **ultralytics** — package compromised via a GitHub Action (2024):
+  https://github.com/ultralytics/ultralytics/security/advisories
+
+> All nine URLs were link-checked (HTTP 200) before publication. Replace any that 404 on the
+> publish date with the Internet Archive mirror.
+
+---
+
+## 8. Blog SEO strategy
+
+- **Primary keyword**: "github repo bot protection" (and "github spam comments").
+- **Secondary**: "open source supply chain attack", "prompt injection github actions",
+  "github action self-hosted runner security", "ml spam detection", "moderate github issues",
+  "polymetrics cli".
+- **Title/H1**: *"GitHub Repo Bot Protection: We Trained an ML Model and a pi-mono Agent to
+  Moderate Our Open-Source Repo"* (~65 chars, front-loaded keyword).
+- **Meta description** (~155 chars): *"Throwaway bots hit our GitHub issues with malicious .zip files. Here's how we used
+  Polymetrics, Podman, and a pi-mono TS agent on a self-hosted runner to detect spam,
+  prompt-injection, and bot accounts — and auto-moderate them."*
+- **Structure** (H2/H3 mirroring this plan): Incident → Threat model → Native hardening → ML
+  models → pi-mono agent → Real-world attacks → Reproduce-it-yourself. Google rewards clear
+  heading hierarchy and depth (this doc is the long-form source).
+- **Internal links**: link to `docs/plans/connector-cli-parity-top100-research.md`, the GitHub
+  parity issue #44, and the `pm` connector docs — keeps readers on the platform.
+- **External links** (§7): outbound links to Aikido/Snyk/Docker/openwall/Ars/GitHub advisories
+  signal topical authority to search engines; they often earn reciprocal inbound links.
+- **Images**: 9 screenshots (§6) each with descriptive `alt` text containing the target keyword
+  (e.g. `alt="pi-mono moderation agent action-digest email for github repo bot protection"`).
+  Add a `diagram.svg` architecture image with a caption.
+- **Schema.org**: mark the post as `TechArticle`/`BlogPosting` with `about` =
+  "GitHub security" and `image` = the architecture diagram; reference the cited advisories as
+  `citation`.
+- **Code blocks**: every `gh`/`podman`/`pm`/TS snippet is crawlable text (great for long-tail
+  queries like "gh api delete issue comment", "podman run ml model github action").
+- **Reproduce-it**: ship the `agent/`, `models/`, and `build/Podfile.moderation` in the repo so
+  the blog links to runnable artifacts — strong E-E-A-T (experience, expertise, authority,
+  trustworthiness) signal.
+- **Distribution**: cross-post to dev.to / Hashnode (canonical = our blog), share the demo GIF on
+  X/LinkedIn, submit to Hacker News with the incident hook ("bots hit our issues within minutes;
+  here's the ML + agent we built in response").
+
+---
+
+---
+
+## 9. Open follow-ups (issues to file)
 
 - File an issue to add a `pm moderation` subcommand wrapping the `/score` endpoint (dogfood the
   CLI as the model client).
 - File an issue to add a **moderation** read stream to the GitHub connector (issue/comment/pr
   events) so the data pipeline is a first-class connector stream, not a one-off script.
+- File an issue to build the **pi-mono TS moderation agent** (§4): `agent/agent.ts` using the pi
+  SDK, `.pi/skills/moderation/SKILL.md`, custom `fetch_events`/`ml_score`/`gh_act`/`git_act`/
+  `mail` tools, and `.github/workflows/moderation.yml` (self-hosted runner, daily + threshold).
+- File an issue to provision the **self-hosted GitHub runner on the VPS** (ephemeral Podman jail,
+  OIDC, fine-grained `GH_MOD_TOKEN`, no `main`-push scope) — human-gated; touches infra.
 - Track the `gh auth refresh -s user` step to complete the 3-account block + abuse report.
 - Track the `.github/workflows/moderate.yml` + `CODEOWNERS` + repository ruleset as a security
   hardening PR (human-gated; touches `.github/`).
