@@ -487,6 +487,86 @@ the agent **already took** (auto-hide/block), the actions **recommended for a hu
 "revert PR #X — supply-chain risk 0.92"), and one-click `gh` commands to execute them. The human
 runs the `gh`/git command locally — so the agent never needs destructive write scope.
 
+### 4.8 Test the setup with Polymetrics schedule (before the GitHub runner)
+
+**Do not wire the agent into the live GitHub repo until the pipeline is proven on Polymetrics'
+own scheduler.** Polymetrics ships a `pm schedule` command (backends: systemd on Linux, launchd
+on macOS, crontab fallback) that runs a `pm flow run <flow> --json` on a cron. This is the
+local/VPS test harness — fully dogfooded, **read-only** (no repo mutations), and needs no GitHub
+Actions runner or self-hosted-runner secrets.
+
+**Step 1 — Define a read-only `moderation` flow** (`flows/moderation.json`): sync GitHub events
+into the warehouse, query the new-since-cursor slice, then POST each row to the Podman `/score`
+endpoint via an HTTP action step and write the digest to a local table.
+
+```json
+{
+  "version": 1,
+  "name": "moderation",
+  "description": "Read-only moderation scan: github events -> ml score -> digest (no repo mutations).",
+  "steps": [
+    { "id": "pull-events", "kind": "sync",
+      "connection": "github-ro", "streams": ["issues", "comments", "pulls"],
+      "out": ["events"] },
+    { "id": "new-since-cursor", "kind": "query",
+      "sql": "select * from events where created_at > coalesce((select max(seen_at) from moderation_cursor), '1970-01-01')",
+      "in": ["events"], "out": ["new_events"] },
+    { "id": "score", "kind": "action",
+      "action_cfg": {
+        "source_table": "new_events",
+        "destination_connector": "http", "destination_credential": "mod-svc",
+        "destination_config": { "base_url": "http://localhost:7788", "path": "/score" },
+        "action": "create", "mappings": { "body": "body", "user": "user.login", "url": "html_url" } },
+      "in": ["new_events"], "out": ["scored"] },
+    { "id": "digest", "kind": "query",
+      "sql": "select count(*) n, sum(case when spam_score>0.5 then 1 else 0 end) spam, max(url) worst from scored",
+      "in": ["scored"], "out": ["digest"] }
+  ]
+}
+```
+
+**Step 2 — Validate read-only (no scheduling, no mutations):**
+
+```bash
+pm flow plan    --file flows/moderation.json          # validate the manifest
+pm flow preview --file flows/moderation.json          # dry-run: show what WOULD sync/POST
+pm flow run     --file flows/moderation.json --json     # one-shot run; writes digest + scored table
+pm flow status  moderation --json                       # inspect the run + checkpoint
+```
+
+`preview` proves the extraction + scoring shape end-to-end against the live repo **without**
+scheduling or any write to the repo. This is the gate: if `preview` is wrong, the agent and the
+GitHub runner are not worth building yet.
+
+**Step 3 — Schedule it on the VPS (daily + threshold guard):**
+
+```bash
+# Daily full scan at 06:00 UTC
+pm schedule create --name moderation-daily --cron "0 6 * * *" --flow moderation
+pm schedule install moderation-daily        # -> systemd user timer on the VPS (or launchd/crontab)
+pm schedule list                            # confirm installed + next-fire
+
+# Threshold guard: a lightweight flow 'moderation-guard' every 30 min that counts new events
+# since cursor; if > N (or any non-collaborator attachment), it runs the full 'moderation' flow.
+pm schedule create --name moderation-guard --cron "*/30 * * * *" --flow moderation-guard
+pm schedule install moderation-guard
+pm schedule remove moderation-guard         # teardown when promoted to the GitHub runner
+```
+
+**Step 4 — Verify the test (acceptance for promoting to the GitHub runner):**
+
+- `pm schedule list` shows both schedules with the systemd timer active.
+- After the first fire: `pm flow status moderation --json` shows a successful run with non-zero
+  `events` synced and `scored` rows.
+- The `digest` warehouse table has sane counts (`n`, `spam`, `worst`) — no false-positive flood.
+- `journalctl --user -u moderation-daily.timer` (or `crontab -l`) shows the cron firing on time.
+- **No** repo mutation occurred (read-only PAT, `http` destination only calls localhost:7788).
+
+Only after this passes do we promote to §4's GitHub-Actions self-hosted runner for the
+**action-taking** (gh/git) half — the read/analyze/email half is already proven on `pm schedule`.
+This also de-risks the blog demo: the screenshot of `pm schedule list` + `pm flow status` is the
+"it runs on our own scheduler" proof before any GitHub-runner complexity.
+
 ---
 
 ## 5. Rollout plan (phased, screenshot-able)
@@ -498,6 +578,7 @@ runs the `gh`/git command locally — so the agent never needs destructive write
 | **P2 — Data pipeline** (2–3 days) | `pm` GitHub streams → feature store; label seed from §0 | Screenshot of `pm github comments` feeding the lake |
 | **P3 — Train models in Podman** (3–5 days) | Models A/B/C trained; `podman build` reproducible | Screenshot of `podman run` + training metrics (P/R/AUC) |
 | **P4 — Inference + Action** (2–3 days) | `/score` endpoint + `moderate.yml` auto-moderating live | Screenshot of the Action auto-hiding a test spam comment in <5s |
+| **P4.5 — `pm schedule` test** (1–2 days) | Read-only `moderation` flow on `pm schedule` (systemd timer); daily + threshold guard; verified end-to-end with **no repo mutations** — the gate before the GitHub runner | Screenshot of `pm schedule list` + `pm flow status moderation` + the digest table |
 | **P5 — pi-mono agent** (3–4 days) | TS agent on self-hosted runner; daily + threshold trigger; skill-based; emails digest | Screenshot of the agent's action-digest email + the audit log |
 | **P6 — Blog & launch** (1 day) | "We dogfooded Polymetrics + pi-mono to run a self-hosted repo-moderation agent" | Architecture diagram + demo GIF + the moderation-email screenshot |
 
@@ -613,6 +694,9 @@ map 1:1 to §2's vectors and the moderation model's targets.
 - File an issue to build the **pi-mono TS moderation agent** (§4): `agent/agent.ts` using the pi
   SDK, `.pi/skills/moderation/SKILL.md`, custom `fetch_events`/`ml_score`/`gh_act`/`git_act`/
   `mail` tools, and `.github/workflows/moderation.yml` (self-hosted runner, daily + threshold).
+- File an issue to add the **read-only `moderation` flow + `pm schedule` test** (§4.8) that gates
+  the GitHub-runner setup: `flows/moderation.json` (sync→query→HTTP-score→digest), `pm flow
+  preview` validation, and the `moderation-daily`/`moderation-guard` systemd timers on the VPS.
 - File an issue to provision the **self-hosted GitHub runner on the VPS** (ephemeral Podman jail,
   OIDC, fine-grained `GH_MOD_TOKEN`, no `main`-push scope) — human-gated; touches infra.
 - Track the `gh auth refresh -s user` step to complete the 3-account block + abuse report.
