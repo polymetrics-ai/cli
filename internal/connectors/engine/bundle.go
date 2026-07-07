@@ -24,6 +24,8 @@ type Bundle struct {
 	HTTP          HTTPBase                 // streams.json "base"; zero value when no streams.json
 	Streams       []StreamSpec             // streams.json "streams"
 	Writes        []WriteAction            // writes.json "actions"; nil when writes.json absent
+	Operations    []OperationSpec          // operations.json "operations"; nil when operations.json absent
+	RawOperations json.RawMessage          // verbatim operations.json bytes for validation/audit scanning
 	Schemas       map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
 	Surface       *APISurface              // api_surface.json
 	CLISurface    *CLISurface              // cli_surface.json
@@ -408,10 +410,12 @@ type SurfaceEndpoint struct {
 	Operation *SurfaceOperation `json:"operation,omitempty"`
 }
 
-// SurfaceCoverage names the stream or write action that covers an endpoint.
+// SurfaceCoverage names the executable connector surface that covers an endpoint.
 type SurfaceCoverage struct {
-	Stream string `json:"stream,omitempty"`
-	Write  string `json:"write,omitempty"`
+	Stream      string   `json:"stream,omitempty"`
+	Write       string   `json:"write,omitempty"`
+	DirectRead  string   `json:"direct_read,omitempty"`
+	DirectReads []string `json:"direct_reads,omitempty"`
 }
 
 // SurfaceExclusion names why an endpoint is intentionally out of scope.
@@ -431,6 +435,87 @@ type SurfaceOperation struct {
 	SourceURL        string `json:"source_url,omitempty"`
 	Notes            string `json:"notes,omitempty"`
 	DuplicateOf      string `json:"duplicate_of,omitempty"`
+}
+
+// OperationSpec is one reviewed, typed operation definition. The first phase
+// loads and validates these definitions only; executors are added in later
+// issue slices and every unknown kind remains rejected by the meta-schema.
+type OperationSpec struct {
+	ID              string                  `json:"id"`
+	Kind            string                  `json:"kind"`
+	Summary         string                  `json:"summary"`
+	Description     string                  `json:"description,omitempty"`
+	SourceURL       string                  `json:"source_url,omitempty"`
+	Risk            string                  `json:"risk"`
+	Approval        string                  `json:"approval"`
+	OutputPolicy    string                  `json:"output_policy"`
+	AuthScopes      []string                `json:"auth_scopes,omitempty"`
+	MutationClass   string                  `json:"mutation_class,omitempty"`
+	Destructive     bool                    `json:"destructive,omitempty"`
+	SecretSensitive bool                    `json:"secret_sensitive,omitempty"`
+	AuditEvent      string                  `json:"audit_event,omitempty"`
+	REST            *RESTOperationSpec      `json:"rest,omitempty"`
+	GraphQL         *GraphQLOperationSpec   `json:"graphql,omitempty"`
+	XML             *XMLOperationSpec       `json:"xml,omitempty"`
+	Binary          *BinaryOperationSpec    `json:"binary,omitempty"`
+	File            *FileOperationSpec      `json:"file,omitempty"`
+	LocalGit        *LocalGitOperationSpec  `json:"local_git,omitempty"`
+	LocalFile       *LocalFileOperationSpec `json:"local_file,omitempty"`
+	Browser         *BrowserOperationSpec   `json:"browser,omitempty"`
+	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
+}
+
+type RESTOperationSpec struct {
+	Method string            `json:"method"`
+	Path   string            `json:"path"`
+	Query  map[string]string `json:"query,omitempty"`
+}
+
+type GraphQLOperationSpec struct {
+	Document      string         `json:"document"`
+	OperationName string         `json:"operation_name"`
+	VariablesPath string         `json:"variables_path,omitempty"`
+	Pagination    map[string]any `json:"pagination,omitempty"`
+}
+
+type XMLOperationSpec struct {
+	EnvelopeTemplate string            `json:"envelope_template"`
+	ResponsePath     string            `json:"response_path,omitempty"`
+	Headers          map[string]string `json:"headers,omitempty"`
+}
+
+type BinaryOperationSpec struct {
+	Method          string `json:"method"`
+	Path            string `json:"path"`
+	MaxBytes        int    `json:"max_bytes,omitempty"`
+	AllowOverwrite  bool   `json:"allow_overwrite,omitempty"`
+	ExtractArchives bool   `json:"extract_archives,omitempty"`
+}
+
+type FileOperationSpec struct {
+	Direction string `json:"direction"`
+	Path      string `json:"path,omitempty"`
+	MaxBytes  int    `json:"max_bytes,omitempty"`
+}
+
+type LocalGitOperationSpec struct {
+	Action      string   `json:"action"`
+	AllowedArgs []string `json:"allowed_args,omitempty"`
+}
+
+type LocalFileOperationSpec struct {
+	Action   string `json:"action"`
+	Path     string `json:"path,omitempty"`
+	MaxBytes int    `json:"max_bytes,omitempty"`
+}
+
+type BrowserOperationSpec struct {
+	Action string `json:"action"`
+	URL    string `json:"url,omitempty"`
+}
+
+type CompositeOperationSpec struct {
+	Steps []string `json:"steps"`
 }
 
 // CLISurface is the parsed cli_surface.json. It is docs/help metadata only:
@@ -484,6 +569,7 @@ type CLICommand struct {
 	Examples      []string                `json:"examples,omitempty"`
 	APISurface    []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
 	OutputPolicy  string                  `json:"output_policy,omitempty"`
+	Operation     string                  `json:"operation,omitempty"`
 	Risk          string                  `json:"risk,omitempty"`
 	Approval      string                  `json:"approval,omitempty"`
 	Notes         string                  `json:"notes,omitempty"`
@@ -504,8 +590,8 @@ type CLIHelpTopic struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, spec, streams, writes, apiSurface, cliSurface *Schema
-	err                                                     error
+	metadata, spec, streams, writes, apiSurface, operations, cliSurface *Schema
+	err                                                                 error
 }{}
 
 func init() {
@@ -525,6 +611,7 @@ func init() {
 	metaSchemas.streams = compileMeta(streamsSchemaJSON)
 	metaSchemas.writes = compileMeta(writesSchemaJSON)
 	metaSchemas.apiSurface = compileMeta(apiSurfaceSchemaJSON)
+	metaSchemas.operations = compileMeta(operationsSchemaJSON)
 	metaSchemas.cliSurface = compileMeta(cliSurfaceSchemaJSON)
 }
 
@@ -668,6 +755,11 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		return Bundle{}, err
 	}
 
+	operations, rawOperations, err := loadOperations(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
+
 	schemas, err := loadStreamSchemas(sub, dirName, streams)
 	if err != nil {
 		return Bundle{}, err
@@ -698,6 +790,8 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		HTTP:          httpBase,
 		Streams:       streams,
 		Writes:        writes,
+		Operations:    operations,
+		RawOperations: rawOperations,
 		Schemas:       schemas,
 		Surface:       surface,
 		CLISurface:    cliSurface,
@@ -797,6 +891,156 @@ func loadWrites(sub fs.FS, dirName string) ([]WriteAction, error) {
 		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
 	}
 	return doc.Actions, nil
+}
+
+func loadOperations(sub fs.FS, dirName string) ([]OperationSpec, json.RawMessage, error) {
+	if !fileExists(sub, "operations.json") {
+		return nil, nil, nil
+	}
+	raw, err := readFile(sub, "operations.json")
+	if err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.operations.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
+	}
+	var doc struct {
+		Operations []OperationSpec `json:"operations"`
+	}
+	if err := strictDecode(raw, &doc); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
+	}
+	if err := validateOperations(doc.Operations); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
+	}
+	return doc.Operations, raw, nil
+}
+
+func validateOperations(ops []OperationSpec) error {
+	seen := map[string]bool{}
+	for i, op := range ops {
+		if seen[op.ID] {
+			return fmt.Errorf("operation %d has duplicate operation id %q", i, op.ID)
+		}
+		seen[op.ID] = true
+
+		block, count := operationExecutionBlock(op)
+		if count != 1 {
+			return fmt.Errorf("operation %d (%q) must declare exactly one execution block, got %d", i, op.ID, count)
+		}
+		expected := expectedOperationBlock(op.Kind)
+		if expected == "" {
+			return fmt.Errorf("operation %d (%q) has unsupported kind %q", i, op.ID, op.Kind)
+		}
+		if block != expected {
+			return fmt.Errorf("operation %d (%q) kind %q must declare %s block, got %s", i, op.ID, op.Kind, expected, block)
+		}
+		if err := validateOperationSemantics(i, op); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func operationExecutionBlock(op OperationSpec) (string, int) {
+	var block string
+	count := 0
+	add := func(name string, present bool) {
+		if !present {
+			return
+		}
+		block = name
+		count++
+	}
+	add("rest", op.REST != nil)
+	add("graphql", op.GraphQL != nil)
+	add("xml", op.XML != nil)
+	add("binary", op.Binary != nil)
+	add("file", op.File != nil)
+	add("local_git", op.LocalGit != nil)
+	add("local_file", op.LocalFile != nil)
+	add("browser", op.Browser != nil)
+	add("composite", op.Composite != nil)
+	return block, count
+}
+
+func expectedOperationBlock(kind string) string {
+	switch kind {
+	case "rest_read", "rest_write":
+		return "rest"
+	case "graphql_query", "graphql_mutation":
+		return "graphql"
+	case "xml_export", "xml_import":
+		return "xml"
+	case "binary_download":
+		return "binary"
+	case "file_upload":
+		return "file"
+	case "local_git":
+		return "local_git"
+	case "local_file":
+		return "local_file"
+	case "browser_open":
+		return "browser"
+	case "stream_etl", "composite":
+		return "composite"
+	default:
+		return ""
+	}
+}
+
+func validateOperationSemantics(i int, op OperationSpec) error {
+	switch op.Kind {
+	case "rest_read":
+		if method := strings.ToUpper(strings.TrimSpace(op.REST.Method)); method != "GET" {
+			return fmt.Errorf("operation %d (%q) rest_read method must be GET, got %s", i, op.ID, method)
+		}
+	case "rest_write":
+		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+		if method == "GET" || method == "HEAD" || method == "" {
+			return fmt.Errorf("operation %d (%q) rest_write method must be mutating, got %s", i, op.ID, method)
+		}
+		if strings.TrimSpace(op.MutationClass) == "" || op.MutationClass == "none" {
+			return fmt.Errorf("operation %d (%q) rest_write must declare mutation_class", i, op.ID)
+		}
+		if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
+			return fmt.Errorf("operation %d (%q) rest_write must declare approval requirements", i, op.ID)
+		}
+	case "graphql_mutation", "xml_import":
+		if strings.TrimSpace(op.MutationClass) == "" || op.MutationClass == "none" {
+			return fmt.Errorf("operation %d (%q) %s must declare mutation_class", i, op.ID, op.Kind)
+		}
+		if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
+			return fmt.Errorf("operation %d (%q) %s must declare approval requirements", i, op.ID, op.Kind)
+		}
+	case "binary_download":
+		if method := strings.ToUpper(strings.TrimSpace(op.Binary.Method)); method != "GET" {
+			return fmt.Errorf("operation %d (%q) binary_download method must be GET, got %s", i, op.ID, method)
+		}
+		if op.Binary.MaxBytes <= 0 {
+			return fmt.Errorf("operation %d (%q) binary_download must declare positive max_bytes", i, op.ID)
+		}
+	case "file_upload":
+		if op.File.Direction != "upload" {
+			return fmt.Errorf("operation %d (%q) file_upload direction must be upload, got %s", i, op.ID, op.File.Direction)
+		}
+		if op.File.MaxBytes <= 0 {
+			return fmt.Errorf("operation %d (%q) file_upload must declare positive max_bytes", i, op.ID)
+		}
+		if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
+			return fmt.Errorf("operation %d (%q) file_upload must declare approval requirements", i, op.ID)
+		}
+	case "local_file":
+		if op.LocalFile.Action == "write" || op.LocalFile.Action == "mkdir" {
+			if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
+				return fmt.Errorf("operation %d (%q) local_file mutation must declare approval requirements", i, op.ID)
+			}
+		}
+		if op.LocalFile.Action == "write" && op.LocalFile.MaxBytes <= 0 {
+			return fmt.Errorf("operation %d (%q) local_file write must declare positive max_bytes", i, op.ID)
+		}
+	}
+	return nil
 }
 
 func loadStreamSchemas(sub fs.FS, dirName string, streams []StreamSpec) (map[string]*StreamSchema, error) {

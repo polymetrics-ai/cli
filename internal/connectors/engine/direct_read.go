@@ -218,8 +218,8 @@ func requireDirectReadEndpoint(b Bundle, method, endpointPath string) error {
 func requireDirectReadSurfaceEndpoint(surface *APISurface, method, endpointPath string) error {
 	for _, ep := range surface.Endpoints {
 		if strings.EqualFold(ep.Method, method) && ep.Path == endpointPath {
-			if ep.Operation == nil || ep.Operation.Model != "direct_read" {
-				return fmt.Errorf("api_surface endpoint %s %s is not a direct_read operation", method, endpointPath)
+			if ep.CoveredBy == nil || (ep.CoveredBy.DirectRead == "" && len(ep.CoveredBy.DirectReads) == 0) {
+				return fmt.Errorf("api_surface endpoint %s %s is not covered by a direct_read command", method, endpointPath)
 			}
 			return nil
 		}

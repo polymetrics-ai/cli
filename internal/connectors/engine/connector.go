@@ -353,6 +353,7 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			Availability:  cmd.Availability,
 			Stream:        cmd.Stream,
 			Write:         cmd.Write,
+			Operation:     cmd.Operation,
 			SourceCLIPath: cmd.SourceCLIPath,
 			SourceURL:     cmd.SourceURL,
 			Flags:         flags,

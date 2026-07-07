@@ -237,6 +237,260 @@ func TestBundleLoadParsesCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadParsesOperations(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.get",
+				"kind": "rest_read",
+				"summary": "Read one widget",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				}
+			}
+		]
+	}`)}
+	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"tagline": "Work with Acme from the command line.",
+		"usage": "pm acme <command> [flags]",
+		"commands": [
+			{
+				"path": "widget view",
+				"summary": "View a widget",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"operation": "acme.widgets.get"
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if len(b.Operations) != 1 {
+		t.Fatalf("Operations = %d, want 1", len(b.Operations))
+	}
+	op := b.Operations[0]
+	if op.ID != "acme.widgets.get" || op.Kind != "rest_read" || op.REST == nil || op.REST.Path != "/widgets/{id}" {
+		t.Fatalf("operation = %+v, want parsed rest_read operation", op)
+	}
+	if b.CLISurface.Commands[0].Operation != "acme.widgets.get" {
+		t.Fatalf("command operation = %q, want acme.widgets.get", b.CLISurface.Commands[0].Operation)
+	}
+}
+
+func TestBundleLoadRejectsUnsafeOperationKind(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.raw.shell",
+				"kind": "shell",
+				"summary": "Run shell",
+				"risk": "critical",
+				"approval": "blocked",
+				"output_policy": "json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected unsafe operation kind to be rejected")
+	}
+	if !strings.Contains(err.Error(), "operations.json") ||
+		!strings.Contains(err.Error(), "/operations/0/kind") ||
+		!strings.Contains(err.Error(), "not in enum") {
+		t.Fatalf("Load error = %q, want operations.json kind enum rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsOperationWithoutMatchingBlock(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.projects.list",
+				"kind": "graphql_query",
+				"summary": "List projects",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/projects"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected graphql_query without graphql block to be rejected")
+	}
+	if !strings.Contains(err.Error(), "operations.json") ||
+		!strings.Contains(err.Error(), "graphql_query") ||
+		!strings.Contains(err.Error(), "graphql") {
+		t.Fatalf("Load error = %q, want operations.json matching-block rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsOperationWithMultipleExecutionBlocks(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.get",
+				"kind": "rest_read",
+				"summary": "Read one widget",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				},
+				"graphql": {
+					"operation_name": "Widget",
+					"document": "query Widget($id: ID!) { node(id: $id) { id } }"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected operation with multiple execution blocks to be rejected")
+	}
+	if !strings.Contains(err.Error(), "operations.json") ||
+		!strings.Contains(err.Error(), "exactly one execution block") {
+		t.Fatalf("Load error = %q, want operations.json single-block rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsDuplicateOperationIDs(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.get",
+				"kind": "rest_read",
+				"summary": "Read one widget",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				}
+			},
+			{
+				"id": "acme.widgets.get",
+				"kind": "rest_read",
+				"summary": "Read one widget again",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected duplicate operation IDs to be rejected")
+	}
+	if !strings.Contains(err.Error(), "operations.json") ||
+		!strings.Contains(err.Error(), "duplicate operation id") {
+		t.Fatalf("Load error = %q, want duplicate operation id rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsRestWriteWithReadMethod(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.update",
+				"kind": "rest_write",
+				"summary": "Update one widget",
+				"risk": "medium",
+				"approval": "reverse ETL writes require plan, preview, approval, execute",
+				"output_policy": "json",
+				"mutation_class": "update",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected rest_write with GET to be rejected")
+	}
+	if !strings.Contains(err.Error(), "rest_write method must be mutating") {
+		t.Fatalf("Load error = %q, want rest_write method rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsBinaryDownloadWithoutPositiveLimit(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.assets.download",
+				"kind": "binary_download",
+				"summary": "Download one asset",
+				"risk": "medium",
+				"approval": "filesystem writes require explicit destination approval",
+				"output_policy": "file_manifest",
+				"binary": {
+					"method": "GET",
+					"path": "/assets/{id}"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected binary_download without max_bytes to be rejected")
+	}
+	if !strings.Contains(err.Error(), "binary_download must declare positive max_bytes") {
+		t.Fatalf("Load error = %q, want binary max_bytes rejection", err.Error())
+	}
+}
+
+func TestBundleLoadEmbeddedGitHubOperations(t *testing.T) {
+	b, err := Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	if len(b.Operations) == 0 {
+		t.Fatalf("GitHub Operations is empty; defs.FS must embed operations.json")
+	}
+	found := false
+	for _, op := range b.Operations {
+		if op.ID == "github.projects.list" && op.Kind == "graphql_query" {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("GitHub operations missing github.projects.list graphql_query example: %+v", b.Operations)
+	}
+}
+
 func TestBundleLoadEmbeddedGitHubCLISurface(t *testing.T) {
 	b, err := Load(defs.FS, "github")
 	if err != nil {

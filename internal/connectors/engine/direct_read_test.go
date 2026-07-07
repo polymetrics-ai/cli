@@ -276,12 +276,8 @@ func directReadBundle(baseURL, method, endpointPath string) Bundle {
 				{
 					Method: method,
 					Path:   endpointPath,
-					Operation: &SurfaceOperation{
-						Model:            "direct_read",
-						Status:           "blocked",
-						Risk:             "medium",
-						BlockedByDefault: true,
-						Reason:           "test direct read operation",
+					CoveredBy: &SurfaceCoverage{
+						DirectRead: "repo read-file",
 					},
 				},
 			},

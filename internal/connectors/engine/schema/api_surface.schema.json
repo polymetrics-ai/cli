@@ -23,7 +23,12 @@
             "additionalProperties": false,
             "properties": {
               "stream": { "type": "string" },
-              "write": { "type": "string" }
+              "write": { "type": "string" },
+              "direct_read": { "type": "string" },
+              "direct_reads": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
             }
           },
           "excluded": {
