@@ -22,5 +22,8 @@ var writesSchemaJSON string
 //go:embed schema/api_surface.schema.json
 var apiSurfaceSchemaJSON string
 
+//go:embed schema/operations.schema.json
+var operationsSchemaJSON string
+
 //go:embed schema/cli_surface.schema.json
 var cliSurfaceSchemaJSON string

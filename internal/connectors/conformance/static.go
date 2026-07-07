@@ -268,10 +268,11 @@ func checkWriteSchemasValid(b engine.Bundle) error {
 
 // checkSurfaceComplete enforces design §E.1 rules 1-4: every endpoint has
 // exactly one executable covered_by row or an explicit blocked non-executable
-// classifier; covered_by resolves to a declared stream/action and every
-// declared stream/action appears in the surface; excluded/operation classifiers
-// use closed vocabularies; capabilities.write/read == false is only legal when
-// the surface has no executable mutation/GET endpoint respectively.
+// classifier; covered_by resolves to a declared stream/action/direct-read
+// command and every declared stream/action appears in the surface;
+// excluded/operation classifiers use closed vocabularies; capabilities.write/read
+// == false is only legal when the surface has no executable mutation/GET
+// endpoint respectively.
 func checkSurfaceComplete(b engine.Bundle) error {
 	if b.Surface == nil {
 		return fmt.Errorf("api_surface.json did not load")
@@ -285,6 +286,14 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	for _, w := range b.Writes {
 		writes[w.Name] = true
 	}
+	directReads := map[string]bool{}
+	if b.CLISurface != nil {
+		for _, cmd := range b.CLISurface.Commands {
+			if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+				directReads[cmd.Path] = true
+			}
+		}
+	}
 
 	coveredStreams := map[string]bool{}
 	coveredWrites := map[string]bool{}
@@ -293,7 +302,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "")
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "" || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -323,6 +332,14 @@ func checkSurfaceComplete(b engine.Bundle) error {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, ep.CoveredBy.Write)
 				}
 				coveredWrites[ep.CoveredBy.Write] = true
+			}
+			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
+				if !directReads[directRead] {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead)
+				}
+				if !strings.EqualFold(ep.Method, "GET") {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path)
+				}
 			}
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
@@ -412,6 +429,17 @@ func checkDocsPresent(b engine.Bundle) error {
 		}
 	}
 	return nil
+}
+
+func coveredDirectReadTargets(covered *engine.SurfaceCoverage) []string {
+	if covered == nil {
+		return nil
+	}
+	targets := append([]string{}, covered.DirectReads...)
+	if covered.DirectRead != "" {
+		targets = append(targets, covered.DirectRead)
+	}
+	return targets
 }
 
 // checkSecretRedaction scans docs.md and every fixture file's raw bytes for

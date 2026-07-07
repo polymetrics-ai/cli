@@ -240,6 +240,7 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkDocsHeadings(b)...)
 	findings = append(findings, checkFixtureSecrets(b)...)
 	findings = append(findings, checkCLISurfaceSecrets(b)...)
+	findings = append(findings, checkOperationsSecrets(b)...)
 	findings = append(findings, checkConformanceSkipReason(b)...)
 	findings = append(findings, checkDefaultTypeMismatch(b)...)
 	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
@@ -273,6 +274,8 @@ func loadErrorFinding(name string, err error) Finding {
 		file = "streams.json"
 	case strings.Contains(msg, "writes.json"):
 		file = "writes.json"
+	case strings.Contains(msg, "operations.json"):
+		file = "operations.json"
 	case strings.Contains(msg, "api_surface.json"):
 		file = "api_surface.json"
 	case strings.Contains(msg, "cli_surface.json"):
@@ -497,8 +500,9 @@ func checkWritePathFields(b engine.Bundle) []Finding {
 //  1. every endpoint has exactly one executable covered_by row or an explicit
 //     blocked non-executable classifier. Legacy surfaces use excluded;
 //     operation-ledger surfaces use operation.
-//  2. covered_by.stream/covered_by.write resolves to a declared stream/action,
-//     and every declared stream/action appears in the surface.
+//  2. covered_by.stream/covered_by.write/covered_by.direct_read resolves to a
+//     declared stream/action/implemented direct-read command, and every
+//     declared stream/action appears in the surface.
 //  3. excluded.category is from the closed vocabulary (defense-in-depth; the
 //     loader's meta-schema enum already enforces this at load time), and
 //     operation rows use the closed operation vocabulary.
@@ -523,6 +527,14 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	for _, w := range b.Writes {
 		writes[w.Name] = true
 	}
+	directReads := map[string]bool{}
+	if b.CLISurface != nil {
+		for _, cmd := range b.CLISurface.Commands {
+			if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+				directReads[cmd.Path] = true
+			}
+		}
+	}
 
 	coveredStreams := map[string]bool{}
 	coveredWrites := map[string]bool{}
@@ -531,7 +543,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "")
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "" || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -583,6 +595,20 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					})
 				} else {
 					coveredWrites[ep.CoveredBy.Write] = true
+				}
+			}
+			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
+				if !directReads[directRead] {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceUnknownTarget,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead),
+					})
+				}
+				if !strings.EqualFold(ep.Method, "GET") {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path),
+					})
 				}
 			}
 			if strings.EqualFold(ep.Method, "GET") {
@@ -693,11 +719,15 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	for _, w := range b.Writes {
 		writes[w.Name] = true
 	}
+	operations := map[string]engine.OperationSpec{}
+	for _, op := range b.Operations {
+		operations[op.ID] = op
+	}
 	endpoints := cliSurfaceEndpointStates(b.Surface)
 
 	var findings []Finding
 	for i, cmd := range b.CLISurface.Commands {
-		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes)...)
+		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
@@ -711,14 +741,25 @@ func checkCLISurfaceReferences(
 	cmd engine.CLICommand,
 	streams map[string]bool,
 	writes map[string]bool,
+	operations map[string]engine.OperationSpec,
 ) []Finding {
 	var findings []Finding
-	if cmd.Stream != "" && cmd.Write != "" {
+	mappings := 0
+	if cmd.Stream != "" {
+		mappings++
+	}
+	if cmd.Write != "" {
+		mappings++
+	}
+	if cmd.Operation != "" {
+		mappings++
+	}
+	if mappings > 1 {
 		findings = append(findings, Finding{
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("command %d (%q) must not reference both stream and write", i, cmd.Path),
+			Message:   fmt.Sprintf("command %d (%q) must not reference more than one executable target (stream, write, operation)", i, cmd.Path),
 		})
 	}
 	if cmd.Stream != "" && !streams[cmd.Stream] {
@@ -737,6 +778,16 @@ func checkCLISurfaceReferences(
 			Message:   fmt.Sprintf("command %d (%q) references unknown write action %q", i, cmd.Path, cmd.Write),
 		})
 	}
+	if cmd.Operation != "" {
+		if _, ok := operations[cmd.Operation]; !ok {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceUnknownTarget,
+				Message:   fmt.Sprintf("command %d (%q) references unknown operation %q", i, cmd.Path, cmd.Operation),
+			})
+		}
+	}
 	return findings
 }
 
@@ -747,7 +798,7 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 
 	switch cmd.Intent {
 	case "etl":
-		if cmd.Stream == "" {
+		if cmd.Stream == "" && cmd.Operation == "" {
 			return []Finding{{
 				Connector: b.Name,
 				File:      "cli_surface.json",
@@ -756,7 +807,7 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 			}}
 		}
 	case "reverse_etl":
-		if cmd.Write == "" {
+		if cmd.Write == "" && cmd.Operation == "" {
 			return []Finding{{
 				Connector: b.Name,
 				File:      "cli_surface.json",
@@ -765,6 +816,9 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 			}}
 		}
 	case "direct_read":
+		if cmd.Operation != "" {
+			return nil
+		}
 		var findings []Finding
 		if len(cmd.APISurface) != 1 {
 			findings = append(findings, Finding{
@@ -803,6 +857,16 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 		if len(findings) > 0 {
 			return findings
 		}
+	case "local_workflow":
+		if cmd.Operation != "" {
+			return nil
+		}
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented local workflow command %d (%q) must reference a typed operation", i, cmd.Path),
+		}}
 	default:
 		return []Finding{{
 			Connector: b.Name,
@@ -861,15 +925,15 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
-		if cmd.Intent == "direct_read" && state.operation != nil && state.operation.Model == "direct_read" {
-			continue
-		}
 		if state.excluded || state.operation != nil || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
+			if cmd.Intent == "direct_read" && directReadCoverageMatches(state.coveredBy, cmd.Path) {
+				continue
+			}
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceSafety,
-				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s that is not covered by a stream or write action", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s that is not covered by an executable surface", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
 			})
 			continue
 		}
@@ -912,6 +976,26 @@ type cliSurfaceEndpointState struct {
 	coveredBy *engine.SurfaceCoverage
 	excluded  bool
 	operation *engine.SurfaceOperation
+}
+
+func coveredDirectReadTargets(covered *engine.SurfaceCoverage) []string {
+	if covered == nil {
+		return nil
+	}
+	targets := append([]string{}, covered.DirectReads...)
+	if covered.DirectRead != "" {
+		targets = append(targets, covered.DirectRead)
+	}
+	return targets
+}
+
+func directReadCoverageMatches(covered *engine.SurfaceCoverage, path string) bool {
+	for _, target := range coveredDirectReadTargets(covered) {
+		if target == path {
+			return true
+		}
+	}
+	return false
 }
 
 func surfaceEndpointKey(method, path string) string {
@@ -985,6 +1069,18 @@ func checkCLISurfaceSecrets(b engine.Bundle) []Finding {
 		File:      "cli_surface.json",
 		Rule:      ruleSecretLiteral,
 		Message:   "cli_surface.json contains a secret-shaped literal",
+	}}
+}
+
+func checkOperationsSecrets(b engine.Bundle) []Finding {
+	if len(b.RawOperations) == 0 || !secretLiteralPattern.Match(b.RawOperations) {
+		return nil
+	}
+	return []Finding{{
+		Connector: b.Name,
+		File:      "operations.json",
+		Rule:      ruleSecretLiteral,
+		Message:   "operations.json contains a secret-shaped literal",
 	}}
 }
 

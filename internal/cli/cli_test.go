@@ -540,6 +540,28 @@ func TestGitHubCommandSurfaceBlocksReverseETLCommand(t *testing.T) {
 	}
 }
 
+func TestGitHubCommandSurfaceBlocksOperationBeforeCredentialResolution(t *testing.T) {
+	root := t.TempDir()
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"github", "project", "list",
+		"--root", root,
+		"--json",
+	}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("project list code = 0, want policy error; stdout=%s", stdout.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"category": "policy"`, `"code": "connector_command_blocked"`, "project list", "operation github.projects.list"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("blocked operation output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+		}
+	}
+	if strings.Contains(out, "missing --credential") || strings.Contains(stderr.String(), "missing --credential") {
+		t.Fatalf("operation-backed command attempted credential resolution before blocking:\nstdout=%s\nstderr=%s", out, stderr.String())
+	}
+}
+
 func runCLI(t *testing.T, args []string) (stdout string, stderr string) {
 	t.Helper()
 	var outBuf, errBuf bytes.Buffer

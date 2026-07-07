@@ -238,6 +238,7 @@
       "intent": "direct_write",
       "availability": "unsafe_or_disallowed",
       "source_cli_path": "gh issue delete",
+      "operation": "github.issue.delete",
       "notes": "Issue deletion is not exposed as a connector write; destructive or non-REST issue management must be reviewed separately."
     },
     {
@@ -563,6 +564,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh repo clone",
+      "operation": "github.repo.clone",
       "notes": "Depends on local git and filesystem state."
     },
     {
@@ -826,6 +828,7 @@
       "intent": "local_workflow",
       "availability": "unsupported_local",
       "source_cli_path": "gh release download",
+      "operation": "github.release.download_assets",
       "notes": "Downloads binary assets to the local filesystem."
     },
     {
@@ -1221,6 +1224,7 @@
       "intent": "direct_read",
       "availability": "planned",
       "source_cli_path": "gh project list",
+      "operation": "github.projects.list",
       "notes": "Projects v2 is GraphQL-centered and is assigned to the GraphQL/project slices."
     },
     {

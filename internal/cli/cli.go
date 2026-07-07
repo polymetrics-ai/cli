@@ -607,6 +607,18 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if !ok || surfaceProvider.CommandSurface() == nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
+	flags := parseFlags(args)
+	path := flags.values["_"]
+	if len(path) == 0 {
+		return usageErrorf("missing connector command path")
+	}
+	if err := commandrunner.Preflight(connector, path); err != nil {
+		var blocked *commandrunner.BlockedCommandError
+		if errors.As(err, &blocked) {
+			return connectorCommandBlockedError(err)
+		}
+		return err
+	}
 	return withApp(root, func(a *app.App) error {
 		return runConnectorCommand(ctx, a, connectorName, args, stdout, jsonOut)
 	})
@@ -675,12 +687,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if err != nil {
 		var blocked *commandrunner.BlockedCommandError
 		if errors.As(err, &blocked) {
-			return &cliError{
-				category: categoryPolicy,
-				code:     "connector_command_blocked",
-				message:  err.Error(),
-				err:      err,
-			}
+			return connectorCommandBlockedError(err)
 		}
 		return err
 	}
@@ -715,6 +722,15 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		fmt.Fprintln(stdout, string(b))
 	}
 	return nil
+}
+
+func connectorCommandBlockedError(err error) error {
+	return &cliError{
+		category: categoryPolicy,
+		code:     "connector_command_blocked",
+		message:  err.Error(),
+		err:      err,
+	}
 }
 
 func directConnector(a *app.App, args []string) (connectors.Connector, connectors.RuntimeConfig, error) {
