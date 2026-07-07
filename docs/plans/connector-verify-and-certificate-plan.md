@@ -7,6 +7,67 @@ Goal: prove GitHub parity end-to-end with a real dev account, then turn the
 existing `pm connectors certify` suite into a **signed "verified by
 organization" certificate** that becomes a merge gate for every connector.
 
+## 0. Gated-execution principle (the new default)
+
+**Old default:** admin / sensitive / destructive endpoints were *blocked*
+(`unsafe_or_disallowed`), so ~234 of 509 GitHub endpoints were unimplemented.
+**New default:** *implement everything; gate by risk tier, never block except
+the tiny `never` set.* Dangerous does not mean unimplementable — it means the
+plan→preview→**human-approval**→execute gate must be stricter. This lifts
+coverage from 105 converted endpoints toward ~500 and is the basis for the
+"verified by organization" certificate.
+
+### Risk tiers (replace the old block list)
+
+| Tier | Endpoints (GitHub) | Gate | CLI availability |
+|---|---|---|---|
+| **open** (etl read / direct_read / binary_read) | 105 converted + 168 to convert | none beyond read | `implemented` |
+| **gated-admin** | ~94 `admin_reverse_etl` (repo settings, Actions perms, OIDC, runners, webhooks…) | plan→preview→**typed-confirmation**→execute; scope-preflight | `implemented` + `approval_mode` |
+| **gated-sensitive** | true secrets/variables (~real subset of 58) | + `input_mode=env` (never inline), `redact_fields`, **transform** (e.g. `github_secret_encryption`: fetch public key→libsodium-encrypt→PUT), redacted preview | `implemented` + `sensitive_policy` (#41) |
+| **gated-destructive** | ~5 `destructive_action` (branch rename, log delete, deployment delete…) | + `--allow-destructive` flag + typed confirmation of the resource name; repo delete/transfer stay `out_of_scope` (org-level) | `implemented` + `destructive` |
+| **never** | raw-API escape hatch, auth-token-print, deprecated, duplicate | none — disallowed by policy | `unsafe_or_disallowed` / `duplicate` / `deprecated` |
+
+Note: the current `disallowed`/`sensitive_reverse_etl` buckets **over-block** —
+e.g. `GET .../assignees/{user}`, `GET .../pulls/{n}/merge`, `GET .../hash-algorithm`,
+`GET .../codeowners/errors` are **reads** misclassified as disallowed, and
+cache-delete/job-rerun/autolink/check-run are **admin**, not sensitive. The
+first slice is to reclassify those (reads→`direct_read`, admin-ish→`admin_reverse_etl`)
+so the tier counts are honest before implementation.
+
+### Gate mechanics (already scaffolded by #41 + #69)
+
+- `pm reverse plan` → plan + `ApprovalToken` + (for gated tiers) a
+  `ConfirmationChallenge` like `github:secret_set:repo`.
+- `pm reverse preview` → redacted preview (secret fields redacted via
+  `sensitive_policy.redact_fields`).
+- `pm reverse run <plan> --approve <token> --confirm <challenge>` →
+  `RunReverseETL` checks the approval-token hash **and**, for gated tiers, that
+  `--confirm` equals the challenge. Destructive also requires `--allow-destructive`.
+- Scope-preflight runs without reading secret values (e.g. verify `repo` scope
+  before listing/creating a secret).
+
+### Implementation slices (each TDD, PR to feat/44)
+
+1. **Typed-confirmation gate** in `RunReverseETL` (the core safety primitive):
+   plan carries `ConfirmationChallenge` for `approval_mode=typed_confirmation` /
+   destructive; `pm reverse run` gains `--confirm`; run is rejected without a
+   match. Unblocks all gated tiers.
+2. **Reclassify** the misclassified endpoints (reads→direct_read; admin-ish→
+   admin_reverse_etl) in `api_surface.json` + update the metrics test.
+3. **Secret transform** `github_secret_encryption` (fetch public key → libsodium
+   encrypt → PUT) behind the typed-confirmation gate — the canonical gated-sensitive
+   write; reuses #41's `github.secrets.put` operation.
+4. **Admin write executors** (repo settings, Actions permissions, webhooks…) —
+   reverse-ETL write actions behind the typed-confirmation gate.
+5. **Destructive flag** (`--allow-destructive`) for the 5 destructive actions
+   (repo delete/transfer stay `out_of_scope`).
+6. **Direct_read + binary_read coverage** (the 168 reads) — direct_read operations
+   + a release-artifact `binary_download` stream.
+
+The certificate (§5) is awarded only when **every safe endpoint** is
+open/gated-implemented (0 `planned`, 0 misclassified `disallowed`, only the
+`never` set blocked).
+
 ---
 
 ## 1. GitHub `gh`-parity verification (current state + checklist)
