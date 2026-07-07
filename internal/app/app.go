@@ -16,10 +16,13 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/safety"
 	statestore "polymetrics.ai/internal/state"
 	"polymetrics.ai/internal/vault"
 )
+
+const reversePlanModeConnectorCommand = "connector_command"
 
 type App struct {
 	root       string
@@ -705,6 +708,102 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 	return plan, nil
 }
 
+func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommandRequest) (ReversePlan, *connectors.WritePreview, error) {
+	if err := connectors.RejectLegacyConnectorName(req.Connector); err != nil {
+		return ReversePlan{}, nil, err
+	}
+	connector, runtime, err := a.ResolveConnectorCredential(ctx, req.Connector, req.Credential, req.Config)
+	if err != nil {
+		return ReversePlan{}, nil, err
+	}
+	writeCommand, err := commandrunner.BuildWriteCommand(ctx, connector, commandrunner.Request{
+		Path:    req.Path,
+		Flags:   req.Flags,
+		Config:  runtime,
+		Preview: req.Preview,
+	})
+	if err != nil {
+		return ReversePlan{}, nil, err
+	}
+	id, err := prefixedID("rplan")
+	if err != nil {
+		return ReversePlan{}, nil, err
+	}
+	token, err := randomToken(18)
+	if err != nil {
+		return ReversePlan{}, nil, err
+	}
+	name := strings.TrimSpace(req.Name)
+	if name == "" {
+		name = strings.ReplaceAll(writeCommand.Command, " ", "_")
+	}
+	planHash, err := connectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Write, writeCommand.Record)
+	if err != nil {
+		return ReversePlan{}, nil, err
+	}
+	created := time.Now().UTC()
+	plan := ReversePlan{
+		ID:                     id,
+		Name:                   name,
+		Status:                 "planned",
+		Mode:                   reversePlanModeConnectorCommand,
+		DestinationConnector:   req.Connector,
+		DestinationCredential:  req.Credential,
+		DestinationConfig:      cloneStringMap(req.Config),
+		Action:                 writeCommand.Write,
+		Mappings:               map[string]string{},
+		ConnectorCommand:       writeCommand.Command,
+		ConnectorCommandPath:   append([]string(nil), req.Path...),
+		ConnectorCommandRecord: cloneRecord(writeCommand.Record),
+		RecordCount:            1,
+		Sample:                 []connectors.Record{cloneRecord(writeCommand.RedactedRecord)},
+		PlanHash:               planHash,
+		ApprovalTokenHash:      hashString(token),
+		ApprovalToken:          token,
+		CreatedAt:              created,
+		ExpiresAt:              created.Add(24 * time.Hour),
+	}
+	stored := plan
+	stored.ApprovalToken = ""
+	a.state.ReversePlans = append(a.state.ReversePlans, stored)
+	if err := a.save(); err != nil {
+		return ReversePlan{}, nil, err
+	}
+	return plan, writeCommand.Preview, nil
+}
+
+func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (ReversePlan, connectors.WritePreview, error) {
+	plan, err := a.GetReversePlan(id)
+	if err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	if plan.Mode != reversePlanModeConnectorCommand {
+		return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("reverse plan %q is not a connector command plan", id)
+	}
+	writer, runtime, err := a.resolveEndpoint(ctx, EndpointConfig{
+		Connector:  plan.DestinationConnector,
+		Credential: plan.DestinationCredential,
+		Config:     plan.DestinationConfig,
+	})
+	if err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	if validator, ok := writer.(connectors.WriteValidator); ok {
+		if err := validator.ValidateWrite(ctx, connectors.WriteRequest{Action: plan.Action, Config: runtime}, []connectors.Record{plan.ConnectorCommandRecord}); err != nil {
+			return ReversePlan{}, connectors.WritePreview{}, err
+		}
+	}
+	dryRunner, ok := writer.(connectors.DryRunWriter)
+	if !ok {
+		return ReversePlan{}, connectors.WritePreview{}, fmt.Errorf("connector %q does not support reverse ETL previews", writer.Name())
+	}
+	preview, err := dryRunner.DryRunWrite(ctx, connectors.WriteRequest{Action: plan.Action, Config: runtime}, []connectors.Record{plan.ConnectorCommandRecord})
+	if err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	return plan, preview, nil
+}
+
 func (a *App) GetReversePlan(id string) (ReversePlan, error) {
 	for _, plan := range a.state.ReversePlans {
 		if plan.ID == id {
@@ -759,6 +858,9 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	if hashString(req.ApprovalToken) != plan.ApprovalTokenHash {
 		return ReverseRun{}, errors.New("approval token is invalid")
 	}
+	if plan.Mode == reversePlanModeConnectorCommand {
+		return a.runConnectorCommandPlan(ctx, planIndex, plan)
+	}
 	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
 	if err != nil {
 		return ReverseRun{}, err
@@ -804,6 +906,79 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 		run.RecordsFailed = result.RecordsFailed
 		if run.RecordsFailed == 0 {
 			run.RecordsFailed = len(mapped) - result.RecordsWritten
+		}
+		run.Error = safety.RedactErrorText(err.Error())
+		run.CompletedAt = time.Now().UTC()
+		a.state.ReverseRuns = append(a.state.ReverseRuns, run)
+		a.state.ReversePlans[planIndex].Status = "failed"
+		_ = a.save()
+		return run, err
+	}
+	run.Status = "completed"
+	run.RecordsSucceeded = result.RecordsWritten
+	run.RecordsFailed = result.RecordsFailed
+	run.CompletedAt = time.Now().UTC()
+	a.state.ReverseRuns = append(a.state.ReverseRuns, run)
+	a.state.ReversePlans[planIndex].Status = "executed"
+	if err := a.save(); err != nil {
+		return ReverseRun{}, err
+	}
+	return run, nil
+}
+
+func (a *App) runConnectorCommandPlan(ctx context.Context, planIndex int, plan ReversePlan) (ReverseRun, error) {
+	planHash, err := connectorCommandPlanHash(
+		plan.Name,
+		plan.DestinationConnector,
+		plan.DestinationCredential,
+		plan.DestinationConfig,
+		plan.ConnectorCommand,
+		plan.ConnectorCommandPath,
+		plan.Action,
+		plan.ConnectorCommandRecord,
+	)
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	if planHash != plan.PlanHash {
+		a.state.ReversePlans[planIndex].Status = "invalidated"
+		a.state.ReversePlans[planIndex].ApprovalTokenHash = ""
+		a.state.ReversePlans[planIndex].ApprovalConsumedAt = time.Now().UTC()
+		_ = a.save()
+		return ReverseRun{}, errors.New("reverse plan command payload changed since approval")
+	}
+	writer, runtime, err := a.resolveEndpoint(ctx, EndpointConfig{
+		Connector:  plan.DestinationConnector,
+		Credential: plan.DestinationCredential,
+		Config:     plan.DestinationConfig,
+	})
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	runID, err := prefixedID("rrun")
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	records := []connectors.Record{cloneRecord(plan.ConnectorCommandRecord)}
+	run := ReverseRun{ID: runID, PlanID: plan.ID, Status: "running", RecordsStaged: len(records), StartedAt: time.Now().UTC()}
+	a.state.ReversePlans[planIndex].Status = "executing"
+	a.state.ReversePlans[planIndex].ApprovalTokenHash = ""
+	a.state.ReversePlans[planIndex].ApprovalConsumedAt = time.Now().UTC()
+	if err := a.save(); err != nil {
+		return ReverseRun{}, err
+	}
+	result, err := writer.Write(ctx, connectors.WriteRequest{
+		Stream: "records",
+		Table:  plan.Name,
+		Action: plan.Action,
+		Config: runtime,
+	}, records)
+	if err != nil {
+		run.Status = "failed"
+		run.RecordsSucceeded = result.RecordsWritten
+		run.RecordsFailed = result.RecordsFailed
+		if run.RecordsFailed == 0 {
+			run.RecordsFailed = len(records) - result.RecordsWritten
 		}
 		run.Error = safety.RedactErrorText(err.Error())
 		run.CompletedAt = time.Now().UTC()

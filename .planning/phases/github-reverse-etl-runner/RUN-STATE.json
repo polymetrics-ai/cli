@@ -1,0 +1,23 @@
+{
+  "issue": 57,
+  "parent_issue": 44,
+  "branch": "feat/57-github-reverse-etl-runner",
+  "status": "implemented",
+  "phase": "green",
+  "human_gate": "pending after PR review",
+  "checks": {
+    "json": "passed",
+    "connector_validate": "passed",
+    "focused_go_tests": "passed",
+    "generator_engine_tests": "passed",
+    "go_build": "passed",
+    "website_typecheck": "passed",
+    "docs_validate": "passed",
+    "diff_check": "passed"
+  },
+  "notes": [
+    "Generic commandrunner.Run remains non-mutating.",
+    "Provider-style reverse ETL commands create stored reverse plans.",
+    "Execution requires stored plan plus approval token."
+  ]
+}

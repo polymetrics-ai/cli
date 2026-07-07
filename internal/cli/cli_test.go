@@ -509,7 +509,7 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	}
 }
 
-func TestGitHubCommandSurfaceBlocksReverseETLCommand(t *testing.T) {
+func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 	root := t.TempDir()
 	runCLI(t, []string{"init", "--root", root, "--json"})
 	runCLI(t, []string{
@@ -525,18 +525,23 @@ func TestGitHubCommandSurfaceBlocksReverseETLCommand(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{
 		"github", "issue", "create",
+		"--title", "Ship connector command plans",
 		"--credential", "github-local",
 		"--root", root,
 		"--json",
 	}, &stdout, &stderr)
-	if code == 0 {
-		t.Fatalf("issue create code = 0, want policy error; stdout=%s", stdout.String())
+	if code != 0 {
+		t.Fatalf("issue create code = %d stderr=%s stdout=%s", code, stderr.String(), stdout.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{`"category": "policy"`, `"code": "connector_command_blocked"`, "issue create", "reverse_etl"} {
+	for _, want := range []string{`"kind": "ConnectorCommandWritePlan"`, `"connector_command": "issue create"`, `"action": "create_issue"`, `"approval_required": true`} {
 		if !strings.Contains(out, want) {
-			t.Fatalf("blocked command output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+			t.Fatalf("planned command output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
 		}
+	}
+	if strings.Contains(out, "approval_token") || strings.Contains(out, "approval_token_hash") ||
+		strings.Contains(out, "connector_command_record") {
+		t.Fatalf("plan JSON leaked approval or raw command payload:\n%s", out)
 	}
 }
 
