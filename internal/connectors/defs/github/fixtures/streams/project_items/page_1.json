@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/graphql",
+    "query": {}
+  },
+  "read_query": {
+    "project_id": "PVT_kwDOFixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "node": {
+          "id": "PVT_kwDOFixture",
+          "number": 1,
+          "title": "Connector CLI parity",
+          "items": {
+            "nodes": [
+              {
+                "id": "PVTI_lADOFixture",
+                "type": "ISSUE",
+                "createdAt": "2026-07-07T00:00:00Z",
+                "updatedAt": "2026-07-07T01:00:00Z",
+                "content": {
+                  "__typename": "Issue",
+                  "id": "I_kwDOFixture",
+                  "number": 40,
+                  "title": "Model GitHub Projects and Discussions command groups",
+                  "url": "https://github.com/octocat/hello-world/issues/40",
+                  "state": "OPEN"
+                }
+              }
+            ],
+            "pageInfo": {
+              "hasNextPage": false,
+              "endCursor": null
+            }
+          }
+        }
+      }
+    }
+  }
+}

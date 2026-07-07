@@ -1020,8 +1020,18 @@ func validateGraphQLVariableValue(name string, value any) error {
 			return fmt.Errorf("graphql variable %q template must be a string", name)
 		}
 		for key := range obj {
-			if key != "template" && key != "type" {
+			if key != "template" && key != "type" && key != "omit_when_empty" && key != "default" {
 				return fmt.Errorf("graphql variable %q template object has unsupported key %q", name, key)
+			}
+		}
+		if def, ok := obj["default"]; ok {
+			if _, ok := def.(string); !ok {
+				return fmt.Errorf("graphql variable %q default must be a string", name)
+			}
+		}
+		if omit, ok := obj["omit_when_empty"]; ok {
+			if _, ok := omit.(bool); !ok {
+				return fmt.Errorf("graphql variable %q omit_when_empty must be a boolean", name)
 			}
 		}
 		if typ, ok := obj["type"].(string); ok {

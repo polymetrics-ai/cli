@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "github-projects-discussions",
+  "status": "local_verified",
+  "reason": "All local gates pass. Ready for commit, push, and PR.",
+  "details": {
+    "lifecycle": [
+      "load-project-context",
+      "profile-repo",
+      "prepare-design-and-prompts",
+      "prd-coverage-gate",
+      "gsd-plan-phase",
+      "tdd-gate-before-execution",
+      "gsd-execute-phase",
+      "local-verification",
+      "gsd-verify-work",
+      "gsd-gap-loop",
+      "write-phase-summary"
+    ],
+    "agentMode": "inline",
+    "coveragePassed": true,
+    "tddGatePassed": true,
+    "verificationPassed": true,
+    "gates": {
+      "gofmt": "passed",
+      "go_mod_tidy": "passed",
+      "go_vet": "passed",
+      "go_build": "passed",
+      "engine_tests": "passed",
+      "connectorgen_tests": "passed",
+      "commandrunner_tests": "passed",
+      "conformance_github": "passed",
+      "conformance_replay_read_query": "passed",
+      "cli_tests": "passed",
+      "connectorgen_validate": "passed_547_connectors_0_findings",
+      "docs_validate": "passed",
+      "smoke": "passed",
+      "golangci_lint": "0_issues",
+      "prd_coverage": "passed",
+      "unrelated_file_review": "passed"
+    },
+    "deliverables": {
+      "graphql_read_streams": 4,
+      "github_streams_total": 37,
+      "github_writes_total": 67,
+      "api_surface_rows": 507,
+      "covered_rows": 105,
+      "new_cli_commands": 4
+    },
+    "orchestrationDecisions": [
+      {"cycle": "verify-gates", "decision": "local_critical_path", "reason": "Unified verification/cleanup slice; no independent sub-issuess to spawn"}
+    ]
+  },
+  "updatedAt": "2026-07-07T14:00:00.000Z"
+}

@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/graphql",
+    "query": {}
+  },
+  "read_query": {
+    "number": "7"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "repository": {
+          "discussion": {
+            "id": "D_kwDOFixture",
+            "number": 7,
+            "title": "CLI parity rollout",
+            "body": "Track the CLI parity rollout.",
+            "url": "https://github.com/octocat/hello-world/discussions/7",
+            "isAnswered": false,
+            "answerChosenAt": null,
+            "createdAt": "2026-07-07T00:00:00Z",
+            "updatedAt": "2026-07-07T02:00:00Z",
+            "author": {
+              "login": "octocat"
+            },
+            "category": {
+              "id": "DIC_kwDOFixture",
+              "name": "General",
+              "slug": "general"
+            },
+            "comments": {
+              "totalCount": 1,
+              "nodes": [
+                {
+                  "id": "DC_kwDOFixture",
+                  "body": "First comment",
+                  "url": "https://github.com/octocat/hello-world/discussions/7#discussioncomment-1",
+                  "isAnswer": false,
+                  "createdAt": "2026-07-07T03:00:00Z",
+                  "updatedAt": "2026-07-07T03:00:00Z",
+                  "author": {
+                    "login": "octocat"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

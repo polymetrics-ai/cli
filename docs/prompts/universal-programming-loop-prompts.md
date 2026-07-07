@@ -7,7 +7,7 @@ Use this prompt family when asking Codex, Claude, or another implementation agen
 Runtime adapters:
 
 - Claude Code: `/gsd:programming-loop` is the reference command shape. It uses a lean in-session
-  orchestrator and Task subagents.
+  orchestrator and worker subagents.
 - Codex: `.codex/agents/gsd-loop-orchestrator.toml` and
   `.agents/agentic-delivery/workflows/codex-active-orchestration-loop.md` mirror the same loop.
   Codex subagents are explicit, so parent issue prompts must say to spawn the orchestrator/workers.
@@ -15,6 +15,7 @@ Runtime adapters:
   `.opencode/commands/gsd-programming-loop.md` mirror the same loop with project-local agents.
 - All runtimes: `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` is the shared
   contract. Use `.agents/skills/caveman/SKILL.md` for compact status and handoffs.
+  The GSD helper scripts are preflight/gate tools only; they never count as worker orchestration.
 
 ## Base Prompt
 
@@ -34,10 +35,14 @@ Required context:
 - Read the phase artifacts under .planning/phases/<phase>/
 
 Rules:
-- Use workflow.use_worktrees=false.
+- Keep coordinator edits in the active checkout. For parent issue fan-out, every mutating worker
+  needs its own isolated worktree or working directory before spawn; read-only workers may share the
+  checkout.
 - Use workflow.tdd_mode=true.
 - For parent issues with ready sub-issues, keep orchestration active: spawn or assign all
   independent ready workers up to runtime limits, or record why no worker can run.
+- After the preflight script returns, the live agent must immediately make a spawn decision:
+  spawn/read-only-spawn/local-critical-path/`not_spawned_*`. A script status alone is not progress.
 - Start with a red test or validation artifact for behavior changes.
 - Keep Go code simple, explicit, context-aware, and testable.
 - Keep secrets out of logs, prompt output, JSON responses, and test fixtures.

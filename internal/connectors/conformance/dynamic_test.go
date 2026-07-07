@@ -3,6 +3,7 @@ package conformance
 import (
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors/engine"
 )
@@ -208,6 +209,50 @@ func TestReusableStreamReplayServerResetsBetweenStreams(t *testing.T) {
 	}
 	if replay.URL != replayURL {
 		t.Fatalf("replay server URL changed between streams: %q -> %q", replayURL, replay.URL)
+	}
+}
+
+func TestReadRawRecordsWithReplayUsesFixtureReadQuery(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		HTTP: engine.HTTPBase{URL: "http://placeholder.invalid"},
+		Streams: []engine.StreamSpec{
+			{
+				Name:   "widgets",
+				Method: "POST",
+				Path:   "/graphql",
+				GraphQL: &engine.GraphQLRequestSpec{
+					Document:      "query Widget($number: Int!) { widget(number: $number) { id } }",
+					OperationName: "Widget",
+					Variables: map[string]any{
+						"number": map[string]any{"template": "{{ query.number }}", "type": "integer"},
+					},
+				},
+				Records:   engine.RecordsSpec{Path: "data.widget", SingleObject: true},
+				SchemaRef: "schemas/widgets.json",
+			},
+		},
+		Fixtures: fstest.MapFS{
+			"streams/widgets/page_1.json": &fstest.MapFile{Data: []byte(`{
+				"request": { "method": "POST", "path": "/graphql", "query": {} },
+				"read_query": { "number": "7" },
+				"response": { "status": 200, "body": { "data": { "widget": { "id": "w7" } } } }
+			}`)},
+		},
+	}
+
+	var records []map[string]any
+	replay := newReusableStreamReplayServer()
+	defer replay.Close()
+	err := readRawRecordsWithReplay(b, "widgets", nil, replay, func(raw map[string]any) error {
+		records = append(records, raw)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("readRawRecordsWithReplay: %v", err)
+	}
+	if len(records) != 1 || records[0]["id"] != "w7" {
+		t.Fatalf("records = %+v, want one fixture-backed GraphQL record", records)
 	}
 }
 

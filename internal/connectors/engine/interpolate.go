@@ -21,6 +21,7 @@ type Vars struct {
 	Secrets map[string]string
 	Record  map[string]any
 	Cursor  string
+	Query   map[string]string
 
 	// IncrementalLowerBound is the RESOLVED, post-formatParam incremental
 	// lower bound for the current stream.Query resolution pass — "" on a
@@ -299,6 +300,12 @@ func resolveRefValue(ref string, vars Vars) (any, error) {
 		return v, nil
 	case "record":
 		return resolveRecordPathValue(vars.Record, segs[1:])
+	case "query":
+		v, ok := vars.Query[key]
+		if !ok {
+			return nil, &unresolvedKeyError{Namespace: "query", Key: key}
+		}
+		return v, nil
 	case "incremental":
 		return resolveIncrementalRef(key, vars)
 	case "fanout":
@@ -751,6 +758,8 @@ var knownFanoutKeys = map[string]bool{
 // entry points enforce the identical namespace/key rules. A bare "cursor"
 // reference always passes (no namespace to check). record/secrets references
 // are accepted without a specKeys check (not spec-declared surfaces).
+// "query.<key>" is accepted as caller-supplied request query/flag state
+// because the allowed key set is command-specific, not spec.json-specific.
 // "incremental.<key>" is checked against knownIncrementalKeys instead of
 // specKeys (it is an engine-provided pseudo-namespace, not a spec.json
 // property), and "fanout.<key>" (S4 engine mini-wave item 2) is likewise
@@ -771,7 +780,7 @@ func checkNamespaceRef(ref string, specKeys map[string]bool) error {
 		if !specKeys[key] {
 			return fmt.Errorf("resolve check: unknown spec key %q referenced as %q", key, ref)
 		}
-	case "secrets", "record":
+	case "secrets", "record", "query":
 		// not statically checkable against specKeys here.
 	case "incremental":
 		if !knownIncrementalKeys[key] {

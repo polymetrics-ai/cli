@@ -380,6 +380,14 @@ func checkInterpolations(b engine.Bundle) []Finding {
 		for _, v := range s.Query {
 			check("streams.json", v.Template)
 		}
+		if s.GraphQL != nil {
+			if err := engine.ResolveCheckGraphQLVariables(s.GraphQL.Variables, specKeys); err != nil {
+				findings = append(findings, Finding{
+					Connector: b.Name, File: "streams.json", Rule: ruleInterpolationUnresolved,
+					Message: fmt.Sprintf("stream %q: %v", s.Name, err),
+				})
+			}
+		}
 		for _, v := range s.ComputedFields {
 			check("streams.json", v)
 		}
@@ -393,6 +401,14 @@ func checkInterpolations(b engine.Bundle) []Finding {
 	}
 	for _, w := range b.Writes {
 		check("writes.json", w.Path)
+		if w.GraphQL != nil {
+			if err := engine.ResolveCheckGraphQLVariables(w.GraphQL.Variables, specKeys); err != nil {
+				findings = append(findings, Finding{
+					Connector: b.Name, File: "writes.json", Rule: ruleInterpolationUnresolved,
+					Message: fmt.Sprintf("write action %q: %v", w.Name, err),
+				})
+			}
+		}
 	}
 	return findings
 }

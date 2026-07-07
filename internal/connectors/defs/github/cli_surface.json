@@ -1297,11 +1297,21 @@
     {
       "path": "project list",
       "summary": "List projects",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
       "source_cli_path": "gh project list",
-      "operation": "github.projects.list",
-      "notes": "Projects v2 is GraphQL-centered and is assigned to the GraphQL/project slices."
+      "source_url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects",
+      "examples": [
+        "pm github project list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GRAPHQL",
+          "path": "ListProjects"
+        }
+      ],
+      "notes": "Lists Projects v2 for the configured repository owner using a fixed GraphQL query. Private projects require read:project scope."
     },
     {
       "path": "project create",
@@ -1314,26 +1324,75 @@
     {
       "path": "project item-list",
       "summary": "List project items",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_items",
       "source_cli_path": "gh project item-list",
-      "notes": "Requires declarative GraphQL support."
+      "source_url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects",
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Project node ID.",
+          "maps_to": "query.project_id"
+        }
+      ],
+      "examples": [
+        "pm github project item-list --project-id PVT_kwDOExample --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GRAPHQL",
+          "path": "ListProjectItems"
+        }
+      ],
+      "notes": "Lists items for a Project v2 node ID using a fixed GraphQL query. Private projects require read:project scope."
     },
     {
       "path": "discussion list",
       "summary": "List discussions",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "discussions",
       "source_cli_path": "gh discussion list",
-      "notes": "Discussions coverage requires GraphQL support."
+      "source_url": "https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions",
+      "examples": [
+        "pm github discussion list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GRAPHQL",
+          "path": "ListDiscussions"
+        }
+      ],
+      "notes": "Lists repository discussions using a fixed GraphQL query. Private repositories require repo scope; public repositories require public_repo scope."
     },
     {
       "path": "discussion view",
       "summary": "View a discussion",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "discussion",
       "source_cli_path": "gh discussion view",
-      "notes": "Discussions coverage requires GraphQL support."
+      "source_url": "https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions",
+      "flags": [
+        {
+          "name": "number",
+          "type": "integer",
+          "summary": "Discussion number.",
+          "maps_to": "query.number"
+        }
+      ],
+      "examples": [
+        "pm github discussion view --number 7 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GRAPHQL",
+          "path": "ViewDiscussion"
+        }
+      ],
+      "notes": "Views one repository discussion using a fixed GraphQL query. Private repositories require repo scope; public repositories require public_repo scope."
     },
     {
       "path": "discussion create",

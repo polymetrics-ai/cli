@@ -68,11 +68,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		}
 	}
 
-	if len(surface.Endpoints) != 503 {
-		t.Fatalf("endpoints = %d, want 503", len(surface.Endpoints))
+	if len(surface.Endpoints) != 507 {
+		t.Fatalf("endpoints = %d, want 507", len(surface.Endpoints))
 	}
-	if covered != 101 {
-		t.Fatalf("covered endpoints = %d, want 101", covered)
+	if covered != 105 {
+		t.Fatalf("covered endpoints = %d, want 105", covered)
 	}
 	if operations != 402 {
 		t.Fatalf("operation endpoints = %d, want 402", operations)
@@ -81,18 +81,20 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
 	}
 	assertStringIntMap(t, "totalByMethod", totalByMethod, map[string]int{
-		"DELETE": 72,
-		"GET":    259,
-		"PATCH":  34,
-		"POST":   91,
-		"PUT":    47,
+		"DELETE":  72,
+		"GET":     259,
+		"GRAPHQL": 4,
+		"PATCH":   34,
+		"POST":    91,
+		"PUT":     47,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"DELETE": 18,
-		"GET":    34,
-		"PATCH":  16,
-		"POST":   23,
-		"PUT":    10,
+		"DELETE":  18,
+		"GET":     34,
+		"GRAPHQL": 4,
+		"PATCH":   16,
+		"POST":    23,
+		"PUT":     10,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE": 54,
