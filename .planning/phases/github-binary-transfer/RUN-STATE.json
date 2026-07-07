@@ -1,0 +1,12 @@
+{
+  "issue": 60,
+  "parent_issue": 44,
+  "parent_pr": 49,
+  "branch": "feat/60-github-binary-transfer",
+  "base_branch": "feat/44-github-cli-parity",
+  "status": "planned",
+  "gsd_mode": "manual fallback",
+  "red_evidence": "pending",
+  "green_evidence": "pending",
+  "review_route": "pending"
+}
