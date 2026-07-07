@@ -14,6 +14,8 @@ import {
 import { dirname, relative, resolve, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { mapCLISurface } from './lib/cli-surface.mjs';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFS_ROOT = resolve(__dirname, '../../internal/connectors/defs');
 const ICON_DATA = resolve(__dirname, '../../internal/connectors/icon_data.json');
@@ -56,70 +58,6 @@ function normalizePrimaryKey(value) {
   }
   if (trim(value)) return [trim(value)];
   return [];
-}
-
-function mapFlags(flags) {
-  return (Array.isArray(flags) ? flags : [])
-    .map((flag) => ({
-      name: trim(flag.name),
-      type: trim(flag.type),
-      summary: trim(flag.summary),
-      values: Array.isArray(flag.values) ? flag.values.map((value) => trim(value)).filter(Boolean) : [],
-      maps_to: trim(flag.maps_to),
-    }))
-    .filter((flag) => flag.name);
-}
-
-function mapCLISurface(surface) {
-  if (!surface || typeof surface !== 'object') return null;
-  const commands = (Array.isArray(surface.commands) ? surface.commands : [])
-    .map((command) => ({
-      path: trim(command.path),
-      summary: trim(command.summary),
-      intent: trim(command.intent),
-      availability: trim(command.availability),
-      stream: trim(command.stream),
-      write: trim(command.write),
-      source_cli_path: trim(command.source_cli_path),
-      source_url: trim(command.source_url),
-      flags: mapFlags(command.flags),
-      examples: Array.isArray(command.examples) ? command.examples.map((example) => trim(example)).filter(Boolean) : [],
-      output_policy: trim(command.output_policy),
-      risk: trim(command.risk),
-      approval: trim(command.approval),
-      notes: trim(command.notes),
-    }))
-    .filter((command) => command.path);
-
-  if (!trim(surface.usage) && commands.length === 0) return null;
-
-  return {
-    tagline: trim(surface.tagline),
-    usage: trim(surface.usage),
-    source_cli: surface.source_cli
-      ? {
-          name: trim(surface.source_cli.name),
-          docs: trim(surface.source_cli.docs),
-          reference: trim(surface.source_cli.reference),
-          source: trim(surface.source_cli.source),
-        }
-      : null,
-    groups: (Array.isArray(surface.groups) ? surface.groups : [])
-      .map((group) => ({
-        id: trim(group.id),
-        title: trim(group.title),
-        commands: Array.isArray(group.commands) ? group.commands.map((command) => trim(command)).filter(Boolean) : [],
-      }))
-      .filter((group) => group.id || group.title || group.commands.length > 0),
-    global_flags: mapFlags(surface.global_flags),
-    commands,
-    help_topics: (Array.isArray(surface.help_topics) ? surface.help_topics : [])
-      .map((topic) => ({
-        name: trim(topic.name),
-        summary: trim(topic.summary),
-      }))
-      .filter((topic) => topic.name),
-  };
 }
 
 function assertInside(root, target, label) {

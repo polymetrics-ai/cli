@@ -677,7 +677,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		return err
 	}
 
-	if err := runConnectorWriteCommand(ctx, a, connector, connectorName, credential, config, path, commandFlags, flags, stdout, jsonOut); err != commandrunner.ErrNotWriteCommand {
+	if err := runConnectorWriteCommand(ctx, a, connectorName, credential, config, path, commandFlags, flags, stdout, jsonOut); err != commandrunner.ErrNotWriteCommand {
 		if err != nil {
 			var blocked *commandrunner.BlockedCommandError
 			if errors.As(err, &blocked) {
@@ -739,15 +739,8 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	return nil
 }
 
-func runConnectorWriteCommand(ctx context.Context, a *app.App, connector connectors.Connector, connectorName, credential string, config map[string]string, path []string, commandFlags map[string][]string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, credential string, config map[string]string, path []string, commandFlags map[string][]string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
 	preview := truthyFlag(flags.first("preview"))
-	if _, err := commandrunner.BuildWriteCommand(ctx, connector, commandrunner.Request{
-		Path:   path,
-		Flags:  commandFlags,
-		Config: connectors.RuntimeConfig{},
-	}); errors.Is(err, commandrunner.ErrNotWriteCommand) {
-		return commandrunner.ErrNotWriteCommand
-	}
 	plan, writePreview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
 		Name:       flags.first("plan-name"),
 		Connector:  connectorName,

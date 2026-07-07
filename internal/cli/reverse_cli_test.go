@@ -3,6 +3,7 @@ package cli_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -219,18 +220,37 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 		Body   map[string]any
 	}
 	var seen []seenRequest
+	serverErrors := make(chan string, 1)
+	reportServerError := func(format string, args ...any) {
+		select {
+		case serverErrors <- fmt.Sprintf(format, args...):
+		default:
+		}
+	}
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var body map[string]any
 		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-			t.Fatalf("decode GitHub request body: %v", err)
+			reportServerError("decode GitHub request body: %v", err)
+			http.Error(w, "bad request", http.StatusBadRequest)
+			return
 		}
 		seen = append(seen, seenRequest{Method: r.Method, Path: r.URL.Path, Body: body})
 		if r.Method != http.MethodPatch || r.URL.Path != "/repos/acme/widgets/issues/101" {
-			t.Fatalf("unexpected GitHub request %s %s", r.Method, r.URL.Path)
+			reportServerError("unexpected GitHub request %s %s", r.Method, r.URL.Path)
+			http.Error(w, "unexpected request", http.StatusNotFound)
+			return
 		}
 		_ = json.NewEncoder(w).Encode(map[string]any{"number": 101, "state": "closed"})
 	}))
 	defer server.Close()
+	assertNoServerError := func() {
+		t.Helper()
+		select {
+		case msg := <-serverErrors:
+			t.Fatal(msg)
+		default:
+		}
+	}
 
 	root := t.TempDir()
 	runCLIForReverseTest(t, []string{"init", "--root", root, "--json"})
@@ -272,6 +292,7 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("github issue close preview code = %d stderr = %s stdout = %s", code, previewStderr.String(), previewStdout.String())
 	}
+	assertNoServerError()
 	if len(seen) != 0 {
 		t.Fatalf("preview made HTTP requests: %+v", seen)
 	}
@@ -292,6 +313,7 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 	if code == 0 || !strings.Contains(wrongPathStdout.String()+wrongPathStderr.String(), "targets command") {
 		t.Fatalf("wrong command path result code=%d stdout=%s stderr=%s", code, wrongPathStdout.String(), wrongPathStderr.String())
 	}
+	assertNoServerError()
 	if len(seen) != 0 {
 		t.Fatalf("wrong command path made HTTP requests: %+v", seen)
 	}
@@ -307,6 +329,7 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 	if code == 0 || !strings.Contains(deniedStderr.String(), "approval token is invalid") {
 		t.Fatalf("bad approval result code=%d stdout=%s stderr=%s", code, deniedStdout.String(), deniedStderr.String())
 	}
+	assertNoServerError()
 	if len(seen) != 0 {
 		t.Fatalf("bad approval made HTTP requests: %+v", seen)
 	}
@@ -349,6 +372,7 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 	if code == 0 || !strings.Contains(normalRunStdout.String()+normalRunStderr.String(), "not a connector command plan") {
 		t.Fatalf("normal plan via provider command result code=%d stdout=%s stderr=%s", code, normalRunStdout.String(), normalRunStderr.String())
 	}
+	assertNoServerError()
 	if len(seen) != 0 {
 		t.Fatalf("normal reverse plan via provider command made HTTP requests: %+v", seen)
 	}
@@ -364,6 +388,7 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("github issue close run code = %d stderr = %s stdout = %s", code, runStderr.String(), runStdout.String())
 	}
+	assertNoServerError()
 	if len(seen) != 1 {
 		t.Fatalf("run request count = %d, want 1: %+v", len(seen), seen)
 	}
