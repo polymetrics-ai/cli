@@ -330,7 +330,7 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			reqPath = resolved
 		}
 		query := mergeQuery(baseQuery, page.Query)
-		body, err := buildStreamRequestBody(stream, req.Config, page, specForPaginator, formattedLowerBound, fc)
+		body, err := buildStreamRequestBody(stream, req.Config, req.Query, page, specForPaginator, formattedLowerBound, fc)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
@@ -406,7 +406,7 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	return nil
 }
 
-func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, page *connsdk.NextPage, pag PaginationSpec, formattedLowerBound string, fc fanoutContext) (any, error) {
+func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, query map[string]string, page *connsdk.NextPage, pag PaginationSpec, formattedLowerBound string, fc fanoutContext) (any, error) {
 	if stream.GraphQL == nil {
 		return nil, nil
 	}
@@ -414,7 +414,7 @@ func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, pag
 	if page != nil && pag.CursorParam != "" {
 		cursor = page.Query.Get(pag.CursorParam)
 	}
-	vars := requestVars(cfg, nil, cursor)
+	vars := requestVars(cfg, nil, cursor, query)
 	vars.IncrementalLowerBound = formattedLowerBound
 	vars.FanoutID = fc.id
 	return buildGraphQLPayload(stream.GraphQL, vars)
@@ -623,8 +623,12 @@ func classifyHeaderResolutionError(err error, spec *Schema, optionalConfigKeys m
 
 // requestVars builds the interpolation environment shared by base URL,
 // headers, query, and path resolution.
-func requestVars(cfg connectors.RuntimeConfig, record map[string]any, cursor string) Vars {
-	return Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: record, Cursor: cursor}
+func requestVars(cfg connectors.RuntimeConfig, record map[string]any, cursor string, query ...map[string]string) Vars {
+	var q map[string]string
+	if len(query) > 0 {
+		q = query[0]
+	}
+	return Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: record, Cursor: cursor, Query: q}
 }
 
 // buildInitialQuery resolves the incremental lower bound (state cursor,

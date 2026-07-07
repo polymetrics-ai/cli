@@ -531,6 +531,32 @@ known engine pseudo-namespace key (`incremental.lower_bound`, checked against
 property that no template anywhere in the bundle ever consumes is still dead config — don't declare
 it (F6, REVIEW.md).
 
+**GraphQL stream variables** (`stream.graphql.variables`): GraphQL reads use a fixed `document` and
+`operation_name` in `streams.json`; the document itself must not be templated. Variable values may
+be constants, nested JSON values, or template objects:
+
+```json
+"graphql": {
+  "operation_name": "ViewDiscussion",
+  "document": "query ViewDiscussion($owner: String!, $repo: String!, $number: Int!) { ... }",
+  "variables": {
+    "owner": "{{ config.owner }}",
+    "repo": "{{ config.repo }}",
+    "number": { "template": "{{ query.number }}", "type": "integer", "default": "7" },
+    "after": { "template": "{{ cursor }}", "omit_when_empty": true }
+  }
+}
+```
+
+`query.*` references come from connector command flags or read request query values, not
+`spec.json`. Static validation accepts that namespace so parameterized command streams can be
+declared without adding command-only fields to connection config. `omit_when_empty` removes an
+empty resolved variable, used for first-page cursors. `default` is a string fallback used only when
+the template hits an unresolved `config.*`, `query.*`, or `incremental.*` key; the default is then
+converted through `type` (`string`, `integer`, `number`, or `boolean`). Do not use GraphQL variables
+as a raw API escape hatch: documents stay fixed and reviewed, and mutations still require explicit
+write actions with plan/preview/approval/execute.
+
 **`client_filtered`** (`incremental.client_filtered: true`): for APIs with no server-side
 incremental filter parameter, the engine drops already-seen records client-side by comparing each
 record's cursor field against the lower bound (strictly greater survives). Use only when the API
@@ -672,6 +698,10 @@ per-record request error, or ctx cancellation), the loop stops immediately;
   returns (field names, nesting, null-vs-absent behavior), then replace every real value with a
   synthetic one (`cus_fixture_1`, `fixture1@example.com`, `+15550100`, `2026-01-01T00:00:0*Z`
   timestamps). Never commit a real ID, name, email, token, or account identifier.
+- Stream fixtures may include `"read_query": {"flag_or_param": "value"}` for parameterized reads
+  whose runtime `ReadRequest.Query` values are not URL query parameters, such as fixed GraphQL
+  documents that take command flags in the POST body. Use this only for replay input; do not model
+  required command flags as GraphQL variable defaults.
 - **A 2-page fixture is REQUIRED whenever the bundle declares pagination** for at least one
   stream (`conformance`'s `pagination_terminates` dynamic check needs a second page to prove the
   engine consumes each page exactly once and terminates). See

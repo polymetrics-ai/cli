@@ -194,6 +194,15 @@ func TestValidate_CLISurfaceReverseETLRequiresRiskAndApproval(t *testing.T) {
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
+func TestValidate_CLISurfaceReverseETLRequiresRequiredRecordFlagMappings(t *testing.T) {
+	cliSurface := strings.Replace(validCLISurfaceJSON(), `"maps_to": "record.name"`, `"maps_to": "query.name"`, 1)
+	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceMissingMapping)
+}
+
 func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
 	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "etl"`, `"intent": "raw_api"`, 1)
 	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
@@ -1228,6 +1237,9 @@ func validCLISurfaceJSON() string {
 				"source_cli_path": "clis widget create",
 				"api_surface": [
 					{ "method": "POST", "path": "/widgets" }
+				],
+				"flags": [
+					{ "name": "name", "type": "string", "summary": "Widget name.", "maps_to": "record.name" }
 				],
 				"risk": "creates a widget",
 				"approval": "reverse ETL writes require plan, preview, approval, execute",

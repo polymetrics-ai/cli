@@ -2,19 +2,24 @@
 
 This repository uses GSD-style local programming loops for implementation phases.
 
-Use this prompt family when asking Codex, Claude, or another implementation agent to execute a scoped phase.
+Use this prompt family when asking Codex, Claude, Pi, or another implementation agent to execute a scoped phase.
 
 Runtime adapters:
 
 - Claude Code: `/gsd:programming-loop` is the reference command shape. It uses a lean in-session
-  orchestrator and Task subagents.
+  orchestrator and worker subagents.
 - Codex: `.codex/agents/gsd-loop-orchestrator.toml` and
   `.agents/agentic-delivery/workflows/codex-active-orchestration-loop.md` mirror the same loop.
   Codex subagents are explicit, so parent issue prompts must say to spawn the orchestrator/workers.
 - OpenCode: `.opencode/agents/gsd-loop-orchestrator.md` and
   `.opencode/commands/gsd-programming-loop.md` mirror the same loop with project-local agents.
+- Pi: `.pi/prompts/pm-orchestrate.md`, `.pi/prompts/pm-gsd-loop.md`, and
+  `.pi/prompts/pm-review-loop.md` mirror the same loop, with `.pi/agents/pm-scout.md`,
+  `.pi/agents/pm-reviewer.md`, and `.pi/agents/pm-gsd-worker.md` as the subagent roster. Launch
+  with `pi --tools read,bash,edit,write,grep,find,ls,subagent --approve`.
 - All runtimes: `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` is the shared
   contract. Use `.agents/skills/caveman/SKILL.md` for compact status and handoffs.
+  The GSD helper scripts are preflight/gate tools only; they never count as worker orchestration.
 
 ## Base Prompt
 
@@ -34,10 +39,15 @@ Required context:
 - Read the phase artifacts under .planning/phases/<phase>/
 
 Rules:
-- Use workflow.use_worktrees=false.
+- Keep coordinator edits in the active checkout. For parent issue fan-out, every mutating worker
+  needs its own isolated worktree or working directory before spawn; read-only workers may share the
+  checkout.
 - Use workflow.tdd_mode=true.
 - For parent issues with ready sub-issues, keep orchestration active: spawn or assign all
   independent ready workers up to runtime limits, or record why no worker can run.
+- After the preflight script returns, the live agent must immediately make a spawn decision:
+  `spawned`, `read_only_spawned`, `local_critical_path`, or one `not_spawned_*` blocker. A script
+  status alone is not progress.
 - Start with a red test or validation artifact for behavior changes.
 - Keep Go code simple, explicit, context-aware, and testable.
 - Keep secrets out of logs, prompt output, JSON responses, and test fixtures.
@@ -72,9 +82,25 @@ Canonical prompts for the GSD Universal Programming Loop roles in this milestone
 
 Overrides live in `.planning/config.json` `model_overrides`.
 
+### Model routing (cost efficiency)
+
+Not every task needs the most capable model. Prototype on `gpt-5.5:xhigh` to establish a baseline,
+then route cheaper models to recon/classification once evals pass. Pi agent frontmatter sets
+per-agent `model` and `thinking` (see the `pi-sub-agent` README); Codex/OpenCode pick up the
+`model_overrides` entries below:
+
+| Pi agent / override key | Model | Rationale |
+|---|---|---|
+| `pm-scout` | `gpt-5.4-mini:high` | Read-only recon is cheap; smaller model is sufficient. |
+| `pm-gsd-worker` | `gpt-5.5:high` | Implementation needs capability but not orchestrator-grade reasoning. |
+| `pm-reviewer` | `gpt-5.5:xhigh` | Adversarial review benefits from deepest reasoning. |
+| orchestrator (`/pm-orchestrate`) | `gpt-5.5:xhigh` (default) | Owns spawn/merge/review decisions; inherit default. |
+
+Record an eval baseline note in the phase `VERIFICATION.md` before downgrading a role further.
+
 ## Runtime policy
 
-The GSD loop is runtime-neutral. Claude, Codex, and OpenCode adapters must point back to
+The GSD loop is runtime-neutral. Claude, Codex, OpenCode, and Pi adapters must point back to
 `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` instead of forking policy. For
 parent issues, the active parent orchestrator is mandatory when subagent tools are available and
 ready sub-issues have disjoint write scopes.

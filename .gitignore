@@ -9,6 +9,11 @@ poly
 # Local Claude Code settings
 .claude/settings.local.json
 
+# Local Pi runtime state
+.pi/npm/
+.pi/git/
+.pi/sessions/
+
 .polymetrics/
 deploy/compose/.env
 

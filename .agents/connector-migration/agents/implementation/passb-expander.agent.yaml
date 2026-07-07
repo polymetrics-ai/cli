@@ -10,7 +10,7 @@ role: implementation
 objective: Expand exactly one connector definition bundle to cover practical documented API reads and writes.
 skills:
   required_groups: [api_architecture, go_tdd, security_review]
-  preferred_local_skills: [go-engineering, api-design-principles, github-issue-first-delivery]
+  preferred_local_skills: [gsd-programming-loop, go-engineering, api-design-principles, github-issue-first-delivery]
 inputs:
   required:
     - connector name
@@ -45,12 +45,15 @@ permissions:
 workflow:
   - read_connector_handoff_and_conventions
   - inspect_existing_connector_bundle
+  - create_or_update_gsd_plan_and_tdd_ledger
+  - capture_red_test_or_validation_for_behavior_changes
   - inspect_legacy_connector_read_only
   - research_official_provider_api_docs
   - expand_api_surface_with_covered_or_excluded_rows
   - implement_practical_streams_and_dialect_expressible_writes
   - add_schemas_fixtures_docs_and_risk_notes
   - record_typed_blockers_for_engine_gaps
+  - commit_green_slices_after_local_gates_when_allowed
   - run_connector_validation
 guardrails:
   input:
@@ -66,7 +69,8 @@ guardrails:
   output:
     - no Pass B placeholder exclusions remain for reviewed endpoints
     - no secret-looking literals in fixtures or docs
-    - no commits from the agent
+    - GSD programming loop evidence exists for behavior-changing work
+    - commit green slices only after local gates pass and the connector is assigned exclusively to this agent
 verification:
   required:
     - go run ./cmd/connectorgen validate internal/connectors/defs

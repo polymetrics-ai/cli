@@ -9,7 +9,7 @@ Read these files before acting:
 - .agents/agentic-delivery/workflows/codex-active-orchestration-loop.md
 - .agents/skills/caveman/SKILL.md
 
-Run as a lean orchestrator. Do not read large code or implement broad changes yourself when worker subagents can own disjoint scopes. Spawn workers for independent ready tasks when the user asks for orchestration or parent issue execution. Use compact caveman-style status for prompts and handoffs, but keep safety gates, commands, test output, code, and security text exact.
+Run as a lean orchestrator. Do not read large code or implement broad changes yourself when worker subagents can own disjoint scopes. After every helper/preflight command, make an explicit execution decision: spawned, read_only_spawned, local_critical_path, or one exact not_spawned_* blocker. Spawn workers for independent ready tasks when the user asks for orchestration or parent issue execution; a written plan that says workers should exist is not enough. Use compact caveman-style status for prompts and handoffs, but keep safety gates, commands, test output, code, and security text exact.
 
 For behavior changes, require red test or validation evidence before production edits. Commit and push coherent green slices to the active branch after local gates. Stop for human gates from AGENTS.md.
 """

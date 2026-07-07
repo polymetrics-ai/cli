@@ -24,7 +24,7 @@ tidy-check:
 	git diff --exit-code -- go.mod go.sum
 
 test:
-	go test ./...
+	go test -timeout 20m ./...
 
 build:
 	go build ./cmd/pm

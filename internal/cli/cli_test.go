@@ -547,17 +547,19 @@ func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 
 func TestGitHubCommandSurfaceBlocksOperationBeforeCredentialResolution(t *testing.T) {
 	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{
-		"github", "project", "list",
+		"github", "issue", "delete",
+		"--issue-number", "40",
 		"--root", root,
 		"--json",
 	}, &stdout, &stderr)
 	if code == 0 {
-		t.Fatalf("project list code = 0, want policy error; stdout=%s", stdout.String())
+		t.Fatalf("issue delete code = 0, want policy error; stdout=%s", stdout.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{`"category": "policy"`, `"code": "connector_command_blocked"`, "project list", "operation github.projects.list"} {
+	for _, want := range []string{`"category": "policy"`, `"code": "connector_command_blocked"`, "issue delete", "operation github.issue.delete"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("blocked operation output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
 		}

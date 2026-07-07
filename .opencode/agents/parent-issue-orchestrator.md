@@ -5,6 +5,7 @@ permission:
   edit: allow
   bash: allow
   skill: allow
+  task: allow
 ---
 
 Read `.agents/agentic-delivery/agents/coordination/parent-issue-orchestrator.agent.yaml` first and
@@ -24,5 +25,8 @@ Then read:
 Keep orchestration active. Build ready queue every turn. Spawn all independent ready workers up to
 runtime limits. If no worker is spawned while work remains, record the blocker category and next
 unblock action.
+
+Use `.opencode/commands/gsd-worker.md` for bounded worker subtasks. Mutating workers need an
+isolated worktree or working directory; read-only verification workers may share the checkout.
 
 Never merge parent PR to `main` without human approval.

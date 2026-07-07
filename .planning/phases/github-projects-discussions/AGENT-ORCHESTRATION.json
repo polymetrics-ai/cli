@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "github-projects-discussions",
+  "mode": "inline",
+  "reason": "Subagent tools unavailable; using sequential inline role passes.",
+  "roles": [
+    "coordinator",
+    "planner",
+    "frontend",
+    "backend",
+    "tester",
+    "security",
+    "reliability-observability",
+    "reviewer"
+  ],
+  "updatedAt": "2026-07-07T10:07:03.950Z"
+}

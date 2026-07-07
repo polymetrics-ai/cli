@@ -602,9 +602,23 @@ func readRawRecordsWithReplay(b engine.Bundle, streamName string, tracker *hitTr
 
 	rb := withReplayURL(b, readReplay.URL)
 	req := readRequestFor(streamName, runtimeConfigForEngine(b), nil)
+	if len(pages) > 0 && len(pages[0].ReadQuery) > 0 {
+		req.Query = cloneStringMap(pages[0].ReadQuery)
+	}
 	return engine.Read(context.Background(), rb, req, engine.HooksFor(b.Name), func(r connectors.Record) error {
 		return onRecord(map[string]any(r))
 	})
+}
+
+func cloneStringMap(in map[string]string) map[string]string {
+	if len(in) == 0 {
+		return nil
+	}
+	out := make(map[string]string, len(in))
+	for k, v := range in {
+		out[k] = v
+	}
+	return out
 }
 
 func firstIncrementalStreamWithFixtures(b engine.Bundle) (engine.StreamSpec, bool) {

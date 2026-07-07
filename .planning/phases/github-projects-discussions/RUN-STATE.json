@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "github-projects-discussions",
+  "status": "verification_blocked_ci_flaky",
+  "reason": "CodeRabbit review comments and pi runtime audit findings addressed; focused local gates pass. Full make verify did not exit 0 in CI: the certify package timed out (10m per-package limit) on the pre-existing slow TestWriteStagesLedgerWrittenBeforeCreate, which is unrelated to this PR's diff (base branch certify package is 298s vs 299s here). Re-running CI is required before merge; verificationPassed is false until a full make verify exits 0.",
+  "details": {
+    "lifecycle": [
+      "load-project-context",
+      "profile-repo",
+      "prepare-design-and-prompts",
+      "prd-coverage-gate",
+      "gsd-plan-phase",
+      "tdd-gate-before-execution",
+      "gsd-execute-phase",
+      "local-verification",
+      "gsd-verify-work",
+      "gsd-gap-loop",
+      "write-phase-summary"
+    ],
+    "agentMode": "inline",
+    "coveragePassed": true,
+    "tddGatePassed": true,
+    "verificationPassed": false,
+    "verificationNote": "verificationPassed is false because full make verify did not exit 0. The CI verify job failed only on the certify package 10m timeout (TestWriteStagesLedgerWrittenBeforeCreate), a pre-existing flaky/borderline test unrelated to this PR (base branch certify package is 298s locally vs 299s here; base CI verify passes). All focused gates below pass. Per the gate-integrity rule in gsd-universal-runtime-loop.md, a timeout is not verification completion.",
+    "gates": {
+      "gofmt": "passed",
+      "go_mod_tidy": "passed",
+      "go_vet": "passed",
+      "go_build": "passed",
+      "engine_tests": "passed",
+      "connectorgen_tests": "passed",
+      "commandrunner_tests": "passed",
+      "conformance_github": "passed",
+      "conformance_replay_read_query": "passed",
+      "cli_tests": "passed",
+      "connectorgen_validate": "passed_547_connectors_0_findings",
+      "docs_validate": "passed",
+      "smoke": "passed",
+      "golangci_lint": "0_issues",
+      "prd_coverage": "passed",
+      "unrelated_file_review": "passed",
+      "make_verify_full": "blocked_ci_timeout_certify_package"
+    },
+    "deliverables": {
+      "graphql_read_streams": 4,
+      "github_streams_total": 37,
+      "github_writes_total": 67,
+      "api_surface_rows": 507,
+      "covered_rows": 105,
+      "new_cli_commands": 4
+    },
+    "orchestrationDecisions": [
+      {"cycle": "load-project-context", "decision": "local_critical_path", "reason": "Coordinator context load; no independent work to spawn."},
+      {"cycle": "profile-repo", "decision": "local_critical_path", "reason": "Single repo-profile pass; no disjoint scope to delegate."},
+      {"cycle": "prepare-design-and-prompts", "decision": "local_critical_path", "reason": "Coupled design + prompt authoring; inline pass."},
+      {"cycle": "prd-coverage-gate", "decision": "local_critical_path", "reason": "Single coverage check against the PRD; inline pass."},
+      {"cycle": "gsd-plan-phase", "decision": "local_critical_path", "reason": "Plan artifact authoring is coupled; inline pass."},
+      {"cycle": "tdd-gate-before-execution", "decision": "local_critical_path", "reason": "TDD ledger gate; inline pass."},
+      {"cycle": "gsd-execute-phase", "decision": "local_critical_path", "reason": "Implementation slices were coupled to the github connector bundle; no disjoint write scope to spawn as a separate worker. Subagent tooling was available but no independent ready sub-issue existed."},
+      {"cycle": "local-verification", "decision": "local_critical_path", "reason": "Unified verification/cleanup slice; no independent sub-issues to spawn."},
+      {"cycle": "gsd-verify-work", "decision": "local_critical_path", "reason": "Focused gate verification; inline pass."},
+      {"cycle": "gsd-gap-loop", "decision": "local_critical_path", "reason": "Gap remediation (CodeRabbit dispositions, pi runtime audit fixes); coupled; inline pass."},
+      {"cycle": "write-phase-summary", "decision": "local_critical_path", "reason": "Single summary artifact; inline pass."}
+    ]
+  },
+  "updatedAt": "2026-07-07T19:30:00.000Z"
+}

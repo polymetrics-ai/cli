@@ -44,7 +44,8 @@ Compact mode affects agent prose and handoff token volume only. It is forbidden 
 
 ## Sources
 
-- Local source skill: `/Users/karthiksivadas/.claude/skills/caveman/SKILL.md`
+- Repo source skill: `.agents/skills/caveman/SKILL.md`
+- Installed user skill example: `~/.agents/skill-repos/mattpocock-skills/skills/productivity/caveman/SKILL.md`
 - Codex skills: https://developers.openai.com/codex/skills
 - Claude Code skills: https://docs.anthropic.com/en/docs/claude-code/skills
 - OpenCode skills: https://opencode.ai/docs/skills/

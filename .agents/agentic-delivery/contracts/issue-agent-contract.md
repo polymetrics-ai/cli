@@ -14,6 +14,7 @@ The issue must provide:
 - required reading
 - required skills or task type, including `gsd-programming-loop` for implementation or
   behavior-changing work
+- shared runtime policy from `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - TDD plan
 - verification commands
 - safety notes

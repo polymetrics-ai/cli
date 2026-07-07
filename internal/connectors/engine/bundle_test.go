@@ -349,6 +349,178 @@ func TestBundleLoadRejectsGraphQLVariableUnsupportedType(t *testing.T) {
 	}
 }
 
+func TestBundleLoadParsesGraphQLVariableOmitWhenEmpty(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($after: String) { widgets(after: $after) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"after": { "template": "{{ cursor }}", "omit_when_empty": true },
+						"owner": { "template": "{{ query.owner }}", "default": "octocat" }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	if _, err := Load(fsys, "acme"); err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+}
+
+func TestBundleLoadRejectsGraphQLVariableDefaultNonString(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($owner: String!) { widgets(owner: $owner) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"owner": { "template": "{{ query.owner }}", "default": 42 }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected non-string default to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "default must be a string") {
+		t.Fatalf("Load error = %q, want default string rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsGraphQLVariableOmitWhenEmptyNonBoolean(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($after: String) { widgets(after: $after) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"after": { "template": "{{ cursor }}", "omit_when_empty": "yes" }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected non-boolean omit_when_empty to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "omit_when_empty must be a boolean") {
+		t.Fatalf("Load error = %q, want omit_when_empty boolean rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsGraphQLVariableDefaultTypeMismatch(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($count: Int!) { widgets(count: $count) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"count": { "template": "{{ query.count }}", "type": "integer", "default": "not-a-number" }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected default/type mismatch to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "default") {
+		t.Fatalf("Load error = %q, want default/type mismatch rejection", err.Error())
+	}
+}
+
+func TestGitHubProjectsDiscussionsCommandsMapToGraphQLStreams(t *testing.T) {
+	b, err := Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load github: %v", err)
+	}
+
+	streams := map[string]StreamSpec{}
+	for _, stream := range b.Streams {
+		streams[stream.Name] = stream
+	}
+	for _, name := range []string{"projects", "project_items", "discussions", "discussion"} {
+		stream, ok := streams[name]
+		if !ok {
+			t.Fatalf("github stream %q missing", name)
+		}
+		if stream.GraphQL == nil {
+			t.Fatalf("github stream %q GraphQL = nil, want fixed GraphQL document", name)
+		}
+		if stream.Method != "POST" || stream.Path != "/graphql" {
+			t.Fatalf("github stream %q method/path = %s %s, want POST /graphql", name, stream.Method, stream.Path)
+		}
+		if stream.SchemaRef == "" {
+			t.Fatalf("github stream %q missing schema ref", name)
+		}
+	}
+
+	if b.CLISurface == nil {
+		t.Fatalf("github cli surface missing")
+	}
+	want := map[string]string{
+		"project list":      "projects",
+		"project item-list": "project_items",
+		"discussion list":   "discussions",
+		"discussion view":   "discussion",
+	}
+	for _, cmd := range b.CLISurface.Commands {
+		stream, ok := want[cmd.Path]
+		if !ok {
+			continue
+		}
+		if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream != stream || cmd.Operation != "" {
+			t.Fatalf("command %q = intent=%q availability=%q stream=%q operation=%q, want implemented etl stream %q with no operation",
+				cmd.Path, cmd.Intent, cmd.Availability, cmd.Stream, cmd.Operation, stream)
+		}
+		delete(want, cmd.Path)
+	}
+	if len(want) > 0 {
+		t.Fatalf("missing GitHub CLI commands: %v", want)
+	}
+}
+
 func TestBundleLoadParsesCLISurface(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

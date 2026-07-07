@@ -3,10 +3,13 @@ package engine
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
 )
+
+type omittedGraphQLVariable struct{}
 
 func buildGraphQLPayload(spec *GraphQLRequestSpec, vars Vars) (map[string]any, error) {
 	if err := validateGraphQLSpec(spec, ""); err != nil {
@@ -34,9 +37,48 @@ func resolveGraphQLVariables(in map[string]any, vars Vars) (map[string]any, erro
 		if err != nil {
 			return nil, fmt.Errorf("resolve graphql variable %q: %w", k, err)
 		}
+		if _, omitted := resolved.(omittedGraphQLVariable); omitted {
+			continue
+		}
 		out[k] = resolved
 	}
 	return out, nil
+}
+
+// ResolveCheckGraphQLVariables statically validates every templated GraphQL
+// variable value against the same interpolation namespace rules used by
+// ordinary stream/write templates. Constant strings without "{{ }}" are no-ops.
+func ResolveCheckGraphQLVariables(in map[string]any, specKeys map[string]bool) error {
+	for name, value := range in {
+		if err := resolveCheckGraphQLValue(value, specKeys); err != nil {
+			return fmt.Errorf("graphql variable %q: %w", name, err)
+		}
+	}
+	return nil
+}
+
+func resolveCheckGraphQLValue(v any, specKeys map[string]bool) error {
+	switch t := v.(type) {
+	case string:
+		return ResolveCheck(t, specKeys)
+	case map[string]any:
+		if template, ok := t["template"]; ok {
+			tmpl, _ := template.(string)
+			return ResolveCheck(tmpl, specKeys)
+		}
+		for _, child := range t {
+			if err := resolveCheckGraphQLValue(child, specKeys); err != nil {
+				return err
+			}
+		}
+	case []any:
+		for _, child := range t {
+			if err := resolveCheckGraphQLValue(child, specKeys); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func resolveGraphQLValue(v any, vars Vars) (any, error) {
@@ -53,17 +95,23 @@ func resolveGraphQLValue(v any, vars Vars) (any, error) {
 			if err != nil {
 				return nil, err
 			}
+			if _, omitted := resolved.(omittedGraphQLVariable); omitted {
+				continue
+			}
 			out[k] = resolved
 		}
 		return out, nil
 	case []any:
-		out := make([]any, len(t))
-		for i, child := range t {
+		out := make([]any, 0, len(t))
+		for _, child := range t {
 			resolved, err := resolveGraphQLValue(child, vars)
 			if err != nil {
 				return nil, err
 			}
-			out[i] = resolved
+			if _, omitted := resolved.(omittedGraphQLVariable); omitted {
+				continue
+			}
+			out = append(out, resolved)
 		}
 		return out, nil
 	default:
@@ -78,7 +126,14 @@ func resolveGraphQLVariableTemplate(spec map[string]any, vars Vars) (any, error)
 	}
 	resolved, err := Interpolate(tmpl, vars)
 	if err != nil {
-		return nil, err
+		if def, ok := spec["default"].(string); ok && isUnresolvedGraphQLDefaultable(err) {
+			resolved = def
+		} else {
+			return nil, err
+		}
+	}
+	if omit, _ := spec["omit_when_empty"].(bool); omit && resolved == "" {
+		return omittedGraphQLVariable{}, nil
 	}
 	typ, _ := spec["type"].(string)
 	switch typ {
@@ -104,6 +159,19 @@ func resolveGraphQLVariableTemplate(spec map[string]any, vars Vars) (any, error)
 		return v, nil
 	default:
 		return nil, fmt.Errorf("unsupported graphql variable type %q", typ)
+	}
+}
+
+func isUnresolvedGraphQLDefaultable(err error) bool {
+	var unresolved *unresolvedKeyError
+	if !errors.As(err, &unresolved) {
+		return false
+	}
+	switch unresolved.Namespace {
+	case "config", "query", "incremental":
+		return true
+	default:
+		return false
 	}
 }
 

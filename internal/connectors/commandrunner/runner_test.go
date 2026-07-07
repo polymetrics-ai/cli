@@ -238,6 +238,41 @@ func TestBuildWriteCommandPlansWithoutExecuting(t *testing.T) {
 	}
 }
 
+func TestBuildWriteCommandAllowsEmptyRecordWhenConnectorValidatorAcceptsIt(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{
+			Commands: []connectors.CommandSurfaceCommand{
+				{
+					Path:         "repo fork",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "create_fork",
+					Risk:         "creates fork",
+					Approval:     "approval required",
+				},
+			},
+		},
+		manifest: connectors.Manifest{
+			WriteActions: []connectors.WriteActionSpec{
+				{Name: "create_fork", Method: "POST", Path: "/repos/{owner}/{repo}/forks", Risk: "creates fork"},
+			},
+		},
+	}
+
+	result, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"repo", "fork"},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	if result.Write != "create_fork" || len(result.Record) != 0 {
+		t.Fatalf("result = %+v, want empty create_fork record", result)
+	}
+	if connector.validateReq.Action != "create_fork" {
+		t.Fatalf("ValidateWrite action = %q, want create_fork", connector.validateReq.Action)
+	}
+}
+
 func TestBuildWriteCommandPreviewDryRunsAndRedactsSecretLikeFields(t *testing.T) {
 	connector := reverseETLFakeConnector()
 	connector.preview = connectors.WritePreview{
@@ -311,18 +346,6 @@ func TestRunReverseETLRejectsMissingWriteAndUnsupportedFlagMapping(t *testing.T)
 				Approval:     "approval required",
 			},
 			want: "must reference write action",
-		},
-		{
-			name: "no flag mappings",
-			command: connectors.CommandSurfaceCommand{
-				Path:         "repo fork",
-				Intent:       "reverse_etl",
-				Availability: "implemented",
-				Write:        "create_fork",
-				Risk:         "creates fork",
-				Approval:     "approval required",
-			},
-			want: "no declared flag mappings",
 		},
 		{
 			name: "unsupported flag mapping",

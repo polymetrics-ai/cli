@@ -1,0 +1,26 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode-go/kimi-k2.7-code",
+  "small_model": "opencode-go/deepseek-v4-flash",
+  "enabled_providers": ["opencode-go", "opencode", "openai"],
+  "instructions": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".agents/agentic-delivery/README.md",
+    ".agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md",
+    ".agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md",
+    ".agents/agentic-delivery/workflows/coderabbit-review-loop.md"
+  ],
+  "watcher": {
+    "ignore": [
+      ".git/**",
+      ".pi/npm/**",
+      ".pi/sessions/**",
+      ".opencode/node_modules/**",
+      "website/node_modules/**",
+      "node_modules/**",
+      "dist/**",
+      "build/**"
+    ]
+  }
+}

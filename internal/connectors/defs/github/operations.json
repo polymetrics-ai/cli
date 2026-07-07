@@ -11,13 +11,67 @@
       "auth_scopes": ["read:project"],
       "graphql": {
         "operation_name": "ListProjects",
-        "document": "query ListProjects($owner: String!, $first: Int!, $after: String) { organization(login: $owner) { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } }",
+        "document": "query ListProjects($owner: String!, $repo: String!, $first: Int!, $after: String) { repository(owner: $owner, name: $repo) { owner { __typename login ... on Organization { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } ... on User { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } } } }",
         "pagination": {
-          "connection_path": "organization.projectsV2",
+          "connection_path": "repository.owner.projectsV2",
           "cursor_variable": "after",
           "page_size_variable": "first",
           "max_page_size": 100
         }
+      }
+    },
+    {
+      "id": "github.project_items.list",
+      "kind": "graphql_query",
+      "summary": "List GitHub Project v2 items using a fixed GraphQL query.",
+      "source_url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "auth_scopes": ["read:project"],
+      "graphql": {
+        "operation_name": "ListProjectItems",
+        "document": "query ListProjectItems($projectId: ID!, $first: Int!, $after: String) { node(id: $projectId) { ... on ProjectV2 { id number title items(first: $first, after: $after) { nodes { id type createdAt updatedAt content { __typename ... on Issue { id number title url state } ... on PullRequest { id number title url state } ... on DraftIssue { id title } } } pageInfo { hasNextPage endCursor } } } } }",
+        "pagination": {
+          "connection_path": "node.items",
+          "cursor_variable": "after",
+          "page_size_variable": "first",
+          "max_page_size": 100
+        }
+      }
+    },
+    {
+      "id": "github.discussions.list",
+      "kind": "graphql_query",
+      "summary": "List repository discussions using a fixed GraphQL query.",
+      "source_url": "https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "auth_scopes": ["repo", "public_repo"],
+      "graphql": {
+        "operation_name": "ListDiscussions",
+        "document": "query ListDiscussions($owner: String!, $repo: String!, $first: Int!, $after: String) { repository(owner: $owner, name: $repo) { discussions(first: $first, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}) { nodes { id number title url isAnswered answerChosenAt createdAt updatedAt author { login } category { id name slug } } pageInfo { hasNextPage endCursor } } } }",
+        "pagination": {
+          "connection_path": "repository.discussions",
+          "cursor_variable": "after",
+          "page_size_variable": "first",
+          "max_page_size": 100
+        }
+      }
+    },
+    {
+      "id": "github.discussions.view",
+      "kind": "graphql_query",
+      "summary": "View one repository discussion using a fixed GraphQL query.",
+      "source_url": "https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "auth_scopes": ["repo", "public_repo"],
+      "graphql": {
+        "operation_name": "ViewDiscussion",
+        "document": "query ViewDiscussion($owner: String!, $repo: String!, $number: Int!) { repository(owner: $owner, name: $repo) { discussion(number: $number) { id number title body url isAnswered answerChosenAt createdAt updatedAt author { login } category { id name slug } comments(first: 20) { totalCount nodes { id body url isAnswer createdAt updatedAt author { login } } } } } }"
       }
     },
     {
