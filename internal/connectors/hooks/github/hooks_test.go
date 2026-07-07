@@ -351,6 +351,61 @@ func TestExecuteWrite_UpdatePullRequestWithFollowups(t *testing.T) {
 	}
 }
 
+func TestExecuteWrite_ReopenIssue(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, nil)
+	h := githubhooks.New()
+	cfg := newRuntimeConfig(srv.URL, nil, nil)
+	rt := newTestRuntime(srv.URL, cfg)
+
+	action := engine.WriteAction{Name: "reopen_issue", Method: "PATCH", Path: "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}"}
+	rec := connectors.Record{"issue_number": 101}
+
+	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	if err != nil {
+		t.Fatalf("ExecuteWrite() error = %v", err)
+	}
+	if !handled {
+		t.Fatal("ExecuteWrite() handled = false, want true for reopen_issue (compound)")
+	}
+	if len(*reqs) != 1 {
+		t.Fatalf("requests = %d, want 1 (state PATCH only), got %+v", len(*reqs), *reqs)
+	}
+	patch := (*reqs)[0]
+	if patch.Method != http.MethodPatch || patch.Path != "/repos/octocat/hello-world/issues/101" {
+		t.Fatalf("reopen request = %+v, want PATCH /repos/octocat/hello-world/issues/101", patch)
+	}
+	if patch.Body["state"] != "open" {
+		t.Fatalf("reopen body = %+v, want state=open", patch.Body)
+	}
+	if _, ok := patch.Body["state_reason"]; ok {
+		t.Fatalf("reopen body has state_reason, want none for reopen: %+v", patch.Body)
+	}
+}
+
+func TestExecuteWrite_ReopenPullRequest(t *testing.T) {
+	srv, reqs := newWriteCaptureServer(t, nil)
+	h := githubhooks.New()
+	cfg := newRuntimeConfig(srv.URL, nil, nil)
+	rt := newTestRuntime(srv.URL, cfg)
+
+	action := engine.WriteAction{Name: "reopen_pull_request", Method: "PATCH", Path: "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}"}
+	rec := connectors.Record{"pull_number": 301}
+
+	handled, err := h.ExecuteWrite(context.Background(), action, rec, rt)
+	if err != nil {
+		t.Fatalf("ExecuteWrite() error = %v", err)
+	}
+	if !handled {
+		t.Fatal("handled = false, want true for reopen_pull_request")
+	}
+	if len(*reqs) != 1 {
+		t.Fatalf("requests = %d, want 1, got %+v", len(*reqs), *reqs)
+	}
+	if (*reqs)[0].Method != http.MethodPatch || (*reqs)[0].Path != "/repos/octocat/hello-world/pulls/301" || (*reqs)[0].Body["state"] != "open" {
+		t.Fatalf("reopen pr request = %+v, want PATCH pulls/301 state=open", (*reqs)[0])
+	}
+}
+
 func TestExecuteWrite_ClosePullRequestWithComment(t *testing.T) {
 	srv, reqs := newWriteCaptureServer(t, nil)
 	h := githubhooks.New()
