@@ -99,6 +99,11 @@ var surfaceOperationRisks = map[string]bool{
 	"critical": true,
 }
 
+var directReadOutputPolicies = map[string]bool{
+	"github_contents_file_metadata": true,
+	"github_contents_directory":     true,
+}
+
 var sourceRequiredOperationModels = map[string]bool{
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
@@ -759,6 +764,45 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 				Message:   fmt.Sprintf("implemented reverse ETL command %d (%q) must reference write action", i, cmd.Path),
 			}}
 		}
+	case "direct_read":
+		var findings []Finding
+		if len(cmd.APISurface) != 1 {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference exactly one api_surface endpoint", i, cmd.Path),
+			})
+		}
+		for _, ep := range cmd.APISurface {
+			if strings.ToUpper(strings.TrimSpace(ep.Method)) != "GET" {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a GET api_surface endpoint, got %s", i, cmd.Path, strings.ToUpper(ep.Method)),
+				})
+			}
+			if isAbsoluteHTTPURL(ep.Path) {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a connector-relative api_surface endpoint", i, cmd.Path),
+				})
+			}
+		}
+		if !directReadOutputPolicies[cmd.OutputPolicy] {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented direct read command %d (%q) must declare a supported output_policy", i, cmd.Path),
+			})
+		}
+		if len(findings) > 0 {
+			return findings
+		}
 	default:
 		return []Finding{{
 			Connector: b.Name,
@@ -817,7 +861,10 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
-		if state.excluded || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
+		if cmd.Intent == "direct_read" && state.operation != nil && state.operation.Model == "direct_read" {
+			continue
+		}
+		if state.excluded || state.operation != nil || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
@@ -855,6 +902,7 @@ func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceE
 		endpoints[surfaceEndpointKey(ep.Method, ep.Path)] = cliSurfaceEndpointState{
 			coveredBy: ep.CoveredBy,
 			excluded:  ep.Excluded != nil,
+			operation: ep.Operation,
 		}
 	}
 	return endpoints
@@ -863,10 +911,16 @@ func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceE
 type cliSurfaceEndpointState struct {
 	coveredBy *engine.SurfaceCoverage
 	excluded  bool
+	operation *engine.SurfaceOperation
 }
 
 func surfaceEndpointKey(method, path string) string {
 	return strings.ToUpper(strings.TrimSpace(method)) + " " + strings.TrimSpace(path)
+}
+
+func isAbsoluteHTTPURL(raw string) bool {
+	lower := strings.ToLower(strings.TrimSpace(raw))
+	return strings.HasPrefix(lower, "http://") || strings.HasPrefix(lower, "https://")
 }
 
 // checkDocsHeadings enforces the fixed docs.md heading set (design §F.6).
