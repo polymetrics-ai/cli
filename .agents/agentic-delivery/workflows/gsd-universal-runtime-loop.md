@@ -1,7 +1,8 @@
 # GSD Universal Runtime Loop
 
 Use this workflow to run the same GSD universal programming loop from Claude Code, Codex, OpenCode,
-or another agent runtime.
+or another agent runtime. Runtime-specific files are activation adapters only; this file owns the
+shared workflow policy.
 
 ## Runtime Contract
 
@@ -32,6 +33,11 @@ Every runtime must run this lifecycle:
 - Subagent mechanism: `Task`.
 - Skills: `.claude/skills/*` and compatible project skills.
 - Default mode: lean in-session orchestrator delegates heavy work to Task subagents.
+- Universal-loop instruction: read this workflow, the phase artifacts, and the required GSD project
+  files before coding; keep the main Claude context as coordinator; use `Task` for independent
+  implementation, tester, reviewer, security, or reliability roles when scopes are disjoint.
+- Parent issue instruction: when a parent issue has ready sub-issues, the coordinator must spawn
+  independent workers through `Task` or record a `not_spawned_*` blocker.
 
 ### Codex
 
@@ -42,6 +48,12 @@ Every runtime must run this lifecycle:
 - Skills: Codex agent skills with progressive disclosure.
 - Default mode for parent issues: spawn a live parent orchestrator context, then spawn workers for
   every ready subissue with disjoint write scope.
+- Universal-loop instruction: load the selected skill bodies before acting, keep `.agents/**` as
+  policy source of truth, and call Codex subagent tools explicitly for independent worker/reviewer
+  roles instead of only summarizing the plan.
+- Parent issue instruction: prompts must explicitly ask Codex to spawn or assign the parent
+  orchestrator and every independent ready worker up to `agents.max_threads` or the available
+  runtime cap.
 
 ### OpenCode
 
@@ -52,6 +64,12 @@ Every runtime must run this lifecycle:
   `.claude/skills/<name>/SKILL.md`, or global equivalents.
 - Default mode for parent issues: primary orchestrator agent dispatches subagents with bounded
   prompts and records worker handoffs.
+- Universal-loop instruction: configure the orchestrator as `mode: primary`, worker/reviewer roles
+  as `mode: subagent` or `mode: all`, and allow Task invocation for the worker agents that can own
+  disjoint scopes.
+- Parent issue instruction: commands that start isolated orchestration work should use
+  `subtask: true`; the primary orchestrator still owns the ready queue, spawn decisions, shared
+  parent artifacts, and final handoff.
 
 ## Active Orchestration Rule
 
@@ -59,6 +77,8 @@ For parent issues with multiple subissues, orchestration is active, not advisory
 
 - Build ready queue.
 - Spawn every independent ready worker up to runtime concurrency limits.
+- Treat "spawn" generically: create a Task, Codex subagent job, OpenCode subtask, or runtime-native
+  worker context with one issue, one branch, one write scope, and one handoff template.
 - Keep one parent orchestrator context open until the parent issue reaches human-ready or blocked.
 - Do not let completed worker threads remain unclosed after handoff integration.
 - If no worker is spawned while work remains, write a blocker with one of:
@@ -67,9 +87,15 @@ For parent issues with multiple subissues, orchestration is active, not advisory
 
 ## Compact Mode
 
-Long-running orchestrators should load the `caveman` skill for progress updates, worker prompts,
-and handoffs. Compact mode is forbidden when it would make safety gates, destructive actions,
-security warnings, or ordered instructions ambiguous.
+Long-running orchestrators should load the `caveman` skill for agent prose: progress updates,
+worker prompts, review summaries, repeated status comments, and handoffs.
+
+Compact mode affects wording and token volume only. It must not change workflow order, verification
+requirements, review coverage, or human gates.
+
+Do not use compact mode for exact code, exact commands, exact test output, security warnings,
+destructive-action warnings, approval gates, legal/security disclosures, or ordered safety
+instructions where shortened wording could change meaning.
 
 ## Sources
 

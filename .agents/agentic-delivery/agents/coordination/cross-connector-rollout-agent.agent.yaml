@@ -10,7 +10,8 @@ role: coordinator
 objective: Prepare connector-neutral templates and shard prompts after provider implementation lessons.
 skills:
   required_groups: [api_architecture, github_planning, docs_and_ux]
-  preferred_local_skills: [github-issue-first-delivery, api-design-principles, ui-refactoring-docs]
+  preferred_local_skills: [github-issue-first-delivery, gsd-programming-loop, api-design-principles, ui-refactoring-docs]
+  compact_local_skill: caveman
 inputs:
   required:
     - provider pilot summary
@@ -23,18 +24,28 @@ outputs:
     - rollout checklist
     - ownership rules
     - parent/subissue branch policy for rollout slices
+    - source notes with official provider/runtime URLs
+    - docs-only GSD plan, TDD exemption, and verification checklist when no production code changes
 permissions:
   allowed_paths: [docs/research/**, .agents/**, .planning/**]
   conditional_denied_paths:
     - path: internal/connectors/defs/**
       unless: implementation phase assigns connector
 workflow:
+  - read_issue_agent_contract_and_gsd_runtime_loop
+  - record_docs_only_plan_and_verification_before_edits
   - extract_provider_pilot_learnings
   - remove_provider_specific_assumptions
   - split_rollout_into_parent_and_subissues
+  - keep_parent_orchestrator_active_for_ready_subissues
   - update_rollout_templates
 guardrails:
   blocking_human_gates: [production connector edits, shared generated files]
+  output:
+    - shared files are coordinator-owned unless a worker receives explicit scope
+    - connector-specific production defs are forbidden unless an implementation issue assigns that connector
+    - compact mode is for agent prose and handoffs only
+    - exact commands, code, test output, security warnings, destructive-action warnings, and approval gates remain uncompressed
 verification:
   required:
     - markdown review

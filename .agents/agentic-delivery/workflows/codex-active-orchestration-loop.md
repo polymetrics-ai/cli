@@ -6,7 +6,8 @@ Use this workflow when Codex owns a parent issue with subissues.
 
 Codex subagents are available, but Codex only spawns them when explicitly asked. A repo-level parent
 orchestrator contract is therefore not enough. The coordinator must create and steer an actual
-orchestrator context and workers.
+orchestrator context and workers. This file is a Codex adapter for the runtime-generic contract in
+`.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`.
 
 ## Loop
 
@@ -57,3 +58,13 @@ Prefer compact prompts:
 ```text
 Use caveman compact mode for status and handoff. Preserve exact commands, paths, tests, safety gates.
 ```
+
+Compact prompts must not shorten exact code, exact commands, exact test output, security warnings,
+destructive-action warnings, approval gates, or ordered safety instructions.
+
+## Source Notes
+
+- Codex skills use progressive disclosure and load full `SKILL.md` instructions only when selected:
+  https://developers.openai.com/codex/skills
+- Codex custom agents can be project-scoped under `.codex/agents/`, and Codex agent settings expose
+  concurrency caps such as `agents.max_threads`: https://developers.openai.com/codex/subagents

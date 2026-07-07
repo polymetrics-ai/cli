@@ -38,6 +38,7 @@ outputs:
   required:
     - parent branch and parent PR URL
     - orchestration state ledger or parent issue status update
+    - ready queue with spawned or not_spawned decision for every worker-ready sub-issue
     - worker assignment prompts or subagent task summaries
     - worker handoff records
     - sub-PR merge decisions
@@ -123,6 +124,8 @@ guardrails:
     - CodeRabbit rate-limit comments are blockers unless a fallback route is recorded
     - Copilot backup review is not approval
     - parent PR review coverage is required for integrated batches skipped on sub-PRs
+    - compact mode is limited to agent prose, prompts, status, and handoffs
+    - exact code, commands, test output, security warnings, destructive-action warnings, ordered safety gates, and approval gates remain uncompressed
 verification:
   required:
     - YAML parse checks for agent specs
@@ -131,9 +134,11 @@ verification:
     - automated review coverage records present or blocker recorded
     - final parent verification summary before human approval
 adapters:
+  claude_code:
+    note: Use this YAML as the source of truth. A Claude Code slash command or prompt should keep the main context as coordinator, invoke Task workers for independent ready sub-issues, and record not_spawned_runtime_capability_missing if Task workers are unavailable in agents mode.
   codex:
     note: Use this YAML as the source of truth. A Codex custom agent should be a thin TOML wrapper that reads this file and the referenced contracts before acting. Because Codex subagents are explicit, the coordinator must spawn this orchestrator or spawn a default agent with this YAML when parent issue execution is requested.
   opencode:
-    note: Use this YAML as the source of truth. Project agents under .opencode/agents/ should be thin Markdown wrappers over this file.
+    note: Use this YAML as the source of truth. Project agents under .opencode/agents/ should be thin Markdown wrappers over this file. Use primary mode for the orchestrator, subagent or all mode for workers, and subtask true for isolated command execution.
   github_actions:
     note: Use this spec as policy metadata only; do not auto-merge parent PRs to main.

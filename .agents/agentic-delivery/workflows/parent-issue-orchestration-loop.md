@@ -1,7 +1,9 @@
 # Parent Issue Orchestration Loop
 
 Use this workflow when a parent issue owns multiple sub-issues and the work must proceed through a
-parent PR plus stacked sub-PRs.
+parent PR plus stacked sub-PRs. The loop is runtime-generic: "spawn" means the active coordinator
+uses the runtime's native worker mechanism, such as Claude Code `Task`, a Codex subagent job, an
+OpenCode subtask, or an equivalent future worker context.
 
 ## Active Mode
 
@@ -60,7 +62,9 @@ satisfied. Each worker prompt must include:
 - worker handoff template
 
 The orchestrator continues non-overlapping work while workers run. It must not duplicate worker
-implementation tasks.
+implementation tasks. Worker prompts may use compact status language, but exact commands, code,
+test output, safety gates, security warnings, destructive-action warnings, and approval gates must
+remain uncompressed and unambiguous.
 
 If subagent tooling exists and ready work is independent, parallel worker dispatch is the default.
 Sequential execution needs an explicit reason in the state ledger.
