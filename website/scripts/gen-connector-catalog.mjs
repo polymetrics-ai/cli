@@ -101,6 +101,7 @@ function mapCLISurface(surface) {
       sourceUrl: trim(command.source_url),
       flags: mapFlags(command.flags),
       examples: Array.isArray(command.examples) ? command.examples.filter((example) => trim(example)).map((example) => trim(example)) : [],
+      outputPolicy: trim(command.output_policy),
       risk: trim(command.risk),
       approval: trim(command.approval),
       notes: trim(command.notes),
