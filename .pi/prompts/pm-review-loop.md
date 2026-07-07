@@ -1,8 +1,13 @@
+---
+description: CodeRabbit/Copilot review disposition loop for Polymetrics
+argument-hint: "<pr-or-review-target>"
+---
+
 # Polymetrics Automated Review Loop
 
 PR or review target:
 
-{{target}}
+$@
 
 Run the automated review disposition loop.
 

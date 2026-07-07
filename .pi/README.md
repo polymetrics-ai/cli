@@ -49,10 +49,11 @@ pi --provider openai-codex --model gpt-5.5
 
 ## Usage
 
-Start Pi from the repository root:
+Start Pi from the repository root. The orchestration agents request read-only search tools
+(`grep`, `find`, `ls`) and the `subagent` extension tool, so enable them explicitly:
 
 ```bash
-pi --approve
+pi --tools read,bash,edit,write,grep,find,ls,subagent --approve
 ```
 
 Useful prompt templates:

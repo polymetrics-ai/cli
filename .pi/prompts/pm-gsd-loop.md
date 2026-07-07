@@ -1,8 +1,13 @@
+---
+description: Issue-first GSD/TDD implementation loop for Polymetrics
+argument-hint: "<implementation-task>"
+---
+
 # Polymetrics GSD Programming Loop
 
 Task:
 
-{{task}}
+$@
 
 Run the mandatory GSD universal programming loop for this implementation or behavior-changing
 task.

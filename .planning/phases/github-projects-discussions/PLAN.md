@@ -23,6 +23,51 @@
    - `go vet ./...`
    - `go build ./cmd/pm`
 
+## Review-Fix + Pi Orchestration Hardening Slice
+
+CodeRabbit reviewed PR #74 and surfaced actionable comments. In parallel, a pi runtime audit
+found the `.pi/` orchestration config has broken prompt-template placeholders and read-only
+subagents that lose search tools. This slice addresses both.
+
+### CodeRabbit disposition
+
+- Accept: comments that are still-valid defects or quick wins (contradictory agent guardrails,
+  non-portable examples, missing test coverage, generated-file noise, schema gaps, metadata
+  auth-labeling).
+- Decline: none planned; every comment is either fixable or will be dispositioned with reason.
+- Defer: trace-file population that requires actual run evidence from a later phase execution;
+  mark as deferred with follow-up issue link.
+
+### Work queue
+
+1. **Pi orchestration runtime** (config/docs, no behavior change):
+   - Fix `.pi/prompts/*.md` to use pi `$@`/`$1` placeholders instead of `{{task}}`/`{{target}}`.
+   - Document `--tools read,bash,edit,write,grep,find,ls,subagent` launch requirement in `.pi/README.md`.
+   - Add `agentScope`, `confirmProjectAgents`, and per-worker `cwd` guidance to `pm-orchestrate.md`.
+   - Harden `pm-coderabbit-disposition.md` tools (drop `bash` from read-only disposition planner).
+   - Create `.agents/agentic-delivery/workflows/pi-active-orchestration-loop.md` adapter.
+2. **Agentic-delivery comments**:
+   - Fix `gsd-universal-runtime-loop.md` fallback token (`failed_runtime_capability` → `not_spawned_*`).
+   - Fix `caveman-token-compression.md` hard-coded home path example.
+   - Fix `passb-expander.agent.yaml` contradictory commit guardrail.
+   - Align `docs/prompts/universal-programming-loop-prompts.md` decision labels with runtime tokens.
+3. **Connector code comments**:
+   - Add DraftIssue fragment to `internal/connectors/defs/github/operations.json` ListProjectItems.
+   - Validate GraphQL variable `default` against declared `type` in `internal/connectors/engine/bundle.go`.
+   - Add regression test for explicitly-empty query variable in `internal/connectors/engine/read_test.go`.
+   - Add `read_query` replay conformance gate to `TEST-PLAN.md`.
+4. **Generated / metadata noise**:
+   - Git-ignore `website/next-env.d.ts` and remove committed version.
+   - Fix `website/data/connectors.generated.json` PAT/GitHub App auth labeling.
+   - Fix `docs/architecture/repo-profile.json` `.next` artifact noise (regenerate or filter).
+5. **Agent role contracts + traces**:
+   - Fill TBD placeholders in `agents/*.md` role contracts or mark as draft.
+   - Populate trace files with real phase evidence where available; defer placeholder-only traces.
+6. **Verification + push**:
+   - Re-run local gates (`make verify`, focused tests).
+   - Push coherent green slices to `feat/40-github-projects-discussions`.
+   - Wait for automatic CodeRabbit incremental review; do not spam manual review commands.
+
 ## Spawn Decision
 
 - `spawned`: read-only workflow adapter audit and GitHub mapping audit sidecars.

@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
   "phase": "github-projects-discussions",
-  "status": "local_verified",
-  "reason": "All local gates pass. Ready for commit, push, and PR.",
+  "status": "review_fix_in_progress",
+  "reason": "PR #74 received CodeRabbit review comments; pi runtime audit found prompt-template and tool-allowlist gaps. Review-fix slice in progress.",
   "details": {
     "lifecycle": [
       "load-project-context",

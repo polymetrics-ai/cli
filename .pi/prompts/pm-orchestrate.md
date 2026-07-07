@@ -1,8 +1,13 @@
+---
+description: Active parent issue orchestration for Polymetrics
+argument-hint: "<parent-issue-or-task>"
+---
+
 # Polymetrics Parent Orchestration
 
 Task or parent issue:
 
-{{task}}
+$@
 
 Run active parent issue orchestration for Polymetrics.
 
@@ -16,10 +21,26 @@ Required reading before action:
 - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
 - `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
 - `.agents/agentic-delivery/contracts/worker-handoff-template.md`
+- `.agents/agentic-delivery/workflows/pi-active-orchestration-loop.md`
 
 Operate as the live parent orchestrator in the main Pi session. Build the ready queue, create or
 confirm the parent branch and parent PR, and delegate independent ready work through the
 `subagent` tool using project agents from `.pi/agents/`.
+
+Pi runtime constraints:
+
+- Use `agentScope: "both"` (or `"project"`) so project agents from `.pi/agents/` are visible.
+  The default `"user"` scope does not load project agents.
+- In non-interactive runs (`pi -p`), project agents are blocked unless you set
+  `confirmProjectAgents: false`. Only set it to `false` after reviewing and trusting the project
+  agents; otherwise run interactively.
+- Give every mutating worker its own `cwd` (prefer a git worktree) so workers do not share the
+  coordinator checkout. Read-only explorer/reviewer agents may share the coordinator checkout.
+- Parallel mode is capped at 8 total tasks and 4 concurrent subprocesses per `subagent` call.
+- Chain mode is capped at 8 sequential steps.
+- Recursive subagent calls are blocked; the orchestrator is the only spawner.
+- Read-only agents (`pm-scout`, `pm-reviewer`) request `grep`/`find`/`ls`. The parent Pi session
+  must enable those tools with `--tools read,bash,edit,write,grep,find,ls,subagent`.
 
 Use compact caveman-style status for progress and handoffs, but keep commands, tests, code,
 security warnings, destructive-action warnings, and human gates exact.
