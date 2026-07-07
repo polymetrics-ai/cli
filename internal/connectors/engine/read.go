@@ -279,6 +279,13 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	if err != nil {
 		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
+	formattedLowerBound := ""
+	if lowerBound != "" && stream.Incremental != nil {
+		formattedLowerBound, err = formatParam(lowerBound, stream.Incremental.ParamFormat)
+		if err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+		}
+	}
 
 	maxPages := specForPaginator.MaxPages
 
@@ -323,11 +330,20 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			reqPath = resolved
 		}
 		query := mergeQuery(baseQuery, page.Query)
+		body, err := buildStreamRequestBody(stream, req.Config, page, specForPaginator, formattedLowerBound, fc)
+		if err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
 
-		resp, err := rt.Requester.Do(ctx, methodOrDefault(stream.Method), reqPath, query, nil)
+		resp, err := rt.Requester.Do(ctx, methodOrDefault(stream.Method), reqPath, query, body)
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Class: class, Hint: hint, Err: err}
+		}
+		if stream.GraphQL != nil {
+			if err := graphQLErrors(resp.Body); err != nil {
+				return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+			}
 		}
 
 		rawRecords, err := extractRecords(resp.Body, stream.Records)
@@ -388,6 +404,20 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 
 	return nil
+}
+
+func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, page *connsdk.NextPage, pag PaginationSpec, formattedLowerBound string, fc fanoutContext) (any, error) {
+	if stream.GraphQL == nil {
+		return nil, nil
+	}
+	var cursor string
+	if page != nil && pag.CursorParam != "" {
+		cursor = page.Query.Get(pag.CursorParam)
+	}
+	vars := requestVars(cfg, nil, cursor)
+	vars.IncrementalLowerBound = formattedLowerBound
+	vars.FanoutID = fc.id
+	return buildGraphQLPayload(stream.GraphQL, vars)
 }
 
 // cloneAndSetQuery returns a copy of base with key set to value — used to

@@ -17,8 +17,21 @@
           "method": { "type": "string" },
           "path": { "type": "string" },
           "path_fields": { "type": "array", "items": { "type": "string" } },
-          "body_type": { "type": "string", "enum": ["json", "form", "none"] },
+          "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql"] },
           "body_fields": { "type": "array", "items": { "type": "string" } },
+          "graphql": {
+            "type": "object",
+            "required": ["document", "operation_name"],
+            "additionalProperties": false,
+            "properties": {
+              "document": { "type": "string" },
+              "operation_name": { "type": "string" },
+              "variables": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          },
           "record_schema": { "type": "object" },
           "delete": {
             "type": "object",

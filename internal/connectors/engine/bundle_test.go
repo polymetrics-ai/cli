@@ -178,6 +178,177 @@ func TestBundleLoadOptionalFilesAbsent(t *testing.T) {
 	}
 }
 
+func TestBundleLoadParsesGraphQLStreamAndWriteAction(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"pagination": { "type": "none" }
+		},
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($first: Int!) { widgets(first: $first) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": { "first": { "template": "{{ config.page_size }}", "type": "integer" } }
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "delete_widget",
+				"kind": "delete",
+				"method": "POST",
+				"path": "/graphql",
+				"body_type": "graphql",
+				"graphql": {
+					"document": "mutation DeleteWidget($id: ID!) { deleteWidget(input: {id: $id}) { clientMutationId } }",
+					"operation_name": "DeleteWidget",
+					"variables": { "id": "{{ record.id }}" }
+				},
+				"record_schema": {
+					"type": "object",
+					"required": ["id"],
+					"properties": { "id": { "type": "string" } }
+				},
+				"risk": "delete"
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Streams[0].GraphQL == nil || b.Streams[0].GraphQL.OperationName != "ListWidgets" {
+		t.Fatalf("stream GraphQL = %+v, want ListWidgets", b.Streams[0].GraphQL)
+	}
+	if len(b.Writes) != 1 || b.Writes[0].GraphQL == nil || b.Writes[0].GraphQL.OperationName != "DeleteWidget" {
+		t.Fatalf("write GraphQL = %+v, want DeleteWidget", b.Writes)
+	}
+}
+
+func TestBundleLoadRejectsGraphQLWriteWithoutGraphQLBlock(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "delete_widget",
+				"kind": "delete",
+				"method": "POST",
+				"path": "/graphql",
+				"body_type": "graphql",
+				"record_schema": { "type": "object" },
+				"risk": "delete"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected body_type graphql without graphql block to fail")
+	}
+	if !strings.Contains(err.Error(), "writes.json") || !strings.Contains(err.Error(), "body_type graphql requires graphql") {
+		t.Fatalf("Load error = %q, want graphql block requirement", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsTemplatedGraphQLDocument(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query {{ config.operation }} { widgets { nodes { id } } }",
+					"operation_name": "ListWidgets"
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected templated GraphQL document to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "fixed bundle metadata") {
+		t.Fatalf("Load error = %q, want fixed document rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsGraphQLWriteQueryDocument(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "delete_widget",
+				"kind": "delete",
+				"method": "POST",
+				"path": "/graphql",
+				"body_type": "graphql",
+				"graphql": {
+					"document": "query DeleteWidget($id: ID!) { node(id: $id) { id } }",
+					"operation_name": "DeleteWidget",
+					"variables": { "id": "{{ record.id }}" }
+				},
+				"record_schema": { "type": "object" },
+				"risk": "delete"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected query document in write action to fail")
+	}
+	if !strings.Contains(err.Error(), "writes.json") || !strings.Contains(err.Error(), "must start with mutation") {
+		t.Fatalf("Load error = %q, want mutation document rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsGraphQLVariableUnsupportedType(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($first: Int!) { widgets(first: $first) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"first": { "template": "{{ config.page_size }}", "type": "int" }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected unsupported GraphQL variable type to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "unsupported type") {
+		t.Fatalf("Load error = %q, want unsupported type rejection", err.Error())
+	}
+}
+
 func TestBundleLoadParsesCLISurface(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

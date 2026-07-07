@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "github-graphql-engine",
+  "mode": "codex-active-orchestration",
+  "reason": "Main agent owned the blocking implementation path and spawned read-only sidecar explorers for disjoint read/write engine inspection.",
+  "roles": [
+    "coordinator",
+    "backend",
+    "tester",
+    "security",
+    "reviewer"
+  ],
+  "subagents": [
+    {
+      "id": "019f3bb3-c176-73b0-be64-a1b819fbb738",
+      "role": "read-path explorer",
+      "scope": "internal/connectors/engine/read.go and stream schema inspection",
+      "status": "completed"
+    },
+    {
+      "id": "019f3bb4-0162-7792-9e5c-8f5b3db7c7ea",
+      "role": "write-path explorer",
+      "scope": "internal/connectors/engine/write.go and writes schema inspection",
+      "status": "completed"
+    }
+  ],
+  "updatedAt": "2026-07-07T09:00:00+05:30"
+}
