@@ -1321,13 +1321,13 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/assignees/{assignee}",
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "a boolean existence check (\"can this user be assigned\"), not a data record",
         "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: non_data_endpoint"
+        "notes": "boolean assignee existence check; read-only"
       }
     },
     {
@@ -2353,13 +2353,13 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/codeowners/errors",
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "a CODEOWNERS file syntax-validation helper, not a data resource",
         "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: non_data_endpoint"
+        "notes": "CODEOWNERS syntax-validation helper; read-only"
       }
     },
     {
@@ -3550,13 +3550,13 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/hash-algorithm",
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "returns a single string flag (the repo's git object hash algorithm, sha1 or sha256), not a data record",
         "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: non_data_endpoint"
+        "notes": "repo git object hash-algorithm flag; read-only"
       }
     },
     {
@@ -3672,26 +3672,26 @@
       "method": "POST",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/pings",
       "operation": {
-        "model": "disallowed",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "sends a test ping event with no meaningful response payload; a connectivity check, not a data mutation",
         "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: non_data_endpoint"
+        "notes": "webhook test ping; gated admin (plan/preview/approval/execute)"
       }
     },
     {
       "method": "POST",
       "path": "/repos/{owner}/{repo}/hooks/{hook_id}/tests",
       "operation": {
-        "model": "disallowed",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "re-sends the most recent push event for testing; a debugging helper, not a data mutation",
         "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: non_data_endpoint"
+        "notes": "webhook test re-deliver; gated admin (plan/preview/approval/execute)"
       }
     },
     {
@@ -4162,13 +4162,13 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "a boolean existence check (\"can this user be assigned to this issue\"), not a data record",
         "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: non_data_endpoint"
+        "notes": "boolean assignee existence check; read-only"
       }
     },
     {
@@ -5111,13 +5111,13 @@
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "a boolean \"has this PR been merged\" check (204/404 status, no body); the pull_requests stream's merged/merged_at fields already carry this",
         "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: non_data_endpoint"
+        "notes": "boolean PR-merged check (204/404); read-only"
       }
     },
     {
@@ -5328,13 +5328,13 @@
       "method": "POST",
       "path": "/repos/{owner}/{repo}/releases/generate-notes",
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
         "reason": "a text-generation preview helper (drafts release notes from commits/PRs), not a data record or persisted mutation",
         "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: non_data_endpoint"
+        "notes": "draft release-notes text generation; read-only (no mutation)"
       }
     },
     {
