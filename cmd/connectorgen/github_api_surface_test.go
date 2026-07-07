@@ -104,12 +104,12 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"PUT":    37,
 	})
 	assertStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":     94,
+		"admin_reverse_etl":     96,
 		"binary_read":           10,
 		"deprecated":            1,
 		"destructive_action":    5,
-		"direct_read":           158,
-		"disallowed":            9,
+		"direct_read":           164,
+		"disallowed":            1,
 		"duplicate":             67,
 		"sensitive_reverse_etl": 58,
 	})
