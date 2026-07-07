@@ -78,6 +78,20 @@ func reversePlanHash(planName, sourceTable, destinationConnector, destinationCre
 	})
 }
 
+func connectorCommandPlanHash(planName, connector, credential string, config map[string]string, command string, path []string, action string, record connectors.Record) (string, error) {
+	return hashJSON(map[string]any{
+		"name":         planName,
+		"connector":    connector,
+		"credential":   credential,
+		"config":       cloneStringMap(config),
+		"command":      command,
+		"path":         append([]string(nil), path...),
+		"action":       action,
+		"record_count": 1,
+		"record":       cloneRecord(record),
+	})
+}
+
 func parseSelectAll(sql string) (string, int, error) {
 	fields := strings.Fields(strings.TrimSpace(strings.TrimSuffix(sql, ";")))
 	if len(fields) < 4 {
