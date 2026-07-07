@@ -299,11 +299,19 @@
       "path": "issue reopen",
       "summary": "Reopen an issue",
       "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "update_issue",
+      "availability": "implemented",
+      "write": "reopen_issue",
       "source_cli_path": "gh issue reopen",
-      "risk": "Reopens an existing issue by setting state through the general update action.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "risk": "Reopens a previously closed issue.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "Issue number to reopen.",
+          "maps_to": "record.issue_number"
+        }
+      ]
     },
     {
       "path": "issue comment",
@@ -676,21 +684,43 @@
       "path": "pr reopen",
       "summary": "Reopen a pull request",
       "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "update_pull_request",
+      "availability": "implemented",
+      "write": "reopen_pull_request",
       "source_cli_path": "gh pr reopen",
-      "risk": "Reopens an existing pull request through the general update action.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "risk": "Reopens a previously closed pull request.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to reopen.",
+          "maps_to": "record.pull_number"
+        }
+      ]
     },
     {
       "path": "pr comment",
       "summary": "Comment on a pull request",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "comment_issue",
       "source_cli_path": "gh pr comment",
-      "risk": "Adds a visible conversation comment because pull request conversations use issue comments.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "risk": "Comments on a pull request (PRs are issues in GitHub's data model).",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to comment on.",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Comment body text.",
+          "maps_to": "record.body"
+        }
+      ]
     },
     {
       "path": "pr merge",
@@ -866,21 +896,49 @@
       "path": "pr lock",
       "summary": "Lock pull request conversation",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "lock_issue",
       "source_cli_path": "gh pr lock",
-      "risk": "Locks the pull request conversation through the issue lock endpoint.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "risk": "Locks a pull request's conversation.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to lock.",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "lock-reason",
+          "type": "enum",
+          "values": [
+            "off-topic",
+            "resolved",
+            "spam",
+            "too heated"
+          ],
+          "summary": "Reason for locking.",
+          "maps_to": "record.lock_reason"
+        }
+      ]
     },
     {
       "path": "pr unlock",
       "summary": "Unlock pull request conversation",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "unlock_issue",
       "source_cli_path": "gh pr unlock",
-      "risk": "Unlocks the pull request conversation through the issue unlock endpoint.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "risk": "Unlocks a pull request's conversation.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to unlock.",
+          "maps_to": "record.issue_number"
+        }
+      ]
     },
     {
       "path": "pr revert",
