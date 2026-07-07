@@ -8,9 +8,9 @@ workflows, skills, and guardrails.
 
 - Pi CLI: `@earendil-works/pi-coding-agent`
 - Project package: `npm:pi-sub-agent@0.1.5`
-- Default Pi model: `openai/gpt-5.5` with `xhigh` thinking
-- OpenCode project model: `openai/gpt-5.5`
-- OpenCode small model: `openai/gpt-5.3-codex-spark`
+- Default Pi model: `openai-codex/gpt-5.5` with `xhigh` thinking
+- OpenCode project model: `opencode-go/kimi-k2.7-code`
+- OpenCode small model: `opencode-go/deepseek-v4-flash`
 
 ## Authentication
 
@@ -37,6 +37,15 @@ Select OpenAI or OpenCode Go/Zen as needed. OpenCode stores credentials in
 
 For Pi's OpenCode provider path, set `OPENCODE_API_KEY` in the shell before launching Pi when
 using `opencode` or `opencode-go` models. Do not commit this value.
+
+If you see OpenAI's API quota error, the session is using `OPENAI_API_KEY` instead of the
+subscription-backed `openai-codex` provider. Use Pi with `openai-codex/*` models, or unset
+`OPENAI_API_KEY` before selecting API-backed `openai/*` models:
+
+```bash
+unset OPENAI_API_KEY
+pi --provider openai-codex --model gpt-5.5
+```
 
 ## Usage
 

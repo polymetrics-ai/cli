@@ -1,11 +1,14 @@
 {
-  "defaultProvider": "openai",
+  "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "xhigh",
   "enabledModels": [
-    "openai/gpt-5.5:xhigh",
-    "openai/gpt-5.3-codex:xhigh",
-    "openai/gpt-5.3-codex-spark:high"
+    "openai-codex/gpt-5.5:xhigh",
+    "openai-codex/gpt-5.4:xhigh",
+    "openai-codex/gpt-5.4-mini:high",
+    "openai-codex/gpt-5.3-codex-spark:high",
+    "opencode-go/kimi-k2.7-code:high",
+    "opencode-go/deepseek-v4-pro:high"
   ],
   "sessionDir": ".pi/sessions",
   "packages": [
