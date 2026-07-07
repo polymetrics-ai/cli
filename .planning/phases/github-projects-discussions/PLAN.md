@@ -70,9 +70,13 @@ subagents that lose search tools. This slice addresses both.
 
 ## Spawn Decision
 
-- `spawned`: read-only workflow adapter audit and GitHub mapping audit sidecars.
-- `not_spawned_write_scope_collision`: no mutating subagent for shared engine/GitHub bundle files in
-  coordinator checkout. Implementation stays local for this slice.
+- `read_only_spawned` (intended) / `local_critical_path` (actual): read-only workflow adapter
+  audit and GitHub mapping audit sidecars. The phase ran inline (`agentMode: inline`) because the
+  audit work was coupled to the coordinator context; inline role passes are recorded as
+  `local_critical_path`, not `spawned`, per the gate-integrity rule in
+  `gsd-universal-runtime-loop.md`.
+- `not_spawned_write_scope_collision`: no mutating subagent for shared engine/GitHub bundle files
+  in coordinator checkout. Implementation stays local for this slice.
 
 ## Human Gates
 
