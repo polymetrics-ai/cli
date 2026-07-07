@@ -9,6 +9,12 @@ Review source: `coderabbitai` on PR #74 (run ID `4e53a71c-2046-449b-aa01-cc0e3bb
 - **deferred**: valid but requires run evidence or human decision; follow-up issue recommended.
 - **duplicate**: same issue covered by another comment.
 
+## How replies were posted
+
+- **Inline review comments** (13 threads on specific files/lines): replied directly to each thread on PR #74 using the disposition template.
+- **Outside-diff / review-body findings** (11 items that could not be posted inline): dispositioned in a top-level PR #74 comment.
+- This file is the durable record of both reply groups.
+
 ---
 
 ## Actionable comments
@@ -29,6 +35,7 @@ Review source: `coderabbitai` on PR #74 (run ID `4e53a71c-2046-449b-aa01-cc0e3bb
 | 5 | `internal/connectors/defs/github/operations.json:33-42` | `ListProjectItems` missing `DraftIssue` fragment in content union. | **accepted** | Added `... on DraftIssue { id title }` to the content union so draft project items return fields. |
 | 6 | `internal/connectors/engine/bundle.go:1023-1036` | GraphQL variable `default` not validated against declared `type`. | **accepted** | Added `validateGraphQLDefaultForType` rejecting mismatched `integer`, `number`, and `boolean` defaults. |
 | 7 | `internal/connectors/engine/read_test.go:230-266` | No test for explicitly-empty (not absent) query variable. | **accepted** | Added `TestReadGraphQLBodyOmitsExplicitlyEmptyQueryVariable` asserting omission when `omit_when_empty=true`. |
+| 8 | `internal/connectors/defs/github/cli_surface.json:232` | `issue edit` `state-reason` is unconstrained `string` while `issue close` constrains it to an enum. | **accepted** | Changed `state-reason` to `enum` with values `completed`, `not_planned`, `reopened` to match GitHub's allowed values. |
 
 ### Generated / metadata noise
 
