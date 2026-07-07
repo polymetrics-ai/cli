@@ -194,6 +194,66 @@
           "method": "PATCH",
           "path": "/repos/{owner}/{repo}/issues/{issue_number}"
         }
+      ],
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "Issue number to edit.",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Issue title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Issue body.",
+          "maps_to": "record.body"
+        },
+        {
+          "name": "state",
+          "type": "enum",
+          "summary": "Issue state.",
+          "maps_to": "record.state",
+          "values": [
+            "open",
+            "closed"
+          ]
+        },
+        {
+          "name": "state-reason",
+          "type": "string",
+          "summary": "Reason for state transition.",
+          "maps_to": "record.state_reason"
+        },
+        {
+          "name": "label",
+          "type": "string_array",
+          "summary": "Issue labels.",
+          "maps_to": "record.labels"
+        },
+        {
+          "name": "assignee",
+          "type": "string_array",
+          "summary": "Issue assignees.",
+          "maps_to": "record.assignees"
+        },
+        {
+          "name": "milestone",
+          "type": "integer",
+          "summary": "Milestone number.",
+          "maps_to": "record.milestone"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Issue type.",
+          "maps_to": "record.type"
+        }
       ]
     },
     {
@@ -254,6 +314,20 @@
           "method": "POST",
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/comments"
         }
+      ],
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "Issue number to comment on.",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Comment body.",
+          "maps_to": "record.body"
+        }
       ]
     },
     {
@@ -270,6 +344,26 @@
           "method": "PUT",
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/lock"
         }
+      ],
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "Issue number to lock.",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "lock-reason",
+          "type": "enum",
+          "summary": "Reason for locking the issue.",
+          "maps_to": "record.lock_reason",
+          "values": [
+            "off-topic",
+            "too heated",
+            "resolved",
+            "spam"
+          ]
+        }
       ]
     },
     {
@@ -285,6 +379,14 @@
         {
           "method": "DELETE",
           "path": "/repos/{owner}/{repo}/issues/{issue_number}/lock"
+        }
+      ],
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "Issue number to unlock.",
+          "maps_to": "record.issue_number"
         }
       ]
     },
@@ -377,6 +479,80 @@
           "method": "POST",
           "path": "/repos/{owner}/{repo}/pulls"
         }
+      ],
+      "flags": [
+        {
+          "name": "head",
+          "type": "string",
+          "summary": "Head branch or ref.",
+          "maps_to": "record.head"
+        },
+        {
+          "name": "base",
+          "type": "string",
+          "summary": "Base branch.",
+          "maps_to": "record.base"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Pull request title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Pull request body.",
+          "maps_to": "record.body"
+        },
+        {
+          "name": "issue",
+          "type": "integer",
+          "summary": "Issue number to convert into a pull request.",
+          "maps_to": "record.issue"
+        },
+        {
+          "name": "draft",
+          "type": "boolean",
+          "summary": "Create a draft pull request.",
+          "maps_to": "record.draft"
+        },
+        {
+          "name": "maintainer-can-modify",
+          "type": "boolean",
+          "summary": "Allow maintainers to modify the branch.",
+          "maps_to": "record.maintainer_can_modify"
+        },
+        {
+          "name": "label",
+          "type": "string_array",
+          "summary": "Pull request labels.",
+          "maps_to": "record.labels"
+        },
+        {
+          "name": "assignee",
+          "type": "string_array",
+          "summary": "Pull request assignees.",
+          "maps_to": "record.assignees"
+        },
+        {
+          "name": "milestone",
+          "type": "integer",
+          "summary": "Milestone number.",
+          "maps_to": "record.milestone"
+        },
+        {
+          "name": "reviewer",
+          "type": "string_array",
+          "summary": "Requested reviewers.",
+          "maps_to": "record.reviewers"
+        },
+        {
+          "name": "team-reviewer",
+          "type": "string_array",
+          "summary": "Requested team reviewers.",
+          "maps_to": "record.team_reviewers"
+        }
       ]
     },
     {
@@ -393,6 +569,78 @@
           "method": "PATCH",
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}"
         }
+      ],
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to edit.",
+          "maps_to": "record.pull_number"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Pull request title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Pull request body.",
+          "maps_to": "record.body"
+        },
+        {
+          "name": "state",
+          "type": "enum",
+          "summary": "Pull request state.",
+          "maps_to": "record.state",
+          "values": [
+            "open",
+            "closed"
+          ]
+        },
+        {
+          "name": "base",
+          "type": "string",
+          "summary": "Base branch.",
+          "maps_to": "record.base"
+        },
+        {
+          "name": "maintainer-can-modify",
+          "type": "boolean",
+          "summary": "Allow maintainers to modify the branch.",
+          "maps_to": "record.maintainer_can_modify"
+        },
+        {
+          "name": "label",
+          "type": "string_array",
+          "summary": "Pull request labels.",
+          "maps_to": "record.labels"
+        },
+        {
+          "name": "assignee",
+          "type": "string_array",
+          "summary": "Pull request assignees.",
+          "maps_to": "record.assignees"
+        },
+        {
+          "name": "milestone",
+          "type": "integer",
+          "summary": "Milestone number.",
+          "maps_to": "record.milestone"
+        },
+        {
+          "name": "reviewer",
+          "type": "string_array",
+          "summary": "Requested reviewers.",
+          "maps_to": "record.reviewers"
+        },
+        {
+          "name": "team-reviewer",
+          "type": "string_array",
+          "summary": "Requested team reviewers.",
+          "maps_to": "record.team_reviewers"
+        }
       ]
     },
     {
@@ -403,7 +651,21 @@
       "write": "close_pull_request",
       "source_cli_path": "gh pr close",
       "risk": "Closes an existing pull request.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to close.",
+          "maps_to": "record.pull_number"
+        },
+        {
+          "name": "comment",
+          "type": "string",
+          "summary": "Optional closing comment.",
+          "maps_to": "record.comment"
+        }
+      ]
     },
     {
       "path": "pr reopen",
@@ -439,6 +701,43 @@
           "method": "PUT",
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge"
         }
+      ],
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to merge.",
+          "maps_to": "record.pull_number"
+        },
+        {
+          "name": "commit-title",
+          "type": "string",
+          "summary": "Commit title for the merge.",
+          "maps_to": "record.commit_title"
+        },
+        {
+          "name": "commit-message",
+          "type": "string",
+          "summary": "Commit message for the merge.",
+          "maps_to": "record.commit_message"
+        },
+        {
+          "name": "sha",
+          "type": "string",
+          "summary": "Expected pull request head SHA.",
+          "maps_to": "record.sha"
+        },
+        {
+          "name": "merge-method",
+          "type": "enum",
+          "summary": "Merge method.",
+          "maps_to": "record.merge_method",
+          "values": [
+            "merge",
+            "squash",
+            "rebase"
+          ]
+        }
       ]
     },
     {
@@ -454,6 +753,37 @@
         {
           "method": "POST",
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews"
+        }
+      ],
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to review.",
+          "maps_to": "record.pull_number"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Review body.",
+          "maps_to": "record.body"
+        },
+        {
+          "name": "commit-id",
+          "type": "string",
+          "summary": "Commit SHA to review.",
+          "maps_to": "record.commit_id"
+        },
+        {
+          "name": "event",
+          "type": "enum",
+          "summary": "Review event.",
+          "maps_to": "record.event",
+          "values": [
+            "APPROVE",
+            "REQUEST_CHANGES",
+            "COMMENT"
+          ]
         }
       ]
     },
@@ -502,6 +832,20 @@
         {
           "method": "PUT",
           "path": "/repos/{owner}/{repo}/pulls/{pull_number}/update-branch"
+        }
+      ],
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to update.",
+          "maps_to": "record.pull_number"
+        },
+        {
+          "name": "expected-head-sha",
+          "type": "string",
+          "summary": "Expected pull request head SHA.",
+          "maps_to": "record.expected_head_sha"
         }
       ]
     },
@@ -611,6 +955,26 @@
         {
           "method": "POST",
           "path": "/repos/{owner}/{repo}/forks"
+        }
+      ],
+      "flags": [
+        {
+          "name": "organization",
+          "type": "string",
+          "summary": "Organization to fork into.",
+          "maps_to": "record.organization"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Fork repository name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "default-branch-only",
+          "type": "boolean",
+          "summary": "Fork only the default branch.",
+          "maps_to": "record.default_branch_only"
         }
       ]
     },
@@ -801,6 +1165,14 @@
           "method": "DELETE",
           "path": "/repos/{owner}/{repo}/keys/{key_id}"
         }
+      ],
+      "flags": [
+        {
+          "name": "key-id",
+          "type": "integer",
+          "summary": "Deploy key ID to delete.",
+          "maps_to": "record.key_id"
+        }
       ]
     },
     {
@@ -856,6 +1228,56 @@
           "method": "POST",
           "path": "/repos/{owner}/{repo}/releases"
         }
+      ],
+      "flags": [
+        {
+          "name": "tag-name",
+          "type": "string",
+          "summary": "Tag name for the release.",
+          "maps_to": "record.tag_name"
+        },
+        {
+          "name": "target-commitish",
+          "type": "string",
+          "summary": "Commit-ish value for creating the tag.",
+          "maps_to": "record.target_commitish"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Release title.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Release notes body.",
+          "maps_to": "record.body"
+        },
+        {
+          "name": "draft",
+          "type": "boolean",
+          "summary": "Create a draft release.",
+          "maps_to": "record.draft"
+        },
+        {
+          "name": "prerelease",
+          "type": "boolean",
+          "summary": "Mark as prerelease.",
+          "maps_to": "record.prerelease"
+        },
+        {
+          "name": "generate-release-notes",
+          "type": "boolean",
+          "summary": "Generate release notes.",
+          "maps_to": "record.generate_release_notes"
+        },
+        {
+          "name": "make-latest",
+          "type": "string",
+          "summary": "Latest-release handling mode.",
+          "maps_to": "record.make_latest"
+        }
       ]
     },
     {
@@ -872,6 +1294,62 @@
           "method": "PATCH",
           "path": "/repos/{owner}/{repo}/releases/{release_id}"
         }
+      ],
+      "flags": [
+        {
+          "name": "release-id",
+          "type": "integer",
+          "summary": "Release ID to edit.",
+          "maps_to": "record.release_id"
+        },
+        {
+          "name": "tag-name",
+          "type": "string",
+          "summary": "Tag name for the release.",
+          "maps_to": "record.tag_name"
+        },
+        {
+          "name": "target-commitish",
+          "type": "string",
+          "summary": "Commit-ish value for the tag.",
+          "maps_to": "record.target_commitish"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Release title.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Release notes body.",
+          "maps_to": "record.body"
+        },
+        {
+          "name": "draft",
+          "type": "boolean",
+          "summary": "Draft state.",
+          "maps_to": "record.draft"
+        },
+        {
+          "name": "prerelease",
+          "type": "boolean",
+          "summary": "Prerelease state.",
+          "maps_to": "record.prerelease"
+        },
+        {
+          "name": "generate-release-notes",
+          "type": "boolean",
+          "summary": "Generate release notes.",
+          "maps_to": "record.generate_release_notes"
+        },
+        {
+          "name": "make-latest",
+          "type": "string",
+          "summary": "Latest-release handling mode.",
+          "maps_to": "record.make_latest"
+        }
       ]
     },
     {
@@ -887,6 +1365,14 @@
         {
           "method": "DELETE",
           "path": "/repos/{owner}/{repo}/releases/{release_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "release-id",
+          "type": "integer",
+          "summary": "Release ID to delete.",
+          "maps_to": "record.release_id"
         }
       ]
     },
@@ -920,6 +1406,14 @@
         {
           "method": "DELETE",
           "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "asset-id",
+          "type": "integer",
+          "summary": "Release asset ID to delete.",
+          "maps_to": "record.asset_id"
         }
       ]
     },
@@ -967,6 +1461,20 @@
         {
           "method": "POST",
           "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches"
+        }
+      ],
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "summary": "Workflow file name or ID.",
+          "maps_to": "record.workflow_id"
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "Git ref to run the workflow on.",
+          "maps_to": "record.ref"
         }
       ]
     },
@@ -1023,6 +1531,14 @@
           "method": "POST",
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun"
         }
+      ],
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "Workflow run ID to rerun.",
+          "maps_to": "record.run_id"
+        }
       ]
     },
     {
@@ -1039,6 +1555,14 @@
           "method": "POST",
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/cancel"
         }
+      ],
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "Workflow run ID to cancel.",
+          "maps_to": "record.run_id"
+        }
       ]
     },
     {
@@ -1054,6 +1578,14 @@
         {
           "method": "DELETE",
           "path": "/repos/{owner}/{repo}/actions/runs/{run_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "Workflow run ID to delete.",
+          "maps_to": "record.run_id"
         }
       ]
     },
@@ -1117,6 +1649,26 @@
           "method": "POST",
           "path": "/repos/{owner}/{repo}/labels"
         }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Label name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "summary": "Label color hex value without #.",
+          "maps_to": "record.color"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Label description.",
+          "maps_to": "record.description"
+        }
       ]
     },
     {
@@ -1133,6 +1685,32 @@
           "method": "PATCH",
           "path": "/repos/{owner}/{repo}/labels/{name}"
         }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Existing label name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "new-name",
+          "type": "string",
+          "summary": "New label name.",
+          "maps_to": "record.new_name"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "summary": "Label color hex value without #.",
+          "maps_to": "record.color"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Label description.",
+          "maps_to": "record.description"
+        }
       ]
     },
     {
@@ -1148,6 +1726,14 @@
         {
           "method": "DELETE",
           "path": "/repos/{owner}/{repo}/labels/{name}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Label name to delete.",
+          "maps_to": "record.name"
         }
       ]
     },
@@ -1204,6 +1790,36 @@
           "method": "POST",
           "path": "/repos/{owner}/{repo}/rulesets"
         }
+      ],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Ruleset name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "target",
+          "type": "enum",
+          "summary": "Ruleset target.",
+          "maps_to": "record.target",
+          "values": [
+            "branch",
+            "tag",
+            "push"
+          ]
+        },
+        {
+          "name": "enforcement",
+          "type": "enum",
+          "summary": "Ruleset enforcement mode.",
+          "maps_to": "record.enforcement",
+          "values": [
+            "disabled",
+            "active",
+            "evaluate"
+          ]
+        }
       ]
     },
     {
@@ -1220,6 +1836,42 @@
           "method": "PUT",
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}"
         }
+      ],
+      "flags": [
+        {
+          "name": "ruleset-id",
+          "type": "integer",
+          "summary": "Ruleset ID to update.",
+          "maps_to": "record.ruleset_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Ruleset name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "target",
+          "type": "enum",
+          "summary": "Ruleset target.",
+          "maps_to": "record.target",
+          "values": [
+            "branch",
+            "tag",
+            "push"
+          ]
+        },
+        {
+          "name": "enforcement",
+          "type": "enum",
+          "summary": "Ruleset enforcement mode.",
+          "maps_to": "record.enforcement",
+          "values": [
+            "disabled",
+            "active",
+            "evaluate"
+          ]
+        }
       ]
     },
     {
@@ -1235,6 +1887,14 @@
         {
           "method": "DELETE",
           "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}"
+        }
+      ],
+      "flags": [
+        {
+          "name": "ruleset-id",
+          "type": "integer",
+          "summary": "Ruleset ID to delete.",
+          "maps_to": "record.ruleset_id"
         }
       ]
     },

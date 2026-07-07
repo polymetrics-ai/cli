@@ -35,4 +35,3 @@
 - No auth-scope refresh.
 - No mutation execution.
 - Parent PR merge to `main` remains human-gated.
-

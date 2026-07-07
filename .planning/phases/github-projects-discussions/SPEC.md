@@ -33,4 +33,3 @@ reverse-ETL approval policies exist.
 - GitHub GraphQL API overview: https://docs.github.com/en/graphql
 - GitHub Projects API docs: https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects
 - GitHub Discussions GraphQL docs: https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions
-

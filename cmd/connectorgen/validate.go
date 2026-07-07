@@ -731,9 +731,9 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	for _, s := range b.Streams {
 		streams[s.Name] = true
 	}
-	writes := map[string]bool{}
+	writes := map[string]engine.WriteAction{}
 	for _, w := range b.Writes {
-		writes[w.Name] = true
+		writes[w.Name] = w
 	}
 	operations := map[string]engine.OperationSpec{}
 	for _, op := range b.Operations {
@@ -746,6 +746,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
+		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
 	}
 	return findings
@@ -756,7 +757,7 @@ func checkCLISurfaceReferences(
 	i int,
 	cmd engine.CLICommand,
 	streams map[string]bool,
-	writes map[string]bool,
+	writes map[string]engine.WriteAction,
 	operations map[string]engine.OperationSpec,
 ) []Finding {
 	var findings []Finding
@@ -786,13 +787,15 @@ func checkCLISurfaceReferences(
 			Message:   fmt.Sprintf("command %d (%q) references unknown stream %q", i, cmd.Path, cmd.Stream),
 		})
 	}
-	if cmd.Write != "" && !writes[cmd.Write] {
-		findings = append(findings, Finding{
-			Connector: b.Name,
-			File:      "cli_surface.json",
-			Rule:      ruleCLISurfaceUnknownTarget,
-			Message:   fmt.Sprintf("command %d (%q) references unknown write action %q", i, cmd.Path, cmd.Write),
-		})
+	if cmd.Write != "" {
+		if _, ok := writes[cmd.Write]; !ok {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceUnknownTarget,
+				Message:   fmt.Sprintf("command %d (%q) references unknown write action %q", i, cmd.Path, cmd.Write),
+			})
+		}
 	}
 	if cmd.Operation != "" {
 		if _, ok := operations[cmd.Operation]; !ok {
@@ -805,6 +808,64 @@ func checkCLISurfaceReferences(
 		}
 	}
 	return findings
+}
+
+func checkCLISurfaceWriteFlags(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	writes map[string]engine.WriteAction,
+) []Finding {
+	if cmd.Availability != "implemented" || cmd.Intent != "reverse_etl" || cmd.Write == "" {
+		return nil
+	}
+
+	action, ok := writes[cmd.Write]
+	if !ok {
+		return nil
+	}
+
+	required := map[string]bool{}
+	if len(action.RecordSchema) > 0 {
+		schema, err := engine.CompileSchema(action.RecordSchema)
+		if err != nil {
+			return nil
+		}
+		for _, field := range schema.RequiredKeys() {
+			required[field] = true
+		}
+	}
+	for _, field := range action.PathFields {
+		required[field] = true
+	}
+	if len(required) == 0 {
+		return nil
+	}
+
+	mapped := map[string]bool{}
+	for _, flag := range cmd.Flags {
+		target, ok := strings.CutPrefix(flag.MapsTo, "record.")
+		if ok && target != "" {
+			mapped[target] = true
+		}
+	}
+
+	missing := make([]string, 0, len(required))
+	for field := range required {
+		if !mapped[field] {
+			missing = append(missing, field)
+		}
+	}
+	if len(missing) == 0 {
+		return nil
+	}
+	sort.Strings(missing)
+	return []Finding{{
+		Connector: b.Name,
+		File:      "cli_surface.json",
+		Rule:      ruleCLISurfaceMissingMapping,
+		Message:   fmt.Sprintf("implemented reverse ETL command %d (%q) for write %q lacks flag mappings for required record fields: %s", i, cmd.Path, cmd.Write, strings.Join(missing, ", ")),
+	}}
 }
 
 func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {

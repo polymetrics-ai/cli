@@ -7,4 +7,3 @@ Success criteria:
 - `pm github discussion list --json` routes to a stream-backed GraphQL read.
 - `pm github discussion view --number <n> --json` routes `number` into GraphQL variables.
 - Project/discussion create commands remain blocked/planned with risk notes.
-

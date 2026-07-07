@@ -7,4 +7,3 @@ Rollback this slice by reverting the commit that adds:
 - Website generated connector data for GitHub.
 
 No external resources are created by this slice.
-

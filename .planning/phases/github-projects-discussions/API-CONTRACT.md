@@ -29,4 +29,3 @@ to an empty string. It does not suppress unresolved-key or type-conversion error
 
 All new streams use `POST /graphql` with fixed documents and JSON output. No generic GraphQL escape
 hatch is added.
-

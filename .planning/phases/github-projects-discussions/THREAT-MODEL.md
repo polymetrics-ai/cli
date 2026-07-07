@@ -14,4 +14,3 @@
 - Project/discussion mutations stay planned/direct-write until reverse-ETL schema and approval
   policy exist.
 - No secret values are requested, printed, stored, summarized, or invented.
-

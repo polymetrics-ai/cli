@@ -11,4 +11,3 @@
   - `jq` parses JSON files.
   - `connectorgen validate` passes for GitHub.
   - GitHub conformance passes or records any dynamic GraphQL fixture limitation.
-
