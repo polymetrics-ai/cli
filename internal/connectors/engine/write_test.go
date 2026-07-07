@@ -190,6 +190,120 @@ func TestWriteBodyFieldsAllowListForDeleteWithBody(t *testing.T) {
 	}
 }
 
+// --- body construction: GraphQL fixed document + declared variables ---
+
+func TestWriteGraphQLBodyUsesFixedDocumentAndDeclaredVariables(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"data":{"deleteIssue":{"clientMutationId":"pm"}}}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:     "delete_issue",
+		Kind:     "delete",
+		Method:   http.MethodPost,
+		Path:     "/graphql",
+		BodyType: "graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "mutation DeleteIssue($issueId: ID!) { deleteIssue(input: {id: $issueId}) { clientMutationId } }",
+			OperationName: "DeleteIssue",
+			Variables: map[string]any{
+				"issueId": "{{ record.issue_id }}",
+			},
+		},
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["issue_id"],
+			"properties": {"issue_id": {"type": "string"}}
+		}`),
+	})
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_issue"}, []connectors.Record{
+		{"issue_id": "I_kwDO123"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("result = %+v", result)
+	}
+	if cap.method != http.MethodPost || cap.path != "/graphql" {
+		t.Fatalf("request = %s %s, want POST /graphql", cap.method, cap.path)
+	}
+	got := cap.json()
+	if got["query"] != "mutation DeleteIssue($issueId: ID!) { deleteIssue(input: {id: $issueId}) { clientMutationId } }" {
+		t.Fatalf("query = %v, want fixed bundle mutation", got["query"])
+	}
+	if got["operationName"] != "DeleteIssue" {
+		t.Fatalf("operationName = %v, want DeleteIssue", got["operationName"])
+	}
+	vars, ok := got["variables"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables = %#v, want object", got["variables"])
+	}
+	if vars["issueId"] != "I_kwDO123" {
+		t.Fatalf("variables.issueId = %#v, want record issue id", vars["issueId"])
+	}
+}
+
+func TestWriteGraphQLBodyIgnoresRecordQueryField(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"data":{"closeIssue":{"clientMutationId":"pm"}}}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:     "close_issue",
+		Kind:     "update",
+		Method:   http.MethodPost,
+		Path:     "/graphql",
+		BodyType: "graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "mutation CloseIssue($issueId: ID!) { closeIssue(input: {issueId: $issueId}) { clientMutationId } }",
+			OperationName: "CloseIssue",
+			Variables: map[string]any{
+				"issueId": "{{ record.issue_id }}",
+			},
+		},
+		RecordSchema: json.RawMessage(`{"type":"object","required":["issue_id"],"properties":{"issue_id":{"type":"string"},"query":{"type":"string"}}}`),
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "close_issue"}, []connectors.Record{
+		{"issue_id": "I_kwDO123", "query": "mutation Unsafe { deleteRepository(input:{repositoryId:\"R\"}) { clientMutationId } }"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	got := cap.json()
+	if strings.Contains(got["query"].(string), "Unsafe") || strings.Contains(got["query"].(string), "deleteRepository") {
+		t.Fatalf("query = %q, record-provided query must not override fixed bundle document", got["query"])
+	}
+}
+
+func TestWriteGraphQLErrorsFailClosed(t *testing.T) {
+	srv, _ := captureServer(t, http.StatusOK, `{"errors":[{"message":"cannot delete issue"}],"data":{"deleteIssue":null}}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:     "delete_issue",
+		Kind:     "delete",
+		Method:   http.MethodPost,
+		Path:     "/graphql",
+		BodyType: "graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "mutation DeleteIssue($issueId: ID!) { deleteIssue(input: {id: $issueId}) { clientMutationId } }",
+			OperationName: "DeleteIssue",
+			Variables: map[string]any{
+				"issueId": "{{ record.issue_id }}",
+			},
+		},
+		RecordSchema: json.RawMessage(`{"type":"object","required":["issue_id"],"properties":{"issue_id":{"type":"string"}}}`),
+	})
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_issue"}, []connectors.Record{
+		{"issue_id": "I_kwDO123"},
+	}, nil)
+	if err == nil {
+		t.Fatalf("Write: want GraphQL errors[] to fail closed")
+	}
+	if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
+		t.Fatalf("result = %+v, want 0 written / 1 failed", result)
+	}
+	if !strings.Contains(strings.ToLower(err.Error()), "graphql") || !strings.Contains(err.Error(), "cannot delete issue") {
+		t.Fatalf("error = %q, want GraphQL error details", err.Error())
+	}
+}
+
 // --- record_schema validation ---
 
 func TestValidateWriteRecordSchemaErrorCarriesRecordIndex(t *testing.T) {

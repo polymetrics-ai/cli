@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "github-graphql-engine",
+  "planRefs": [
+    ".planning/phases/github-graphql-engine/PLAN.md",
+    ".planning/phases/github-graphql-engine/TEST-PLAN.md"
+  ],
+  "ledgerRef": ".planning/phases/github-graphql-engine/TDD-LEDGER.md",
+  "passed": true,
+  "tasks": [],
+  "behaviorTasks": [],
+  "failures": [],
+  "updatedAt": "2026-07-07T08:55:36.282Z"
+}
