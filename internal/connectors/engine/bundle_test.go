@@ -2,6 +2,7 @@ package engine
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -714,6 +715,79 @@ func TestBundleLoadRejectsOperationWithMultipleExecutionBlocks(t *testing.T) {
 	if !strings.Contains(err.Error(), "operations.json") ||
 		!strings.Contains(err.Error(), "exactly one execution block") {
 		t.Fatalf("Load error = %q, want operations.json single-block rejection", err.Error())
+	}
+}
+
+const secretWriteOp = `{
+		"id": "acme.secrets.put",
+		"kind": "rest_write",
+		"summary": "Create or update a repo secret",
+		"risk": "high",
+		"approval": "plan, preview, approval, execute",
+		"output_policy": "json",
+		"mutation_class": "secret",
+		"secret_sensitive": true,
+		"rest": {
+			"method": "PUT",
+			"path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+		}%s
+	}`
+
+func TestBundleLoadRejectsSecretOperationWithoutPolicy(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"operations":[%s]}`, fmt.Sprintf(secretWriteOp, "")))}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected secret-sensitive operation without sensitive_policy to be rejected")
+	}
+	if !strings.Contains(err.Error(), "sensitive_policy") {
+		t.Fatalf("Load error = %q, want sensitive_policy rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsInlineInputModeForSecretOperation(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	policy := `, "sensitive_policy": {"input_mode": "inline", "redact_fields": ["value"], "transform": "none", "approval_mode": "typed_confirmation"}`
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"operations":[%s]}`, fmt.Sprintf(secretWriteOp, policy)))}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected inline input_mode for a secret operation to be rejected")
+	}
+	if !strings.Contains(err.Error(), "inline") || !strings.Contains(err.Error(), "input_mode") {
+		t.Fatalf("Load error = %q, want inline input_mode rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsSecretOperationWithoutTypedConfirmation(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	policy := `, "sensitive_policy": {"input_mode": "env", "redact_fields": ["value"], "transform": "github_secret_encryption", "approval_mode": "none"}`
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"operations":[%s]}`, fmt.Sprintf(secretWriteOp, policy)))}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected secret operation without typed_confirmation to be rejected")
+	}
+	if !strings.Contains(err.Error(), "typed_confirmation") {
+		t.Fatalf("Load error = %q, want typed_confirmation rejection", err.Error())
+	}
+}
+
+func TestBundleLoadAcceptsSecretOperationWithFullPolicy(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	policy := `, "sensitive_policy": {"input_mode": "env", "redact_fields": ["value"], "transform": "github_secret_encryption", "approval_mode": "typed_confirmation", "preflight": "scope_check"}`
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"operations":[%s]}`, fmt.Sprintf(secretWriteOp, policy)))}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: secret operation with full policy should be accepted: %v", err)
+	}
+	if len(b.Operations) != 1 || b.Operations[0].SensitivePolicy == nil {
+		t.Fatalf("loaded operation missing sensitive_policy: %+v", b.Operations)
+	}
+	if got := b.Operations[0].SensitivePolicy.ApprovalMode; got != "typed_confirmation" {
+		t.Fatalf("approval_mode = %q, want typed_confirmation", got)
 	}
 }
 

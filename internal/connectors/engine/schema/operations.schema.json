@@ -53,6 +53,29 @@
           },
           "destructive": { "type": "boolean" },
           "secret_sensitive": { "type": "boolean" },
+          "sensitive_policy": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "input_mode": {
+                "type": "string",
+                "enum": ["env", "file", "stdin", "env_or_file", "env_or_stdin", "inline"]
+              },
+              "redact_fields": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "preflight": { "type": "string" },
+              "transform": {
+                "type": "string",
+                "enum": ["none", "github_secret_encryption"]
+              },
+              "approval_mode": {
+                "type": "string",
+                "enum": ["none", "typed_confirmation"]
+              }
+            }
+          },
           "audit_event": { "type": "string" },
           "rest": {
             "type": "object",
