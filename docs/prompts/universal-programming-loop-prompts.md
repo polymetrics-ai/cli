@@ -4,6 +4,18 @@ This repository uses GSD-style local programming loops for implementation phases
 
 Use this prompt family when asking Codex, Claude, or another implementation agent to execute a scoped phase.
 
+Runtime adapters:
+
+- Claude Code: `/gsd:programming-loop` is the reference command shape. It uses a lean in-session
+  orchestrator and Task subagents.
+- Codex: `.codex/agents/gsd-loop-orchestrator.toml` and
+  `.agents/agentic-delivery/workflows/codex-active-orchestration-loop.md` mirror the same loop.
+  Codex subagents are explicit, so parent issue prompts must say to spawn the orchestrator/workers.
+- OpenCode: `.opencode/agents/gsd-loop-orchestrator.md` and
+  `.opencode/commands/gsd-programming-loop.md` mirror the same loop with project-local agents.
+- All runtimes: `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` is the shared
+  contract. Use `.agents/skills/caveman/SKILL.md` for compact status and handoffs.
+
 ## Base Prompt
 
 ```text
@@ -24,6 +36,8 @@ Required context:
 Rules:
 - Use workflow.use_worktrees=false.
 - Use workflow.tdd_mode=true.
+- For parent issues with ready sub-issues, keep orchestration active: spawn or assign all
+  independent ready workers up to runtime limits, or record why no worker can run.
 - Start with a red test or validation artifact for behavior changes.
 - Keep Go code simple, explicit, context-aware, and testable.
 - Keep secrets out of logs, prompt output, JSON responses, and test fixtures.
@@ -57,6 +71,16 @@ Canonical prompts for the GSD Universal Programming Loop roles in this milestone
 | all GSD loop roles | `gpt-5.5` with `xhigh` reasoning effort |
 
 Overrides live in `.planning/config.json` `model_overrides`.
+
+## Runtime policy
+
+The GSD loop is runtime-neutral. Claude, Codex, and OpenCode adapters must point back to
+`.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` instead of forking policy. For
+parent issues, the active parent orchestrator is mandatory when subagent tools are available and
+ready sub-issues have disjoint write scopes.
+
+Use `caveman` compact mode for orchestration status, worker prompts, and handoffs. Do not compress
+safety gates, code, commands, exact test output, or security warnings past clarity.
 
 ## Go skill policy (user directive: cc-skills-golang)
 

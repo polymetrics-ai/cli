@@ -24,7 +24,12 @@ human gate.
 - [x] Preserve the #51 parent orchestrator workflow already merged into `main`.
 - [x] Keep GitHub CLI surface metadata and website documentation from the parent branch.
 - [x] Update GSD model policy to Codex `gpt-5.5` with `xhigh` reasoning.
-- [ ] Push rebased parent branch.
+- [x] Merge green #57/#69 reverse-ETL command runner slice into the parent branch.
+- [x] Add cross-runtime GSD loop adapters for Codex and OpenCode.
+- [x] Add repo-local `caveman` compact-output skill for orchestration handoffs.
+- [x] Make parent issue orchestration active instead of advisory.
+- [ ] Push updated parent branch.
+- [ ] Wait for automatic PR #49 CodeRabbit review and checks after the new parent commits.
 - [ ] Resolve current PR #49 CodeRabbit findings with dispositions.
 - [ ] Continue sub-issues in dependency order:
   - [ ] #35 help renderer
@@ -41,6 +46,10 @@ human gate.
 Run subissues in parallel only when write scopes are disjoint and dependencies are satisfied. The
 orchestrator owns shared parent artifacts, parent PR body, parent branch pushes, review coverage
 records, and final human-readiness.
+
+Active orchestration rule: when subagent tooling exists, spawn or assign every independent ready
+subissue up to runtime limits. If no worker is spawned while work remains, record the blocker
+category in `ORCHESTRATION-STATE.json`.
 
 ## Human Gates
 

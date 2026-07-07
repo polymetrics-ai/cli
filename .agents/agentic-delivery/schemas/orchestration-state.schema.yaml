@@ -6,6 +6,9 @@ required_fields:
   - parent_branch
   - parent_pr
   - default_branch
+  - orchestrator
+  - ready_queue
+  - spawn_decisions
   - subissues
   - human_gates
   - updated_at
@@ -22,6 +25,25 @@ field_contract:
   default_branch:
     type: string
     example: main
+  orchestrator:
+    type: object
+    required: [mode, runtime, status]
+    mode_values: [active_owner, advisory, blocked]
+    status_values: [running, waiting_for_workers, waiting_for_review, blocked, human_ready]
+  ready_queue:
+    type: list
+    item_required: [number, status, dependencies, write_scope, decision]
+    decision_values:
+      - spawned
+      - not_spawned_dependency_blocked
+      - not_spawned_write_scope_collision
+      - not_spawned_human_gate
+      - not_spawned_runtime_capability_missing
+      - not_spawned_review_blocked
+      - not_spawned_verification_blocked
+  spawn_decisions:
+    type: list
+    item_required: [timestamp, decision, issue_numbers, reason]
   subissues:
     type: list
     item_required:

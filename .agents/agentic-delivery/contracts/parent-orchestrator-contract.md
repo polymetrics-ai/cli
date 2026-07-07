@@ -23,12 +23,28 @@ The orchestrator must also read:
 - `AGENTS.md`
 - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
+- `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
 - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
 - `.agents/agentic-delivery/references/gsd-pi-adapter.md`
 - `.agents/agentic-delivery/references/required-skills-routing.md`
 - `.agents/agentic-delivery/contracts/worker-handoff-template.md`
 - `.agents/agentic-delivery/schemas/orchestration-state.schema.yaml`
+
+## Activation
+
+When triggered, the orchestrator is the active execution owner, not an advisory reviewer. It creates
+or confirms parent branch/PR state, assigns workers, records state, arbitrates sub-PR merges, and
+drives review coverage until the parent issue is human-ready or blocked.
+
+Triggers:
+
+- user references a parent issue with sub-issues
+- user references stacked PRs, parent branch, or parent PR
+- parent PR is missing or lacks review coverage
+- sub-PR merge arbitration is needed
+- CodeRabbit/Copilot review coverage gap blocks integration
+- remaining sub-issues are ready or need dependency scheduling
 
 ## Responsibilities
 
@@ -46,6 +62,9 @@ The orchestrator owns:
 - routing Copilot backup review when CodeRabbit is blocked by rate limits or unavailability
 - launching or assigning automated review disposition work
 - declaring final parent PR readiness for human approval
+
+The orchestrator must not stop after describing next steps when all required inputs are available,
+no human gate is triggered, and at least one sub-issue is worker-ready.
 
 Worker agents own implementation for one assigned sub-issue. Workers do not own shared parent issue
 comments, parent PR bodies, parent branch pushes, or default sub-PR merge decisions unless the
@@ -85,6 +104,16 @@ Sub-issues may run in parallel only when all of these are true:
 - human gates are not crossed
 
 When file ownership is unclear, run the sub-issues sequentially or split them further.
+
+At every parent orchestration turn, record whether workers were spawned. If no worker is spawned
+while work remains, record exactly one blocker category:
+
+- `dependency_blocked`
+- `write_scope_collision`
+- `human_gate`
+- `runtime_capability_missing`
+- `review_blocked`
+- `verification_blocked`
 
 ## Merge Policy
 

@@ -43,9 +43,10 @@ The `pm` CLI has ~556 native Go connectors, but the architecture has drifted fro
   schedule roundtrip with zero crontab residue, secret-redaction scan, JSON-contract assertions).
   Tier 0 fixture / Tier 1 recorded replay / Tier 2 live (credential-gated; no credential =
   `uncertified`, never `failed`). Exit 3 = leaked resources.
-- **G5 Migration at scale**: waves orchestrated by the GSD programming loop; Fable plans/reviews,
-  Sonnet 5 executes; ~105 bundle-agents for Pass A (parity migration), Pass B (capability
-  expansion) budget decided after the pilot with real cost data.
+- **G5 Migration at scale**: waves orchestrated by the GSD programming loop across Claude, Codex,
+  OpenCode, or future runtimes; implementation agents own disjoint scopes; active parent
+  orchestrators spawn or assign all ready workers until human-ready or blocked; compact handoffs
+  reduce coordination tokens without changing TDD, verification, or safety gates.
 
 ## Non-goals
 

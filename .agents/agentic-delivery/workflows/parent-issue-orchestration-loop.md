@@ -3,6 +3,18 @@
 Use this workflow when a parent issue owns multiple sub-issues and the work must proceed through a
 parent PR plus stacked sub-PRs.
 
+## Active Mode
+
+Execute this state machine until the parent issue is human-ready, blocked, or explicitly limited by
+the user. Do not stop after describing next steps when required inputs and permissions are available.
+
+At each coordinator turn:
+
+- build the ready queue
+- spawn or assign all independent ready workers up to runtime limits
+- record `spawned` or a `not_spawned_*` blocker category
+- keep the parent orchestrator context open until handoff, human gate, or blocker
+
 ## 1. Initialize Parent Work
 
 1. Read `AGENTS.md` and the parent issue.
@@ -49,6 +61,9 @@ satisfied. Each worker prompt must include:
 
 The orchestrator continues non-overlapping work while workers run. It must not duplicate worker
 implementation tasks.
+
+If subagent tooling exists and ready work is independent, parallel worker dispatch is the default.
+Sequential execution needs an explicit reason in the state ledger.
 
 ## 4. Review Worker Handoffs
 

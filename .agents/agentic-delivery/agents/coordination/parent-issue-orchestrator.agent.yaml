@@ -14,8 +14,18 @@ metadata:
   - coderabbit
   - copilot
 role: orchestration
-objective: Drive a large parent issue from parent PR creation through worker execution, integrated review, and human-ready
-  final PR state.
+objective: Drive a large parent issue from parent PR creation through worker execution, integrated review, and human-ready final PR state.
+activation:
+  mode: active_owner
+  triggers:
+  - parent issue with sub-issues
+  - stacked PRs
+  - missing parent PR
+  - parent branch coordination
+  - sub-PR merge arbitration
+  - automated review coverage gap
+  - remaining ready sub-issues
+  rule: When triggered, this agent actively drives execution until human-ready, blocked, or explicitly limited by the user. It must not only summarize the contract when workers can be launched safely.
 skills:
   required_groups:
   - orchestration
@@ -25,6 +35,7 @@ skills:
   required_local_skills:
   - github-issue-first-delivery
   - golang-how-to
+  compact_local_skill: caveman
   preferred_local_skills:
   - gsd-programming-loop
   - gsd-plan-phase
@@ -69,10 +80,10 @@ permissions:
   - unrestricted SQL write
   - generic shell write tools exposed to users
 workflow:
-- enforce_cli_help_docs_website_parity_when_cli_changes
 - load_gsd_pi_adapter
 - load_required_go_and_design_skills
 - enforce_runtime_rlm_website_integration_when_relevant
+- enforce_cli_help_docs_website_parity_when_cli_changes
 - read_parent_issue_and_repo_rules
 - create_or_confirm_parent_branch_from_main
 - create_or_confirm_parent_pr_to_main
@@ -93,6 +104,7 @@ state:
 handoffs:
   worker_template: .agents/agentic-delivery/contracts/worker-handoff-template.md
 concurrency:
+  default: spawn_all_ready_disjoint_workers
   allowed_when:
   - sub-issue dependencies are satisfied
   - write scopes are disjoint
@@ -101,6 +113,14 @@ concurrency:
   - shared parent artifacts would be edited by more than one worker
   - dependency order is unclear
   - human gates are likely
+  required_decision_values:
+  - spawned
+  - not_spawned_dependency_blocked
+  - not_spawned_write_scope_collision
+  - not_spawned_human_gate
+  - not_spawned_runtime_capability_missing
+  - not_spawned_review_blocked
+  - not_spawned_verification_blocked
 merge_policy:
   owner: parent-issue-orchestrator
   sub_pr_target: parent branch
@@ -109,8 +129,7 @@ merge_policy:
 coverage_policy:
   coderabbit_required: true
   skipped_review_is_approval: false
-  fallback: parent PR review coverage after provisional integration, then Copilot backup when CodeRabbit is rate-limited or
-    unavailable
+  fallback: parent PR review coverage after provisional integration, then Copilot backup when CodeRabbit is rate-limited or unavailable
 guardrails:
   input:
   - parent PR must exist before sub-issue execution is considered ready
@@ -140,13 +159,10 @@ verification:
   - final parent verification summary before human approval
 adapters:
   codex:
-    note: Use this YAML as the source of truth. A Codex custom agent should be a thin TOML wrapper that reads this file and
-      the referenced contracts before acting.
+    note: Use this YAML as the source of truth. A Codex custom agent should be a thin TOML wrapper that reads this file and the referenced contracts before acting. Because Codex subagents are explicit, the coordinator must spawn this orchestrator or spawn a default agent with this YAML when parent issue execution is requested.
+  opencode:
+    note: Use this YAML as the source of truth. Project agents under .opencode/agents/ should be thin Markdown wrappers over this file.
   github_actions:
     note: Use this spec as policy metadata only; do not auto-merge parent PRs to main.
   pi:
-    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
-      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
-      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
-      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
-      and keep runtime-backed services optional unless explicitly in scope.
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md and keep runtime-backed services optional unless explicitly in scope.

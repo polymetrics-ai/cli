@@ -11,5 +11,12 @@
     "service_tier": "priority"
   },
   "manual_gsd_fallback": true,
-  "human_gate": "parent PR merge to main"
+  "human_gate": "parent PR merge to main",
+  "active_orchestration": {
+    "status": "enabled",
+    "compact_skill": "caveman",
+    "codex_adapter": ".codex/agents/gsd-loop-orchestrator.toml",
+    "opencode_adapter": ".opencode/agents/gsd-loop-orchestrator.md",
+    "state_file": ".planning/phases/github-cli-parity-parent-orchestration/ORCHESTRATION-STATE.json"
+  }
 }

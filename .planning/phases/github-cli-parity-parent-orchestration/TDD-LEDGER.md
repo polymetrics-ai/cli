@@ -27,3 +27,15 @@
 - Loader evidence added: `TestBundleLoadParsesCLISurface` now asserts `RawCLISurface` is retained.
 - Green targeted command:
   `go test ./cmd/connectorgen ./internal/connectors/engine`.
+
+### Active orchestration runtime slice
+
+- Task type: orchestration/configuration.
+- Red/validation target: existing workflow allowed passive planning because the parent orchestrator
+  contract had no activation field and Codex/OpenCode adapters did not require worker spawn
+  decisions.
+- Green evidence:
+  - `activation.mode: active_owner` added to the parent orchestrator YAML.
+  - Codex/OpenCode adapters added for GSD loop and parent issue orchestration.
+  - `caveman` repo-local skill added under `.agents/skills/`.
+  - Orchestration state schema now requires `orchestrator`, `ready_queue`, and `spawn_decisions`.
