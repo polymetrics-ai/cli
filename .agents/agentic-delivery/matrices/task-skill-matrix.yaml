@@ -85,6 +85,7 @@ skills:
       - parent-roadmap
       - stacked-pr
       - parent-orchestration
+      - review
   orchestration:
     capabilities:
       - parent issue state machine ownership

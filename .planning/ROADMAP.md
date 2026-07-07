@@ -8,9 +8,9 @@ POST/PUT/PATCH/DELETE → reverse-ETL write action) plus a credential-driven cer
 Plan of record: `~/.claude/plans/please-check-all-the-serialized-storm.md` (approved 2026-07-02);
 program PRD: `docs/plans/universal-programming-loop-prd.md`.
 
-Execution: GSD Universal Programming Loop per phase; the GitHub CLI parity implementation track uses
-Codex `gpt-5.5` with `xhigh` reasoning effort for all GSD roles; role prompts apply
-cc-skills-golang.
+Execution: GSD Universal Programming Loop per phase; this workspace config requires Codex `gpt-5.5`
+with `xhigh` reasoning effort for all GSD roles, including the GitHub CLI parity implementation
+track; role prompts apply cc-skills-golang.
 
 ### Phase: wave0-engine-harness
 
