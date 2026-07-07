@@ -21,49 +21,161 @@
   },
   "ready_queue": [
     {
-      "number": 35,
-      "status": "planned",
-      "dependencies": [],
-      "write_scope": [
-        "internal/cli",
-        "internal/connectors/commandrunner",
-        "internal/connectors/defs/github/docs.md",
-        "website/content/docs"
-      ],
-      "decision": "not_spawned_review_blocked"
-    },
-    {
-      "number": 37,
-      "status": "planned",
-      "dependencies": [],
-      "write_scope": [
-        "internal/connectors/defs/github/api_surface.json",
-        "internal/connectors/defs/github/cli_surface.json",
-        ".planning/phases/github-operation-ledger"
-      ],
-      "decision": "not_spawned_review_blocked"
-    },
-    {
       "number": 39,
-      "status": "planned",
+      "status": "worker_ready",
       "dependencies": [],
       "write_scope": [
         "internal/connectors/engine",
+        "internal/connectors/engine/schema",
         "internal/connectors/defs/github",
         ".planning/phases/github-graphql-engine"
       ],
       "decision": "not_spawned_review_blocked"
+    },
+    {
+      "number": 40,
+      "status": "planned",
+      "dependencies": [39],
+      "write_scope": [
+        "internal/connectors/defs/github",
+        "website/content/docs",
+        ".planning/phases/github-projects-discussions"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 41,
+      "status": "planned",
+      "dependencies": [39],
+      "write_scope": [
+        "internal/connectors/engine",
+        "internal/connectors/engine/schema",
+        "internal/connectors/defs/github",
+        ".planning/phases/github-sensitive-admin"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 42,
+      "status": "planned",
+      "dependencies": [39, 40, 41],
+      "write_scope": [
+        ".agents",
+        ".planning",
+        "docs"
+      ],
+      "decision": "not_spawned_dependency_blocked"
     }
   ],
   "spawn_decisions": [
     {
       "timestamp": "2026-07-07T08:21:29Z",
       "decision": "not_spawned_review_blocked",
-      "issue_numbers": [35, 37, 39],
+      "issue_numbers": [39],
       "reason": "Parent PR #49 checks and automatic CodeRabbit coverage are running after #69 integration and active-orchestration workflow edits."
     }
   ],
   "subissues": [
+    {
+      "number": 34,
+      "url": "https://github.com/polymetrics-ai/cli/issues/34",
+      "branch": "feat/34-cli-surface-metadata",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/48",
+      "worker": "provider-cli-surface-agent",
+      "status": "provisionally_integrated",
+      "write_scope": ["internal/connectors/defs/github", "website", ".planning"],
+      "verification": "Integrated in parent branch before current active-orchestration slice",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "clean",
+        "head_sha": "222e0f3",
+        "reviewed_range": "parent PR #49 historical range",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "No current blocker recorded",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/49"
+      }
+    },
+    {
+      "number": 35,
+      "url": "https://github.com/polymetrics-ai/cli/issues/35",
+      "branch": "feat/35-github-help-renderer",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/52",
+      "worker": "help-renderer-agent",
+      "status": "provisionally_integrated",
+      "write_scope": ["internal/cli", "internal/connectors/commandrunner", "website", ".planning"],
+      "verification": "Integrated in parent branch before current active-orchestration slice",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "clean",
+        "head_sha": "fb2a2a3",
+        "reviewed_range": "parent PR #49 historical range",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "No current blocker recorded",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/49"
+      }
+    },
+    {
+      "number": 36,
+      "url": "https://github.com/polymetrics-ai/cli/issues/36",
+      "branch": "feat/36-github-stream-runner",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/53",
+      "worker": "issue-first-implementation-agent",
+      "status": "provisionally_integrated",
+      "write_scope": ["internal/connectors/commandrunner", "internal/cli", ".planning"],
+      "verification": "Integrated in parent branch before current active-orchestration slice",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "clean",
+        "head_sha": "7096d44",
+        "reviewed_range": "parent PR #49 historical range",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "No current blocker recorded",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/49"
+      }
+    },
+    {
+      "number": 37,
+      "url": "https://github.com/polymetrics-ai/cli/issues/37",
+      "branch": "feat/37-github-operation-ledger",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/54",
+      "worker": "operation-ledger-architect",
+      "status": "provisionally_integrated",
+      "write_scope": ["internal/connectors/defs/github", ".planning"],
+      "verification": "Integrated in parent branch before current active-orchestration slice",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "clean",
+        "head_sha": "8bc6044",
+        "reviewed_range": "parent PR #49 historical range",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "No current blocker recorded",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/49"
+      }
+    },
+    {
+      "number": 38,
+      "url": "https://github.com/polymetrics-ai/cli/issues/38",
+      "branch": "feat/38-github-direct-read",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/55",
+      "worker": "direct-read-executor-agent",
+      "status": "provisionally_integrated",
+      "write_scope": ["internal/connectors/commandrunner", "internal/cli", "website", ".planning"],
+      "verification": "Integrated in parent branch before current active-orchestration slice",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "clean",
+        "head_sha": "7c3ae32",
+        "reviewed_range": "parent PR #49 historical range",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "No current blocker recorded",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/49"
+      }
+    },
     {
       "number": 57,
       "url": "https://github.com/polymetrics-ai/cli/issues/57",
@@ -99,5 +211,5 @@
     "production deployment",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-07T08:21:29Z"
+  "updated_at": "2026-07-07T08:31:00Z"
 }
