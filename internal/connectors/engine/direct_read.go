@@ -40,7 +40,8 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	if err := requireDirectReadEndpoint(b, method, req.Path); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	resolvedPath, err := resolveSurfaceEndpointPath(req.Path, req.Config, req.PathParams)
+	cfg := materializeConfigDefaults(b, req.Config)
+	resolvedPath, err := resolveSurfaceEndpointPath(req.Path, cfg, req.PathParams)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
@@ -55,7 +56,6 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
 	defer cancel()
 
-	cfg := materializeConfigDefaults(b, req.Config)
 	rt, err := newRuntime(ctx, b, cfg, h)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
