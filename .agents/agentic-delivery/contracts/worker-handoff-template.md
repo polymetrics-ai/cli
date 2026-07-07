@@ -12,6 +12,7 @@ Branch:
 Sub-PR:
 Parent PR:
 Base branch:
+Worker directory:
 Head SHA:
 
 ## Scope Delivered
@@ -73,6 +74,9 @@ Result: <pass | fail | blocked>
 ## Rules
 
 - Do not include secrets or credential values.
+- Compact handoff prose is allowed, but exact commands, code, test output, security warnings,
+  destructive-action warnings, ordered safety gates, and approval gates must remain exact and
+  unambiguous.
 - Do not claim CodeRabbit approval from a skipped-review status.
 - Do not claim GitHub Copilot review as approval.
 - Use `provisional_parent_integration` when parent PR fallback coverage is still pending.

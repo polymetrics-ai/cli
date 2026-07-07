@@ -35,7 +35,9 @@ The orchestrator must also read:
 
 When triggered, the orchestrator is the active execution owner, not an advisory reviewer. It creates
 or confirms parent branch/PR state, assigns workers, records state, arbitrates sub-PR merges, and
-drives review coverage until the parent issue is human-ready or blocked.
+drives review coverage until the parent issue is human-ready or blocked. Runtime adapters must
+invoke this contract; they must not fork or weaken its GSD, TDD, review, compact-mode, or human-gate
+rules.
 
 Triggers:
 
@@ -65,6 +67,23 @@ The orchestrator owns:
 
 The orchestrator must not stop after describing next steps when all required inputs are available,
 no human gate is triggered, and at least one sub-issue is worker-ready.
+
+The meaning of `spawn` is runtime-generic:
+
+- Claude Code: create `Task` workers.
+- Codex: explicitly invoke Codex subagent tools or a custom Codex worker after assigning a separate
+  git worktree or working directory for any worker that can edit files.
+- OpenCode: invoke configured subagents or commands with `subtask: true`.
+- Future runtimes: create an isolated worker context with one issue, one branch, one write scope,
+  one working directory, and the worker handoff template.
+
+If the runtime has no worker mechanism and the requested mode requires agents, record
+`not_spawned_runtime_capability_missing`.
+
+If the runtime can spawn workers but cannot isolate mutating workers from the coordinator checkout,
+record `not_spawned_isolation_missing`. Do not spawn code-writing workers into the same working tree
+as the orchestrator. Read-only explorer/reviewer agents may still run in the shared checkout when
+their prompt forbids edits.
 
 Worker agents own implementation for one assigned sub-issue. Workers do not own shared parent issue
 comments, parent PR bodies, parent branch pushes, or default sub-PR merge decisions unless the
@@ -100,6 +119,7 @@ Sub-issues may run in parallel only when all of these are true:
 - write scopes are disjoint
 - each worker has one primary issue
 - each worker has a bounded branch and PR base
+- each mutating worker has a separate worktree or working directory
 - shared parent artifacts are orchestrator-owned
 - human gates are not crossed
 
@@ -111,9 +131,14 @@ while work remains, record exactly one blocker category:
 - `dependency_blocked`
 - `write_scope_collision`
 - `human_gate`
+- `isolation_missing`
 - `runtime_capability_missing`
 - `review_blocked`
 - `verification_blocked`
+
+Compact handoffs are allowed only for agent prose. Do not compact exact code, commands, test output,
+review findings, security warnings, destructive-action warnings, ordered safety gates, or approval
+gates in worker prompts or handoffs.
 
 ## Merge Policy
 
