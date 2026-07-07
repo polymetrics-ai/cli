@@ -265,6 +265,47 @@ func TestReadGraphQLBodyUsesDefaultForMissingQueryVariable(t *testing.T) {
 	}
 }
 
+func TestReadGraphQLBodyOmitsExplicitlyEmptyQueryVariable(t *testing.T) {
+	var gotBody map[string]any
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		raw, _ := io.ReadAll(r.Body)
+		if err := json.Unmarshal(raw, &gotBody); err != nil {
+			t.Fatalf("request body JSON: %v; raw=%q", err, string(raw))
+		}
+		_, _ = w.Write([]byte(`{"data":{"widget":{"id":"w9","name":"Nine","updated_at":"2026-07-07T00:00:00Z"}}}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Method: http.MethodPost,
+		Path:   "/graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "query Widget($number: Int) { widget(number: $number) { id name updated_at } }",
+			OperationName: "Widget",
+			Variables: map[string]any{
+				"number": map[string]any{"template": "{{ query.number }}", "type": "integer", "default": "7", "omit_when_empty": true},
+			},
+		},
+		Records: RecordsSpec{Path: "data.widget", SingleObject: true},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Query:  map[string]string{"number": ""},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	vars, ok := gotBody["variables"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables = %#v, want object", gotBody["variables"])
+	}
+	if _, exists := vars["number"]; exists {
+		t.Fatalf("variables.number should be omitted for explicitly empty query value, got %#v", vars["number"])
+	}
+	if len(records) != 1 || records[0]["id"] != "w9" {
+		t.Fatalf("records = %+v, want one GraphQL object", records)
+	}
+}
+
 func TestReadGraphQLBodyOmitsEmptyOptionalVariable(t *testing.T) {
 	var gotBodies []map[string]any
 	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {

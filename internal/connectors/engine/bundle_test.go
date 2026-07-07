@@ -439,6 +439,37 @@ func TestBundleLoadRejectsGraphQLVariableOmitWhenEmptyNonBoolean(t *testing.T) {
 	}
 }
 
+func TestBundleLoadRejectsGraphQLVariableDefaultTypeMismatch(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($count: Int!) { widgets(count: $count) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"count": { "template": "{{ query.count }}", "type": "integer", "default": "not-a-number" }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected default/type mismatch to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "default") {
+		t.Fatalf("Load error = %q, want default/type mismatch rejection", err.Error())
+	}
+}
+
 func TestGitHubProjectsDiscussionsCommandsMapToGraphQLStreams(t *testing.T) {
 	b, err := Load(defs.FS, "github")
 	if err != nil {
