@@ -3,10 +3,10 @@
 GitHub reads 33 stream(s), and writes through 67 action(s).
 
 The connector now declares a JSON-first command surface in `cli_surface.json`. This surface is a
-docs and validation contract for gh-inspired GitHub commands; it does not add runtime dispatch by
-itself. Commands mapped to existing streams are ETL reads, commands mapped to existing write actions
-remain reverse ETL writes, and unsupported local workflow commands such as clone, checkout, browser,
-completion, alias, extension, and local config are labeled separately.
+docs, validation, and safe dispatch contract for gh-inspired GitHub commands. Commands mapped to
+existing streams are ETL reads, commands mapped to existing write actions are reverse ETL command
+plans, and unsupported local workflow commands such as clone, checkout, browser, completion, alias,
+extension, and local config are labeled separately.
 
 Readable streams: `repository`, `issues`, `pull_requests`, `branches`, `commits`, `tags`,
 `releases`, `labels`, `milestones`, `issue_comments`, `pull_request_review_comments`,
@@ -79,6 +79,24 @@ Authentication behavior:
 Requests use the configured `base_url` value after applying defaults.
 
 Connection checks call GET `/repos/{{ config.owner }}/{{ config.repo }}`.
+
+## Connector command writes
+
+Mapped `reverse_etl` commands never mutate GitHub directly from a plain command invocation. The
+provider-style command creates a stored reverse plan with an approval token, optional preview uses
+the connector write dry-run path, and execution requires the same stored plan plus `--approve`.
+
+Example:
+
+```bash
+pm github issue close --issue-number 101 --credential github-token
+pm github issue close --plan <plan-id> --preview --json
+pm github issue close --plan <plan-id> --approve <approval-token> --json
+```
+
+JSON plan and preview output redacts approval tokens, approval token hashes, and raw command payload
+records. Commands without explicit `record.*` flag mappings remain blocked until their input model is
+declared.
 
 ## Streams notes
 
@@ -497,8 +515,9 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 - Batch defaults: read_page_size=100.
 - API coverage includes 33 stream-backed endpoint group(s), 67 write-backed endpoint group(s).
 - GitHub CLI parity is intentionally staged. The current metadata covers selected `gh` command
-  families modeled in this slice and maps implemented commands to current stream/write names, but
-  connector command dispatch is a later phase.
+  families modeled in this slice and maps implemented commands to current stream/write names. Runtime
+  dispatch is limited to stream reads, guarded direct reads, and reverse ETL write commands with
+  explicit `record.*` flag mappings.
 - GitHub Projects v2, discussions, gist, codespaces, organization-wide views, and several status or
   search commands require GraphQL or mixed REST/GraphQL coverage that is not modeled by this REST
   bundle yet.

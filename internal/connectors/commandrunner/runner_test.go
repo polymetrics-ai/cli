@@ -11,8 +11,18 @@ import (
 
 type fakeConnector struct {
 	surface       *connectors.CommandSurface
+	manifest      connectors.Manifest
 	readReq       connectors.ReadRequest
 	directReadReq connectors.DirectReadRequest
+	validateReq   connectors.WriteRequest
+	dryRunReq     connectors.WriteRequest
+	writeReq      connectors.WriteRequest
+	writeRecords  []connectors.Record
+	validateErr   error
+	dryRunErr     error
+	writeErr      error
+	preview       connectors.WritePreview
+	writeResult   connectors.WriteResult
 }
 
 func (f *fakeConnector) Name() string { return "github" }
@@ -40,10 +50,33 @@ func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadR
 		},
 	}, nil
 }
-func (f *fakeConnector) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
-	return connectors.WriteResult{}, errors.New("write should not be called")
+func (f *fakeConnector) Write(_ context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
+	f.writeReq = req
+	f.writeRecords = append([]connectors.Record(nil), records...)
+	if f.writeErr != nil {
+		return connectors.WriteResult{}, f.writeErr
+	}
+	if f.writeResult != (connectors.WriteResult{}) {
+		return f.writeResult, nil
+	}
+	return connectors.WriteResult{RecordsWritten: len(records)}, nil
 }
 func (f *fakeConnector) CommandSurface() *connectors.CommandSurface { return f.surface }
+func (f *fakeConnector) Manifest() connectors.Manifest              { return f.manifest }
+func (f *fakeConnector) ValidateWrite(_ context.Context, req connectors.WriteRequest, _ []connectors.Record) error {
+	f.validateReq = req
+	return f.validateErr
+}
+func (f *fakeConnector) DryRunWrite(_ context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
+	f.dryRunReq = req
+	if f.dryRunErr != nil {
+		return connectors.WritePreview{}, f.dryRunErr
+	}
+	if f.preview.Action != "" || f.preview.RecordsStaged != 0 || len(f.preview.Warnings) > 0 {
+		return f.preview, nil
+	}
+	return connectors.WritePreview{Action: req.Action, RecordsStaged: len(records)}, nil
+}
 
 func TestRunImplementedStreamCommand(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
@@ -132,13 +165,6 @@ func TestRunBlocksNonStreamCommands(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
 			{
-				Path:         "issue create",
-				Intent:       "reverse_etl",
-				Availability: "implemented",
-				Write:        "create_issue",
-				Risk:         "creates a visible issue",
-			},
-			{
 				Path:         "repo clone",
 				Intent:       "local_workflow",
 				Availability: "unsupported_local",
@@ -152,7 +178,6 @@ func TestRunBlocksNonStreamCommands(t *testing.T) {
 		path []string
 		want string
 	}{
-		{name: "reverse_etl", path: []string{"issue", "create"}, want: "reverse_etl"},
 		{name: "local_workflow", path: []string{"repo", "clone"}, want: "unsupported_local"},
 		{name: "unknown", path: []string{"issue", "frobnicate"}, want: "unknown command"},
 	}
@@ -171,6 +196,169 @@ func TestRunBlocksNonStreamCommands(t *testing.T) {
 			}
 			if !strings.Contains(err.Error(), tt.want) {
 				t.Fatalf("Run error = %q, want to contain %q", err.Error(), tt.want)
+			}
+		})
+	}
+}
+
+func TestBuildWriteCommandPlansWithoutExecuting(t *testing.T) {
+	connector := reverseETLFakeConnector()
+
+	result, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"issue", "create"},
+		Flags: map[string][]string{
+			"title": []string{"Ship connector commands"},
+			"body":  []string{"Plan first"},
+		},
+		Config: connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	if result.Connector != "github" || result.Command != "issue create" || result.Write != "create_issue" {
+		t.Fatalf("write command identity = %+v, want github issue create create_issue", result)
+	}
+	if result.MutationClass != "create" || result.TargetResource != "issue" {
+		t.Fatalf("mutation target = %+v, want create issue", result)
+	}
+	if result.ApprovalRequired != true {
+		t.Fatalf("ApprovalRequired = false, want true")
+	}
+	if connector.validateReq.Action != "create_issue" {
+		t.Fatalf("ValidateWrite action = %q, want create_issue", connector.validateReq.Action)
+	}
+	if connector.dryRunReq.Action != "" {
+		t.Fatalf("DryRunWrite action = %q, want not called", connector.dryRunReq.Action)
+	}
+	if connector.writeReq.Action != "" {
+		t.Fatalf("Write action = %q, want not called", connector.writeReq.Action)
+	}
+	if got := result.Record["title"]; got != "Ship connector commands" {
+		t.Fatalf("plan record title = %#v, want title", got)
+	}
+}
+
+func TestBuildWriteCommandPreviewDryRunsAndRedactsSecretLikeFields(t *testing.T) {
+	connector := reverseETLFakeConnector()
+	connector.preview = connectors.WritePreview{
+		Action:        "create_deploy_key",
+		RecordsStaged: 1,
+		Warnings:      []string{"resolved request: POST https://api.github.test/repos/octo/hello/keys"},
+	}
+
+	result, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"repo", "deploy-key", "add"},
+		Flags: map[string][]string{
+			"title": []string{"deploy"},
+			"key":   []string{"ssh-rsa AAAA-sensitive"},
+		},
+		Config:  connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	if result.Preview == nil {
+		t.Fatalf("result = %+v, want plan and preview", result)
+	}
+	if connector.dryRunReq.Action != "create_deploy_key" {
+		t.Fatalf("DryRunWrite action = %q, want create_deploy_key", connector.dryRunReq.Action)
+	}
+	if connector.writeReq.Action != "" {
+		t.Fatalf("Write action = %q, want not called", connector.writeReq.Action)
+	}
+	if got := result.RedactedRecord["key"]; got != "***" {
+		t.Fatalf("plan record key = %#v, want redacted", got)
+	}
+}
+
+func TestRunReverseETLCommandRemainsNonExecutableInGenericRunner(t *testing.T) {
+	connector := reverseETLFakeConnector()
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"issue", "close"},
+		Flags: map[string][]string{"issue-number": []string{"101"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for reverse ETL command")
+		return nil
+	})
+	if err == nil {
+		t.Fatal("Run error = nil, want blocked generic runner")
+	}
+	var blocked *BlockedCommandError
+	if !errors.As(err, &blocked) {
+		t.Fatalf("Run error type = %T, want BlockedCommandError", err)
+	}
+	if !strings.Contains(err.Error(), "reverse_etl") {
+		t.Fatalf("Run error = %q, want reverse_etl", err.Error())
+	}
+}
+
+func TestRunReverseETLRejectsMissingWriteAndUnsupportedFlagMapping(t *testing.T) {
+	tests := []struct {
+		name    string
+		command connectors.CommandSurfaceCommand
+		flags   map[string][]string
+		want    string
+	}{
+		{
+			name: "missing write",
+			command: connectors.CommandSurfaceCommand{
+				Path:         "issue create",
+				Intent:       "reverse_etl",
+				Availability: "implemented",
+				Risk:         "creates issue",
+				Approval:     "approval required",
+			},
+			want: "must reference write action",
+		},
+		{
+			name: "no flag mappings",
+			command: connectors.CommandSurfaceCommand{
+				Path:         "repo fork",
+				Intent:       "reverse_etl",
+				Availability: "implemented",
+				Write:        "create_fork",
+				Risk:         "creates fork",
+				Approval:     "approval required",
+			},
+			want: "no declared flag mappings",
+		},
+		{
+			name: "unsupported flag mapping",
+			command: connectors.CommandSurfaceCommand{
+				Path:         "issue create",
+				Intent:       "reverse_etl",
+				Availability: "implemented",
+				Write:        "create_issue",
+				Risk:         "creates issue",
+				Approval:     "approval required",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "state", Type: "string", MapsTo: "query.state"},
+				},
+			},
+			flags: map[string][]string{"state": []string{"open"}},
+			want:  "unsupported target",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := &fakeConnector{
+				surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{tt.command}},
+				manifest: connectors.Manifest{WriteActions: []connectors.WriteActionSpec{
+					{Name: "create_issue", Method: "POST", Path: "/issues"},
+					{Name: "create_fork", Method: "POST", Path: "/forks"},
+				}},
+			}
+			_, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path:  strings.Fields(tt.command.Path),
+				Flags: tt.flags,
+			})
+			if err == nil {
+				t.Fatal("Run error = nil, want rejection")
+			}
+			if !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Run error = %q, want %q", err.Error(), tt.want)
 			}
 		})
 	}
@@ -202,6 +390,57 @@ func TestRunImplementedOperationCommandIsFeatureGated(t *testing.T) {
 	if !strings.Contains(err.Error(), "operation github.projects.list") ||
 		!strings.Contains(err.Error(), "executor is not implemented") {
 		t.Fatalf("Run error = %q, want operation feature gate", err.Error())
+	}
+}
+
+func reverseETLFakeConnector() *fakeConnector {
+	return &fakeConnector{
+		surface: &connectors.CommandSurface{
+			Commands: []connectors.CommandSurfaceCommand{
+				{
+					Path:         "issue create",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "create_issue",
+					Risk:         "creates a visible issue",
+					Approval:     "approval required",
+					Flags: []connectors.CommandSurfaceFlag{
+						{Name: "title", Type: "string", MapsTo: "record.title"},
+						{Name: "body", Type: "string", MapsTo: "record.body"},
+					},
+				},
+				{
+					Path:         "issue close",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "close_issue",
+					Risk:         "closes an issue",
+					Approval:     "approval required",
+					Flags: []connectors.CommandSurfaceFlag{
+						{Name: "issue-number", Type: "integer", MapsTo: "record.issue_number"},
+					},
+				},
+				{
+					Path:         "repo deploy-key add",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "create_deploy_key",
+					Risk:         "adds deploy key",
+					Approval:     "approval required",
+					Flags: []connectors.CommandSurfaceFlag{
+						{Name: "title", Type: "string", MapsTo: "record.title"},
+						{Name: "key", Type: "string", MapsTo: "record.key"},
+					},
+				},
+			},
+		},
+		manifest: connectors.Manifest{
+			WriteActions: []connectors.WriteActionSpec{
+				{Name: "create_issue", Method: "POST", Path: "/repos/{owner}/{repo}/issues", Risk: "creates issue"},
+				{Name: "close_issue", Method: "PATCH", Path: "/repos/{owner}/{repo}/issues/{issue_number}", Risk: "closes issue"},
+				{Name: "create_deploy_key", Method: "POST", Path: "/repos/{owner}/{repo}/keys", Risk: "adds deploy key"},
+			},
+		},
 	}
 }
 

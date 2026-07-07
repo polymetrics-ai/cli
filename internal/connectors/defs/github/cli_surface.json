@@ -138,8 +138,40 @@
       "source_cli_path": "gh issue create",
       "risk": "Creates a visible issue in the configured repository.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Issue title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Issue body.",
+          "maps_to": "record.body"
+        },
+        {
+          "name": "label",
+          "type": "string_array",
+          "summary": "Issue labels.",
+          "maps_to": "record.labels"
+        },
+        {
+          "name": "assignee",
+          "type": "string_array",
+          "summary": "Issue assignees.",
+          "maps_to": "record.assignees"
+        },
+        {
+          "name": "milestone",
+          "type": "integer",
+          "summary": "Milestone number.",
+          "maps_to": "record.milestone"
+        }
+      ],
       "examples": [
-        "pm github issue create --json"
+        "pm github issue create --title \"Ship connector commands\" --json"
       ],
       "api_surface": [
         {
@@ -172,7 +204,31 @@
       "write": "close_issue",
       "source_cli_path": "gh issue close",
       "risk": "Closes an existing issue.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "Issue number to close.",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "comment",
+          "type": "string",
+          "summary": "Optional closing comment.",
+          "maps_to": "record.comment"
+        },
+        {
+          "name": "state-reason",
+          "type": "enum",
+          "values": [
+            "completed",
+            "not_planned"
+          ],
+          "summary": "Reason for closing the issue.",
+          "maps_to": "record.state_reason"
+        }
+      ]
     },
     {
       "path": "issue reopen",
@@ -704,6 +760,26 @@
       "source_cli_path": "gh repo deploy-key add",
       "risk": "Adds a deploy key to the repository.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Deploy key title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "summary": "Public deploy key.",
+          "maps_to": "record.key"
+        },
+        {
+          "name": "read-only",
+          "type": "boolean",
+          "summary": "Create a read-only deploy key.",
+          "maps_to": "record.read_only"
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",

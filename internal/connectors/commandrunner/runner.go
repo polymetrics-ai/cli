@@ -2,9 +2,11 @@ package commandrunner
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
@@ -19,6 +21,7 @@ type Request struct {
 	Config   connectors.RuntimeConfig
 	Limit    int
 	MaxBytes int
+	Preview  bool
 }
 
 type Result struct {
@@ -28,6 +31,22 @@ type Result struct {
 	Count      int                          `json:"count,omitempty"`
 	DirectRead *connectors.DirectReadResult `json:"direct_read,omitempty"`
 }
+
+type WriteCommand struct {
+	Connector        string                   `json:"connector"`
+	Command          string                   `json:"command"`
+	Write            string                   `json:"write"`
+	MutationClass    string                   `json:"mutation_class"`
+	TargetResource   string                   `json:"target_resource"`
+	ApprovalRequired bool                     `json:"approval_required"`
+	Risk             string                   `json:"risk,omitempty"`
+	Approval         string                   `json:"approval,omitempty"`
+	Record           connectors.Record        `json:"record,omitempty"`
+	RedactedRecord   connectors.Record        `json:"redacted_record,omitempty"`
+	Preview          *connectors.WritePreview `json:"preview,omitempty"`
+}
+
+var ErrNotWriteCommand = errors.New("connector command is not a reverse ETL write command")
 
 type BlockedCommandError struct {
 	Connector    string
@@ -52,8 +71,78 @@ func (e *BlockedCommandError) Error() string {
 }
 
 func Preflight(connector connectors.Connector, path []string) error {
-	_, _, err := resolveRunnableCommand(connector, path)
+	_, _, err := resolvePreflightCommand(connector, path)
 	return err
+}
+
+func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req Request) (WriteCommand, error) {
+	cmd, command, err := resolvePreflightCommand(connector, req.Path)
+	if err != nil {
+		return WriteCommand{}, err
+	}
+	if cmd.Intent != "reverse_etl" {
+		return WriteCommand{}, ErrNotWriteCommand
+	}
+	if cmd.Availability != "implemented" || cmd.Write == "" {
+		return WriteCommand{}, &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      command,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "implemented reverse ETL commands must reference write action",
+		}
+	}
+	action, ok := findWriteAction(connectors.ManifestOf(connector), cmd.Write)
+	if !ok {
+		return WriteCommand{}, &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      command,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       fmt.Sprintf("write action %q is not declared in connector manifest", cmd.Write),
+		}
+	}
+	record, err := recordOverrides(cmd, req.Flags)
+	if err != nil {
+		return WriteCommand{}, err
+	}
+	writeReq := connectors.WriteRequest{Action: cmd.Write, Config: req.Config}
+	records := []connectors.Record{record}
+	if validator, ok := connector.(connectors.WriteValidator); ok {
+		if err := validator.ValidateWrite(ctx, writeReq, records); err != nil {
+			return WriteCommand{}, err
+		}
+	}
+	out := WriteCommand{
+		Connector:        connector.Name(),
+		Command:          command,
+		Write:            cmd.Write,
+		MutationClass:    mutationClassOf(action),
+		TargetResource:   targetResourceOf(cmd),
+		ApprovalRequired: true,
+		Risk:             firstNonEmpty(cmd.Risk, action.Risk),
+		Approval:         firstNonEmpty(cmd.Approval, "reverse ETL writes require plan, preview, approval, execute"),
+		Record:           cloneRecord(record),
+		RedactedRecord:   redactRecord(record),
+	}
+	if req.Preview {
+		dryRunner, ok := connector.(connectors.DryRunWriter)
+		if !ok {
+			return WriteCommand{}, &BlockedCommandError{
+				Connector:    connector.Name(),
+				Command:      command,
+				Intent:       cmd.Intent,
+				Availability: cmd.Availability,
+				Reason:       "connector does not support reverse ETL previews",
+			}
+		}
+		preview, err := dryRunner.DryRunWrite(ctx, writeReq, records)
+		if err != nil {
+			return WriteCommand{}, err
+		}
+		out.Preview = &preview
+	}
+	return out, nil
 }
 
 func Run(ctx context.Context, connector connectors.Connector, req Request, emit func(connectors.Record) error) (Result, error) {
@@ -100,6 +189,26 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 }
 
 func resolveRunnableCommand(connector connectors.Connector, path []string) (connectors.CommandSurfaceCommand, string, error) {
+	cmd, command, err := resolvePreflightCommand(connector, path)
+	if err != nil {
+		return connectors.CommandSurfaceCommand{}, command, err
+	}
+	if cmd.Intent == "etl" && cmd.Availability == "implemented" && cmd.Stream != "" {
+		return cmd, command, nil
+	}
+	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+		return cmd, command, nil
+	}
+	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+		Connector:    connector.Name(),
+		Command:      command,
+		Intent:       cmd.Intent,
+		Availability: cmd.Availability,
+		Reason:       blockReason(cmd),
+	}
+}
+
+func resolvePreflightCommand(connector connectors.Connector, path []string) (connectors.CommandSurfaceCommand, string, error) {
 	command := commandPath(path)
 	if connector == nil {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Command: command, Reason: "connector is nil"}
@@ -133,6 +242,9 @@ func resolveRunnableCommand(connector connectors.Connector, path []string) (conn
 		return cmd, command, nil
 	}
 	if cmd.Intent == "etl" && cmd.Availability == "implemented" && cmd.Stream != "" {
+		return cmd, command, nil
+	}
+	if cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && cmd.Write != "" {
 		return cmd, command, nil
 	}
 	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
@@ -269,6 +381,8 @@ func blockReason(cmd connectors.CommandSurfaceCommand) string {
 	switch {
 	case cmd.Operation != "":
 		return fmt.Sprintf("operation %s executor is not implemented in this slice", cmd.Operation)
+	case cmd.Intent == "reverse_etl" && cmd.Write == "":
+		return "implemented reverse ETL commands must reference write action"
 	case cmd.Intent == "reverse_etl":
 		if cmd.Approval != "" {
 			return cmd.Approval
@@ -335,7 +449,7 @@ func queryOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]str
 
 func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 	switch flag.Type {
-	case "", "string", "boolean":
+	case "", "string", "boolean", "integer", "string_array":
 		return nil
 	case "enum":
 		for _, allowed := range flag.Values {
@@ -406,6 +520,170 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 		}
 	}
 	return pathParams, query, nil
+}
+
+func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (connectors.Record, error) {
+	allowed := map[string]connectors.CommandSurfaceFlag{}
+	for _, flag := range cmd.Flags {
+		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
+			return nil, err
+		}
+		allowed[flag.Name] = flag
+	}
+	if len(allowed) == 0 {
+		return nil, &BlockedCommandError{
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "reverse ETL command has no declared flag mappings",
+		}
+	}
+	record := connectors.Record{}
+	for name, values := range flags {
+		if len(values) == 0 {
+			continue
+		}
+		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
+			return nil, err
+		}
+		flag, ok := allowed[name]
+		if !ok {
+			return nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+		}
+		target, ok := strings.CutPrefix(flag.MapsTo, "record.")
+		if !ok || target == "" {
+			return nil, &BlockedCommandError{
+				Command:      cmd.Path,
+				Intent:       cmd.Intent,
+				Availability: cmd.Availability,
+				Reason:       fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo),
+			}
+		}
+		if err := safety.ValidateIdentifier(target, "record field"); err != nil {
+			return nil, err
+		}
+		value, err := coerceFlagValue(flag, values)
+		if err != nil {
+			return nil, err
+		}
+		record[target] = value
+	}
+	return record, nil
+}
+
+func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	clean := make([]string, 0, len(values))
+	for _, value := range values {
+		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
+			return nil, err
+		}
+		clean = append(clean, value)
+	}
+	value := clean[len(clean)-1]
+	if err := validateFlagValue(flag, value); err != nil {
+		return nil, err
+	}
+	switch flag.Type {
+	case "", "string", "enum":
+		return value, nil
+	case "boolean":
+		parsed, err := strconv.ParseBool(value)
+		if err != nil {
+			return nil, fmt.Errorf("invalid --%s %q, want boolean", flag.Name, value)
+		}
+		return parsed, nil
+	case "integer":
+		parsed, err := strconv.Atoi(value)
+		if err != nil {
+			return nil, fmt.Errorf("invalid --%s %q, want integer", flag.Name, value)
+		}
+		return parsed, nil
+	case "string_array":
+		var out []string
+		for _, raw := range clean {
+			for _, item := range strings.Split(raw, ",") {
+				item = strings.TrimSpace(item)
+				if item != "" {
+					out = append(out, item)
+				}
+			}
+		}
+		return out, nil
+	default:
+		return nil, &BlockedCommandError{
+			Command: "unknown",
+			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
+		}
+	}
+}
+
+func findWriteAction(manifest connectors.Manifest, name string) (connectors.WriteActionSpec, bool) {
+	for _, action := range manifest.WriteActions {
+		if action.Name == name {
+			return action, true
+		}
+	}
+	return connectors.WriteActionSpec{}, false
+}
+
+func mutationClassOf(action connectors.WriteActionSpec) string {
+	switch strings.ToUpper(strings.TrimSpace(action.Method)) {
+	case http.MethodPost:
+		return "create"
+	case http.MethodPut, http.MethodPatch:
+		return "update"
+	case http.MethodDelete:
+		return "delete"
+	default:
+		return "write"
+	}
+}
+
+func targetResourceOf(cmd connectors.CommandSurfaceCommand) string {
+	fields := strings.Fields(cmd.Path)
+	if len(fields) == 0 {
+		return ""
+	}
+	return fields[0]
+}
+
+func cloneRecord(in connectors.Record) connectors.Record {
+	out := make(connectors.Record, len(in))
+	for k, v := range in {
+		out[k] = v
+	}
+	return out
+}
+
+func redactRecord(in connectors.Record) connectors.Record {
+	out := make(connectors.Record, len(in))
+	for k, v := range in {
+		if isSensitiveRecordField(k) {
+			out[k] = "***"
+			continue
+		}
+		out[k] = v
+	}
+	return out
+}
+
+func isSensitiveRecordField(name string) bool {
+	normalized := strings.ToLower(strings.ReplaceAll(name, "-", "_"))
+	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "key", "body", "comment", "content", "payload", "inputs"} {
+		if strings.Contains(normalized, marker) {
+			return true
+		}
+	}
+	return false
+}
+
+func firstNonEmpty(values ...string) string {
+	for _, value := range values {
+		if strings.TrimSpace(value) != "" {
+			return value
+		}
+	}
+	return ""
 }
 
 func isAbsoluteHTTPURL(raw string) bool {

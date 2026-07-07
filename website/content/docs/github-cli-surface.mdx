@@ -10,9 +10,9 @@ The GitHub connector now has a JSON-first command surface contract at
 [GitHub REST API docs](https://docs.github.com/en/rest), and the
 [GitHub GraphQL docs](https://docs.github.com/en/graphql) as source material.
 
-This is metadata first. It tells `pm` and future docs renderers which GitHub commands are ETL reads,
-which are approval-gated reverse ETL writes, which require GraphQL or new API coverage, and which
-are local workflow features that should not become connector API commands.
+This is metadata plus a guarded runtime path. It tells `pm` and docs renderers which GitHub commands
+are ETL reads, which can create approval-gated reverse ETL write plans, which require GraphQL or new
+API coverage, and which are local workflow features that should not become connector API commands.
 
 ## Current surface
 
@@ -28,15 +28,15 @@ are local workflow features that should not become connector API commands.
 | GitHub read streams | 33 |
 | GitHub write actions | 67 |
 | Tracked REST endpoints | 503 |
-| Covered REST endpoints | 100 |
-| Excluded REST endpoints | 403 |
+| Covered REST endpoints | 101 |
+| Excluded REST endpoints | 402 |
 
 ## Execution model
 
 | Intent | Current count | Runtime rule |
 |---|---:|---|
 | `etl` | 16 | Reads map to existing streams or planned stream/direct-read coverage. |
-| `reverse_etl` | 34 | Writes must stay plan, preview, approval, execute. |
+| `reverse_etl` | 34 | Commands with explicit `record.*` flag mappings create stored reverse plans; execution requires preview and approval. |
 | `direct_read` | 32 | Candidates for constrained read commands that do not naturally fit streams. |
 | `direct_write` | 25 | Blocked unless a safe reverse-ETL execution model is designed. |
 | `local_workflow` | 14 | Browser, git, shell, extension, completion, or local config behavior. |
@@ -74,14 +74,30 @@ are local workflow features that should not become connector API commands.
 | Local workflow commands | `clone`, `checkout`, `browse`, `alias`, `extension`, `completion`, and local config should stay outside connector API dispatch. |
 | Raw API and GraphQL | Must be constrained before use; an unrestricted `gh api` clone would violate connector safety rules. |
 
+## Runtime write flow
+
+Mapped command writes never mutate GitHub directly from a plain invocation. A provider-style command
+creates a stored reverse plan and returns an approval token in text output; JSON output redacts the
+token and the raw command payload.
+
+```bash
+pm github issue close --issue-number 101 --credential github-token
+pm github issue close --plan <plan-id> --preview --json
+pm github issue close --plan <plan-id> --approve <approval-token> --json
+```
+
+Commands without explicit `record.*` flag mappings remain blocked until their input model is
+declared. Secret and variable writes remain out of runtime dispatch.
+
 ## Roadmap
 
 1. Validate optional `cli_surface.json` metadata and reject broken stream, write, endpoint, or
    secret-looking references.
-2. Render connector help from the metadata without adding runtime command dispatch.
-3. Add a generic safe executor for commands mapped to existing streams and write actions.
-4. Add thin aliases such as `pm github issue list` only after the generic executor exists.
-5. Add GraphQL and direct-read foundations for Projects v2, discussions, search, status, and other
+2. Render connector help from the metadata and expose safe stream/direct-read command dispatch.
+3. Expand reverse ETL command input mappings across issue, pull request, label, release, workflow,
+   and ruleset write families.
+4. Add thin aliases such as `pm github issue list` only through the generic command surface.
+5. Add GraphQL and operation foundations for Projects v2, discussions, search, status, and other
    gh parity gaps.
 
 ## Agent notes
