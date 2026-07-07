@@ -63,6 +63,7 @@ workflow:
   - create_or_confirm_parent_pr_to_main
   - seed_parent_pr_when_no_diff_exists
   - build_dependency_and_write_scope_queue
+  - create_or_confirm_worker_worktrees_for_mutating_workers
   - spawn_or_assign_independent_workers
   - receive_worker_handoffs
   - verify_sub_pr_scope_checks_and_review_route
@@ -83,8 +84,10 @@ concurrency:
     - sub-issue dependencies are satisfied
     - write scopes are disjoint
     - each worker owns exactly one issue
+    - mutating workers have separate worktrees or working directories
   blocked_when:
     - shared parent artifacts would be edited by more than one worker
+    - mutating workers would share the coordinator checkout
     - dependency order is unclear
     - human gates are likely
   required_decision_values:
@@ -92,6 +95,7 @@ concurrency:
     - not_spawned_dependency_blocked
     - not_spawned_write_scope_collision
     - not_spawned_human_gate
+    - not_spawned_isolation_missing
     - not_spawned_runtime_capability_missing
     - not_spawned_review_blocked
     - not_spawned_verification_blocked
@@ -119,6 +123,7 @@ guardrails:
     - quality gate reductions
   output:
     - shared parent artifacts are orchestrator-owned
+    - mutating workers do not use the coordinator checkout
     - no closing keywords in sub-PRs targeting parent branches
     - skipped CodeRabbit review status is not approval
     - CodeRabbit rate-limit comments are blockers unless a fallback route is recorded
@@ -137,7 +142,7 @@ adapters:
   claude_code:
     note: Use this YAML as the source of truth. A Claude Code slash command or prompt should keep the main context as coordinator, invoke Task workers for independent ready sub-issues, and record not_spawned_runtime_capability_missing if Task workers are unavailable in agents mode.
   codex:
-    note: Use this YAML as the source of truth. A Codex custom agent should be a thin TOML wrapper that reads this file and the referenced contracts before acting. Because Codex subagents are explicit, the coordinator must spawn this orchestrator or spawn a default agent with this YAML when parent issue execution is requested.
+    note: Use this YAML as the source of truth. A Codex custom agent should be a thin TOML wrapper that reads this file and the referenced contracts before acting. Because Codex subagents are explicit, the coordinator must spawn this orchestrator or spawn a default agent with this YAML when parent issue execution is requested. Code-writing Codex workers must receive separate worktrees or working directories; otherwise record not_spawned_isolation_missing and keep implementation local.
   opencode:
     note: Use this YAML as the source of truth. Project agents under .opencode/agents/ should be thin Markdown wrappers over this file. Use primary mode for the orchestrator, subagent or all mode for workers, and subtask true for isolated command execution.
   github_actions:

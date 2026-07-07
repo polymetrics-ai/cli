@@ -8,6 +8,8 @@ Status: completed.
   OpenCode, and future runtimes.
 - Made parent orchestration explicitly runtime-generic: `spawn` can mean Claude Code `Task`, Codex
   subagent job, OpenCode subtask, or a future isolated worker context.
+- Added the live Codex lesson: code-writing workers need their own worktree or working directory;
+  shared-checkout mutation is a blocker, even when file scopes are disjoint.
 - Hardened Caveman compact-mode rules so compacting only affects agent prose/status/handoffs and
   never exact commands, code, tests, review findings, security warnings, destructive-action
   warnings, ordered safety gates, or approval gates.
@@ -21,6 +23,8 @@ Status: completed.
 - PASS: `git diff --check -- .agents/agentic-delivery .agents/skills/caveman .planning/phases/cross-connector-rollout`
 - PASS: YAML parse for `.agents/agentic-delivery` and `.planning/phases/cross-connector-rollout`
 - PASS: `jq empty .planning/phases/cross-connector-rollout/RUN-STATE.json`
+- PASS: follow-up review after a live Codex worker collision confirmed workflow now requires
+  isolated worktrees or records `not_spawned_isolation_missing`.
 
 ## Review Route
 

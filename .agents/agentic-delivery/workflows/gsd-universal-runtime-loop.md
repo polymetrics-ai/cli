@@ -18,11 +18,17 @@ Every runtime must run this lifecycle:
 3. Create or update phase `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `SUMMARY.md`, and
    `RUN-STATE.json`.
 4. For behavior changes, capture red test or validation evidence before production edits.
-5. Spawn worker/reviewer subagents for independent tasks when the runtime exposes subagents.
-6. If subagents are unavailable and mode is `agents`, stop with `failed_runtime_capability`.
-7. If subagents are unavailable and mode is `auto`, run the same roles inline and record fallback.
-8. Commit and push coherent green slices after local gates.
-9. Stop only for human gates, strict TDD failure, repeated verification failure, or explicit user
+5. For mutating worker roles, create or confirm isolated working directories or git worktrees before
+   spawning. A disjoint write scope is not enough if agents share one filesystem checkout.
+6. Spawn worker/reviewer subagents for independent tasks when the runtime exposes subagents and
+   isolation is available for mutating workers.
+7. If subagents are unavailable and mode is `agents`, stop with `failed_runtime_capability`.
+8. If mutating worker isolation is unavailable and mode is `agents`, stop with
+   `failed_runtime_capability` or record `not_spawned_isolation_missing` in the parent ledger.
+9. If subagents are unavailable or mutating isolation is unavailable and mode is `auto`, run the
+   same roles inline or read-only and record fallback.
+10. Commit and push coherent green slices after local gates.
+11. Stop only for human gates, strict TDD failure, repeated verification failure, or explicit user
    stop.
 
 ## Runtime Adapters
@@ -53,7 +59,8 @@ Every runtime must run this lifecycle:
   roles instead of only summarizing the plan.
 - Parent issue instruction: prompts must explicitly ask Codex to spawn or assign the parent
   orchestrator and every independent ready worker up to `agents.max_threads` or the available
-  runtime cap.
+  runtime cap, after the coordinator has created one isolated worktree or working directory per
+  mutating worker.
 
 ### OpenCode
 
@@ -78,12 +85,13 @@ For parent issues with multiple subissues, orchestration is active, not advisory
 - Build ready queue.
 - Spawn every independent ready worker up to runtime concurrency limits.
 - Treat "spawn" generically: create a Task, Codex subagent job, OpenCode subtask, or runtime-native
-  worker context with one issue, one branch, one write scope, and one handoff template.
+  worker context with one issue, one branch, one write scope, one isolated working directory, and
+  one handoff template.
 - Keep one parent orchestrator context open until the parent issue reaches human-ready or blocked.
 - Do not let completed worker threads remain unclosed after handoff integration.
 - If no worker is spawned while work remains, write a blocker with one of:
-  `dependency_blocked`, `write_scope_collision`, `human_gate`, `runtime_capability_missing`,
-  `review_blocked`, or `verification_blocked`.
+  `dependency_blocked`, `write_scope_collision`, `human_gate`, `isolation_missing`,
+  `runtime_capability_missing`, `review_blocked`, or `verification_blocked`.
 
 ## Compact Mode
 

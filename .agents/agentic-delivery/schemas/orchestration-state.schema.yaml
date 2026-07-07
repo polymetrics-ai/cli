@@ -38,6 +38,7 @@ field_contract:
       - not_spawned_dependency_blocked
       - not_spawned_write_scope_collision
       - not_spawned_human_gate
+      - not_spawned_isolation_missing
       - not_spawned_runtime_capability_missing
       - not_spawned_review_blocked
       - not_spawned_verification_blocked
@@ -54,6 +55,7 @@ field_contract:
       - worker
       - status
       - write_scope
+      - worker_directory
       - verification
       - automated_review
   subissue_status_values:

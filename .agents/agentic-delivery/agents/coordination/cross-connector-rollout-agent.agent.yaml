@@ -24,6 +24,7 @@ outputs:
     - rollout checklist
     - ownership rules
     - parent/subissue branch policy for rollout slices
+    - worker isolation policy for mutating agents
     - source notes with official provider/runtime URLs
     - docs-only GSD plan, TDD exemption, and verification checklist when no production code changes
 permissions:
@@ -37,12 +38,14 @@ workflow:
   - extract_provider_pilot_learnings
   - remove_provider_specific_assumptions
   - split_rollout_into_parent_and_subissues
+  - require_worker_worktree_isolation_for_mutating_subagents
   - keep_parent_orchestrator_active_for_ready_subissues
   - update_rollout_templates
 guardrails:
   blocking_human_gates: [production connector edits, shared generated files]
   output:
     - shared files are coordinator-owned unless a worker receives explicit scope
+    - mutating workers need isolated worktrees or working directories
     - connector-specific production defs are forbidden unless an implementation issue assigns that connector
     - compact mode is for agent prose and handoffs only
     - exact commands, code, test output, security warnings, destructive-action warnings, and approval gates remain uncompressed

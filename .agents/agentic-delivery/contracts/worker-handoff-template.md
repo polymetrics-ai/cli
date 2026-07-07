@@ -12,6 +12,7 @@ Branch:
 Sub-PR:
 Parent PR:
 Base branch:
+Worker directory:
 Head SHA:
 
 ## Scope Delivered

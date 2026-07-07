@@ -3,7 +3,7 @@
 Issue: #42
 Parent issue: #44
 Parent branch: `feat/44-github-cli-parity`
-Worker branch: `codex/42-harden-universal-orchestration`
+Worker branch: `docs/42-harden-universal-orchestration`
 Task type: docs-only workflow hardening
 
 ## Objective
@@ -15,6 +15,8 @@ runtimes while preserving active parent orchestration and safe compact handoffs.
 
 - Clarify shared GSD runtime adapter instructions in `.agents/agentic-delivery/**`.
 - Clarify parent orchestrator duty to spawn every independent ready worker up to runtime limits.
+- Clarify that mutating workers need isolated worktrees or working directories, not only disjoint
+  file scopes.
 - Clarify `caveman` compact mode as prose/handoff compression only.
 - Record local and official source notes for Codex and OpenCode runtime features.
 - Keep the change generic, not specific to one connector or one provider.
@@ -40,6 +42,8 @@ runtimes while preserving active parent orchestration and safe compact handoffs.
   Code, Codex, and OpenCode.
 - Parent orchestration is active: orchestrator builds the queue and spawns/assigns independent
   ready workers, or records a `not_spawned_*` blocker.
+- Mutating workers are not spawned into the coordinator checkout; if isolation is unavailable, the
+  orchestrator records `not_spawned_isolation_missing`.
 - Caveman guidance says it compresses agent prose, prompts, status, and handoffs only.
 - Caveman guidance forbids compacting exact code, exact commands, exact test output, ordered safety
   gates, security warnings, destructive-action warnings, or approval gates.

@@ -57,6 +57,7 @@ satisfied. Each worker prompt must include:
 - parent issue URL
 - parent branch and parent PR
 - allowed write scope
+- isolated worker directory or git worktree for mutating tasks
 - required GSD/TDD workflow
 - required verification
 - worker handoff template
@@ -68,6 +69,10 @@ remain uncompressed and unambiguous.
 
 If subagent tooling exists and ready work is independent, parallel worker dispatch is the default.
 Sequential execution needs an explicit reason in the state ledger.
+
+Mutating workers must not share the coordinator checkout. If no isolated worktree or working
+directory is available, record `not_spawned_isolation_missing` and run the slice locally or with
+read-only agents.
 
 ## 4. Review Worker Handoffs
 

@@ -14,6 +14,8 @@ jq empty .planning/phases/cross-connector-rollout/RUN-STATE.json
 - PASS:
   `find .agents/agentic-delivery .planning/phases/cross-connector-rollout -type f \( -name '*.yaml' -o -name '*.yml' \) -print0 | xargs -0 ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f) }'`
 - PASS: `jq empty .planning/phases/cross-connector-rollout/RUN-STATE.json`
+- PASS: follow-up workflow review after a live Codex shared-worktree collision; mutating workers
+  now require isolated worktrees or `not_spawned_isolation_missing`.
 
 ## Gate Notes
 
