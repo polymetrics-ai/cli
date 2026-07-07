@@ -28,6 +28,7 @@
       "risk": "critical",
       "approval": "destructive reverse ETL writes require plan, preview, approval, execute",
       "output_policy": "json",
+      "auth_scopes": ["repo", "public_repo"],
       "mutation_class": "delete",
       "destructive": true,
       "graphql": {
