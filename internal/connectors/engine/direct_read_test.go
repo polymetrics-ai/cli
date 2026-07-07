@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -46,6 +47,41 @@ func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
 	}
 	if body["name"] != "README.md" {
 		t.Fatalf("body name = %v, want README.md", body["name"])
+	}
+}
+
+func TestDirectReadResolvesPathWithConfigDefaults(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/repos/octo/hello/contents/README.md" {
+			t.Fatalf("path = %s, want defaulted owner/repo path", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"name":"README.md","type":"file"}`))
+	}))
+	defer srv.Close()
+
+	b := directReadBundle(srv.URL, http.MethodGet, "/repos/{owner}/{repo}/contents/{path}")
+	spec, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"properties": {
+			"owner": {"type": "string", "default": "octo"},
+			"repo": {"type": "string", "default": "hello"}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b.Spec = spec
+
+	_, err = DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/repos/{owner}/{repo}/contents/{path}",
+		Config:       connectors.RuntimeConfig{Config: map[string]string{}},
+		PathParams:   map[string]string{"path": "README.md"},
+		OutputPolicy: "github_contents_file_metadata",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
 	}
 }
 
