@@ -496,34 +496,89 @@ local/VPS test harness — fully dogfooded, **read-only** (no repo mutations), a
 Actions runner or self-hosted-runner secrets.
 
 **Step 1 — Define a read-only `moderation` flow** (`flows/moderation.json`): sync GitHub events
-into the warehouse, query the new-since-cursor slice, then POST each row to the Podman `/score`
+**and the collaborators roster** into the warehouse, drop everything that is a real contributor
+(see §4.8a), query the new-since-cursor slice, then POST each remaining row to the Podman `/score`
 endpoint via an HTTP action step and write the digest to a local table.
 
 ```json
 {
   "version": 1,
   "name": "moderation",
-  "description": "Read-only moderation scan: github events -> ml score -> digest (no repo mutations).",
+  "description": "Read-only moderation scan: github events -> filter trusted -> ml score -> digest (no repo mutations).",
   "steps": [
     { "id": "pull-events", "kind": "sync",
       "connection": "github-ro", "streams": ["issues", "comments", "pulls"],
       "out": ["events"] },
+    { "id": "pull-collaborators", "kind": "sync",
+      "connection": "github-ro", "streams": ["collaborators"],
+      "out": ["collaborators"] },
     { "id": "new-since-cursor", "kind": "query",
-      "sql": "select * from events where created_at > coalesce((select max(seen_at) from moderation_cursor), '1970-01-01')",
+      "sql": "select e.* from events e where e.created_at > coalesce((select max(seen_at) from moderation_cursor), '1970-01-01')",
       "in": ["events"], "out": ["new_events"] },
+    { "id": "filter-trusted", "kind": "query",
+      "sql": "select n.* from new_events n left join collaborators c on c.login = n.user_login where n.author_association not in ('OWNER','MEMBER','COLLABORATOR','CONTRIBUTOR') and c.login is null",
+      "in": ["new_events", "collaborators"], "out": ["moderation_events"] },
     { "id": "score", "kind": "action",
       "action_cfg": {
-        "source_table": "new_events",
+        "source_table": "moderation_events",
         "destination_connector": "http", "destination_credential": "mod-svc",
         "destination_config": { "base_url": "http://localhost:7788", "path": "/score" },
-        "action": "create", "mappings": { "body": "body", "user": "user.login", "url": "html_url" } },
-      "in": ["new_events"], "out": ["scored"] },
+        "action": "create", "mappings": { "body": "body", "user": "user_login", "url": "html_url", "association": "author_association" } },
+      "in": ["moderation_events"], "out": ["scored"] },
     { "id": "digest", "kind": "query",
       "sql": "select count(*) n, sum(case when spam_score>0.5 then 1 else 0 end) spam, max(url) worst from scored",
       "in": ["scored"], "out": ["digest"] }
   ]
 }
 ```
+
+The scoring step now sources from `moderation_events` (the post-filter set), so trusted events are
+never scored and never count toward the threshold trigger.
+
+### 4.8a Trusted-event filtering (an option, not hardcoded)
+
+The flow must **skip real contributors** so maintainers' and collaborators' own issue/PR/comment
+activity never triggers moderation. Two complementary signals, both driven by GitHub's
+`author_association` field (present on the `issues`, `issue_comments`, `pull_requests`, and
+`commit_comments` streams) plus the `collaborators` stream:
+
+1. **Association allow/deny set** (the primary filter). GitHub's `author_association` enum is
+   `OWNER`, `MEMBER`, `COLLABORATOR`, `CONTRIBUTOR`, `FIRST_TIMER`, `FIRST_TIME_CONTRIBUTOR`,
+   `MANNEQUIN`, `NONE`. The default exclusion set is
+   `OWNER,MEMBER,COLLABORATOR,CONTRIBUTOR` (the "actual contributors"). The remaining values —
+   `NONE`, `FIRST_TIMER`, `FIRST_TIME_CONTRIBUTOR`, `MANNEQUIN` — are the moderation targets
+   (outsiders and newcomers). This is the query's `not in (...)` clause above.
+2. **Collaborator roster anti-join** (the safety net). `author_association` can lag or be `NONE`
+   for a user who is in fact a collaborator via team membership. The `pull-collaborators` sync +
+   the `left join ... where c.login is null` clause drops any event whose `user.login` is in the
+   repo's collaborators roster, regardless of association. This is the "actual contributors"
+   guard the §4.8 intro calls out.
+
+**Make it an option.** The exclusion set should be configurable, not hardcoded. Ship it as a
+flow-level parameter surfaced on the CLI so a maintainer can widen/narrow trust without editing
+JSON:
+
+```bash
+# Default: exclude OWNER,MEMBER,COLLABORATOR,CONTRIBUTOR (keep outsiders + newcomers)
+pm flow run --file flows/moderation.json --json
+
+# Stricter (during an attack): also exclude FIRST_TIME_CONTRIBUTOR -> moderate only NONE
+pm flow run --file flows/moderation.json --exclude-associations OWNER,MEMBER,COLLABORATOR,CONTRIBUTOR,FIRST_TIME_CONTRIBUTOR --json
+
+# Add ad-hoc trusted logins (e.g. known good bots) without touching the roster
+pm flow run --file flows/moderation.json --trust-login coderabbitai,dependabot,github-actions --json
+
+# Show what WOULD be filtered (dry-run) before scheduling
+pm flow preview --file flows/moderation.json --exclude-associations OWNER,MEMBER,COLLABORATOR
+```
+
+Mapping (`--exclude-associations` → query `not in (...)`, `--trust-login` → an extra anti-join) is
+a small `flow run`/`flow preview` enhancement tracked as a follow-up issue; until then the same
+filtering lives in the `filter-trusted` query SQL (above) with the default set.
+
+**Acceptance for the filter:** against the §0 incident data, `filter-trusted` drops all of
+`karthik-sivadas`' OWN items and keeps only the three throwaway `NONE` accounts — proving real
+contributors do not trigger the pipeline.
 
 **Step 2 — Validate read-only (no scheduling, no mutations):**
 
@@ -695,8 +750,14 @@ map 1:1 to §2's vectors and the moderation model's targets.
   SDK, `.pi/skills/moderation/SKILL.md`, custom `fetch_events`/`ml_score`/`gh_act`/`git_act`/
   `mail` tools, and `.github/workflows/moderation.yml` (self-hosted runner, daily + threshold).
 - File an issue to add the **read-only `moderation` flow + `pm schedule` test** (§4.8) that gates
-  the GitHub-runner setup: `flows/moderation.json` (sync→query→HTTP-score→digest), `pm flow
-  preview` validation, and the `moderation-daily`/`moderation-guard` systemd timers on the VPS.
+  the GitHub-runner setup: `flows/moderation.json` (sync→**filter-trusted**→query→HTTP-score→
+  digest), `pm flow preview` validation, and the `moderation-daily`/`moderation-guard` systemd
+  timers on the VPS.
+- File an issue to add **`flow run`/`flow preview` trusted-event options** (§4.8a):
+  `--exclude-associations` (default `OWNER,MEMBER,COLLABORATOR,CONTRIBUTOR`) and
+  `--trust-login <csv>` that inject the GitHub `author_association` and `collaborators`-roster
+  anti-join into the query layer, so real contributors don't trigger moderation — configurable
+  without editing flow JSON.
 - File an issue to provision the **self-hosted GitHub runner on the VPS** (ephemeral Podman jail,
   OIDC, fine-grained `GH_MOD_TOKEN`, no `main`-push scope) — human-gated; touches infra.
 - Track the `gh auth refresh -s user` step to complete the 3-account block + abuse report.
