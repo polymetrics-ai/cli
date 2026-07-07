@@ -467,16 +467,91 @@ not in code. The skill encodes: `spam_score>0.9 && bot_score>0.5` → auto-hide+
 `injection_score>0.7` → freeze the GSD orchestrator for that issue + label + alert;
 non-collaborator `.zip`/`.exe` attachment → immediate delete; everything else → digest only.
 
-### 4.6 Self-hosted runner safety on the VPS
+### 4.6 Bot code lives in a SEPARATE PRIVATE repo (the public Action gives away nothing)
 
-A self-hosted runner on a public repo is itself an attack surface (§2 #4). Mitigations:
-- **Ephemeral**: the runner job runs in a fresh Podman container or VM per run (not the host).
-- **No long-lived secrets on the runner**: use OIDC + short-lived tokens; `GH_MOD_TOKEN` is a
-  fine-grained PAT scoped to this repo, read+issue+comment only, **never** `repo`-full.
+The agent source, the ML models, the Podman image source, the moderation skill, and every
+secret live in a **separate private repo — `polymetrics-ai/moderation`** — never in the public
+`polymetrics-ai/cli` repo. The public repo's only role is a tiny read-only **audit trigger**;
+it contains no scoring logic, no model, no token beyond a single least-privilege dispatch
+credential. An attacker who reads the entire public repo learns none of the detection logic.
+
+**Why a dispatch, not a `uses:` reference?** A public repo **cannot** call a private reusable
+workflow — GitHub authorizes private reusable workflows only for callers in the same
+org/enterprise with explicit access, and a public caller cannot authenticate to read a private
+workflow file (reusing-workflows access rules). So the public repo's audit job does
+**cross-repo event dispatch**: it fires `repository_dispatch` (or `workflow_dispatch` via the
+REST API) on the private repo, using a fine-grained PAT whose only capability is triggering that
+one workflow. The private repo's workflow then runs on the self-hosted runner.
+
+**Repo split:**
+
+| Artifact | Public `cli` | Private `moderation` |
+|---|---|---|
+| `.github/workflows/moderation.yml` (audit/trigger) | yes — ~20 lines, no logic | no |
+| `.github/workflows/agent.yml` (runs the agent) | no | yes |
+| `agent/` (pi-mono TS agent) | no | yes |
+| `models/` (A/B/C weights) — `build/Podfile.moderation` | no | yes (built on the runner; image never published) |
+| `.pi/skills/moderation/SKILL.md` | no | yes |
+| `flows/moderation.json`, `pm schedule` timers | VPS only (dogfood) | optionally copied for the runner |
+| `GH_MOD_TOKEN` (read+moderate the public repo) | no | yes (private repo secret only) |
+| `MOD_DISPATCH_PAT` (trigger the private workflow) | yes (public secret, scoped to `moderation` repo only) | no |
+| self-hosted runner registration | no | yes — registered to the private repo ONLY |
+
+**Public repo `.github/workflows/moderation.yml`** (the entire trigger — nothing else):
+
+```yaml
+name: moderation-audit
+on:
+  issue_comment: { types: [created] }
+  issues:       { types: [opened, edited] }
+  pull_request: { types: [opened, edited] }
+  schedule:     [ { cron: '0 6 * * *' } ]
+permissions: { contents: read }            # least privilege; no write to the public repo from here
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          # Fine-grained PAT scoped ONLY to polymetrics-ai/moderation:
+          #   contents: none, actions: write, workflows: write
+          # It can trigger the private workflow; it cannot read private code.
+          MOD_PAT: ${{ secrets.MOD_DISPATCH_PAT }}
+        run: |
+          # Count new external events since cursor (pure gating; no scoring here).
+          # Threshold exceeded (or daily cron) -> dispatch the private agent.
+          curl -fsS -X POST -H "Authorization: token $MOD_PAT" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/polymetrics-ai/moderation/dispatches \
+            -d '{"event_type":"moderation.scan","client_payload":{"since":"24h"}}'
+```
+
+Anyone who reads this file sees only "on N events, call dispatch on `moderation` with `since`" —
+no model, no token value, no scoring, no runner address. The `client_payload` carries only a
+time window; it takes **no user-controlled input** into the dispatch command (a fork PR cannot
+inject arguments), and the dispatch is rate-limited (max one per `since` window) to deny a
+flood-trigger attack.
+
+**Private repo `polymetrics-ai/moderation` `agent.yml`** runs the real logic on the self-hosted
+runner (registered to the private repo only), checks out the private repo, and calls the public
+repo's API with `GH_MOD_TOKEN` (a fine-grained PAT scoped to `polymetrics-ai/cli` with
+`issues: write, pull_requests: write, metadata: read` — never `contents: write`, never
+`administration`). The public repo's own `GITHUB_TOKEN` is never used by the agent.
+
+### 4.6a Self-hosted runner safety on the VPS
+
+A self-hosted runner is itself an attack surface (§2 #4). Constraints:
+- **Register the runner to the PRIVATE repo only.** Never register a self-hosted runner to a
+  public repo (GitHub's warning: fork PRs get RCE on a public-repo self-hosted runner). The VPS
+  runner is bound to `polymetrics-ai/moderation`; the public repo runs only on `ubuntu-latest`.
+- **Ephemeral**: the agent job runs in a fresh Podman container or VM per run, not on the host.
+- **No long-lived secrets on the runner**: prefer OIDC + short-lived tokens; `GH_MOD_TOKEN` is a
+  fine-grained PAT scoped to the public repo, issues/PR/comment only, **never** `repo`-full.
 - **Jail the pi agent**: `tools` excludes `subagent`; `gh_act`/`git_act` are allow-listed
   (delete-comment, lock, label — never merge-to-main, never push to `main`).
-- **Audit log**: every agent action is appended to `docs/audit/moderation.log` (committed) so a
-  human can review what the bot did. Screenshot-friendly for the blog.
+- **No public image**: build the Podman model image **on the runner** from the private source;
+  never push it to a public registry (so the model weights never leave the VPS).
+- **Audit log**: every agent action is appended to `audit/moderation.log` (committed to the
+  private repo) so a human can review what the bot did. Screenshot-friendly for the blog.
 - **Human gate**: any `git_act` on `main`/parent branches requires a `--allow-destructive` flag
   the runner does not set; the agent emails the recommendation instead.
 
@@ -729,14 +804,62 @@ map 1:1 to §2's vectors and the moderation model's targets.
   `citation`.
 - **Code blocks**: every `gh`/`podman`/`pm`/TS snippet is crawlable text (great for long-tail
   queries like "gh api delete issue comment", "podman run ml model github action").
-- **Reproduce-it**: ship the `agent/`, `models/`, and `build/Podfile.moderation` in the repo so
-  the blog links to runnable artifacts — strong E-E-A-T (experience, expertise, authority,
-  trustworthiness) signal.
+- **Reproduce-it (safely)**: link to runnable *templates*, not live secrets — see §8a. Strong
+  E-E-A-T (experience, expertise, authority, trustworthiness) signal without arming attackers.
 - **Distribution**: cross-post to dev.to / Hashnode (canonical = our blog), share the demo GIF on
   X/LinkedIn, submit to Hacker News with the incident hook ("bots hit our issues within minutes;
   here's the ML + agent we built in response").
 
----
+### 8a Responsible disclosure: teach the technique, don't arm the attacker
+
+A moderation blog for a security product must teach readers *how to build the posture* without
+handing over a turn-key way to attack our repo (or theirs). The ``attacker reads the blog and still
+can't win'' property is itself the headline selling point — and good SEO (``responsible
+disclosure'', ``defense-in-depth'', ``assume-breach'').
+
+**What the blog deliberately does NOT include** (state this explicitly in a callout; it doubles
+as a trust signal):
+- No real token values, PAT scopes we actually use, runner host/IP, SMTP creds, model-server URL.
+  Substitute placeholders (`<GH_MOD_TOKEN>`, `models.local`, `mod@yourdomain`).
+- No production model weights/architecture specifics that an attacker could reverse (publish a
+  *schematic* of the 3-model stack + metrics, not the trained artifacts or feature importances that
+  reveal detection blind spots).
+- No threshold constants or the exact `author_association` exclusion set wired into our live run
+  (use a clearly-marked *illustrative* set; keep live values in the private repo's secret/config).
+- No reproducible attack recipe (no zip payloads, no prompt-injection strings, no seed-user
+  handles). Describe the *class* (``a comment with a `*.zip` attachment and social-engineering
+  phrasing'') not a copy-paste payload.
+- No screenshots that contain a real token, the audit log with a live account handle, or the
+  private repo's URL path beyond `polymetrics-ai/moderation`.
+
+**What the blog DOES teach** (the transferable, defensive techniques — every one a keyword):
+- **Assume-breach posture**: design the public repo so that an attacker who clones it 100% still
+  can't moderate, exfiltrate, or trigger destructive actions — because the code + tokens live in a
+  private repo (§4.6) and the public repo's only capability is a rate-limited dispatch.
+- **Least-privilege dispatch**: the cross-repo PAT is scoped to a single workflow on a single
+  private repo (`actions: write`, `contents: none`); even if it leaks it can only *start* a scan,
+  not read code or mutate the public repo. Show the scope table.
+- **No-self-hosted-runner-on-public-repos**: GitHub's own rule; we register the runner only to the
+  private repo. Why a public+self-hosted runner = remote code execution on the VPS.
+- **No user-controlled input into the dispatch**: the audit job takes no PR-author argument, so a
+  fork cannot influence what the agent scans or how often (anti-flood). Rate-limit + `since` only.
+- **Filter-trusted flow / author_association**: the generic technique (skip OWNER/MEMBER/
+  COLLABORATOR/CONTRIBUTOR via the GitHub field + collaborators anti-join) so real contributors
+  never trigger moderation — readers can replicate on their repo without our values.
+- **OIDC over long-lived PATs**: recommend short-lived OIDC for the cross-repo call (we show the
+  fine-grained-PAT path as the simple option, OIDC as the hardened one).
+- **Ephemeral runner jail, no logs of secrets, audit log in the private repo**: the reviewable-
+  bot pattern.
+
+**The rhetorical move**: ``We wrote this assuming the attacker reads it. Every technique below
+helps you harden your repo; none of them helps an attacker hit ours, because ours already assumes a
+hostile public repo and keeps the model, the tokens, and the runner in a private one.`` That sentence
+is the blog's thesis + its SEO hook.
+
+**Disclosure timing**: publish the blog only AFTER the live repo is hardened per §1 + §4.6
+(branch protection, interaction limits, private moderation repo, runner on private repo only,
+secrets rotated). Do not publish while the incident response or a known vulnerable workflow is
+still open — that would turn the blog into an attack map against us.
 
 ---
 
@@ -746,9 +869,12 @@ map 1:1 to §2's vectors and the moderation model's targets.
   CLI as the model client).
 - File an issue to add a **moderation** read stream to the GitHub connector (issue/comment/pr
   events) so the data pipeline is a first-class connector stream, not a one-off script.
-- File an issue to build the **pi-mono TS moderation agent** (§4): `agent/agent.ts` using the pi
-  SDK, `.pi/skills/moderation/SKILL.md`, custom `fetch_events`/`ml_score`/`gh_act`/`git_act`/
-  `mail` tools, and `.github/workflows/moderation.yml` (self-hosted runner, daily + threshold).
+- File an issue to build the **private `polymetrics-ai/moderation` repo** (§4.6): host the
+  pi-mono TS agent (`agent/`), `models/`, `build/Podfile.moderation`, `.pi/skills/moderation/`,
+  its own `.github/workflows/agent.yml`, the self-hosted runner registration, and `GH_MOD_TOKEN`
+  (scoped to read+moderate `cli`). The public `cli` repo ships ONLY the rate-limited audit trigger
+  (`MOD_DISPATCH_PAT`, scoped to `moderation` actions). No public `uses:` of a private reusable
+  workflow — use cross-repo `repository_dispatch`.
 - File an issue to add the **read-only `moderation` flow + `pm schedule` test** (§4.8) that gates
   the GitHub-runner setup: `flows/moderation.json` (sync→**filter-trusted**→query→HTTP-score→
   digest), `pm flow preview` validation, and the `moderation-daily`/`moderation-guard` systemd
@@ -758,8 +884,9 @@ map 1:1 to §2's vectors and the moderation model's targets.
   `--trust-login <csv>` that inject the GitHub `author_association` and `collaborators`-roster
   anti-join into the query layer, so real contributors don't trigger moderation — configurable
   without editing flow JSON.
-- File an issue to provision the **self-hosted GitHub runner on the VPS** (ephemeral Podman jail,
-  OIDC, fine-grained `GH_MOD_TOKEN`, no `main`-push scope) — human-gated; touches infra.
+- File an issue to provision the **self-hosted GitHub runner on the VPS registered ONLY to the
+  private `moderation` repo** (never the public `cli` repo — public + self-hosted = RCE);
+  ephemeral Podman jail, OIDC, fine-grained `GH_MOD_TOKEN`, no `main`-push scope — human-gated; touches infra.
 - Track the `gh auth refresh -s user` step to complete the 3-account block + abuse report.
 - Track the `.github/workflows/moderate.yml` + `CODEOWNERS` + repository ruleset as a security
   hardening PR (human-gated; touches `.github/`).
