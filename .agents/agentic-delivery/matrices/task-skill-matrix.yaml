@@ -118,6 +118,8 @@ task_types:
   parent-orchestration:
     required_skill_groups: [orchestration, github_planning, review_disposition, security_review]
     primary_agent: parent-issue-orchestrator
+    activation: active_owner
+    compact_skill: caveman
   parent-roadmap:
     required_skill_groups: [github_planning, review_disposition, docs_and_ux]
     primary_agent: stacked-roadmap-coordinator

@@ -8,7 +8,8 @@
   files when a workflow changes instead of copying long rules here.
 - For parent issues with sub-issues, follow
   `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`; runtime-specific agent
-  files are thin adapters over `.agents/`.
+  files are thin adapters over `.agents/`. Treat parent issue orchestration as active ownership:
+  spawn or assign ready workers until human-ready, blocked, or explicitly limited by the user.
 - For automated review routing, follow
   `.agents/agentic-delivery/workflows/automated-review-routing-loop.md` and
   `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`. CodeRabbit automatic review is

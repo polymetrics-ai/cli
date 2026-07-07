@@ -17,7 +17,14 @@
 ## Pending
 
 - broader verification required by #44 before parent PR human gate
+- active-orchestration slice checks after current edits:
+  - YAML parse check for `.agents/`, `.github/ISSUE_TEMPLATE`, `.github/workflows`, and
+    `.opencode/agents`
+  - TOML parse check for `.codex/agents`
+  - `jq empty .planning/phases/github-cli-parity-parent-orchestration/ORCHESTRATION-STATE.json`
+  - `git diff --check`
 
 ## Notes
 
-The parent branch has been rebased locally onto `origin/main`. Push and remote CI are still pending.
+The parent branch has integrated #69 locally. Push and remote CI are pending for the active
+orchestration updates.

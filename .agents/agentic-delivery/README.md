@@ -26,6 +26,10 @@ skills, guardrails, YAML agent definitions, and handoff rules.
   Copilot backup review, and human fallback.
 - `workflows/parent-issue-orchestration-loop.md`: full parent issue execution loop across workers,
   sub-PRs, parent PR review, and human readiness.
+- `workflows/gsd-universal-runtime-loop.md`: cross-runtime GSD loop contract for Claude, Codex,
+  OpenCode, and future runtimes.
+- `workflows/codex-active-orchestration-loop.md`: Codex-specific active orchestration loop for
+  parent issues, because Codex subagents must be spawned explicitly.
 - `workflows/stacked-parent-subissue-workflow.md`: parent branch and sub-PR workflow for large
   issue hierarchies.
 - `references/issue-roadmap-best-practices.md`: source-backed GitHub and Atlassian planning
@@ -33,6 +37,8 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `references/coderabbit-review-best-practices.md`: source-backed CodeRabbit review practices.
 - `references/automated-review-routing-best-practices.md`: source-backed CodeRabbit-to-Copilot
   fallback policy.
+- `references/caveman-token-compression.md`: compact-output guidance for long-running
+  orchestration.
 - `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
 - `schemas/orchestration-state.schema.yaml`: field contract for parent issue state ledgers.
@@ -42,8 +48,9 @@ The `.agents/agentic-delivery/` directory holds shared contracts, conventions, a
 Specialized agent families can live beside it under `.agents/<functional-area>/` while reusing the
 same schema and issue-to-PR contract.
 
-Runtime-specific files, such as `.codex/agents/*.toml`, are thin adapters. They must point back to
-the `.agents/` YAML and Markdown contracts instead of copying policy.
+Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are thin
+activation adapters. They must point back to the `.agents/` YAML and Markdown contracts instead of
+copying GSD/TDD, CodeRabbit, or human-gate policy.
 
 ## Design principles
 
@@ -54,6 +61,9 @@ the `.agents/` YAML and Markdown contracts instead of copying policy.
 - A parent issue orchestrator owns shared parent artifacts, parent PR state, sub-PR merge
   arbitration, automated review coverage routing, and final readiness. Worker agents implement one
   assigned sub-issue and report back through the worker handoff template.
+- Parent issue orchestration is active, not advisory. If ready sub-issues exist and runtime
+  subagent tools are available, the orchestrator must spawn or assign all independent ready workers
+  up to runtime limits, or record the blocker category and next unblock action.
 - Stacked work must have a parent PR from the parent branch to `main` before sub-issues are treated
   as executable. If the parent branch has no useful file diff, use a deliberate seed commit to open
   the parent PR thread.

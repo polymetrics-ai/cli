@@ -12,8 +12,13 @@
   agent-task grouping, raw CLI-surface bytes, CLI command stream/write ambiguity, agent matrix
   review-disposition coverage, issue-first parent PR blocker wording, and catalog JSON
   serialization.
+- #69 was green and merged into the parent branch as the #57 reverse-ETL command runner slice.
+- Parent orchestration is now documented as active ownership: the orchestrator must build a ready
+  queue, spawn every independent ready worker when subagent tooling exists, or record a blocker.
+- Added cross-runtime GSD adapters for Codex and OpenCode plus a repo-local `caveman` skill for
+  compact status, prompts, and handoffs.
 
 ## Next
 
-Push the rebased parent branch, wait for automatic CodeRabbit review on the new commits, then
-continue #44 subissues in dependency order.
+Push the parent branch, wait for automatic CodeRabbit review on PR #49, resolve any actionable
+comments with dispositions, then continue #44 subissues through the active orchestrator.

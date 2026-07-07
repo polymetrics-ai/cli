@@ -1,0 +1,103 @@
+{
+  "parent_issue": {
+    "number": 44,
+    "url": "https://github.com/polymetrics-ai/cli/issues/44",
+    "title": "GitHub CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/44-github-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/49",
+    "base": "main",
+    "head": "feat/44-github-cli-parity",
+    "draft": false,
+    "state": "OPEN"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "codex",
+    "status": "waiting_for_review"
+  },
+  "ready_queue": [
+    {
+      "number": 35,
+      "status": "planned",
+      "dependencies": [],
+      "write_scope": [
+        "internal/cli",
+        "internal/connectors/commandrunner",
+        "internal/connectors/defs/github/docs.md",
+        "website/content/docs"
+      ],
+      "decision": "not_spawned_review_blocked"
+    },
+    {
+      "number": 37,
+      "status": "planned",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/github/api_surface.json",
+        "internal/connectors/defs/github/cli_surface.json",
+        ".planning/phases/github-operation-ledger"
+      ],
+      "decision": "not_spawned_review_blocked"
+    },
+    {
+      "number": 39,
+      "status": "planned",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/engine",
+        "internal/connectors/defs/github",
+        ".planning/phases/github-graphql-engine"
+      ],
+      "decision": "not_spawned_review_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-07T08:21:29Z",
+      "decision": "not_spawned_review_blocked",
+      "issue_numbers": [35, 37, 39],
+      "reason": "Parent PR #49 checks and automatic CodeRabbit coverage are running after #69 integration and active-orchestration workflow edits."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 57,
+      "url": "https://github.com/polymetrics-ai/cli/issues/57",
+      "branch": "feat/57-github-reverse-etl-runner",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/69",
+      "worker": "issue-first-implementation-agent",
+      "status": "provisionally_integrated",
+      "write_scope": [
+        "internal/app",
+        "internal/cli",
+        "internal/connectors/commandrunner",
+        "internal/connectors/defs/github",
+        "website"
+      ],
+      "verification": "PR #69 checks passed before merge",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending",
+        "head_sha": "300c4cae",
+        "reviewed_range": "parent PR #49 after #69 integration",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Pending automatic parent PR review coverage",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/49"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "production deployment",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-07T08:21:29Z"
+}

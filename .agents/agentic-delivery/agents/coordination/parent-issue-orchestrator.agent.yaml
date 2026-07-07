@@ -8,9 +8,21 @@ metadata:
   tags: [github, orchestration, parent-issue, sub-issues, stacked-pr, coderabbit, copilot]
 role: orchestration
 objective: Drive a large parent issue from parent PR creation through worker execution, integrated review, and human-ready final PR state.
+activation:
+  mode: active_owner
+  triggers:
+    - parent issue with sub-issues
+    - stacked PRs
+    - missing parent PR
+    - parent branch coordination
+    - sub-PR merge arbitration
+    - automated review coverage gap
+    - remaining ready sub-issues
+  rule: When triggered, this agent actively drives execution until human-ready, blocked, or explicitly limited by the user. It must not only summarize the contract when workers can be launched safely.
 skills:
   required_groups: [orchestration, github_planning, review_disposition, security_review]
   required_local_skills: [github-issue-first-delivery]
+  compact_local_skill: caveman
   preferred_local_skills: [gsd-programming-loop, gsd-plan-phase, gsd-code-review]
 inputs:
   required:
@@ -65,6 +77,7 @@ state:
 handoffs:
   worker_template: .agents/agentic-delivery/contracts/worker-handoff-template.md
 concurrency:
+  default: spawn_all_ready_disjoint_workers
   allowed_when:
     - sub-issue dependencies are satisfied
     - write scopes are disjoint
@@ -73,6 +86,14 @@ concurrency:
     - shared parent artifacts would be edited by more than one worker
     - dependency order is unclear
     - human gates are likely
+  required_decision_values:
+    - spawned
+    - not_spawned_dependency_blocked
+    - not_spawned_write_scope_collision
+    - not_spawned_human_gate
+    - not_spawned_runtime_capability_missing
+    - not_spawned_review_blocked
+    - not_spawned_verification_blocked
 merge_policy:
   owner: parent-issue-orchestrator
   sub_pr_target: parent branch
@@ -111,6 +132,8 @@ verification:
     - final parent verification summary before human approval
 adapters:
   codex:
-    note: Use this YAML as the source of truth. A Codex custom agent should be a thin TOML wrapper that reads this file and the referenced contracts before acting.
+    note: Use this YAML as the source of truth. A Codex custom agent should be a thin TOML wrapper that reads this file and the referenced contracts before acting. Because Codex subagents are explicit, the coordinator must spawn this orchestrator or spawn a default agent with this YAML when parent issue execution is requested.
+  opencode:
+    note: Use this YAML as the source of truth. Project agents under .opencode/agents/ should be thin Markdown wrappers over this file.
   github_actions:
     note: Use this spec as policy metadata only; do not auto-merge parent PRs to main.

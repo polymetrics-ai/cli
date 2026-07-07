@@ -37,6 +37,10 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
   `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`. The parent issue
   orchestrator owns shared parent artifacts, parent PR state, sub-PR merge decisions, automated
   review coverage routing, and final human-readiness.
+- When a task references a parent issue, sub-issues, stacked PRs, parent branch, parent PR, or
+  automated review coverage, invoke the parent issue orchestrator as the active owner before worker
+  execution. Do not stop at a plan when the parent issue has ready, unblocked sub-issues and the
+  runtime can spawn workers.
 - For implementation or behavior-changing work, `gsd-programming-loop` is mandatory. Load it before
   coding, follow its TDD/programming lifecycle, and record GSD/TDD evidence in the phase or PR
   artifacts. If the local GSD scripts are unavailable, run the manual GSD loop and record that
