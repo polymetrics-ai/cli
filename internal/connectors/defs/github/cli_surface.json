@@ -226,9 +226,14 @@
         },
         {
           "name": "state-reason",
-          "type": "string",
+          "type": "enum",
           "summary": "Reason for state transition.",
-          "maps_to": "record.state_reason"
+          "maps_to": "record.state_reason",
+          "values": [
+            "completed",
+            "not_planned",
+            "reopened"
+          ]
         },
         {
           "name": "label",
