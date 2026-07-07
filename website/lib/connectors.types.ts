@@ -66,6 +66,7 @@ export type ConnectorCliCommand = {
   sourceUrl: string;
   flags: ConnectorCliFlag[];
   examples: string[];
+  outputPolicy: string;
   risk: string;
   approval: string;
   notes: string;
