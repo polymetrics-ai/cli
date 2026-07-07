@@ -50,7 +50,9 @@ pi --provider openai-codex --model gpt-5.5
 ## Usage
 
 Start Pi from the repository root. The orchestration agents request read-only search tools
-(`grep`, `find`, `ls`) and the `subagent` extension tool, so enable them explicitly:
+(`grep`, `find`, `ls`) and the `subagent` extension tool, so enable them explicitly. Pi's default
+active tool set is only `read,bash,edit,write`; without the flag below, `pm-scout`/`pm-reviewer`
+cannot use `grep`/`find`/`ls`:
 
 ```bash
 pi --tools read,bash,edit,write,grep,find,ls,subagent --approve
@@ -59,8 +61,30 @@ pi --tools read,bash,edit,write,grep,find,ls,subagent --approve
 Useful prompt templates:
 
 - `/pm-orchestrate`: active parent issue orchestration using project agents.
+  Example: `/pm-orchestrate 42` (parent issue number) or `/pm-orchestrate https://github.com/polymetrics-ai/cli/issues/42`.
 - `/pm-gsd-loop`: issue-first GSD/TDD implementation loop.
+  Example: `/pm-gsd-loop 40` or `/pm-gsd-loop "add DraftIssue to ListProjectItems"`.
 - `/pm-review-loop`: CodeRabbit/Copilot review disposition loop.
+  Example: `/pm-review-loop 74` (PR number) or `/pm-review-loop feat/40-github-projects-discussions`.
+
+### Non-interactive (CI / parent-PR review coverage)
+
+For automated runs, load project agents with `agentScope` and explicit project-agent trust:
+
+```bash
+pi -p "Run the GSD verify cycle for phase github-projects-discussions" \
+  --tools read,bash,edit,write,grep,find,ls,subagent \
+  --agentScope both --confirmProjectAgents false
+```
+
+Only set `--confirmProjectAgents false` after reviewing and trusting the agents under
+`.pi/agents/`.
+
+### Compaction and retry
+
+`.pi/settings.json` enables compaction (`reserveTokens: 16384`, `keepRecentTokens: 20000`) for
+long-running xhigh orchestration loops, and `maxRetries: 3` for transient provider errors.
+Provider-level retry is disabled (`maxRetries: 0`) so Pi-level retry owns backoff.
 
 The first Pi run in this repository asks for project trust because `.pi/settings.json` and
 project-local agents can influence runtime behavior. Trust only after reviewing this directory.

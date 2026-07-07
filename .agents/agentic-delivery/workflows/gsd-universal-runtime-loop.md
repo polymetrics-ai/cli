@@ -1,8 +1,8 @@
 # GSD Universal Runtime Loop
 
 Use this workflow to run the same GSD universal programming loop from Claude Code, Codex, OpenCode,
-or another agent runtime. Runtime-specific files are activation adapters only; this file owns the
-shared workflow policy.
+Pi, or another agent runtime. Runtime-specific files are activation adapters only; this file owns
+the shared workflow policy.
 
 ## Runtime Contract
 
@@ -68,6 +68,9 @@ Every runtime must run this lifecycle:
   orchestrator and every independent ready worker up to `agents.max_threads` or the available
   runtime cap, after the coordinator has created one isolated worktree or working directory per
   mutating worker.
+- Worker agents: this repo has no `.codex/agents/gsd-loop-worker.toml`. Codex workers are spawned
+  as default agents with the `issue-agent-contract.md` and task body pasted into the spawn prompt,
+  each in its own worktree. (OpenCode and Pi, by contrast, ship dedicated worker agents/commands.)
 
 ### OpenCode
 
@@ -85,9 +88,61 @@ Every runtime must run this lifecycle:
 - Parent issue instruction: commands that start isolated orchestration work should use
   `subtask: true`; the primary orchestrator still owns the ready queue, spawn decisions, shared
   parent artifacts, and final handoff.
-- This repo provides `.opencode/agents/gsd-worker.md` and `.opencode/commands/gsd-worker.md` for
-  bounded worker subtasks. The primary orchestrator should invoke that worker command through the
-  task/subtask mechanism for independent scopes.
+- This repo provides `.opencode/commands/gsd-worker.md` (and the `.opencode/agents/gsd-worker.md`
+  agent it binds) for bounded worker subtasks. The primary orchestrator should invoke that worker
+  command through the task/subtask mechanism for independent scopes.
+
+### Pi
+
+- Project instructions: `AGENTS.md`.
+- Settings: `.pi/settings.json` (provider/model defaults, compaction, retry).
+- Prompts: `.pi/prompts/*.md` use `$@`/`$1` placeholders and `argument-hint` frontmatter; invoke with
+  `/pm-orchestrate`, `/pm-gsd-loop`, `/pm-review-loop`.
+- Agents: `.pi/agents/*.md` (read-only `pm-scout`/`pm-reviewer`; mutating `pm-gsd-worker`).
+- Subagent mechanism: the `subagent` tool with per-task `cwd`, concurrency 8 total / 4 concurrent.
+  Read-only agents are scoped to `read,grep,find,ls`; the mutating worker adds `bash,edit,write`
+  and never receives `subagent` (no recursive delegation).
+- Required launch: `pi --tools read,bash,edit,write,grep,find,ls,subagent --approve` so read-only agents
+  that request `grep`/`find`/`ls` actually receive them (pi's default active set is
+  `read,bash,edit,write` only).
+- Skills: `.agents/skills/<name>/SKILL.md` (project skills) and global equivalents.
+- Isolation: give every mutating worker a per-task `cwd` (or a git worktree). If isolation is
+  unavailable, record `not_spawned_isolation_missing` and keep implementation local.
+- Default mode for parent issues: the `/pm-orchestrate` prompt owns the ready queue and parent PR;
+  dispatch `pm-gsd-worker` via `subagent` for independent ready sub-issues with disjoint write
+  scope, and `pm-scout`/`pm-reviewer` for read-only recon/review.
+- Universal-loop instruction: keep `.agents/**` as the policy source of truth; the `.pi/` prompts
+  and agents are thin wrappers over it. Record one explicit spawn decision per cycle.
+- Parent issue instruction: prompts must explicitly spawn `pm-gsd-worker` for every independent
+  ready worker up to the concurrency cap, after creating one isolated `cwd`/worktree per mutating
+  worker. Inline role passes are `local_critical_path` or `not_spawned_runtime_capability_missing`,
+  never `spawned`.
+
+## Gate Integrity And State Honesty
+
+The loop's state files are the audit record, not a marketing surface. Record ground truth:
+
+- `verificationPassed` in `RUN-STATE.json` may be `true` **only** when the full `make verify` (or
+  the declared phase equivalent) exits 0. A timeout, a partial run, or only focused/subset gates
+  passing must record `verificationPassed: false` with the failing or incomplete gate named, even
+  if individual packages pass. Focused gates (gofmt, vet, a single package's tests,
+  `connectorgen validate`) are evidence of progress, not verification completion.
+- One explicit execution decision is required **per orchestration cycle**, not one for the whole
+  phase. Append a new entry to `RUN-STATE.json` `orchestrationDecisions` for each cycle (plan,
+  tdd-gate, execute, verify, gap-loop, summary) with `cycle`, `decision`, and `reason`.
+- Inline role passes (no subagent spawned) are `local_critical_path` or
+  `not_spawned_runtime_capability_missing`, **never** `spawned`. `spawned` requires an actual
+  subagent/worker context with its own issue, branch, and write scope.
+- `read_only_spawned` is for actual read-only subagent recon/review sidecars, not inline passes.
+- When a cycle completes, update the originating `PROMPTS.md` kickoff snapshot's `Downstream
+  artifact` and `Verification result` fields. No snapshot may stay `pending` once `RUN-STATE.json`
+  is terminal. A stale snapshot while RUN-STATE is terminal is a workflow defect.
+- Never invent run evidence. If a trace or gate result was not actually captured, mark it `DRAFT`
+  and reference the real artifact; do not backfill fabricated pass/fail values.
+
+A future `scripts/gsd-check` helper (advisory, then enforced) will validate RUN-STATE against the
+real `make verify` exit, flag stale `PROMPTS.md`, and assert per-cycle decisions exist. Until it
+exists, the orchestrator enforces these rules manually.
 
 ## Active Orchestration Rule
 

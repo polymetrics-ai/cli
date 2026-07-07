@@ -46,7 +46,7 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
   artifacts. If the local GSD scripts are unavailable, run the manual GSD loop and record that
   fallback explicitly; do not skip test-first implementation.
 - Treat `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` as the shared runtime
-  policy for Codex, Claude, OpenCode, and future agents. Runtime adapters may activate the loop, but
+  policy for Codex, Claude, OpenCode, Pi, and future agents. Runtime adapters may activate the loop, but
   must not weaken active orchestration, TDD, review, compact-mode, or human-gate requirements.
 - Plan before coding. Create or update the issue's GSD plan, TDD ledger, and verification checklist
   before production edits, then keep them current as the implementation changes.

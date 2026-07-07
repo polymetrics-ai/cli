@@ -26,6 +26,9 @@
     "gsd-plan-checker": "gpt-5.5:xhigh",
     "gsd-verifier": "gpt-5.5:xhigh",
     "gsd-executor": "gpt-5.5:xhigh",
-    "gsd-debugger": "gpt-5.5:xhigh"
+    "gsd-debugger": "gpt-5.5:xhigh",
+    "pm-scout": "gpt-5.4-mini:high",
+    "pm-gsd-worker": "gpt-5.5:high",
+    "pm-reviewer": "gpt-5.5:xhigh"
   }
 }

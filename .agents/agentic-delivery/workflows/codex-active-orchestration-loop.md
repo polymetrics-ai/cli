@@ -18,6 +18,9 @@ orchestrator context and workers. This file is a Codex adapter for the runtime-g
    - `.agents/agentic-delivery/agents/coordination/parent-issue-orchestrator.agent.yaml`
    - `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
    - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
+   - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
+   - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
+   - `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
    - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
    - `.agents/skills/caveman/SKILL.md`
 4. Build ready queue from parent issue and orchestration state.

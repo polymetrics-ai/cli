@@ -28,9 +28,15 @@ contract in `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
 5. Create or confirm an isolated working directory for every worker that may edit files. For Pi,
    pass a per-task `cwd` to the `subagent` tool. Prefer a git worktree per worker branch, for
    example `git worktree add ../<repo>-worktrees/<issue>-<slug> -b <branch> <parent-branch>`.
+   `.planning/config.json` sets `use_worktrees: false`, so the project's default isolation is a
+   per-task `cwd` (a sibling checkout), not a git worktree; either satisfies the contract. A
+   mutating worker without its own `cwd` must be recorded as `not_spawned_isolation_missing`.
 6. Spawn one worker per independent ready subissue through the `subagent` tool, up to the Pi
-   runtime limits. The coordinator must call `subagent` in the current turn; writing a plan that
-   says a worker should exist is not a spawn decision.
+   runtime limits. Dispatch `pm-gsd-worker` for mutating implementation, `pm-scout` for
+   read-only reconnaissance, and `pm-reviewer` for read-only adversarial review. The coordinator
+   must call `subagent` in the current turn; writing a plan that says a worker should exist is
+   not a spawn decision. Inline role passes are `local_critical_path` or
+   `not_spawned_runtime_capability_missing`, never `spawned`.
 7. Assign each worker one issue, one branch, one write scope, one working directory, and one
    handoff template. Use `agentScope: "both"` (or `"project"`) so project agents from `.pi/agents/`
    are visible. In non-interactive runs, project agents are blocked unless
