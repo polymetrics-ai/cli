@@ -1,0 +1,471 @@
+# Connector CLI parity research prompt
+
+You are working in the Polymetrics CLI repository on the connector-architecture-v2 program.
+Your task is to design a JSON-first CLI command surface for connectors, starting with GitHub and
+then scaling the research across every connector by using isolated per-connector agents.
+
+This is a research and planning pass first. Do not implement runtime command dispatch, do not change
+connector behavior, and do not mutate production bundle files unless the coordinator explicitly asks
+for an implementation phase. Produce artifacts that make the next implementation obvious, testable,
+and safe.
+
+## Required reading
+
+Before doing any work, read these files fully:
+
+1. `AGENTS.md`
+2. `docs/migration/HANDOFF-CODEX.md`
+3. `docs/migration/conventions.md`
+4. `docs/architecture/connector-architecture-v2-design.md`
+
+Honor all project rules in those files. In particular:
+
+- Do not push directly.
+- Avoid working-tree collisions.
+- Prefer JSON/docs over Go for this research.
+- Never request, print, store, summarize, or invent secrets.
+- Use `pm help <topic>` before unfamiliar `pm` commands.
+- Prefer `--json` for machine-readable CLI output.
+- Reverse ETL writes must stay plan, preview, approval, execute.
+- Do not expose generic shell, generic SQL write, or unrestricted generic HTTP write tools.
+
+## Program objective
+
+Design a connector CLI-surface layer that makes `pm` connector docs and future connector commands
+approach the quality and usefulness of famous provider CLIs, using GitHub CLI (`gh`) as the first
+pilot.
+
+The goal is not to blindly clone each vendor CLI. The goal is to make each Polymetrics connector
+usable from the command line with clear command groups, usage, flags, examples, JSON output,
+ETL/reverse-ETL classification, API coverage, exclusions, and safety labels.
+
+For GitHub, use `gh` as the feature-parity baseline:
+
+- Root help shape similar to `gh`: tagline, usage, command groups, examples, help topics, flags.
+- Command groups such as issues, pull requests, repositories, releases, workflows, runs, labels,
+  rulesets, secrets/variables, search, orgs, projects, gists, codespaces, discussion, auth/config,
+  and other current `gh` surfaces.
+- Explicitly separate API-backed commands from local workflow commands such as clone, checkout,
+  browse, alias, extension, completion, and config.
+
+For other connectors, derive a provider-specific command surface from:
+
+- Existing `internal/connectors/defs/<name>/` streams, writes, docs, schemas, and API surface.
+- Official provider API documentation.
+- Official provider CLI documentation or source when a provider CLI exists.
+- OpenAPI, Discovery, or similar machine-readable specs when available.
+
+Use primary sources only for technical claims. If the source can change, browse and cite the current
+official source in the artifact.
+
+## Current hypothesis to validate
+
+The current GitHub connector is strong for repository-scoped ETL and approved reverse ETL, but it is
+not a full `gh` replacement. Earlier local inspection found:
+
+- 33 GitHub read streams.
+- 67 GitHub write actions.
+- 503 tracked GitHub REST endpoints in `api_surface.json`.
+- 100 endpoints covered.
+- 403 endpoints excluded.
+- Tracked REST endpoint coverage around 19.9 percent.
+
+Re-check these numbers in this clone before relying on them. If this branch differs from the
+feature branch, document the difference rather than forcing the numbers to match.
+
+## Definitions
+
+Use these classifications consistently.
+
+### Command availability
+
+- `implemented`: command maps directly to an existing stream or write action.
+- `partial`: a related stream/write exists, but flags, output, scope, workflow, or behavior differ.
+- `planned`: safe and useful, but no stream/write exists yet.
+- `excluded`: deliberately out of scope with a written reason.
+- `unsupported_local`: vendor CLI command depends on local machine workflow, browser behavior, git
+  operations, shell completion, extension installation, or local config management.
+- `unsupported_api`: provider API surface exists but the connector does not model it yet.
+- `unsafe_or_disallowed`: violates Polymetrics safety rules, e.g. unrestricted shell/SQL/HTTP write
+  behavior or destructive admin operations that should never be exposed as connector writes.
+- `unknown`: source documentation is missing, unreachable, ambiguous, or needs human review.
+
+### Command intent
+
+- `etl`: read-oriented stream command.
+- `reverse_etl`: write-oriented action that must use plan, preview, approval, execute.
+- `direct_read`: read command not naturally modeled as a stream but still API-backed.
+- `direct_write`: write command not naturally modeled as reverse ETL; treat as blocked unless the
+  coordinator approves a safe execution model.
+- `local_workflow`: local git, browser, file, config, completion, or extension command.
+- `auth`: authentication/session management command.
+- `config`: local or connector config command.
+- `raw_api`: authenticated API escape hatch; must be constrained and approved before implementation.
+- `docs_only`: useful documentation/help surface, not executable.
+
+## JSON-first design target
+
+Design an optional per-connector file, likely:
+
+`internal/connectors/defs/<name>/cli_surface.json`
+
+This file should not duplicate endpoint implementation. It should point to existing streams and
+write actions where possible.
+
+Draft shape:
+
+```json
+{
+  "tagline": "Work with GitHub repositories from the command line.",
+  "usage": "pm github <command> <subcommand> [flags]",
+  "source_cli": {
+    "name": "gh",
+    "docs": "https://cli.github.com/manual/gh",
+    "reference": "https://cli.github.com/manual/gh_help_reference"
+  },
+  "groups": [
+    {
+      "id": "core",
+      "title": "Core Commands",
+      "commands": ["issue", "pr", "repo", "release"]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    }
+  ],
+  "commands": [
+    {
+      "path": "issue list",
+      "summary": "List issues",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issues",
+      "source_cli_path": "gh issue list",
+      "flags": [
+        {
+          "name": "state",
+          "type": "enum",
+          "values": ["open", "closed", "all"],
+          "maps_to": "query.state"
+        }
+      ],
+      "examples": [
+        "pm github issue list --state open --json"
+      ]
+    },
+    {
+      "path": "issue create",
+      "summary": "Create an issue",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_issue",
+      "source_cli_path": "gh issue create",
+      "risk": "creates a visible issue in the configured repository",
+      "approval": "reverse ETL writes require plan, preview, approval, execute"
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "authentication",
+      "summary": "Credential setup and supported auth modes."
+    }
+  ]
+}
+```
+
+Also consider whether some fields should live in existing files instead:
+
+- `metadata.json`: tagline, usage, command group summaries.
+- `streams.json`: stream-level command aliases.
+- `writes.json`: write-action command aliases.
+- `api_surface.json`: `covered_by.command` references.
+
+Default recommendation: keep a separate `cli_surface.json` so the command surface can evolve without
+bloating core stream/write files. If runtime offline help needs the data, propose a compact generated
+index instead of embedding large research ledgers.
+
+## GitHub pilot tasks
+
+Work from a clean branch. Do not edit unrelated connector files.
+
+1. Build the current Polymetrics GitHub surface inventory.
+   - Run `pm help connectors` before using connector inspection commands.
+   - Use `pm connectors inspect github --json`.
+   - Inspect `internal/connectors/defs/github/metadata.json`.
+   - Inspect `internal/connectors/defs/github/streams.json`.
+   - Inspect `internal/connectors/defs/github/writes.json`.
+   - Inspect `internal/connectors/defs/github/api_surface.json`.
+   - Inspect `internal/connectors/defs/github/docs.md`.
+   - Count streams, writes, covered endpoints, excluded endpoints, and exclusion categories.
+
+2. Build the current `gh` command inventory from primary sources.
+   - Use the official GitHub CLI manual.
+   - Use the official GitHub CLI full reference.
+   - Inspect the official `cli/cli` source tree when needed.
+   - Capture root command groups, subcommands, aliases, help topics, examples, and global flags.
+   - Record source URLs and date accessed.
+
+3. Map `gh` commands to Polymetrics capability.
+   - For each command path, decide availability and intent.
+   - Link to `stream`, `write`, `api_surface` endpoint, or explicit exclusion.
+   - Mark local workflow commands separately from API-backed commands.
+   - Mark commands that require GraphQL separately if the connector only models REST.
+   - Mark commands that need elevated scopes or destructive admin rights.
+
+4. Draft `cli_surface.json` for GitHub as a research artifact only.
+   - Put the draft under `docs/research/connector-cli-parity/github/cli_surface.draft.json`.
+   - Do not add it to `internal/connectors/defs/github/` in the research phase unless asked.
+
+5. Draft GitHub docs output.
+   - Produce a gh-like rendered help document under
+     `docs/research/connector-cli-parity/github/help-preview.md`.
+   - Include `USAGE`, command groups, ETL streams, reverse ETL actions, flags, examples, help
+     topics, and known gaps.
+
+6. Produce a GitHub parity matrix.
+   - Preferred machine-readable file:
+     `docs/research/connector-cli-parity/github/parity-matrix.json`.
+   - Include command path, source, source URL, intent, availability, stream/write mapping,
+     endpoint mapping, notes, and risk.
+
+## Whole-codebase scaling plan
+
+After the GitHub pilot, use per-connector agents. Each agent owns exactly one connector and writes
+only under:
+
+`docs/research/connector-cli-parity/connectors/<connector>/`
+
+Do not let shard agents edit shared files, generated files, or production connector defs. The
+coordinator owns shared summaries and schema proposals.
+
+### Coordinator responsibilities
+
+1. Generate the connector roster.
+   - Prefer `find internal/connectors/defs -mindepth 1 -maxdepth 1 -type d`.
+   - Record connector name, docs URL, capabilities, stream count, write count, API surface count,
+     and whether a provider CLI exists.
+
+2. Create batches.
+   - Start with high-value connectors and connectors with known provider CLIs:
+     `github`, `gitlab`, `slack`, `stripe`, `shopify`, `salesforce`, `google-*`, `aws-*`,
+     `datadog`, `pagerduty`, `linear`, `jira`, `notion`, `hubspot`.
+   - Then fan out to the remaining connectors.
+
+3. Enforce file ownership.
+   - One connector per agent.
+   - One output directory per connector.
+   - Shared files only edited by coordinator.
+
+4. Merge agent outputs into:
+   - `docs/research/connector-cli-parity/roster.json`
+   - `docs/research/connector-cli-parity/summary.md`
+   - `docs/research/connector-cli-parity/schema-proposal.md`
+   - `docs/research/connector-cli-parity/implementation-plan.md`
+
+### Per-connector agent prompt template
+
+Assign exactly one connector name to each agent.
+
+```
+You are the CLI parity research agent for connector: <connector>.
+
+Read AGENTS.md, docs/migration/conventions.md, and the connector's local files under
+internal/connectors/defs/<connector>/.
+
+Do not edit production connector files. Write only under:
+docs/research/connector-cli-parity/connectors/<connector>/
+
+Tasks:
+1. Inventory current Polymetrics capability:
+   - metadata
+   - spec
+   - streams
+   - writes
+   - api_surface
+   - docs
+2. Find official provider API documentation.
+3. Find official provider CLI documentation/source if a provider CLI exists.
+4. Build a command taxonomy:
+   - groups
+   - commands
+   - subcommands
+   - flags
+   - examples
+   - auth/config/help topics
+5. Map each provider CLI command or canonical API operation to:
+   - stream
+   - write
+   - endpoint
+   - exclusion
+   - unsupported_local
+   - unsupported_api
+   - unsafe_or_disallowed
+   - unknown
+6. Draft cli_surface.draft.json for this connector.
+7. Draft help-preview.md for this connector.
+8. Draft parity-matrix.json for this connector.
+9. Summarize implementation gaps and any required engine/schema extensions.
+
+Use primary sources only. Cite source URLs in source-links.md.
+Never request or include secrets.
+Do not invent commands that require generic shell, unrestricted HTTP write, or generic SQL write.
+```
+
+## Artifact requirements
+
+Create these research artifacts.
+
+### Program-level artifacts
+
+- `docs/research/connector-cli-parity/README.md`
+- `docs/research/connector-cli-parity/schema-proposal.md`
+- `docs/research/connector-cli-parity/implementation-plan.md`
+- `docs/research/connector-cli-parity/roster.json`
+- `docs/research/connector-cli-parity/summary.md`
+
+### GitHub pilot artifacts
+
+- `docs/research/connector-cli-parity/github/source-links.md`
+- `docs/research/connector-cli-parity/github/current-pm-surface.md`
+- `docs/research/connector-cli-parity/github/gh-command-inventory.md`
+- `docs/research/connector-cli-parity/github/parity-matrix.json`
+- `docs/research/connector-cli-parity/github/cli_surface.draft.json`
+- `docs/research/connector-cli-parity/github/help-preview.md`
+- `docs/research/connector-cli-parity/github/gaps.md`
+
+### Per-connector artifacts
+
+For each connector:
+
+- `docs/research/connector-cli-parity/connectors/<connector>/source-links.md`
+- `docs/research/connector-cli-parity/connectors/<connector>/current-pm-surface.md`
+- `docs/research/connector-cli-parity/connectors/<connector>/provider-cli-or-api-inventory.md`
+- `docs/research/connector-cli-parity/connectors/<connector>/parity-matrix.json`
+- `docs/research/connector-cli-parity/connectors/<connector>/cli_surface.draft.json`
+- `docs/research/connector-cli-parity/connectors/<connector>/help-preview.md`
+- `docs/research/connector-cli-parity/connectors/<connector>/gaps.md`
+
+## Parity metrics
+
+Compute these metrics for GitHub and then every connector.
+
+1. API endpoint coverage
+   - `covered endpoints / tracked endpoints`
+   - grouped by method and exclusion category.
+
+2. CLI command coverage
+   - `implemented commands / provider CLI commands`
+   - include partial and unsupported categories separately.
+
+3. Documentation coverage
+   - command has usage
+   - command has summary
+   - command has flags
+   - command has example
+   - command has output notes
+   - command has auth/risk notes when needed
+
+4. Execution-model coverage
+   - ETL-backed
+   - reverse-ETL-backed
+   - direct read candidate
+   - direct write candidate
+   - local workflow only
+   - unsupported/disallowed
+
+5. Implementation risk
+   - no Go change
+   - schema/docs only
+   - engine loader change
+   - CLI renderer change
+   - dynamic command dispatch change
+   - hook/native needed
+   - unsafe/disallowed
+
+## Implementation strategy to propose, not yet execute
+
+Phase 0: Research only.
+- Produce GitHub pilot artifacts.
+- Produce schema proposal.
+- Produce all-connector roster and batching plan.
+
+Phase 1: Docs-only command surface.
+- Add optional `cli_surface.json` schema.
+- Add validation that command references resolve to streams/writes or explicit exclusions.
+- Generate gh-like connector help previews.
+- Update website docs to render the command tree.
+
+Phase 2: Generic connector command executor.
+- Add a safe generic path such as `pm connectors run <connector> <command path>`.
+- Execute only commands mapped to streams or existing write actions.
+- Reads default to JSON-friendly output.
+- Writes use plan, preview, approval, execute.
+
+Phase 3: Optional first-class aliases.
+- Consider generated aliases like `pm github issue list`.
+- Keep aliases thin wrappers around the same JSON-defined command surface.
+- Do not hard-code one connector's command tree in Go.
+
+Phase 4: Controlled raw API escape hatch, only if approved.
+- Restrict to connector base URL and connector auth.
+- Disallow arbitrary hosts.
+- Strongly classify methods by risk.
+- Require approval for mutations.
+- Redact secrets.
+- Do not create generic unrestricted HTTP write tooling.
+
+## Validation expectations
+
+For research artifacts:
+
+- `jq` must parse all `.json` artifacts.
+- Markdown files should be readable and source-linked.
+- No secret-looking values.
+- No production files modified unless explicitly approved.
+
+For later implementation:
+
+- `go run ./cmd/connectorgen validate internal/connectors/defs/<name>`
+- `go test ./internal/connectors/conformance -run 'TestConformance/<name>'`
+- `go vet ./...`
+- `go test ./...`
+- `go build ./cmd/pm`
+- `make verify`
+
+## Source seed list for GitHub pilot
+
+Use current official sources and record access dates:
+
+- GitHub CLI manual: https://cli.github.com/manual/gh
+- GitHub CLI full reference: https://cli.github.com/manual/gh_help_reference
+- GitHub CLI source: https://github.com/cli/cli
+- GitHub REST API docs: https://docs.github.com/en/rest
+- GitHub GraphQL API docs, when command coverage requires it:
+  https://docs.github.com/en/graphql
+
+Optional comparative CLI design sources:
+
+- Google Cloud CLI overview: https://docs.cloud.google.com/sdk/gcloud
+- Google Cloud CLI reference: https://docs.cloud.google.com/sdk/gcloud/reference
+- Google Workspace CLI / gws: https://github.com/googleworkspace/cli
+- GAM for Google Workspace: https://github.com/GAM-team/GAM
+
+## Definition of done for the GitHub pilot
+
+The GitHub pilot is done when a reviewer can answer these questions from the artifacts without
+re-running research:
+
+1. What does current `pm` GitHub support?
+2. What does current `gh` support?
+3. Which `gh` commands map to existing streams?
+4. Which `gh` commands map to existing write actions?
+5. Which commands are local workflow features, not connector API features?
+6. Which commands require new streams/writes/API coverage?
+7. Which commands should be explicitly excluded for safety or scope?
+8. What would `pm github --help` look like after adding `cli_surface.json`?
+9. What minimal Go changes would be needed to render docs from this metadata?
+10. How should the same process scale to every connector without shared-file collisions?

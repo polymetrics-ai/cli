@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -1010,6 +1011,24 @@ func validateGraphQLVariables(vars map[string]any) error {
 	return nil
 }
 
+func validateGraphQLDefaultForType(def, typ string) error {
+	switch typ {
+	case "integer":
+		if _, err := strconv.ParseInt(def, 10, 64); err != nil {
+			return fmt.Errorf("must be a valid integer, got %q", def)
+		}
+	case "number":
+		if _, err := strconv.ParseFloat(def, 64); err != nil {
+			return fmt.Errorf("must be a valid number, got %q", def)
+		}
+	case "boolean":
+		if _, err := strconv.ParseBool(def); err != nil {
+			return fmt.Errorf("must be a valid boolean, got %q", def)
+		}
+	}
+	return nil
+}
+
 func validateGraphQLVariableValue(name string, value any) error {
 	obj, ok := value.(map[string]any)
 	if !ok {
@@ -1020,8 +1039,24 @@ func validateGraphQLVariableValue(name string, value any) error {
 			return fmt.Errorf("graphql variable %q template must be a string", name)
 		}
 		for key := range obj {
-			if key != "template" && key != "type" {
+			if key != "template" && key != "type" && key != "omit_when_empty" && key != "default" {
 				return fmt.Errorf("graphql variable %q template object has unsupported key %q", name, key)
+			}
+		}
+		if def, ok := obj["default"]; ok {
+			defStr, ok := def.(string)
+			if !ok {
+				return fmt.Errorf("graphql variable %q default must be a string", name)
+			}
+			if typ, _ := obj["type"].(string); typ != "" && typ != "string" {
+				if err := validateGraphQLDefaultForType(defStr, typ); err != nil {
+					return fmt.Errorf("graphql variable %q default %v", name, err)
+				}
+			}
+		}
+		if omit, ok := obj["omit_when_empty"]; ok {
+			if _, ok := omit.(bool); !ok {
+				return fmt.Errorf("graphql variable %q omit_when_empty must be a boolean", name)
 			}
 		}
 		if typ, ok := obj["type"].(string); ok {

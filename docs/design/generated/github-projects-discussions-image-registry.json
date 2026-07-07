@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "github-projects-discussions",
+  "images": [
+    {
+      "direction": "direction-a",
+      "source": "pending-human-or-image-tool",
+      "promptRef": "docs/design/generated/github-projects-discussions-direction-a.prompt.md",
+      "imageRef": null,
+      "imageUrl": null,
+      "critiqueRef": "docs/design/generated/github-projects-discussions-direction-a-critique.md",
+      "selected": false,
+      "notes": "Use an attached human reference or generated image before frontend implementation.",
+      "createdAt": "2026-07-07T10:07:03.949Z"
+    }
+  ],
+  "updatedAt": "2026-07-07T10:07:03.949Z"
+}

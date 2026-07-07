@@ -70,10 +70,11 @@ no human gate is triggered, and at least one sub-issue is worker-ready.
 
 The meaning of `spawn` is runtime-generic:
 
-- Claude Code: create `Task` workers.
+- Claude Code: create Agent/Task workers.
 - Codex: explicitly invoke Codex subagent tools or a custom Codex worker after assigning a separate
   git worktree or working directory for any worker that can edit files.
-- OpenCode: invoke configured subagents or commands with `subtask: true`.
+- OpenCode: invoke configured worker subagents or worker commands with `subtask: true`; keep the
+  primary orchestrator in the main context.
 - Future runtimes: create an isolated worker context with one issue, one branch, one write scope,
   one working directory, and the worker handoff template.
 
@@ -126,15 +127,16 @@ Sub-issues may run in parallel only when all of these are true:
 When file ownership is unclear, run the sub-issues sequentially or split them further.
 
 At every parent orchestration turn, record whether workers were spawned. If no worker is spawned
-while work remains, record exactly one blocker category:
+while work remains, the orchestrator must either take the local critical-path action that unblocks
+workers or record exactly one blocker category:
 
-- `dependency_blocked`
-- `write_scope_collision`
-- `human_gate`
-- `isolation_missing`
-- `runtime_capability_missing`
-- `review_blocked`
-- `verification_blocked`
+- `not_spawned_dependency_blocked`
+- `not_spawned_write_scope_collision`
+- `not_spawned_human_gate`
+- `not_spawned_isolation_missing`
+- `not_spawned_runtime_capability_missing`
+- `not_spawned_review_blocked`
+- `not_spawned_verification_blocked`
 
 Compact handoffs are allowed only for agent prose. Do not compact exact code, commands, test output,
 review findings, security warnings, destructive-action warnings, ordered safety gates, or approval

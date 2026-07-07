@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/graphql",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "repository": {
+          "owner": {
+            "__typename": "Organization",
+            "login": "synthetic-conformance-value",
+            "projectsV2": {
+              "nodes": [
+                {
+                  "id": "PVT_kwDOFixture",
+                  "number": 1,
+                  "title": "Connector CLI parity",
+                  "url": "https://github.com/orgs/octocat/projects/1",
+                  "closed": false,
+                  "updatedAt": "2026-07-07T00:00:00Z"
+                }
+              ],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": null
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

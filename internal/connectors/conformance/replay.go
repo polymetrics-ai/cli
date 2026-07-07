@@ -12,14 +12,18 @@ import (
 )
 
 // fixturePage is one recorded API page: fixtures/streams/<stream>/page_N.json,
-// shape {"request":{"method","path","query"},"response":{"status","body"}}.
+// shape {"request":{"method","path","query"},"read_query":{...},"response":{"status","body"}}.
+// read_query is optional harness input for parameterized streams whose runtime
+// request needs connectors.ReadRequest.Query values that are not URL query
+// params, e.g. GraphQL command flags embedded in the POST body.
 // This shape is already load-bearing in the committed
 // internal/connectors/engine/testdata/bundles/widget-demo fixture (Wave A/B
 // reference), so it is reused verbatim here rather than invented fresh.
 type fixturePage struct {
-	file     string          // relative path, for error messages / hit tracking
-	Request  fixtureRequest  `json:"request"`
-	Response fixtureResponse `json:"response"`
+	file      string            // relative path, for error messages / hit tracking
+	Request   fixtureRequest    `json:"request"`
+	ReadQuery map[string]string `json:"read_query,omitempty"`
+	Response  fixtureResponse   `json:"response"`
 }
 
 type fixtureRequest struct {

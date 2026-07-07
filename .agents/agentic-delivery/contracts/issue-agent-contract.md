@@ -15,6 +15,7 @@ The issue must provide:
 - required skills or task type, including `gsd-programming-loop` through the repo-local GSD/Pi
   adapter for implementation or behavior-changing work and required Go/design skills from
   `.agents/agentic-delivery/references/required-skills-routing.md`
+- shared runtime policy from `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - TDD plan
 - verification commands
 - safety notes

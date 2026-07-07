@@ -238,6 +238,11 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 				return fmt.Errorf("stream %q: %w", s.Name, err)
 			}
 		}
+		if s.GraphQL != nil {
+			if err := engine.ResolveCheckGraphQLVariables(s.GraphQL.Variables, specKeys); err != nil {
+				return fmt.Errorf("stream %q: %w", s.Name, err)
+			}
+		}
 		for _, v := range s.ComputedFields {
 			if err := check(v); err != nil {
 				return fmt.Errorf("stream %q: %w", s.Name, err)
@@ -247,6 +252,11 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 	for _, w := range b.Writes {
 		if err := check(w.Path); err != nil {
 			return fmt.Errorf("write action %q: %w", w.Name, err)
+		}
+		if w.GraphQL != nil {
+			if err := engine.ResolveCheckGraphQLVariables(w.GraphQL.Variables, specKeys); err != nil {
+				return fmt.Errorf("write action %q: %w", w.Name, err)
+			}
 		}
 	}
 	return nil

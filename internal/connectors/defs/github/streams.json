@@ -532,6 +532,162 @@
         "repository": "{{ config.owner }}/{{ config.repo }}"
       },
       "schema": "schemas/languages.json"
+    },
+    {
+      "name": "projects",
+      "method": "POST",
+      "path": "/graphql",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.repository.owner.projectsV2.pageInfo.endCursor",
+        "stop_path": "data.repository.owner.projectsV2.pageInfo.hasNextPage",
+        "page_size": 100
+      },
+      "graphql": {
+        "operation_name": "ListProjects",
+        "document": "query ListProjects($owner: String!, $repo: String!, $first: Int!, $after: String) { repository(owner: $owner, name: $repo) { owner { __typename login ... on Organization { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } ... on User { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } } } }",
+        "variables": {
+          "owner": "{{ config.owner }}",
+          "repo": "{{ config.repo }}",
+          "first": 100,
+          "after": {
+            "template": "{{ cursor }}",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.repository.owner.projectsV2.nodes"
+      },
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "owner": "{{ config.owner }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "project_items",
+      "method": "POST",
+      "path": "/graphql",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.node.items.pageInfo.endCursor",
+        "stop_path": "data.node.items.pageInfo.hasNextPage",
+        "page_size": 100
+      },
+      "graphql": {
+        "operation_name": "ListProjectItems",
+        "document": "query ListProjectItems($projectId: ID!, $first: Int!, $after: String) { node(id: $projectId) { ... on ProjectV2 { id number title items(first: $first, after: $after) { nodes { id type createdAt updatedAt content { __typename ... on Issue { id number title url state } ... on PullRequest { id number title url state } } } pageInfo { hasNextPage endCursor } } } } }",
+        "variables": {
+        "projectId": {
+          "template": "{{ query.project_id }}"
+        },
+          "first": 100,
+          "after": {
+            "template": "{{ cursor }}",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.node.items.nodes"
+      },
+      "response_fields": {
+        "project_id": "data.node.id",
+        "project_number": "data.node.number",
+        "project_title": "data.node.title"
+      },
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "content_type": "{{ record.content.__typename }}",
+        "content_id": "{{ record.content.id }}",
+        "content_number": "{{ record.content.number }}",
+        "content_title": "{{ record.content.title }}",
+        "content_url": "{{ record.content.url }}",
+        "content_state": "{{ record.content.state }}"
+      },
+      "schema": "schemas/project_items.json"
+    },
+    {
+      "name": "discussions",
+      "method": "POST",
+      "path": "/graphql",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.repository.discussions.pageInfo.endCursor",
+        "stop_path": "data.repository.discussions.pageInfo.hasNextPage",
+        "page_size": 100
+      },
+      "graphql": {
+        "operation_name": "ListDiscussions",
+        "document": "query ListDiscussions($owner: String!, $repo: String!, $first: Int!, $after: String) { repository(owner: $owner, name: $repo) { discussions(first: $first, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}) { nodes { id number title url isAnswered answerChosenAt createdAt updatedAt author { login } category { id name slug } } pageInfo { hasNextPage endCursor } } } }",
+        "variables": {
+          "owner": "{{ config.owner }}",
+          "repo": "{{ config.repo }}",
+          "first": 100,
+          "after": {
+            "template": "{{ cursor }}",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.repository.discussions.nodes"
+      },
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "author_login": "{{ record.author.login }}",
+        "category_id": "{{ record.category.id }}",
+        "category_name": "{{ record.category.name }}",
+        "category_slug": "{{ record.category.slug }}",
+        "is_answered": "{{ record.isAnswered }}",
+        "answer_chosen_at": "{{ record.answerChosenAt }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/discussions.json"
+    },
+    {
+      "name": "discussion",
+      "method": "POST",
+      "path": "/graphql",
+      "pagination": {
+        "type": "none"
+      },
+      "graphql": {
+        "operation_name": "ViewDiscussion",
+        "document": "query ViewDiscussion($owner: String!, $repo: String!, $number: Int!) { repository(owner: $owner, name: $repo) { discussion(number: $number) { id number title body url isAnswered answerChosenAt createdAt updatedAt author { login } category { id name slug } comments(first: 20) { totalCount nodes { id body url isAnswer createdAt updatedAt author { login } } } } } }",
+        "variables": {
+          "owner": "{{ config.owner }}",
+          "repo": "{{ config.repo }}",
+        "number": {
+          "template": "{{ query.number }}",
+          "type": "integer"
+        }
+        }
+      },
+      "records": {
+        "path": "data.repository.discussion",
+        "single_object": true
+      },
+      "computed_fields": {
+        "repository": "{{ config.owner }}/{{ config.repo }}",
+        "author_login": "{{ record.author.login }}",
+        "category_id": "{{ record.category.id }}",
+        "category_name": "{{ record.category.name }}",
+        "category_slug": "{{ record.category.slug }}",
+        "is_answered": "{{ record.isAnswered }}",
+        "answer_chosen_at": "{{ record.answerChosenAt }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/discussion.json"
     }
   ]
 }

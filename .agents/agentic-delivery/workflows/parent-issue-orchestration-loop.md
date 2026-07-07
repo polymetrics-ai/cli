@@ -21,7 +21,8 @@ At each coordinator turn:
 
 1. Read `AGENTS.md` and the parent issue.
 2. Read the parent orchestrator contract and stacked PR workflow.
-3. Read `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`.
+3. Read `.agents/agentic-delivery/workflows/automated-review-routing-loop.md` and
+   `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`.
 4. Confirm the parent issue has acceptance criteria, sub-issues, branch policy, verification, and
    human gates.
 5. Create or confirm the parent branch from `main`.

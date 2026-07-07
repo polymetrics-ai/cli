@@ -530,14 +530,6 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 		}
 		allowed[flag.Name] = flag
 	}
-	if len(allowed) == 0 {
-		return nil, &BlockedCommandError{
-			Command:      cmd.Path,
-			Intent:       cmd.Intent,
-			Availability: cmd.Availability,
-			Reason:       "reverse ETL command has no declared flag mappings",
-		}
-	}
 	record := connectors.Record{}
 	for name, values := range flags {
 		if len(values) == 0 {

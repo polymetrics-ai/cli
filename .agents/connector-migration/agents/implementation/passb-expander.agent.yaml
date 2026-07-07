@@ -17,17 +17,18 @@ skills:
   - api_architecture
   - go_tdd
   - security_review
-  preferred_local_skills:
-  - go-engineering
-  - api-design-principles
-  - github-issue-first-delivery
-  - golang-design-patterns
-  - golang-structs-interfaces
   required_local_skills:
   - gsd-programming-loop
   - golang-how-to
   - golang-testing
   - golang-security
+  preferred_local_skills:
+  - gsd-programming-loop
+  - go-engineering
+  - api-design-principles
+  - github-issue-first-delivery
+  - golang-design-patterns
+  - golang-structs-interfaces
 inputs:
   required:
   - connector name
@@ -64,12 +65,14 @@ permissions:
   - unrestricted SQL write
   - generic shell write to external systems
 workflow:
-- enforce_cli_help_docs_website_parity_when_cli_changes
 - load_gsd_pi_adapter
 - load_required_go_and_design_skills
 - enforce_runtime_rlm_website_integration_when_relevant
+- enforce_cli_help_docs_website_parity_when_cli_changes
 - read_connector_handoff_and_conventions
 - inspect_existing_connector_bundle
+- create_or_update_gsd_plan_and_tdd_ledger
+- capture_red_test_or_validation_for_behavior_changes
 - inspect_legacy_connector_read_only
 - research_official_provider_api_docs
 - expand_api_surface_with_covered_or_excluded_rows
@@ -77,6 +80,7 @@ workflow:
 - add_schemas_fixtures_docs_and_risk_notes
 - record_typed_blockers_for_engine_gaps
 - run_connector_validation
+- commit_green_slices_after_local_gates_when_allowed
 guardrails:
   input:
   - exactly one connector must be assigned
@@ -91,7 +95,8 @@ guardrails:
   output:
   - no Pass B placeholder exclusions remain for reviewed endpoints
   - no secret-looking literals in fixtures or docs
-  - no commits from the agent
+  - GSD programming loop evidence exists for behavior-changing work
+  - commit green slices only after local gates pass and the connector is assigned exclusively to this agent
 verification:
   required:
   - go run ./cmd/connectorgen validate internal/connectors/defs
@@ -100,8 +105,4 @@ adapters:
   codex:
     note: Translate this YAML to a connector-specific Codex prompt; do not rely on .codex/agents TOML.
   pi:
-    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
-      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
-      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
-      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
-      and keep runtime-backed services optional unless explicitly in scope.
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md and keep runtime-backed services optional unless explicitly in scope.

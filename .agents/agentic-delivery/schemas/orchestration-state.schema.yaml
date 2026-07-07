@@ -29,12 +29,17 @@ field_contract:
     type: object
     required: [mode, runtime, status]
     mode_values: [active_owner, advisory, blocked]
+    mode_rules:
+      - active_owner is required for executable parent issue orchestration when worker runtime is available.
+      - advisory is allowed only for read-only audits, planning reviews, or explicit human-requested analysis mode.
     status_values: [running, waiting_for_workers, waiting_for_review, blocked, human_ready]
   ready_queue:
     type: list
     item_required: [number, status, dependencies, write_scope, decision]
     decision_values:
       - spawned
+      - read_only_spawned
+      - local_critical_path
       - not_spawned_dependency_blocked
       - not_spawned_write_scope_collision
       - not_spawned_human_gate

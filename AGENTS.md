@@ -88,6 +88,9 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
   shell, follow its TDD/programming lifecycle, and record GSD/TDD evidence in the phase or PR
   artifacts. If the repo-local GSD adapter is unavailable, run the manual GSD loop and record that
   fallback explicitly; do not skip test-first implementation.
+- Treat `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` as the shared runtime
+  policy for Codex, Claude, OpenCode, Pi, and future agents. Runtime adapters may activate the loop, but
+  must not weaken active orchestration, TDD, review, compact-mode, or human-gate requirements.
 - Plan before coding. Create or update the issue's GSD plan, TDD ledger, and verification checklist
   before production edits, then keep them current as the implementation changes.
 - Commit and push regularly to the active issue/PR branch after each coherent green slice: plan

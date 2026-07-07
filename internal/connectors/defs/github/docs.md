@@ -1,6 +1,6 @@
 # Overview
 
-GitHub reads 33 stream(s), and writes through 67 action(s).
+GitHub reads 37 stream(s), and writes through 67 action(s).
 
 The connector now declares a JSON-first command surface in `cli_surface.json`. This surface is a
 docs, validation, and safe dispatch contract for gh-inspired GitHub commands. Commands mapped to
@@ -13,7 +13,8 @@ Readable streams: `repository`, `issues`, `pull_requests`, `branches`, `commits`
 `collaborators`, `contributors`, `stargazers`, `subscribers`, `workflows`, `workflow_runs`,
 `workflow_artifacts`, `deployments`, `commit_comments`, `deploy_keys`, `webhooks`, `environments`,
 `forks`, `invitations`, `issue_events`, `code_scanning_alerts`, `dependabot_alerts`,
-`secret_scanning_alerts`, `security_advisories`, `repo_rulesets`, `autolinks`, `languages`.
+`secret_scanning_alerts`, `security_advisories`, `repo_rulesets`, `autolinks`, `languages`,
+`projects`, `project_items`, `discussions`, `discussion`.
 
 Write actions: `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
 `create_pull_request`, `update_pull_request`, `close_pull_request`, `request_reviewers`,
@@ -32,7 +33,7 @@ Write actions: `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
 `update_code_scanning_alert`, `update_dependabot_alert`, `create_deployment`, `create_fork`,
 `create_repo_ruleset`, `update_repo_ruleset`, `delete_repo_ruleset`, `update_secret_scanning_alert`.
 
-Service API documentation: https://docs.github.com/en/rest.
+Service API documentation: https://docs.github.com/en/rest and https://docs.github.com/en/graphql.
 
 ## Auth setup
 
@@ -103,8 +104,9 @@ declared.
 Default pagination: page-number pagination; page parameter `page`; size parameter `per_page`; starts
 at 1; page size 100.
 
-Pagination by stream: none: `languages`; page_number: `repository`, `issues`, `pull_requests`,
-`branches`, `commits`, `tags`, `releases`, `labels`, `milestones`, `issue_comments`,
+Pagination by stream: cursor: `projects`, `project_items`, `discussions`; none: `languages`,
+`discussion`; page_number: `repository`, `issues`, `pull_requests`, `branches`, `commits`, `tags`,
+`releases`, `labels`, `milestones`, `issue_comments`,
 `pull_request_review_comments`, `collaborators`, `contributors`, `stargazers`, `subscribers`,
 `workflows`, `workflow_runs`, `workflow_artifacts`, `deployments`, `commit_comments`, `deploy_keys`,
 `webhooks`, `environments`, `forks`, `invitations`, `issue_events`, `code_scanning_alerts`,
@@ -225,6 +227,20 @@ lower bound is available.
   100; computed output fields `repository`.
 - `languages`: GET `/repos/{{ config.owner }}/{{ config.repo }}/languages` - single-object response;
   records path `.`; computed output fields `repository`; emits passthrough records.
+- `projects`: GraphQL `ListProjects` on POST `/graphql` - records path
+  `data.repository.owner.projectsV2.nodes`; cursor pagination with `after`; page size 100; computed
+  output fields `owner`, `repository`, `updated_at`. Requires repository access plus project read
+  permissions for private project data.
+- `project_items`: GraphQL `ListProjectItems` on POST `/graphql` - records path
+  `data.node.items.nodes`; cursor pagination with `after`; page size 100; requires
+  `--project-id`; copies project metadata from the response and flattens issue or pull request
+  content fields.
+- `discussions`: GraphQL `ListDiscussions` on POST `/graphql` - records path
+  `data.repository.discussions.nodes`; cursor pagination with `after`; page size 100; computed
+  output fields for author, category, answer state, and timestamps.
+- `discussion`: GraphQL `ViewDiscussion` on POST `/graphql` - single-object response at
+  `data.repository.discussion`; requires `--number`; includes the first 20 discussion comments in
+  the JSON record.
 
 ## Write actions & risks
 
@@ -513,14 +529,14 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 33 stream-backed endpoint group(s), 67 write-backed endpoint group(s).
+- API coverage includes 37 stream-backed endpoint group(s), 67 write-backed endpoint group(s).
 - GitHub CLI parity is intentionally staged. The current metadata covers selected `gh` command
   families modeled in this slice and maps implemented commands to current stream/write names. Runtime
   dispatch is limited to stream reads, guarded direct reads, and reverse ETL write commands with
   explicit `record.*` flag mappings.
-- GitHub Projects v2, discussions, gist, codespaces, organization-wide views, and several status or
-  search commands require GraphQL or mixed REST/GraphQL coverage that is not modeled by this REST
-  bundle yet.
+- GitHub Projects v2 and discussions now have fixed GraphQL read streams for repository-scoped
+  reads. Project/discussion mutations, gist, codespaces, organization-wide views, and several status
+  or search commands still require additional GraphQL or mixed REST/GraphQL coverage.
 - Secret and variable write commands are not exposed as reverse ETL actions until encryption,
   redaction, scope, and approval semantics are modeled explicitly.
 - Raw `gh api` and `gh api graphql` style escape hatches are classified as unsafe unless constrained
