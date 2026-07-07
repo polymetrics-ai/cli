@@ -41,6 +41,7 @@ type CommandSurfaceCommand struct {
 	Availability  string
 	Stream        string
 	Write         string
+	Operation     string
 	SourceCLIPath string
 	SourceURL     string
 	Flags         []CommandSurfaceFlag

@@ -176,6 +176,35 @@ func TestRunBlocksNonStreamCommands(t *testing.T) {
 	}
 }
 
+func TestRunImplementedOperationCommandIsFeatureGated(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "project list",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "github.projects.list",
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{Path: []string{"project", "list"}}, func(connectors.Record) error {
+		t.Fatal("emit called for feature-gated operation command")
+		return nil
+	})
+	if err == nil {
+		t.Fatal("Run error = nil, want feature gate")
+	}
+	var blocked *BlockedCommandError
+	if !errors.As(err, &blocked) {
+		t.Fatalf("Run error type = %T, want BlockedCommandError", err)
+	}
+	if !strings.Contains(err.Error(), "operation github.projects.list") ||
+		!strings.Contains(err.Error(), "executor is not implemented") {
+		t.Fatalf("Run error = %q, want operation feature gate", err.Error())
+	}
+}
+
 func TestRunRejectsUnknownFlagAndInvalidEnum(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{

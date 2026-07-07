@@ -51,24 +51,17 @@ func (e *BlockedCommandError) Error() string {
 	return strings.Join(parts, ": ")
 }
 
+func Preflight(connector connectors.Connector, path []string) error {
+	_, _, err := resolveRunnableCommand(connector, path)
+	return err
+}
+
 func Run(ctx context.Context, connector connectors.Connector, req Request, emit func(connectors.Record) error) (Result, error) {
-	if connector == nil {
-		return Result{}, &BlockedCommandError{Command: commandPath(req.Path), Reason: "connector is nil"}
-	}
-	if err := validateCommandPath(req.Path); err != nil {
+	cmd, command, err := resolveRunnableCommand(connector, req.Path)
+	if err != nil {
 		return Result{}, err
 	}
-	command := commandPath(req.Path)
-	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
-	if !ok || surfaceProvider.CommandSurface() == nil {
-		return Result{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "connector has no command surface"}
-	}
-
-	cmd, ok := findCommand(surfaceProvider.CommandSurface(), command)
-	if !ok {
-		return Result{}, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
-	}
-	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+	if cmd.Intent == "direct_read" {
 		return runDirectRead(ctx, connector, cmd, req)
 	}
 	if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream == "" {
@@ -106,54 +99,54 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	return result, nil
 }
 
-func runDirectRead(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
-	reader, ok := connector.(connectors.DirectReader)
+func resolveRunnableCommand(connector connectors.Connector, path []string) (connectors.CommandSurfaceCommand, string, error) {
+	command := commandPath(path)
+	if connector == nil {
+		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Command: command, Reason: "connector is nil"}
+	}
+	if err := validateCommandPath(path); err != nil {
+		return connectors.CommandSurfaceCommand{}, command, err
+	}
+	command = commandPath(path)
+	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || surfaceProvider.CommandSurface() == nil {
+		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "connector has no command surface"}
+	}
+
+	cmd, ok := findCommand(surfaceProvider.CommandSurface(), command)
 	if !ok {
-		return Result{}, &BlockedCommandError{
+		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
+	}
+	if cmd.Operation != "" {
+		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 			Connector:    connector.Name(),
-			Command:      cmd.Path,
+			Command:      command,
 			Intent:       cmd.Intent,
 			Availability: cmd.Availability,
-			Reason:       "connector does not support direct reads",
+			Reason:       fmt.Sprintf("operation %s executor is not implemented in this slice", cmd.Operation),
 		}
 	}
-	if len(cmd.APISurface) != 1 {
-		return Result{}, &BlockedCommandError{
-			Connector:    connector.Name(),
-			Command:      cmd.Path,
-			Intent:       cmd.Intent,
-			Availability: cmd.Availability,
-			Reason:       "direct_read commands require exactly one api_surface endpoint",
+	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+		if err := validateDirectReadCommand(connector, cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, err
 		}
+		return cmd, command, nil
 	}
-	endpoint := cmd.APISurface[0]
-	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
-	if method != http.MethodGet {
-		return Result{}, &BlockedCommandError{
-			Connector:    connector.Name(),
-			Command:      cmd.Path,
-			Intent:       cmd.Intent,
-			Availability: cmd.Availability,
-			Reason:       fmt.Sprintf("direct_read commands require GET api_surface endpoints, got %s", method),
-		}
+	if cmd.Intent == "etl" && cmd.Availability == "implemented" && cmd.Stream != "" {
+		return cmd, command, nil
 	}
-	if isAbsoluteHTTPURL(endpoint.Path) {
-		return Result{}, &BlockedCommandError{
-			Connector:    connector.Name(),
-			Command:      cmd.Path,
-			Intent:       cmd.Intent,
-			Availability: cmd.Availability,
-			Reason:       "direct_read commands must not reference an absolute URL",
-		}
+	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+		Connector:    connector.Name(),
+		Command:      command,
+		Intent:       cmd.Intent,
+		Availability: cmd.Availability,
+		Reason:       blockReason(cmd),
 	}
-	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
-		return Result{}, &BlockedCommandError{
-			Connector:    connector.Name(),
-			Command:      cmd.Path,
-			Intent:       cmd.Intent,
-			Availability: cmd.Availability,
-			Reason:       "direct_read commands require an explicit supported output_policy",
-		}
+}
+
+func runDirectRead(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
+	if err := validateDirectReadCommand(connector, cmd); err != nil {
+		return Result{}, err
 	}
 	pathParams, query, err := directReadOverrides(cmd, req.Flags)
 	if err != nil {
@@ -166,7 +159,9 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 	if maxBytes > MaxDirectReadBytes {
 		maxBytes = MaxDirectReadBytes
 	}
-	direct, err := reader.DirectRead(ctx, connectors.DirectReadRequest{
+	endpoint := cmd.APISurface[0]
+	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+	direct, err := connector.(connectors.DirectReader).DirectRead(ctx, connectors.DirectReadRequest{
 		Method:       method,
 		Path:         endpoint.Path,
 		Config:       req.Config,
@@ -183,6 +178,57 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Command:    cmd.Path,
 		DirectRead: &direct,
 	}, nil
+}
+
+func validateDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	if _, ok := connector.(connectors.DirectReader); !ok {
+		return &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "connector does not support direct reads",
+		}
+	}
+	if len(cmd.APISurface) != 1 {
+		return &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "direct_read commands require exactly one api_surface endpoint",
+		}
+	}
+	endpoint := cmd.APISurface[0]
+	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+	if method != http.MethodGet {
+		return &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       fmt.Sprintf("direct_read commands require GET api_surface endpoints, got %s", method),
+		}
+	}
+	if isAbsoluteHTTPURL(endpoint.Path) {
+		return &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "direct_read commands must not reference an absolute URL",
+		}
+	}
+	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
+		return &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "direct_read commands require an explicit supported output_policy",
+		}
+	}
+	return nil
 }
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {
@@ -221,6 +267,8 @@ func findCommand(surface *connectors.CommandSurface, path string) (connectors.Co
 
 func blockReason(cmd connectors.CommandSurfaceCommand) string {
 	switch {
+	case cmd.Operation != "":
+		return fmt.Sprintf("operation %s executor is not implemented in this slice", cmd.Operation)
 	case cmd.Intent == "reverse_etl":
 		if cmd.Approval != "" {
 			return cmd.Approval

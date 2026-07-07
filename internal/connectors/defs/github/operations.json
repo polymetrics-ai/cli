@@ -1,0 +1,68 @@
+{
+  "operations": [
+    {
+      "id": "github.projects.list",
+      "kind": "graphql_query",
+      "summary": "List GitHub Projects using a fixed GraphQL query.",
+      "source_url": "https://docs.github.com/en/graphql",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "auth_scopes": ["read:project"],
+      "graphql": {
+        "operation_name": "ListProjects",
+        "document": "query ListProjects($owner: String!, $first: Int!, $after: String) { organization(login: $owner) { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } }",
+        "pagination": {
+          "connection_path": "organization.projectsV2",
+          "cursor_variable": "after",
+          "page_size_variable": "first",
+          "max_page_size": 100
+        }
+      }
+    },
+    {
+      "id": "github.issue.delete",
+      "kind": "graphql_mutation",
+      "summary": "Delete an issue using a fixed GraphQL mutation.",
+      "source_url": "https://cli.github.com/manual/gh_issue_delete",
+      "risk": "critical",
+      "approval": "destructive reverse ETL writes require plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "graphql": {
+        "operation_name": "DeleteIssue",
+        "document": "mutation DeleteIssue($issueId: ID!) { deleteIssue(input: { issueId: $issueId }) { clientMutationId } }"
+      }
+    },
+    {
+      "id": "github.release.download_assets",
+      "kind": "binary_download",
+      "summary": "Download release assets with a bounded file-transfer policy.",
+      "source_url": "https://cli.github.com/manual/gh_release_download",
+      "risk": "medium",
+      "approval": "filesystem writes require an explicit destination policy",
+      "output_policy": "file_manifest",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "github.repo.clone",
+      "kind": "local_git",
+      "summary": "Clone a repository through a restricted local Git workflow.",
+      "source_url": "https://cli.github.com/manual/gh_repo_clone",
+      "risk": "medium",
+      "approval": "local filesystem and git mutations require explicit approval",
+      "output_policy": "local_workflow_plan",
+      "local_git": {
+        "action": "clone",
+        "allowed_args": ["owner_repo", "destination"]
+      }
+    }
+  ]
+}

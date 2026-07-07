@@ -16,10 +16,10 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	var surface struct {
 		OperationLedgerVersion int `json:"operation_ledger_version"`
 		Endpoints              []struct {
-			Method    string            `json:"method"`
-			CoveredBy map[string]string `json:"covered_by"`
-			Excluded  map[string]string `json:"excluded"`
-			Operation *githubOperation  `json:"operation"`
+			Method    string           `json:"method"`
+			CoveredBy map[string]any   `json:"covered_by"`
+			Excluded  map[string]any   `json:"excluded"`
+			Operation *githubOperation `json:"operation"`
 		} `json:"endpoints"`
 	}
 	if err := json.Unmarshal(raw, &surface); err != nil {
@@ -71,11 +71,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 503 {
 		t.Fatalf("endpoints = %d, want 503", len(surface.Endpoints))
 	}
-	if covered != 100 {
-		t.Fatalf("covered endpoints = %d, want 100", covered)
+	if covered != 101 {
+		t.Fatalf("covered endpoints = %d, want 101", covered)
 	}
-	if operations != 403 {
-		t.Fatalf("operation endpoints = %d, want 403", operations)
+	if operations != 402 {
+		t.Fatalf("operation endpoints = %d, want 402", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -89,14 +89,14 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
 		"DELETE": 18,
-		"GET":    33,
+		"GET":    34,
 		"PATCH":  16,
 		"POST":   23,
 		"PUT":    10,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE": 54,
-		"GET":    226,
+		"GET":    225,
 		"PATCH":  18,
 		"POST":   68,
 		"PUT":    37,
@@ -106,7 +106,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"binary_read":           10,
 		"deprecated":            1,
 		"destructive_action":    5,
-		"direct_read":           159,
+		"direct_read":           158,
 		"disallowed":            9,
 		"duplicate":             67,
 		"sensitive_reverse_etl": 58,
@@ -115,10 +115,10 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"critical": 5,
 		"high":     168,
 		"low":      77,
-		"medium":   153,
+		"medium":   152,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 403,
+		"blocked": 402,
 	})
 }
 

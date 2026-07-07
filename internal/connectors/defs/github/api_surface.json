@@ -2784,14 +2784,8 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/contents/{path}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "reading file/directory contents requires a caller-chosen path with no enumerable parameter space; executable command mappings must declare an output policy that redacts file content and blocks sensitive paths",
-        "source_url": "https://docs.github.com/en/rest",
-        "notes": "legacy exclusion category: out_of_scope"
+      "covered_by": {
+        "direct_reads": ["repo read-file", "repo read-dir"]
       }
     },
     {

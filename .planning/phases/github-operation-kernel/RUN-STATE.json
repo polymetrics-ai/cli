@@ -1,0 +1,14 @@
+{
+  "phase": "github-operation-kernel",
+  "issue": 56,
+  "branch": "feat/56-operation-kernel",
+  "status": "completed_with_warnings",
+  "gsd_mode": "manual_fallback",
+  "reason": "scripts/programming-loop.mjs and scripts/tdd-gate.mjs are not present in this checkout",
+  "updated_at": "2026-07-07T06:41:47Z",
+  "warnings": [
+    "go test ./... PTY session remained open after no matching go test process was visible; interrupted and recorded as inconclusive",
+    "go test ./internal/connectors/... PTY session remained open after no matching go test process was visible; interrupted and recorded as inconclusive",
+    "make verify not run for this stacked foundation slice"
+  ]
+}
