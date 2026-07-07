@@ -68,11 +68,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		}
 	}
 
-	if len(surface.Endpoints) != 507 {
-		t.Fatalf("endpoints = %d, want 507", len(surface.Endpoints))
+	if len(surface.Endpoints) != 509 {
+		t.Fatalf("endpoints = %d, want 509", len(surface.Endpoints))
 	}
-	if covered != 105 {
-		t.Fatalf("covered endpoints = %d, want 105", covered)
+	if covered != 107 {
+		t.Fatalf("covered endpoints = %d, want 107", covered)
 	}
 	if operations != 402 {
 		t.Fatalf("operation endpoints = %d, want 402", operations)
@@ -84,7 +84,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"DELETE":  72,
 		"GET":     259,
 		"GRAPHQL": 4,
-		"PATCH":   34,
+		"PATCH":   36,
 		"POST":    91,
 		"PUT":     47,
 	})
@@ -92,7 +92,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"DELETE":  18,
 		"GET":     34,
 		"GRAPHQL": 4,
-		"PATCH":   16,
+		"PATCH":   18,
 		"POST":    23,
 		"PUT":     10,
 	})
