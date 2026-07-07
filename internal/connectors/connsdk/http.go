@@ -17,6 +17,7 @@ import (
 
 // maxErrorBody bounds how much of an error response body is captured in HTTPError.
 const maxErrorBody = 8 << 10 // 8 KiB
+const defaultMaxResponseBody = 64 << 20
 
 // Response is a captured HTTP response with its body already read.
 type Response struct {
@@ -177,7 +178,22 @@ func (r *Requester) Do(ctx context.Context, method, path string, query url.Value
 			return nil, fmt.Errorf("encode request body: %w", err)
 		}
 	}
-	return r.do(ctx, method, path, query, payload, "application/json")
+	return r.do(ctx, method, path, query, payload, "application/json", defaultMaxResponseBody)
+}
+
+// DoLimited performs Do while bounding the captured successful response body to
+// maxBodyBytes+1. Callers can reject len(resp.Body) > maxBodyBytes without ever
+// buffering the default 64 MiB response cap.
+func (r *Requester) DoLimited(ctx context.Context, method, path string, query url.Values, body any, maxBodyBytes int) (*Response, error) {
+	var payload []byte
+	if body != nil {
+		var err error
+		payload, err = json.Marshal(body)
+		if err != nil {
+			return nil, fmt.Errorf("encode request body: %w", err)
+		}
+	}
+	return r.do(ctx, method, path, query, payload, "application/json", maxBodyBytes+1)
 }
 
 // DoForm performs an HTTP request with an application/x-www-form-urlencoded body,
@@ -191,16 +207,19 @@ func (r *Requester) DoForm(ctx context.Context, method, path string, query, form
 		payload = []byte(form.Encode())
 		contentType = "application/x-www-form-urlencoded"
 	}
-	return r.do(ctx, method, path, query, payload, contentType)
+	return r.do(ctx, method, path, query, payload, contentType, defaultMaxResponseBody)
 }
 
 // do is the shared request core for Do/DoForm. payload is the already-encoded
 // body (nil for none) and contentType is the Content-Type to set when a body is
 // present.
-func (r *Requester) do(ctx context.Context, method, path string, query url.Values, payload []byte, contentType string) (*Response, error) {
+func (r *Requester) do(ctx context.Context, method, path string, query url.Values, payload []byte, contentType string, maxBodyBytes int) (*Response, error) {
 	fullURL, err := r.resolveURL(path, query)
 	if err != nil {
 		return nil, err
+	}
+	if maxBodyBytes <= 0 {
+		maxBodyBytes = defaultMaxResponseBody
 	}
 
 	attempts := r.maxRetries() + 1
@@ -237,7 +256,7 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 			return nil, lastErr
 		}
 
-		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, 64<<20))
+		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		resp.Body.Close()
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {

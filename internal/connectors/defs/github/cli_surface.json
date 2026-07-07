@@ -11,32 +11,69 @@
     {
       "id": "core",
       "title": "Core Commands",
-      "commands": ["issue", "pr", "repo", "release"]
+      "commands": [
+        "issue",
+        "pr",
+        "repo",
+        "release"
+      ]
     },
     {
       "id": "actions",
       "title": "GitHub Actions Commands",
-      "commands": ["workflow", "run", "cache"]
+      "commands": [
+        "workflow",
+        "run",
+        "cache"
+      ]
     },
     {
       "id": "collaboration",
       "title": "Collaboration Commands",
-      "commands": ["label", "ruleset", "org", "project", "discussion"]
+      "commands": [
+        "label",
+        "ruleset",
+        "org",
+        "project",
+        "discussion"
+      ]
     },
     {
       "id": "security",
       "title": "Security And Configuration Commands",
-      "commands": ["secret", "variable", "gpg-key", "ssh-key", "attestation"]
+      "commands": [
+        "secret",
+        "variable",
+        "gpg-key",
+        "ssh-key",
+        "attestation"
+      ]
     },
     {
       "id": "local",
       "title": "Local Workflow Commands",
-      "commands": ["auth", "config", "browse", "alias", "extension", "completion"]
+      "commands": [
+        "auth",
+        "config",
+        "browse",
+        "alias",
+        "extension",
+        "completion"
+      ]
     },
     {
       "id": "additional",
       "title": "Additional Commands",
-      "commands": ["api", "search", "gist", "codespace", "status", "copilot", "skill", "agent-task"]
+      "commands": [
+        "api",
+        "search",
+        "gist",
+        "codespace",
+        "status",
+        "copilot",
+        "skill",
+        "agent-task"
+      ]
     }
   ],
   "global_flags": [
@@ -64,12 +101,18 @@
         {
           "name": "state",
           "type": "enum",
-          "values": ["open", "closed", "all"],
+          "values": [
+            "open",
+            "closed",
+            "all"
+          ],
           "summary": "Filter by issue state.",
           "maps_to": "query.state"
         }
       ],
-      "examples": ["pm github issue list --state open --json"],
+      "examples": [
+        "pm github issue list --state open --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -95,7 +138,9 @@
       "source_cli_path": "gh issue create",
       "risk": "Creates a visible issue in the configured repository.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "examples": ["pm github issue create --json"],
+      "examples": [
+        "pm github issue create --json"
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -242,7 +287,9 @@
       "availability": "implemented",
       "stream": "pull_requests",
       "source_cli_path": "gh pr list",
-      "examples": ["pm github pr list --json"],
+      "examples": [
+        "pm github pr list --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -444,7 +491,9 @@
       "availability": "implemented",
       "stream": "repository",
       "source_cli_path": "gh repo view",
-      "examples": ["pm github repo view --json"],
+      "examples": [
+        "pm github repo view --json"
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -534,19 +583,71 @@
     },
     {
       "path": "repo read-file",
-      "summary": "Read repository file contents",
+      "summary": "Read repository file metadata",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "gh repo read-file",
-      "notes": "Read-only file contents are useful direct-read candidates but are not ETL streams yet."
+      "notes": "Executes the fixed GitHub repository contents read endpoint with file content and raw download URLs redacted.",
+      "source_url": "https://docs.github.com/en/rest/repos/contents#get-repository-content",
+      "flags": [
+        {
+          "name": "path",
+          "type": "string",
+          "summary": "Repository-relative file or directory path.",
+          "maps_to": "path.path"
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "Branch, tag, or commit SHA to read from.",
+          "maps_to": "query.ref"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/contents/{path}"
+        }
+      ],
+      "output_policy": "github_contents_file_metadata",
+      "examples": [
+        "pm github repo read-file --path README.md --json",
+        "pm github repo read-file --path docs/guide.md --ref main --json"
+      ]
     },
     {
       "path": "repo read-dir",
       "summary": "Read repository directory contents",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "gh repo read-dir",
-      "notes": "Directory contents are useful direct-read candidates but are not ETL streams yet."
+      "notes": "Executes the fixed GitHub repository contents read endpoint for directory listings; file responses are rejected.",
+      "source_url": "https://docs.github.com/en/rest/repos/contents#get-repository-content",
+      "flags": [
+        {
+          "name": "path",
+          "type": "string",
+          "summary": "Repository-relative file or directory path.",
+          "maps_to": "path.path"
+        },
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "Branch, tag, or commit SHA to read from.",
+          "maps_to": "query.ref"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/contents/{path}"
+        }
+      ],
+      "output_policy": "github_contents_directory",
+      "examples": [
+        "pm github repo read-dir --path docs --json",
+        "pm github repo read-dir --path src --ref main --json"
+      ]
     },
     {
       "path": "repo autolink list",

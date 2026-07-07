@@ -445,6 +445,70 @@ func TestGitHubCommandSurfaceClampsOversizedLimit(t *testing.T) {
 	}
 }
 
+func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
+	var gotPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		if r.Method != http.MethodGet {
+			t.Fatalf("method = %s, want GET", r.Method)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"name":"README.md","type":"file","encoding":"base64","content":"SGVsbG8=","download_url":"https://raw.example.test/README.md"}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "owner=octocat",
+		"--config", "repo=hello-world",
+		"--config", "base_url=" + srv.URL,
+		"--config", "public_access=true",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"github", "repo", "read-file",
+		"--credential", "github-local",
+		"--path", "README.md",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/repos/octocat/hello-world/contents/README.md" {
+		t.Fatalf("request path = %q, want contents file path", gotPath)
+	}
+
+	var env struct {
+		Kind     string         `json:"kind"`
+		Command  string         `json:"command"`
+		Method   string         `json:"method"`
+		Path     string         `json:"path"`
+		Status   int            `json:"status"`
+		Response map[string]any `json:"response"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandDirectRead" || env.Command != "repo read-file" || env.Method != "GET" || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want direct-read README result", env)
+	}
+	if env.Response["name"] != "README.md" || env.Response["type"] != "file" {
+		t.Fatalf("response = %+v, want README file metadata", env.Response)
+	}
+	if _, ok := env.Response["content"]; ok {
+		t.Fatalf("response leaked content: %+v", env.Response)
+	}
+	if _, ok := env.Response["download_url"]; ok {
+		t.Fatalf("response leaked download_url: %+v", env.Response)
+	}
+	if env.Response["content_redacted"] != true || env.Response["download_url_redacted"] != true {
+		t.Fatalf("response redaction markers = %+v, want content and download_url redacted", env.Response)
+	}
+}
+
 func TestGitHubCommandSurfaceBlocksReverseETLCommand(t *testing.T) {
 	root := t.TempDir()
 	runCLI(t, []string{"init", "--root", root, "--json"})
