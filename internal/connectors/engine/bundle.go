@@ -466,6 +466,7 @@ type OperationSpec struct {
 	MutationClass   string                  `json:"mutation_class,omitempty"`
 	Destructive     bool                    `json:"destructive,omitempty"`
 	SecretSensitive bool                    `json:"secret_sensitive,omitempty"`
+	SensitivePolicy *SensitivePolicySpec    `json:"sensitive_policy,omitempty"`
 	AuditEvent      string                  `json:"audit_event,omitempty"`
 	REST            *RESTOperationSpec      `json:"rest,omitempty"`
 	GraphQL         *GraphQLOperationSpec   `json:"graphql,omitempty"`
@@ -482,6 +483,23 @@ type RESTOperationSpec struct {
 	Method string            `json:"method"`
 	Path   string            `json:"path"`
 	Query  map[string]string `json:"query,omitempty"`
+}
+
+// SensitivePolicySpec is the reverse-ETL sensitive/admin policy for an operation
+// whose inputs or effects must never leak (secrets, variables, elevated-scope
+// admin actions). It declares how secret values may be supplied (never inline
+// CLI by default), which record fields must be redacted everywhere, the
+// provider-specific transform that replaces a generic body template (e.g.
+// GitHub's fetch-public-key + libsodium-encrypt flow), the preflight check that
+// runs without reading secret values, and the approval mode that requires typed
+// confirmation. The first sensitive/admin policy issue (#41) implements schema
+// and validator support only; live secret writes remain blocked.
+type SensitivePolicySpec struct {
+	InputMode    string   `json:"input_mode,omitempty"`    // env | file | stdin | env_or_file | env_or_stdin (never "inline")
+	RedactFields []string `json:"redact_fields,omitempty"` // record fields redacted in docs/previews/logs/errors
+	Preflight    string   `json:"preflight,omitempty"`     // scope/availability check without reading secret values
+	Transform    string   `json:"transform,omitempty"`     // none | github_secret_encryption | provider-specific
+	ApprovalMode string   `json:"approval_mode,omitempty"` // typed_confirmation required for secret writes
 }
 
 type GraphQLOperationSpec struct {
@@ -1222,6 +1240,52 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if op.LocalFile.Action == "write" && op.LocalFile.MaxBytes <= 0 {
 			return fmt.Errorf("operation %d (%q) local_file write must declare positive max_bytes", i, op.ID)
 		}
+	}
+	if err := validateSensitivePolicy(i, op); err != nil {
+		return err
+	}
+	return nil
+}
+
+// validateSensitivePolicy enforces the sensitive/admin reverse-ETL policy model
+// (#41). An operation that is secret_sensitive or has mutation_class "secret"
+// must declare a sensitive_policy with: a non-inline input_mode, at least one
+// redact_fields entry, and approval_mode "typed_confirmation". The transform,
+// when set, must be a known value. Live secret writes remain blocked in this
+// issue; this is schema + validator support only.
+func validateSensitivePolicy(i int, op OperationSpec) error {
+	isSecret := op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret")
+	if !isSecret {
+		// Non-secret operations may still declare a policy (e.g. admin actions
+		// that redact fields) but are not forced to.
+		if op.SensitivePolicy == nil {
+			return nil
+		}
+	} else if op.SensitivePolicy == nil {
+		return fmt.Errorf("operation %d (%q) is secret_sensitive but declares no sensitive_policy (input_mode, redact_fields, approval_mode)", i, op.ID)
+	}
+	p := op.SensitivePolicy
+	switch strings.ToLower(strings.TrimSpace(p.InputMode)) {
+	case "", "inline":
+		if isSecret {
+			return fmt.Errorf("operation %d (%q) sensitive_policy input_mode must not be inline; secret values must come from env/file/stdin", i, op.ID)
+		}
+	case "env", "file", "stdin", "env_or_file", "env_or_stdin":
+		// allowed
+	default:
+		return fmt.Errorf("operation %d (%q) sensitive_policy input_mode %q is not a known value", i, op.ID, p.InputMode)
+	}
+	if isSecret && len(p.RedactFields) == 0 {
+		return fmt.Errorf("operation %d (%q) sensitive_policy must declare at least one redact_fields entry", i, op.ID)
+	}
+	switch strings.ToLower(strings.TrimSpace(p.Transform)) {
+	case "", "none", "github_secret_encryption":
+		// allowed
+	default:
+		return fmt.Errorf("operation %d (%q) sensitive_policy transform %q is not a known value", i, op.ID, p.Transform)
+	}
+	if isSecret && !strings.EqualFold(p.ApprovalMode, "typed_confirmation") {
+		return fmt.Errorf("operation %d (%q) sensitive_policy approval_mode must be typed_confirmation for secret writes", i, op.ID)
 	}
 	return nil
 }

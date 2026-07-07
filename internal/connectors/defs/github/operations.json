@@ -118,6 +118,29 @@
         "action": "clone",
         "allowed_args": ["owner_repo", "destination"]
       }
+    },
+    {
+      "id": "github.secrets.put",
+      "kind": "rest_write",
+      "summary": "Create or update a repository Actions secret (policy-modeled, not executable in this issue).",
+      "source_url": "https://docs.github.com/en/rest/actions/secrets#create-or-update-a-repository-secret",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute plus typed confirmation",
+      "output_policy": "json",
+      "auth_scopes": ["repo"],
+      "mutation_class": "secret",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": ["encrypted_value"],
+        "preflight": "scope_check",
+        "transform": "github_secret_encryption",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+      }
     }
   ]
 }
