@@ -71,11 +71,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 509 {
 		t.Fatalf("endpoints = %d, want 509", len(surface.Endpoints))
 	}
-	if covered != 107 {
-		t.Fatalf("covered endpoints = %d, want 107", covered)
+	if covered != 440 {
+		t.Fatalf("covered endpoints = %d, want 440", covered)
 	}
-	if operations != 402 {
-		t.Fatalf("operation endpoints = %d, want 402", operations)
+	if operations != 69 {
+		t.Fatalf("operation endpoints = %d, want 69 (only duplicate/deprecated/disallowed remain unconverted)", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -89,38 +89,30 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"PUT":     47,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"DELETE":  18,
-		"GET":     34,
+		"DELETE":  67,
+		"GET":     205,
 		"GRAPHQL": 4,
-		"PATCH":   18,
-		"POST":    23,
-		"PUT":     10,
+		"PATCH":   34,
+		"POST":    85,
+		"PUT":     45,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
-		"DELETE": 54,
-		"GET":    225,
-		"PATCH":  18,
-		"POST":   68,
-		"PUT":    37,
+		"DELETE": 5,
+		"GET":    54,
+		"PATCH":  2,
+		"POST":   6,
+		"PUT":    2,
 	})
 	assertStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":     96,
-		"binary_read":           10,
-		"deprecated":            1,
-		"destructive_action":    5,
-		"direct_read":           164,
-		"disallowed":            1,
-		"duplicate":             67,
-		"sensitive_reverse_etl": 58,
+		"disallowed": 1,
+		"duplicate":  67,
+		"deprecated": 1,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"critical": 5,
-		"high":     168,
-		"low":      77,
-		"medium":   152,
+		"low": 69,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 402,
+		"blocked": 69,
 	})
 }
 
