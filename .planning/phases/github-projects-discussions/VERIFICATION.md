@@ -47,8 +47,9 @@
 | Connectorgen validate | passed | `go run ./cmd/connectorgen validate internal/connectors/defs --json` | 547 connectors checked, 0 findings. |
 | Pi prompt placeholders | passed | `grep -R '{{task}}\|{{target}}' .pi/prompts/` | No unsupported placeholders remain. |
 | next-env.d.ts untracked | passed | `git ls-files website/next-env.d.ts` | Removed from index. |
+| CodeRabbit disposition | resolved | PR #74 review threads | 14 inline threads replied + 11 outside-diff items in top-level comment; `@coderabbitai resolve` executed and CodeRabbit resolved all threads. |
 | Full `make verify` | timeout | `make verify` | Timed out at 5 min; likely full-suite runtime. Focused gates above pass and the changed packages are green. |
 
 ## Final Local Gate Summary
 
-Focused local gates pass. Full `make verify` exceeded the session timeout; recommend running it in a CI or longer-lived shell before final merge. Ready for commit and push.
+Focused local gates pass; CodeRabbit review threads are resolved. Full `make verify` exceeded the session timeout; CI `verify` job is still running and should be watched. Ready for commit and push.

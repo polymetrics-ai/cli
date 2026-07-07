@@ -71,6 +71,13 @@ Review source: `coderabbitai` on PR #74 (run ID `4e53a71c-2046-449b-aa01-cc0e3bb
 
 None. All CodeRabbit findings and pi-runtime audit findings were addressed in this slice.
 
+## Resolution
+
+- All 14 inline review threads received disposition replies using the project template.
+- All 11 outside-diff / review-body findings were dispositioned in a top-level PR comment.
+- CodeRabbit resolved all review threads on PR #74 after `@coderabbitai resolve`.
+- Approval is disabled in this repository's CodeRabbit configuration, so final merge approval remains a human gate.
+
 ## Verification
 
 - `go test ./internal/connectors/engine ./cmd/connectorgen -count=1` — pass.
