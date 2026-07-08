@@ -64,6 +64,24 @@ Red/green tests:
 - Added `TestGenerateRecordForGitHubLabelIncludesColor`.
 - Green: focused tests and `go test ./internal/connectors/... -count=1` passed.
 
+### Live-run follow-up fixes
+
+Later live GitHub runs exposed additional harness assumptions:
+
+- streams without a cursor were being forced through incremental/resume paths;
+- capture-replay deduped modes were attempted without both primary key and cursor metadata;
+- optional GitHub security/project streams may return 403/404 for a disposable repo/token and should be documented skips, not hard failures;
+- reverse writes needed GitHub's default `base_url` stored with the credential for write execution.
+
+Red/green tests:
+
+- Added `TestResumeSkipsWhenIncrementalDidNotProduceCursor`.
+- Added `TestFullSweepStreamSpecsPreserveCatalogStreamsWithoutPKOrCursor`.
+- Added `TestFullRefreshOverwriteDedupedSkipsWithoutCursor`.
+- Added `TestEffectiveCredentialConfigAddsGitHubBaseURL`.
+- Added `TestLiveStreamUnavailableClassifiesGitHub403`.
+- Green: focused certify tests and `go test ./internal/connectors/... -count=1` passed.
+
 ## Live Tests
 
-No live GitHub credentialed test has been run in this PR. Live tests require a rotated token via environment variable only.
+Live GitHub certificate runs were executed against disposable repo `karthik-sivadas/pm-cert-test-20260709025802` using an environment-provided token only. Early runs did not pass and produced the live-run defects above. The latest pre-fix report still had deterministic harness failures; another live run is required after the latest fixes.

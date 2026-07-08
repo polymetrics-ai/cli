@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 )
@@ -349,6 +350,30 @@ func cliInfoFrom(res CLIResult) CLIStageInfo {
 	return CLIStageInfo{ArgvRedacted: res.ArgvRedacted, ExitCode: res.ExitCode, Kind: res.Kind}
 }
 
+func effectiveCredentialConfig(connector string, config map[string]string) map[string]string {
+	out := make(map[string]string, len(config)+1)
+	for k, v := range config {
+		out[k] = v
+	}
+	if connector == "github" && out["base_url"] == "" {
+		out["base_url"] = "https://api.github.com"
+	}
+	return out
+}
+
+func liveStreamUnavailable(rc *runContext, res CLIResult) bool {
+	if rc.opts.Connector != "github" || res.Kind != "Error" {
+		return false
+	}
+	text := res.Stdout + "\n" + res.Stderr
+	if errObj, _ := res.Envelope["error"].(map[string]any); errObj != nil {
+		if msg, _ := errObj["message"].(string); msg != "" {
+			text += "\n" + msg
+		}
+	}
+	return strings.Contains(text, "http 403") || strings.Contains(text, "http 404")
+}
+
 // streamName is the source stream certified: currentStream during --full
 // sweeps, Options.Stream when explicitly set, else "customers" (sample's first
 // stream with a cursor field, matching design §A command spec's default "first
@@ -632,8 +657,14 @@ func stageCredentialsAdd(rc *runContext, rep *Report) error {
 		for field, envName := range rc.opts.SecretEnv {
 			args = append(args, "--from-env", field+"="+envName)
 		}
-		for k, v := range rc.opts.Config {
-			args = append(args, "--config", k+"="+v)
+		config := effectiveCredentialConfig(rc.opts.Connector, rc.opts.Config)
+		keys := make([]string, 0, len(config))
+		for k := range config {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			args = append(args, "--config", k+"="+config[k])
 		}
 		res := rc.run(args...)
 		passed, errMsg := assertKind(rc, "credentials_add", res, "Credential", 0)
@@ -796,6 +827,9 @@ func stageFullRefreshAppend(rc *runContext, rep *Report) error {
 		res := rc.run("etl", "run", "--connection", rc.liveConnectionName(), "--stream", stream, "--json")
 		passed, errMsg := assertKind(rc, "etl_full_refresh_append", res, "ETLRun", 0)
 		if !passed {
+			if liveStreamUnavailable(rc, res) {
+				return false, cliInfoFrom(res), "skipped: live stream unavailable for this credential/repository"
+			}
 			return false, cliInfoFrom(res), errMsg
 		}
 		read, _ := runInt(res.Envelope, "records_read")
@@ -979,6 +1013,11 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 		skipStage(rc, rep, "etl_full_refresh_overwrite_deduped", "skipped: stream has no primary key field")
 		return nil
 	}
+	if rc.cursorField() == "" {
+		skipStage(rc, rep, "capture_connection_overwrite_deduped", "skipped: stream has no cursor field")
+		skipStage(rc, rep, "etl_full_refresh_overwrite_deduped", "skipped: stream has no cursor field")
+		return nil
+	}
 	if rc.capturePath == "" {
 		skipStage(rc, rep, "etl_full_refresh_overwrite_deduped", "skipped: no capture available")
 		return nil
@@ -1047,6 +1086,9 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 		res := rc.run("etl", "run", "--connection", connName, "--stream", stream, "--json")
 		passed, errMsg := assertKind(rc, "etl_incremental_append", res, "ETLRun", 0)
 		if !passed {
+			if liveStreamUnavailable(rc, res) {
+				return false, cliInfoFrom(res), "skipped: live stream unavailable for this credential/repository"
+			}
 			return false, cliInfoFrom(res), errMsg
 		}
 		cursor := checkpointString(res.Envelope, "cursor")
