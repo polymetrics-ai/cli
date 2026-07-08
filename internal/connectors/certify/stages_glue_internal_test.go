@@ -27,7 +27,7 @@ func TestFullSweepFlowAndScheduleNamesAreStreamScoped(t *testing.T) {
 	if got := rc.flowConnectionName(); got != "cert_flow_conn_sample_pull_requests" {
 		t.Fatalf("stream flowConnectionName = %q", got)
 	}
-	if got := rc.scheduleName(); got != "cert-schedule-sample-pull_requests" {
+	if got := rc.scheduleName(); got != "cert-schedule-sample-pull-requests" {
 		t.Fatalf("stream scheduleName = %q", got)
 	}
 }

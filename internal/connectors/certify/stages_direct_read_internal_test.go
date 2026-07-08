@@ -5,7 +5,7 @@ import "testing"
 func TestDirectReadCandidatesForGitHub(t *testing.T) {
 	candidates := directReadCandidatesFor("github", map[string]string{
 		"direct_read_path":     "docs/index.md",
-		"direct_read_dir_path": "docs",
+		"direct_read_dir_path": "",
 		"direct_read_ref":      "main",
 	})
 	if len(candidates) != 2 {
@@ -14,7 +14,7 @@ func TestDirectReadCandidatesForGitHub(t *testing.T) {
 
 	want := map[string][]string{
 		"repo read-file": {"github", "repo", "read-file", "--credential", sourceCredentialName, "--path", "docs/index.md", "--ref", "main", "--max-bytes", "1048576", "--json"},
-		"repo read-dir":  {"github", "repo", "read-dir", "--credential", sourceCredentialName, "--path", "docs", "--ref", "main", "--max-bytes", "1048576", "--json"},
+		"repo read-dir":  {"github", "repo", "read-dir", "--credential", sourceCredentialName, "--path", "", "--ref", "main", "--max-bytes", "1048576", "--json"},
 	}
 	for _, candidate := range candidates {
 		wantArgs, ok := want[candidate.Command]

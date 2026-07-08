@@ -52,7 +52,7 @@ func directReadCandidatesFor(connector string, config map[string]string) []direc
 	switch connector {
 	case "github":
 		filePath := configValue(config, "direct_read_path", "README.md")
-		dirPath := configValue(config, "direct_read_dir_path", ".")
+		dirPath := configValue(config, "direct_read_dir_path", "")
 		return []directReadCandidate{
 			githubDirectReadCandidate("read-file", "direct_read_sweep_repo_read_file", "repo read-file", filePath, config),
 			githubDirectReadCandidate("read-dir", "direct_read_sweep_repo_read_dir", "repo read-dir", dirPath, config),

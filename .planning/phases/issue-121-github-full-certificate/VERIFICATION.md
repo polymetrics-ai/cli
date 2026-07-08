@@ -36,10 +36,29 @@ scripts/verify-gsd-workflow origin/feat/44-github-cli-parity
 
 ## Known Caveats
 
-- The full GitHub certificate has not been live-tested.
 - The token pasted into chat was not used and must be revoked/rotated.
 - Full `go test ./...` timed out locally in host-crontab code without `PM_CRONTAB_FILE`; the isolated seam test passed previously.
 - The certify package can be long-running because full-mode sample coverage exercises repeated in-process CLI flows.
+
+## Live Test Findings
+
+A live GitHub run was executed against disposable repo `karthik-sivadas/pm-cert-test-20260709025802` using an environment-provided token. The first run produced a report but did not pass.
+
+Report path:
+
+```text
+/var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.5VxmsRQj6x/.polymetrics/certifications/github.json
+```
+
+Key first-run findings:
+
+- Surface accounting passed: 507 endpoints, 105 covered, 402 blocked.
+- Catalog passed with 37 streams.
+- Direct-read `repo read-dir` failed because the default path was `.`.
+- Schedule stages failed for stream names with underscores because schedule names require lowercase alphanumeric plus hyphen.
+- Write plan for `create_label` failed because generated record omitted required `color`.
+
+Follow-up fixes were implemented with tests. A second live run is required after rebuilding `pm`.
 
 ## Live Test Command Template
 

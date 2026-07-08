@@ -49,6 +49,21 @@
 - Red: `TestDefaultStreamName` failed before `defaultStreamName` existed.
 - Green: `TestDefaultStreamName` and full sample tests passed.
 
+### Live-run defect fixes
+
+After the first live GitHub run against the disposable repo, the report failed on deterministic harness issues:
+
+- schedule names used underscores even though `pm schedule` only accepts lowercase alphanumeric plus hyphen;
+- `repo read-dir` used `--path .`, which the direct-read policy rejects;
+- GitHub `create_label` record generation omitted required `color`.
+
+Red/green tests:
+
+- Updated `TestFullSweepFlowAndScheduleNamesAreStreamScoped` to require dash-safe schedule names.
+- Updated `TestDirectReadCandidatesForGitHub` to use an empty repo-root directory path.
+- Added `TestGenerateRecordForGitHubLabelIncludesColor`.
+- Green: focused tests and `go test ./internal/connectors/... -count=1` passed.
+
 ## Live Tests
 
 No live GitHub credentialed test has been run in this PR. Live tests require a rotated token via environment variable only.

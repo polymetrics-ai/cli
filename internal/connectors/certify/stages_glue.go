@@ -85,9 +85,16 @@ func (rc *runContext) flowQueryTable() string {
 func (rc *runContext) scheduleName() string {
 	name := "cert-schedule-" + rc.opts.Connector
 	if rc.currentStream != "" {
-		name += "-" + safeName(rc.currentStream)
+		name += "-" + safeScheduleName(rc.currentStream)
+	}
+	if len(name) > 64 {
+		return name[:64]
 	}
 	return name
+}
+
+func safeScheduleName(name string) string {
+	return strings.ReplaceAll(strings.ToLower(safeName(name)), "_", "-")
 }
 
 // stageFlowRoundtrip drives stage 18: it registers a dedicated capture-backed
