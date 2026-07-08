@@ -4,7 +4,28 @@
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
+const https = require("node:https");
 const { spawnSync } = require("node:child_process");
+
+const OFFICIAL_REPO = "open-gsd/gsd-core";
+const OFFICIAL_REF = process.env.GSD_OFFICIAL_REF || "next";
+const OFFICIAL_RAW_BASE = `https://raw.githubusercontent.com/${OFFICIAL_REPO}/${OFFICIAL_REF}`;
+const OFFICIAL_DOCS = [
+  "docs/README.md",
+  "docs/COMMANDS.md",
+  "docs/CONFIGURATION.md",
+  "docs/CLI-TOOLS.md",
+  "docs/how-to/install-on-your-runtime.md",
+  "docs/tutorials/onboarding-an-existing-codebase.md",
+  "docs/how-to/drive-gsd-from-a-tracker-issue.md",
+  "docs/how-to/discuss-a-phase.md",
+  "docs/how-to/plan-a-phase.md",
+  "docs/how-to/execute-a-phase.md",
+  "docs/how-to/verify-and-ship.md",
+  "docs/reference/planning-artifacts.md",
+  "docs/explanation/the-phase-loop.md",
+  "docs/ARCHITECTURE.md",
+];
 
 function repoRoot() {
   const result = spawnSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" });
@@ -15,38 +36,22 @@ function repoRoot() {
 const root = repoRoot();
 const home = os.homedir();
 const gsdHome = process.env.GSD_HOME || path.join(home, ".claude", "get-shit-done");
-const claudeGSDCommands = process.env.GSD_COMMANDS_HOME || path.join(home, ".claude", "commands", "gsd");
 const gsdTools = path.join(gsdHome, "bin", "gsd-tools.cjs");
+const gsdDir = path.join(root, ".gsd");
+const docsDir = path.join(gsdDir, "official-docs");
+const commandsPath = path.join(gsdDir, "commands.json");
+const lockPath = path.join(gsdDir, "upstream.lock.json");
+const promptDir = path.join(gsdDir, "prompts");
 
-const upstreamSources = {
-  "map-codebase": [
-    path.join(claudeGSDCommands, "map-codebase.md"),
-    path.join(gsdHome, "workflows", "map-codebase.md"),
-  ],
-  "new-project": [
-    path.join(claudeGSDCommands, "new-project.md"),
-    path.join(gsdHome, "workflows", "new-project.md"),
-  ],
-  "plan-phase": [
-    path.join(claudeGSDCommands, "plan-phase.md"),
-    path.join(gsdHome, "workflows", "plan-phase.md"),
-  ],
-  "programming-loop": [
-    path.join(claudeGSDCommands, "programming-loop.md"),
-    path.join(home, ".claude", "skills", "gsd-programming-loop", "SKILL.md"),
-    path.join(home, ".claude", "skills", "gsd-programming-loop", "references", "workflows", "programming-loop.md"),
-  ],
-};
-
-const promptSources = {
+const specialPrompts = {
   "issue-122-rebootstrap": {
-    file: path.join(root, ".gsd", "prompts", "issue-122-rebootstrap.md"),
-    workflows: ["map-codebase", "new-project", "plan-phase", "programming-loop"],
+    file: path.join(promptDir, "issue-122-rebootstrap.md"),
+    commands: ["onboard", "map-codebase", "new-project", "plan-phase", "programming-loop"],
   },
 };
 
 function usage() {
-  console.log(`repo-local GSD command\n\nUsage:\n  scripts/gsd help\n  scripts/gsd doctor\n  scripts/gsd workflows\n  scripts/gsd sources <workflow|prompt>\n  scripts/gsd prompt <prompt-name> [args...]\n  scripts/gsd init <gsd-tools-init-command> [args...]\n\nExamples:\n  scripts/gsd doctor\n  scripts/gsd sources issue-122-rebootstrap\n  scripts/gsd prompt issue-122-rebootstrap > .planning/traces/issue-122-gsd-onboarding-prompt.md\n  scripts/gsd init map-codebase\n\nEnvironment:\n  GSD_HOME          Override upstream GSD Core home (default: ~/.claude/get-shit-done)\n  GSD_COMMANDS_HOME Override upstream GSD command docs (default: ~/.claude/commands/gsd)\n`);
+  console.log(`repo-local GSD adapter for Pi and shell\n\nUsage:\n  scripts/gsd help\n  scripts/gsd doctor\n  scripts/gsd version\n  scripts/gsd sync-upstream\n  scripts/gsd list [--json]\n  scripts/gsd sources <command|prompt>\n  scripts/gsd prompt <command|prompt> [args...]\n  scripts/gsd run <command|prompt> [args...]\n  scripts/gsd init <gsd-tools-init-command> [args...]\n  scripts/gsd verify-pi\n\nExamples:\n  scripts/gsd sync-upstream\n  scripts/gsd list\n  scripts/gsd sources plan-phase\n  scripts/gsd prompt plan-phase 1 --skip-research\n  scripts/gsd prompt issue-122-rebootstrap > .planning/traces/issue-122-gsd-onboarding-prompt.md\n\nOfficial source:\n  https://github.com/open-gsd/gsd-core/blob/next/docs/README.md\n`);
 }
 
 function exists(file) {
@@ -54,124 +59,370 @@ function exists(file) {
 }
 
 function requireFile(file) {
-  if (!exists(file)) {
-    throw new Error(`missing required GSD source: ${file}`);
-  }
+  if (!exists(file)) throw new Error(`missing required file: ${file}`);
 }
 
-function workflowsFor(name) {
-  if (upstreamSources[name]) return [name];
-  if (promptSources[name]) return promptSources[name].workflows;
-  throw new Error(`unknown workflow or prompt: ${name}`);
+function readJSON(file) {
+  return JSON.parse(fs.readFileSync(file, "utf8"));
 }
 
-function sourceList(name) {
-  const workflows = workflowsFor(name);
-  const files = [];
-  for (const workflow of workflows) {
-    for (const file of upstreamSources[workflow] || []) files.push(file);
+function writeJSON(file, value) {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`);
+}
+
+function fetchText(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, { headers: { "user-agent": "polymetrics-gsd-adapter" } }, (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`GET ${url} -> ${res.statusCode}`));
+        res.resume();
+        return;
+      }
+      let body = "";
+      res.setEncoding("utf8");
+      res.on("data", (chunk) => { body += chunk; });
+      res.on("end", () => resolve(body));
+    }).on("error", reject);
+  });
+}
+
+function gitLsRemoteNext() {
+  const result = spawnSync("git", ["ls-remote", `https://github.com/${OFFICIAL_REPO}.git`, `refs/heads/${OFFICIAL_REF}`], {
+    encoding: "utf8",
+  });
+  if (result.status !== 0) return null;
+  return result.stdout.trim().split(/\s+/)[0] || null;
+}
+
+function commandName(input) {
+  return input.replace(/^\//, "").replace(/^gsd[-:]/, "");
+}
+
+function loadRegistry() {
+  requireFile(commandsPath);
+  return readJSON(commandsPath);
+}
+
+function allCommands() {
+  return loadRegistry().commands || [];
+}
+
+function findCommand(name) {
+  const normalized = commandName(name);
+  return allCommands().find((cmd) => cmd.name === normalized || cmd.officialCommand === `gsd-${normalized}`);
+}
+
+function commandSection(command) {
+  const commandsDoc = path.join(docsDir, "COMMANDS.md");
+  if (!exists(commandsDoc)) return "";
+  const text = fs.readFileSync(commandsDoc, "utf8");
+  const official = command.officialCommand;
+  const marker = `### \`/${official}`;
+  const start = text.indexOf(marker);
+  if (start === -1) return "";
+  const rest = text.slice(start);
+  const next = rest.slice(1).search(/^### `\/gsd-/m);
+  return (next === -1 ? rest : rest.slice(0, next + 1)).trim();
+}
+
+function sourceDocsFor(name) {
+  const normalized = commandName(name);
+  if (specialPrompts[normalized]) {
+    const files = [specialPrompts[normalized].file, commandsPath, lockPath];
+    for (const cmdName of specialPrompts[normalized].commands) {
+      const cmd = findCommand(cmdName);
+      if (cmd) for (const doc of cmd.sourceDocs || []) files.push(path.join(root, doc.replace(/^docs\//, ".gsd/official-docs/")));
+    }
+    return [...new Set(files)];
   }
-  if (promptSources[name]) files.push(promptSources[name].file);
+  const cmd = findCommand(normalized);
+  if (!cmd) throw new Error(`unknown GSD command or prompt: ${name}`);
+  const files = [commandsPath, lockPath];
+  for (const doc of cmd.sourceDocs || ["docs/COMMANDS.md"]) files.push(path.join(root, doc.replace(/^docs\//, ".gsd/official-docs/")));
   return [...new Set(files)];
 }
 
+function parseCommandsFromOfficialDocs() {
+  const commandsDoc = path.join(docsDir, "COMMANDS.md");
+  requireFile(commandsDoc);
+  const text = fs.readFileSync(commandsDoc, "utf8");
+  const entries = [];
+  const seen = new Set();
+  const regex = /^### `\/(gsd-[^`\s]+)(?:\s+[^`]*)?`\s*$/gm;
+  for (const match of text.matchAll(regex)) {
+    const officialCommand = match[1];
+    const name = officialCommand.replace(/^gsd-/, "");
+    if (seen.has(name)) continue;
+    seen.add(name);
+    const start = match.index + match[0].length;
+    const rest = text.slice(start);
+    const nextMatch = rest.search(/^### `\/gsd-/m);
+    const section = (nextMatch === -1 ? rest : rest.slice(0, nextMatch)).trim();
+    const description = section.split(/\r?\n/).map((line) => line.trim()).find((line) => (
+      line && !line.startsWith("|") && !line.startsWith("---") && !line.startsWith("```") && !line.startsWith("**")
+    )) || `Official GSD Core command /${officialCommand}`;
+    const flags = [];
+    const flagRegex = /^\| `([^`]+)` \| ([^|]+) \|/gm;
+    for (const f of section.matchAll(flagRegex)) flags.push({ flag: f[1], description: f[2].trim() });
+    const examples = [];
+    const exampleRegex = new RegExp(`^/${officialCommand}[^\\n]*$`, "gm");
+    for (const ex of section.matchAll(exampleRegex)) examples.push(ex[0].replace(/^\//, ""));
+    entries.push({
+      name,
+      officialCommand,
+      piCommand: officialCommand,
+      genericInvocation: `gsd ${name}`,
+      description: description.slice(0, 300),
+      flags,
+      examples: examples.slice(0, 10),
+      sourceDocs: ["docs/COMMANDS.md"],
+      requiresAgentTurn: true,
+    });
+  }
+  const routers = {
+    workflow: "Phase pipeline router — discuss, plan, execute, verify, phase, progress, next",
+    project: "Project lifecycle router — milestones, audits, summary",
+    quality: "Quality gates router — code review, debug, audit, security, eval, ui",
+    context: "Codebase intelligence router — map, graphify, docs, learnings",
+    manage: "Management router — config, workspace, workstreams, thread, update, ship, inbox",
+    ideate: "Exploration and capture router — explore, sketch, spike, spec, capture",
+  };
+  for (const [name, description] of Object.entries(routers)) {
+    if (seen.has(name)) continue;
+    entries.push({
+      name,
+      officialCommand: `gsd-${name}`,
+      piCommand: `gsd-${name}`,
+      genericInvocation: `gsd ${name}`,
+      description,
+      flags: [],
+      examples: [],
+      sourceDocs: ["docs/COMMANDS.md"],
+      requiresAgentTurn: true,
+    });
+  }
+  entries.sort((a, b) => a.name.localeCompare(b.name));
+  return entries;
+}
+
+async function syncUpstream() {
+  fs.mkdirSync(docsDir, { recursive: true });
+  for (const doc of OFFICIAL_DOCS) {
+    const url = `${OFFICIAL_RAW_BASE}/${doc}`;
+    const target = path.join(gsdDir, "official-docs", doc.replace(/^docs\//, ""));
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.writeFileSync(target, await fetchText(url));
+    console.log(`fetched\t${doc}`);
+  }
+  const commit = gitLsRemoteNext();
+  writeJSON(lockPath, {
+    source: `github.com/${OFFICIAL_REPO}`,
+    ref: OFFICIAL_REF,
+    commit,
+    docs: `https://github.com/${OFFICIAL_REPO}/blob/${OFFICIAL_REF}/docs/README.md`,
+    checked_at: new Date().toISOString().slice(0, 10),
+    runtime_adapter: "pi-project-local",
+  });
+  writeJSON(commandsPath, {
+    schema: 1,
+    source: OFFICIAL_REPO,
+    ref: OFFICIAL_REF,
+    commit,
+    generated_from: "docs/COMMANDS.md",
+    command_syntax: {
+      official_hyphen: "/gsd-command-name [args]",
+      pi_generic: "/gsd <command> [args]",
+      pi_alias: "/gsd-command-name [args]",
+      shell: "scripts/gsd prompt <command> [args]",
+    },
+    commands: parseCommandsFromOfficialDocs(),
+  });
+  console.log(`commands\t${allCommands().length}`);
+}
+
+function nodeMajor() {
+  return Number(process.versions.node.split(".")[0]);
+}
+
 function doctor() {
-  const checks = [
-    ["repo root", root],
-    ["GSD_HOME", gsdHome],
-    ["gsd-tools", gsdTools],
-    ["GSD commands", claudeGSDCommands],
-  ];
+  const checks = [];
+  checks.push(["node >=18", nodeMajor() >= 18, process.version]);
+  checks.push(["repo root", exists(root), root]);
+  checks.push(["official docs", exists(path.join(docsDir, "README.md")), path.join(docsDir, "README.md")]);
+  checks.push(["commands registry", exists(commandsPath), commandsPath]);
+  checks.push(["upstream lock", exists(lockPath), lockPath]);
+  checks.push(["canonical issue prompt", exists(path.join(promptDir, "issue-122-rebootstrap.md")), path.join(promptDir, "issue-122-rebootstrap.md")]);
+  checks.push(["pi settings", exists(path.join(root, ".pi", "settings.json")), path.join(root, ".pi", "settings.json")]);
+  checks.push(["pi extension", exists(path.join(root, ".pi", "extensions", "gsd", "index.ts")), path.join(root, ".pi", "extensions", "gsd", "index.ts")]);
+  checks.push(["pi skill", exists(path.join(root, ".pi", "skills", "gsd-core", "SKILL.md")), path.join(root, ".pi", "skills", "gsd-core", "SKILL.md")]);
+  checks.push(["pi prompt", exists(path.join(root, ".pi", "prompts", "gsd.md")), path.join(root, ".pi", "prompts", "gsd.md")]);
   let ok = true;
-  for (const [label, file] of checks) {
-    const good = exists(file);
-    ok = ok && good;
-    console.log(`${good ? "ok" : "missing"}\t${label}\t${file}`);
+  for (const [label, good, detail] of checks) {
+    ok = ok && Boolean(good);
+    console.log(`${good ? "ok" : "missing"}\t${label}\t${detail}`);
   }
-  for (const name of Object.keys(upstreamSources)) {
-    for (const file of upstreamSources[name]) {
-      const good = exists(file);
-      ok = ok && good;
-      console.log(`${good ? "ok" : "missing"}\tsource:${name}\t${file}`);
-    }
-  }
-  for (const [name, meta] of Object.entries(promptSources)) {
-    const good = exists(meta.file);
-    ok = ok && good;
-    console.log(`${good ? "ok" : "missing"}\tprompt:${name}\t${meta.file}`);
-  }
+  if (exists(commandsPath)) console.log(`ok\tcommands\t${allCommands().length}`);
   if (!ok) process.exit(1);
 }
 
+function listCommands(jsonFlag) {
+  const commands = allCommands();
+  if (jsonFlag) {
+    console.log(JSON.stringify(commands, null, 2));
+    return;
+  }
+  for (const cmd of commands) console.log(`${cmd.officialCommand}\t${cmd.description}`);
+}
+
 function printSources(name) {
-  for (const file of sourceList(name)) {
+  for (const file of sourceDocsFor(name)) {
     requireFile(file);
     console.log(file);
   }
 }
 
-function printPrompt(name, args) {
-  const meta = promptSources[name];
-  if (!meta) throw new Error(`unknown prompt: ${name}`);
-  for (const file of sourceList(name)) requireFile(file);
-  const prompt = fs.readFileSync(meta.file, "utf8");
+function renderSpecialPrompt(name, args) {
+  const meta = specialPrompts[name];
+  requireFile(meta.file);
+  const lock = exists(lockPath) ? readJSON(lockPath) : {};
   console.log(`# Generated by scripts/gsd prompt ${name}${args.length ? ` ${args.join(" ")}` : ""}`);
   console.log(`# Repo: ${root}`);
-  console.log(`# Upstream GSD home: ${gsdHome}`);
+  console.log(`# Official GSD: ${lock.source || OFFICIAL_REPO}@${lock.commit || OFFICIAL_REF}`);
+  console.log(`# Runtime adapter: pi-project-local`);
   console.log("");
-  console.log(prompt.trimEnd());
+  console.log(fs.readFileSync(meta.file, "utf8").trimEnd());
   console.log("");
-  console.log("## Upstream source files resolved by scripts/gsd");
+  console.log("## Official and repo-local source files resolved by scripts/gsd");
   console.log("");
-  for (const file of sourceList(name)) console.log(`- \`${file}\``);
+  for (const file of sourceDocsFor(name)) console.log(`- \`${file}\``);
+}
+
+function renderCommandPrompt(name, args) {
+  const cmd = findCommand(name);
+  if (!cmd) throw new Error(`unknown GSD command: ${name}`);
+  const lock = exists(lockPath) ? readJSON(lockPath) : {};
+  const section = commandSection(cmd);
+  console.log(`# Generated by scripts/gsd prompt ${cmd.name}${args.length ? ` ${args.join(" ")}` : ""}`);
+  console.log(`# Repo: ${root}`);
+  console.log(`# Official GSD: ${lock.source || OFFICIAL_REPO}@${lock.commit || OFFICIAL_REF}`);
+  console.log(`# Runtime adapter: pi-project-local`);
+  console.log("");
+  console.log(`# Execute official GSD command in Pi: /${cmd.officialCommand}${args.length ? ` ${args.join(" ")}` : ""}`);
+  console.log("");
+  console.log("You are running GSD Core through the repo-local Pi adapter. Follow the official GSD Core docs and this repository's AGENTS.md safety rules.");
+  console.log("");
+  console.log("## Required first steps");
+  console.log("");
+  console.log("1. Read `AGENTS.md`.");
+  console.log("2. Run or inspect `scripts/gsd doctor` if this session has not already validated the adapter.");
+  console.log("3. Read the relevant official command excerpt below and any source files listed at the end of this prompt.");
+  console.log("4. Execute the requested workflow using Pi tools. If the official workflow expects runtime subagents that Pi does not provide, perform the documented inline/manual fallback and record that fallback in the generated planning artifacts.");
+  console.log("");
+  console.log("## Requested command");
+  console.log("");
+  console.log(`- Command: \`/${cmd.officialCommand}\``);
+  console.log(`- Args: \`${args.join(" ") || "(none)"}\``);
+  console.log(`- Description: ${cmd.description}`);
+  if (cmd.flags?.length) {
+    console.log("\n## Known flags\n");
+    for (const flag of cmd.flags) console.log(`- \`${flag.flag}\` — ${flag.description}`);
+  }
+  if (cmd.examples?.length) {
+    console.log("\n## Official examples\n");
+    for (const example of cmd.examples) console.log(`- \`/${example}\``);
+  }
+  if (section) {
+    console.log("\n## Official COMMANDS.md excerpt\n");
+    console.log(section);
+  }
+  console.log("\n## Repo safety overlay\n");
+  console.log("- Do not request, print, store, or summarize secrets.");
+  console.log("- Do not add dependencies without human approval.");
+  console.log("- Do not run credentialed connector checks unless explicitly requested.");
+  console.log("- Reverse ETL must remain plan → preview → approval → execute.");
+  console.log("- Do not expose generic shell, generic HTTP write, or generic SQL write tools.");
+  console.log("- For planning-only work, do not edit `cmd/` or `internal/`.");
+  console.log("\n## Source files resolved by scripts/gsd\n");
+  for (const file of sourceDocsFor(cmd.name)) console.log(`- \`${file}\``);
+}
+
+function printPrompt(name, args) {
+  const normalized = commandName(name);
+  if (specialPrompts[normalized]) return renderSpecialPrompt(normalized, args);
+  return renderCommandPrompt(normalized, args);
 }
 
 function runInit(args) {
   requireFile(gsdTools);
-  const child = spawnSync("node", [gsdTools, "init", ...args], {
-    cwd: root,
-    stdio: "inherit",
-  });
+  const child = spawnSync("node", [gsdTools, "init", ...args], { cwd: root, stdio: "inherit" });
   process.exit(child.status ?? 1);
 }
 
-function main() {
+function verifyPi() {
+  const files = [
+    ".pi/settings.json",
+    ".pi/extensions/gsd/index.ts",
+    ".pi/prompts/gsd.md",
+    ".pi/skills/gsd-core/SKILL.md",
+    ".gsd/commands.json",
+    ".gsd/upstream.lock.json",
+  ];
+  let ok = true;
+  for (const rel of files) {
+    const file = path.join(root, rel);
+    const good = exists(file);
+    ok = ok && good;
+    console.log(`${good ? "ok" : "missing"}\t${rel}`);
+  }
+  if (!ok) process.exit(1);
+}
+
+async function main() {
   const [cmd, ...args] = process.argv.slice(2);
-  try {
-    switch (cmd || "help") {
-      case "help":
-      case "--help":
-      case "-h":
-        usage();
-        break;
-      case "doctor":
-        doctor();
-        break;
-      case "workflows":
-        console.log("# workflows");
-        Object.keys(upstreamSources).sort().forEach((name) => console.log(name));
-        console.log("# prompts");
-        Object.keys(promptSources).sort().forEach((name) => console.log(name));
-        break;
-      case "sources":
-        if (!args[0]) throw new Error("sources requires <workflow|prompt>");
-        printSources(args[0]);
-        break;
-      case "prompt":
-        if (!args[0]) throw new Error("prompt requires <prompt-name>");
-        printPrompt(args[0], args.slice(1));
-        break;
-      case "init":
-        if (!args[0]) throw new Error("init requires a gsd-tools init command, e.g. map-codebase");
-        runInit(args);
-        break;
-      default:
-        throw new Error(`unknown command: ${cmd}`);
+  switch (cmd || "help") {
+    case "help":
+    case "--help":
+    case "-h":
+      usage();
+      return;
+    case "doctor":
+      doctor();
+      return;
+    case "version": {
+      const lock = exists(lockPath) ? readJSON(lockPath) : {};
+      console.log(JSON.stringify({ adapter: "pi-project-local", official: lock, commands: exists(commandsPath) ? allCommands().length : 0 }, null, 2));
+      return;
     }
-  } catch (error) {
-    console.error(`scripts/gsd: ${error.message}`);
-    process.exit(1);
+    case "sync-upstream":
+      await syncUpstream();
+      return;
+    case "list":
+    case "workflows":
+      listCommands(args.includes("--json"));
+      return;
+    case "sources":
+      if (!args[0]) throw new Error("sources requires <command|prompt>");
+      printSources(args[0]);
+      return;
+    case "prompt":
+    case "run":
+      if (!args[0]) throw new Error(`${cmd} requires <command|prompt>`);
+      printPrompt(args[0], args.slice(1));
+      return;
+    case "init":
+      if (!args[0]) throw new Error("init requires a gsd-tools init command, e.g. map-codebase");
+      runInit(args);
+      return;
+    case "verify-pi":
+      verifyPi();
+      return;
+    default:
+      throw new Error(`unknown command: ${cmd}`);
   }
 }
 
-main();
+main().catch((error) => {
+  console.error(`scripts/gsd: ${error.message}`);
+  process.exit(1);
+});

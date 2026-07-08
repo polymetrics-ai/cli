@@ -4,9 +4,15 @@
 
 ```bash
 scripts/gsd doctor
+scripts/gsd version
+scripts/gsd list
+scripts/gsd sources plan-phase
 scripts/gsd sources issue-122-rebootstrap
-scripts/gsd prompt issue-122-rebootstrap >/tmp/issue-122-generated-prompt.md
-diff -u .planning/traces/issue-122-gsd-onboarding-prompt.md /tmp/issue-122-generated-prompt.md
+scripts/gsd prompt issue-122-rebootstrap >/tmp/issue122-regenerated.md
+diff -u .planning/traces/issue-122-gsd-onboarding-prompt.md /tmp/issue122-regenerated.md
+scripts/gsd prompt plan-phase 1 --skip-research >/tmp/gsd-plan-phase.md
+test -s /tmp/gsd-plan-phase.md
+scripts/gsd verify-pi
 node -e "JSON.parse(require('fs').readFileSync('.planning/config.json','utf8')); console.log('config ok')"
 test -f .planning/PROJECT.md
 test -f .planning/REQUIREMENTS.md
@@ -28,9 +34,14 @@ git diff --name-only -- cmd internal
 
 ## Expected Results
 
-- `scripts/gsd doctor` exits 0.
-- `scripts/gsd sources issue-122-rebootstrap` resolves upstream GSD workflow sources and the repo prompt.
-- The generated prompt matches `.planning/traces/issue-122-gsd-onboarding-prompt.md`.
+- `scripts/gsd doctor` exits 0 and reports official docs, command registry, upstream lock, Pi settings, Pi extension, Pi skill, Pi prompt, and command count.
+- `scripts/gsd version` reports official `open-gsd/gsd-core` source lock and `pi-project-local` runtime adapter.
+- `scripts/gsd list` prints the official GSD command registry.
+- `scripts/gsd sources plan-phase` resolves official source docs.
+- `scripts/gsd sources issue-122-rebootstrap` resolves canonical repo prompt and official source docs.
+- The generated issue prompt matches `.planning/traces/issue-122-gsd-onboarding-prompt.md` exactly.
+- `scripts/gsd prompt plan-phase 1 --skip-research` produces a non-empty official command prompt.
+- `scripts/gsd verify-pi` exits 0.
 - `config ok` is printed.
 - All `test` commands exit 0.
 - `rg` finds multi-surface connector parity, safety, certification, and conformance language.
@@ -48,7 +59,7 @@ sha256 e0959e4c8eba6e8610255a0cd9a98b39267902ba19600515abfdab726bfd57f5
 
 ## Not Run
 
-- `go test ./...` — not required for planning-only issue and no Go source changed.
+- `go test ./...` — not required for planning/tooling-only issue and no Go source changed.
 - Credentialed connector checks — explicitly out of scope.
 - Reverse ETL execution — explicitly out of scope.
 - Runtime-backed integration tests — optional and not needed for issue #122.

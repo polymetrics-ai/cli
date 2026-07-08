@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-07-08)
 Phase: 1 of 5 (Inventory and Surface Reconciliation)
 Plan: 1 of 3 in current phase
 Status: Rebootstrap in progress
-Last activity: 2026-07-08 — Legacy/custom `.planning/` archived outside active planning; upstream GSD Core brownfield artifacts recreated with multi-technology connector-surface prompt.
+Last activity: 2026-07-08 — Legacy/custom `.planning/` archived outside active planning; upstream GSD Core brownfield artifacts recreated with multi-technology connector-surface prompt; official `open-gsd/gsd-core@next` command registry ported to Pi via `scripts/gsd` and `.pi/` resources.
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -37,6 +37,7 @@ Decisions are logged in PROJECT.md Key Decisions table. Recent decisions affecti
 
 - Issue #122: Active `.planning/` is tracked and replaces the legacy/custom tree.
 - Issue #122: Old `.planning/` archive lives outside active planning at `../planning-archives/`.
+- Issue #122: Official `open-gsd/gsd-core@next` docs are pinned in `.gsd/upstream.lock.json` and adapted for Pi through `scripts/gsd` plus `.pi/` resources.
 - Issue #122: Connector parity includes REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queues/events/webhooks, native protocols, direct-read, and writes.
 - Issue #122: Phase 1 inventory reconciliation is a hard gate before connector fanout.
 
@@ -47,7 +48,7 @@ Decisions are logged in PROJECT.md Key Decisions table. Recent decisions affecti
 
 ### Blockers/Concerns
 
-- Slash command execution and Claude Task subagents are not exposed in this Pi harness; workflow source files and deterministic `gsd-tools.cjs` preflight commands are recorded in `.planning/traces/gsd-command-log.md`.
+- Pi can now invoke repo-local GSD prompts through `/gsd` after project trust/reload, but official GSD subagent-heavy workflows may still require inline/manual fallback when Pi lacks a matching subagent primitive.
 - No live connector credentials should be used in this issue.
 
 ## Session Continuity

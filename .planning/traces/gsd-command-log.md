@@ -1,10 +1,43 @@
 # GSD Command / Workflow Log — Issue #122
 
-## Environment note
+## Official source
 
-The repository now provides a runtime-neutral GSD adapter at `scripts/gsd` plus a Pi prompt template at `.pi/prompts/gsd.md`. This avoids relying on Claude-only slash-command dispatch while still using the installed upstream GSD Core command/workflow sources. In this Pi harness, upstream GSD prompt generation was run through `scripts/gsd`, deterministic preflight commands were run through `gsd-tools.cjs`, and all workflow sources are recorded here.
+This repo now uses a project-local Pi adapter based on the official GSD Core documentation:
 
-## Preflight and repo-local GSD commands run
+```text
+https://github.com/open-gsd/gsd-core/blob/next/docs/README.md
+```
+
+Pinned upstream source:
+
+```json
+{
+  "source": "github.com/open-gsd/gsd-core",
+  "ref": "next",
+  "commit": "20297a8ff941378b8615a5d3e8629e52c10a0f9d",
+  "runtime_adapter": "pi-project-local"
+}
+```
+
+The official docs do not currently list Pi as a supported runtime in `docs/how-to/install-on-your-runtime.md`, so this repository provides a project-local Pi adapter rather than claiming upstream Pi support.
+
+## Pi adapter
+
+Repo-local files:
+
+- `scripts/gsd` — shell/runtime-neutral adapter.
+- `.gsd/upstream.lock.json` — official source lock.
+- `.gsd/commands.json` — generated command registry from official `docs/COMMANDS.md`.
+- `.gsd/official-docs/` — official docs snapshot used by the adapter.
+- `.gsd/prompts/issue-122-rebootstrap.md` — canonical repo-specific onboarding prompt.
+- `.pi/settings.json` — project-local Pi resource loading.
+- `.pi/extensions/gsd/index.ts` — Pi slash-command adapter (`/gsd`, `/gsd-plan-phase`, etc.).
+- `.pi/prompts/gsd.md` — prompt-template fallback.
+- `.pi/skills/gsd-core/SKILL.md` — project-local GSD skill for default planning/implementation behavior.
+
+## Commands run
+
+Initial red/preflight evidence:
 
 ```bash
 git status --short --branch
@@ -13,34 +46,31 @@ node "$HOME/.claude/get-shit-done/bin/gsd-tools.cjs" init map-codebase
 find .planning/phases -maxdepth 1 -mindepth 1 -type d | wc -l
 test -d .planning/codebase || echo NO_CODEBASE_MAP
 git diff --name-only -- cmd internal
+```
+
+Official adapter setup/verification:
+
+```bash
+scripts/gsd sync-upstream
 scripts/gsd doctor
+scripts/gsd version
+scripts/gsd list
+scripts/gsd sources plan-phase
 scripts/gsd sources issue-122-rebootstrap
 scripts/gsd prompt issue-122-rebootstrap > .planning/traces/issue-122-gsd-onboarding-prompt.md
+scripts/gsd prompt issue-122-rebootstrap >/tmp/issue122-regenerated.md
+diff -u .planning/traces/issue-122-gsd-onboarding-prompt.md /tmp/issue122-regenerated.md
+scripts/gsd prompt plan-phase 1 --skip-research >/tmp/gsd-plan-phase.md
+scripts/gsd verify-pi
 ```
 
-## Upstream GSD command sources used
-
-Equivalent GSD user commands encoded by `scripts/gsd prompt issue-122-rebootstrap`:
+Equivalent official GSD flow encoded by `scripts/gsd prompt issue-122-rebootstrap`:
 
 ```text
-/gsd:map-codebase connector parity, all connector technologies and surfaces
-/gsd:new-project --auto <runtime-neutral prompt>
-/gsd:plan-phase 1 --skip-research
-/gsd:programming-loop init --phase 01-inventory-reconciliation --dry-run
+/gsd-onboard or /gsd-map-codebase + /gsd-new-project for brownfield onboarding
+/gsd-plan-phase 1 --skip-research
+/gsd-programming-loop init --phase 01-inventory-reconciliation --dry-run
 ```
-
-Installed workflow source files resolved by `scripts/gsd sources issue-122-rebootstrap`:
-
-- `/Users/karthiksivadas/.claude/commands/gsd/map-codebase.md`
-- `/Users/karthiksivadas/.claude/get-shit-done/workflows/map-codebase.md`
-- `/Users/karthiksivadas/.claude/commands/gsd/new-project.md`
-- `/Users/karthiksivadas/.claude/get-shit-done/workflows/new-project.md`
-- `/Users/karthiksivadas/.claude/commands/gsd/plan-phase.md`
-- `/Users/karthiksivadas/.claude/get-shit-done/workflows/plan-phase.md`
-- `/Users/karthiksivadas/.claude/commands/gsd/programming-loop.md`
-- `/Users/karthiksivadas/.claude/skills/gsd-programming-loop/SKILL.md`
-- `/Users/karthiksivadas/.claude/skills/gsd-programming-loop/references/workflows/programming-loop.md`
-- `.gsd/prompts/issue-122-rebootstrap.md`
 
 ## Archive evidence
 
@@ -60,4 +90,10 @@ sha256 e0959e4c8eba6e8610255a0cd9a98b39267902ba19600515abfdab726bfd57f5
 
 ## Scope guard
 
-Issue #122 is planning-only. Generated/updated files are confined to `.planning/` and optional ignore/archive metadata. No `cmd/` or `internal/` source edits are allowed.
+Issue #122 is planning/tooling-only. No `cmd/` or `internal/` source edits are allowed. The final source guard remains:
+
+```bash
+git diff --name-only -- cmd internal
+```
+
+Expected output: none.

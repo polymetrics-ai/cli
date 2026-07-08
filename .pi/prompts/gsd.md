@@ -1,18 +1,18 @@
 ---
-description: Run a repo-local, runtime-neutral GSD workflow prompt
-argument-hint: "<prompt-name|doctor|sources|init> [args...]"
+description: Run an official GSD Core workflow through the repo-local Pi adapter
+argument-hint: "<command> [args...]"
 ---
-You are running the repo-local GSD command adapter, not Claude-specific slash commands.
+Run the repo-local official GSD Core adapter for Pi.
 
-1. Use `scripts/gsd doctor` first if the workflow has not been checked this session.
-2. For workflow prompts, run:
+1. Run:
 
 ```bash
+scripts/gsd doctor
 scripts/gsd prompt $ARGUMENTS
 ```
 
-3. Read the generated prompt carefully and execute it using the available Pi tools.
-4. Record the exact `scripts/gsd ...` command used in any planning trace you update.
-5. Preserve repo safety rules from `AGENTS.md`: no secrets, no credentialed connector checks, no reverse ETL execution without plan/preview/approval/execute, no new dependencies without human approval, and no `cmd/` or `internal/` edits for planning-only issue #122.
+2. Read the generated prompt and execute it using Pi tools.
+3. Record the exact `scripts/gsd ...` command in planning traces when updating `.planning/`.
+4. Follow `AGENTS.md` safety gates: no secrets, no new dependencies without approval, no credentialed connector checks unless requested, no generic raw write tools, and reverse ETL remains plan → preview → approval → execute.
 
-If `$ARGUMENTS` is `doctor`, `sources`, `workflows`, or `init`, run the corresponding `scripts/gsd $ARGUMENTS` command and report the result.
+If `$ARGUMENTS` is `doctor`, `list`, `version`, `sources <command>`, or `verify-pi`, run `scripts/gsd $ARGUMENTS` and report the result instead of starting a workflow.

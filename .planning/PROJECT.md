@@ -56,6 +56,7 @@ The current codebase has a completed Connector Architecture v2 baseline on `main
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Rebootstrap active `.planning/` from upstream GSD Core workflow shape | The old tree was custom/legacy and should not pollute future onboarding | — Pending |
+| Pin official `open-gsd/gsd-core@next` docs for Pi adapter | Pi is not listed as an upstream runtime, so the repo needs explicit provenance for its adapter | ✓ Good |
 | Archive old `.planning/` outside active planning context | Preserves auditability without tracking stale artifacts | ✓ Good |
 | Inventory reconciliation precedes connector fanout | Current bundle/API/certification/surface counts must be trusted before parallel work | — Pending |
 | Treat connector parity as multi-surface, not REST-only | GraphQL, XML/SOAP, CSV/NDJSON, binary, file, database, CDC, queue, webhook, and direct-read surfaces exist in the repo | — Pending |
