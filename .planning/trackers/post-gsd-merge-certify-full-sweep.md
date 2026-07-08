@@ -5,18 +5,17 @@
 
 ## Current Gate
 
-PR #123 must merge before rebasing/resuming the certificate branch.
+PR #123 has merged and the certificate workstream has been resumed on `feat/certify-full-sweep`.
 
 ```bash
-gh pr view 123 --json state,mergedAt,mergeStateStatus,autoMergeRequest,headRefName,baseRefName,url
+gh pr view 123 --json state,mergedAt,mergeCommit,url
 ```
 
-Current observed state when this tracker was created:
+Observed states:
 
 ```text
-PR #123: OPEN, auto-merge enabled, mergeStateStatus=BLOCKED, mergedAt=null
-headRefName=chore/122-upstream-gsd-rebootstrap
-baseRefName=main
+Tracker creation: PR #123 OPEN, auto-merge enabled, mergeStateStatus=BLOCKED, mergedAt=null.
+Resume checkpoint: PR #123 MERGED at merge commit 8d2ddf41; feat/certify-full-sweep rebased on origin/main and pushed.
 ```
 
 ## Secret Handling Notice
@@ -241,17 +240,43 @@ Follow `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`.
 - Do not post redundant `@coderabbitai review` commands unless fallback conditions apply.
 - Copilot review is fallback-only when CodeRabbit is blocked.
 
+## All-Streams Read Sweep Slice Evidence
+
+Status: first implementation slice in progress and locally green for the certify package.
+
+Behavior added:
+
+- `Options.Full` now iterates every stream returned by the live catalog for source read stages.
+- Per-stream live, capture, file credential, and incremental connection names avoid collisions.
+- Catalog primary key and cursor fields are reused per stream, with legacy `id` / `updated_at` defaults.
+- Flow roundtrip now uses the stream-scoped capture credential and catalog-derived primary/cursor fields after a full sweep.
+
+Test-first evidence:
+
+```text
+Red: go test ./internal/connectors/certify/ -run 'TestCatalogStreamSpecsFromStreams|TestFullSweepNamesAreStreamScoped|TestFullSweepStreamSpecsFallbackToSelectedStream' -count=1 -v
+     failed on undefined full-sweep helpers before production edits.
+Green: go test ./internal/connectors/certify/ -run TestFullSweepSourceStagesAgainstSample -count=1 -v
+Green: go test ./internal/connectors/certify/ -count=1 -timeout=10m
+Green: go test ./internal/connectors/... -count=1
+```
+
+No credentialed/live GitHub checks were run. The compromised pasted token remains unused and must be revoked/rotated before any future credentialed testing.
+
 ## Tracker Checklist
 
-- [ ] PR #123 merged.
-- [ ] Certificate branch/worktree verified.
-- [ ] Target rebase base confirmed (`feat/44-github-cli-parity` vs `main`).
-- [ ] Rebase completed cleanly or blockers recorded.
-- [ ] GSD programming loop prompt generated for #121.
-- [ ] Required Go/runtime/design skills loaded and recorded.
-- [ ] Red tests added for first resumed slice.
-- [ ] Fixture/non-credentialed tests green.
-- [ ] Credentialed tests gated behind env vars only.
+- [x] PR #123 merged.
+- [x] Certificate branch/worktree verified.
+- [x] Target rebase base confirmed (`main` for the resumed branch checkpoint).
+- [x] Rebase completed cleanly or blockers recorded.
+- [x] GSD programming loop prompt generated for #121.
+- [x] Required Go/runtime/design skills loaded and recorded.
+- [x] Red tests added for first resumed slice.
+- [x] Fixture/non-credentialed tests green for the first all-streams read sweep slice.
+- [x] Credentialed tests gated behind env vars only.
+- [ ] Binary sweep implemented and tested.
+- [ ] Direct-read sweep implemented and tested.
+- [ ] Flow/schedule per stream implemented and tested.
 - [ ] RLM bus-factor fixture plan created.
 - [ ] Future Pi-agent stream-based RLM problem selection tracked.
 - [ ] CLI/docs/website parity verified for CLI-visible changes.
