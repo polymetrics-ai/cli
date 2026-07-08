@@ -104,9 +104,7 @@ func safeScheduleName(name string) string {
 // (both steps done) through the real `pm flow` CLI surface.
 func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 	if rc.capturePath == "" {
-		recordStage(rc, rep, "flow_roundtrip", 1, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, "flow_roundtrip: no capture available (etl_full_refresh_append did not produce one)"
-		})
+		skipStage(rc, rep, "flow_roundtrip", "skipped: no capture available (etl_full_refresh_append did not produce one)")
 		return nil
 	}
 

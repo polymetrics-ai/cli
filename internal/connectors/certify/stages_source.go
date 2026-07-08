@@ -910,9 +910,7 @@ func (rc *runContext) captureStreamName() string {
 
 func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 	if rc.capturePath == "" {
-		recordStage(rc, rep, "etl_full_refresh_overwrite", 1, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, "etl_full_refresh_overwrite: no capture available (etl_full_refresh_append did not produce one)"
-		})
+		skipStage(rc, rep, "etl_full_refresh_overwrite", "skipped: no capture available (etl_full_refresh_append did not produce one)")
 		return nil
 	}
 	table := "cert_overwrite_" + rc.streamName()
@@ -962,9 +960,7 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 
 func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 	if rc.capturePath == "" {
-		recordStage(rc, rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, "etl_full_refresh_overwrite_deduped: no capture available"
-		})
+		skipStage(rc, rep, "etl_full_refresh_overwrite_deduped", "skipped: no capture available")
 		return nil
 	}
 	table := "cert_overwrite_deduped_" + rc.streamName()
@@ -1026,11 +1022,12 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 			return false, cliInfoFrom(res), errMsg
 		}
 		cursor := checkpointString(res.Envelope, "cursor")
+		read1, _ := runInt(res.Envelope, "records_read")
 		if cursor == "" {
-			return false, cliInfoFrom(res), "etl_incremental_append: no cursor recorded on checkpoint"
+			rep.Capabilities.SyncModes["incremental_append"] = SyncModeResult{Result: "passed_no_cursor", DataSource: "live", Reason: "no cursor recorded on checkpoint"}
+			return true, cliInfoFrom(res), ""
 		}
 		rc.incrementalRun1Cursor = cursor
-		read1, _ := runInt(res.Envelope, "records_read")
 		rc.incrementalRun1Records = read1
 		rep.Capabilities.SyncModes["incremental_append"] = SyncModeResult{Result: "pass", DataSource: "live", CursorAdvanced: true}
 		return true, cliInfoFrom(res), ""
@@ -1044,9 +1041,7 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 
 func stageResume(rc *runContext, rep *Report) error {
 	if rc.incrementalConnection == "" {
-		recordStage(rc, rep, "resume", 2, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, "resume: incremental_append did not complete, nothing to resume"
-		})
+		skipStage(rc, rep, "resume", "skipped: incremental_append did not produce a resumable cursor")
 		return nil
 	}
 	stream := rc.streamName()
@@ -1104,9 +1099,7 @@ func compareCursorStrings(a, b string) int {
 
 func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 	if rc.capturePath == "" {
-		recordStage(rc, rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, "etl_incremental_append_deduped: no capture available"
-		})
+		skipStage(rc, rep, "etl_incremental_append_deduped", "skipped: no capture available")
 		return nil
 	}
 	table := "cert_incremental_deduped_" + rc.streamName()
