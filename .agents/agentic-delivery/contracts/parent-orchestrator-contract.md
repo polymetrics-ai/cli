@@ -25,6 +25,7 @@ The orchestrator must also read:
 - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
 - `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
 - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
+- `.agents/agentic-delivery/references/gsd-pi-adapter.md`
 - `.agents/agentic-delivery/contracts/worker-handoff-template.md`
 - `.agents/agentic-delivery/schemas/orchestration-state.schema.yaml`
 
@@ -37,7 +38,7 @@ The orchestrator owns:
 - creating a deliberate parent seed commit when GitHub needs a diff to open the parent PR
 - maintaining the parent issue status and orchestration state ledger
 - selecting sub-issues that can run in parallel without write-scope collisions
-- spawning or assigning worker agents with bounded prompts
+- spawning or assigning worker agents with bounded prompts that name the `/gsd ...` or `scripts/gsd prompt ...` command path
 - receiving worker handoffs
 - deciding whether a sub-PR can merge into the parent branch
 - requesting or observing parent PR CodeRabbit coverage after integrated batches

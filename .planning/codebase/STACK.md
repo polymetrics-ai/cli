@@ -1,67 +1,51 @@
-# Technology Stack
+# Stack
 
-**Analysis Date:** 2026-07-08
-**Generated via:** Upstream `/gsd:map-codebase` workflow shape, issue #122 prompt.
+**Generated via:** `scripts/gsd prompt map-codebase --fast` through the official GSD Core Pi adapter
+**Upstream GSD Core:** `open-gsd/gsd-core@20297a8ff941378b8615a5d3e8629e52c10a0f9d`
 
-## Languages
+## Language and Runtime
 
-**Primary:**
-- Go 1.25.4 module with pinned toolchain `go1.25.11` — CLI, connector runtime, conformance, certification, scheduling, vault, runtime probes.
+- Go CLI monolith.
+- Node.js is used for repo-local planning/tooling adapter `scripts/gsd` and Pi extension resources.
+- Optional runtime-backed execution uses project runtime scripts; runtime services are not required for issue #122.
 
-**Secondary:**
-- Shell — local runtime scripts and verification orchestration.
-- TypeScript/JavaScript — website and release/documentation tooling under `website/` and build helpers.
-- JSON / JSON Schema — connector definition bundles under `internal/connectors/defs/`.
-- Markdown — CLI docs, architecture, migration, and active GSD planning artifacts.
+## Primary Product Surface
 
-## Runtime
+- CLI binary: `pm`.
+- Main package: `cmd/pm`.
+- Product domains: ETL, reverse ETL, connector inspection, credential management, local warehouse queries, scheduling, flow execution, and optional runtime-backed execution.
 
-**Environment:**
-- Single Go binary `pm` built from `cmd/pm`.
-- Optional runtime-backed execution uses local services via `scripts/runtime.sh` and Temporal dependencies.
-- Local-first project state and warehouses live under `.polymetrics/` at runtime.
+## Connector Architecture
 
-**Package Manager:**
-- Go modules (`go.mod`, `go.sum`).
-- Website uses Node tooling in `website/`.
+- Declarative connector bundles: `internal/connectors/defs/<connector>/`.
+- Runtime engine: `internal/connectors/engine/`.
+- Hook escape hatches: `internal/connectors/hooks/`.
+- Native connectors: `internal/connectors/native/`.
+- Conformance/certification: `internal/connectors/conformance/`, `internal/connectors/certify/`.
 
-## Frameworks and Core Libraries
+## Planning and Agent Runtime
 
-**CLI and application:**
-- Standard-library CLI architecture in `internal/cli` and `cmd/pm`.
-- `internal/app` owns ETL, reverse ETL, warehouse/query, sync modes, and execution flows.
+- Official GSD docs snapshot: `.gsd/official-docs/`.
+- Official command registry: `.gsd/commands.json`.
+- Source lock: `.gsd/upstream.lock.json`.
+- Shell adapter: `scripts/gsd`.
+- Pi settings/extension/prompt/skill: `.pi/`.
+- Agent specs/contracts: `.agents/`.
+- Active planning artifacts: `.planning/`.
 
-**Connector runtime:**
-- `internal/connectors/engine` interprets JSON bundles.
-- `internal/connectors/connsdk` provides low-level HTTP/auth/pagination/extract helpers.
-- `internal/connectors/hooks` provides Tier 2 custom behavior.
-- `internal/connectors/native` provides Tier 3 non-HTTP/custom connectors.
+## Verification Stack
 
-**Data/runtime dependencies:**
-- `github.com/jackc/pgx/v5` for PostgreSQL.
-- `github.com/marcboeker/go-duckdb` for optional DuckDB support.
-- `github.com/redis/go-redis/v9` and Temporal SDK/API packages for runtime features.
-- `github.com/stretchr/testify` for tests.
+Local gates from `AGENTS.md`:
 
-## Verification Tooling
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+```
 
-- `make verify` runs formatting, tidy check, vet, tests, build, docs validation, smoke, lint, and `connectorgen validate`.
-- `go test ./...`, `go vet ./...`, `go build ./cmd/pm` are primary local gates.
-- `golangci-lint` covers declarative connector architecture packages.
-- GitHub Actions workflows: verify, security, scorecard, release, website, PR issue guard.
-
-## Connector Surface Technologies
-
-Planning must not assume connectors are only REST/JSON APIs. Current repo evidence includes connector docs or defs mentioning:
-
-- REST/HTTP JSON APIs — dominant connector shape.
-- GraphQL — examples include `github`, `linear`, `monday`, `notion`, `plaid`, `stigg`.
-- XML/SOAP/XML feeds — examples include `amazon-sqs`, `rss`, `tally-prime`, `workday`.
-- CSV/NDJSON/report exports — examples include `amplitude`, `appsflyer`, `mixpanel`, `vercel`.
-- Binary/download/upload/multipart capabilities — common across attachments, artifacts, archives, exports, documents, and media.
-- Databases/CDC — `postgres`, `dynamodb`, and native connector directories.
-- Queues/events/webhooks/audit logs — `amazon-sqs` plus many event/webhook resources.
-- File/object storage style integrations — S3-like and signed-download flows appear in docs/defs.
+Planning-only issue #122 uses adapter/docs verification instead of Go gates unless Go source changes.
 
 ---
-*Stack analysis: 2026-07-08*
+*Stack refreshed: 2026-07-08; phases intentionally unchanged.*

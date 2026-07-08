@@ -1,21 +1,47 @@
 # Polymetrics CLI Connector Parity
 
+**Generated via:** official GSD Core Pi adapter command path
+**Commands:** `scripts/gsd prompt onboard --fast --skip-phases`, `scripts/gsd prompt map-codebase --fast`, `scripts/gsd prompt new-project --from-existing --non-interactive`, `scripts/gsd prompt milestone-summary --planning-only`
+**Upstream GSD Core:** `open-gsd/gsd-core@20297a8ff941378b8615a5d3e8629e52c10a0f9d`
+**Runtime adapter:** `pi-project-local`
+
 ## What This Is
 
-Polymetrics CLI (`pm`) is a local-first Go CLI for ETL, reverse ETL, connector inspection, credential management, local warehouse queries, scheduling, and optional runtime-backed execution. This GSD Core brownfield project tracks connector parity across every documented connector surface, not only REST APIs: REST/JSON, GraphQL, XML/SOAP, CSV/NDJSON exports, binary transfers, file/object storage, SQL/CDC, queues/events/webhooks, native protocols, direct-read commands, and product-safe writes.
+Polymetrics CLI (`pm`) is a local-first Go CLI for dependency-free ETL, reverse ETL, connector inspection, credential management, local warehouse queries, scheduling, and optional runtime-backed execution. This GSD Core brownfield project tracks connector parity across every documented connector surface, not only REST APIs.
+
+Connector parity includes REST/JSON, GraphQL, XML/SOAP, CSV/NDJSON/report exports, binary transfers, file/object storage, SQL/CDC, queues/events/webhooks/audit logs, native protocols, direct-read commands, and product-safe writes.
 
 ## Core Value
 
 Users and agents can trust `pm` as a connector-complete, safety-gated ETL and reverse ETL interface whose advertised connector capabilities match documented upstream product surfaces without duplicate or unsafe exposure.
+
+## Current Repo Snapshot
+
+Generated from the working tree during the GSD Pi refresh:
+
+| Signal | Count |
+|---|---:|
+| Connector definition directories | 547 |
+| Connector `api_surface.json` files | 547 |
+| Stream definition files | 7159 |
+| Write definition files | 5699 |
+| Hook directories | 78 |
+| Native connector directories | 37 |
+| Go source files under `cmd/` + `internal/` | 491 |
+| Repo-local YAML agent specs | 14 |
+| Official GSD commands exposed through Pi adapter | 69 |
+
+These counts are planning inputs only. Phase 1 remains the hard gate for regenerated, de-duplicated, authoritative inventory before connector fanout.
 
 ## Requirements
 
 ### Validated
 
 - ✓ Single-binary Go CLI architecture exists with ETL, query, reverse ETL, scheduling, docs, and smoke verification.
-- ✓ Connector Architecture v2 exists with embedded JSON definition bundles, declarative engine, hooks, native connectors, conformance, and `connectorgen validate`.
+- ✓ Connector Architecture v2 exists with embedded JSON definition bundles, declarative engine, hooks, native connectors, conformance, and code generation.
 - ✓ Reverse ETL uses plan, preview, approval, and execute semantics; raw generic shell, generic HTTP write, and generic SQL write tools remain out of scope.
 - ✓ Certification harness components exist under `internal/connectors/certify/` with source, write, replay, report, ledger, and sweeper stages.
+- ✓ Official GSD Core command docs are pinned and surfaced through `scripts/gsd` plus Pi resources under `.pi/`.
 
 ### Active
 
@@ -26,20 +52,22 @@ Users and agents can trust `pm` as a connector-complete, safety-gated ETL and re
 - [ ] Ensure every product-safe documented write/mutation is available through reverse ETL plan/preview/approval/run or a typed exclusion.
 - [ ] Ensure direct-read and binary-transfer endpoints are supported where product-safe and human-gated where risky.
 - [ ] Ensure conformance and certification gates enforce parity before rollout claims.
+- [ ] Ensure agents and subagents use repo-local GSD commands via `.pi` or `scripts/gsd`, with manual fallback recorded only when the adapter is unavailable.
 
 ### Out of Scope
 
-- Runtime connector changes for issue #122 — this issue only reboots planning state.
+- Runtime connector changes for issue #122 — this issue only reboots planning and agent guidance.
 - New dependencies — dependency additions require explicit human approval.
 - Credentialed live connector checks — no secrets are needed for planning rebootstrap.
 - Destructive/admin execution — remains human-gated and outside automated planning edits.
 - Generic shell, generic HTTP write, or generic SQL write tools — explicitly disallowed safety boundary.
+- Phase regeneration in this refresh — user explicitly requested updating everything except phases.
 
 ## Context
 
-This repository previously carried a custom/legacy `.planning/` tree with stale phase artifacts and connector counts. Issue #122 reboots active planning using upstream GSD Core workflow shape while preserving Polymetrics-specific connector parity overlays from `AGENTS.md`, `docs/migration/HANDOFF-CODEX.md`, `docs/migration/conventions.md`, `docs/architecture/connector-architecture-v2-design.md`, `docs/architecture/connector-certification-design.md`, and `docs/plans/universal-programming-loop-prd.md`.
+This repository previously carried a custom/legacy `.planning/` tree with stale phase artifacts and connector counts. Issue #122 reboots active planning using official GSD Core workflow shape while preserving Polymetrics-specific connector parity overlays from `AGENTS.md`, `docs/migration/HANDOFF-CODEX.md`, `docs/migration/conventions.md`, `docs/architecture/connector-architecture-v2-design.md`, `docs/architecture/connector-certification-design.md`, and `docs/plans/universal-programming-loop-prd.md`.
 
-The current codebase has a completed Connector Architecture v2 baseline on `main`: JSON connector definitions under `internal/connectors/defs/`, Tier 2 hooks, Tier 3 natives, conformance, certification, and code generation. Onboarding scans observed 547 connector definition directories, 78 hook directories, 37 native directories, and 547 `api_surface.json` files with 29,123 endpoint rows. These are initial inputs only; the first phase must regenerate and reconcile authoritative inventory before fanout.
+The official GSD docs do not currently list Pi as an upstream runtime. This repository therefore provides a project-local Pi adapter that renders official command prompts through `scripts/gsd`, exposes `/gsd` plus generated `/gsd-*` aliases through `.pi/extensions/gsd/index.ts`, and loads default behavior through `.pi/skills/gsd-core/SKILL.md`.
 
 ## Constraints
 
@@ -49,18 +77,20 @@ The current codebase has a completed Connector Architecture v2 baseline on `main
 - **Architecture**: Connector runtime remains declarative-first with Tier 2 hooks and Tier 3 natives only when justified by `docs/migration/conventions.md`.
 - **Surface coverage**: Connector parity covers REST, GraphQL, XML/SOAP, report exports, binary transfers, file/object storage, SQL/CDC, queues/events/webhooks, native protocols, direct-read, and writes.
 - **De-duplication**: One upstream operation maps to exactly one primary classification; aliases and duplicate docs references are cross-links, not duplicated work.
+- **Agent runtime**: Agents and subagents should prefer `/gsd <command>` or `scripts/gsd prompt <command>` from the repo-local Pi adapter.
 - **Review**: Issue-to-PR delivery follows `.agents/agentic-delivery/contracts/issue-agent-contract.md`; PR targets `main` and uses `Closes #122`.
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
-|----------|-----------|---------|
-| Rebootstrap active `.planning/` from upstream GSD Core workflow shape | The old tree was custom/legacy and should not pollute future onboarding | — Pending |
-| Pin official `open-gsd/gsd-core@next` docs for Pi adapter | Pi is not listed as an upstream runtime, so the repo needs explicit provenance for its adapter | ✓ Good |
-| Archive old `.planning/` outside active planning context | Preserves auditability without tracking stale artifacts | ✓ Good |
-| Inventory reconciliation precedes connector fanout | Current bundle/API/certification/surface counts must be trusted before parallel work | — Pending |
-| Treat connector parity as multi-surface, not REST-only | GraphQL, XML/SOAP, CSV/NDJSON, binary, file, database, CDC, queue, webhook, and direct-read surfaces exist in the repo | — Pending |
-| Keep active `.planning/` tracked | Issue explicitly requires upstream-generated planning to remain versioned | ✓ Good |
+|---|---|---|
+| Rebootstrap active `.planning/` from official GSD Core workflow shape | The old tree was custom/legacy and should not pollute future onboarding | In progress |
+| Pin official `open-gsd/gsd-core@next` docs for Pi adapter | Pi is not listed as an upstream runtime, so the repo needs explicit provenance for its adapter | Good |
+| Expose GSD through `.pi` and `scripts/gsd` | Agents need runtime-neutral command access and Pi slash-command aliases | Good |
+| Archive old `.planning/` outside active planning context | Preserves auditability without tracking stale artifacts | Good |
+| Inventory reconciliation precedes connector fanout | Current bundle/API/certification/surface counts must be trusted before parallel work | Pending |
+| Treat connector parity as multi-surface, not REST-only | GraphQL, XML/SOAP, CSV/NDJSON, binary, file, database, CDC, queue, webhook, and direct-read surfaces exist in the repo | Pending |
+| Keep active `.planning/` tracked | Issue explicitly requires upstream-generated planning to remain versioned | Good |
 
 ---
-*Last updated: 2026-07-08 after issue #122 upstream GSD Core rebootstrap onboarding*
+*Last updated: 2026-07-08 via repo-local official GSD Core Pi adapter; phases intentionally not regenerated in this refresh.*

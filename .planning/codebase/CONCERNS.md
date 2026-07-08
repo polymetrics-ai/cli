@@ -1,49 +1,35 @@
-# Concerns
+# Concerns and Watchpoints
 
-**Analysis Date:** 2026-07-08
-**Generated via:** Upstream `/gsd:map-codebase` workflow shape, issue #122 prompt.
+**Generated via:** official GSD Core Pi adapter command path.
 
-## Planning Concerns
+## Active Concerns
 
-### Legacy planning contamination
+1. **Inventory freshness** — quick counts exist, but Phase 1 must regenerate authoritative inventory before connector fanout.
+2. **Surface duplication** — duplicated docs pages, aliases, generated references, and product guides can create duplicate operation work unless canonical identity is enforced.
+3. **REST bias** — connector parity must not force GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queue/event/webhook, native, or direct-read surfaces into REST stream shapes.
+4. **Write safety** — product-safe mutations must map to reverse ETL actions; destructive/admin/elevated writes remain human-gated or excluded.
+5. **Credential safety** — no planning artifact should contain secrets or prompt for credentials.
+6. **Agent drift** — reusable agents and subagents must use the repo-local official GSD Pi adapter instead of stale Claude-local or manual-only command assumptions.
+7. **Planning scope creep** — issue #122 must not edit `cmd/`, `internal/`, or `.planning/phases/**` in this refresh.
+8. **Review coverage** — CodeRabbit skip/rate-limit/disabled states are blockers or require documented fallback, not approvals.
 
-The previous `.planning/` tree was custom/legacy GSD-style state with many stale phase directories. It must remain archived outside active planning and should not be used as the new milestone source of truth.
+## Human Gates
 
-### Inventory drift
+- New dependencies.
+- Auth scope changes.
+- Secrets or credential access.
+- Destructive/admin external actions.
+- Production deploys.
+- Quality-gate reductions.
+- Reverse ETL execution.
+- Parent PR merge to `main`.
 
-Generated counts have changed across prior docs and worktrees. Current onboarding observed 547 defs bundles, 78 hook dirs, 37 native dirs, and 29,123 `api_surface.json` endpoint rows, but Phase 1 must regenerate authoritative counts from current code and docs before fanout.
+## Mitigations
 
-### REST-only blind spot
-
-Planning that says only "API endpoints" risks missing GraphQL, XML/SOAP, CSV/NDJSON exports, binary transfers, file/object storage, SQL/CDC, queues/events/webhooks, and other connector technologies. The new requirements and roadmap explicitly model connector surfaces across protocols.
-
-### Duplicate surface counting
-
-Generated docs, product guides, OpenAPI specs, GraphQL schemas, webhook pages, and binary export docs can describe the same capability in multiple places. Inventory needs canonical operation identity and alias tracking to avoid duplicate streams/actions/commands.
-
-## Runtime and Safety Concerns
-
-### Secret exposure
-
-No issue #122 work requires secrets. Credentialed checks and live certification remain separate and must never print or summarize secret values.
-
-### Destructive/admin write paths
-
-Repository deletion, admin mutations, elevated scopes, destructive deletes, and dependency-sensitive capabilities must remain human-gated or typed exclusions unless explicitly approved.
-
-### Generic raw tool exposure
-
-The repo rules explicitly forbid generic shell, generic HTTP write, and generic SQL write tools. Parity work must expose product-specific safe commands/actions, not raw escape hatches.
-
-### Dependency gates
-
-Some native/CDC or protocol-specific work may require dependencies. New dependencies are human-gated and out of scope for issue #122.
-
-## Review Concerns
-
-- CodeRabbit skipped/disabled/rate-limited review is not completed review coverage.
-- Parent/main PR merges remain human-gated.
-- Any follow-on connector fanout should use disjoint worktrees/paths to avoid `defs/` index and `go:embed` collisions.
+- Use `scripts/gsd doctor` and `.pi/skills/gsd-core/SKILL.md` as the first-line GSD runtime check.
+- Record `scripts/gsd prompt ...` commands in planning traces for deterministic evidence.
+- Keep connector fanout blocked until inventory review is complete.
+- Keep generated claims tied to conformance/certification outputs.
 
 ---
-*Concern analysis: 2026-07-08*
+*Concerns refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter.*

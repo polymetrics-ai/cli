@@ -14,6 +14,7 @@ skills:
   preferred_local_skills: [go-engineering, stride-analysis-patterns, threat-mitigation-mapping]
 inputs:
   required:
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - issue URL
     - sensitive-data-and-admin-actions.md
     - provider official secret/admin docs
@@ -30,6 +31,7 @@ permissions:
     - unrestricted SQL write
     - secret value read/print
 workflow:
+  - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
   - add_redaction_tests
@@ -42,3 +44,6 @@ verification:
   required:
     - targeted tests
     - secret-looking literal scan
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

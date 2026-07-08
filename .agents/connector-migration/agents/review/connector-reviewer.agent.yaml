@@ -13,6 +13,7 @@ skills:
   preferred_local_skills: [go-engineering, api-design-principles]
 inputs:
   required:
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - connector name
     - connector diff or bundle path
     - docs/migration/conventions.md
@@ -31,6 +32,7 @@ permissions:
     - destructive commands
     - external writes
 workflow:
+  - load_gsd_pi_adapter
   - read_conventions
   - inspect_connector_bundle
   - compare_against_legacy_package
@@ -52,3 +54,5 @@ verification:
 adapters:
   codex:
     note: Translate this YAML to a read-only Codex review prompt when spawning reviewer agents.
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

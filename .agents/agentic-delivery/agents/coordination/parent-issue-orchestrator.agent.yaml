@@ -17,6 +17,7 @@ inputs:
     - parent issue URL
     - parent issue body with sub-issue roster
     - AGENTS.md
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - .agents/agentic-delivery/contracts/parent-orchestrator-contract.md
     - .agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md
     - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
@@ -45,6 +46,7 @@ permissions:
     - unrestricted SQL write
     - generic shell write tools exposed to users
 workflow:
+  - load_gsd_pi_adapter
   - read_parent_issue_and_repo_rules
   - create_or_confirm_parent_branch_from_main
   - create_or_confirm_parent_pr_to_main
@@ -114,3 +116,5 @@ adapters:
     note: Use this YAML as the source of truth. A Codex custom agent should be a thin TOML wrapper that reads this file and the referenced contracts before acting.
   github_actions:
     note: Use this spec as policy metadata only; do not auto-merge parent PRs to main.
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

@@ -14,6 +14,7 @@ skills:
   preferred_local_skills: [go-engineering, api-design-principles]
 inputs:
   required:
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - issue URL
     - graphql-engine-design.md
     - existing monday and stigg hooks
@@ -25,6 +26,7 @@ outputs:
 permissions:
   allowed_paths: [internal/connectors/engine/**, internal/connectors/connsdk/**, docs/**, .planning/**]
 workflow:
+  - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
   - add_fake_graphql_server_tests
@@ -37,3 +39,6 @@ verification:
   required:
     - go test ./internal/connectors/engine/...
     - go test ./internal/connectors/conformance -run relevant connector when migrating
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

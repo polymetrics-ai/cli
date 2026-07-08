@@ -16,6 +16,7 @@ inputs:
     - parent objective
     - source research or product brief
     - AGENTS.md
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - .agents/agentic-delivery/references/issue-roadmap-best-practices.md
     - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
 outputs:
@@ -37,6 +38,7 @@ permissions:
     - destructive external actions
     - unrestricted HTTP write
 workflow:
+  - load_gsd_pi_adapter
   - read_sources_and_repo_rules
   - define_parent_issue
   - split_into_subissues
@@ -65,3 +67,6 @@ verification:
     - markdown review
     - YAML parse checks
     - issue body references current agent contracts
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

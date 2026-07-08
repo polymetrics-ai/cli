@@ -13,6 +13,7 @@ skills:
   preferred_local_skills: [github-issue-first-delivery, api-design-principles, ui-refactoring-docs]
 inputs:
   required:
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - provider pilot summary
     - completed implementation issues
     - connector roster
@@ -29,6 +30,7 @@ permissions:
     - path: internal/connectors/defs/**
       unless: implementation phase assigns connector
 workflow:
+  - load_gsd_pi_adapter
   - extract_provider_pilot_learnings
   - remove_provider_specific_assumptions
   - split_rollout_into_parent_and_subissues
@@ -39,3 +41,6 @@ verification:
   required:
     - markdown review
     - JSON/YAML parse checks
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

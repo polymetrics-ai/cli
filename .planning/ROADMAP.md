@@ -1,106 +1,151 @@
 # Roadmap: Polymetrics CLI Connector Parity
 
+**Generated via:** official GSD Core Pi adapter command path
+**Commands:** `scripts/gsd prompt onboard --fast --skip-phases`, `scripts/gsd prompt new-project --from-existing --non-interactive`, `scripts/gsd prompt milestone-summary --planning-only`
+**Upstream GSD Core:** `open-gsd/gsd-core@20297a8ff941378b8615a5d3e8629e52c10a0f9d`
+**Phase regeneration:** skipped by request
+
 ## Overview
 
-This roadmap replaces the legacy custom `.planning/` tree with an upstream GSD Core brownfield plan for connector parity. The first phase is deliberately inventory reconciliation: no connector fanout starts until the repository and upstream documentation are reconciled across all connector technologies, with canonical operation de-duplication and human-gated risk classification.
+This roadmap replaces the legacy custom `.planning/` tree with an official GSD Core brownfield plan for connector parity. The repo-local Pi adapter is the command path for future GSD work: agents use `/gsd <command>` or generated `/gsd-*` aliases in Pi, and non-interactive automation uses `scripts/gsd prompt <command>`.
 
-## Phases
+The first delivery gate remains inventory reconciliation. No connector fanout starts until the repository and upstream documentation are reconciled across all connector technologies, canonical operation de-duplication is applied, and human-gated risk classification is reviewed.
 
-**Phase Numbering:** Integer phases are planned milestone work; inserted decimal phases are reserved for urgent gate fixes.
+## North-Star Milestone
 
-- [ ] **Phase 1: Inventory and Surface Reconciliation** - Reconcile connector inventory and all documented surfaces before any connector fanout.
-- [ ] **Phase 2: Durable Read and ETL Parity** - Ensure product-safe documented record collections are available through `pm` catalog/read/ETL or typed exclusions.
-- [ ] **Phase 3: Direct-Read, Binary, and Native Surface Parity** - Cover product-safe direct-read, binary transfer, file/object, SQL/CDC, queue/event, GraphQL, XML/SOAP, CSV/NDJSON, and native surfaces without misclassification.
-- [ ] **Phase 4: Reverse ETL and Mutation Parity** - Map safe mutations/writes across connector technologies to reverse ETL plan/preview/approval/run or typed exclusions.
-- [ ] **Phase 5: Conformance and Certification Enforcement** - Make conformance/certification outputs authoritative for connector parity claims and rollout readiness.
+Deliver connector parity that is:
 
-## Phase Details
+1. **Surface-complete** — covers REST, GraphQL, XML/SOAP, CSV/NDJSON/report export, binary, file/object, SQL/CDC, queue/event/webhook/audit-log, native protocol, direct-read, and reverse ETL write surfaces.
+2. **Safety-gated** — keeps secrets, auth scopes, destructive/admin operations, live credential checks, reverse ETL execution, new dependencies, quality-gate reductions, and `main` merges under human control.
+3. **De-duplicated** — assigns each documented upstream operation exactly one primary classification.
+4. **Conformance-backed** — derives parity claims from generated inventory, fixture/replay gates, conformance checks, and certification status.
+5. **Agent-runnable** — uses official GSD Core commands through `.pi` and `scripts/gsd`, not runtime-specific copied command files.
 
-### Phase 1: Inventory and Surface Reconciliation
-**Goal**: Produce a current, generated, de-duplicated connector parity baseline before fanout.
-**Depends on**: Nothing (first phase)
-**Requirements**: [GSD-01, GSD-02, GSD-03, GSD-04, INV-01, INV-02, INV-03, INV-04, INV-05, GATE-03]
-**Success Criteria** (what must be TRUE):
-  1. Active `.planning/` is upstream GSD Core shaped and the pre-rebootstrap archive is recorded outside active planning.
-  2. Generated inventory reconciles bundle, hook, native, docs, API/surface manifest, stream, write, binary, direct-read, native protocol, blocker, quarantine, conformance, and certification counts.
-  3. The inventory classifies REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queue/event/webhook/audit-log, native, direct-read, and mutation surfaces.
-  4. The inventory applies canonical operation identity to avoid duplicate work from multiple docs pages/specs.
-  5. No connector fanout work is dispatched until inventory outputs are reviewed.
-**Plans**: 3 plans
+## Workstreams
 
-Plans:
-- [ ] 01-01: Rebootstrap planning and preserve GSD/archive evidence.
-- [ ] 01-02: Generate current connector inventory and multi-technology surface classification.
-- [ ] 01-03: Review inventory, de-duplication, blockers, and approve/disallow fanout entry.
+### 0. GSD Runtime and Agent Enablement
 
-### Phase 2: Durable Read and ETL Parity
-**Goal**: Bring product-safe documented durable record collections to CLI and ETL parity.
-**Depends on**: Phase 1
-**Requirements**: [READ-01]
-**Success Criteria** (what must be TRUE):
-  1. Every product-safe documented stream/report/event log/feed/table/queue message/CDC event/durable record collection is covered by a connector read surface or typed exclusion.
-  2. `pm connectors inspect`, catalog, read, and ETL surfaces agree on stream names, schemas, sync modes, cursor behavior, and limitations.
-  3. Incremental, pagination, cursor, schema, and projection behavior is verified through conformance fixtures or typed blockers.
-**Plans**: TBD after Phase 1 inventory reconciliation
+**Goal:** Make the official GSD command surface the default for humans, Pi sessions, and reusable agents.
 
-Plans:
-- [ ] 02-01: Prioritize durable read parity gaps from Phase 1 inventory.
-- [ ] 02-02: Execute read parity slices with conformance-backed verification.
+**Status:** In progress on issue #122.
 
-### Phase 3: Direct-Read, Binary, and Native Surface Parity
-**Goal**: Cover product-safe non-stream and non-REST read surfaces without forcing them into the wrong abstraction.
-**Depends on**: Phase 1
-**Requirements**: [READ-02, READ-03, READ-04]
-**Success Criteria** (what must be TRUE):
-  1. Direct-read operations are classified separately from durable ETL streams.
-  2. Binary operations have product-safe transfer surfaces or typed exclusions.
-  3. GraphQL, XML/SOAP, CSV/NDJSON/report export, file/object, SQL/CDC, queue/event/webhook/audit-log, and native protocol reads use an appropriate declarative, hook, native, direct-read, binary, or exclusion path.
-  4. Admin/elevated/destructive direct-read or binary operations remain human-gated.
-**Plans**: TBD after Phase 1 inventory reconciliation
+**Required outcomes:**
 
-Plans:
-- [ ] 03-01: Classify direct-read, binary, native, and protocol-specific surfaces.
-- [ ] 03-02: Plan safe CLI/native coverage and typed exclusions.
+- `.gsd/upstream.lock.json` pins official GSD source.
+- `.gsd/commands.json` lists official commands generated from official docs.
+- `.pi/extensions/gsd/index.ts` exposes `/gsd` plus `/gsd-*` aliases.
+- `.pi/skills/gsd-core/SKILL.md` sets default planning/implementation behavior.
+- `.agents/**` instructions route agents/subagents through the Pi adapter or `scripts/gsd`.
+- Manual-GSD fallback is only used when the adapter is unavailable and must be recorded.
 
-### Phase 4: Reverse ETL and Mutation Parity
-**Goal**: Map safe writes/mutations to reverse ETL actions with approval gates.
-**Depends on**: Phase 1
-**Requirements**: [WRITE-01, WRITE-02, WRITE-03]
-**Success Criteria** (what must be TRUE):
-  1. Product-safe mutations across REST, GraphQL, XML/SOAP, file/object, queue, database/native, and other protocol-specific operations map to reverse ETL actions or typed exclusions.
-  2. Plan, preview, approval, and execute semantics are preserved for every write path.
-  3. Destructive/admin/elevated-scope writes are human-gated and never exposed as generic raw write tools.
-**Plans**: TBD after Phase 1 inventory reconciliation
+### 1. Inventory and Surface Reconciliation
 
-Plans:
-- [ ] 04-01: Prioritize safe reverse ETL mutation gaps from Phase 1 inventory.
-- [ ] 04-02: Execute write parity slices with preview, approval, and certification evidence.
+**Goal:** Produce a current, generated, de-duplicated connector parity baseline before fanout.
 
-### Phase 5: Conformance and Certification Enforcement
-**Goal**: Make validated gates authoritative for connector parity status.
-**Depends on**: Phases 2-4
-**Requirements**: [GATE-01, GATE-02, GATE-03]
-**Success Criteria** (what must be TRUE):
-  1. Conformance validates schemas, fixtures, surface manifests, streams, writes, direct-read/binary metadata, cursor/pagination behavior, docs, and de-duplication contracts.
-  2. Certification reports distinguish replay/fixture success, live success, missing credentials (`uncertified`), typed blockers, and failures.
-  3. Public or PR-facing connector parity claims derive from generated conformance/certification artifacts.
-**Plans**: TBD after Phases 2-4
+**Depends on:** Workstream 0 for command/runtime consistency.
 
-Plans:
-- [ ] 05-01: Reconcile conformance gate coverage.
-- [ ] 05-02: Reconcile certification gate coverage and reporting.
+**Success criteria:**
+
+- Active `.planning/` is official GSD Core shaped and the pre-rebootstrap archive is recorded outside active planning.
+- Inventory reconciles bundles, hooks, natives, docs, API/surface manifests, streams, writes, binary surfaces, direct-read surfaces, native protocol surfaces, blockers, quarantine, conformance, and certification.
+- Inventory classifies REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queue/event/webhook/audit-log, native, direct-read, and mutation surfaces.
+- Canonical operation identity avoids duplicate work from multiple docs pages/specs.
+- Connector fanout is blocked until inventory outputs are reviewed.
+
+### 2. Durable Read and ETL Parity
+
+**Goal:** Bring product-safe documented durable record collections to CLI and ETL parity.
+
+**Depends on:** Workstream 1.
+
+**Success criteria:**
+
+- Every product-safe documented stream/report/event log/feed/table/queue message/CDC event/durable record collection is covered by a connector read surface or typed exclusion.
+- `pm connectors inspect`, catalog, read, and ETL surfaces agree on stream names, schemas, sync modes, cursor behavior, and limitations.
+- Incremental, pagination, cursor, schema, and projection behavior is verified through conformance fixtures or typed blockers.
+
+### 3. Direct-Read, Binary, and Native Surface Parity
+
+**Goal:** Cover product-safe non-stream and non-REST read surfaces without forcing them into the wrong abstraction.
+
+**Depends on:** Workstream 1.
+
+**Success criteria:**
+
+- Direct-read operations are classified separately from durable ETL streams.
+- Binary operations have product-safe transfer surfaces or typed exclusions.
+- GraphQL, XML/SOAP, CSV/NDJSON/report export, file/object, SQL/CDC, queue/event/webhook/audit-log, and native protocol reads use an appropriate declarative, hook, native, direct-read, binary, or exclusion path.
+- Admin/elevated/destructive direct-read or binary operations remain human-gated.
+
+### 4. Reverse ETL and Mutation Parity
+
+**Goal:** Map safe writes/mutations to reverse ETL actions with approval gates.
+
+**Depends on:** Workstream 1.
+
+**Success criteria:**
+
+- Product-safe mutations across REST, GraphQL, XML/SOAP, file/object, queue, database/native, and other protocol-specific operations map to reverse ETL actions or typed exclusions.
+- Plan, preview, approval, and execute semantics are preserved for every write path.
+- Destructive/admin/elevated-scope writes are human-gated and never exposed as generic raw write tools.
+
+### 5. Conformance and Certification Enforcement
+
+**Goal:** Make validated gates authoritative for connector parity status.
+
+**Depends on:** Workstreams 2–4.
+
+**Success criteria:**
+
+- Conformance validates schemas, fixtures, surface manifests, streams, writes, direct-read/binary metadata, cursor/pagination behavior, docs, and de-duplication contracts.
+- Certification reports distinguish replay/fixture success, live success, missing credentials (`uncertified`), typed blockers, and failures.
+- Public or PR-facing connector parity claims derive from generated conformance/certification artifacts.
+
+## Phase Mapping
+
+The existing phase files are preserved in this refresh by request. They still map to the roadmap as follows:
+
+| Existing phase | Roadmap workstream | Status |
+|---|---|---|
+| Phase 1: Inventory and Surface Reconciliation | Workstreams 0–1 | In progress |
+| Phase 2: Durable Read and ETL Parity | Workstream 2 | Not started |
+| Phase 3: Direct-Read, Binary, and Native Surface Parity | Workstream 3 | Not started |
+| Phase 4: Reverse ETL and Mutation Parity | Workstream 4 | Not started |
+| Phase 5: Conformance and Certification Enforcement | Workstream 5 | Not started |
 
 ## Progress
 
-**Execution Order:** Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5. Phase 1 is a hard planning gate: no connector fanout before inventory and surface reconciliation is reviewed.
+| Workstream | Status | Notes |
+|---|---|---|
+| 0. GSD Runtime and Agent Enablement | In progress | Official docs pinned; Pi adapter and agent guidance refreshed. |
+| 1. Inventory and Surface Reconciliation | In progress | Planning exists; generated inventory still must be reviewed before fanout. |
+| 2. Durable Read and ETL Parity | Not started | Blocked on Workstream 1. |
+| 3. Direct-Read, Binary, and Native Surface Parity | Not started | Blocked on Workstream 1. |
+| 4. Reverse ETL and Mutation Parity | Not started | Blocked on Workstream 1. |
+| 5. Conformance and Certification Enforcement | Not started | Blocked on Workstreams 2–4. |
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Inventory and Surface Reconciliation | 0/3 | In progress | - |
-| 2. Durable Read and ETL Parity | 0/TBD | Not started | - |
-| 3. Direct-Read, Binary, and Native Surface Parity | 0/TBD | Not started | - |
-| 4. Reverse ETL and Mutation Parity | 0/TBD | Not started | - |
-| 5. Conformance and Certification Enforcement | 0/TBD | Not started | - |
+## Command Path for Future Updates
+
+Use official GSD commands through the repo-local adapter:
+
+```bash
+scripts/gsd doctor
+scripts/gsd list
+scripts/gsd prompt map-codebase --fast
+scripts/gsd prompt new-project --from-existing --non-interactive
+scripts/gsd prompt plan-phase 1 --skip-research
+scripts/gsd prompt programming-loop init --phase <phase> --dry-run
+```
+
+In Pi after trust/reload:
+
+```text
+/gsd doctor
+/gsd list
+/gsd map-codebase --fast
+/gsd plan-phase 1 --skip-research
+/gsd-programming-loop init --phase <phase> --dry-run
+```
 
 ---
-*Roadmap generated: 2026-07-08 via upstream GSD Core brownfield workflow shape for issue #122*
+*Roadmap refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter; `.planning/phases/**` intentionally unchanged.*

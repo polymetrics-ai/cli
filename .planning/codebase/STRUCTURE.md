@@ -1,59 +1,37 @@
 # Structure
 
-**Analysis Date:** 2026-07-08
-**Generated via:** Upstream `/gsd:map-codebase` workflow shape, issue #122 prompt.
+**Generated via:** `scripts/gsd prompt map-codebase --fast` through the official GSD Core Pi adapter.
 
-## Top-Level Layout
-
-| Path | Purpose |
-|---|---|
-| `cmd/pm` | Main CLI executable entry point. |
-| `cmd/connectorgen` | Connector bundle validation/generation/scaffolding. |
-| `cmd/iconregistrygen` | Connector icon registry generation. |
-| `internal/cli` | CLI command implementations, docs/help rendering, certification CLI. |
-| `internal/app` | ETL, reverse ETL, query, warehouse, connection, and sync-mode application logic. |
-| `internal/connectors` | Connector interfaces, declarative engine, defs, hooks, natives, conformance, certify. |
-| `internal/runtime` / `internal/worker` | Optional runtime-backed execution. |
-| `internal/flow` | Flow execution surfaces. |
-| `internal/schedule` | Local scheduling/crontab integration. |
-| `internal/vault` | Credential storage and secret handling. |
-| `docs/architecture` | Architecture and certification design docs. |
-| `docs/migration` | Connector migration conventions, inventory/status, quarantine, rosters. |
-| `.agents/agentic-delivery` | Issue-first delivery contracts and automated review workflows. |
-| `.planning` | Active upstream GSD Core planning artifacts for issue #122 onward. |
-
-## Connector Directory Structure
+## Repository Areas
 
 | Path | Purpose |
 |---|---|
-| `internal/connectors/defs/<name>/metadata.json` | Connector identity, capabilities, risk, docs URL. |
-| `internal/connectors/defs/<name>/spec.json` | Connection JSON Schema with `x-secret` fields. |
-| `internal/connectors/defs/<name>/streams.json` | Declarative stream/read definitions. |
-| `internal/connectors/defs/<name>/writes.json` | Declarative write actions, when present. |
-| `internal/connectors/defs/<name>/api_surface.json` | Documented operation coverage and exclusions. |
-| `internal/connectors/defs/<name>/schemas/*.json` | Per-stream schemas with primary key/cursor extensions. |
-| `internal/connectors/defs/<name>/fixtures/**` | Recorded fixture pages and write request shapes. |
-| `internal/connectors/hooks/<name>/` | Connector-specific Tier 2 hooks. |
-| `internal/connectors/native/<name>/` | Tier 3 native implementations. |
+| `cmd/` | CLI entrypoints and command surfaces. Not edited for issue #122. |
+| `internal/` | Product implementation, connector runtime, ETL/reverse ETL, state, warehouse, certification. Not edited for issue #122. |
+| `internal/connectors/defs/` | JSON connector definition bundles. Current quick count: 547 directories. |
+| `internal/connectors/hooks/` | Hook implementations for connector behavior not captured declaratively. Current quick count: 78 directories. |
+| `internal/connectors/native/` | Native protocol implementations. Current quick count: 37 directories. |
+| `docs/architecture/` | Architecture and certification design docs. |
+| `docs/migration/` | Connector architecture v2 handoff, conventions, status, and wave guidance. |
+| `.agents/` | Agent-neutral contracts, reusable YAML specs, task/skill matrix, and connector migration agents. |
+| `.gsd/` | Official GSD source lock, docs snapshot, command registry, and repo-specific prompt sources. |
+| `.pi/` | Pi settings, extension, prompt, and skill resources for official GSD command execution. |
+| `.planning/` | Active GSD planning tree for issue #122. |
+| `scripts/` | Repo-local scripts including `scripts/gsd`. |
 
-## Generated / Shared Files to Treat Carefully
+## Important Generated/Planning Boundaries
 
-- Hook/native generated wiring is orchestrator-owned when regenerated.
-- `go.mod` / `go.sum` must not change without human approval.
-- `cmd/` and `internal/` must not change in issue #122.
-- Active `.planning/` is tracked; local archive paths outside `.planning/` are not active GSD context.
+- `.planning/phases/**` is intentionally unchanged in this refresh.
+- `cmd/**` and `internal/**` are out of scope for issue #122 planning-only changes.
+- `.gsd/official-docs/**` is an official docs snapshot pinned by `.gsd/upstream.lock.json`.
+- `.gsd/commands.json` is generated from official `docs/COMMANDS.md`.
+- `.pi/extensions/gsd/index.ts` registers `/gsd` and generated `/gsd-*` aliases.
 
-## Current Inventory Snapshot Inputs
+## Agent Structure
 
-During onboarding, generated shell checks observed:
-
-- `internal/connectors/defs`: 547 connector definition directories.
-- `internal/connectors/hooks`: 78 hook directories.
-- `internal/connectors/native`: 37 native directories.
-- `internal/connectors/defs/*/api_surface.json`: 547 files.
-- `api_surface.json` endpoint rows: 29,123 total, 13,468 covered, 15,655 excluded.
-
-These are planning inputs, not final reconciled truth; Phase 1 must regenerate and review the authoritative inventory.
+- `.agents/agentic-delivery/agents/**/*.agent.yaml`: reusable delivery/orchestration/review/security/architecture agents.
+- `.agents/connector-migration/agents/**/*.agent.yaml`: connector migration implementation/review agents.
+- All agents should route GSD workflows through `.pi` when interactive and `scripts/gsd prompt` when non-interactive.
 
 ---
-*Structure analysis: 2026-07-08*
+*Structure refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter.*

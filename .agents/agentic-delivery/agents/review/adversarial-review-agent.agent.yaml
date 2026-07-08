@@ -13,6 +13,7 @@ skills:
   preferred_local_skills: [go-engineering, api-design-principles, gsd-code-review]
 inputs:
   required:
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - PR diff or file list
     - linked issue
     - verification output
@@ -24,6 +25,7 @@ outputs:
 permissions:
   allowed_paths: [read-only]
 workflow:
+  - load_gsd_pi_adapter
   - read_issue
   - inspect_diff
   - verify_tests_match_acceptance
@@ -36,3 +38,6 @@ verification:
   required:
     - review report with severity ordering
     - automated review findings are dispositioned or explicitly pending
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

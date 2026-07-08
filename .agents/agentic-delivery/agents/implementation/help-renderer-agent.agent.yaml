@@ -14,6 +14,7 @@ skills:
   preferred_local_skills: [go-engineering, web-design-guidelines, frontend-design]
 inputs:
   required:
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - issue URL
     - cli_surface schema or draft
     - expected help-preview artifact
@@ -25,6 +26,7 @@ outputs:
 permissions:
   allowed_paths: [cmd/**, internal/**, docs/**, website/**, .planning/**]
 workflow:
+  - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
   - add_golden_red_test
@@ -37,3 +39,6 @@ verification:
   required:
     - go test targeted renderer package
     - website checks if website files change
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

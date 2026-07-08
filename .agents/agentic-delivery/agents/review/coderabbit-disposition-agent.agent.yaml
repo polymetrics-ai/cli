@@ -13,6 +13,7 @@ skills:
   preferred_local_skills: [github-issue-first-delivery, gsd-code-review, go-engineering]
 inputs:
   required:
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - github_pr_url
     - linked issue
     - PR base branch and repository default branch
@@ -51,6 +52,7 @@ permissions:
     - unrestricted HTTP write
     - repeated CodeRabbit or Copilot review requests in the same blocker window
 workflow:
+  - load_gsd_pi_adapter
   - read_issue_and_pr_scope
   - read_automated_review_routing_loop
   - read_coderabbit_review_loop
@@ -103,3 +105,5 @@ adapters:
     note: Use REST for issue comments and review comments; use GraphQL only if resolving non-CodeRabbit GitHub review threads directly.
   codex:
     note: Convert this YAML to a review-disposition prompt and keep GitHub writes limited to PR comments.
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

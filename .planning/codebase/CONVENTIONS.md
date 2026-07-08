@@ -1,68 +1,47 @@
 # Conventions
 
-**Analysis Date:** 2026-07-08
-**Generated via:** Upstream `/gsd:map-codebase` workflow shape, issue #122 prompt.
+**Generated via:** official GSD Core Pi adapter command path.
 
-## Go Conventions
+## GSD Command Conventions
 
-- Go-only CLI monolith for core runtime.
-- Use `gofmt` on `cmd` and `internal` when Go code changes.
-- Prefer table-driven tests for engine, conformance, certify, and CLI behavior.
-- Use contextual errors and safety redaction; never include secrets in errors/logs.
-- Do not add dependencies without human approval.
+- Prefer Pi interactive commands after project trust/reload:
+  - `/gsd <command> [args...]`
+  - generated aliases such as `/gsd-plan-phase`, `/gsd-map-codebase`, `/gsd-programming-loop`.
+- Prefer shell prompt generation for deterministic traces:
+  - `scripts/gsd prompt <command> [args...]`.
+- Run `scripts/gsd doctor` before relying on the adapter in a new environment.
+- Use `scripts/gsd sources <command>` when recording provenance.
+- Record manual-GSD fallback only when the adapter is unavailable.
 
-## CLI Conventions
+## Issue and PR Conventions
 
-- Prefer `--json` for machine-readable agent interactions.
-- Commands must validate untrusted arguments and avoid broad path traversal or control characters.
-- Reverse ETL must follow plan, preview, approval, execute.
-- Do not expose generic shell, generic HTTP write, generic SQL write, or unrestricted raw API tools.
+- One primary issue per implementation PR.
+- PR titles use Conventional Commits.
+- Default-branch completion PRs use `Closes #N`; stacked/incremental PRs use `Refs #N`.
+- Commit and push coherent green slices after local gates.
+- Never push to `main`; merge to `main` is human-gated.
 
-## Connector Authoring Conventions
+## Implementation Conventions
 
-Source of truth: `docs/migration/conventions.md`.
+- Plan before production edits.
+- For behavior changes, follow GSD/TDD: plan, red test, green implementation, refactor, verification.
+- Keep GSD plan, TDD ledger, and verification checklist current.
+- No new dependencies without explicit human approval.
 
-- Tier 1: declarative bundle only where possible.
-- Tier 2: hooks for justified custom auth/stream/record/write/check behavior.
-- Tier 3: native component split for non-HTTP or full custom connectors.
-- Connector names use bare names, not `source-*` / `destination-*` slugs.
-- `api_surface.json` must map each documented operation to exactly one covered surface or typed exclusion.
-- Fixtures should represent real wire shapes and sanitized values.
-- Parity deviations must be ledgered with typed blockers, not silent approximations.
+## Connector Conventions
 
-## Multi-Technology Surface Conventions
-
-Connector parity must classify all documented surfaces, not just REST endpoints:
-
-- REST/HTTP JSON operations.
-- GraphQL operations.
-- XML/SOAP/XML feeds.
-- CSV/TSV/NDJSON/report export operations.
-- Binary uploads/downloads.
-- File/object storage operations.
-- SQL/database/CDC operations.
-- Queue/event/webhook/audit-log operations.
-- Admin/destructive/elevated-scope operations.
-
-Each operation gets one primary classification; aliases and duplicate docs entries are cross-references.
-
-## Issue-First Delivery Conventions
-
-Source of truth: `.agents/agentic-delivery/contracts/issue-agent-contract.md`.
-
-- Read issue and required context first.
-- Keep one primary issue per PR.
-- Create/update plan, TDD ledger, and verification checklist before production edits.
-- Commit coherent checkpoints and push active issue branches, never `main`.
-- Use Conventional Commit PR titles and `Closes #N` for completed main-targeted work.
-- Run automated review routing and disposition actionable findings.
+- Declarative-first connector bundles under `internal/connectors/defs/<connector>/`.
+- Hooks and native implementations only when justified by migration conventions.
+- One upstream operation maps to exactly one primary classification.
+- Multi-surface connector planning must include REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queues/events/webhooks, native protocols, direct-read, and writes.
 
 ## Safety Conventions
 
-- No secrets are needed for planning work.
-- Do not run credentialed connector checks in issue #122.
-- Do not run real reverse ETL execution in issue #122.
-- New dependencies, auth scope changes, destructive external actions, production deploys, quality gate reductions, and `main` merge are human-gated.
+- Never request, print, summarize, or store secrets.
+- Add credentials only from environment variables or stdin when explicitly required.
+- Reverse ETL must follow plan, preview, approval, execute.
+- Do not expose generic shell, generic HTTP write, or generic SQL write tools.
+- Treat command arguments as untrusted.
 
 ---
-*Convention analysis: 2026-07-08*
+*Conventions refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter.*

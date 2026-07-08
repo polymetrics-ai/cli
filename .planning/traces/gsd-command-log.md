@@ -37,6 +37,20 @@ Repo-local files:
 
 ## Commands run
 
+Non-phase refresh evidence (requested after Pi adapter setup):
+
+```bash
+scripts/gsd prompt map-codebase --fast > .planning/traces/gsd-map-codebase-refresh-prompt.md
+scripts/gsd prompt new-project --from-existing --non-interactive > .planning/traces/gsd-new-project-refresh-prompt.md
+scripts/gsd prompt roadmap --refresh > .planning/traces/gsd-roadmap-refresh-prompt.md # failed: not an official command in registry
+scripts/gsd prompt onboard --fast --skip-phases > .planning/traces/gsd-onboard-refresh-prompt.md
+scripts/gsd prompt milestone-summary --planning-only > .planning/traces/gsd-milestone-summary-refresh-prompt.md
+scripts/gsd prompt docs-update .planning AGENTS.md .agents --planning-only > .planning/traces/gsd-docs-update-agents-prompt.md
+scripts/gsd prompt health --context > .planning/traces/gsd-health-refresh-prompt.md
+```
+
+The non-phase refresh used official commands available in `.gsd/commands.json`; `/gsd-roadmap` is not currently an official command, so roadmap updates were produced through the official onboarding/new-project/milestone-summary/docs-update prompt path.
+
 Initial red/preflight evidence:
 
 ```bash

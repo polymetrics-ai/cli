@@ -14,6 +14,7 @@ skills:
   preferred_local_skills: [github-issue-first-delivery, go-engineering, web-design-guidelines]
 inputs:
   required:
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - provider CLI surface issue
     - connector name
     - cli_surface draft path from the issue
@@ -26,6 +27,7 @@ outputs:
 permissions:
   allowed_paths: [internal/connectors/defs/<connector>/**, internal/connectors/**, cmd/connectorgen/**, docs/**, .planning/**]
 workflow:
+  - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
   - validate_research_json
@@ -40,3 +42,6 @@ verification:
     - go test targeted packages
     - go run ./cmd/connectorgen validate internal/connectors/defs/<connector>
     - secret-looking literal scan
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

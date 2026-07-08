@@ -1,9 +1,10 @@
 version: 1
 default_rules:
   - Read AGENTS.md and .agents/agentic-delivery/contracts/issue-agent-contract.md before work.
-  - Load and follow gsd-programming-loop for implementation or behavior-changing work.
+  - Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work.
+  - Load and follow gsd-programming-loop through /gsd-programming-loop in Pi or scripts/gsd prompt programming-loop from shell for implementation or behavior-changing work.
   - Use test-first implementation for behavior changes.
-  - If local GSD scripts are unavailable, record the manual GSD loop fallback and keep TDD evidence.
+  - If the repo-local GSD/Pi adapter is unavailable, record the manual GSD loop fallback and keep TDD evidence.
   - Plan before production edits and keep the GSD plan, TDD ledger, and verification checklist current.
   - Commit and push coherent green slices to the active issue/PR branch after local green gates.
   - Keep PR scope to one primary issue.

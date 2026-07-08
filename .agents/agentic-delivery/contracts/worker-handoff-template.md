@@ -24,7 +24,9 @@ Head SHA:
 
 ## GSD / TDD Evidence
 
-- GSD mode: <scripted | manual fallback>
+- GSD mode: <pi / scripts/gsd / manual fallback>
+- GSD command: </gsd ... or scripts/gsd prompt ...>
+- GSD adapter source: `.agents/agentic-delivery/references/gsd-pi-adapter.md`
 - Red test evidence: <command/result or docs-only exemption>
 - Green implementation evidence: <command/result>
 - Refactor evidence: <command/result or not applicable>

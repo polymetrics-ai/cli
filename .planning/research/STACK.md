@@ -1,43 +1,28 @@
-# Research — Connector Technology Stack
+# Research: Stack
 
-**Generated via:** Upstream `/gsd:new-project --auto` research step shape  
-**Date:** 2026-07-08
+**Generated via:** official GSD Core Pi adapter command path.
 
-## Current Stack Signals
+## Implementation Stack
 
-- Go CLI monolith with `pm` binary.
-- JSON Schema connector bundles.
-- Declarative HTTP engine plus hook/native escape hatches.
-- Local verification via `make verify` and Go test/build/vet.
-- Optional runtime services and DuckDB integration.
+- Go CLI monolith.
+- Embedded JSON connector bundles.
+- Local warehouse/query and ETL/reverse ETL services.
+- Optional runtime-backed execution.
 
-## Connector Technology Signals from Current Repo
+## Planning Stack
 
-Working-tree scans found docs/defs mentions for multiple connector technologies:
+- Official GSD Core docs snapshot pinned in `.gsd/official-docs/`.
+- Repo-local command registry in `.gsd/commands.json`.
+- Repo-local shell adapter in `scripts/gsd`.
+- Pi extension/prompt/skill resources in `.pi/`.
+- Agent-neutral contracts and YAML specs in `.agents/`.
 
-- `graphql`: 8 connector dirs mentioning GraphQL.
-- `xml`: 13 connector dirs mentioning XML.
-- `soap`: 1 connector dir mentioning SOAP.
-- `csv`: 35 connector dirs mentioning CSV.
-- `ndjson`: 2 connector dirs mentioning NDJSON.
-- `binary`: 142 connector dirs mentioning binary-related language.
-- `download`: 90 connector dirs mentioning downloads.
-- `multipart`: 74 connector dirs mentioning multipart.
-- `queue`: 24 connector dirs mentioning queue-related language.
-- Native connector dirs include database, queue, built-in, and custom protocol implementations.
+## Verification Stack
 
-These are broad text-scan signals, not final classifications. Phase 1 must generate authoritative connector-by-connector inventory.
+- Go gates for source changes.
+- `scripts/gsd doctor/version/list/verify-pi` for GSD adapter health.
+- JSON/YAML parse checks for planning and agent resources.
+- `git diff --name-only -- cmd internal` and `git diff --name-only -- .planning/phases` scope guards for issue #122.
 
-## Documentation Sources
-
-Use organization/repo docs as primary constraints:
-
-- `docs/migration/conventions.md`
-- `docs/architecture/connector-architecture-v2-design.md`
-- `docs/architecture/connector-certification-design.md`
-- `docs/plans/universal-programming-loop-prd.md`
-- Per-connector `docs.md`, `api_surface.json`, schemas, streams, writes, fixtures.
-
-## No New Dependencies
-
-Planning should not add dependencies. Protocol-specific implementation dependencies are future human-gated decisions.
+---
+*Stack research refreshed: 2026-07-08.*

@@ -28,6 +28,20 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
 - Do not expose or invent generic shell, generic HTTP write, or generic SQL write tools.
 - Treat command arguments as untrusted; avoid control characters, path traversal, and broad file paths.
 
+## GSD Core Runtime For Agents
+
+This repo uses official GSD Core workflows through a project-local Pi adapter:
+
+- Interactive Pi: use `/gsd <command> [args...]` or generated aliases such as `/gsd-plan-phase`,
+  `/gsd-programming-loop`, and `/gsd-code-review` after project trust/reload.
+- Shell/non-interactive: use `scripts/gsd prompt <command> [args...]` and execute the generated
+  prompt with local tools.
+- Health/provenance: run `scripts/gsd doctor`, `scripts/gsd list`, and
+  `scripts/gsd sources <command>` when validating the adapter.
+- Agent reference: read `.agents/agentic-delivery/references/gsd-pi-adapter.md` before GSD work.
+- Manual-GSD fallback is allowed only when the adapter is unavailable; record the fallback in the
+  planning trace, phase artifact, worker handoff, or PR body.
+
 ## Issue-First Delivery And Automated Review
 
 - For issue-to-PR work, read `.agents/agentic-delivery/contracts/issue-agent-contract.md` and keep
@@ -38,8 +52,9 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
   orchestrator owns shared parent artifacts, parent PR state, sub-PR merge decisions, automated
   review coverage routing, and final human-readiness.
 - For implementation or behavior-changing work, `gsd-programming-loop` is mandatory. Load it before
-  coding, follow its TDD/programming lifecycle, and record GSD/TDD evidence in the phase or PR
-  artifacts. If the local GSD scripts are unavailable, run the manual GSD loop and record that
+  coding through `/gsd-programming-loop` in Pi or `scripts/gsd prompt programming-loop ...` from
+  shell, follow its TDD/programming lifecycle, and record GSD/TDD evidence in the phase or PR
+  artifacts. If the repo-local GSD adapter is unavailable, run the manual GSD loop and record that
   fallback explicitly; do not skip test-first implementation.
 - Plan before coding. Create or update the issue's GSD plan, TDD ledger, and verification checklist
   before production edits, then keep them current as the implementation changes.

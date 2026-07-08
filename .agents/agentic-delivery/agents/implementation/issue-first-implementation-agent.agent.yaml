@@ -18,6 +18,7 @@ inputs:
     - issue body with acceptance criteria
     - parent issue and parent PR when the issue is part of a stacked roadmap
     - AGENTS.md
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - .agents/agentic-delivery/contracts/issue-agent-contract.md
     - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
     - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
@@ -47,6 +48,7 @@ permissions:
     - unrestricted HTTP write
     - unrestricted SQL write
 workflow:
+  - load_gsd_pi_adapter
   - read_issue
   - read_required_context
   - load_required_skills
@@ -98,3 +100,5 @@ adapters:
     note: Convert this YAML to a thread prompt plus local tool execution.
   github_actions:
     note: Use as metadata for PR guard checks, not as executable workflow.
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

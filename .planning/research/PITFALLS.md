@@ -1,28 +1,29 @@
-# Research — Pitfalls
+# Research: Pitfalls
 
-**Generated via:** Upstream `/gsd:new-project --auto` research step shape  
-**Date:** 2026-07-08
+**Generated via:** official GSD Core Pi adapter command path.
 
-## REST-Only Planning Pitfall
+## Connector Pitfalls
 
-Treating connector parity as only REST endpoint parity misses GraphQL, XML/SOAP, CSV/NDJSON exports, binary transfers, file/object APIs, SQL/CDC, queues/events/webhooks, and native protocols. This creates false completion and misclassified CLI surfaces.
+- Treating documented connector APIs as REST-only.
+- Duplicating operation work because docs pages, generated references, aliases, and product guides describe the same upstream operation.
+- Mapping binary/download/export operations into durable stream abstractions without product fit.
+- Mapping direct-read operations into ETL when they are point lookups or operational reads.
+- Exposing destructive/admin/elevated-scope writes instead of typed exclusions or human gates.
+- Treating missing live credentials as certification failure instead of `uncertified`.
 
-## Duplicate Operation Pitfall
+## Planning Pitfalls
 
-The same upstream capability can appear in OpenAPI specs, generated docs, human guides, SDK examples, GraphQL schemas, and webhook docs. Without canonical operation identity, planning can double-count the same operation as multiple streams/actions/commands.
+- Using stale legacy `.planning/` counts for fanout.
+- Regenerating `.planning/phases/**` when the user requested non-phase refresh only.
+- Claiming upstream Pi support when the official GSD docs do not list Pi as a runtime.
+- Letting agents use stale Claude-local slash command assumptions instead of the repo-local Pi adapter.
 
-## Unsafe Write Pitfall
+## Delivery Pitfalls
 
-Some writes are destructive, admin-only, billing-impacting, elevated-scope, or credential-management operations. These must not be normalized into routine reverse ETL actions without human approval.
+- Posting redundant CodeRabbit manual review commands after every push.
+- Treating skipped/rate-limited automated review as approval.
+- Adding dependencies without human approval.
+- Running credentialed connector checks or reverse ETL execution during planning-only work.
 
-## Wrong Abstraction Pitfall
-
-Binary downloads, report exports, direct status reads, SQL queries, queue receives, and event logs should not all be forced into durable ETL streams. Correct classification matters for CLI UX, safety, conformance, and certification.
-
-## Stale Inventory Pitfall
-
-Prior `.planning/` counts were produced by earlier branches and phases. Phase 1 must regenerate counts from the current tree and current upstream docs.
-
-## Secret Handling Pitfall
-
-Planning and replay gates must not require secrets. Live certification is credential-gated and missing credentials should produce `uncertified`, not failure.
+---
+*Pitfall research refreshed: 2026-07-08.*

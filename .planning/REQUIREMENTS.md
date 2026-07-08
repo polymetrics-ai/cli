@@ -1,16 +1,20 @@
 # Requirements: Polymetrics CLI Connector Parity
 
 **Defined:** 2026-07-08
+**Refreshed via:** official GSD Core Pi adapter commands
 **Core Value:** Users and agents can trust `pm` as a connector-complete, safety-gated ETL and reverse ETL interface whose advertised connector capabilities match documented upstream product surfaces without duplicate or unsafe exposure.
 
 ## v1 Requirements
 
-### GSD Rebootstrap
+### GSD and Pi Runtime
 
 - [ ] **GSD-01**: Pre-rebootstrap `.planning/` state is archived outside active `.planning/` before replacement.
-- [ ] **GSD-02**: Active `.planning/` is recreated in upstream GSD Core structure with tracked `PROJECT.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`, config, codebase maps, and phase artifacts.
+- [ ] **GSD-02**: Active `.planning/` is recreated in official GSD Core structure with tracked `PROJECT.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`, config, codebase maps, and phase artifacts.
 - [ ] **GSD-03**: New planning artifacts identify the active milestone as connector parity across all connector technologies, not only REST APIs.
 - [ ] **GSD-04**: Verification records the commands/workflows used and confirms no Go source files changed.
+- [ ] **GSD-05**: Official `open-gsd/gsd-core@next` source is pinned in `.gsd/upstream.lock.json` and command registry is generated from official docs.
+- [ ] **GSD-06**: Pi resources expose repo-local GSD commands through `/gsd`, generated `/gsd-*` aliases, prompt fallback, and GSD Core skill defaults.
+- [ ] **GSD-07**: Agents and subagents route GSD work through `.pi` commands or `scripts/gsd prompt`, with manual fallback recorded only when the adapter is unavailable.
 
 ### Inventory and Canonical Surface Baseline
 
@@ -46,12 +50,14 @@
 - **GOV-01**: Generate durable public connector capability reports from validated manifests and certification outputs.
 - **GOV-02**: Add recurring drift detection for upstream product documentation across REST, GraphQL, XML/SOAP, binary, file, database, queue, webhook/event, and other connector surfaces.
 - **GOV-03**: Add richer cost/timing reports for future parallel connector migration waves.
+- **GOV-04**: Keep GSD/Pi adapter compatibility checked when upstream GSD Core command docs change.
 
 ## Out of Scope
 
 | Feature | Reason |
-|---------|--------|
-| Runtime connector implementation in issue #122 | This issue is planning rebootstrap only. |
+|---|---|
+| Runtime connector implementation in issue #122 | This issue is planning and agent/runtime rebootstrap only. |
+| Phase regeneration in this refresh | User explicitly requested updating everything except phases. |
 | New dependencies | Requires human gate and is unnecessary for planning. |
 | Credentialed connector checks | No secrets are needed; live checks are separate certification work. |
 | Destructive/admin execution | Must remain human-gated. |
@@ -59,33 +65,30 @@
 
 ## Traceability
 
-| Requirement | Phase | Status |
-|-------------|-------|--------|
-| GSD-01 | Phase 1 | In Progress |
-| GSD-02 | Phase 1 | In Progress |
-| GSD-03 | Phase 1 | In Progress |
-| GSD-04 | Phase 1 | In Progress |
-| INV-01 | Phase 1 | Pending |
-| INV-02 | Phase 1 | Pending |
-| INV-03 | Phase 1 | Pending |
-| INV-04 | Phase 1 | Pending |
-| INV-05 | Phase 1 | Pending |
-| READ-01 | Phase 2 | Pending |
-| READ-02 | Phase 3 | Pending |
-| READ-03 | Phase 3 | Pending |
-| READ-04 | Phase 3 | Pending |
-| WRITE-01 | Phase 4 | Pending |
-| WRITE-02 | Phase 4 | Pending |
-| WRITE-03 | Phase 4 | Pending |
-| GATE-01 | Phase 5 | Pending |
-| GATE-02 | Phase 5 | Pending |
-| GATE-03 | Phase 1 | Pending |
-
-**Coverage:**
-- v1 requirements: 19 total
-- Mapped to phases: 19
-- Unmapped: 0
+| Requirement | Roadmap Workstream | Status |
+|---|---|---|
+| GSD-01 | 0/1 | In progress |
+| GSD-02 | 0/1 | In progress |
+| GSD-03 | 0/1 | In progress |
+| GSD-04 | 0/1 | In progress |
+| GSD-05 | 0 | In progress |
+| GSD-06 | 0 | In progress |
+| GSD-07 | 0 | In progress |
+| INV-01 | 1 | Pending |
+| INV-02 | 1 | Pending |
+| INV-03 | 1 | Pending |
+| INV-04 | 1 | Pending |
+| INV-05 | 1 | Pending |
+| READ-01 | 2 | Pending |
+| READ-02 | 3 | Pending |
+| READ-03 | 3 | Pending |
+| READ-04 | 3 | Pending |
+| WRITE-01 | 4 | Pending |
+| WRITE-02 | 4 | Pending |
+| WRITE-03 | 4 | Pending |
+| GATE-01 | 5 | Pending |
+| GATE-02 | 5 | Pending |
+| GATE-03 | 1 | Pending |
 
 ---
-*Requirements defined: 2026-07-08*
-*Last updated: 2026-07-08 after issue #122 upstream GSD Core rebootstrap*
+*Requirements refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter; phases intentionally unchanged.*

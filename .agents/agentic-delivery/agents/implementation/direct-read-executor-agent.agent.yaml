@@ -14,6 +14,7 @@ skills:
   preferred_local_skills: [go-engineering, api-design-principles]
 inputs:
   required:
+    - .agents/agentic-delivery/references/gsd-pi-adapter.md
     - issue URL
     - operation-ledger schema
     - safety model docs
@@ -28,6 +29,7 @@ permissions:
     - unrestricted HTTP write
     - unrestricted SQL write
 workflow:
+  - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
   - add_rejection_tests_for_full_urls_and_mutations
@@ -40,3 +42,6 @@ verification:
   required:
     - go test targeted executor packages
     - secret redaction tests
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.

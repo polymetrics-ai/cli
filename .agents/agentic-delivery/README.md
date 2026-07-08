@@ -34,6 +34,7 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `references/automated-review-routing-best-practices.md`: source-backed CodeRabbit-to-Copilot
   fallback policy.
 - `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
+- `references/gsd-pi-adapter.md`: repo-local official GSD Core command path for Pi and shell agents.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
 - `schemas/orchestration-state.schema.yaml`: field contract for parent issue state ledgers.
 - `agents/<type>/*.agent.yaml`: reusable role definitions grouped by agent type.
@@ -59,11 +60,13 @@ the `.agents/` YAML and Markdown contracts instead of copying policy.
   the parent PR thread.
 - Skills are declared by capability, with preferred local skill names when available.
 - Guardrails are explicit hard stops, not prose suggestions.
-- Production behavior changes require `gsd-programming-loop`; if local GSD scripts are unavailable,
-  agents must record a manual-GSD fallback and still provide test-first evidence.
+- Production behavior changes require `gsd-programming-loop` through the repo-local Pi adapter:
+  use `/gsd-programming-loop ...` in Pi or `scripts/gsd prompt programming-loop ...` from shell. If
+  the adapter is unavailable, agents must record a manual-GSD fallback and still provide test-first
+  evidence.
 - Implementation agents must plan before production edits, keep GSD/TDD/verification artifacts
-  current, and commit/push coherent green slices to the active issue/PR branch after local green
-  gates.
+  current, record the GSD command path used, and commit/push coherent green slices to the active
+  issue/PR branch after local green gates.
 - CodeRabbit review is a post-implementation gate. Every actionable review item must receive a
   reasoned disposition before it is resolved. Non-draft PRs targeting `main` should rely on
   automatic review. Follow-up fix commits should rely on automatic incremental review when active;

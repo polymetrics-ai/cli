@@ -1,32 +1,32 @@
-# Research Summary — Connector Parity Rebootstrap
+# Research Summary
 
-**Generated via:** Upstream `/gsd:new-project --auto` research synthesis shape  
-**Date:** 2026-07-08
+**Generated via:** official GSD Core Pi adapter command path
+**Commands:** `scripts/gsd prompt map-codebase --fast`, `scripts/gsd prompt docs-update .planning AGENTS.md .agents --planning-only`, `scripts/gsd prompt health --context`
 
-## Key Finding
+## Findings
 
-Connector parity must be planned as multi-surface product parity, not only REST API endpoint parity. The repo already contains evidence of REST, GraphQL, XML/SOAP, CSV/NDJSON, binary transfer, file/object storage, SQL/CDC, queue/event/webhook/audit-log, direct-read, and native connector surfaces.
+1. The repository has a completed Connector Architecture v2 baseline with declarative connector bundles, hooks, native implementations, conformance, and certification scaffolding.
+2. Connector parity cannot be represented as REST-only. The plan must account for REST/JSON, GraphQL, XML/SOAP, CSV/NDJSON/report exports, binary transfer, file/object storage, SQL/CDC, queues/events/webhooks/audit logs, native protocols, direct-read, and reverse ETL writes.
+3. Quick map counts show 547 connector definition directories, 547 API surface files, 7159 stream definition files, 5699 write definition files, 78 hook directories, and 37 native connector directories.
+4. Quick map counts are not authoritative parity claims. Phase 1 must regenerate and reconcile inventory before connector fanout.
+5. Official GSD Core command docs are pinned and surfaced through a repo-local Pi adapter because Pi is not listed as an upstream GSD runtime.
+6. Agent/subagent instructions need durable guidance to use `/gsd`, generated `/gsd-*` aliases, or `scripts/gsd prompt` rather than stale runtime-specific assumptions.
 
-## Stack Additions
+## Current Risks
 
-No stack additions are needed for issue #122. Future implementation dependencies are human-gated.
+- Duplicate operation work from docs aliases or generated API references.
+- Wrong abstraction for non-REST, binary, native, or direct-read surfaces.
+- Unsafe write exposure if reverse ETL boundaries are bypassed.
+- Agent drift if YAML specs and contracts do not mention the Pi adapter.
+- Planning drift if `.planning/phases/**` is accidentally regenerated during this refresh.
 
-## Table Stakes
+## Recommended Next Steps
 
-- Generate current inventory before fanout.
-- Canonicalize and de-duplicate documented operations.
-- Classify each operation exactly once as ETL stream, reverse ETL write, direct-read, binary transfer, native protocol, event/webhook/audit surface, or typed exclusion.
-- Preserve safety: no secrets, no generic raw tools, reverse ETL approval flow, human gates.
-- Make conformance and certification the source of truth for parity claims.
+1. Keep issue #122 scoped to planning, GSD/Pi runtime, and agent guidance.
+2. Keep `.planning/phases/**` unchanged in this refresh.
+3. Require future implementation agents to run official GSD command prompts before production edits.
+4. Start connector fanout only after inventory reconciliation is generated and reviewed.
+5. Route PR review through CodeRabbit automatic review, with Copilot fallback only under documented blocker conditions.
 
-## Watch Out For
-
-- REST-only blind spots.
-- Duplicated operations across multiple docs/spec sources.
-- Unsafe admin/destructive writes.
-- Misclassifying binary/direct-read/native surfaces as streams.
-- Stale counts from old planning artifacts.
-
-## Roadmap Implication
-
-The first roadmap phase must be inventory and surface reconciliation. Connector fanout comes only after that inventory is generated and reviewed.
+---
+*Research refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter.*

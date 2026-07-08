@@ -1,44 +1,33 @@
-# Research — Connector Surface Features
+# Research: Features
 
-**Generated via:** Upstream `/gsd:new-project --auto` research step shape  
-**Date:** 2026-07-08
+**Generated via:** official GSD Core Pi adapter command path.
 
-## Table Stakes
+## Product Feature Areas
 
-Connector parity requires coverage of every documented product-safe connector capability, not just REST endpoints.
+- Connector inspection and manifest/catalog discovery.
+- ETL reads and local warehouse/output loading.
+- Reverse ETL writes with plan, preview, approval, execute.
+- Local warehouse queries.
+- Credential reference management without printing secrets.
+- Scheduling and optional runtime-backed execution.
+- Connector conformance and certification reporting.
 
-### Surface Classes
+## Connector Surface Feature Areas
 
-1. **ETL streams** — durable record collections usable through catalog/read/ETL.
-2. **Reverse ETL write actions** — product-safe mutations through plan/preview/approval/run.
-3. **Direct-read commands** — useful non-durable reads that should not be modeled as sync streams.
-4. **Binary transfer commands** — artifacts, archives, attachments, files, documents, exports, media.
-5. **Native protocol capabilities** — database, CDC, queue, file/object, and custom system surfaces.
-6. **Webhook/event/audit-log surfaces** — event resources, logs, queues, and replayable/auditable event data.
-7. **Typed exclusions** — destructive, elevated-scope, deprecated, duplicate, non-data, or out-of-scope operations.
+- Durable record streams.
+- Report/export ingestion.
+- Direct-read commands.
+- Binary transfer commands.
+- Reverse ETL actions.
+- Native protocol access for databases, CDC, queues, file/object systems, and product-specific protocols.
+- Typed exclusions for unsafe or out-of-scope operations.
 
-### Protocol Families to Preserve
+## Planning/Agent Feature Areas
 
-- REST/HTTP JSON.
-- GraphQL queries, mutations, and subscription/event-style surfaces where documented.
-- XML/SOAP/XML feeds.
-- CSV, TSV, NDJSON, and report-export protocols.
-- Binary upload/download protocols.
-- File/object storage APIs and signed transfer flows.
-- SQL/database and CDC protocols.
-- Queues, webhooks, audit logs, and event streams.
+- Official GSD command registry under `.gsd/commands.json`.
+- Pi interactive command aliases through `.pi/extensions/gsd/index.ts`.
+- Default Pi skill behavior through `.pi/skills/gsd-core/SKILL.md`.
+- Deterministic shell prompt generation through `scripts/gsd prompt`.
 
-## Differentiators
-
-- Agent-safe CLI with JSON output and deterministic exit codes.
-- Reverse ETL approval flow instead of raw mutation tools.
-- Conformance and certification as the source of truth for connector capability claims.
-- Explicit de-duplication so generated API docs, product guides, and protocol schemas do not inflate coverage.
-
-## Anti-Features
-
-- Generic shell execution.
-- Generic HTTP write tools.
-- Generic SQL write tools.
-- Silent approximation of unsupported connector behavior.
-- Credentialed live tests as a requirement for no-secret planning gates.
+---
+*Feature research refreshed: 2026-07-08.*
