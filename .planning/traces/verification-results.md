@@ -5,6 +5,10 @@
 ## Commands Run
 
 ```bash
+scripts/gsd doctor
+scripts/gsd sources issue-122-rebootstrap
+scripts/gsd prompt issue-122-rebootstrap >/tmp/issue-122-generated-prompt.md
+diff -u .planning/traces/issue-122-gsd-onboarding-prompt.md /tmp/issue-122-generated-prompt.md
 node -e "JSON.parse(require('fs').readFileSync('.planning/config.json','utf8')); console.log('config ok')"
 test -f .planning/PROJECT.md
 test -f .planning/REQUIREMENTS.md
@@ -29,6 +33,10 @@ git diff --name-only -- cmd internal
 
 ## Results
 
+- Repo-local `scripts/gsd doctor`: PASS.
+- `scripts/gsd sources issue-122-rebootstrap`: PASS; resolved upstream command/workflow sources and repo prompt.
+- `scripts/gsd prompt issue-122-rebootstrap`: PASS; generated `.planning/traces/issue-122-gsd-onboarding-prompt.md`.
+- Generated prompt diff check: PASS after updating trace from command output.
 - Config parse: PASS (`config ok`).
 - Required active planning files: PASS.
 - Codebase map files: PASS.

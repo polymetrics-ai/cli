@@ -3,6 +3,10 @@
 ## Required Commands
 
 ```bash
+scripts/gsd doctor
+scripts/gsd sources issue-122-rebootstrap
+scripts/gsd prompt issue-122-rebootstrap >/tmp/issue-122-generated-prompt.md
+diff -u .planning/traces/issue-122-gsd-onboarding-prompt.md /tmp/issue-122-generated-prompt.md
 node -e "JSON.parse(require('fs').readFileSync('.planning/config.json','utf8')); console.log('config ok')"
 test -f .planning/PROJECT.md
 test -f .planning/REQUIREMENTS.md
@@ -24,6 +28,9 @@ git diff --name-only -- cmd internal
 
 ## Expected Results
 
+- `scripts/gsd doctor` exits 0.
+- `scripts/gsd sources issue-122-rebootstrap` resolves upstream GSD workflow sources and the repo prompt.
+- The generated prompt matches `.planning/traces/issue-122-gsd-onboarding-prompt.md`.
 - `config ok` is printed.
 - All `test` commands exit 0.
 - `rg` finds multi-surface connector parity, safety, certification, and conformance language.

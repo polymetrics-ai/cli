@@ -2,9 +2,9 @@
 
 ## Environment note
 
-This Pi harness can read files, run shell commands, and edit/write files, but it does not expose Claude slash-command execution or the Claude `Task` subagent API. Therefore the upstream GSD Core command specs were executed as workflow documents from their installed command/source files, with deterministic preflight commands run through `gsd-tools.cjs` and all workflow sources recorded here.
+The repository now provides a runtime-neutral GSD adapter at `scripts/gsd` plus a Pi prompt template at `.pi/prompts/gsd.md`. This avoids relying on Claude-only slash-command dispatch while still using the installed upstream GSD Core command/workflow sources. In this Pi harness, upstream GSD prompt generation was run through `scripts/gsd`, deterministic preflight commands were run through `gsd-tools.cjs`, and all workflow sources are recorded here.
 
-## Preflight commands run
+## Preflight and repo-local GSD commands run
 
 ```bash
 git status --short --branch
@@ -13,20 +13,23 @@ node "$HOME/.claude/get-shit-done/bin/gsd-tools.cjs" init map-codebase
 find .planning/phases -maxdepth 1 -mindepth 1 -type d | wc -l
 test -d .planning/codebase || echo NO_CODEBASE_MAP
 git diff --name-only -- cmd internal
+scripts/gsd doctor
+scripts/gsd sources issue-122-rebootstrap
+scripts/gsd prompt issue-122-rebootstrap > .planning/traces/issue-122-gsd-onboarding-prompt.md
 ```
 
 ## Upstream GSD command sources used
 
-Equivalent GSD user commands:
+Equivalent GSD user commands encoded by `scripts/gsd prompt issue-122-rebootstrap`:
 
 ```text
 /gsd:map-codebase connector parity, all connector technologies and surfaces
-/gsd:new-project --auto @.planning/traces/issue-122-gsd-onboarding-prompt.md
+/gsd:new-project --auto <runtime-neutral prompt>
 /gsd:plan-phase 1 --skip-research
 /gsd:programming-loop init --phase 01-inventory-reconciliation --dry-run
 ```
 
-Installed workflow source files read/executed:
+Installed workflow source files resolved by `scripts/gsd sources issue-122-rebootstrap`:
 
 - `/Users/karthiksivadas/.claude/commands/gsd/map-codebase.md`
 - `/Users/karthiksivadas/.claude/get-shit-done/workflows/map-codebase.md`
@@ -35,6 +38,9 @@ Installed workflow source files read/executed:
 - `/Users/karthiksivadas/.claude/commands/gsd/plan-phase.md`
 - `/Users/karthiksivadas/.claude/get-shit-done/workflows/plan-phase.md`
 - `/Users/karthiksivadas/.claude/commands/gsd/programming-loop.md`
+- `/Users/karthiksivadas/.claude/skills/gsd-programming-loop/SKILL.md`
+- `/Users/karthiksivadas/.claude/skills/gsd-programming-loop/references/workflows/programming-loop.md`
+- `.gsd/prompts/issue-122-rebootstrap.md`
 
 ## Archive evidence
 
