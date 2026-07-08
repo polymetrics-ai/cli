@@ -263,6 +263,29 @@ Green: go test ./internal/connectors/... -count=1
 
 No credentialed/live GitHub checks were run. The compromised pasted token remains unused and must be revoked/rotated before any future credentialed testing.
 
+## Binary Download Sweep Slice Evidence
+
+Status: binary-download certification safety gate added for full mode.
+
+Behavior added:
+
+- `Options.Full` now runs a binary-download certification stage when a curated connector candidate exists.
+- GitHub uses the declared `release download` command path and verifies operation-backed binary executors remain safely blocked instead of writing files without an explicit bounded file policy.
+- Connectors without curated binary candidates record a documented non-failing skip and a `capabilities.binary` result.
+- The stage scans binary command output for secret leaks before reporting `blocked`/pass.
+
+Test-first evidence:
+
+```text
+Red: go test ./internal/connectors/certify/ -run 'TestBinaryDownloadCandidateForGitHub|TestBinaryDownloadCandidateForUnknownConnector' -count=1 -v
+     failed on undefined binary candidate helper before production edits.
+Green: go test ./internal/connectors/certify/ -run 'TestBinaryDownloadCandidateForGitHub|TestBinaryDownloadCandidateForUnknownConnector|TestFullSweepSourceStagesAgainstSample' -count=1 -v
+Green: go test ./internal/connectors/certify/ -count=1 -timeout=10m
+Green: go test ./internal/connectors/... -count=1
+```
+
+No binary bytes are downloaded in dependency-free tests. A real bounded binary executor remains a future implementation gate; this slice certifies that the current binary surface is explicit and safely blocked.
+
 ## Direct-Read Sweep Slice Evidence
 
 Status: curated direct-read certification stage added for full mode.
@@ -297,7 +320,7 @@ No credentialed/live GitHub checks were run. The stage is ready for future env-g
 - [x] Red tests added for first resumed slice.
 - [x] Fixture/non-credentialed tests green for the first all-streams read sweep slice.
 - [x] Credentialed tests gated behind env vars only.
-- [ ] Binary sweep implemented and tested.
+- [x] Binary sweep safety gate implemented and tested (executor remains future gated work).
 - [x] Direct-read sweep implemented and tested.
 - [ ] Flow/schedule per stream implemented and tested.
 - [ ] RLM bus-factor fixture plan created.
