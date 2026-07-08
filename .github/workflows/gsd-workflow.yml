@@ -1,0 +1,19 @@
+name: GSD workflow evidence
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  gsd-workflow-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify implementation changes have GSD/TDD evidence
+        env:
+          GSD_BASE_REF: origin/${{ github.base_ref }}
+        run: scripts/verify-gsd-workflow
