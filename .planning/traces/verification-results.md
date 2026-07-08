@@ -114,6 +114,31 @@ rg -n "runtime-rlm-website-integration|Podman|PostgreSQL|Dragonfly|Redis|Tempora
 
 Result: PASS. GSD prompts, agent references, Pi skill, AGENTS.md, and non-phase planning docs now preserve concise runtime/RLM/Pi-agent/website integration knowledge with canonical source docs, while keeping runtime-backed checks optional and gated.
 
+## Post-Merge Certify Full Sweep Tracker Verification
+
+Commands:
+
+```bash
+scripts/gsd prompt docs-update SESSION_HANDOFF.md .planning/trackers/post-gsd-merge-certify-full-sweep.md --post-merge-certify-tracker > .planning/traces/gsd-post-merge-certify-tracker-prompt.md
+rg -n "ghp_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+" .planning/trackers .planning/traces/gsd-post-merge-certify-tracker-prompt.md
+scripts/gsd doctor
+scripts/gsd verify-pi
+node -e "JSON.parse(require('fs').readFileSync('.planning/config.json','utf8')); JSON.parse(require('fs').readFileSync('.gsd/commands.json','utf8')); JSON.parse(require('fs').readFileSync('.gsd/upstream.lock.json','utf8')); JSON.parse(require('fs').readFileSync('.pi/settings.json','utf8')); console.log('json ok')"
+python3 - <<'PY'
+from pathlib import Path
+import yaml
+for path in sorted(Path('.agents').rglob('*.yaml')):
+    yaml.safe_load(path.read_text())
+print('yaml ok')
+PY
+git diff --check
+git diff --name-only -- cmd internal
+git diff --name-only -- .planning/phases
+git diff --name-only -- website
+```
+
+Result: PASS. The tracker was added at `.planning/trackers/post-gsd-merge-certify-full-sweep.md`, no pasted credential was persisted, and `cmd/internal`, `.planning/phases`, and `website` source diffs remained empty.
+
 ## Results
 
 - `scripts/gsd doctor`: PASS. Official docs, command registry, lock, Pi settings, Pi extension, Pi skill, Pi prompt, and commands were detected.
