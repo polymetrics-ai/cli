@@ -47,6 +47,12 @@ func TestFullSweepSourceStagesAgainstSample(t *testing.T) {
 	if rep.Capabilities.DirectRead == nil || rep.Capabilities.DirectRead.Result != "skipped" {
 		t.Fatalf("Capabilities.DirectRead = %+v, want skipped", rep.Capabilities.DirectRead)
 	}
+	if stage := mustStage(t, rep, "binary_download_sweep"); stage.Passed || !containsAny(stage.Error, "skipped:") {
+		t.Fatalf("binary_download_sweep = %+v, want documented skip for sample", stage)
+	}
+	if rep.Capabilities.Binary == nil || rep.Capabilities.Binary.Result != "skipped" {
+		t.Fatalf("Capabilities.Binary = %+v, want skipped", rep.Capabilities.Binary)
+	}
 }
 
 func TestSourceStagesAgainstSample(t *testing.T) {
@@ -246,6 +252,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		"approval_idempotency":     true,
 		"write_sweep_all_pairings": true,
 		"direct_read_sweep":        true,
+		"binary_download_sweep":    true,
 	}
 	for _, stage := range rep.Stages {
 		if metaStagesWithoutDirectCLICall[stage.Name] {
