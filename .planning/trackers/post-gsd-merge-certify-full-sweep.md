@@ -263,6 +263,29 @@ Green: go test ./internal/connectors/... -count=1
 
 No credentialed/live GitHub checks were run. The compromised pasted token remains unused and must be revoked/rotated before any future credentialed testing.
 
+## Direct-Read Sweep Slice Evidence
+
+Status: curated direct-read certification stage added for full mode.
+
+Behavior added:
+
+- `Options.Full` now runs a direct-read certification stage when a curated connector candidate exists.
+- GitHub uses the implemented `repo read-file` command with credential resolution, bounded `--max-bytes`, and content/download URL redaction from the commandrunner path.
+- Connectors without curated direct-read candidates record a documented non-failing skip and a `capabilities.direct_read` result.
+- The stage scans direct-read output for secret leaks before reporting pass.
+
+Test-first evidence:
+
+```text
+Red: go test ./internal/connectors/certify/ -run 'TestDirectReadCandidateForGitHub|TestDirectReadCandidateForUnknownConnector' -count=1 -v
+     failed on undefined direct-read candidate helper before production edits.
+Green: go test ./internal/connectors/certify/ -run 'TestDirectReadCandidateForGitHub|TestDirectReadCandidateForUnknownConnector|TestFullSweepSourceStagesAgainstSample' -count=1 -v
+Green: go test ./internal/connectors/certify/ -count=1 -timeout=10m
+Green: go test ./internal/connectors/... -count=1
+```
+
+No credentialed/live GitHub checks were run. The stage is ready for future env-gated live runs with rotated credentials only.
+
 ## Tracker Checklist
 
 - [x] PR #123 merged.
@@ -275,7 +298,7 @@ No credentialed/live GitHub checks were run. The compromised pasted token remain
 - [x] Fixture/non-credentialed tests green for the first all-streams read sweep slice.
 - [x] Credentialed tests gated behind env vars only.
 - [ ] Binary sweep implemented and tested.
-- [ ] Direct-read sweep implemented and tested.
+- [x] Direct-read sweep implemented and tested.
 - [ ] Flow/schedule per stream implemented and tested.
 - [ ] RLM bus-factor fixture plan created.
 - [ ] Future Pi-agent stream-based RLM problem selection tracked.
