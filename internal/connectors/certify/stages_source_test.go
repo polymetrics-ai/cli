@@ -259,6 +259,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		"write_sweep_all_pairings": true,
 		"direct_read_sweep":        true,
 		"binary_download_sweep":    true,
+		"surface_inventory":        true,
 	}
 	for _, stage := range rep.Stages {
 		if metaStagesWithoutDirectCLICall[stage.Name] {

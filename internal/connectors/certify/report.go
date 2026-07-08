@@ -73,6 +73,7 @@ type Capabilities struct {
 	SecretRedaction CapabilityResult             `json:"secret_redaction"`
 	DirectRead      *CapabilityResult            `json:"direct_read,omitempty"`
 	Binary          *CapabilityResult            `json:"binary,omitempty"`
+	Surface         *SurfaceResult               `json:"surface,omitempty"`
 	Flow            *CapabilityResult            `json:"flow,omitempty"`
 	Schedule        *ScheduleResult              `json:"schedule,omitempty"`
 	WriteActions    map[string]WriteActionResult `json:"write_actions,omitempty"`

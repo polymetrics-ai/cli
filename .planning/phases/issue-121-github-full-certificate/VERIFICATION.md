@@ -6,7 +6,8 @@ Executed on the correctly stacked branch `feat/121-certify-full-sweep-stacked`:
 
 ```text
 PASS: git diff --check
-PASS: go test ./internal/connectors/certify/ -run 'TestDefaultStreamName|TestFullSweepSourceStagesAgainstSample|TestSourceStagesAgainstSample|TestWriteStagesLedgerWrittenBeforeCreate|TestSweepPairingsForGithubHasMultiple|TestDirectReadCandidateForGitHub|TestBinaryDownloadCandidateForGitHub|TestFullSweepFlowAndScheduleNamesAreStreamScoped' -count=1 -timeout=4m -v
+PASS: go test ./internal/connectors/certify/ -run 'TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints|TestDirectReadCandidatesForGitHub|TestGithubWriteActionInventoryAccountsForAllDeclaredActions|TestFullSweepSourceStagesAgainstSample|TestSourceStagesAgainstSample|TestWriteStagesLedgerWrittenBeforeCreate' -count=1 -timeout=5m -v
+PASS: go test ./internal/connectors/... -count=1
 ```
 
 Executed on the clean branch before recreating the stacked PR:

@@ -21,7 +21,18 @@
 ### Direct read stage
 
 - Red: `TestDirectReadCandidateForGitHub` and `TestDirectReadCandidateForUnknownConnector` failed before direct-read candidate helper existed.
-- Green: focused direct-read tests passed.
+- Red follow-up: `TestDirectReadCandidatesForGitHub` failed while only `repo read-file` was swept.
+- Green: direct-read sweep now accounts for both implemented GitHub direct-read commands: `repo read-file` and `repo read-dir`.
+
+### 507 endpoint surface accounting
+
+- Red: `TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints` failed before the surface inventory stage existed.
+- Green: GitHub API surface accounting verifies 507 endpoints: 105 covered and 402 blocked with typed reasons.
+
+### 67 write action accounting
+
+- Red: `TestGithubWriteActionInventoryAccountsForAllDeclaredActions` failed before write action inventory accounting existed.
+- Green: GitHub write action inventory accounts all 67 declared write actions, marking safe curated/inferred pairings separately from unpaired/blocked actions.
 
 ### Binary safety gate
 

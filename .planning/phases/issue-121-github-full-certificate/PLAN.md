@@ -25,15 +25,27 @@ Manual-GSD fallback requirements for this phase:
 - Binary-download safety gate for a curated GitHub binary command (`release download`) that verifies operation-backed binary commands remain safely blocked until a bounded executor exists.
 - GitHub catalog bootstrap default stream (`issues`).
 
+## Current GitHub Surface Inventory
+
+The parent branch GitHub bundle currently declares:
+
+- 507 reviewed API endpoints in `api_surface.json`.
+- 37 stream-covered endpoints.
+- 67 write-covered endpoints/actions.
+- 2 direct-read-covered endpoints (`repo read-file`, `repo read-dir`).
+- 402 explicitly blocked endpoints with typed model/status/reason, including 158 blocked direct-read candidates and 10 blocked binary-read candidates.
+
+The certificate must account for all 507 endpoints. It must not blindly execute blocked/admin/sensitive/destructive/local/binary surfaces.
+
 ## Remaining Certificate Work
 
-The full GitHub organization certificate is **not complete** until these gates pass:
+The full GitHub organization certificate is **not live-complete** until these gates pass:
 
 1. Live GitHub run with rotated token and disposable/dev repository.
 2. Verify the actual catalog stream count and every stream's read/query stages.
-3. Expand direct-read certification beyond the curated `repo read-file` smoke to the intended GitHub direct-read surface.
-4. Implement or explicitly defer bounded binary executors for all binary operations; do not download arbitrary bytes without an explicit destination/max-byte policy.
-5. Execute live write lifecycle for every safe curated pairing, including cleanup verification, with a credentialed dev repo.
+3. Execute both currently implemented direct-read commands (`repo read-file`, `repo read-dir`) against safe paths.
+4. Keep binary-read surfaces blocked unless/until a bounded binary executor and destination policy are implemented; current surface accounting verifies the 10 blocked binary-read API endpoints plus the one typed binary operation.
+5. Execute live write lifecycle for every safe curated pairing, including cleanup verification, with a credentialed dev repo. All 67 declared write actions are now accounted for, but not all are safe standalone create-cleanup lifecycles.
 6. Enforce typed confirmation / secret transform / destructive/admin runtime gates where not already covered by metadata validation.
 
 ## Live Credential Safety
