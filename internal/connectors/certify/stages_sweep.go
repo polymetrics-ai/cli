@@ -4,16 +4,11 @@ import (
 	"fmt"
 )
 
-// stageWriteSweepAllPairings runs only when Options.Full is true. It iterates
-// every WritePairing beyond the first (which the existing write stages 12-17
-// already tested), running the create→verify→cleanup lifecycle for each and
-// recording per-pairing results in Capabilities.WriteActions. When Full is
-// false, it records a documented skip (the existing single-pairing test
-// remains the default).
-//
-// This is the "test every write action" sweep from
-// docs/plans/connector-complete-testing-and-mail-setup-plan.md §1. The
-// existing write stages own the first pairing; this stage owns the rest.
+// stageWriteSweepAllPairings runs only when Options.Full is true. It accounts
+// every declared write action beyond the first live lifecycle that stages
+// 12-17 exercise. Actions with safe pairings are marked untested until the
+// bounded executor can run every lifecycle; blocked actions are recorded with
+// their inventory reason.
 func stageWriteSweepAllPairings(rc *runContext, rep *Report) error {
 	if !rc.opts.Full {
 		skipStage(rc, rep, "write_sweep_all_pairings",
@@ -33,7 +28,6 @@ func stageWriteSweepAllPairings(rc *runContext, rep *Report) error {
 		return nil
 	}
 
-	// Ensure WriteActions map exists.
 	if rep.Capabilities.WriteActions == nil {
 		rep.Capabilities.WriteActions = map[string]WriteActionResult{}
 	}

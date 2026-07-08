@@ -53,23 +53,23 @@ Final report path:
 Final passing run:
 
 ```text
-started_at: 2026-07-08T23:11:29.08724Z
-completed_at: 2026-07-08T23:17:34.330273Z
+started_at: 2026-07-08T23:27:37.590763Z
+completed_at: 2026-07-08T23:33:51.22998Z
 passed: true
-stage_count: 925
+stage_count: 1089
 failed_count: 0
 skipped_count: 129
 ```
 
 Key final evidence:
 
-- Surface accounting passed: 507 endpoints, 105 covered, 402 blocked.
+- Surface accounting passed: 509 endpoints, 440 covered, 69 blocked.
 - Catalog passed with 37 streams.
 - Direct-read sweep passed with 2 stages.
 - Binary download surface remained safely blocked.
 - Flow and schedule capabilities passed; schedule residue was false.
 - Secret redaction and JSON contract passed.
-- Write action inventory accounted for 67 actions: 1 live pass (`create_label`), 10 untested pairings, 56 blocked.
+- Write action inventory accounted for 231 actions: 1 live pass (`create_label`), 10 untested pairings, 220 blocked.
 - `create_label` write lifecycle passed with read-back verification and cleanup; residue check found 0 `pm-cert-github-*` labels remaining.
 
 Early-run findings fixed with tests:

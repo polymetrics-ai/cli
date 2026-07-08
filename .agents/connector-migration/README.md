@@ -10,6 +10,14 @@ runner-specific format.
   documented API surface.
 - `agents/review/connector-reviewer.agent.yaml`: read-only adversarial review for migrated or
   expanded connector bundles.
+- `rollout-checklist.md`: the end-to-end checklist every connector rollout slice must satisfy.
+- `templates/connector-rollout-prompt.md`: the per-connector worker prompt template (connector-neutral;
+  replace the bracketed variables before dispatch).
+- `validation-gates.md`: mandatory gates (JSON parse, connectorgen validate, secret scan, source
+  links, operation classification, build/test, website idempotency, review).
+- `ownership-rules.md`: coordinator-owned vs worker-owned files to prevent shared-file collisions.
+- `next-batches.md`: sequenced candidate connectors (GitLab, Slack, Stripe, Jira, Salesforce, …) for
+  rolling out the GitHub pilot's CLI parity shape.
 
 ## Rules
 

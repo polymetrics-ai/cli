@@ -299,11 +299,19 @@
       "path": "issue reopen",
       "summary": "Reopen an issue",
       "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "update_issue",
+      "availability": "implemented",
+      "write": "reopen_issue",
       "source_cli_path": "gh issue reopen",
-      "risk": "Reopens an existing issue by setting state through the general update action.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "risk": "Reopens a previously closed issue.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "Issue number to reopen.",
+          "maps_to": "record.issue_number"
+        }
+      ]
     },
     {
       "path": "issue comment",
@@ -676,21 +684,43 @@
       "path": "pr reopen",
       "summary": "Reopen a pull request",
       "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "update_pull_request",
+      "availability": "implemented",
+      "write": "reopen_pull_request",
       "source_cli_path": "gh pr reopen",
-      "risk": "Reopens an existing pull request through the general update action.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "risk": "Reopens a previously closed pull request.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to reopen.",
+          "maps_to": "record.pull_number"
+        }
+      ]
     },
     {
       "path": "pr comment",
       "summary": "Comment on a pull request",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "comment_issue",
       "source_cli_path": "gh pr comment",
-      "risk": "Adds a visible conversation comment because pull request conversations use issue comments.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "risk": "Comments on a pull request (PRs are issues in GitHub's data model).",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to comment on.",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Comment body text.",
+          "maps_to": "record.body"
+        }
+      ]
     },
     {
       "path": "pr merge",
@@ -866,21 +896,49 @@
       "path": "pr lock",
       "summary": "Lock pull request conversation",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "lock_issue",
       "source_cli_path": "gh pr lock",
-      "risk": "Locks the pull request conversation through the issue lock endpoint.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "risk": "Locks a pull request's conversation.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to lock.",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "lock-reason",
+          "type": "enum",
+          "values": [
+            "off-topic",
+            "resolved",
+            "spam",
+            "too heated"
+          ],
+          "summary": "Reason for locking.",
+          "maps_to": "record.lock_reason"
+        }
+      ]
     },
     {
       "path": "pr unlock",
       "summary": "Unlock pull request conversation",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "unlock_issue",
       "source_cli_path": "gh pr unlock",
-      "risk": "Unlocks the pull request conversation through the issue unlock endpoint.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute."
+      "risk": "Unlocks a pull request's conversation.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "Pull request number to unlock.",
+          "maps_to": "record.issue_number"
+        }
+      ]
     },
     {
       "path": "pr revert",
@@ -2290,6 +2348,4779 @@
       "availability": "unsupported_api",
       "source_cli_path": "gh agent-task list",
       "notes": "Agent task APIs are not modeled by the repository connector surface."
+    },
+    {
+      "path": "repo delete-2",
+      "summary": "DELETE /repos/{owner}/{repo}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "repo",
+      "source_cli_path": "",
+      "risk": "critical",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [],
+      "notes": "destructive; requires --allow-destructive + typed confirmation"
+    },
+    {
+      "path": "repo update",
+      "summary": "PATCH /repos/{owner}/{repo}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "repo2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "artifact download",
+      "summary": "Download /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_artifacts_artifact_id_archive_format",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "artifact-id",
+          "type": "string",
+          "summary": "artifact_id path parameter"
+        },
+        {
+          "name": "archive-format",
+          "type": "string",
+          "summary": "archive_format path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions retention-limit view",
+      "summary": "Read /repos/{owner}/{repo}/actions/cache/retention-limit",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_cache_retention_limit",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions retention-limit set",
+      "summary": "PUT /repos/{owner}/{repo}/actions/cache/retention-limit",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_cache_retention_limit2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions storage-limit view",
+      "summary": "Read /repos/{owner}/{repo}/actions/cache/storage-limit",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_cache_storage_limit",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions storage-limit set",
+      "summary": "PUT /repos/{owner}/{repo}/actions/cache/storage-limit",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_cache_storage_limit2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions usage view",
+      "summary": "Read /repos/{owner}/{repo}/actions/cache/usage",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_cache_usage",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions caches delete",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/caches",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_caches",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions caches view",
+      "summary": "Read /repos/{owner}/{repo}/actions/caches",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_caches2",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions caches delete-2",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/caches/{cache_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_caches_cache_id",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "cache-id",
+          "type": "integer",
+          "summary": "cache_id path parameter",
+          "maps_to": "record.cache_id"
+        }
+      ]
+    },
+    {
+      "path": "actions concurrency_groups view",
+      "summary": "Read /repos/{owner}/{repo}/actions/concurrency_groups",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_concurrency_groups",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions concurrency_groups view-2",
+      "summary": "Read /repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_concurrency_groups_concurrency_group_name",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "concurrency-group-name",
+          "type": "string",
+          "summary": "concurrency_group_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions jobs view",
+      "summary": "Read /repos/{owner}/{repo}/actions/jobs/{job_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_jobs_job_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "integer",
+          "summary": "job_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "run logs view",
+      "summary": "Read /repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_jobs_job_id_logs",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "integer",
+          "summary": "job_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions rerun create",
+      "summary": "POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_jobs_job_id_rerun",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "job-id",
+          "type": "integer",
+          "summary": "job_id path parameter",
+          "maps_to": "record.job_id"
+        }
+      ]
+    },
+    {
+      "path": "actions sub view",
+      "summary": "Read /repos/{owner}/{repo}/actions/oidc/customization/sub",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_oidc_customization_sub",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions sub set",
+      "summary": "PUT /repos/{owner}/{repo}/actions/oidc/customization/sub",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_oidc_customization_sub2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions organization-secrets view",
+      "summary": "Read /repos/{owner}/{repo}/actions/organization-secrets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_organization_secrets",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions organization-variables view",
+      "summary": "Read /repos/{owner}/{repo}/actions/organization-variables",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_organization_variables",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions permissions view",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_permissions",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions permissions set",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_permissions2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions access view",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/access",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_permissions_access",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions permissions set-2",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/access",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_permissions_access2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions artifact-and-log-retention view",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_permissions_artifact_and_log_retention",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions permissions set-3",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_permissions_artifact_and_log_retention2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions fork-pr-contributor-approval view",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_permissions_fork_pr_contributor_approval",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions permissions set-4",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_permissions_fork_pr_contributor_approval2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions fork-pr-workflows-private-repos view",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_permissions_fork_pr_workflows_private_repos",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions permissions set-5",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_permissions_fork_pr_workflows_private_repos2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions selected-actions view",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/selected-actions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_permissions_selected_actions",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions permissions set-6",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/selected-actions",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_permissions_selected_actions2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions workflow view",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/workflow",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_permissions_workflow",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions permissions set-7",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/workflow",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_permissions_workflow2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions runners view",
+      "summary": "Read /repos/{owner}/{repo}/actions/runners",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runners",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions downloads view",
+      "summary": "Read /repos/{owner}/{repo}/actions/runners/downloads",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runners_downloads",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions generate-jitconfig create",
+      "summary": "POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runners_generate_jitconfig",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions registration-token create",
+      "summary": "POST /repos/{owner}/{repo}/actions/runners/registration-token",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runners_registration_token",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions remove-token create",
+      "summary": "POST /repos/{owner}/{repo}/actions/runners/remove-token",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runners_remove_token",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "actions runners delete",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runners_runner_id",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "runner-id",
+          "type": "integer",
+          "summary": "runner_id path parameter",
+          "maps_to": "record.runner_id"
+        }
+      ]
+    },
+    {
+      "path": "actions runners view-2",
+      "summary": "Read /repos/{owner}/{repo}/actions/runners/{runner_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runners_runner_id2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "runner-id",
+          "type": "integer",
+          "summary": "runner_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions labels delete",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runners_runner_id_labels",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "runner-id",
+          "type": "integer",
+          "summary": "runner_id path parameter",
+          "maps_to": "record.runner_id"
+        }
+      ]
+    },
+    {
+      "path": "actions labels view",
+      "summary": "Read /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runners_runner_id_labels2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "runner-id",
+          "type": "integer",
+          "summary": "runner_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions labels create",
+      "summary": "POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runners_runner_id_labels3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "runner-id",
+          "type": "integer",
+          "summary": "runner_id path parameter",
+          "maps_to": "record.runner_id"
+        }
+      ]
+    },
+    {
+      "path": "actions labels set",
+      "summary": "PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runners_runner_id_labels4",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "runner-id",
+          "type": "integer",
+          "summary": "runner_id path parameter",
+          "maps_to": "record.runner_id"
+        }
+      ]
+    },
+    {
+      "path": "actions labels delete-2",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runners_runner_id_labels_name",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "runner-id",
+          "type": "integer",
+          "summary": "runner_id path parameter",
+          "maps_to": "record.runner_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "name path parameter",
+          "maps_to": "record.name"
+        }
+      ]
+    },
+    {
+      "path": "actions approvals view",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/approvals",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id_approvals",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions approve create",
+      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runs_run_id_approve",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter",
+          "maps_to": "record.run_id"
+        }
+      ]
+    },
+    {
+      "path": "actions attempts view",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id_attempts_attempt_number",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter"
+        },
+        {
+          "name": "attempt-number",
+          "type": "integer",
+          "summary": "attempt_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions jobs view-2",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id_attempts_attempt_number_jobs",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter"
+        },
+        {
+          "name": "attempt-number",
+          "type": "integer",
+          "summary": "attempt_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "run logs view-2",
+      "summary": "Download /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id_attempts_attempt_number_logs",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "string",
+          "summary": "run_id path parameter"
+        },
+        {
+          "name": "attempt-number",
+          "type": "string",
+          "summary": "attempt_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions concurrency_groups view-3",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id_concurrency_groups",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions deployment_protection_rule create",
+      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runs_run_id_deployment_protection_rule",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter",
+          "maps_to": "record.run_id"
+        }
+      ]
+    },
+    {
+      "path": "actions jobs view-3",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id_jobs",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions logs delete",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runs_run_id_logs",
+      "source_cli_path": "",
+      "risk": "critical",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter",
+          "maps_to": "record.run_id"
+        }
+      ],
+      "notes": "destructive; requires --allow-destructive + typed confirmation"
+    },
+    {
+      "path": "run logs view-3",
+      "summary": "Download /repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id_logs2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "string",
+          "summary": "run_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions pending_deployments view",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id_pending_deployments",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions pending_deployments create",
+      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_runs_run_id_pending_deployments2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter",
+          "maps_to": "record.run_id"
+        }
+      ]
+    },
+    {
+      "path": "actions timing view",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/timing",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_runs_run_id_timing",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "run-id",
+          "type": "integer",
+          "summary": "run_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "actions secrets view",
+      "summary": "Read /repos/{owner}/{repo}/actions/secrets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_secrets",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "actions public-key view",
+      "summary": "Read /repos/{owner}/{repo}/actions/secrets/public-key",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_secrets_public_key",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "secret delete-2",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_secrets_secret_name",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter",
+          "maps_to": "record.secret_name"
+        }
+      ]
+    },
+    {
+      "path": "actions secrets view-2",
+      "summary": "Read /repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_secrets_secret_name2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "secret set-2",
+      "summary": "PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_secrets_secret_name3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter",
+          "maps_to": "record.secret_name"
+        }
+      ]
+    },
+    {
+      "path": "actions variables view",
+      "summary": "Read /repos/{owner}/{repo}/actions/variables",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_variables",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "variable create",
+      "summary": "POST /repos/{owner}/{repo}/actions/variables",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_variables2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "variable delete-2",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/variables/{name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_variables_name",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "name path parameter",
+          "maps_to": "record.name"
+        }
+      ]
+    },
+    {
+      "path": "actions variables view-2",
+      "summary": "Read /repos/{owner}/{repo}/actions/variables/{name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_variables_name2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "variable update",
+      "summary": "PATCH /repos/{owner}/{repo}/actions/variables/{name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_variables_name3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "name path parameter",
+          "maps_to": "record.name"
+        }
+      ]
+    },
+    {
+      "path": "actions disable set",
+      "summary": "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_workflows_workflow_id_disable",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "integer",
+          "summary": "workflow_id path parameter",
+          "maps_to": "record.workflow_id"
+        }
+      ]
+    },
+    {
+      "path": "actions enable set",
+      "summary": "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "actions_workflows_workflow_id_enable",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "integer",
+          "summary": "workflow_id path parameter",
+          "maps_to": "record.workflow_id"
+        }
+      ]
+    },
+    {
+      "path": "actions timing view-2",
+      "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.actions_workflows_workflow_id_timing",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "integer",
+          "summary": "workflow_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "assignees view",
+      "summary": "Read /repos/{owner}/{repo}/assignees/{assignee}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.assignees_assignee",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "assignee",
+          "type": "string",
+          "summary": "assignee path parameter"
+        }
+      ]
+    },
+    {
+      "path": "attestations create",
+      "summary": "POST /repos/{owner}/{repo}/attestations",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "attestations",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "attestations view",
+      "summary": "Read /repos/{owner}/{repo}/attestations/{subject_digest}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.attestations_subject_digest",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "subject-digest",
+          "type": "string",
+          "summary": "subject_digest path parameter"
+        }
+      ]
+    },
+    {
+      "path": "autolinks create",
+      "summary": "POST /repos/{owner}/{repo}/autolinks",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "autolinks",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "autolinks delete",
+      "summary": "DELETE /repos/{owner}/{repo}/autolinks/{autolink_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "autolinks_autolink_id",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "autolink-id",
+          "type": "integer",
+          "summary": "autolink_id path parameter",
+          "maps_to": "record.autolink_id"
+        }
+      ]
+    },
+    {
+      "path": "automated-security-fixes delete",
+      "summary": "DELETE /repos/{owner}/{repo}/automated-security-fixes",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "automated_security_fixes",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "automated-security-fixes view",
+      "summary": "Read /repos/{owner}/{repo}/automated-security-fixes",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.automated_security_fixes2",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "automated-security-fixes set",
+      "summary": "PUT /repos/{owner}/{repo}/automated-security-fixes",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "automated_security_fixes3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "branches protection delete",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches protection view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch_protection2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter"
+        }
+      ]
+    },
+    {
+      "path": "branches protection set",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches enforce_admins delete",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_enforce_admins",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches enforce_admins view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch_protection_enforce_admins2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter"
+        }
+      ]
+    },
+    {
+      "path": "branches enforce_admins create",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_enforce_admins3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches required_pull_request_reviews delete",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_required_pull_request_reviews",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches required_pull_request_reviews view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch_protection_required_pull_request_reviews2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter"
+        }
+      ]
+    },
+    {
+      "path": "branches required_pull_request_reviews update",
+      "summary": "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_required_pull_request_reviews3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches required_signatures delete",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_required_signatures",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches required_signatures view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch_protection_required_signatures2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter"
+        }
+      ]
+    },
+    {
+      "path": "branches required_signatures create",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_required_signatures3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches required_status_checks delete",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_required_status_checks",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches required_status_checks view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch_protection_required_status_checks2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter"
+        }
+      ]
+    },
+    {
+      "path": "branches required_status_checks update",
+      "summary": "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_required_status_checks3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches contexts delete",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_required_status_checks_contexts",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches contexts view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch_protection_required_status_checks_contexts2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter"
+        }
+      ]
+    },
+    {
+      "path": "branches contexts create",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_required_status_checks_contexts3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches contexts set",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_required_status_checks_contexts4",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches restrictions delete",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_restrictions",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches restrictions view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch_protection_restrictions2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter"
+        }
+      ]
+    },
+    {
+      "path": "branches apps delete",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_restrictions_apps",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches apps view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch_protection_restrictions_apps2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter"
+        }
+      ]
+    },
+    {
+      "path": "branches apps create",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_restrictions_apps3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches apps set",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_restrictions_apps4",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches teams delete",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_restrictions_teams",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches teams view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch_protection_restrictions_teams2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter"
+        }
+      ]
+    },
+    {
+      "path": "branches teams create",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_restrictions_teams3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches teams set",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_restrictions_teams4",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches users delete",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_restrictions_users",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches users view",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.branches_branch_protection_restrictions_users2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter"
+        }
+      ]
+    },
+    {
+      "path": "branches users create",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_restrictions_users3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches users set",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_protection_restrictions_users4",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ]
+    },
+    {
+      "path": "branches rename create",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/rename",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "branches_branch_rename",
+      "source_cli_path": "",
+      "risk": "critical",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "branch",
+          "type": "string",
+          "summary": "branch path parameter",
+          "maps_to": "record.branch"
+        }
+      ],
+      "notes": "destructive; requires --allow-destructive + typed confirmation"
+    },
+    {
+      "path": "check-runs create",
+      "summary": "POST /repos/{owner}/{repo}/check-runs",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "check_runs",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "check-runs view",
+      "summary": "Read /repos/{owner}/{repo}/check-runs/{check_run_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.check_runs_check_run_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "check-run-id",
+          "type": "integer",
+          "summary": "check_run_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "check-runs update",
+      "summary": "PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "check_runs_check_run_id2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "check-run-id",
+          "type": "integer",
+          "summary": "check_run_id path parameter",
+          "maps_to": "record.check_run_id"
+        }
+      ]
+    },
+    {
+      "path": "check-runs annotations view",
+      "summary": "Read /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.check_runs_check_run_id_annotations",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "check-run-id",
+          "type": "integer",
+          "summary": "check_run_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "check-runs rerequest create",
+      "summary": "POST /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "check_runs_check_run_id_rerequest",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "check-run-id",
+          "type": "integer",
+          "summary": "check_run_id path parameter",
+          "maps_to": "record.check_run_id"
+        }
+      ]
+    },
+    {
+      "path": "check-suites create",
+      "summary": "POST /repos/{owner}/{repo}/check-suites",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "check_suites",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "check-suites preferences update",
+      "summary": "PATCH /repos/{owner}/{repo}/check-suites/preferences",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "check_suites_preferences",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "check-suites view",
+      "summary": "Read /repos/{owner}/{repo}/check-suites/{check_suite_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.check_suites_check_suite_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "check-suite-id",
+          "type": "integer",
+          "summary": "check_suite_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "check-suites check-runs view",
+      "summary": "Read /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.check_suites_check_suite_id_check_runs",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "check-suite-id",
+          "type": "integer",
+          "summary": "check_suite_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "check-suites rerequest create",
+      "summary": "POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "check_suites_check_suite_id_rerequest",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "check-suite-id",
+          "type": "integer",
+          "summary": "check_suite_id path parameter",
+          "maps_to": "record.check_suite_id"
+        }
+      ]
+    },
+    {
+      "path": "code-quality findings view",
+      "summary": "Read /repos/{owner}/{repo}/code-quality/findings",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_quality_findings",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "code-quality findings view-2",
+      "summary": "Read /repos/{owner}/{repo}/code-quality/findings/{finding_number}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_quality_findings_finding_number",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "finding-number",
+          "type": "integer",
+          "summary": "finding_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "code-quality setup view",
+      "summary": "Read /repos/{owner}/{repo}/code-quality/setup",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_quality_setup",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "code-quality setup update",
+      "summary": "PATCH /repos/{owner}/{repo}/code-quality/setup",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "code_quality_setup2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "code-scanning autofix view",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_alerts_alert_number_autofix",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "alert-number",
+          "type": "integer",
+          "summary": "alert_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning autofix create",
+      "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "code_scanning_alerts_alert_number_autofix2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "alert-number",
+          "type": "integer",
+          "summary": "alert_number path parameter",
+          "maps_to": "record.alert_number"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning commits create",
+      "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "code_scanning_alerts_alert_number_autofix_commits",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "alert-number",
+          "type": "integer",
+          "summary": "alert_number path parameter",
+          "maps_to": "record.alert_number"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning instances view",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_alerts_alert_number_instances",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "alert-number",
+          "type": "integer",
+          "summary": "alert_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning analyses view",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_analyses",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "code-scanning analyses delete",
+      "summary": "DELETE /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "code_scanning_analyses_analysis_id",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "analysis-id",
+          "type": "integer",
+          "summary": "analysis_id path parameter",
+          "maps_to": "record.analysis_id"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning analyses view-2",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_analyses_analysis_id2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "analysis-id",
+          "type": "integer",
+          "summary": "analysis_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning databases view",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/databases",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_codeql_databases",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "code-scanning databases delete",
+      "summary": "DELETE /repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "code_scanning_codeql_databases_language",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "language path parameter",
+          "maps_to": "record.language"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning databases view-2",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_codeql_databases_language2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "language path parameter"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning variant-analyses create",
+      "summary": "POST /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "code_scanning_codeql_variant_analyses",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "code-scanning variant-analyses view",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_codeql_variant_analyses_codeql_variant_analysis_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "codeql-variant-analysis-id",
+          "type": "integer",
+          "summary": "codeql_variant_analysis_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning repos view",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_codeql_variant_analyses_codeql_variant_analysis_id_repos_repo_owner_repo_name",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "codeql-variant-analysis-id",
+          "type": "integer",
+          "summary": "codeql_variant_analysis_id path parameter"
+        },
+        {
+          "name": "repo-owner",
+          "type": "string",
+          "summary": "repo_owner path parameter"
+        },
+        {
+          "name": "repo-name",
+          "type": "string",
+          "summary": "repo_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "code-scanning default-setup view",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/default-setup",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_default_setup",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "code-scanning default-setup update",
+      "summary": "PATCH /repos/{owner}/{repo}/code-scanning/default-setup",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "code_scanning_default_setup2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "code-sanning upload",
+      "summary": "POST /repos/{owner}/{repo}/code-scanning/sarifs",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "code_scanning_sarifs",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "code-scanning sarifs view",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_scanning_sarifs_sarif_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "sarif-id",
+          "type": "integer",
+          "summary": "sarif_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "code-security-configuration view",
+      "summary": "Read /repos/{owner}/{repo}/code-security-configuration",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.code_security_configuration",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "codeowners errors view",
+      "summary": "Read /repos/{owner}/{repo}/codeowners/errors",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.codeowners_errors",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "codespaces view",
+      "summary": "Read /repos/{owner}/{repo}/codespaces",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.codespaces",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "codespaces create",
+      "summary": "POST /repos/{owner}/{repo}/codespaces",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "codespaces2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "codespaces devcontainers view",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/devcontainers",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.codespaces_devcontainers",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "codespaces machines view",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/machines",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.codespaces_machines",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "codespaces new view",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/new",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.codespaces_new",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "codespaces permissions_check view",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/permissions_check",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.codespaces_permissions_check",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "codespaces secrets view",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/secrets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.codespaces_secrets",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "codespaces public-key view",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/public-key",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.codespaces_secrets_public_key",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "secret delete-3",
+      "summary": "DELETE /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "codespaces_secrets_secret_name",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter",
+          "maps_to": "record.secret_name"
+        }
+      ]
+    },
+    {
+      "path": "codespaces secrets view-2",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.codespaces_secrets_secret_name2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "secret set-3",
+      "summary": "PUT /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "codespaces_secrets_secret_name3",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter",
+          "maps_to": "record.secret_name"
+        }
+      ]
+    },
+    {
+      "path": "comments reactions view",
+      "summary": "Read /repos/{owner}/{repo}/comments/{comment_id}/reactions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.comments_comment_id_reactions",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "comments reactions create",
+      "summary": "POST /repos/{owner}/{repo}/comments/{comment_id}/reactions",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "comments_comment_id_reactions2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter",
+          "maps_to": "record.comment_id"
+        }
+      ]
+    },
+    {
+      "path": "comments reactions delete",
+      "summary": "DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "comments_comment_id_reactions_reaction_id",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter",
+          "maps_to": "record.comment_id"
+        },
+        {
+          "name": "reaction-id",
+          "type": "integer",
+          "summary": "reaction_id path parameter",
+          "maps_to": "record.reaction_id"
+        }
+      ]
+    },
+    {
+      "path": "commits branches-where-head view",
+      "summary": "Read /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.commits_commit_sha_branches_where_head",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "commit-sha",
+          "type": "string",
+          "summary": "commit_sha path parameter"
+        }
+      ]
+    },
+    {
+      "path": "commits pulls view",
+      "summary": "Read /repos/{owner}/{repo}/commits/{commit_sha}/pulls",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.commits_commit_sha_pulls",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "commit-sha",
+          "type": "string",
+          "summary": "commit_sha path parameter"
+        }
+      ]
+    },
+    {
+      "path": "commits check-runs view",
+      "summary": "Read /repos/{owner}/{repo}/commits/{ref}/check-runs",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.commits_ref_check_runs",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "ref path parameter"
+        }
+      ]
+    },
+    {
+      "path": "commits check-suites view",
+      "summary": "Read /repos/{owner}/{repo}/commits/{ref}/check-suites",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.commits_ref_check_suites",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "ref path parameter"
+        }
+      ]
+    },
+    {
+      "path": "commits status view",
+      "summary": "Read /repos/{owner}/{repo}/commits/{ref}/status",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.commits_ref_status",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "ref path parameter"
+        }
+      ]
+    },
+    {
+      "path": "commits statuses view",
+      "summary": "Read /repos/{owner}/{repo}/commits/{ref}/statuses",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.commits_ref_statuses",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "ref path parameter"
+        }
+      ]
+    },
+    {
+      "path": "community profile view",
+      "summary": "Read /repos/{owner}/{repo}/community/profile",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.community_profile",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "compare view",
+      "summary": "Read /repos/{owner}/{repo}/compare/{basehead}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.compare_basehead",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "basehead",
+          "type": "string",
+          "summary": "basehead path parameter"
+        }
+      ]
+    },
+    {
+      "path": "copilot configuration view",
+      "summary": "Read /repos/{owner}/{repo}/copilot/cloud-agent/configuration",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.copilot_cloud_agent_configuration",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "dependabot secrets view",
+      "summary": "Read /repos/{owner}/{repo}/dependabot/secrets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.dependabot_secrets",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "dependabot public-key view",
+      "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/public-key",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.dependabot_secrets_public_key",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "secret delete-4",
+      "summary": "DELETE /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "dependabot_secrets_secret_name",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter",
+          "maps_to": "record.secret_name"
+        }
+      ]
+    },
+    {
+      "path": "dependabot secrets view-2",
+      "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.dependabot_secrets_secret_name2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "secret set-4",
+      "summary": "PUT /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "dependabot_secrets_secret_name3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter",
+          "maps_to": "record.secret_name"
+        }
+      ]
+    },
+    {
+      "path": "dependency-graph compare view",
+      "summary": "Read /repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.dependency_graph_compare_basehead",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "basehead",
+          "type": "string",
+          "summary": "basehead path parameter"
+        }
+      ]
+    },
+    {
+      "path": "repo sbom view",
+      "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.dependency_graph_sbom",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "repo sbom fetch",
+      "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.dependency_graph_sbom_fetch_report_sbom_uuid",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "sbom-uuid",
+          "type": "string",
+          "summary": "sbom_uuid path parameter"
+        }
+      ]
+    },
+    {
+      "path": "repo sbom generate",
+      "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom/generate-report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.dependency_graph_sbom_generate_report",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "dependency-graph snapshots create",
+      "summary": "POST /repos/{owner}/{repo}/dependency-graph/snapshots",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "dependency_graph_snapshots",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "deployments delete",
+      "summary": "DELETE /repos/{owner}/{repo}/deployments/{deployment_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "deployments_deployment_id",
+      "source_cli_path": "",
+      "risk": "critical",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "deployment-id",
+          "type": "integer",
+          "summary": "deployment_id path parameter",
+          "maps_to": "record.deployment_id"
+        }
+      ],
+      "notes": "destructive; requires --allow-destructive + typed confirmation"
+    },
+    {
+      "path": "deployments statuses view",
+      "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.deployments_deployment_id_statuses",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "deployment-id",
+          "type": "integer",
+          "summary": "deployment_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "deployments statuses create",
+      "summary": "POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "deployments_deployment_id_statuses2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "deployment-id",
+          "type": "integer",
+          "summary": "deployment_id path parameter",
+          "maps_to": "record.deployment_id"
+        }
+      ]
+    },
+    {
+      "path": "dispatches create",
+      "summary": "POST /repos/{owner}/{repo}/dispatches",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "dispatches",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "environments deployment-branch-policies view",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name_deployment_branch_policies",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "environments deployment-branch-policies create",
+      "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "environments_environment_name_deployment_branch_policies2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter",
+          "maps_to": "record.environment_name"
+        }
+      ]
+    },
+    {
+      "path": "environments deployment-branch-policies delete",
+      "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "environments_environment_name_deployment_branch_policies_branch_policy_id",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter",
+          "maps_to": "record.environment_name"
+        },
+        {
+          "name": "branch-policy-id",
+          "type": "integer",
+          "summary": "branch_policy_id path parameter",
+          "maps_to": "record.branch_policy_id"
+        }
+      ]
+    },
+    {
+      "path": "environments deployment-branch-policies view-2",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name_deployment_branch_policies_branch_policy_id2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter"
+        },
+        {
+          "name": "branch-policy-id",
+          "type": "integer",
+          "summary": "branch_policy_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "environments deployment-branch-policies set",
+      "summary": "PUT /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "environments_environment_name_deployment_branch_policies_branch_policy_id3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter",
+          "maps_to": "record.environment_name"
+        },
+        {
+          "name": "branch-policy-id",
+          "type": "integer",
+          "summary": "branch_policy_id path parameter",
+          "maps_to": "record.branch_policy_id"
+        }
+      ]
+    },
+    {
+      "path": "environments deployment_protection_rules view",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name_deployment_protection_rules",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "environments deployment_protection_rules create",
+      "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "environments_environment_name_deployment_protection_rules2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter",
+          "maps_to": "record.environment_name"
+        }
+      ]
+    },
+    {
+      "path": "environments apps view",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name_deployment_protection_rules_apps",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "environments deployment_protection_rules delete",
+      "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "environments_environment_name_deployment_protection_rules_protection_rule_id",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter",
+          "maps_to": "record.environment_name"
+        },
+        {
+          "name": "protection-rule-id",
+          "type": "integer",
+          "summary": "protection_rule_id path parameter",
+          "maps_to": "record.protection_rule_id"
+        }
+      ]
+    },
+    {
+      "path": "environments deployment_protection_rules view-2",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name_deployment_protection_rules_protection_rule_id2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter"
+        },
+        {
+          "name": "protection-rule-id",
+          "type": "integer",
+          "summary": "protection_rule_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "environments secrets view",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name_secrets",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "environments public-key view",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name_secrets_public_key",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "secret delete-5",
+      "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "environments_environment_name_secrets_secret_name",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter",
+          "maps_to": "record.environment_name"
+        },
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter",
+          "maps_to": "record.secret_name"
+        }
+      ]
+    },
+    {
+      "path": "environments secrets view-2",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name_secrets_secret_name2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter"
+        },
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "secret set-5",
+      "summary": "PUT /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "environments_environment_name_secrets_secret_name3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter",
+          "maps_to": "record.environment_name"
+        },
+        {
+          "name": "secret-name",
+          "type": "string",
+          "summary": "secret_name path parameter",
+          "maps_to": "record.secret_name"
+        }
+      ]
+    },
+    {
+      "path": "environments variables view",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/variables",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name_variables",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "variable create-2",
+      "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/variables",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "environments_environment_name_variables2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter",
+          "maps_to": "record.environment_name"
+        }
+      ]
+    },
+    {
+      "path": "variable delete-3",
+      "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "environments_environment_name_variables_name",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter",
+          "maps_to": "record.environment_name"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "name path parameter",
+          "maps_to": "record.name"
+        }
+      ]
+    },
+    {
+      "path": "environments variables view-2",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.environments_environment_name_variables_name2",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "name path parameter"
+        }
+      ]
+    },
+    {
+      "path": "variable update-2",
+      "summary": "PATCH /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "environments_environment_name_variables_name3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "environment-name",
+          "type": "string",
+          "summary": "environment_name path parameter",
+          "maps_to": "record.environment_name"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "name path parameter",
+          "maps_to": "record.name"
+        }
+      ]
+    },
+    {
+      "path": "git blobs create",
+      "summary": "POST /repos/{owner}/{repo}/git/blobs",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "git_blobs",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "git blobs view",
+      "summary": "Read /repos/{owner}/{repo}/git/blobs/{file_sha}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.git_blobs_file_sha",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "file-sha",
+          "type": "string",
+          "summary": "file_sha path parameter"
+        }
+      ]
+    },
+    {
+      "path": "git commits create",
+      "summary": "POST /repos/{owner}/{repo}/git/commits",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "git_commits",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "git ref view",
+      "summary": "Read /repos/{owner}/{repo}/git/ref/{ref}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.git_ref_ref",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "ref path parameter"
+        }
+      ]
+    },
+    {
+      "path": "git tags view",
+      "summary": "Read /repos/{owner}/{repo}/git/tags/{tag_sha}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.git_tags_tag_sha",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "tag-sha",
+          "type": "string",
+          "summary": "tag_sha path parameter"
+        }
+      ]
+    },
+    {
+      "path": "git trees create",
+      "summary": "POST /repos/{owner}/{repo}/git/trees",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "git_trees",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "git trees view",
+      "summary": "Read /repos/{owner}/{repo}/git/trees/{tree_sha}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.git_trees_tree_sha",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "tree-sha",
+          "type": "string",
+          "summary": "tree_sha path parameter"
+        }
+      ]
+    },
+    {
+      "path": "hash-algorithm view",
+      "summary": "Read /repos/{owner}/{repo}/hash-algorithm",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.hash_algorithm",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "hooks deliveries view",
+      "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/deliveries",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.hooks_hook_id_deliveries",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "summary": "hook_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "hooks deliveries view-2",
+      "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.hooks_hook_id_deliveries_delivery_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "summary": "hook_id path parameter"
+        },
+        {
+          "name": "delivery-id",
+          "type": "integer",
+          "summary": "delivery_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "webhook create",
+      "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "hooks_hook_id_deliveries_delivery_id_attempts",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "summary": "hook_id path parameter",
+          "maps_to": "record.hook_id"
+        },
+        {
+          "name": "delivery-id",
+          "type": "integer",
+          "summary": "delivery_id path parameter",
+          "maps_to": "record.delivery_id"
+        }
+      ]
+    },
+    {
+      "path": "webhook create-2",
+      "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/pings",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "hooks_hook_id_pings",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "summary": "hook_id path parameter",
+          "maps_to": "record.hook_id"
+        }
+      ]
+    },
+    {
+      "path": "webhook create-3",
+      "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/tests",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "hooks_hook_id_tests",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "hook-id",
+          "type": "integer",
+          "summary": "hook_id path parameter",
+          "maps_to": "record.hook_id"
+        }
+      ]
+    },
+    {
+      "path": "immutable-releases delete",
+      "summary": "DELETE /repos/{owner}/{repo}/immutable-releases",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "immutable_releases",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "immutable-releases view",
+      "summary": "Read /repos/{owner}/{repo}/immutable-releases",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.immutable_releases2",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "immutable-releases set",
+      "summary": "PUT /repos/{owner}/{repo}/immutable-releases",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "immutable_releases3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "import delete",
+      "summary": "DELETE /repos/{owner}/{repo}/import",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "import",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "import view",
+      "summary": "Read /repos/{owner}/{repo}/import",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.import2",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "import update",
+      "summary": "PATCH /repos/{owner}/{repo}/import",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "import3",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "import set",
+      "summary": "PUT /repos/{owner}/{repo}/import",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "import4",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "import authors view",
+      "summary": "Read /repos/{owner}/{repo}/import/authors",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.import_authors",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "import authors update",
+      "summary": "PATCH /repos/{owner}/{repo}/import/authors/{author_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "import_authors_author_id",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "author-id",
+          "type": "integer",
+          "summary": "author_id path parameter",
+          "maps_to": "record.author_id"
+        }
+      ]
+    },
+    {
+      "path": "import large_files view",
+      "summary": "Read /repos/{owner}/{repo}/import/large_files",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.import_large_files",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "import lfs update",
+      "summary": "PATCH /repos/{owner}/{repo}/import/lfs",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "import_lfs",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "installation view",
+      "summary": "Read /repos/{owner}/{repo}/installation",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.installation",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "interaction-limits delete",
+      "summary": "DELETE /repos/{owner}/{repo}/interaction-limits",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "interaction_limits",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "interaction-limits view",
+      "summary": "Read /repos/{owner}/{repo}/interaction-limits",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.interaction_limits2",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "interaction-limits set",
+      "summary": "PUT /repos/{owner}/{repo}/interaction-limits",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "interaction_limits3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "interaction-limits bypass-list delete",
+      "summary": "DELETE /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "interaction_limits_pulls_bypass_list",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "interaction-limits bypass-list view",
+      "summary": "Read /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.interaction_limits_pulls_bypass_list2",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "interaction-limits bypass-list set",
+      "summary": "PUT /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "interaction_limits_pulls_bypass_list3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "invitations delete",
+      "summary": "DELETE /repos/{owner}/{repo}/invitations/{invitation_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "invitations_invitation_id",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "invitation-id",
+          "type": "integer",
+          "summary": "invitation_id path parameter",
+          "maps_to": "record.invitation_id"
+        }
+      ]
+    },
+    {
+      "path": "invitations update",
+      "summary": "PATCH /repos/{owner}/{repo}/invitations/{invitation_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "invitations_invitation_id2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "invitation-id",
+          "type": "integer",
+          "summary": "invitation_id path parameter",
+          "maps_to": "record.invitation_id"
+        }
+      ]
+    },
+    {
+      "path": "issue-types view",
+      "summary": "Read /repos/{owner}/{repo}/issue-types",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issue_types",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "issues pin delete",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_comments_comment_id_pin",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter",
+          "maps_to": "record.comment_id"
+        }
+      ]
+    },
+    {
+      "path": "issues pin set",
+      "summary": "PUT /repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_comments_comment_id_pin2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter",
+          "maps_to": "record.comment_id"
+        }
+      ]
+    },
+    {
+      "path": "issues reactions view",
+      "summary": "Read /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_comments_comment_id_reactions",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "issues reactions create",
+      "summary": "POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_comments_comment_id_reactions2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter",
+          "maps_to": "record.comment_id"
+        }
+      ]
+    },
+    {
+      "path": "issues reactions delete",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_comments_comment_id_reactions_reaction_id",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter",
+          "maps_to": "record.comment_id"
+        },
+        {
+          "name": "reaction-id",
+          "type": "integer",
+          "summary": "reaction_id path parameter",
+          "maps_to": "record.reaction_id"
+        }
+      ]
+    },
+    {
+      "path": "issues assignees view",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_assignees_assignee",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter"
+        },
+        {
+          "name": "assignee",
+          "type": "string",
+          "summary": "assignee path parameter"
+        }
+      ]
+    },
+    {
+      "path": "issues blocked_by view",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_dependencies_blocked_by",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "issues blocked_by create",
+      "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_dependencies_blocked_by2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter",
+          "maps_to": "record.issue_number"
+        }
+      ]
+    },
+    {
+      "path": "issues blocked_by delete",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_dependencies_blocked_by_issue_id",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "issue-id",
+          "type": "integer",
+          "summary": "issue_id path parameter",
+          "maps_to": "record.issue_id"
+        }
+      ]
+    },
+    {
+      "path": "issues blocking view",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_dependencies_blocking",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "issues issue-field-values view",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_issue_field_values",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "issues issue-field-values create",
+      "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_issue_field_values2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter",
+          "maps_to": "record.issue_number"
+        }
+      ]
+    },
+    {
+      "path": "issues issue-field-values set",
+      "summary": "PUT /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_issue_field_values3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter",
+          "maps_to": "record.issue_number"
+        }
+      ]
+    },
+    {
+      "path": "issues issue-field-values delete",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_issue_field_values_issue_field_id",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "issue-field-id",
+          "type": "integer",
+          "summary": "issue_field_id path parameter",
+          "maps_to": "record.issue_field_id"
+        }
+      ]
+    },
+    {
+      "path": "issues parent view",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/parent",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_parent",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "issues reactions view-2",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/reactions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_reactions",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "issues reactions create-2",
+      "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/reactions",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_reactions2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter",
+          "maps_to": "record.issue_number"
+        }
+      ]
+    },
+    {
+      "path": "issues reactions delete-2",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_reactions_reaction_id",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter",
+          "maps_to": "record.issue_number"
+        },
+        {
+          "name": "reaction-id",
+          "type": "integer",
+          "summary": "reaction_id path parameter",
+          "maps_to": "record.reaction_id"
+        }
+      ]
+    },
+    {
+      "path": "issues sub_issue delete",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_sub_issue",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter",
+          "maps_to": "record.issue_number"
+        }
+      ]
+    },
+    {
+      "path": "issues sub_issues view",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.issues_issue_number_sub_issues",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "issues sub_issues create",
+      "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_sub_issues2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter",
+          "maps_to": "record.issue_number"
+        }
+      ]
+    },
+    {
+      "path": "issues priority update",
+      "summary": "PATCH /repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issues_issue_number_sub_issues_priority",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-number",
+          "type": "integer",
+          "summary": "issue_number path parameter",
+          "maps_to": "record.issue_number"
+        }
+      ]
+    },
+    {
+      "path": "license view",
+      "summary": "Read /repos/{owner}/{repo}/license",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.license",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "merge-upstream create",
+      "summary": "POST /repos/{owner}/{repo}/merge-upstream",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "merge_upstream",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "milestones labels view",
+      "summary": "Read /repos/{owner}/{repo}/milestones/{milestone_number}/labels",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.milestones_milestone_number_labels",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "milestone-number",
+          "type": "integer",
+          "summary": "milestone_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "notifications view",
+      "summary": "Read /repos/{owner}/{repo}/notifications",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.notifications",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "notifications set",
+      "summary": "PUT /repos/{owner}/{repo}/notifications",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "notifications2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "pages delete",
+      "summary": "DELETE /repos/{owner}/{repo}/pages",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pages",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "pages view",
+      "summary": "Read /repos/{owner}/{repo}/pages",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pages2",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "pages create",
+      "summary": "POST /repos/{owner}/{repo}/pages",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pages3",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "pages set",
+      "summary": "PUT /repos/{owner}/{repo}/pages",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pages4",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "pages builds view",
+      "summary": "Read /repos/{owner}/{repo}/pages/builds",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pages_builds",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "pages builds create",
+      "summary": "POST /repos/{owner}/{repo}/pages/builds",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pages_builds2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "pages latest view",
+      "summary": "Read /repos/{owner}/{repo}/pages/builds/latest",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pages_builds_latest",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "pages builds view-2",
+      "summary": "Read /repos/{owner}/{repo}/pages/builds/{build_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pages_builds_build_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "build-id",
+          "type": "integer",
+          "summary": "build_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "pages deployments create",
+      "summary": "POST /repos/{owner}/{repo}/pages/deployments",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pages_deployments",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "pages deployments view",
+      "summary": "Read /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pages_deployments_pages_deployment_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "pages-deployment-id",
+          "type": "integer",
+          "summary": "pages_deployment_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "pages cancel create",
+      "summary": "POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pages_deployments_pages_deployment_id_cancel",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pages-deployment-id",
+          "type": "integer",
+          "summary": "pages_deployment_id path parameter",
+          "maps_to": "record.pages_deployment_id"
+        }
+      ]
+    },
+    {
+      "path": "pages health view",
+      "summary": "Read /repos/{owner}/{repo}/pages/health",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pages_health",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "private-vulnerability-reporting delete",
+      "summary": "DELETE /repos/{owner}/{repo}/private-vulnerability-reporting",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "private_vulnerability_reporting",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "private-vulnerability-reporting view",
+      "summary": "Read /repos/{owner}/{repo}/private-vulnerability-reporting",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.private_vulnerability_reporting2",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "private-vulnerability-reporting set",
+      "summary": "PUT /repos/{owner}/{repo}/private-vulnerability-reporting",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "private_vulnerability_reporting3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "properties values view",
+      "summary": "Read /repos/{owner}/{repo}/properties/values",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.properties_values",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "properties values update",
+      "summary": "PATCH /repos/{owner}/{repo}/properties/values",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "properties_values2",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "pulls reactions view",
+      "summary": "Read /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_comments_comment_id_reactions",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "pulls reactions create",
+      "summary": "POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pulls_comments_comment_id_reactions2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter",
+          "maps_to": "record.comment_id"
+        }
+      ]
+    },
+    {
+      "path": "pulls reactions delete",
+      "summary": "DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pulls_comments_comment_id_reactions_reaction_id",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "comment-id",
+          "type": "integer",
+          "summary": "comment_id path parameter",
+          "maps_to": "record.comment_id"
+        },
+        {
+          "name": "reaction-id",
+          "type": "integer",
+          "summary": "reaction_id path parameter",
+          "maps_to": "record.reaction_id"
+        }
+      ]
+    },
+    {
+      "path": "pulls codespaces create",
+      "summary": "POST /repos/{owner}/{repo}/pulls/{pull_number}/codespaces",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pulls_pull_number_codespaces",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "pull_number path parameter",
+          "maps_to": "record.pull_number"
+        }
+      ]
+    },
+    {
+      "path": "pulls commits view",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/commits",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_pull_number_commits",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "pull_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "pulls files view",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/files",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_pull_number_files",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "pull_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "pulls merge view",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/merge",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_pull_number_merge",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "pull_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "pulls requested_reviewers delete",
+      "summary": "DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pulls_pull_number_requested_reviewers",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "pull_number path parameter",
+          "maps_to": "record.pull_number"
+        }
+      ]
+    },
+    {
+      "path": "pulls reviews view",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_pull_number_reviews",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "pull_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "pulls comments view",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.pulls_pull_number_reviews_review_id_comments",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "pull-number",
+          "type": "integer",
+          "summary": "pull_number path parameter"
+        },
+        {
+          "name": "review-id",
+          "type": "integer",
+          "summary": "review_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "readme view",
+      "summary": "Read /repos/{owner}/{repo}/readme",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.readme",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "readme view-2",
+      "summary": "Read /repos/{owner}/{repo}/readme/{dir}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.readme_dir",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "dir",
+          "type": "string",
+          "summary": "dir path parameter"
+        }
+      ]
+    },
+    {
+      "path": "releases assets view",
+      "summary": "Read /repos/{owner}/{repo}/releases/assets/{asset_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.releases_assets_asset_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "asset-id",
+          "type": "integer",
+          "summary": "asset_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "releases generate-notes view",
+      "summary": "POST /repos/{owner}/{repo}/releases/generate-notes",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "releases_generate_notes",
+      "source_cli_path": "",
+      "risk": "low",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "releases assets view-2",
+      "summary": "Read /repos/{owner}/{repo}/releases/{release_id}/assets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.releases_release_id_assets",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "release-id",
+          "type": "integer",
+          "summary": "release_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "releases assets view-3",
+      "summary": "POST /repos/{owner}/{repo}/releases/{release_id}/assets",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "releases_release_id_assets2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "release-id",
+          "type": "integer",
+          "summary": "release_id path parameter",
+          "maps_to": "record.release_id"
+        }
+      ]
+    },
+    {
+      "path": "releases reactions view",
+      "summary": "Read /repos/{owner}/{repo}/releases/{release_id}/reactions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.releases_release_id_reactions",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "release-id",
+          "type": "integer",
+          "summary": "release_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "releases reactions create",
+      "summary": "POST /repos/{owner}/{repo}/releases/{release_id}/reactions",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "releases_release_id_reactions2",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "release-id",
+          "type": "integer",
+          "summary": "release_id path parameter",
+          "maps_to": "record.release_id"
+        }
+      ]
+    },
+    {
+      "path": "releases reactions delete",
+      "summary": "DELETE /repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "releases_release_id_reactions_reaction_id",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "release-id",
+          "type": "integer",
+          "summary": "release_id path parameter",
+          "maps_to": "record.release_id"
+        },
+        {
+          "name": "reaction-id",
+          "type": "integer",
+          "summary": "reaction_id path parameter",
+          "maps_to": "record.reaction_id"
+        }
+      ]
+    },
+    {
+      "path": "rulesets rule-suites view",
+      "summary": "Read /repos/{owner}/{repo}/rulesets/rule-suites",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.rulesets_rule_suites",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "rulesets rule-suites view-2",
+      "summary": "Read /repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.rulesets_rule_suites_rule_suite_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "rule-suite-id",
+          "type": "integer",
+          "summary": "rule_suite_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "rulesets history view",
+      "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}/history",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.rulesets_ruleset_id_history",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ruleset-id",
+          "type": "integer",
+          "summary": "ruleset_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "rulesets history view-2",
+      "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.rulesets_ruleset_id_history_version_id",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ruleset-id",
+          "type": "integer",
+          "summary": "ruleset_id path parameter"
+        },
+        {
+          "name": "version-id",
+          "type": "integer",
+          "summary": "version_id path parameter"
+        }
+      ]
+    },
+    {
+      "path": "secret-scanning locations view",
+      "summary": "Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.secret_scanning_alerts_alert_number_locations",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "alert-number",
+          "type": "integer",
+          "summary": "alert_number path parameter"
+        }
+      ]
+    },
+    {
+      "path": "secret-scanning push-protection-bypasses create",
+      "summary": "POST /repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "secret_scanning_push_protection_bypasses",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "secret-scanning scan-history view",
+      "summary": "Read /repos/{owner}/{repo}/secret-scanning/scan-history",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.secret_scanning_scan_history",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "security-advisories create",
+      "summary": "POST /repos/{owner}/{repo}/security-advisories",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "security_advisories",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "security-advisories reports create",
+      "summary": "POST /repos/{owner}/{repo}/security-advisories/reports",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "security_advisories_reports",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "security-advisories update",
+      "summary": "PATCH /repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "security_advisories_ghsa_id",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "ghsa-id",
+          "type": "integer",
+          "summary": "ghsa_id path parameter",
+          "maps_to": "record.ghsa_id"
+        }
+      ]
+    },
+    {
+      "path": "security-advisories cve create",
+      "summary": "POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "security_advisories_ghsa_id_cve",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "ghsa-id",
+          "type": "integer",
+          "summary": "ghsa_id path parameter",
+          "maps_to": "record.ghsa_id"
+        }
+      ]
+    },
+    {
+      "path": "security-advisories forks create",
+      "summary": "POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "security_advisories_ghsa_id_forks",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "ghsa-id",
+          "type": "integer",
+          "summary": "ghsa_id path parameter",
+          "maps_to": "record.ghsa_id"
+        }
+      ]
+    },
+    {
+      "path": "stats code_frequency view",
+      "summary": "Read /repos/{owner}/{repo}/stats/code_frequency",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.stats_code_frequency",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "stats commit_activity view",
+      "summary": "Read /repos/{owner}/{repo}/stats/commit_activity",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.stats_commit_activity",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "stats contributors view",
+      "summary": "Read /repos/{owner}/{repo}/stats/contributors",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.stats_contributors",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "stats participation view",
+      "summary": "Read /repos/{owner}/{repo}/stats/participation",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.stats_participation",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "stats punch_card view",
+      "summary": "Read /repos/{owner}/{repo}/stats/punch_card",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.stats_punch_card",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "statuses create",
+      "summary": "POST /repos/{owner}/{repo}/statuses/{sha}",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "statuses_sha",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "sha",
+          "type": "string",
+          "summary": "sha path parameter",
+          "maps_to": "record.sha"
+        }
+      ]
+    },
+    {
+      "path": "subscription delete",
+      "summary": "DELETE /repos/{owner}/{repo}/subscription",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "subscription",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "subscription view",
+      "summary": "Read /repos/{owner}/{repo}/subscription",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.subscription2",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "subscription set",
+      "summary": "PUT /repos/{owner}/{repo}/subscription",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "subscription3",
+      "source_cli_path": "",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "repo archive tarball",
+      "summary": "Download /repos/{owner}/{repo}/tarball/{ref}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.tarball_ref",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "ref path parameter"
+        }
+      ]
+    },
+    {
+      "path": "teams view",
+      "summary": "Read /repos/{owner}/{repo}/teams",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.teams",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "traffic clones view",
+      "summary": "Read /repos/{owner}/{repo}/traffic/clones",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.traffic_clones",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "traffic paths view",
+      "summary": "Read /repos/{owner}/{repo}/traffic/popular/paths",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.traffic_popular_paths",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "traffic referrers view",
+      "summary": "Read /repos/{owner}/{repo}/traffic/popular/referrers",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.traffic_popular_referrers",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "traffic views view",
+      "summary": "Read /repos/{owner}/{repo}/traffic/views",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.traffic_views",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "transfer create",
+      "summary": "POST /repos/{owner}/{repo}/transfer",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "transfer",
+      "source_cli_path": "",
+      "risk": "critical",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [],
+      "notes": "destructive; requires --allow-destructive + typed confirmation"
+    },
+    {
+      "path": "vulnerability-alerts delete",
+      "summary": "DELETE /repos/{owner}/{repo}/vulnerability-alerts",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "vulnerability_alerts",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "vulnerability-alerts view",
+      "summary": "Read /repos/{owner}/{repo}/vulnerability-alerts",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.vulnerability_alerts2",
+      "source_cli_path": "",
+      "flags": []
+    },
+    {
+      "path": "vulnerability-alerts set",
+      "summary": "PUT /repos/{owner}/{repo}/vulnerability-alerts",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "vulnerability_alerts3",
+      "source_cli_path": "",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": []
+    },
+    {
+      "path": "repo archive zipball",
+      "summary": "Download /repos/{owner}/{repo}/zipball/{ref}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "github.zipball_ref",
+      "source_cli_path": "",
+      "flags": [
+        {
+          "name": "ref",
+          "type": "string",
+          "summary": "ref path parameter"
+        }
+      ]
     }
   ],
   "help_topics": [

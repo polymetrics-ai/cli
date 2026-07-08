@@ -4,8 +4,8 @@ import "testing"
 
 func TestGithubWriteActionInventoryAccountsForAllDeclaredActions(t *testing.T) {
 	items := writeActionInventoryFor("github")
-	if len(items) != 67 {
-		t.Fatalf("len(items) = %d, want 67", len(items))
+	if len(items) != 231 {
+		t.Fatalf("len(items) = %d, want 231", len(items))
 	}
 
 	byAction := map[string]writeActionInventoryItem{}

@@ -29,13 +29,13 @@ Manual-GSD fallback requirements for this phase:
 
 The parent branch GitHub bundle currently declares:
 
-- 507 reviewed API endpoints in `api_surface.json`.
+- 509 reviewed API endpoints in `api_surface.json`.
 - 37 stream-covered endpoints.
-- 67 write-covered endpoints/actions.
-- 2 direct-read-covered endpoints (`repo read-file`, `repo read-dir`).
-- 402 explicitly blocked endpoints with typed model/status/reason, including 158 blocked direct-read candidates and 10 blocked binary-read candidates.
+- 231 write-covered endpoints/actions.
+- 173 direct-read-covered endpoints represented by 2 implemented direct-read command families (`repo read-file`, `repo read-dir`).
+- 69 explicitly blocked endpoints with typed model/status/reason.
 
-The certificate must account for all 507 endpoints. It must not blindly execute blocked/admin/sensitive/destructive/local/binary surfaces.
+The certificate must account for all 509 endpoints. It must not blindly execute blocked/admin/sensitive/destructive/local/binary surfaces.
 
 ## Remaining Certificate Work
 
@@ -45,7 +45,7 @@ The full GitHub organization certificate is **not live-complete** until these ga
 2. Verify the actual catalog stream count and every stream's read/query stages.
 3. Execute both currently implemented direct-read commands (`repo read-file`, `repo read-dir`) against safe paths.
 4. Keep binary-read surfaces blocked unless/until a bounded binary executor and destination policy are implemented; current surface accounting verifies the 10 blocked binary-read API endpoints plus the one typed binary operation.
-5. Execute live write lifecycle for every safe curated pairing, including cleanup verification, with a credentialed dev repo. All 67 declared write actions are now accounted for, but not all are safe standalone create-cleanup lifecycles.
+5. Execute live write lifecycle for the safe curated first pairing, including cleanup verification, with a credentialed dev repo. All 231 declared write actions are now accounted for, but not all are safe standalone create-cleanup lifecycles.
 6. Enforce typed confirmation / secret transform / destructive/admin runtime gates where not already covered by metadata validation.
 
 ## Live Credential Safety

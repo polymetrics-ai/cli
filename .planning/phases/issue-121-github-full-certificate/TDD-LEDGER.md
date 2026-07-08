@@ -24,15 +24,15 @@
 - Red follow-up: `TestDirectReadCandidatesForGitHub` failed while only `repo read-file` was swept.
 - Green: direct-read sweep now accounts for both implemented GitHub direct-read commands: `repo read-file` and `repo read-dir`.
 
-### 507 endpoint surface accounting
+### 509 endpoint surface accounting
 
 - Red: `TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints` failed before the surface inventory stage existed.
-- Green: GitHub API surface accounting verifies 507 endpoints: 105 covered and 402 blocked with typed reasons.
+- Green: GitHub API surface accounting verifies 509 endpoints: 440 covered and 69 blocked with typed reasons after merging the parent branch.
 
-### 67 write action accounting
+### 231 write action accounting
 
 - Red: `TestGithubWriteActionInventoryAccountsForAllDeclaredActions` failed before write action inventory accounting existed.
-- Green: GitHub write action inventory accounts all 67 declared write actions, marking safe curated/inferred pairings separately from unpaired/blocked actions.
+- Green: GitHub write action inventory accounts all 231 declared write actions, marking safe curated/inferred pairings separately from unpaired/blocked actions.
 
 ### Binary safety gate
 
@@ -84,4 +84,4 @@ Red/green tests:
 
 ## Live Tests
 
-Live GitHub certificate runs were executed against disposable repo `karthik-sivadas/pm-cert-test-20260709025802` using an environment-provided token only. Early runs did not pass and produced the live-run defects above. The final run passed with 925 stages, 0 failures, 129 documented skips, 507 API endpoints accounted, 37 catalog streams accounted, 2 direct-read stages passed, binary download safely blocked, and `create_label` write lifecycle passed with cleanup residue check showing 0 remaining cert labels.
+Live GitHub certificate runs were executed against disposable repo `karthik-sivadas/pm-cert-test-20260709025802` using an environment-provided token only. Early runs did not pass and produced the live-run defects above. The final merged-parent run passed with 1089 stages, 0 failures, 129 documented skips, 509 API endpoints accounted, 37 catalog streams accounted, 2 direct-read stages passed, binary download safely blocked, and `create_label` write lifecycle passed with cleanup residue check showing 0 remaining cert labels.
