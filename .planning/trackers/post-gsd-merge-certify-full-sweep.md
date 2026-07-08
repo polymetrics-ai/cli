@@ -329,6 +329,20 @@ Green: go test ./internal/connectors/... -count=1
 
 No credentialed/live GitHub checks were run. The stage is ready for future env-gated live runs with rotated credentials only.
 
+## Verification Checkpoint
+
+Latest local gates for the pushed implementation slices:
+
+```text
+PASS: git diff --check
+PASS: go vet ./...
+PASS: go build ./cmd/pm
+PASS: go test ./internal/connectors/certify/ -count=1 -timeout=10m
+PASS: go test ./internal/connectors/... -count=1
+PASS: PM_CRONTAB_FILE=$(mktemp) go test ./internal/cli -run TestScheduleCLI_Remove -count=1 -timeout=2m -v
+CAVEAT: go test ./... timed out in internal/cli TestScheduleCLI_Remove when it invoked the host crontab without PM_CRONTAB_FILE; the isolated crontab-seam rerun passed.
+```
+
 ## Tracker Checklist
 
 - [x] PR #123 merged.
