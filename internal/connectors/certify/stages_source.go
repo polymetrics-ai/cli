@@ -236,6 +236,7 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 		stageApprovalIdempotency,
 		stageFlowRoundtrip,
 		stageScheduleRoundtrip,
+		stageWriteSweepAllPairings,
 	}
 
 	for _, stage := range stages {

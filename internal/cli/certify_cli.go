@@ -90,6 +90,7 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 
 	skip := parseCSVFlags(flags.values["skip"])
 	write := flags.first("write") == "true"
+	full := flags.first("full") == "true"
 	for _, s := range skip {
 		if s == "write" {
 			write = false
@@ -105,6 +106,7 @@ func certifyOptionsFromFlags(connector string, flags parsedFlags) (certify.Optio
 		SecretEnv: secretEnv,
 		KeepWork:  flags.first("keep-workdir") == "true",
 		Write:     write,
+		Full:      full,
 	}, nil
 }
 
