@@ -337,11 +337,18 @@ Latest local gates for the pushed implementation slices:
 PASS: git diff --check
 PASS: go vet ./...
 PASS: go build ./cmd/pm
-PASS: go test ./internal/connectors/certify/ -count=1 -timeout=10m
+PASS: go test ./internal/connectors/certify/ -run 'TestDefaultStreamName|TestFullSweepSourceStagesAgainstSample|TestSourceStagesAgainstSample' -count=1 -timeout=3m -v
+PASS: go test ./internal/connectors/certify/ -run 'TestWriteStagesLedgerWrittenBeforeCreate|TestSweepPairingsForGithubHasMultiple' -count=1 -timeout=3m -v
+PASS: go test ./internal/connectors/certify/ -count=1 -timeout=10m (before the GitHub bootstrap-stream follow-up)
 PASS: go test ./internal/connectors/... -count=1
 PASS: PM_CRONTAB_FILE=$(mktemp) go test ./internal/cli -run TestScheduleCLI_Remove -count=1 -timeout=2m -v
+CAVEAT: go test ./internal/connectors/certify/ -count=1 now exceeds the local harness timeout after adding the full-mode per-stream sample coverage; focused changed tests pass.
 CAVEAT: go test ./... timed out in internal/cli TestScheduleCLI_Remove when it invoked the host crontab without PM_CRONTAB_FILE; the isolated crontab-seam rerun passed.
 ```
+
+Bootstrap fix:
+
+- `defaultStreamName("github")` now uses `issues` so `pm connectors certify github --full` can create the initial catalog connection without requiring the sample-only `customers` stream.
 
 ## Tracker Checklist
 
