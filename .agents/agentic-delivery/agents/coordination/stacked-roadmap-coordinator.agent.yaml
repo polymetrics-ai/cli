@@ -33,6 +33,7 @@ inputs:
   - AGENTS.md
   - .agents/agentic-delivery/references/gsd-pi-adapter.md
   - .agents/agentic-delivery/references/required-skills-routing.md
+  - .agents/agentic-delivery/references/runtime-rlm-website-integration.md
   - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
   - .agents/agentic-delivery/references/issue-roadmap-best-practices.md
   - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
@@ -58,6 +59,7 @@ workflow:
 - enforce_cli_help_docs_website_parity_when_cli_changes
 - load_gsd_pi_adapter
 - load_required_go_and_design_skills
+- enforce_runtime_rlm_website_integration_when_relevant
 - read_sources_and_repo_rules
 - define_parent_issue
 - split_into_subissues
@@ -91,4 +93,5 @@ adapters:
     note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
       runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
       before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
-      and record them in the plan, handoff, or PR body.
+      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+      and keep runtime-backed services optional unless explicitly in scope.

@@ -69,6 +69,14 @@ Required Go/design skill routing refresh:
 
 This added durable guidance that Go work starts with `golang-how-to`, task-specific Go skills such as `golang-cli`, `golang-testing`, `golang-security`, and `golang-documentation` are loaded as applicable, and website/docs UI work loads design skills such as `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices`.
 
+Runtime/RLM/Pi-agent/website integration knowledge refresh:
+
+```bash
+scripts/gsd prompt docs-update .agents .planning docs/architecture/runtime-dependencies.md docs/runtime/SETUP.md docs/cli/runtime.md docs/cli/rlm.md website/content/docs/architecture.mdx website/content/docs/cli-reference.mdx --runtime-rlm-website-integration > .planning/traces/gsd-runtime-rlm-website-integration-prompt.md
+```
+
+This added concise `.planning` and agent memory for the optional runtime topology: Podman-first local orchestration, Docker fallback, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, `pm runtime`, `pm rlm`, `pm agent image`, `pm worker`, and the website stack. The full details stay in canonical docs instead of being copied into every prompt.
+
 Initial red/preflight evidence:
 
 ```bash

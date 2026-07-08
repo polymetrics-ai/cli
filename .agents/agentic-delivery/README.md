@@ -36,6 +36,7 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
 - `references/gsd-pi-adapter.md`: repo-local official GSD Core command path for Pi and shell agents.
 - `references/required-skills-routing.md`: required Go/design skill routing for agents and subagents.
+- `references/runtime-rlm-website-integration.md`: required runtime/RLM/Pi-agent/website integration knowledge for Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, and website docs.
 - `references/cli-help-docs-website-parity.md`: required parity checklist for CLI help, manual docs, generated docs, and website docs.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
 - `schemas/orchestration-state.schema.yaml`: field contract for parent issue state ledgers.
@@ -73,6 +74,7 @@ the `.agents/` YAML and Markdown contracts instead of copying policy.
 - CLI feature work must keep runtime help, bare namespace behavior, `docs/cli/**`, website docs,
   generated help/manual artifacts, and tests in parity; follow
   `references/cli-help-docs-website-parity.md`.
+- Runtime/RLM/Pi-agent work must preserve the dependency-free default, treat Podman/PostgreSQL/DragonflyDB/Temporal as optional runtime-backed services unless explicitly in scope, and follow `references/runtime-rlm-website-integration.md`.
 - CodeRabbit review is a post-implementation gate. Every actionable review item must receive a
   reasoned disposition before it is resolved. Non-draft PRs targeting `main` should rely on
   automatic review. Follow-up fix commits should rely on automatic incremental review when active;

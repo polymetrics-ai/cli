@@ -103,6 +103,17 @@ PY
 
 Result: PASS. GSD prompts, Pi skill/prompt, AGENTS.md, agent contracts, task-skill matrix, and all YAML agent specs now require or route task-appropriate Go/design skills, including `golang-how-to`, `golang-cli`, `golang-testing`, `golang-security`, `golang-documentation`, `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices` as applicable.
 
+## Runtime / RLM / Pi Agent / Website Integration Knowledge Verification
+
+Commands:
+
+```bash
+scripts/gsd prompt docs-update .agents .planning docs/architecture/runtime-dependencies.md docs/runtime/SETUP.md docs/cli/runtime.md docs/cli/rlm.md website/content/docs/architecture.mdx website/content/docs/cli-reference.mdx --runtime-rlm-website-integration > .planning/traces/gsd-runtime-rlm-website-integration-prompt.md
+rg -n "runtime-rlm-website-integration|Podman|PostgreSQL|Dragonfly|Redis|Temporal|RLM|pm runtime|pm rlm|pm agent image|pm worker|Next.js|React 19|Fumadocs" AGENTS.md .agents .planning .pi scripts/gsd
+```
+
+Result: PASS. GSD prompts, agent references, Pi skill, AGENTS.md, and non-phase planning docs now preserve concise runtime/RLM/Pi-agent/website integration knowledge with canonical source docs, while keeping runtime-backed checks optional and gated.
+
 ## Results
 
 - `scripts/gsd doctor`: PASS. Official docs, command registry, lock, Pi settings, Pi extension, Pi skill, Pi prompt, and commands were detected.

@@ -23,6 +23,19 @@ POLYMETRICS_INTEGRATION=1 go test ./...
 scripts/runtime.sh down
 ```
 
+Runtime-backed checks cover optional Podman/Docker Compose services: PostgreSQL on `localhost:15433`, DragonflyDB/Redis-compatible coordination on `localhost:6379`, Temporal on `localhost:7233`, and Temporal UI on `http://localhost:8080`. They are not required for dependency-free unit tests or planning-only work.
+
+RLM/Pi-agent runtime checks, when explicitly in scope, may include:
+
+```bash
+pm runtime doctor --json
+pm agent image ensure --json
+pm worker status --json
+pm rlm run --spec spec.json --in customers --out scored_customers --mode agent --request "score leads" --json
+```
+
+Do not run RLM agent mode, worker services, or credentialed runtime checks unless the issue explicitly requests runtime-backed verification.
+
 ## CLI Help / Docs / Website Parity Gates
 
 Use for CLI command, flag, help, output, or connector-surface feature work:
@@ -76,6 +89,21 @@ PY
 ```
 
 If PyYAML is unavailable, use a runtime-neutral parse/check available in the current environment and record fallback.
+
+## Website Verification Boundaries
+
+When website docs or UI change, choose relevant checks from:
+
+```bash
+cd website
+npm run gen:website-data
+npm run typecheck
+npm run test:unit
+npm run test:e2e
+npm run build
+```
+
+Do not add frontend dependencies without human approval.
 
 ## Connector Verification Boundaries
 

@@ -7,6 +7,7 @@
 - Read `.agents/agentic-delivery/references/required-skills-routing.md` before implementation, review, CLI, connector, docs, website, or design work.
 - For Go work, load `golang-how-to` first, then task-specific skills such as `golang-cli`, `golang-testing`, `golang-security`, `golang-error-handling`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`, `golang-database`, `golang-graphql`, or `golang-documentation`.
 - For website/docs UI work, load design skills such as `frontend-design`, `web-design-guidelines`, `vercel-react-best-practices`, and `vercel-composition-patterns` as applicable.
+- For runtime/RLM/Pi-agent work involving Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, `pm runtime`, `pm rlm`, `pm agent image`, `pm worker`, or website architecture docs, read `.agents/agentic-delivery/references/runtime-rlm-website-integration.md`.
 - Record required skills in the GSD plan, worker handoff, or PR body.
 
 ## GSD Command Conventions

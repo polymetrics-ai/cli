@@ -54,6 +54,7 @@ These counts are planning inputs only. Phase 1 remains the hard gate for regener
 - [ ] Ensure conformance and certification gates enforce parity before rollout claims.
 - [ ] Ensure agents and subagents use repo-local GSD commands via `.pi` or `scripts/gsd`, with manual fallback recorded only when the adapter is unavailable.
 - [ ] Ensure CLI feature work updates runtime help, bare namespace help behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests together.
+- [ ] Preserve runtime/RLM/Pi-agent/website integration knowledge for Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, and the Next.js/Fumadocs website without making runtime checks mandatory.
 
 ### Out of Scope
 
@@ -80,6 +81,7 @@ The official GSD docs do not currently list Pi as an upstream runtime. This repo
 - **De-duplication**: One upstream operation maps to exactly one primary classification; aliases and duplicate docs references are cross-links, not duplicated work.
 - **Agent runtime**: Agents and subagents should prefer `/gsd <command>` or `scripts/gsd prompt <command>` from the repo-local Pi adapter.
 - **CLI docs parity**: CLI-visible changes must follow `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` so runtime help, manual docs, website docs, and generated artifacts stay aligned.
+- **Runtime/RLM/website memory**: Runtime-backed services are optional and documented through `.agents/agentic-delivery/references/runtime-rlm-website-integration.md` plus canonical runtime and website docs.
 - **Review**: Issue-to-PR delivery follows `.agents/agentic-delivery/contracts/issue-agent-contract.md`; PR targets `main` and uses `Closes #122`.
 
 ## Key Decisions

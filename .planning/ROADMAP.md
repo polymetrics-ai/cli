@@ -39,8 +39,10 @@ Deliver connector parity that is:
 - `.pi/skills/gsd-core/SKILL.md` sets default planning/implementation behavior.
 - `.agents/**` instructions route agents/subagents through the Pi adapter or `scripts/gsd`.
 - `.agents/agentic-delivery/references/required-skills-routing.md` defines required Go/design skill routing for agents and subagents.
+- `.agents/agentic-delivery/references/runtime-rlm-website-integration.md` preserves runtime/RLM/Pi-agent/website integration knowledge for Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, and website docs.
 - `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` defines the CLI help/manual/website parity gate.
 - Manual-GSD fallback is only used when the adapter is unavailable and must be recorded.
+- Runtime-backed checks remain optional and gated; dependency-free CLI paths must not require PostgreSQL, DragonflyDB, Temporal, or Podman.
 
 ### 1. Inventory and Surface Reconciliation
 

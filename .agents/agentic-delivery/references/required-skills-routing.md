@@ -2,6 +2,8 @@
 
 Use this reference before assigning or executing repo-local agent work. It maps common Polymetrics tasks to the required available skills.
 
+For runtime, RLM, Pi agent, PostgreSQL, DragonflyDB/Redis, Temporal, Podman, or website documentation work, also read `.agents/agentic-delivery/references/runtime-rlm-website-integration.md`.
+
 ## Always-on Go skill routing
 
 For any Go implementation, review, debugging, CLI, connector runtime, validation, or test task, load:
@@ -72,6 +74,19 @@ For CLI docs/website parity work, combine the design skills above with:
 - `golang-cli`
 - `golang-documentation`
 - `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`
+
+## Runtime/RLM/Pi agent dependency routing
+
+For optional runtime services, RLM agent mode, Podman/Docker Compose local runtime, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, `pm runtime`, `pm rlm`, `pm agent image`, `pm worker`, or runtime website docs, read `.agents/agentic-delivery/references/runtime-rlm-website-integration.md` and load:
+
+- `golang-how-to`
+- `golang-cli` for CLI surfaces
+- `golang-context` and `golang-concurrency` for workers, cancellation, leases, and Temporal-style orchestration
+- `golang-database` for PostgreSQL work
+- `golang-security` and `golang-safety` for secrets, credentials, command args, paths, and runtime boundaries
+- `golang-testing` for runtime-gated tests
+- `golang-documentation` for docs/website updates
+- website design skills when `website/**` changes
 
 ## Required GSD path
 

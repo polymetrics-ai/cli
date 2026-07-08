@@ -17,6 +17,13 @@
 - [ ] **GSD-07**: Agents and subagents route GSD work through `.pi` commands or `scripts/gsd prompt`, with manual fallback recorded only when the adapter is unavailable.
 - [ ] **GSD-08**: Agents and subagents load required Go/design skills from `.agents/agentic-delivery/references/required-skills-routing.md` and record skill evidence in GSD plans, handoffs, or PR bodies.
 
+### Runtime, RLM, Pi Agent, and Website Integration Knowledge
+
+- [ ] **RUNTIME-01**: Planning and agent guidance preserves canonical knowledge for Podman-first local runtime, Docker fallback, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, `pm runtime`, `pm rlm`, `pm agent image`, and `pm worker`.
+- [ ] **RUNTIME-02**: Runtime-backed checks remain optional and explicitly gated; default unit tests and dependency-free CLI paths must not require PostgreSQL, DragonflyDB, Temporal, or Podman.
+- [ ] **RUNTIME-03**: Runtime/RLM/Pi-agent work follows `.agents/agentic-delivery/references/runtime-rlm-website-integration.md` and updates docs/website parity when user-facing behavior changes.
+- [ ] **WEBSITE-01**: Website architecture knowledge records Next.js 16, React 19, Fumadocs, generated docs/data scripts, and relevant website checks without adding dependencies.
+
 ### CLI Help, Manual, Docs, and Website Parity
 
 - [ ] **CLI-DOC-01**: Every CLI command, subcommand, flag, output, connector surface, or help-topic change updates runtime help, `docs/cli/**`, website docs under `website/**`, generated help/manual artifacts, and tests together or records explicit not-applicable notes.
@@ -83,6 +90,10 @@
 | GSD-06 | 0 | In progress |
 | GSD-07 | 0 | In progress |
 | GSD-08 | 0 | Pending |
+| RUNTIME-01 | 0 | Pending |
+| RUNTIME-02 | 0 | Pending |
+| RUNTIME-03 | 0 | Pending |
+| WEBSITE-01 | 0 | Pending |
 | CLI-DOC-01 | 0/2/3/4 | Pending |
 | CLI-DOC-02 | 0/2/3/4 | Pending |
 | CLI-DOC-03 | 0/2/3/4 | Pending |

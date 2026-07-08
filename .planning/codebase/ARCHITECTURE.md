@@ -7,7 +7,7 @@
 
 ## Pattern Overview
 
-**Overall:** Go-only local-first CLI monolith with declarative connector runtime, optional hook/native escape hatches, safety-gated reverse ETL, and repo-local GSD/Pi planning automation.
+**Overall:** Go-only local-first CLI monolith with declarative connector runtime, optional hook/native escape hatches, optional Podman-backed runtime services, RLM/Pi-agent mode, safety-gated reverse ETL, website docs, and repo-local GSD/Pi planning automation.
 
 **Key Characteristics:**
 
@@ -18,6 +18,9 @@
 - Safety-gated reverse ETL uses plan, preview, approval, and execute flow.
 - Conformance and certification make connector capability claims testable.
 - GSD planning is official-docs-backed through `scripts/gsd` and `.pi` resources rather than copied runtime-specific command files.
+- Optional runtime integration uses Podman-first local orchestration, PostgreSQL, DragonflyDB/Redis-compatible coordination, and Temporal.
+- RLM agent mode is opt-in and runtime-backed through Temporal plus a Podman-managed agent image.
+- Website docs use Next.js 16, React 19, and Fumadocs, with generated docs/connectors data.
 
 ## Current Structural Snapshot
 
@@ -69,6 +72,26 @@ These are quick map inputs, not certification claims.
 
 **Runtime model:** Declarative-first; use hooks/native code only when required by protocol, auth, pagination, binary, streaming, or product behavior that does not fit JSON bundle semantics.
 
+### Optional Runtime and RLM Layer
+
+**Purpose:** Provide opt-in runtime-backed execution, performance comparisons, RLM agent mode, and local integration testing without weakening the dependency-free default path.
+
+**Contains:** `deploy/compose`, `deploy/temporal`, `scripts/runtime.sh`, `scripts/setup-runtime-*`, runtime docs, `pm runtime`, `pm perf --runtime`, `pm rlm`, `pm agent image`, and `pm worker` surfaces.
+
+**Depends on:** Podman or Docker Compose for local orchestration; PostgreSQL for durable control-plane/run ledger data; DragonflyDB/Redis-compatible coordination; Temporal for durable workflows and RLM agent mode.
+
+**Key safety rule:** Runtime-backed checks are optional and explicitly gated. Do not store plaintext credentials, raw row payloads, approval tokens, or large batches in Temporal history or DragonflyDB. Do not make runtime services mandatory for default unit tests.
+
+### Website Documentation Layer
+
+**Purpose:** Public documentation, CLI reference, architecture docs, connector catalog pages, and generated website data.
+
+**Contains:** `website/content/docs`, `website/app`, `website/components`, `website/scripts`, and `website/package.json`.
+
+**Depends on:** Next.js 16, React 19, Fumadocs, Radix UI, Lucide icons, Tailwind CSS v4 tooling.
+
+**Key parity rule:** Runtime/RLM/CLI-visible changes update website docs or record explicit not-applicable notes. Website/design work loads the required design skills from `.agents/agentic-delivery/references/required-skills-routing.md`.
+
 ### Planning and Agent Layer
 
 **Purpose:** Official GSD command execution, issue-first delivery contracts, reusable agent specs, migration inventories, parity status, and PR review routing.
@@ -116,13 +139,22 @@ These are quick map inputs, not certification claims.
 3. Live checks require explicit credentials and treat missing credentials as uncertified.
 4. Parity claims derive from generated certification/conformance outputs, not manual assertions.
 
+### Runtime / RLM / Pi Agent Flow
+
+1. User or agent starts local runtime only when needed: `scripts/runtime.sh up`.
+2. `pm runtime doctor --json` checks PostgreSQL, DragonflyDB, and Temporal endpoints.
+3. Dependency-free RLM modes (`deterministic`, `fixture`) run locally without runtime services.
+4. RLM `agent` mode uses `pm agent image ensure`, Temporal workflows, and `pm worker serve/status`.
+5. Runtime-backed verification remains optional and is gated by `POLYMETRICS_INTEGRATION=1`.
+
 ### GSD/Pi Agent Flow
 
 1. Agent reads `AGENTS.md` and issue contract.
 2. Agent runs `scripts/gsd doctor` or `/gsd doctor` when needed.
 3. Agent generates the relevant official command prompt, e.g. `scripts/gsd prompt plan-phase 1 --skip-research` or `/gsd plan-phase 1 --skip-research`.
-4. Agent updates required planning/TDD/verification artifacts before production edits.
-5. Agent verifies and records GSD evidence in planning traces or PR body.
+4. Agent reads required references for the task, including `runtime-rlm-website-integration.md` for runtime/RLM/Pi-agent/website architecture work.
+5. Agent updates required planning/TDD/verification artifacts before production edits.
+6. Agent verifies and records GSD evidence in planning traces or PR body.
 
 ## Connector Surface Model
 

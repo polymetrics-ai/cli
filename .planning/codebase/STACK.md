@@ -6,8 +6,9 @@
 ## Language and Runtime
 
 - Go CLI monolith.
-- Node.js is used for repo-local planning/tooling adapter `scripts/gsd` and Pi extension resources.
+- Node.js is used for repo-local planning/tooling adapter `scripts/gsd`, Pi extension resources, and the website.
 - Optional runtime-backed execution uses project runtime scripts; runtime services are not required for issue #122.
+- Runtime/RLM/Pi-agent integration knowledge is summarized in `.agents/agentic-delivery/references/runtime-rlm-website-integration.md` and sourced from `docs/architecture/runtime-dependencies.md` plus `docs/runtime/SETUP.md`.
 
 ## Primary Product Surface
 
@@ -22,6 +23,21 @@
 - Hook escape hatches: `internal/connectors/hooks/`.
 - Native connectors: `internal/connectors/native/`.
 - Conformance/certification: `internal/connectors/conformance/`, `internal/connectors/certify/`.
+
+## Optional Runtime Services
+
+- Podman-first local orchestration with Docker Compose fallback.
+- PostgreSQL for durable control-plane data, run ledgers, plans/approvals/audit events, checkpoints, and integration-test tables.
+- DragonflyDB / Redis-compatible layer for leases, retry coordination, rate counters, workflow hints, batch pointers, ephemeral agent locks, and cheap caches.
+- Temporal for durable workflows, long-running ETL/reverse ETL, approval waits, retries, cancellation/resume, per-connector worker isolation, and RLM agent mode.
+- Runtime endpoints: PostgreSQL `localhost:15433`, DragonflyDB `localhost:6379`, Temporal `localhost:7233`, Temporal UI `http://localhost:8080`.
+
+## Website Stack
+
+- Next.js 16, React 19, Fumadocs, Radix UI, Lucide icons, Tailwind CSS v4 tooling.
+- Website docs live under `website/content/docs/**`.
+- Website generated data scripts live in `website/package.json`.
+- Runtime/RLM website contract appears in `website/content/docs/architecture.mdx` and `website/content/docs/cli-reference.mdx`.
 
 ## Planning and Agent Runtime
 

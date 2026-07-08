@@ -1,7 +1,7 @@
 # Project State
 
 **Project:** Polymetrics CLI Connector Parity
-**Last activity:** 2026-07-08 — GSD and agent guidance updated so agents/subagents load required Go/design skills and CLI feature work keeps runtime help, bare namespace help behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests in parity.
+**Last activity:** 2026-07-08 — Runtime/RLM/Pi-agent/website integration knowledge added to GSD, agents, and non-phase planning docs; guidance now preserves Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, and website stack details without making runtime checks mandatory.
 
 ## Current State
 
@@ -13,6 +13,7 @@
 - `.pi/skills/gsd-core/SKILL.md` provides default GSD behavior for Pi.
 - `.agents/**` guidance routes GSD work through the Pi adapter or `scripts/gsd prompt`.
 - `.agents/agentic-delivery/references/required-skills-routing.md` defines required Go/design skill routing for agents and subagents.
+- `.agents/agentic-delivery/references/runtime-rlm-website-integration.md` defines runtime/RLM/Pi-agent/website integration knowledge and canonical source docs.
 - `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` defines the required parity gate for CLI-visible changes.
 - Connector parity includes REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queues/events/webhooks, native protocols, direct-read, and writes.
 - Phase 1 inventory reconciliation is a hard gate before connector fanout.
@@ -44,6 +45,7 @@ These are quick-map inputs only; authoritative counts require Phase 1 inventory 
 - Keep `cmd/`, `internal/`, and `.planning/phases/**` unchanged for the current non-phase refresh.
 - For future CLI feature work, require parity across `pm help <topic>`, bare namespace invocations such as `pm connectors`, `pm <command> --help`, `docs/cli/**`, `website/**`, generated help/manual artifacts, and tests.
 - For future Go work, require `golang-how-to` plus task-specific Go skills. For website/docs UI work, require applicable design skills such as `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices`.
+- For future runtime/RLM/Pi-agent work, preserve the dependency-free default and treat Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, and Temporal as optional runtime-backed services unless the issue explicitly says otherwise.
 
 ## Blockers / Human Gates
 

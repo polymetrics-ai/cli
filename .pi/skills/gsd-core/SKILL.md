@@ -16,7 +16,7 @@ scripts/gsd doctor
 scripts/gsd list
 ```
 
-Before implementation/review/design work, also read `.agents/agentic-delivery/references/required-skills-routing.md` and load the required Go/design skills for the task.
+Before implementation/review/design work, also read `.agents/agentic-delivery/references/required-skills-routing.md` and load the required Go/design skills for the task. For runtime/RLM/Pi-agent work involving Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, `pm runtime`, `pm rlm`, `pm agent image`, `pm worker`, or website architecture docs, also read `.agents/agentic-delivery/references/runtime-rlm-website-integration.md`.
 
 Use the Pi slash command when interactive:
 

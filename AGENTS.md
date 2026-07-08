@@ -38,6 +38,9 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
   `golang-database`, `golang-graphql`, or `golang-documentation` as applicable.
 - For website/docs UI work, load design skills such as `frontend-design`, `web-design-guidelines`,
   `vercel-react-best-practices`, and `vercel-composition-patterns` as applicable.
+- For runtime/RLM/Pi-agent work involving Podman, PostgreSQL, DragonflyDB/Redis-compatible
+  coordination, Temporal, `pm runtime`, `pm rlm`, `pm agent image`, `pm worker`, or website
+  architecture docs, read `.agents/agentic-delivery/references/runtime-rlm-website-integration.md`.
 - Record required skills used in the GSD plan, worker handoff, or PR body.
 
 ## GSD Core Runtime For Agents
