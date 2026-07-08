@@ -15,6 +15,7 @@
 - [ ] **GSD-05**: Official `open-gsd/gsd-core@next` source is pinned in `.gsd/upstream.lock.json` and command registry is generated from official docs.
 - [ ] **GSD-06**: Pi resources expose repo-local GSD commands through `/gsd`, generated `/gsd-*` aliases, prompt fallback, and GSD Core skill defaults.
 - [ ] **GSD-07**: Agents and subagents route GSD work through `.pi` commands or `scripts/gsd prompt`, with manual fallback recorded only when the adapter is unavailable.
+- [ ] **GSD-08**: Agents and subagents load required Go/design skills from `.agents/agentic-delivery/references/required-skills-routing.md` and record skill evidence in GSD plans, handoffs, or PR bodies.
 
 ### CLI Help, Manual, Docs, and Website Parity
 
@@ -81,6 +82,7 @@
 | GSD-05 | 0 | In progress |
 | GSD-06 | 0 | In progress |
 | GSD-07 | 0 | In progress |
+| GSD-08 | 0 | Pending |
 | CLI-DOC-01 | 0/2/3/4 | Pending |
 | CLI-DOC-02 | 0/2/3/4 | Pending |
 | CLI-DOC-03 | 0/2/3/4 | Pending |

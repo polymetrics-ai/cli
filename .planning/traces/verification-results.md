@@ -85,6 +85,24 @@ rg -n "cli-help-docs-website-parity|pm connectors|bare namespace|docs/cli|websit
 
 Result: PASS. GSD prompts, agent references, Pi skill/prompt, AGENTS.md, and non-phase planning artifacts now require CLI-visible feature work to keep runtime help, bare namespace command behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests in parity.
 
+## Required Go/Design Skills Routing Verification
+
+Commands:
+
+```bash
+scripts/gsd prompt docs-update .agents AGENTS.md .pi .planning --required-skills-routing > .planning/traces/gsd-required-skills-routing-prompt.md
+rg -n "required-skills-routing|golang-how-to|golang-cli|golang-testing|frontend-design|web-design-guidelines|vercel-react-best-practices|load_required_go_and_design_skills" AGENTS.md .agents .pi scripts/gsd .planning
+python3 - <<'PY'
+from pathlib import Path
+import yaml
+for path in sorted(Path('.agents').rglob('*.yaml')):
+    yaml.safe_load(path.read_text())
+print('yaml ok')
+PY
+```
+
+Result: PASS. GSD prompts, Pi skill/prompt, AGENTS.md, agent contracts, task-skill matrix, and all YAML agent specs now require or route task-appropriate Go/design skills, including `golang-how-to`, `golang-cli`, `golang-testing`, `golang-security`, `golang-documentation`, `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices` as applicable.
+
 ## Results
 
 - `scripts/gsd doctor`: PASS. Official docs, command registry, lock, Pi settings, Pi extension, Pi skill, Pi prompt, and commands were detected.

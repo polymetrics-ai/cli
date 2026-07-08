@@ -1,7 +1,7 @@
 # Project State
 
 **Project:** Polymetrics CLI Connector Parity
-**Last activity:** 2026-07-08 — GSD and agent guidance updated so CLI feature work requires runtime help, bare namespace help behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests to stay in parity.
+**Last activity:** 2026-07-08 — GSD and agent guidance updated so agents/subagents load required Go/design skills and CLI feature work keeps runtime help, bare namespace help behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests in parity.
 
 ## Current State
 
@@ -12,6 +12,7 @@
 - `.pi/extensions/gsd/index.ts` exposes `/gsd` plus generated `/gsd-*` aliases after project trust/reload.
 - `.pi/skills/gsd-core/SKILL.md` provides default GSD behavior for Pi.
 - `.agents/**` guidance routes GSD work through the Pi adapter or `scripts/gsd prompt`.
+- `.agents/agentic-delivery/references/required-skills-routing.md` defines required Go/design skill routing for agents and subagents.
 - `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` defines the required parity gate for CLI-visible changes.
 - Connector parity includes REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queues/events/webhooks, native protocols, direct-read, and writes.
 - Phase 1 inventory reconciliation is a hard gate before connector fanout.
@@ -42,6 +43,7 @@ These are quick-map inputs only; authoritative counts require Phase 1 inventory 
 - Keep manual-GSD fallback only for adapter-unavailable cases and record it explicitly.
 - Keep `cmd/`, `internal/`, and `.planning/phases/**` unchanged for the current non-phase refresh.
 - For future CLI feature work, require parity across `pm help <topic>`, bare namespace invocations such as `pm connectors`, `pm <command> --help`, `docs/cli/**`, `website/**`, generated help/manual artifacts, and tests.
+- For future Go work, require `golang-how-to` plus task-specific Go skills. For website/docs UI work, require applicable design skills such as `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices`.
 
 ## Blockers / Human Gates
 

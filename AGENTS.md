@@ -28,6 +28,18 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
 - Do not expose or invent generic shell, generic HTTP write, or generic SQL write tools.
 - Treat command arguments as untrusted; avoid control characters, path traversal, and broad file paths.
 
+## Required Skills For Agents
+
+- Before implementation, review, debugging, CLI, connector, docs, website, or design work, read
+  `.agents/agentic-delivery/references/required-skills-routing.md` and load the required skills.
+- For any Go task, start with `golang-how-to`, then load task-specific Go skills such as
+  `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`,
+  `golang-database`, `golang-graphql`, or `golang-documentation` as applicable.
+- For website/docs UI work, load design skills such as `frontend-design`, `web-design-guidelines`,
+  `vercel-react-best-practices`, and `vercel-composition-patterns` as applicable.
+- Record required skills used in the GSD plan, worker handoff, or PR body.
+
 ## GSD Core Runtime For Agents
 
 This repo uses official GSD Core workflows through a project-local Pi adapter:

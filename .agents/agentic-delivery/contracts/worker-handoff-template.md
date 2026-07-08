@@ -22,11 +22,14 @@ Head SHA:
 
 - `<path>`: <reason>
 
-## GSD / TDD Evidence
+## GSD / TDD / Skill Evidence
 
 - GSD mode: <pi / scripts/gsd / manual fallback>
 - GSD command: </gsd ... or scripts/gsd prompt ...>
 - GSD adapter source: `.agents/agentic-delivery/references/gsd-pi-adapter.md`
+- Required skills source: `.agents/agentic-delivery/references/required-skills-routing.md`
+- Required Go skills loaded: <golang-how-to, golang-cli, golang-testing, ... or not applicable>
+- Required design skills loaded: <frontend-design, web-design-guidelines, vercel-react-best-practices, ... or not applicable>
 - Red test evidence: <command/result or docs-only exemption>
 - Green implementation evidence: <command/result>
 - Refactor evidence: <command/result or not applicable>

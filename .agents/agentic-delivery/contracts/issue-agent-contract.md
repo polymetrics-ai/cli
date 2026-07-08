@@ -13,7 +13,8 @@ The issue must provide:
 - acceptance criteria
 - required reading
 - required skills or task type, including `gsd-programming-loop` through the repo-local GSD/Pi
-  adapter for implementation or behavior-changing work
+  adapter for implementation or behavior-changing work and required Go/design skills from
+  `.agents/agentic-delivery/references/required-skills-routing.md`
 - TDD plan
 - verification commands
 - safety notes
@@ -29,7 +30,11 @@ before implementation.
 1. Read the issue first. Treat it as the task contract.
 2. Read repo rules and required context named in the issue.
 3. Confirm the issue maps to one primary PR. Split the issue if it is too large.
-4. Load the skills required by `task-skill-matrix.yaml` for the issue task type.
+4. Load the skills required by `task-skill-matrix.yaml` for the issue task type and
+   `.agents/agentic-delivery/references/required-skills-routing.md`. For Go work, start with
+   `golang-how-to`; for CLI work include `golang-cli`; for website/design work include the relevant
+   design skills such as `frontend-design`, `web-design-guidelines`, and
+   `vercel-react-best-practices`.
 5. For implementation or behavior-changing work, load and follow `gsd-programming-loop` before
    coding through `/gsd-programming-loop ...` in Pi or `scripts/gsd prompt programming-loop ...`
    from shell. Read `.agents/agentic-delivery/references/gsd-pi-adapter.md` first. If the adapter is
@@ -121,6 +126,8 @@ Every implementation PR must include:
 - red/green/refactor evidence when behavior changed
 - GSD programming-loop evidence, including the `/gsd...` or `scripts/gsd prompt ...` command used,
   or an explicit manual-GSD fallback note
+- Required Go/design skills loaded, with task-specific notes from
+  `.agents/agentic-delivery/references/required-skills-routing.md`
 - CLI help/manual/website parity evidence for CLI feature work, including bare namespace behavior
   such as `pm connectors` when relevant
 - commit/push checkpoint summary

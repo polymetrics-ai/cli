@@ -11,8 +11,9 @@ You are running GSD Core through the repo-local Pi adapter. Follow the official 
 
 1. Read `AGENTS.md`.
 2. Run or inspect `scripts/gsd doctor` if this session has not already validated the adapter.
-3. Read the relevant official command excerpt below and any source files listed at the end of this prompt.
-4. Execute the requested workflow using Pi tools. If the official workflow expects runtime subagents that Pi does not provide, perform the documented inline/manual fallback and record that fallback in the generated planning artifacts.
+3. Read `.agents/agentic-delivery/references/required-skills-routing.md` and load the required Go/design skills for this task.
+4. Read the relevant official command excerpt below and any source files listed at the end of this prompt.
+5. Execute the requested workflow using Pi tools. If the official workflow expects runtime subagents that Pi does not provide, perform the documented inline/manual fallback and record that fallback in the generated planning artifacts.
 
 ## Requested command
 
@@ -64,7 +65,13 @@ Generate comprehensive project summary from milestone artifacts for team onboard
 - Do not run credentialed connector checks unless explicitly requested.
 - Reverse ETL must remain plan → preview → approval → execute.
 - Do not expose generic shell, generic HTTP write, or generic SQL write tools.
+- Load required Go/design skills from `.agents/agentic-delivery/references/required-skills-routing.md` and record the skills used in the plan, handoff, or PR body.
+- For CLI feature work, update runtime help, `docs/cli/**`, website docs, generated help/manual artifacts, and tests together; namespace commands such as `pm connectors` should show contextual help when invoked without an action.
 - For planning-only work, do not edit `cmd/` or `internal/`.
+
+## CLI help/docs/website parity overlay
+
+When the requested GSD workflow affects CLI commands, flags, help text, docs, connector surfaces, or website documentation, read `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` and include its checklist in the plan, TDD ledger, verification summary, and PR body.
 
 ## Source files resolved by scripts/gsd
 

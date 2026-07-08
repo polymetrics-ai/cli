@@ -35,6 +35,7 @@ skills, guardrails, YAML agent definitions, and handoff rules.
   fallback policy.
 - `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
 - `references/gsd-pi-adapter.md`: repo-local official GSD Core command path for Pi and shell agents.
+- `references/required-skills-routing.md`: required Go/design skill routing for agents and subagents.
 - `references/cli-help-docs-website-parity.md`: required parity checklist for CLI help, manual docs, generated docs, and website docs.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
 - `schemas/orchestration-state.schema.yaml`: field contract for parent issue state ledgers.
@@ -66,7 +67,8 @@ the `.agents/` YAML and Markdown contracts instead of copying policy.
   the adapter is unavailable, agents must record a manual-GSD fallback and still provide test-first
   evidence.
 - Implementation agents must plan before production edits, keep GSD/TDD/verification artifacts
-  current, record the GSD command path used, and commit/push coherent green slices to the active
+  current, record the GSD command path used, record required Go/design skills loaded from
+  `references/required-skills-routing.md`, and commit/push coherent green slices to the active
   issue/PR branch after local green gates.
 - CLI feature work must keep runtime help, bare namespace behavior, `docs/cli/**`, website docs,
   generated help/manual artifacts, and tests in parity; follow

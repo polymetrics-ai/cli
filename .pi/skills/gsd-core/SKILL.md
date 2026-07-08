@@ -16,6 +16,8 @@ scripts/gsd doctor
 scripts/gsd list
 ```
 
+Before implementation/review/design work, also read `.agents/agentic-delivery/references/required-skills-routing.md` and load the required Go/design skills for the task.
+
 Use the Pi slash command when interactive:
 
 ```text
@@ -39,10 +41,11 @@ For implementation or behavior-changing work:
 2. Read `AGENTS.md`.
 3. Run the relevant GSD command prompt through `scripts/gsd` or `/gsd`.
 4. Create or update the GSD plan, TDD ledger, and verification checklist before production edits.
-5. Capture red/green/refactor evidence for behavior changes.
-6. Run targeted verification, then the issue's broader verification.
-7. Commit coherent green checkpoints.
-8. Open/update the PR with GSD evidence and `Closes #N` or `Refs #N` as appropriate.
+5. Capture the required Go/design skills loaded from `.agents/agentic-delivery/references/required-skills-routing.md`.
+6. Capture red/green/refactor evidence for behavior changes.
+7. Run targeted verification, then the issue's broader verification.
+8. Commit coherent green checkpoints.
+9. Open/update the PR with GSD evidence, required skills evidence, and `Closes #N` or `Refs #N` as appropriate.
 
 ## CLI help/docs/website parity
 

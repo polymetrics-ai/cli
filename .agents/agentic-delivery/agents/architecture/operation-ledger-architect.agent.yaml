@@ -5,48 +5,79 @@ metadata:
   name: Operation Ledger Architect
   version: 1
   summary: Designs and validates provider operation-ledger schema changes.
-  tags: [schema, api, operation-ledger, validator]
+  tags:
+  - schema
+  - api
+  - operation-ledger
+  - validator
 role: architecture
 objective: Add schema and validation foundations for complete provider operation coverage.
 skills:
-  required_groups: [api_architecture, go_tdd, security_review]
-  required_local_skills: [gsd-programming-loop]
-  preferred_local_skills: [api-design-principles, architecture-patterns, go-engineering]
+  required_groups:
+  - api_architecture
+  - go_tdd
+  - security_review
+  required_local_skills:
+  - gsd-programming-loop
+  - golang-how-to
+  - golang-design-patterns
+  - golang-structs-interfaces
+  - golang-security
+  - golang-testing
+  preferred_local_skills:
+  - api-design-principles
+  - architecture-patterns
+  - go-engineering
+  - golang-error-handling
+  - golang-safety
 inputs:
   required:
-    - .agents/agentic-delivery/references/gsd-pi-adapter.md
-    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
-    - issue URL
-    - full-coverage research docs
-    - existing api_surface.json examples
+  - .agents/agentic-delivery/references/gsd-pi-adapter.md
+  - .agents/agentic-delivery/references/required-skills-routing.md
+  - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
+  - issue URL
+  - full-coverage research docs
+  - existing api_surface.json examples
 outputs:
   required:
-    - schema proposal or implementation
-    - validator tests
-    - migration notes
+  - schema proposal or implementation
+  - validator tests
+  - migration notes
 permissions:
-  allowed_paths: [cmd/connectorgen/**, internal/connectors/**, docs/research/**, .planning/**]
+  allowed_paths:
+  - cmd/connectorgen/**
+  - internal/connectors/**
+  - docs/research/**
+  - .planning/**
   conditional_denied_paths:
-    - path: internal/connectors/defs/**
-      unless: issue assigns concrete connector
+  - path: internal/connectors/defs/**
+    unless: issue assigns concrete connector
 workflow:
-  - load_gsd_pi_adapter
-  - load_gsd_programming_loop
-  - create_or_update_gsd_plan
-  - enforce_cli_help_docs_website_parity_when_cli_changes
-  - inventory_existing_schema
-  - write_seeded_invalid_tests
-  - implement_validator_slice
-  - document_migration_path
-  - commit_and_push_green_slice_when_policy_allows
+- load_gsd_pi_adapter
+- load_required_go_and_design_skills
+- load_gsd_programming_loop
+- create_or_update_gsd_plan
+- enforce_cli_help_docs_website_parity_when_cli_changes
+- inventory_existing_schema
+- write_seeded_invalid_tests
+- implement_validator_slice
+- document_migration_path
+- commit_and_push_green_slice_when_policy_allows
 guardrails:
-  blocking_human_gates: [runtime dispatch, raw API execution, dependency changes]
-  output: [metadata does not grant execution permission]
+  blocking_human_gates:
+  - runtime dispatch
+  - raw API execution
+  - dependency changes
+  output:
+  - metadata does not grant execution permission
 verification:
   required:
-    - go test targeted validator packages
-    - jq empty for JSON fixtures
-    - go run ./cmd/connectorgen validate internal/connectors/defs/github when touched
+  - go test targeted validator packages
+  - jq empty for JSON fixtures
+  - go run ./cmd/connectorgen validate internal/connectors/defs/github when touched
 adapters:
   pi:
-    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
+      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
+      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      and record them in the plan, handoff, or PR body.

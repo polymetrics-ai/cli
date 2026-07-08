@@ -5,44 +5,70 @@ metadata:
   name: Cross Connector Rollout Agent
   version: 1
   summary: Turns provider pilot patterns into reusable per-connector rollout templates.
-  tags: [cross-connector, rollout, docs, agents]
+  tags:
+  - cross-connector
+  - rollout
+  - docs
+  - agents
 role: coordinator
 objective: Prepare connector-neutral templates and shard prompts after provider implementation lessons.
 skills:
-  required_groups: [api_architecture, github_planning, docs_and_ux]
-  preferred_local_skills: [github-issue-first-delivery, api-design-principles, ui-refactoring-docs]
+  required_groups:
+  - api_architecture
+  - github_planning
+  - docs_and_ux
+  preferred_local_skills:
+  - github-issue-first-delivery
+  - api-design-principles
+  - ui-refactoring-docs
+  - golang-how-to
+  - golang-documentation
+  - web-design-guidelines
+  - frontend-design
+  required_local_skills:
+  - golang-how-to
 inputs:
   required:
-    - .agents/agentic-delivery/references/gsd-pi-adapter.md
-    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
-    - provider pilot summary
-    - completed implementation issues
-    - connector roster
-    - parent issue and sub-issue hierarchy when rollout spans multiple PRs
+  - .agents/agentic-delivery/references/gsd-pi-adapter.md
+  - .agents/agentic-delivery/references/required-skills-routing.md
+  - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
+  - provider pilot summary
+  - completed implementation issues
+  - connector roster
+  - parent issue and sub-issue hierarchy when rollout spans multiple PRs
 outputs:
   required:
-    - per-connector prompt template
-    - rollout checklist
-    - ownership rules
-    - parent/subissue branch policy for rollout slices
+  - per-connector prompt template
+  - rollout checklist
+  - ownership rules
+  - parent/subissue branch policy for rollout slices
 permissions:
-  allowed_paths: [docs/research/**, .agents/**, .planning/**]
+  allowed_paths:
+  - docs/research/**
+  - .agents/**
+  - .planning/**
   conditional_denied_paths:
-    - path: internal/connectors/defs/**
-      unless: implementation phase assigns connector
+  - path: internal/connectors/defs/**
+    unless: implementation phase assigns connector
 workflow:
-  - enforce_cli_help_docs_website_parity_when_cli_changes
-  - load_gsd_pi_adapter
-  - extract_provider_pilot_learnings
-  - remove_provider_specific_assumptions
-  - split_rollout_into_parent_and_subissues
-  - update_rollout_templates
+- enforce_cli_help_docs_website_parity_when_cli_changes
+- load_gsd_pi_adapter
+- load_required_go_and_design_skills
+- extract_provider_pilot_learnings
+- remove_provider_specific_assumptions
+- split_rollout_into_parent_and_subissues
+- update_rollout_templates
 guardrails:
-  blocking_human_gates: [production connector edits, shared generated files]
+  blocking_human_gates:
+  - production connector edits
+  - shared generated files
 verification:
   required:
-    - markdown review
-    - JSON/YAML parse checks
+  - markdown review
+  - JSON/YAML parse checks
 adapters:
   pi:
-    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work; record manual fallback only if the adapter is unavailable.
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
+      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
+      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      and record them in the plan, handoff, or PR body.

@@ -59,6 +59,16 @@ scripts/gsd prompt docs-update docs/cli website/content/docs .agents .planning -
 
 This added durable agent/GSD guidance that CLI-visible work must keep runtime help, bare namespace behavior such as `pm connectors`, `docs/cli/**`, website docs, generated help/manual artifacts, and tests in parity.
 
+Required Go/design skill routing refresh:
+
+```bash
+# Added .agents/agentic-delivery/references/required-skills-routing.md
+# Updated AGENTS.md, .pi prompts/skills, scripts/gsd prompt overlay, agent specs, matrices, contracts, and planning docs.
+# Regenerated scripts/gsd prompt traces so generated prompts include required skill loading.
+```
+
+This added durable guidance that Go work starts with `golang-how-to`, task-specific Go skills such as `golang-cli`, `golang-testing`, `golang-security`, and `golang-documentation` are loaded as applicable, and website/docs UI work loads design skills such as `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices`.
+
 Initial red/preflight evidence:
 
 ```bash

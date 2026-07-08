@@ -46,6 +46,7 @@ In Pi after project trust/reload, use the interactive equivalents:
 ## Agent requirements
 
 - Agents and subagents must prefer `.pi` GSD commands when running inside Pi.
+- Agents and subagents must read `.agents/agentic-delivery/references/required-skills-routing.md` and load required Go/design skills before implementation, review, CLI, docs, website, or connector work.
 - For CLI command, flag, output, connector surface, help-topic, manual, or website-doc changes, agents must also follow `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`.
 - Non-interactive or non-Pi runners must use `scripts/gsd prompt <command> [args...]` and then execute the generated prompt with their local tools.
 - Manual-GSD fallback is allowed only when `scripts/gsd doctor` fails or Pi project resources are unavailable; record the fallback in the phase, planning trace, handoff, or PR body.

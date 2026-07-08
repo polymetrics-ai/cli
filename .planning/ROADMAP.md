@@ -20,7 +20,8 @@ Deliver connector parity that is:
 3. **De-duplicated** — assigns each documented upstream operation exactly one primary classification.
 4. **Conformance-backed** — derives parity claims from generated inventory, fixture/replay gates, conformance checks, and certification status.
 5. **Agent-runnable** — uses official GSD Core commands through `.pi` and `scripts/gsd`, not runtime-specific copied command files.
-6. **Help/docs/website-complete** — every CLI-visible feature keeps runtime help, bare namespace command behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests in parity.
+6. **Skill-routed** — agents and subagents load required Go/design skills such as `golang-how-to`, `golang-cli`, `golang-testing`, `golang-security`, `golang-documentation`, `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices` as applicable.
+7. **Help/docs/website-complete** — every CLI-visible feature keeps runtime help, bare namespace command behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests in parity.
 
 ## Workstreams
 
@@ -37,6 +38,7 @@ Deliver connector parity that is:
 - `.pi/extensions/gsd/index.ts` exposes `/gsd` plus `/gsd-*` aliases.
 - `.pi/skills/gsd-core/SKILL.md` sets default planning/implementation behavior.
 - `.agents/**` instructions route agents/subagents through the Pi adapter or `scripts/gsd`.
+- `.agents/agentic-delivery/references/required-skills-routing.md` defines required Go/design skill routing for agents and subagents.
 - `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` defines the CLI help/manual/website parity gate.
 - Manual-GSD fallback is only used when the adapter is unavailable and must be recorded.
 
