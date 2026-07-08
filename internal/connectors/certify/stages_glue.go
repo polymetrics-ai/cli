@@ -78,10 +78,10 @@ func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 	connName := flowConnectionName(rc.opts.Connector)
 	connOK := recordStage(rc, rep, "flow_connection_create", 1, func() (bool, CLIStageInfo, string) {
 		res := rc.run("connections", "create", connName,
-			"--source", "file:"+fileCredentialName,
+			"--source", "file:"+rc.fileCredentialName(),
 			"--destination", "warehouse:"+warehouseCredentialName,
 			"--stream", rc.captureStreamName(),
-			"--primary-key", "id",
+			"--primary-key", rc.primaryKey(),
 			"--cursor", rc.cursorField(),
 			"--sync-mode", "full_refresh_append",
 			"--table", table,
