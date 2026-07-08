@@ -1,81 +1,106 @@
-# Roadmap
+# Roadmap: Polymetrics CLI Connector Parity
 
-## Milestone: connector-architecture-v2 (current)
+## Overview
 
-Rewrite the connector architecture to be JSON-schema-declarative, unified-named (clean break from
-source-/destination- slugs), with full capability on first run (every GET → ETL stream; every
-POST/PUT/PATCH/DELETE → reverse-ETL write action) plus a credential-driven certification harness.
-Plan of record: `~/.claude/plans/please-check-all-the-serialized-storm.md` (approved 2026-07-02);
-program PRD: `docs/plans/universal-programming-loop-prd.md`.
+This roadmap replaces the legacy custom `.planning/` tree with an upstream GSD Core brownfield plan for connector parity. The first phase is deliberately inventory reconciliation: no connector fanout starts until the repository and upstream documentation are reconciled across all connector technologies, with canonical operation de-duplication and human-gated risk classification.
 
-Execution: GSD Universal Programming Loop per phase; coordinator/planner/reviewer roles on `fable`,
-backend/tester/security/reliability roles on `sonnet` (Sonnet 5); role prompts apply cc-skills-golang.
+## Phases
 
-### Phase: wave0-engine-harness
+**Phase Numbering:** Integer phases are planned milestone work; inserted decimal phases are reserved for urgent gate fixes.
 
-Declarative engine (`internal/connectors/engine/`), bundle JSON Schemas + `cmd/connectorgen`
-(validate|gen|new), conformance v2 (httptest fixture replay), `pm connectors certify` harness core,
-`docs/migration/conventions.md`, `.golangci.yml`, `docs/migration/inventory.json`.
+- [ ] **Phase 1: Inventory and Surface Reconciliation** - Reconcile connector inventory and all documented surfaces before any connector fanout.
+- [ ] **Phase 2: Durable Read and ETL Parity** - Ensure product-safe documented record collections are available through `pm` catalog/read/ETL or typed exclusions.
+- [ ] **Phase 3: Direct-Read, Binary, and Native Surface Parity** - Cover product-safe direct-read, binary transfer, file/object, SQL/CDC, queue/event, GraphQL, XML/SOAP, CSV/NDJSON, and native surfaces without misclassification.
+- [ ] **Phase 4: Reverse ETL and Mutation Parity** - Map safe mutations/writes across connector technologies to reverse ETL plan/preview/approval/run or typed exclusions.
+- [ ] **Phase 5: Conformance and Certification Enforcement** - Make conformance/certification outputs authoritative for connector parity claims and rollout readiness.
 
-Acceptance:
-- Engine unit tests green (interpolation, auth selection, pagination matrix, read/write paths, error mapping).
-- 3 goldens migrated with engine-vs-legacy parity tests passing: stripe, searxng, postgres.
-- `connectorgen validate` rejects seeded-invalid bundles; accepts the goldens.
-- Conformance v2 passes for the 3 goldens (static + httptest fixture replay).
-- Certify source stages pass against the `sample` connector end-to-end.
-- `go build ./... && go test ./... && golangci-lint run` green.
+## Phase Details
 
-### Phase: wave1-pilot
+### Phase 1: Inventory and Surface Reconciliation
+**Goal**: Produce a current, generated, de-duplicated connector parity baseline before fanout.
+**Depends on**: Nothing (first phase)
+**Requirements**: [GSD-01, GSD-02, GSD-03, GSD-04, INV-01, INV-02, INV-03, INV-04, INV-05, GATE-03]
+**Success Criteria** (what must be TRUE):
+  1. Active `.planning/` is upstream GSD Core shaped and the pre-rebootstrap archive is recorded outside active planning.
+  2. Generated inventory reconciles bundle, hook, native, docs, API/surface manifest, stream, write, binary, direct-read, native protocol, blocker, quarantine, conformance, and certification counts.
+  3. The inventory classifies REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queue/event/webhook/audit-log, native, direct-read, and mutation surfaces.
+  4. The inventory applies canonical operation identity to avoid duplicate work from multiple docs pages/specs.
+  5. No connector fanout work is dispatched until inventory outputs are reviewed.
+**Plans**: 3 plans
 
-Migrate 10 pilot connectors (xkcd, vitally, bitly, calendly, sentry, chargebee, zendesk-support,
-monday, github, gmail), one Sonnet backend-agent each; Fable line-by-line review of every diff;
-conventions + executor prompt template patched with learnings; per-connector cost data recorded.
+Plans:
+- [ ] 01-01: Rebootstrap planning and preserve GSD/archive evidence.
+- [ ] 01-02: Generate current connector inventory and multi-technology surface classification.
+- [ ] 01-03: Review inventory, de-duplication, blockers, and approve/disallow fanout entry.
 
-Acceptance: all 10 pass agent self-check + wave gate + review; conventions.md updated; cost report
-written to `docs/migration/pilot-costs.json`; Pass B budget decision made with user.
+### Phase 2: Durable Read and ETL Parity
+**Goal**: Bring product-safe documented durable record collections to CLI and ETL parity.
+**Depends on**: Phase 1
+**Requirements**: [READ-01]
+**Success Criteria** (what must be TRUE):
+  1. Every product-safe documented stream/report/event log/feed/table/queue message/CDC event/durable record collection is covered by a connector read surface or typed exclusion.
+  2. `pm connectors inspect`, catalog, read, and ETL surfaces agree on stream names, schemas, sync modes, cursor behavior, and limitations.
+  3. Incremental, pagination, cursor, schema, and projection behavior is verified through conformance fixtures or typed blockers.
+**Plans**: TBD after Phase 1 inventory reconciliation
 
-### Phase: wave2-fanout-http-sm
+Plans:
+- [ ] 02-01: Prioritize durable read parity gaps from Phase 1 inventory.
+- [ ] 02-02: Execute read parity slices with conformance-backed verification.
 
-Fan-out migration of declarative-HTTP S (<300 loc, 12/agent) and M (300–699, 7/agent) connectors
-(~49 bundle agents). Wave gate: path guard, registrygen, full build/test/conformance/lint; 20%
-adversarial review; 1 repair retry then quarantine.
+### Phase 3: Direct-Read, Binary, and Native Surface Parity
+**Goal**: Cover product-safe non-stream and non-REST read surfaces without forcing them into the wrong abstraction.
+**Depends on**: Phase 1
+**Requirements**: [READ-02, READ-03, READ-04]
+**Success Criteria** (what must be TRUE):
+  1. Direct-read operations are classified separately from durable ETL streams.
+  2. Binary operations have product-safe transfer surfaces or typed exclusions.
+  3. GraphQL, XML/SOAP, CSV/NDJSON/report export, file/object, SQL/CDC, queue/event/webhook/audit-log, and native protocol reads use an appropriate declarative, hook, native, direct-read, binary, or exclusion path.
+  4. Admin/elevated/destructive direct-read or binary operations remain human-gated.
+**Plans**: TBD after Phase 1 inventory reconciliation
 
-### Phase: wave3-fanout-http-lxl
+Plans:
+- [ ] 03-01: Classify direct-read, binary, native, and protocol-specific surfaces.
+- [ ] 03-02: Plan safe CLI/native coverage and typed exclusions.
 
-Fan-out migration of declarative-HTTP L (700–899, 4/agent) and XL (≥900, 1/agent) connectors
-(~56 bundle agents). 100% review of XL output.
+### Phase 4: Reverse ETL and Mutation Parity
+**Goal**: Map safe writes/mutations to reverse ETL actions with approval gates.
+**Depends on**: Phase 1
+**Requirements**: [WRITE-01, WRITE-02, WRITE-03]
+**Success Criteria** (what must be TRUE):
+  1. Product-safe mutations across REST, GraphQL, XML/SOAP, file/object, queue, database/native, and other protocol-specific operations map to reverse ETL actions or typed exclusions.
+  2. Plan, preview, approval, and execute semantics are preserved for every write path.
+  3. Destructive/admin/elevated-scope writes are human-gated and never exposed as generic raw write tools.
+**Plans**: TBD after Phase 1 inventory reconciliation
 
-### Phase: wave4-fanout-nonhttp
+Plans:
+- [ ] 04-01: Prioritize safe reverse ETL mutation gaps from Phase 1 inventory.
+- [ ] 04-02: Execute write parity slices with preview, approval, and certification evidence.
 
-Migration of database_go / file_go / destination_go / native_go kinds (~15 agents) to Tier-3
-native layout (component split) + defs bundles.
+### Phase 5: Conformance and Certification Enforcement
+**Goal**: Make validated gates authoritative for connector parity status.
+**Depends on**: Phases 2-4
+**Requirements**: [GATE-01, GATE-02, GATE-03]
+**Success Criteria** (what must be TRUE):
+  1. Conformance validates schemas, fixtures, surface manifests, streams, writes, direct-read/binary metadata, cursor/pagination behavior, docs, and de-duplication contracts.
+  2. Certification reports distinguish replay/fixture success, live success, missing credentials (`uncertified`), typed blockers, and failures.
+  3. Public or PR-facing connector parity claims derive from generated conformance/certification artifacts.
+**Plans**: TBD after Phases 2-4
 
-### Phase: wave5-capability-expansion
+Plans:
+- [ ] 05-01: Reconcile conformance gate coverage.
+- [ ] 05-02: Reconcile certification gate coverage and reporting.
 
-Pass B (roster per pilot decision): per-connector `api_surface.json` from documentation_url →
-implement missing streams + write actions → completeness critic ≥95% coverage or documented
-exclusions → `docs/migration/coverage-report.json`.
+## Progress
 
-### Phase: wave6-convergence
+**Execution Order:** Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5. Phase 1 is a hard planning gate: no connector fanout before inventory and surface reconciliation is reviewed.
 
-Registry flip to bundles; legacy deletion (slug.go, catalog_data.json, registryset, native_port.go,
-native_conformance.go, manifest.go structs, alias/live-registry machinery); naming clean-break
-sweep; catalog generated from manifests; docs regen; full `certify --replay` + credential-gated
-live certification. HUMAN GATE before deletion.
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Inventory and Surface Reconciliation | 0/3 | In progress | - |
+| 2. Durable Read and ETL Parity | 0/TBD | Not started | - |
+| 3. Direct-Read, Binary, and Native Surface Parity | 0/TBD | Not started | - |
+| 4. Reverse ETL and Mutation Parity | 0/TBD | Not started | - |
+| 5. Conformance and Certification Enforcement | 0/TBD | Not started | - |
 
-## Completed milestone: go-cli-mvp
-
-## Phase: go-cli-mvp
-
-Build a working Go CLI vertical slice for local ETL and reverse ETL using the architecture in `POLYMETRICS_GO_CLI_MONOLITH_PRD_ARCHITECTURE.md`.
-
-Acceptance:
-
-- `poly init` creates a usable project directory.
-- `poly help` and `poly man` expose detailed docs.
-- Credentials can be added from environment values and stored encrypted.
-- A connection can sync sample data into a local JSONL warehouse.
-- A reverse ETL plan can preview warehouse data and write approved mapped records to an outbox.
-- Commands support JSON output for agent callers.
-- `go test ./...` and `go build ./cmd/poly` pass.
-
+---
+*Roadmap generated: 2026-07-08 via upstream GSD Core brownfield workflow shape for issue #122*

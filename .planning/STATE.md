@@ -1,50 +1,57 @@
-# State
+# Project State
 
-Current milestone: connector-architecture-v2
+## Project Reference
 
-Current phase: wave2-fanout-http-sm
+See: .planning/PROJECT.md (updated 2026-07-08)
 
-Status: pending (BLOCKED on S3 engine mini-wave: incremental-lower-bound query vars + ResolveCheck ==/in when-grammar + carried minors)
+**Core value:** Users and agents can trust `pm` as a connector-complete, safety-gated ETL and reverse ETL interface whose advertised connector capabilities match documented upstream product surfaces without duplicate or unsafe exposure.
+**Current focus:** Phase 1 — Inventory and Surface Reconciliation
 
-Completed: wave1-pilot (2026-07-02) — 10/10 pilots migrated at parity, 2 Fable review rounds,
-gap-loop cycle 1 (engine mini-wave + 10-pilot repair), re-review GO completed_with_warnings.
-See .planning/phases/wave1-pilot/SUMMARY.md + docs/migration/pilot-costs.json.
+## Current Position
 
-Completed: wave0-engine-harness (2026-07-02) — declarative engine (85.7% cov), 3 goldens with
-parity (stripe/searxng/postgres), connectorgen, conformance v2, certify source stages, lint gates,
-migration recipe + schemas, inventory (557 connectors S137/M388/L31/XL1 → ~77 Pass A bundle
-agents). Reviewer GO after 1 gap-loop cycle. See .planning/phases/wave0-engine-harness/SUMMARY.md.
+Phase: 1 of 5 (Inventory and Surface Reconciliation)
+Plan: 1 of 3 in current phase
+Status: Rebootstrap in progress
+Last activity: 2026-07-08 — Legacy/custom `.planning/` archived outside active planning; upstream GSD Core brownfield artifacts recreated with multi-technology connector-surface prompt.
 
-Model policy (user directive): coordinator/planner/reviewer roles → `fable`; backend/tester/
-security/reliability roles → `sonnet` (Sonnet 5); Go work applies cc-skills-golang skills.
+Progress: [░░░░░░░░░░] 0%
 
-Previous phase: wave1-http-api-longtail-complete-opencode (completed)
+## Performance Metrics
 
-Latest verification (2026-06-26):
+**Velocity:**
+- Total plans completed: 0
+- Average duration: n/a
+- Total execution time: n/a
 
-- `make verify` exit 0; `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, docs validation, and smoke all passed.
-- 556 per-system connector dirs registered (556 dirs == 556 registry imports); no quarantine.
-- Connector docs generation/validation is manual-only; per-connector `docs/connectors/**/SKILL.md` generation is no longer required for verify.
-- No new dependencies added.
+**By Phase:**
 
-Connector count: **556 native Go connectors** (from 1 at session start).
-- Templates: github (custom), stripe (declarative-HTTP).
-- Parallel batch 1: slack, hubspot(+write), notion, jira, sendgrid, postgres (DB; CDC stubbed).
-- Mega-batch: 110 HTTP connectors (airtable, amazon-ads, gitlab, zendesk-*, intercom, klaviyo,
-  mailchimp, square, xero, trello … + alpha long tail), all on connsdk, TDD, fixture mode.
-- Pending batch repair + OpenCode batch: 50 inherited connector dirs repaired/converged, then 100 more
-  API connectors built by 10 parallel OpenCode subagents with red-first package tests.
-- Final long-tail completion: remaining 140 HTTP/API source connectors implemented, including the final
-  18 test-only packages (`tavus` through `zoho-bigin`) repaired locally with read-only fixture-capable code.
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| 1. Inventory and Surface Reconciliation | 0/3 | n/a | n/a |
 
-Factory: `cmd/registrygen` derives `registryset/registry_gen.go` from connector dirs (collision-free
-parallel authoring); Workflow tool fans out one universal-loop agent per connector.
+## Accumulated Context
 
-Known gaps / follow-ups (non-blocking):
-- Catalog-enablement divergence: registry 556 live vs catalog enabled=2 — needs a deliberate flip
-  pass + conformance-count update.
-- Postgres logical-replication CDC needs pglogrepl (dependency human-gate). go1.24 floor accepted.
-- No CI yet; local gates: `make verify`, `make verify-duckdb`.
-- All current HTTP/API source catalog entries have native connector dirs.
+### Decisions
 
-Next: gated DB-CDC/cloud/file batches; catalog-enablement + manifest-streams polish; reverse-ETL writes per-API.
+Decisions are logged in PROJECT.md Key Decisions table. Recent decisions affecting current work:
+
+- Issue #122: Active `.planning/` is tracked and replaces the legacy/custom tree.
+- Issue #122: Old `.planning/` archive lives outside active planning at `../planning-archives/`.
+- Issue #122: Connector parity includes REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queues/events/webhooks, native protocols, direct-read, and writes.
+- Issue #122: Phase 1 inventory reconciliation is a hard gate before connector fanout.
+
+### Pending Todos
+
+- Run Phase 1 Plan 01-02 to generate authoritative inventory from current repo and upstream docs.
+- Run Phase 1 Plan 01-03 to review de-duplication, blockers, and fanout readiness.
+
+### Blockers/Concerns
+
+- Slash command execution and Claude Task subagents are not exposed in this Pi harness; workflow source files and deterministic `gsd-tools.cjs` preflight commands are recorded in `.planning/traces/gsd-command-log.md`.
+- No live connector credentials should be used in this issue.
+
+## Session Continuity
+
+Last session: 2026-07-08
+Stopped at: Issue #122 active planning rebootstrap and verification.
+Resume file: None
