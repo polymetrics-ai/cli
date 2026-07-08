@@ -247,6 +247,7 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	}
 	tailStages := []stageFunc{
 		stageDirectReadSweep,
+		stageBinaryDownloadSweep,
 		stageWritePlanPreview,
 		stageWriteCreate,
 		stageWriteVerify,
