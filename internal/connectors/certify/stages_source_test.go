@@ -209,6 +209,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		"write_cleanup":        true,
 		"cleanup_verify":       true,
 		"approval_idempotency": true,
+		"write_sweep_all_pairings": true,
 	}
 	for _, stage := range rep.Stages {
 		if metaStagesWithoutDirectCLICall[stage.Name] {
