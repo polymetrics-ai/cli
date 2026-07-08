@@ -254,10 +254,11 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 		stageWriteCleanup,
 		stageCleanupVerify,
 		stageApprovalIdempotency,
-		stageFlowRoundtrip,
-		stageScheduleRoundtrip,
-		stageWriteSweepAllPairings,
 	}
+	if !r.opts.Full {
+		tailStages = append(tailStages, stageFlowRoundtrip, stageScheduleRoundtrip)
+	}
+	tailStages = append(tailStages, stageWriteSweepAllPairings)
 
 	for _, stage := range setupStages {
 		if err := stage(rc, &rep); err != nil {
@@ -489,6 +490,12 @@ func runFullReadSweep(rc *runContext, rep *Report, readStages []stageFunc) error
 			if err := stage(rc, rep); err != nil {
 				return err
 			}
+		}
+		if err := stageFlowRoundtrip(rc, rep); err != nil {
+			return err
+		}
+		if err := stageScheduleRoundtrip(rc, rep); err != nil {
+			return err
 		}
 	}
 	return nil

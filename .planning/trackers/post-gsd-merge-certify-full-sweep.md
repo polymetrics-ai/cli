@@ -263,6 +263,26 @@ Green: go test ./internal/connectors/... -count=1
 
 No credentialed/live GitHub checks were run. The compromised pasted token remains unused and must be revoked/rotated before any future credentialed testing.
 
+## Flow/Schedule Per-Stream Slice Evidence
+
+Status: full mode now runs glue stages per catalog stream.
+
+Behavior added:
+
+- `Options.Full` runs `flow_roundtrip` and `schedule_roundtrip` after each stream’s read/capture stages instead of only once for the final stream.
+- Flow names, flow tables, flow connection names, query tables, and schedule names are stream-scoped during full sweeps to avoid collisions.
+- Non-full behavior keeps the original single flow/schedule tail stages.
+
+Test-first evidence:
+
+```text
+Red: go test ./internal/connectors/certify/ -run TestFullSweepFlowAndScheduleNamesAreStreamScoped -count=1 -v
+     failed on undefined stream-scoped glue helpers before production edits.
+Green: go test ./internal/connectors/certify/ -run 'TestFullSweepFlowAndScheduleNamesAreStreamScoped|TestFullSweepSourceStagesAgainstSample' -count=1 -v
+Green: go test ./internal/connectors/certify/ -count=1 -timeout=10m
+Green: go test ./internal/connectors/... -count=1
+```
+
 ## Binary Download Sweep Slice Evidence
 
 Status: binary-download certification safety gate added for full mode.
@@ -322,7 +342,7 @@ No credentialed/live GitHub checks were run. The stage is ready for future env-g
 - [x] Credentialed tests gated behind env vars only.
 - [x] Binary sweep safety gate implemented and tested (executor remains future gated work).
 - [x] Direct-read sweep implemented and tested.
-- [ ] Flow/schedule per stream implemented and tested.
+- [x] Flow/schedule per stream implemented and tested.
 - [ ] RLM bus-factor fixture plan created.
 - [ ] Future Pi-agent stream-based RLM problem selection tracked.
 - [ ] CLI/docs/website parity verified for CLI-visible changes.
