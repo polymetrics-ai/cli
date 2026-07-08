@@ -84,4 +84,4 @@ Red/green tests:
 
 ## Live Tests
 
-Live GitHub certificate runs were executed against disposable repo `karthik-sivadas/pm-cert-test-20260709025802` using an environment-provided token only. Early runs did not pass and produced the live-run defects above. The latest pre-fix report still had deterministic harness failures; another live run is required after the latest fixes.
+Live GitHub certificate runs were executed against disposable repo `karthik-sivadas/pm-cert-test-20260709025802` using an environment-provided token only. Early runs did not pass and produced the live-run defects above. The final run passed with 925 stages, 0 failures, 129 documented skips, 507 API endpoints accounted, 37 catalog streams accounted, 2 direct-read stages passed, binary download safely blocked, and `create_label` write lifecycle passed with cleanup residue check showing 0 remaining cert labels.

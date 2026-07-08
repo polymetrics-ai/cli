@@ -42,23 +42,44 @@ scripts/verify-gsd-workflow origin/feat/44-github-cli-parity
 
 ## Live Test Findings
 
-A live GitHub run was executed against disposable repo `karthik-sivadas/pm-cert-test-20260709025802` using an environment-provided token. The first run produced a report but did not pass.
+Live GitHub runs were executed against disposable repo `karthik-sivadas/pm-cert-test-20260709025802` using an environment-provided token. Early runs produced reports but did not pass; the final run passed.
 
-Report path:
+Final report path:
 
 ```text
 /var/folders/tk/bmp_tx0976s4rkh1phvrpjlw0000gn/T/tmp.5VxmsRQj6x/.polymetrics/certifications/github.json
 ```
 
-Key first-run findings:
+Final passing run:
+
+```text
+started_at: 2026-07-08T23:11:29.08724Z
+completed_at: 2026-07-08T23:17:34.330273Z
+passed: true
+stage_count: 925
+failed_count: 0
+skipped_count: 129
+```
+
+Key final evidence:
 
 - Surface accounting passed: 507 endpoints, 105 covered, 402 blocked.
 - Catalog passed with 37 streams.
-- Direct-read `repo read-dir` failed because the default path was `.`.
-- Schedule stages failed for stream names with underscores because schedule names require lowercase alphanumeric plus hyphen.
-- Write plan for `create_label` failed because generated record omitted required `color`.
+- Direct-read sweep passed with 2 stages.
+- Binary download surface remained safely blocked.
+- Flow and schedule capabilities passed; schedule residue was false.
+- Secret redaction and JSON contract passed.
+- Write action inventory accounted for 67 actions: 1 live pass (`create_label`), 10 untested pairings, 56 blocked.
+- `create_label` write lifecycle passed with read-back verification and cleanup; residue check found 0 `pm-cert-github-*` labels remaining.
 
-Follow-up fixes were implemented with tests. A second live run is required after rebuilding `pm`.
+Early-run findings fixed with tests:
+
+- Schedule names used underscores even though `pm schedule` only accepts lowercase alphanumeric plus hyphen.
+- `repo read-dir` used `--path .`, which the direct-read policy rejects.
+- GitHub `create_label` record generation omitted required `color`.
+- Streams without cursor/primary-key metadata were forced through unsupported sync modes.
+- Optional GitHub security/project streams returned permission/config availability errors and now record documented skips.
+- Reverse writes needed GitHub's default `base_url` stored with the credential.
 
 ## Live Test Command Template
 
