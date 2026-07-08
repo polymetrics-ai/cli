@@ -379,10 +379,17 @@ func (rc *runContext) streamSpec() streamSpec {
 	name := rc.streamName()
 	for _, spec := range rc.catalogStreamSpecs {
 		if spec.Name == name {
-			return spec.withDefaults()
+			return spec.withPrimaryKeyDefault()
 		}
 	}
 	return streamSpec{Name: name}.withDefaults()
+}
+
+func (spec streamSpec) withPrimaryKeyDefault() streamSpec {
+	if spec.PrimaryKey == "" {
+		spec.PrimaryKey = "id"
+	}
+	return spec
 }
 
 func (spec streamSpec) withDefaults() streamSpec {
@@ -521,7 +528,7 @@ func (rc *runContext) fullSweepStreamSpecs() []streamSpec {
 			if spec.Name == "" {
 				continue
 			}
-			out = append(out, spec.withDefaults())
+			out = append(out, spec.withPrimaryKeyDefault())
 		}
 		if len(out) > 0 {
 			return out
@@ -533,15 +540,18 @@ func (rc *runContext) fullSweepStreamSpecs() []streamSpec {
 func stageFullSweepConnectionCreate(rc *runContext, rep *Report) error {
 	stream := rc.streamName()
 	recordStage(rc, rep, "full_sweep_connection_create_"+safeName(stream), 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("connections", "create", rc.liveConnectionName(),
-			"--source", rc.opts.Connector+":"+sourceCredentialName,
-			"--destination", "warehouse:"+warehouseCredentialName,
+		args := []string{"connections", "create", rc.liveConnectionName(),
+			"--source", rc.opts.Connector + ":" + sourceCredentialName,
+			"--destination", "warehouse:" + warehouseCredentialName,
 			"--stream", stream,
 			"--primary-key", rc.primaryKey(),
-			"--cursor", rc.cursorField(),
 			"--sync-mode", "full_refresh_append",
-			"--table", "cert_live_"+stream,
-			"--json")
+			"--table", "cert_live_" + stream,
+			"--json"}
+		if cursor := rc.cursorField(); cursor != "" {
+			args = append(args, "--cursor", cursor)
+		}
+		res := rc.run(args...)
 		passed, errMsg := assertKind(rc, "full_sweep_connection_create_"+safeName(stream), res, "Connection", 0)
 		return passed, cliInfoFrom(res), errMsg
 	})
@@ -671,15 +681,18 @@ func stageCredentialsTest(rc *runContext, rep *Report) error {
 func stageCatalog(rc *runContext, rep *Report) error {
 	stream := rc.streamName()
 	recordStage(rc, rep, "connection_create", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("connections", "create", rc.liveConnectionName(),
-			"--source", rc.opts.Connector+":"+sourceCredentialName,
-			"--destination", "warehouse:"+warehouseCredentialName,
+		args := []string{"connections", "create", rc.liveConnectionName(),
+			"--source", rc.opts.Connector + ":" + sourceCredentialName,
+			"--destination", "warehouse:" + warehouseCredentialName,
 			"--stream", stream,
 			"--primary-key", rc.primaryKey(),
-			"--cursor", rc.cursorField(),
 			"--sync-mode", "full_refresh_append",
-			"--table", "cert_live_"+stream,
-			"--json")
+			"--table", "cert_live_" + stream,
+			"--json"}
+		if cursor := rc.cursorField(); cursor != "" {
+			args = append(args, "--cursor", cursor)
+		}
+		res := rc.run(args...)
 		passed, errMsg := assertKind(rc, "connection_create", res, "Connection", 0)
 		return passed, cliInfoFrom(res), errMsg
 	})
@@ -886,15 +899,18 @@ func (rc *runContext) setupCaptureConnection(rep *Report, mode, table string) (b
 }
 
 func (rc *runContext) createCaptureConnection(rep *Report, stageName, mode, table string) (bool, CLIStageInfo, string) {
-	res := rc.run("connections", "create", rc.captureConnectionName(mode),
-		"--source", "file:"+rc.fileCredentialName(),
-		"--destination", "warehouse:"+warehouseCredentialName,
+	args := []string{"connections", "create", rc.captureConnectionName(mode),
+		"--source", "file:" + rc.fileCredentialName(),
+		"--destination", "warehouse:" + warehouseCredentialName,
 		"--stream", rc.captureStreamName(),
 		"--primary-key", rc.primaryKey(),
-		"--cursor", rc.cursorField(),
 		"--sync-mode", mode,
 		"--table", table,
-		"--json")
+		"--json"}
+	if cursor := rc.cursorField(); cursor != "" {
+		args = append(args, "--cursor", cursor)
+	}
+	res := rc.run(args...)
 	passed, errMsg := assertKind(rc, stageName, res, "Connection", 0)
 	return passed, cliInfoFrom(res), errMsg
 }
@@ -994,6 +1010,11 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 // --- stage 8: etl_incremental_append (LIVE) + stage 9: resume (LIVE run 2) ---
 
 func stageIncrementalAppend(rc *runContext, rep *Report) error {
+	if rc.cursorField() == "" {
+		skipStage(rc, rep, "incremental_connection_create", "skipped: stream has no cursor field")
+		skipStage(rc, rep, "etl_incremental_append", "skipped: stream has no cursor field")
+		return nil
+	}
 	stream := rc.streamName()
 	table := "cert_incremental_" + stream
 	connName := "cert_incremental"
@@ -1098,6 +1119,10 @@ func compareCursorStrings(a, b string) int {
 // --- stage 10: etl_incremental_append_deduped (CAPTURE) ---
 
 func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
+	if rc.cursorField() == "" {
+		skipStage(rc, rep, "etl_incremental_append_deduped", "skipped: stream has no cursor field")
+		return nil
+	}
 	if rc.capturePath == "" {
 		skipStage(rc, rep, "etl_incremental_append_deduped", "skipped: no capture available")
 		return nil

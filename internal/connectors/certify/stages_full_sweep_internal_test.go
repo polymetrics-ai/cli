@@ -58,6 +58,17 @@ func TestFullSweepNamesAreStreamScoped(t *testing.T) {
 	}
 }
 
+func TestFullSweepStreamSpecsPreserveCatalogStreamsWithoutCursor(t *testing.T) {
+	rc := &runContext{catalogStreamSpecs: []streamSpec{{Name: "branches", PrimaryKey: "name"}}}
+	specs := rc.fullSweepStreamSpecs()
+	if len(specs) != 1 {
+		t.Fatalf("len(specs) = %d, want 1", len(specs))
+	}
+	if specs[0].Name != "branches" || specs[0].PrimaryKey != "name" || specs[0].CursorField != "" {
+		t.Fatalf("spec = %+v, want branches/name with empty cursor", specs[0])
+	}
+}
+
 func TestFullSweepStreamSpecsFallbackToSelectedStream(t *testing.T) {
 	rc := &runContext{opts: Options{Stream: "customers"}}
 	specs := rc.fullSweepStreamSpecs()
