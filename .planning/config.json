@@ -1,10 +1,51 @@
 {
+  "mode": "yolo",
+  "granularity": "coarse",
+  "runtime": "pi",
   "workflow": {
-    "use_worktrees": false,
-    "tdd_mode": true,
-    "universal_programming_loop": true,
+    "research": true,
     "plan_check": true,
-    "commit_docs": true
+    "verifier": true,
+    "auto_advance": false,
+    "nyquist_validation": true,
+    "use_worktrees": false,
+    "tdd_mode": true
+  },
+  "planning": {
+    "commit_docs": true,
+    "search_gitignored": false
+  },
+  "parallelization": {
+    "enabled": true,
+    "plan_level": true,
+    "task_level": false,
+    "skip_checkpoints": false,
+    "max_concurrent_agents": 3,
+    "min_plans_for_parallel": 2
+  },
+  "gates": {
+    "confirm_project": false,
+    "confirm_phases": false,
+    "confirm_roadmap": false,
+    "confirm_breakdown": true,
+    "confirm_plan": true,
+    "execute_next_plan": false,
+    "issues_review": true,
+    "confirm_transition": true
+  },
+  "safety": {
+    "always_confirm_destructive": true,
+    "always_confirm_external_services": true,
+    "human_gates": [
+      "new_dependencies",
+      "auth_scope_changes",
+      "destructive_admin_actions",
+      "production_deploys",
+      "credentialed_connector_checks",
+      "reverse_etl_execution",
+      "quality_gate_reductions",
+      "main_branch_merge"
+    ]
   },
   "model_profile": "quality",
   "model_overrides": {
@@ -15,11 +56,8 @@
     "gsd-loop-tester": "sonnet",
     "gsd-loop-security": "sonnet",
     "gsd-loop-reliability-observability": "sonnet",
-    "gsd-loop-frontend": "sonnet",
     "gsd-planner": "fable",
     "gsd-plan-checker": "sonnet",
-    "gsd-verifier": "sonnet",
-    "gsd-executor": "sonnet",
-    "gsd-debugger": "sonnet"
+    "gsd-verifier": "sonnet"
   }
 }

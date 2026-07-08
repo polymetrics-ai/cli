@@ -1,81 +1,160 @@
-# Roadmap
+# Roadmap: Polymetrics CLI Connector Parity
 
-## Milestone: connector-architecture-v2 (current)
+**Generated via:** official GSD Core Pi adapter command path
+**Commands:** `scripts/gsd prompt onboard --fast --skip-phases`, `scripts/gsd prompt new-project --from-existing --non-interactive`, `scripts/gsd prompt milestone-summary --planning-only`
+**Upstream GSD Core:** `open-gsd/gsd-core@20297a8ff941378b8615a5d3e8629e52c10a0f9d`
+**Phase regeneration:** skipped by request
 
-Rewrite the connector architecture to be JSON-schema-declarative, unified-named (clean break from
-source-/destination- slugs), with full capability on first run (every GET → ETL stream; every
-POST/PUT/PATCH/DELETE → reverse-ETL write action) plus a credential-driven certification harness.
-Plan of record: `~/.claude/plans/please-check-all-the-serialized-storm.md` (approved 2026-07-02);
-program PRD: `docs/plans/universal-programming-loop-prd.md`.
+## Overview
 
-Execution: GSD Universal Programming Loop per phase; coordinator/planner/reviewer roles on `fable`,
-backend/tester/security/reliability roles on `sonnet` (Sonnet 5); role prompts apply cc-skills-golang.
+This roadmap replaces the legacy custom `.planning/` tree with an official GSD Core brownfield plan for connector parity. The repo-local Pi adapter is the command path for future GSD work: agents use `/gsd <command>` or generated `/gsd-*` aliases in Pi, and non-interactive automation uses `scripts/gsd prompt <command>`.
 
-### Phase: wave0-engine-harness
+The first delivery gate remains inventory reconciliation. No connector fanout starts until the repository and upstream documentation are reconciled across all connector technologies, canonical operation de-duplication is applied, and human-gated risk classification is reviewed.
 
-Declarative engine (`internal/connectors/engine/`), bundle JSON Schemas + `cmd/connectorgen`
-(validate|gen|new), conformance v2 (httptest fixture replay), `pm connectors certify` harness core,
-`docs/migration/conventions.md`, `.golangci.yml`, `docs/migration/inventory.json`.
+## North-Star Milestone
 
-Acceptance:
-- Engine unit tests green (interpolation, auth selection, pagination matrix, read/write paths, error mapping).
-- 3 goldens migrated with engine-vs-legacy parity tests passing: stripe, searxng, postgres.
-- `connectorgen validate` rejects seeded-invalid bundles; accepts the goldens.
-- Conformance v2 passes for the 3 goldens (static + httptest fixture replay).
-- Certify source stages pass against the `sample` connector end-to-end.
-- `go build ./... && go test ./... && golangci-lint run` green.
+Deliver connector parity that is:
 
-### Phase: wave1-pilot
+1. **Surface-complete** — covers REST, GraphQL, XML/SOAP, CSV/NDJSON/report export, binary, file/object, SQL/CDC, queue/event/webhook/audit-log, native protocol, direct-read, and reverse ETL write surfaces.
+2. **Safety-gated** — keeps secrets, auth scopes, destructive/admin operations, live credential checks, reverse ETL execution, new dependencies, quality-gate reductions, and `main` merges under human control.
+3. **De-duplicated** — assigns each documented upstream operation exactly one primary classification.
+4. **Conformance-backed** — derives parity claims from generated inventory, fixture/replay gates, conformance checks, and certification status.
+5. **Agent-runnable** — uses official GSD Core commands through `.pi` and `scripts/gsd`, not runtime-specific copied command files.
+6. **Skill-routed** — agents and subagents load required Go/design skills such as `golang-how-to`, `golang-cli`, `golang-testing`, `golang-security`, `golang-documentation`, `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices` as applicable.
+7. **Help/docs/website-complete** — every CLI-visible feature keeps runtime help, bare namespace command behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests in parity.
 
-Migrate 10 pilot connectors (xkcd, vitally, bitly, calendly, sentry, chargebee, zendesk-support,
-monday, github, gmail), one Sonnet backend-agent each; Fable line-by-line review of every diff;
-conventions + executor prompt template patched with learnings; per-connector cost data recorded.
+## Workstreams
 
-Acceptance: all 10 pass agent self-check + wave gate + review; conventions.md updated; cost report
-written to `docs/migration/pilot-costs.json`; Pass B budget decision made with user.
+### 0. GSD Runtime and Agent Enablement
 
-### Phase: wave2-fanout-http-sm
+**Goal:** Make the official GSD command surface the default for humans, Pi sessions, and reusable agents.
 
-Fan-out migration of declarative-HTTP S (<300 loc, 12/agent) and M (300–699, 7/agent) connectors
-(~49 bundle agents). Wave gate: path guard, registrygen, full build/test/conformance/lint; 20%
-adversarial review; 1 repair retry then quarantine.
+**Status:** In progress on issue #122.
 
-### Phase: wave3-fanout-http-lxl
+**Required outcomes:**
 
-Fan-out migration of declarative-HTTP L (700–899, 4/agent) and XL (≥900, 1/agent) connectors
-(~56 bundle agents). 100% review of XL output.
+- `.gsd/upstream.lock.json` pins official GSD source.
+- `.gsd/commands.json` lists official commands generated from official docs.
+- `.pi/extensions/gsd/index.ts` exposes `/gsd` plus `/gsd-*` aliases.
+- `.pi/skills/gsd-core/SKILL.md` sets default planning/implementation behavior.
+- `.agents/**` instructions route agents/subagents through the Pi adapter or `scripts/gsd`.
+- `.agents/agentic-delivery/references/required-skills-routing.md` defines required Go/design skill routing for agents and subagents.
+- `.agents/agentic-delivery/references/runtime-rlm-website-integration.md` preserves runtime/RLM/Pi-agent/website integration knowledge for Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, and website docs.
+- `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` defines the CLI help/manual/website parity gate.
+- Manual-GSD fallback is only used when the adapter is unavailable and must be recorded.
+- Runtime-backed checks remain optional and gated; dependency-free CLI paths must not require PostgreSQL, DragonflyDB, Temporal, or Podman.
 
-### Phase: wave4-fanout-nonhttp
+### 1. Inventory and Surface Reconciliation
 
-Migration of database_go / file_go / destination_go / native_go kinds (~15 agents) to Tier-3
-native layout (component split) + defs bundles.
+**Goal:** Produce a current, generated, de-duplicated connector parity baseline before fanout.
 
-### Phase: wave5-capability-expansion
+**Depends on:** Workstream 0 for command/runtime consistency.
 
-Pass B (roster per pilot decision): per-connector `api_surface.json` from documentation_url →
-implement missing streams + write actions → completeness critic ≥95% coverage or documented
-exclusions → `docs/migration/coverage-report.json`.
+**Success criteria:**
 
-### Phase: wave6-convergence
+- Active `.planning/` is official GSD Core shaped and the pre-rebootstrap archive is recorded outside active planning.
+- Inventory reconciles bundles, hooks, natives, docs, API/surface manifests, streams, writes, binary surfaces, direct-read surfaces, native protocol surfaces, blockers, quarantine, conformance, and certification.
+- Inventory classifies REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queue/event/webhook/audit-log, native, direct-read, and mutation surfaces.
+- Canonical operation identity avoids duplicate work from multiple docs pages/specs.
+- Connector fanout is blocked until inventory outputs are reviewed.
 
-Registry flip to bundles; legacy deletion (slug.go, catalog_data.json, registryset, native_port.go,
-native_conformance.go, manifest.go structs, alias/live-registry machinery); naming clean-break
-sweep; catalog generated from manifests; docs regen; full `certify --replay` + credential-gated
-live certification. HUMAN GATE before deletion.
+### 2. Durable Read and ETL Parity
 
-## Completed milestone: go-cli-mvp
+**Goal:** Bring product-safe documented durable record collections to CLI and ETL parity.
 
-## Phase: go-cli-mvp
+**Depends on:** Workstream 1.
 
-Build a working Go CLI vertical slice for local ETL and reverse ETL using the architecture in `POLYMETRICS_GO_CLI_MONOLITH_PRD_ARCHITECTURE.md`.
+**Success criteria:**
 
-Acceptance:
+- Every product-safe documented stream/report/event log/feed/table/queue message/CDC event/durable record collection is covered by a connector read surface or typed exclusion.
+- `pm connectors inspect`, catalog, read, and ETL surfaces agree on stream names, schemas, sync modes, cursor behavior, and limitations.
+- Incremental, pagination, cursor, schema, and projection behavior is verified through conformance fixtures or typed blockers.
+- CLI-visible read surfaces update runtime help, bare namespace summaries, `docs/cli/**`, website docs, generated help/manual artifacts, and tests.
 
-- `poly init` creates a usable project directory.
-- `poly help` and `poly man` expose detailed docs.
-- Credentials can be added from environment values and stored encrypted.
-- A connection can sync sample data into a local JSONL warehouse.
-- A reverse ETL plan can preview warehouse data and write approved mapped records to an outbox.
-- Commands support JSON output for agent callers.
-- `go test ./...` and `go build ./cmd/poly` pass.
+### 3. Direct-Read, Binary, and Native Surface Parity
 
+**Goal:** Cover product-safe non-stream and non-REST read surfaces without forcing them into the wrong abstraction.
+
+**Depends on:** Workstream 1.
+
+**Success criteria:**
+
+- Direct-read operations are classified separately from durable ETL streams.
+- Binary operations have product-safe transfer surfaces or typed exclusions.
+- GraphQL, XML/SOAP, CSV/NDJSON/report export, file/object, SQL/CDC, queue/event/webhook/audit-log, and native protocol reads use an appropriate declarative, hook, native, direct-read, binary, or exclusion path.
+- CLI help/manual/website docs explain direct-read and binary surfaces without misclassifying them as durable ETL streams.
+- Admin/elevated/destructive direct-read or binary operations remain human-gated.
+
+### 4. Reverse ETL and Mutation Parity
+
+**Goal:** Map safe writes/mutations to reverse ETL actions with approval gates.
+
+**Depends on:** Workstream 1.
+
+**Success criteria:**
+
+- Product-safe mutations across REST, GraphQL, XML/SOAP, file/object, queue, database/native, and other protocol-specific operations map to reverse ETL actions or typed exclusions.
+- Plan, preview, approval, and execute semantics are preserved for every write path.
+- Runtime help, manual docs, and website docs consistently describe plan → preview → approval → execute for write paths.
+- Destructive/admin/elevated-scope writes are human-gated and never exposed as generic raw write tools.
+
+### 5. Conformance and Certification Enforcement
+
+**Goal:** Make validated gates authoritative for connector parity status.
+
+**Depends on:** Workstreams 2–4.
+
+**Success criteria:**
+
+- Conformance validates schemas, fixtures, surface manifests, streams, writes, direct-read/binary metadata, cursor/pagination behavior, docs, and de-duplication contracts.
+- Certification reports distinguish replay/fixture success, live success, missing credentials (`uncertified`), typed blockers, and failures.
+- Public or PR-facing connector parity claims derive from generated conformance/certification artifacts.
+
+## Phase Mapping
+
+The existing phase files are preserved in this refresh by request. They still map to the roadmap as follows:
+
+| Existing phase | Roadmap workstream | Status |
+|---|---|---|
+| Phase 1: Inventory and Surface Reconciliation | Workstreams 0–1 | In progress |
+| Phase 2: Durable Read and ETL Parity | Workstream 2 | Not started |
+| Phase 3: Direct-Read, Binary, and Native Surface Parity | Workstream 3 | Not started |
+| Phase 4: Reverse ETL and Mutation Parity | Workstream 4 | Not started |
+| Phase 5: Conformance and Certification Enforcement | Workstream 5 | Not started |
+
+## Progress
+
+| Workstream | Status | Notes |
+|---|---|---|
+| 0. GSD Runtime and Agent Enablement | In progress | Official docs pinned; Pi adapter and agent guidance refreshed. |
+| 1. Inventory and Surface Reconciliation | In progress | Planning exists; generated inventory still must be reviewed before fanout. |
+| 2. Durable Read and ETL Parity | Not started | Blocked on Workstream 1. |
+| 3. Direct-Read, Binary, and Native Surface Parity | Not started | Blocked on Workstream 1. |
+| 4. Reverse ETL and Mutation Parity | Not started | Blocked on Workstream 1. |
+| 5. Conformance and Certification Enforcement | Not started | Blocked on Workstreams 2–4. |
+
+## Command Path for Future Updates
+
+Use official GSD commands through the repo-local adapter:
+
+```bash
+scripts/gsd doctor
+scripts/gsd list
+scripts/gsd prompt map-codebase --fast
+scripts/gsd prompt new-project --from-existing --non-interactive
+scripts/gsd prompt plan-phase 1 --skip-research
+scripts/gsd prompt programming-loop init --phase <phase> --dry-run
+```
+
+In Pi after trust/reload:
+
+```text
+/gsd doctor
+/gsd list
+/gsd map-codebase --fast
+/gsd plan-phase 1 --skip-research
+/gsd-programming-loop init --phase <phase> --dry-run
+```
+
+---
+*Roadmap refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter; `.planning/phases/**` intentionally unchanged.*

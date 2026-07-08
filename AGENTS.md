@@ -28,6 +28,48 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
 - Do not expose or invent generic shell, generic HTTP write, or generic SQL write tools.
 - Treat command arguments as untrusted; avoid control characters, path traversal, and broad file paths.
 
+## Required Skills For Agents
+
+- Before implementation, review, debugging, CLI, connector, docs, website, or design work, read
+  `.agents/agentic-delivery/references/required-skills-routing.md` and load the required skills.
+- For any Go task, start with `golang-how-to`, then load task-specific Go skills such as
+  `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`,
+  `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, `golang-concurrency`,
+  `golang-database`, `golang-graphql`, or `golang-documentation` as applicable.
+- For website/docs UI work, load design skills such as `frontend-design`, `web-design-guidelines`,
+  `vercel-react-best-practices`, and `vercel-composition-patterns` as applicable.
+- For runtime/RLM/Pi-agent work involving Podman, PostgreSQL, DragonflyDB/Redis-compatible
+  coordination, Temporal, `pm runtime`, `pm rlm`, `pm agent image`, `pm worker`, or website
+  architecture docs, read `.agents/agentic-delivery/references/runtime-rlm-website-integration.md`.
+- Record required skills used in the GSD plan, worker handoff, or PR body.
+
+## GSD Core Runtime For Agents
+
+This repo uses official GSD Core workflows through a project-local Pi adapter:
+
+- Interactive Pi: use `/gsd <command> [args...]` or generated aliases such as `/gsd-plan-phase`,
+  `/gsd-programming-loop`, and `/gsd-code-review` after project trust/reload.
+- Shell/non-interactive: use `scripts/gsd prompt <command> [args...]` and execute the generated
+  prompt with local tools.
+- Health/provenance: run `scripts/gsd doctor`, `scripts/gsd list`, and
+  `scripts/gsd sources <command>` when validating the adapter.
+- Agent reference: read `.agents/agentic-delivery/references/gsd-pi-adapter.md` before GSD work.
+- Manual-GSD fallback is allowed only when the adapter is unavailable; record the fallback in the
+  planning trace, phase artifact, worker handoff, or PR body.
+
+## CLI Help, Manual, Docs, And Website Parity
+
+- For any CLI command, subcommand, flag, output, connector surface, or help-topic change, read
+  `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` before implementation.
+- A CLI feature is incomplete until runtime help, bare namespace command behavior, `docs/cli/**`,
+  website docs under `website/**`, generated help/manual artifacts, and tests are updated or
+  explicitly marked not applicable.
+- Namespace commands with no action selected, such as `pm connectors`, should render contextual
+  help/subcommand summary and exit successfully rather than failing with a confusing missing-action
+  error. Invalid actions should still return usage errors.
+- PRs for CLI changes must list help/manual/website parity verification, including `pm help <topic>`,
+  `pm <namespace>`, `pm <command> --help`, and docs/website grep or generator checks as applicable.
+
 ## Issue-First Delivery And Automated Review
 
 - For issue-to-PR work, read `.agents/agentic-delivery/contracts/issue-agent-contract.md` and keep
@@ -38,8 +80,9 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
   orchestrator owns shared parent artifacts, parent PR state, sub-PR merge decisions, automated
   review coverage routing, and final human-readiness.
 - For implementation or behavior-changing work, `gsd-programming-loop` is mandatory. Load it before
-  coding, follow its TDD/programming lifecycle, and record GSD/TDD evidence in the phase or PR
-  artifacts. If the local GSD scripts are unavailable, run the manual GSD loop and record that
+  coding through `/gsd-programming-loop` in Pi or `scripts/gsd prompt programming-loop ...` from
+  shell, follow its TDD/programming lifecycle, and record GSD/TDD evidence in the phase or PR
+  artifacts. If the repo-local GSD adapter is unavailable, run the manual GSD loop and record that
   fallback explicitly; do not skip test-first implementation.
 - Plan before coding. Create or update the issue's GSD plan, TDD ledger, and verification checklist
   before production edits, then keep them current as the implementation changes.

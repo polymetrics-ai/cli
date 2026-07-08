@@ -1,10 +1,16 @@
 version: 1
 default_rules:
   - Read AGENTS.md and .agents/agentic-delivery/contracts/issue-agent-contract.md before work.
-  - Load and follow gsd-programming-loop for implementation or behavior-changing work.
+  - Read .agents/agentic-delivery/references/gsd-pi-adapter.md before GSD work.
+  - Read .agents/agentic-delivery/references/required-skills-routing.md before implementation, review, CLI, docs, website, design, or connector work.
+  - Load and follow gsd-programming-loop through /gsd-programming-loop in Pi or scripts/gsd prompt programming-loop from shell for implementation or behavior-changing work.
+  - For Go work, load golang-how-to first, then task-specific Go skills.
+  - For CLI work, load golang-cli, golang-testing, golang-error-handling, golang-documentation, and golang-security when user input, credentials, filesystem paths, or external IO are involved.
+  - For website/docs UI work, load frontend-design, web-design-guidelines, vercel-react-best-practices, and vercel-composition-patterns as applicable.
   - Use test-first implementation for behavior changes.
-  - If local GSD scripts are unavailable, record the manual GSD loop fallback and keep TDD evidence.
+  - If the repo-local GSD/Pi adapter is unavailable, record the manual GSD loop fallback and keep TDD evidence.
   - Plan before production edits and keep the GSD plan, TDD ledger, and verification checklist current.
+  - For CLI command, flag, output, connector surface, or help-topic changes, follow .agents/agentic-delivery/references/cli-help-docs-website-parity.md.
   - Commit and push coherent green slices to the active issue/PR branch after local green gates.
   - Keep PR scope to one primary issue.
   - Stop for human gates before auth, secrets, dependencies, destructive actions, deploys, or gate reductions.
@@ -32,7 +38,14 @@ skills:
       - CLI and validation code
     required_local_skills:
       - gsd-programming-loop
+      - golang-how-to
+      - golang-testing
     preferred_local_skills:
+      - golang-cli
+      - golang-error-handling
+      - golang-security
+      - golang-safety
+      - golang-documentation
       - go-engineering
     required_for:
       - guardrail-go
@@ -44,7 +57,19 @@ skills:
       - API taxonomy
       - REST and GraphQL modeling
       - safe execution models
+      - connector runtime design
+      - operation classification
+    required_local_skills:
+      - golang-how-to
+      - golang-design-patterns
+      - golang-structs-interfaces
+      - golang-security
     preferred_local_skills:
+      - golang-naming
+      - golang-error-handling
+      - golang-safety
+      - golang-graphql
+      - golang-database
       - api-design-principles
       - architecture-patterns
       - go-engineering
@@ -58,7 +83,14 @@ skills:
       - secret handling
       - destructive action gates
       - approval boundaries
+      - command argument and path safety
+    required_local_skills:
+      - golang-how-to
+      - golang-security
+      - golang-safety
     preferred_local_skills:
+      - golang-error-handling
+      - golang-lint
       - go-engineering
       - stride-analysis-patterns
       - threat-mitigation-mapping
@@ -73,9 +105,17 @@ skills:
       - review comment triage
       - disposition replies
       - follow-up issue routing
+      - Go/security/design review skill loading
+    required_local_skills:
+      - golang-how-to
+      - golang-security
+      - golang-testing
     preferred_local_skills:
       - github-issue-first-delivery
       - gsd-code-review
+      - golang-lint
+      - golang-error-handling
+      - web-design-guidelines
       - go-engineering
     required_for:
       - coderabbit-review
@@ -90,21 +130,33 @@ skills:
       - sub-PR merge arbitration
       - parent PR automated review coverage routing
       - human gate escalation
+      - required skill routing for workers
     preferred_local_skills:
       - github-issue-first-delivery
       - gsd-programming-loop
       - gsd-plan-phase
       - gsd-code-review
+      - golang-how-to
+      - web-design-guidelines
     required_for:
       - parent-orchestration
   docs_and_ux:
     capabilities:
       - help rendering
+      - bare namespace command help behavior
+      - CLI manual parity under docs/cli
       - website/docs presentation
+      - generated help/manual artifact parity
       - accessibility and information architecture
-    preferred_local_skills:
+      - React/Next docs UI review
+    required_local_skills:
+      - golang-documentation
       - web-design-guidelines
+    preferred_local_skills:
+      - golang-cli
       - frontend-design
+      - vercel-react-best-practices
+      - vercel-composition-patterns
       - ui-refactoring-docs
     required_for:
       - help-renderer
@@ -129,6 +181,9 @@ task_types:
   cli-surface:
     required_skill_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
     primary_agent: provider-cli-surface-agent
+  cli-help-docs-website-parity:
+    required_skill_groups: [go_tdd, docs_and_ux]
+    primary_agent: help-renderer-agent
   help-renderer:
     required_skill_groups: [go_tdd, docs_and_ux]
     primary_agent: help-renderer-agent

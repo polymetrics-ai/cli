@@ -8,6 +8,15 @@ Add this section to implementation issues.
 Follow the generic issue-to-PR contract:
 `.agents/agentic-delivery/contracts/issue-agent-contract.md`
 
+Use the repo-local official GSD Core Pi adapter:
+`.agents/agentic-delivery/references/gsd-pi-adapter.md`
+
+Load required Go/design skills:
+`.agents/agentic-delivery/references/required-skills-routing.md`
+
+For CLI command, flag, output, connector surface, or help-topic changes, use:
+`.agents/agentic-delivery/references/cli-help-docs-website-parity.md`
+
 Follow the post-implementation CodeRabbit review loop:
 `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
 
@@ -24,7 +33,9 @@ For parent issues that spawn or assign multiple workers, follow:
 Task type: `<task-type-from-task-skill-matrix>`
 
 Required skills:
-- `gsd-programming-loop` for implementation or behavior-changing work
+- `gsd-programming-loop` for implementation or behavior-changing work through `/gsd-programming-loop` in Pi or `scripts/gsd prompt programming-loop ...` from shell
+- `golang-how-to` for Go work, plus task-specific Go skills from `required-skills-routing.md`
+- design skills such as `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices` for website/docs UI work
 - `<skill capability or local skill name>`
 
 Primary agent:
@@ -56,10 +67,14 @@ PR body must include one of:
 - `Refs #<issue-number>` when the PR is stacked or incremental
 
 Before merge:
-- confirm `gsd-programming-loop` was loaded and followed for implementation or behavior-changing
-  work, or record the manual-GSD fallback when local GSD scripts are unavailable
+- confirm `gsd-programming-loop` was loaded and followed through `/gsd-programming-loop ...` or
+  `scripts/gsd prompt programming-loop ...` for implementation or behavior-changing work, or record
+  the manual-GSD fallback when the repo-local adapter is unavailable
 - confirm the GSD plan, TDD ledger, and verification checklist were created or updated before
   production edits
+- confirm required Go/design skills from `.agents/agentic-delivery/references/required-skills-routing.md` were loaded and recorded
+- for CLI feature work, confirm runtime help, bare namespace behavior, `docs/cli/**`, website docs,
+  generated help/manual artifacts, and tests are updated or explicitly marked not applicable
 - commit and push coherent green slices to the active issue/PR branch after local green gates;
   never push to `main`
 - observe automatic CodeRabbit review after implementation when the PR is non-draft and targets

@@ -5,35 +5,82 @@ metadata:
   name: Help Renderer Agent
   version: 1
   summary: Builds generic connector help rendering from CLI surface metadata.
-  tags: [help, docs, cli, ux]
+  tags:
+  - help
+  - docs
+  - cli
+  - ux
 role: implementation
 objective: Render connector command help from metadata with golden tests and accessible docs output.
 skills:
-  required_groups: [go_tdd, docs_and_ux]
-  required_local_skills: [gsd-programming-loop]
-  preferred_local_skills: [go-engineering, web-design-guidelines, frontend-design]
+  required_groups:
+  - go_tdd
+  - docs_and_ux
+  required_local_skills:
+  - gsd-programming-loop
+  - golang-how-to
+  - golang-cli
+  - golang-testing
+  - golang-documentation
+  - web-design-guidelines
+  preferred_local_skills:
+  - go-engineering
+  - web-design-guidelines
+  - frontend-design
+  - vercel-react-best-practices
+  - vercel-composition-patterns
 inputs:
   required:
-    - issue URL
-    - cli_surface schema or draft
-    - expected help-preview artifact
+  - .agents/agentic-delivery/references/gsd-pi-adapter.md
+  - .agents/agentic-delivery/references/required-skills-routing.md
+  - .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+  - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
+  - issue URL
+  - cli_surface schema or draft
+  - expected help-preview artifact
 outputs:
   required:
-    - renderer code
-    - golden tests
-    - updated help preview
+  - renderer code
+  - golden tests
+  - updated help preview
+  - verified bare namespace help behavior for command groups
+  - updated docs/cli manual page or explicit not-applicable note
+  - updated website docs or explicit canonical-link/not-applicable note
+  - generated help/manual artifact update or explicit not-applicable note
 permissions:
-  allowed_paths: [cmd/**, internal/**, docs/**, website/**, .planning/**]
+  allowed_paths:
+  - cmd/**
+  - internal/**
+  - docs/**
+  - website/**
+  - .planning/**
 workflow:
-  - load_gsd_programming_loop
-  - create_or_update_gsd_plan
-  - add_golden_red_test
-  - implement_renderer
-  - check_mobile_or_docs_rendering_if_website_changes
-  - commit_and_push_green_slice_when_policy_allows
+- load_gsd_pi_adapter
+- load_required_go_and_design_skills
+- enforce_runtime_rlm_website_integration_when_relevant
+- load_gsd_programming_loop
+- create_or_update_gsd_plan
+- enforce_cli_help_docs_website_parity_when_cli_changes
+- add_golden_red_test
+- implement_renderer
+- check_mobile_or_docs_rendering_if_website_changes
+- commit_and_push_green_slice_when_policy_allows
 guardrails:
-  blocking_human_gates: [new frontend dependencies, generated website rewrites]
+  blocking_human_gates:
+  - new frontend dependencies
+  - generated website rewrites
 verification:
   required:
-    - go test targeted renderer package
-    - website checks if website files change
+  - go test targeted renderer package
+  - pm help <topic> for affected help topic
+  - pm <namespace> for affected command group bare invocation
+  - pm <command> --help for affected command
+  - rg docs/cli and website for affected command or flag
+  - website checks if website files change
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
+      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
+      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+      and keep runtime-backed services optional unless explicitly in scope.

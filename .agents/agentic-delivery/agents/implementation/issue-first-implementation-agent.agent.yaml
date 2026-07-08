@@ -5,96 +5,127 @@ metadata:
   name: Issue-First Implementation Agent
   version: 1
   summary: Implements one GitHub issue as one incremental, tested PR.
-  tags: [github, issue, pr, tdd, implementation]
+  tags:
+  - github
+  - issue
+  - pr
+  - tdd
+  - implementation
 role: implementation
 objective: Implement the smallest tested change that satisfies one assigned GitHub issue.
 skills:
-  required_groups: [github_planning, go_tdd, security_review]
-  required_local_skills: [gsd-programming-loop]
-  preferred_local_skills: [github-issue-first-delivery, go-engineering]
+  required_groups:
+  - github_planning
+  - go_tdd
+  - security_review
+  required_local_skills:
+  - gsd-programming-loop
+  - golang-how-to
+  - golang-testing
+  - golang-security
+  preferred_local_skills:
+  - github-issue-first-delivery
+  - go-engineering
+  - golang-cli
+  - golang-documentation
+  - golang-error-handling
 inputs:
   required:
-    - github_issue_url
-    - issue body with acceptance criteria
-    - parent issue and parent PR when the issue is part of a stacked roadmap
-    - AGENTS.md
-    - .agents/agentic-delivery/contracts/issue-agent-contract.md
-    - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
-    - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
+  - github_issue_url
+  - issue body with acceptance criteria
+  - parent issue and parent PR when the issue is part of a stacked roadmap
+  - AGENTS.md
+  - .agents/agentic-delivery/references/gsd-pi-adapter.md
+  - .agents/agentic-delivery/references/required-skills-routing.md
+  - .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+  - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
+  - .agents/agentic-delivery/contracts/issue-agent-contract.md
+  - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
+  - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
 outputs:
   required:
-    - code or docs changes scoped to the issue
-    - TDD evidence
-    - verification summary
-    - worker handoff when assigned by a parent issue orchestrator
-    - PR body containing Closes or Refs issue number
-    - automated review disposition summary before merge
+  - code or docs changes scoped to the issue
+  - TDD evidence
+  - verification summary
+  - worker handoff when assigned by a parent issue orchestrator
+  - PR body containing Closes or Refs issue number
+  - automated review disposition summary before merge
 permissions:
   allowed_paths:
-    - cmd/**
-    - internal/**
-    - docs/**
-    - .github/**
-    - .agents/**
-    - .planning/**
+  - cmd/**
+  - internal/**
+  - docs/**
+  - .github/**
+  - .agents/**
+  - .planning/**
   conditional_denied_paths:
-    - path: go.mod
-      unless: issue explicitly approves dependencies
-    - path: go.sum
-      unless: issue explicitly approves dependencies
+  - path: go.mod
+    unless: issue explicitly approves dependencies
+  - path: go.sum
+    unless: issue explicitly approves dependencies
   denied_tools:
-    - generic shell write to external systems
-    - unrestricted HTTP write
-    - unrestricted SQL write
+  - generic shell write to external systems
+  - unrestricted HTTP write
+  - unrestricted SQL write
 workflow:
-  - read_issue
-  - read_required_context
-  - load_required_skills
-  - load_gsd_programming_loop
-  - confirm_parent_pr_exists_for_stacked_issue
-  - create_or_update_gsd_plan
-  - write_red_test_for_behavior_change
-  - implement_minimal_slice
-  - run_targeted_tests
-  - refactor
-  - run_issue_verification
-  - commit_and_push_green_slice_after_green_gates
-  - prepare_pr_with_issue_link
-  - choose_automated_review_route
-  - wait_for_automatic_coderabbit_review_or_record_fallback
-  - confirm_coderabbit_review_was_not_only_skipped
-  - request_copilot_backup_when_coderabbit_is_blocked_and_enabled
-  - route_non_main_base_review_to_parent_pr_when_needed
-  - disposition_automated_review_findings
-  - ensure_fix_commits_are_coderabbit_reviewed
-  - report_worker_handoff_to_orchestrator_when_assigned
+- load_gsd_pi_adapter
+- load_required_go_and_design_skills
+- enforce_runtime_rlm_website_integration_when_relevant
+- read_issue
+- read_required_context
+- load_required_skills
+- load_gsd_programming_loop
+- confirm_parent_pr_exists_for_stacked_issue
+- create_or_update_gsd_plan
+- enforce_cli_help_docs_website_parity_when_cli_changes
+- write_red_test_for_behavior_change
+- implement_minimal_slice
+- run_targeted_tests
+- refactor
+- run_issue_verification
+- commit_and_push_green_slice_after_green_gates
+- prepare_pr_with_issue_link
+- choose_automated_review_route
+- wait_for_automatic_coderabbit_review_or_record_fallback
+- confirm_coderabbit_review_was_not_only_skipped
+- request_copilot_backup_when_coderabbit_is_blocked_and_enabled
+- route_non_main_base_review_to_parent_pr_when_needed
+- disposition_automated_review_findings
+- ensure_fix_commits_are_coderabbit_reviewed
+- report_worker_handoff_to_orchestrator_when_assigned
 guardrails:
   input:
-    - issue must include acceptance criteria and verification
+  - issue must include acceptance criteria and verification
   blocking_human_gates:
-    - auth scope changes
-    - secrets
-    - new dependencies
-    - destructive external actions
-    - quality gate reduction
+  - auth scope changes
+  - secrets
+  - new dependencies
+  - destructive external actions
+  - quality gate reduction
   output:
-    - no secrets in artifacts
-    - PR body must reference issue
-    - skipped CodeRabbit review status must not be counted as review completion
-    - CodeRabbit rate-limit comments must be recorded as blockers, not clean reviews
-    - Copilot backup review must not be treated as approval
-    - non-main-base sub-PRs require parent-PR review coverage when CodeRabbit skips the sub-PR
-    - every actionable automated review finding must be answered before resolve
+  - no secrets in artifacts
+  - PR body must reference issue
+  - skipped CodeRabbit review status must not be counted as review completion
+  - CodeRabbit rate-limit comments must be recorded as blockers, not clean reviews
+  - Copilot backup review must not be treated as approval
+  - non-main-base sub-PRs require parent-PR review coverage when CodeRabbit skips the sub-PR
+  - every actionable automated review finding must be answered before resolve
 verification:
   required:
-    - targeted tests for changed packages
-    - broader command from issue
-    - GSD plan, TDD ledger, and verification checklist updated
-    - green-slice commits pushed to the active issue/PR branch
-    - git diff --check
-    - CodeRabbit automatic review observed, Copilot backup requested under fallback policy, or blocker recorded
+  - targeted tests for changed packages
+  - broader command from issue
+  - GSD plan, TDD ledger, and verification checklist updated
+  - green-slice commits pushed to the active issue/PR branch
+  - git diff --check
+  - CodeRabbit automatic review observed, Copilot backup requested under fallback policy, or blocker recorded
 adapters:
   codex:
     note: Convert this YAML to a thread prompt plus local tool execution.
   github_actions:
     note: Use as metadata for PR guard checks, not as executable workflow.
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
+      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
+      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+      and keep runtime-backed services optional unless explicitly in scope.

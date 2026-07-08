@@ -1,0 +1,21 @@
+{
+  "phase": "01-inventory-reconciliation",
+  "status": "in_progress",
+  "issue": 122,
+  "workflow": "upstream-gsd-core-brownfield-rebootstrap",
+  "current_plan": "01-01-rebootstrap-planning",
+  "human_gates": [
+    "new_dependencies",
+    "credentialed_connector_checks",
+    "reverse_etl_execution",
+    "destructive_admin_actions",
+    "quality_gate_reductions",
+    "main_branch_merge"
+  ],
+  "scope_guard": {
+    "planning_only": true,
+    "forbidden_paths": ["cmd", "internal"],
+    "no_go_source_changes": true
+  },
+  "last_updated": "2026-07-08"
+}

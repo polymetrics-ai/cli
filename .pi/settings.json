@@ -1,0 +1,6 @@
+{
+  "extensions": ["extensions/gsd"],
+  "prompts": ["prompts"],
+  "skills": ["skills"],
+  "enableSkillCommands": true
+}

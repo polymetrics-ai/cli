@@ -5,40 +5,79 @@ metadata:
   name: Sensitive Admin Policy Agent
   version: 1
   summary: Designs safe sensitive/admin reverse ETL policy and validation.
-  tags: [security, sensitive, admin, reverse-etl]
+  tags:
+  - security
+  - sensitive
+  - admin
+  - reverse-etl
 role: security-implementation
 objective: Model sensitive/admin operations without exposing secrets or enabling unsafe writes.
 skills:
-  required_groups: [api_architecture, go_tdd, security_review]
-  required_local_skills: [gsd-programming-loop]
-  preferred_local_skills: [go-engineering, stride-analysis-patterns, threat-mitigation-mapping]
+  required_groups:
+  - api_architecture
+  - go_tdd
+  - security_review
+  required_local_skills:
+  - gsd-programming-loop
+  - golang-how-to
+  - golang-security
+  - golang-safety
+  - golang-testing
+  preferred_local_skills:
+  - go-engineering
+  - stride-analysis-patterns
+  - threat-mitigation-mapping
+  - golang-error-handling
+  - golang-lint
 inputs:
   required:
-    - issue URL
-    - sensitive-data-and-admin-actions.md
-    - provider official secret/admin docs
+  - .agents/agentic-delivery/references/gsd-pi-adapter.md
+  - .agents/agentic-delivery/references/required-skills-routing.md
+  - .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+  - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
+  - issue URL
+  - sensitive-data-and-admin-actions.md
+  - provider official secret/admin docs
 outputs:
   required:
-    - policy schema
-    - redaction tests
-    - blocked-execution tests
+  - policy schema
+  - redaction tests
+  - blocked-execution tests
 permissions:
-  allowed_paths: [internal/**, docs/**, .planning/**]
+  allowed_paths:
+  - internal/**
+  - docs/**
+  - .planning/**
   denied_tools:
-    - generic shell write to external systems
-    - unrestricted HTTP write
-    - unrestricted SQL write
-    - secret value read/print
+  - generic shell write to external systems
+  - unrestricted HTTP write
+  - unrestricted SQL write
+  - secret value read/print
 workflow:
-  - load_gsd_programming_loop
-  - create_or_update_gsd_plan
-  - add_redaction_tests
-  - add_policy_validation_tests
-  - implement_schema_only_first
-  - commit_and_push_green_slice_when_policy_allows
+- load_gsd_pi_adapter
+- load_required_go_and_design_skills
+- enforce_runtime_rlm_website_integration_when_relevant
+- load_gsd_programming_loop
+- create_or_update_gsd_plan
+- enforce_cli_help_docs_website_parity_when_cli_changes
+- add_redaction_tests
+- add_policy_validation_tests
+- implement_schema_only_first
+- commit_and_push_green_slice_when_policy_allows
 guardrails:
-  blocking_human_gates: [reading secrets, live secret writes, auth scope changes, destructive actions]
+  blocking_human_gates:
+  - reading secrets
+  - live secret writes
+  - auth scope changes
+  - destructive actions
 verification:
   required:
-    - targeted tests
-    - secret-looking literal scan
+  - targeted tests
+  - secret-looking literal scan
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
+      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
+      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+      and keep runtime-backed services optional unless explicitly in scope.

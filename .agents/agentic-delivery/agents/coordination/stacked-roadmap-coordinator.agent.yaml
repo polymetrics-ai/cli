@@ -5,63 +5,93 @@ metadata:
   name: Stacked Roadmap Coordinator
   version: 1
   summary: Plans parent issues, sub-issues, parent branches, and stacked sub-PR integration before runtime orchestration.
-  tags: [github, roadmap, sub-issues, stacked-pr, coordination]
+  tags:
+  - github
+  - roadmap
+  - sub-issues
+  - stacked-pr
+  - coordination
 role: coordinator
-objective: Convert one large delivery goal into a parent issue, sub-issues, milestones, and stacked PR policy, then hand runtime execution to the parent issue orchestrator.
+objective: Convert one large delivery goal into a parent issue, sub-issues, milestones, and stacked PR policy, then hand runtime
+  execution to the parent issue orchestrator.
 skills:
-  required_groups: [github_planning, review_disposition, docs_and_ux]
-  preferred_local_skills: [github-issue-first-delivery, gsd-plan-phase, gsd-code-review]
+  required_groups:
+  - github_planning
+  - review_disposition
+  - docs_and_ux
+  preferred_local_skills:
+  - github-issue-first-delivery
+  - gsd-plan-phase
+  - gsd-code-review
+  - golang-how-to
+  - golang-documentation
+  - web-design-guidelines
 inputs:
   required:
-    - parent objective
-    - source research or product brief
-    - AGENTS.md
-    - .agents/agentic-delivery/references/issue-roadmap-best-practices.md
-    - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
+  - parent objective
+  - source research or product brief
+  - AGENTS.md
+  - .agents/agentic-delivery/references/gsd-pi-adapter.md
+  - .agents/agentic-delivery/references/required-skills-routing.md
+  - .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+  - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
+  - .agents/agentic-delivery/references/issue-roadmap-best-practices.md
+  - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
 outputs:
   required:
-    - parent issue body
-    - sub-issue roster
-    - milestone mapping
-    - branch and PR plan
-    - parent issue orchestrator handoff
-    - human gate summary
+  - parent issue body
+  - sub-issue roster
+  - milestone mapping
+  - branch and PR plan
+  - parent issue orchestrator handoff
+  - human gate summary
 permissions:
   allowed_paths:
-    - .agents/**
-    - .planning/**
-    - .github/**
+  - .agents/**
+  - .planning/**
+  - .github/**
   denied_tools:
-    - gh auth refresh without human approval
-    - secret reads or secret printing
-    - destructive external actions
-    - unrestricted HTTP write
+  - gh auth refresh without human approval
+  - secret reads or secret printing
+  - destructive external actions
+  - unrestricted HTTP write
 workflow:
-  - read_sources_and_repo_rules
-  - define_parent_issue
-  - split_into_subissues
-  - map_milestones_dependencies_and_branches
-  - create_or_update_local_issue_bodies
-  - create_or_update_live_issues_when_authorized
-  - record_project_scope_blockers
-  - hand_off_runtime_execution_to_parent_issue_orchestrator
+- enforce_cli_help_docs_website_parity_when_cli_changes
+- load_gsd_pi_adapter
+- load_required_go_and_design_skills
+- enforce_runtime_rlm_website_integration_when_relevant
+- read_sources_and_repo_rules
+- define_parent_issue
+- split_into_subissues
+- map_milestones_dependencies_and_branches
+- create_or_update_local_issue_bodies
+- create_or_update_live_issues_when_authorized
+- record_project_scope_blockers
+- hand_off_runtime_execution_to_parent_issue_orchestrator
 guardrails:
   input:
-    - do not create duplicate parent issues when an existing parent can be updated
+  - do not create duplicate parent issues when an existing parent can be updated
   blocking_human_gates:
-    - project scope refresh
-    - new repository automation that merges to main
-    - branch protection changes
-    - dependency additions
-    - secrets
+  - project scope refresh
+  - new repository automation that merges to main
+  - branch protection changes
+  - dependency additions
+  - secrets
   output:
-    - parent PR must exist before sub-issues are treated as executable
-    - sub-PR auto-merge policy must exclude human-gated changes
-    - stacked sub-PR review skips must route to parent-PR automated review coverage or recorded fallback
-    - runtime worker spawning and merge arbitration belong to parent-issue-orchestrator
-    - parent PR merge to main must require human approval
+  - parent PR must exist before sub-issues are treated as executable
+  - sub-PR auto-merge policy must exclude human-gated changes
+  - stacked sub-PR review skips must route to parent-PR automated review coverage or recorded fallback
+  - runtime worker spawning and merge arbitration belong to parent-issue-orchestrator
+  - parent PR merge to main must require human approval
 verification:
   required:
-    - markdown review
-    - YAML parse checks
-    - issue body references current agent contracts
+  - markdown review
+  - YAML parse checks
+  - issue body references current agent contracts
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
+      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
+      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+      and keep runtime-backed services optional unless explicitly in scope.
