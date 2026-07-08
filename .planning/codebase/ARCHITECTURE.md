@@ -47,6 +47,8 @@ These are quick map inputs, not certification claims.
 
 **Key safety rule:** Use `pm help <topic>` before unfamiliar commands; prefer `--json` for machine-readable output.
 
+**Help/docs parity rule:** CLI-visible changes must keep runtime help, bare namespace command behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests aligned. Namespace command groups such as `pm connectors` should show contextual help/subcommand summary when invoked without an action.
+
 ### Application Layer
 
 **Purpose:** ETL, reverse ETL, query, flow, schedule, runtime-backed execution, state, warehouse, and approval flows.

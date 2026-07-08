@@ -16,6 +16,7 @@ inputs:
     - connector name
     - AGENTS.md
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - docs/migration/HANDOFF-CODEX.md
     - docs/migration/conventions.md
     - docs/architecture/connector-architecture-v2-design.md
@@ -44,6 +45,7 @@ permissions:
     - unrestricted SQL write
     - generic shell write to external systems
 workflow:
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - load_gsd_pi_adapter
   - read_connector_handoff_and_conventions
   - inspect_existing_connector_bundle

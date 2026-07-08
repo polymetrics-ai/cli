@@ -20,6 +20,7 @@ Deliver connector parity that is:
 3. **De-duplicated** — assigns each documented upstream operation exactly one primary classification.
 4. **Conformance-backed** — derives parity claims from generated inventory, fixture/replay gates, conformance checks, and certification status.
 5. **Agent-runnable** — uses official GSD Core commands through `.pi` and `scripts/gsd`, not runtime-specific copied command files.
+6. **Help/docs/website-complete** — every CLI-visible feature keeps runtime help, bare namespace command behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests in parity.
 
 ## Workstreams
 
@@ -36,6 +37,7 @@ Deliver connector parity that is:
 - `.pi/extensions/gsd/index.ts` exposes `/gsd` plus `/gsd-*` aliases.
 - `.pi/skills/gsd-core/SKILL.md` sets default planning/implementation behavior.
 - `.agents/**` instructions route agents/subagents through the Pi adapter or `scripts/gsd`.
+- `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` defines the CLI help/manual/website parity gate.
 - Manual-GSD fallback is only used when the adapter is unavailable and must be recorded.
 
 ### 1. Inventory and Surface Reconciliation
@@ -63,6 +65,7 @@ Deliver connector parity that is:
 - Every product-safe documented stream/report/event log/feed/table/queue message/CDC event/durable record collection is covered by a connector read surface or typed exclusion.
 - `pm connectors inspect`, catalog, read, and ETL surfaces agree on stream names, schemas, sync modes, cursor behavior, and limitations.
 - Incremental, pagination, cursor, schema, and projection behavior is verified through conformance fixtures or typed blockers.
+- CLI-visible read surfaces update runtime help, bare namespace summaries, `docs/cli/**`, website docs, generated help/manual artifacts, and tests.
 
 ### 3. Direct-Read, Binary, and Native Surface Parity
 
@@ -75,6 +78,7 @@ Deliver connector parity that is:
 - Direct-read operations are classified separately from durable ETL streams.
 - Binary operations have product-safe transfer surfaces or typed exclusions.
 - GraphQL, XML/SOAP, CSV/NDJSON/report export, file/object, SQL/CDC, queue/event/webhook/audit-log, and native protocol reads use an appropriate declarative, hook, native, direct-read, binary, or exclusion path.
+- CLI help/manual/website docs explain direct-read and binary surfaces without misclassifying them as durable ETL streams.
 - Admin/elevated/destructive direct-read or binary operations remain human-gated.
 
 ### 4. Reverse ETL and Mutation Parity
@@ -87,6 +91,7 @@ Deliver connector parity that is:
 
 - Product-safe mutations across REST, GraphQL, XML/SOAP, file/object, queue, database/native, and other protocol-specific operations map to reverse ETL actions or typed exclusions.
 - Plan, preview, approval, and execute semantics are preserved for every write path.
+- Runtime help, manual docs, and website docs consistently describe plan → preview → approval → execute for write paths.
 - Destructive/admin/elevated-scope writes are human-gated and never exposed as generic raw write tools.
 
 ### 5. Conformance and Certification Enforcement

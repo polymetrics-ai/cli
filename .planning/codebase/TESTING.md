@@ -23,6 +23,23 @@ POLYMETRICS_INTEGRATION=1 go test ./...
 scripts/runtime.sh down
 ```
 
+## CLI Help / Docs / Website Parity Gates
+
+Use for CLI command, flag, help, output, or connector-surface feature work:
+
+```bash
+pm help <topic>
+pm <namespace>
+pm <command> --help
+rg -n "<command>|<flag>|<topic>" docs/cli website
+```
+
+Expected behavior:
+
+- namespace commands such as `pm connectors` render contextual help/subcommand summary and exit 0 when no action is selected;
+- invalid actions still return usage errors;
+- `docs/cli/**`, `website/**`, generated help/manual artifacts, and golden tests are updated or explicitly marked not applicable.
+
 ## Planning-Only GSD/Pi Gates
 
 Use for issue #122 planning/agent refreshes:

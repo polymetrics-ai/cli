@@ -13,6 +13,16 @@
 - Use `scripts/gsd sources <command>` when recording provenance.
 - Record manual-GSD fallback only when the adapter is unavailable.
 
+## CLI Help / Docs / Website Parity Conventions
+
+For CLI command, subcommand, flag, output, connector surface, or help-topic changes:
+
+- Read `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` before implementation.
+- Namespace command groups with no action selected, such as `pm connectors`, should render contextual help/subcommand summary and exit successfully.
+- Invalid actions should still return usage errors.
+- Update runtime help, `docs/cli/**`, website docs under `website/**`, generated help/manual artifacts, and tests together.
+- Record parity evidence in the GSD plan, TDD ledger, verification summary, worker handoff, and PR body.
+
 ## Issue and PR Conventions
 
 - One primary issue per implementation PR.

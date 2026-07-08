@@ -31,6 +31,16 @@ Head SHA:
 - Green implementation evidence: <command/result>
 - Refactor evidence: <command/result or not applicable>
 
+## CLI Help / Docs / Website Parity
+
+- Applies: <yes | no>
+- Runtime help checked: <pm help topic / pm namespace / pm command --help / not applicable>
+- Bare namespace behavior checked: <command/result or not applicable>
+- `docs/cli/**` updated: <yes | no | not applicable>
+- `website/**` updated: <yes | no | not applicable>
+- Generated help/manual artifacts updated: <yes | no | not applicable>
+- Parity exemptions:
+
 ## Verification
 
 ```bash

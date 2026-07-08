@@ -35,6 +35,7 @@ skills, guardrails, YAML agent definitions, and handoff rules.
   fallback policy.
 - `references/yaml-agent-best-practices.md`: research-backed rules for YAML agent specs.
 - `references/gsd-pi-adapter.md`: repo-local official GSD Core command path for Pi and shell agents.
+- `references/cli-help-docs-website-parity.md`: required parity checklist for CLI help, manual docs, generated docs, and website docs.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
 - `schemas/orchestration-state.schema.yaml`: field contract for parent issue state ledgers.
 - `agents/<type>/*.agent.yaml`: reusable role definitions grouped by agent type.
@@ -67,6 +68,9 @@ the `.agents/` YAML and Markdown contracts instead of copying policy.
 - Implementation agents must plan before production edits, keep GSD/TDD/verification artifacts
   current, record the GSD command path used, and commit/push coherent green slices to the active
   issue/PR branch after local green gates.
+- CLI feature work must keep runtime help, bare namespace behavior, `docs/cli/**`, website docs,
+  generated help/manual artifacts, and tests in parity; follow
+  `references/cli-help-docs-website-parity.md`.
 - CodeRabbit review is a post-implementation gate. Every actionable review item must receive a
   reasoned disposition before it is resolved. Non-draft PRs targeting `main` should rely on
   automatic review. Follow-up fix commits should rely on automatic incremental review when active;

@@ -19,6 +19,7 @@ The issue must provide:
 - safety notes
 - source links
 - automated review route expectations
+- for CLI feature work, CLI help/manual/website parity expectations from `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`
 
 If any of these are missing and the task is not trivial, update the issue or create a planning PR
 before implementation.
@@ -36,7 +37,9 @@ before implementation.
    trace, or PR artifacts; do not skip TDD evidence.
 6. Create or update the GSD plan, TDD ledger, and verification checklist for the issue before
    production edits. The plan must name the slice boundaries, expected red/green/refactor evidence,
-   verification commands, and commit/push checkpoints.
+   verification commands, and commit/push checkpoints. For CLI command, flag, output, connector
+   surface, or help-topic changes, include the CLI help/manual/website parity checklist from
+   `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`.
 7. Start a branch that includes the issue number when practical.
    - If the issue is a sub-issue in a parent roadmap, branch from the parent branch.
    - If the issue is a parent issue, branch from `main` and keep the parent PR human-gated.
@@ -47,7 +50,10 @@ before implementation.
      noise.
 8. For behavior changes, write or update a failing test before production code.
 9. Implement the smallest slice that satisfies the issue.
-10. Run targeted tests, then broader verification from the issue.
+10. Run targeted tests, then broader verification from the issue. For CLI feature work, verify
+    runtime help (`pm help <topic>`, `pm <namespace>`, `pm <command> --help`), docs under
+    `docs/cli/**`, website docs under `website/**`, and generated help/manual artifacts as
+    applicable.
 11. Commit after each coherent green slice. Good checkpoints are plan-only, red-test, green
     implementation, refactor, and review-fix batches. Do not commit unrelated files.
 12. Push each committed checkpoint to the active issue/PR branch after the relevant green gates so
@@ -115,6 +121,8 @@ Every implementation PR must include:
 - red/green/refactor evidence when behavior changed
 - GSD programming-loop evidence, including the `/gsd...` or `scripts/gsd prompt ...` command used,
   or an explicit manual-GSD fallback note
+- CLI help/manual/website parity evidence for CLI feature work, including bare namespace behavior
+  such as `pm connectors` when relevant
 - commit/push checkpoint summary
 - verification commands and results
 - safety notes for auth, secrets, writes, or data movement

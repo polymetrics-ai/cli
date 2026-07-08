@@ -19,6 +19,7 @@ inputs:
     - parent issue and parent PR when the issue is part of a stacked roadmap
     - AGENTS.md
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - .agents/agentic-delivery/contracts/issue-agent-contract.md
     - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
     - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
@@ -55,6 +56,7 @@ workflow:
   - load_gsd_programming_loop
   - confirm_parent_pr_exists_for_stacked_issue
   - create_or_update_gsd_plan
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - write_red_test_for_behavior_change
   - implement_minimal_slice
   - run_targeted_tests

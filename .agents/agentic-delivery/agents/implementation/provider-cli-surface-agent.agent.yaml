@@ -15,6 +15,7 @@ skills:
 inputs:
   required:
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - provider CLI surface issue
     - connector name
     - cli_surface draft path from the issue
@@ -23,6 +24,7 @@ outputs:
   required:
     - validated cli_surface metadata
     - reference validation tests
+    - CLI help/manual/website parity note for affected provider command surfaces
     - no runtime command dispatch unless issue explicitly asks
 permissions:
   allowed_paths: [internal/connectors/defs/<connector>/**, internal/connectors/**, cmd/connectorgen/**, docs/**, .planning/**]
@@ -30,6 +32,7 @@ workflow:
   - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - validate_research_json
   - add_failing_reference_tests
   - implement_schema_or_metadata_slice
@@ -41,6 +44,8 @@ verification:
   required:
     - go test targeted packages
     - go run ./cmd/connectorgen validate internal/connectors/defs/<connector>
+    - pm help connectors or affected command help, or explicit runtime-dispatch not-applicable note
+    - docs/cli and website parity grep or explicit not-applicable note
     - secret-looking literal scan
 adapters:
   pi:

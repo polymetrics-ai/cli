@@ -6,6 +6,7 @@ default_rules:
   - Use test-first implementation for behavior changes.
   - If the repo-local GSD/Pi adapter is unavailable, record the manual GSD loop fallback and keep TDD evidence.
   - Plan before production edits and keep the GSD plan, TDD ledger, and verification checklist current.
+  - For CLI command, flag, output, connector surface, or help-topic changes, follow .agents/agentic-delivery/references/cli-help-docs-website-parity.md.
   - Commit and push coherent green slices to the active issue/PR branch after local green gates.
   - Keep PR scope to one primary issue.
   - Stop for human gates before auth, secrets, dependencies, destructive actions, deploys, or gate reductions.
@@ -101,7 +102,10 @@ skills:
   docs_and_ux:
     capabilities:
       - help rendering
+      - bare namespace command help behavior
+      - CLI manual parity under docs/cli
       - website/docs presentation
+      - generated help/manual artifact parity
       - accessibility and information architecture
     preferred_local_skills:
       - web-design-guidelines
@@ -130,6 +134,9 @@ task_types:
   cli-surface:
     required_skill_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
     primary_agent: provider-cli-surface-agent
+  cli-help-docs-website-parity:
+    required_skill_groups: [go_tdd, docs_and_ux]
+    primary_agent: help-renderer-agent
   help-renderer:
     required_skill_groups: [go_tdd, docs_and_ux]
     primary_agent: help-renderer-agent

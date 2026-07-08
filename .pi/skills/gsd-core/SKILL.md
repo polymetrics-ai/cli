@@ -44,6 +44,17 @@ For implementation or behavior-changing work:
 7. Commit coherent green checkpoints.
 8. Open/update the PR with GSD evidence and `Closes #N` or `Refs #N` as appropriate.
 
+## CLI help/docs/website parity
+
+For any CLI command, subcommand, flag, output, connector surface, or help-topic change, read `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` and update all applicable surfaces together:
+
+- runtime help (`pm help <topic>`, `pm <command> --help`);
+- bare namespace behavior (`pm connectors` and similar command groups should render contextual help/subcommand summary when no action is selected);
+- `docs/cli/**` manual pages;
+- website docs under `website/**`;
+- generated help/manual fixtures, indexes, previews, and tests;
+- PR verification evidence.
+
 ## Safety rules
 
 - Never request, print, store, or summarize secrets.

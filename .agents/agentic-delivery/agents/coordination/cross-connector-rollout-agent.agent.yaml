@@ -14,6 +14,7 @@ skills:
 inputs:
   required:
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - provider pilot summary
     - completed implementation issues
     - connector roster
@@ -30,6 +31,7 @@ permissions:
     - path: internal/connectors/defs/**
       unless: implementation phase assigns connector
 workflow:
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - load_gsd_pi_adapter
   - extract_provider_pilot_learnings
   - remove_provider_specific_assumptions

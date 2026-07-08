@@ -15,6 +15,7 @@ skills:
 inputs:
   required:
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - issue URL
     - full-coverage research docs
     - existing api_surface.json examples
@@ -32,6 +33,7 @@ workflow:
   - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - inventory_existing_schema
   - write_seeded_invalid_tests
   - implement_validator_slice

@@ -15,6 +15,7 @@ skills:
 inputs:
   required:
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - issue URL
     - operation-ledger schema
     - safety model docs
@@ -32,6 +33,7 @@ workflow:
   - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - add_rejection_tests_for_full_urls_and_mutations
   - add_httptest_read_success_case
   - implement_executor

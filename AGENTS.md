@@ -42,6 +42,19 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 - Manual-GSD fallback is allowed only when the adapter is unavailable; record the fallback in the
   planning trace, phase artifact, worker handoff, or PR body.
 
+## CLI Help, Manual, Docs, And Website Parity
+
+- For any CLI command, subcommand, flag, output, connector surface, or help-topic change, read
+  `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` before implementation.
+- A CLI feature is incomplete until runtime help, bare namespace command behavior, `docs/cli/**`,
+  website docs under `website/**`, generated help/manual artifacts, and tests are updated or
+  explicitly marked not applicable.
+- Namespace commands with no action selected, such as `pm connectors`, should render contextual
+  help/subcommand summary and exit successfully rather than failing with a confusing missing-action
+  error. Invalid actions should still return usage errors.
+- PRs for CLI changes must list help/manual/website parity verification, including `pm help <topic>`,
+  `pm <namespace>`, `pm <command> --help`, and docs/website grep or generator checks as applicable.
+
 ## Issue-First Delivery And Automated Review
 
 - For issue-to-PR work, read `.agents/agentic-delivery/contracts/issue-agent-contract.md` and keep

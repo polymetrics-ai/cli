@@ -342,7 +342,10 @@ function renderCommandPrompt(name, args) {
   console.log("- Do not run credentialed connector checks unless explicitly requested.");
   console.log("- Reverse ETL must remain plan → preview → approval → execute.");
   console.log("- Do not expose generic shell, generic HTTP write, or generic SQL write tools.");
+  console.log("- For CLI feature work, update runtime help, `docs/cli/**`, website docs, generated help/manual artifacts, and tests together; namespace commands such as `pm connectors` should show contextual help when invoked without an action.");
   console.log("- For planning-only work, do not edit `cmd/` or `internal/`.");
+  console.log("\n## CLI help/docs/website parity overlay\n");
+  console.log("When the requested GSD workflow affects CLI commands, flags, help text, docs, connector surfaces, or website documentation, read `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` and include its checklist in the plan, TDD ledger, verification summary, and PR body.");
   console.log("\n## Source files resolved by scripts/gsd\n");
   for (const file of sourceDocsFor(cmd.name)) console.log(`- \`${file}\``);
 }

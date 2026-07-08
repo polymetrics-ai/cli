@@ -22,6 +22,10 @@ All connector migration agents use the repo-local official GSD Core Pi adapter:
 - Read `.agents/agentic-delivery/references/gsd-pi-adapter.md` before GSD work.
 - Record manual-GSD fallback only when the adapter is unavailable.
 
+## CLI Help / Docs / Website Parity
+
+When connector migration work adds or changes a CLI-visible connector surface, command, flag, help topic, or generated docs metadata, follow `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`. Update runtime help, bare namespace behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests together, or record explicit not-applicable notes.
+
 ## Rules
 
 - Assign exactly one connector per implementation agent.

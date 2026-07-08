@@ -17,6 +17,7 @@ inputs:
     - source research or product brief
     - AGENTS.md
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - .agents/agentic-delivery/references/issue-roadmap-best-practices.md
     - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
 outputs:
@@ -38,6 +39,7 @@ permissions:
     - destructive external actions
     - unrestricted HTTP write
 workflow:
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - load_gsd_pi_adapter
   - read_sources_and_repo_rules
   - define_parent_issue

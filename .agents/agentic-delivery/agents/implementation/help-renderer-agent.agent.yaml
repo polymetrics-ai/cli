@@ -15,6 +15,7 @@ skills:
 inputs:
   required:
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - issue URL
     - cli_surface schema or draft
     - expected help-preview artifact
@@ -23,12 +24,17 @@ outputs:
     - renderer code
     - golden tests
     - updated help preview
+    - verified bare namespace help behavior for command groups
+    - updated docs/cli manual page or explicit not-applicable note
+    - updated website docs or explicit canonical-link/not-applicable note
+    - generated help/manual artifact update or explicit not-applicable note
 permissions:
   allowed_paths: [cmd/**, internal/**, docs/**, website/**, .planning/**]
 workflow:
   - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - add_golden_red_test
   - implement_renderer
   - check_mobile_or_docs_rendering_if_website_changes
@@ -38,6 +44,10 @@ guardrails:
 verification:
   required:
     - go test targeted renderer package
+    - pm help <topic> for affected help topic
+    - pm <namespace> for affected command group bare invocation
+    - pm <command> --help for affected command
+    - rg docs/cli and website for affected command or flag
     - website checks if website files change
 adapters:
   pi:

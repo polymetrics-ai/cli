@@ -14,6 +14,7 @@ skills:
 inputs:
   required:
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - github_pr_url
     - linked issue
     - PR base branch and repository default branch
@@ -52,6 +53,7 @@ permissions:
     - unrestricted HTTP write
     - repeated CodeRabbit or Copilot review requests in the same blocker window
 workflow:
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - load_gsd_pi_adapter
   - read_issue_and_pr_scope
   - read_automated_review_routing_loop

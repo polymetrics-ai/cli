@@ -18,6 +18,7 @@ inputs:
     - parent issue body with sub-issue roster
     - AGENTS.md
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - .agents/agentic-delivery/contracts/parent-orchestrator-contract.md
     - .agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md
     - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
@@ -46,6 +47,7 @@ permissions:
     - unrestricted SQL write
     - generic shell write tools exposed to users
 workflow:
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - load_gsd_pi_adapter
   - read_parent_issue_and_repo_rules
   - create_or_confirm_parent_branch_from_main

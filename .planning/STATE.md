@@ -1,7 +1,7 @@
 # Project State
 
 **Project:** Polymetrics CLI Connector Parity
-**Last activity:** 2026-07-08 — Non-phase planning artifacts refreshed through official GSD Core Pi adapter commands; agent/subagent guidance updated to use `.pi` GSD commands and `scripts/gsd`.
+**Last activity:** 2026-07-08 — GSD and agent guidance updated so CLI feature work requires runtime help, bare namespace help behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests to stay in parity.
 
 ## Current State
 
@@ -11,7 +11,8 @@
 - `.gsd/commands.json` exposes 69 official GSD commands generated from official `docs/COMMANDS.md`.
 - `.pi/extensions/gsd/index.ts` exposes `/gsd` plus generated `/gsd-*` aliases after project trust/reload.
 - `.pi/skills/gsd-core/SKILL.md` provides default GSD behavior for Pi.
-- `.agents/**` guidance is being updated so agents and subagents route GSD work through the Pi adapter or `scripts/gsd prompt`.
+- `.agents/**` guidance routes GSD work through the Pi adapter or `scripts/gsd prompt`.
+- `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` defines the required parity gate for CLI-visible changes.
 - Connector parity includes REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queues/events/webhooks, native protocols, direct-read, and writes.
 - Phase 1 inventory reconciliation is a hard gate before connector fanout.
 - `.planning/phases/**` was intentionally not regenerated in this refresh per user request.
@@ -40,6 +41,7 @@ These are quick-map inputs only; authoritative counts require Phase 1 inventory 
 - Prefer `scripts/gsd prompt <command>` for deterministic traces and non-interactive automation.
 - Keep manual-GSD fallback only for adapter-unavailable cases and record it explicitly.
 - Keep `cmd/`, `internal/`, and `.planning/phases/**` unchanged for the current non-phase refresh.
+- For future CLI feature work, require parity across `pm help <topic>`, bare namespace invocations such as `pm connectors`, `pm <command> --help`, `docs/cli/**`, `website/**`, generated help/manual artifacts, and tests.
 
 ## Blockers / Human Gates
 
@@ -51,10 +53,9 @@ These are quick-map inputs only; authoritative counts require Phase 1 inventory 
 
 ## Next Expected Work
 
-1. Finish agent/subagent guidance updates.
-2. Run GSD/Pi, YAML/JSON, diff, and scope verification.
-3. Commit and push the non-phase refresh to PR #123.
-4. Let CI and CodeRabbit automatic review run; do not post redundant manual review commands unless documented fallback conditions apply.
+1. Run GSD/Pi, YAML/JSON, diff, and scope verification.
+2. Commit and push the CLI help/docs/website parity guidance to PR #123.
+3. Let CI and CodeRabbit automatic review run; do not post redundant manual review commands unless documented fallback conditions apply.
 
 ---
 *State refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter.*

@@ -73,6 +73,18 @@ yaml ok
 non-phase gsd/pi refresh verification ok; cmd/internal and phases diffs empty
 ```
 
+## CLI Help / Docs / Website Parity Guidance Verification
+
+Commands:
+
+```bash
+scripts/gsd prompt docs-update docs/cli website/content/docs .agents .planning --cli-help-parity > .planning/traces/gsd-cli-docs-help-parity-prompt.md
+rg -n "CLI help/docs/website parity|cli-help-docs-website-parity|pm connectors|namespace" .planning/traces/gsd-cli-docs-help-parity-prompt.md
+rg -n "cli-help-docs-website-parity|pm connectors|bare namespace|docs/cli|website" AGENTS.md .agents .pi scripts/gsd .planning
+```
+
+Result: PASS. GSD prompts, agent references, Pi skill/prompt, AGENTS.md, and non-phase planning artifacts now require CLI-visible feature work to keep runtime help, bare namespace command behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests in parity.
+
 ## Results
 
 - `scripts/gsd doctor`: PASS. Official docs, command registry, lock, Pi settings, Pi extension, Pi skill, Pi prompt, and commands were detected.

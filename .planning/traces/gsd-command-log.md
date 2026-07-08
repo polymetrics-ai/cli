@@ -51,6 +51,14 @@ scripts/gsd prompt health --context > .planning/traces/gsd-health-refresh-prompt
 
 The non-phase refresh used official commands available in `.gsd/commands.json`; `/gsd-roadmap` is not currently an official command, so roadmap updates were produced through the official onboarding/new-project/milestone-summary/docs-update prompt path.
 
+CLI help/docs/website parity guidance refresh:
+
+```bash
+scripts/gsd prompt docs-update docs/cli website/content/docs .agents .planning --cli-help-parity > .planning/traces/gsd-cli-docs-help-parity-prompt.md
+```
+
+This added durable agent/GSD guidance that CLI-visible work must keep runtime help, bare namespace behavior such as `pm connectors`, `docs/cli/**`, website docs, generated help/manual artifacts, and tests in parity.
+
 Initial red/preflight evidence:
 
 ```bash

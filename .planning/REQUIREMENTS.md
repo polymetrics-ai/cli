@@ -16,6 +16,13 @@
 - [ ] **GSD-06**: Pi resources expose repo-local GSD commands through `/gsd`, generated `/gsd-*` aliases, prompt fallback, and GSD Core skill defaults.
 - [ ] **GSD-07**: Agents and subagents route GSD work through `.pi` commands or `scripts/gsd prompt`, with manual fallback recorded only when the adapter is unavailable.
 
+### CLI Help, Manual, Docs, and Website Parity
+
+- [ ] **CLI-DOC-01**: Every CLI command, subcommand, flag, output, connector surface, or help-topic change updates runtime help, `docs/cli/**`, website docs under `website/**`, generated help/manual artifacts, and tests together or records explicit not-applicable notes.
+- [ ] **CLI-DOC-02**: Namespace command groups with no action selected, such as `pm connectors`, render contextual help/subcommand summaries and exit successfully, while invalid actions still return usage errors.
+- [ ] **CLI-DOC-03**: Implementation PRs for CLI changes include parity evidence for `pm help <topic>`, `pm <namespace>`, `pm <command> --help`, docs/website search or generator checks, and any golden/help fixture updates.
+- [ ] **CLI-DOC-04**: Agents and subagents follow `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` for CLI-visible changes.
+
 ### Inventory and Canonical Surface Baseline
 
 - [ ] **INV-01**: The first execution phase reconciles connector inventory across `internal/connectors/defs/`, hooks, natives, docs, `api_surface.json`, conformance, certification, CLI metadata, direct-read, binary, and blocker/quarantine state before connector fanout.
@@ -74,6 +81,10 @@
 | GSD-05 | 0 | In progress |
 | GSD-06 | 0 | In progress |
 | GSD-07 | 0 | In progress |
+| CLI-DOC-01 | 0/2/3/4 | Pending |
+| CLI-DOC-02 | 0/2/3/4 | Pending |
+| CLI-DOC-03 | 0/2/3/4 | Pending |
+| CLI-DOC-04 | 0 | Pending |
 | INV-01 | 1 | Pending |
 | INV-02 | 1 | Pending |
 | INV-03 | 1 | Pending |

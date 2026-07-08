@@ -11,6 +11,9 @@ Follow the generic issue-to-PR contract:
 Use the repo-local official GSD Core Pi adapter:
 `.agents/agentic-delivery/references/gsd-pi-adapter.md`
 
+For CLI command, flag, output, connector surface, or help-topic changes, use:
+`.agents/agentic-delivery/references/cli-help-docs-website-parity.md`
+
 Follow the post-implementation CodeRabbit review loop:
 `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
 
@@ -64,6 +67,8 @@ Before merge:
   the manual-GSD fallback when the repo-local adapter is unavailable
 - confirm the GSD plan, TDD ledger, and verification checklist were created or updated before
   production edits
+- for CLI feature work, confirm runtime help, bare namespace behavior, `docs/cli/**`, website docs,
+  generated help/manual artifacts, and tests are updated or explicitly marked not applicable
 - commit and push coherent green slices to the active issue/PR branch after local green gates;
   never push to `main`
 - observe automatic CodeRabbit review after implementation when the PR is non-draft and targets

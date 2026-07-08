@@ -15,6 +15,7 @@
 
 - Using stale legacy `.planning/` counts for fanout.
 - Regenerating `.planning/phases/**` when the user requested non-phase refresh only.
+- Shipping CLI-visible work without updating runtime help, bare namespace command behavior such as `pm connectors`, `docs/cli/**`, website docs, generated help/manual artifacts, and tests.
 - Claiming upstream Pi support when the official GSD docs do not list Pi as a runtime.
 - Letting agents use stale Claude-local slash command assumptions instead of the repo-local Pi adapter.
 

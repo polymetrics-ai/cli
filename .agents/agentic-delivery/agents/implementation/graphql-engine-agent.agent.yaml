@@ -15,6 +15,7 @@ skills:
 inputs:
   required:
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - issue URL
     - graphql-engine-design.md
     - existing monday and stigg hooks
@@ -29,6 +30,7 @@ workflow:
   - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - add_fake_graphql_server_tests
   - implement_fixed_document_body_builder
   - keep_arbitrary_query_text_blocked

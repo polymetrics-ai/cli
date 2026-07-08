@@ -53,6 +53,7 @@ These counts are planning inputs only. Phase 1 remains the hard gate for regener
 - [ ] Ensure direct-read and binary-transfer endpoints are supported where product-safe and human-gated where risky.
 - [ ] Ensure conformance and certification gates enforce parity before rollout claims.
 - [ ] Ensure agents and subagents use repo-local GSD commands via `.pi` or `scripts/gsd`, with manual fallback recorded only when the adapter is unavailable.
+- [ ] Ensure CLI feature work updates runtime help, bare namespace help behavior, `docs/cli/**`, website docs, generated help/manual artifacts, and tests together.
 
 ### Out of Scope
 
@@ -78,6 +79,7 @@ The official GSD docs do not currently list Pi as an upstream runtime. This repo
 - **Surface coverage**: Connector parity covers REST, GraphQL, XML/SOAP, report exports, binary transfers, file/object storage, SQL/CDC, queues/events/webhooks, native protocols, direct-read, and writes.
 - **De-duplication**: One upstream operation maps to exactly one primary classification; aliases and duplicate docs references are cross-links, not duplicated work.
 - **Agent runtime**: Agents and subagents should prefer `/gsd <command>` or `scripts/gsd prompt <command>` from the repo-local Pi adapter.
+- **CLI docs parity**: CLI-visible changes must follow `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` so runtime help, manual docs, website docs, and generated artifacts stay aligned.
 - **Review**: Issue-to-PR delivery follows `.agents/agentic-delivery/contracts/issue-agent-contract.md`; PR targets `main` and uses `Closes #122`.
 
 ## Key Decisions
@@ -87,6 +89,7 @@ The official GSD docs do not currently list Pi as an upstream runtime. This repo
 | Rebootstrap active `.planning/` from official GSD Core workflow shape | The old tree was custom/legacy and should not pollute future onboarding | In progress |
 | Pin official `open-gsd/gsd-core@next` docs for Pi adapter | Pi is not listed as an upstream runtime, so the repo needs explicit provenance for its adapter | Good |
 | Expose GSD through `.pi` and `scripts/gsd` | Agents need runtime-neutral command access and Pi slash-command aliases | Good |
+| Require CLI help/manual/website parity | CLI features should be discoverable via `pm help`, bare namespace commands like `pm connectors`, `docs/cli/**`, website docs, and generated help artifacts | Good |
 | Archive old `.planning/` outside active planning context | Preserves auditability without tracking stale artifacts | Good |
 | Inventory reconciliation precedes connector fanout | Current bundle/API/certification/surface counts must be trusted before parallel work | Pending |
 | Treat connector parity as multi-surface, not REST-only | GraphQL, XML/SOAP, CSV/NDJSON, binary, file, database, CDC, queue, webhook, and direct-read surfaces exist in the repo | Pending |

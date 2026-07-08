@@ -15,6 +15,7 @@ skills:
 inputs:
   required:
     - .agents/agentic-delivery/references/gsd-pi-adapter.md
+    - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
     - issue URL
     - sensitive-data-and-admin-actions.md
     - provider official secret/admin docs
@@ -34,6 +35,7 @@ workflow:
   - load_gsd_pi_adapter
   - load_gsd_programming_loop
   - create_or_update_gsd_plan
+  - enforce_cli_help_docs_website_parity_when_cli_changes
   - add_redaction_tests
   - add_policy_validation_tests
   - implement_schema_only_first
