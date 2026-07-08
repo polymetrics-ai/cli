@@ -359,7 +359,19 @@ func (rc *runContext) streamName() string {
 	if rc.opts.Stream != "" {
 		return rc.opts.Stream
 	}
-	return "customers"
+	return defaultStreamName(rc.opts.Connector)
+}
+
+func defaultStreamName(connector string) string {
+	switch connector {
+	case "github":
+		// GitHub's full sweep needs a real bootstrap stream before the catalog
+		// has been refreshed. issues has stable id/updated_at fields and is
+		// already one of the high-value parity streams.
+		return "issues"
+	default:
+		return "customers"
+	}
 }
 
 func (rc *runContext) streamSpec() streamSpec {
