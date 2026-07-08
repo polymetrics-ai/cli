@@ -20,6 +20,14 @@ type Options struct {
 	// never failed" applies analogously here: absence of a safe write path
 	// must never fail the report).
 	Write bool
+
+	// Full enables the comprehensive sweep: every stream (not just the
+	// first), every write pairing (not just the first), binary downloads,
+	// and direct reads. The existing single-pairing write stages still run
+	// first; Full adds a stageWriteSweepAllPairings stage that iterates the
+	// remaining pairings. See
+	// docs/plans/connector-complete-testing-and-mail-setup-plan.md.
+	Full bool
 }
 
 // Runner orchestrates certification stages for exactly one connector,
