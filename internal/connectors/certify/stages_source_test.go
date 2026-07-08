@@ -41,6 +41,12 @@ func TestFullSweepSourceStagesAgainstSample(t *testing.T) {
 	if got := countStages(rep, "etl_full_refresh_append"); got != 2 {
 		t.Fatalf("etl_full_refresh_append stages = %d, want 2 for sample's catalog streams", got)
 	}
+	if stage := mustStage(t, rep, "direct_read_sweep"); stage.Passed || !containsAny(stage.Error, "skipped:") {
+		t.Fatalf("direct_read_sweep = %+v, want documented skip for sample", stage)
+	}
+	if rep.Capabilities.DirectRead == nil || rep.Capabilities.DirectRead.Result != "skipped" {
+		t.Fatalf("Capabilities.DirectRead = %+v, want skipped", rep.Capabilities.DirectRead)
+	}
 }
 
 func TestSourceStagesAgainstSample(t *testing.T) {
@@ -239,6 +245,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		"cleanup_verify":           true,
 		"approval_idempotency":     true,
 		"write_sweep_all_pairings": true,
+		"direct_read_sweep":        true,
 	}
 	for _, stage := range rep.Stages {
 		if metaStagesWithoutDirectCLICall[stage.Name] {

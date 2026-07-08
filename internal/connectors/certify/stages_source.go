@@ -246,6 +246,7 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 		stageQueryContract,
 	}
 	tailStages := []stageFunc{
+		stageDirectReadSweep,
 		stageWritePlanPreview,
 		stageWriteCreate,
 		stageWriteVerify,

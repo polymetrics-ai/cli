@@ -71,6 +71,7 @@ type Capabilities struct {
 	Resume          CapabilityResult             `json:"resume"`
 	JSONContract    CapabilityResult             `json:"json_contract"`
 	SecretRedaction CapabilityResult             `json:"secret_redaction"`
+	DirectRead      *CapabilityResult            `json:"direct_read,omitempty"`
 	Flow            *CapabilityResult            `json:"flow,omitempty"`
 	Schedule        *ScheduleResult              `json:"schedule,omitempty"`
 	WriteActions    map[string]WriteActionResult `json:"write_actions,omitempty"`
