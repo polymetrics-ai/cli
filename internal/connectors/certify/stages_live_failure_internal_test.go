@@ -15,11 +15,17 @@ func TestEffectiveCredentialConfigAddsGitHubBaseURL(t *testing.T) {
 	}
 }
 
-func TestLiveStreamUnavailableClassifiesGitHub403(t *testing.T) {
+func TestLiveStreamUnavailableClassifiesGitHubUnavailableErrors(t *testing.T) {
 	rc := &runContext{opts: Options{Connector: "github"}}
-	res := CLIResult{Kind: "Error", Stdout: `{"error":{"message":"github stream=code_scanning_alerts page=0: http 403 for https://api.github.com/repos/o/r/code-scanning/alerts: [redacted]"},"kind":"Error"}`}
-	if !liveStreamUnavailable(rc, res) {
-		t.Fatal("liveStreamUnavailable = false, want true")
+	cases := []CLIResult{
+		{Kind: "Error", Stdout: `{"error":{"message":"github stream=code_scanning_alerts page=0: http 403 for https://api.github.com/repos/o/r/code-scanning/alerts: [redacted]"},"kind":"Error"}`},
+		{Kind: "Error", Stdout: `{"error":{"message":"graphql errors: Your token has not been granted the required scopes to execute this query"},"kind":"Error"}`},
+		{Kind: "Error", Stdout: `{"error":{"message":"resolve graphql variable \"number\": interpolate: unresolved key \"number\" in query"},"kind":"Error"}`},
+	}
+	for _, res := range cases {
+		if !liveStreamUnavailable(rc, res) {
+			t.Fatalf("liveStreamUnavailable(%q) = false, want true", res.Stdout)
+		}
 	}
 }
 
