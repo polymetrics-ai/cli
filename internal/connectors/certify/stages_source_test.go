@@ -41,6 +41,12 @@ func TestFullSweepSourceStagesAgainstSample(t *testing.T) {
 	if got := countStages(rep, "etl_full_refresh_append"); got != 2 {
 		t.Fatalf("etl_full_refresh_append stages = %d, want 2 for sample's catalog streams", got)
 	}
+	if got := countStages(rep, "flow_roundtrip"); got != 2 {
+		t.Fatalf("flow_roundtrip stages = %d, want 2 for sample's catalog streams", got)
+	}
+	if got := countStages(rep, "schedule_roundtrip"); got != 2 {
+		t.Fatalf("schedule_roundtrip stages = %d, want 2 for sample's catalog streams", got)
+	}
 	if stage := mustStage(t, rep, "direct_read_sweep"); stage.Passed || !containsAny(stage.Error, "skipped:") {
 		t.Fatalf("direct_read_sweep = %+v, want documented skip for sample", stage)
 	}
