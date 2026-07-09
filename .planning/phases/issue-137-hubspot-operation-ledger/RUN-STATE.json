@@ -29,7 +29,7 @@
     "golang-graphql",
     "golang-lint"
   ],
-  "status": "verified",
+  "status": "pr_open_checks_pending",
   "verificationPassed": true,
   "verificationBlocker": "none",
   "orchestrationDecisions": [
@@ -52,6 +52,11 @@
       "cycle": "broad-gates",
       "decision": "local_critical_path",
       "reason": "kept conformance operation-model vocabulary in lockstep after broad test failure; final gofmt/vet/test/build/make verify/connectorgen validate passed"
+    },
+    {
+      "cycle": "sub_pr",
+      "decision": "opened_stacked_pr",
+      "reason": "opened https://github.com/polymetrics-ai/cli/pull/239 against #134 branch because #137 depends on #134 scaffold"
     }
   ],
   "human_gates": [
