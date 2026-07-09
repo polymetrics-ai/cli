@@ -95,4 +95,4 @@ Website docs remain deferred to #206 because #205 exposes no provider-specific r
 
 ## Current result
 
-Targeted #205 validation and full local `make verify` passed on the stacked branch. Stacked PR #235 is open/ready against `feat/204-crisp-cli-parity`; CI checks passed before the review-fix commit. CodeRabbit reviewed the full range through `767056d` and reported two actionable findings; both were fixed locally, and `make verify` passed again. A follow-up push/incremental review remains pending. Full parent verification will need to be re-run after later implementation slices.
+Targeted #205 validation and full local `make verify` passed on the stacked branch. Stacked PR #235 is open/ready against `feat/204-crisp-cli-parity`; CI checks passed before the review-fix commit. CodeRabbit reviewed the full range through `767056d` and reported two actionable findings; both were fixed in `49319c88`, and `make verify` passed again. Incremental CodeRabbit review for the fix commit hit a review-limit window (next review available in 39 minutes), so do not retry immediately. Full parent verification will need to be re-run after later implementation slices.

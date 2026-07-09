@@ -3,13 +3,13 @@
   "issue": 205,
   "parentIssue": 204,
   "connector": "crisp",
-  "status": "review_fixes_local_green",
+  "status": "review_fix_pushed_rate_limited",
   "gsd": {
     "planCommand": "scripts/gsd prompt plan-phase 204 --skip-research",
     "programmingLoopStatus": "manual_fallback_command_unavailable"
   },
   "verificationPassed": true,
-  "verificationNotes": "Targeted #205 validation passed (single-connector temp-root validate, all-defs validate, conformance smoke, connectors inspect smoke, docs validate). Full local make verify passed on the stacked branch and after CodeRabbit fixes. Stacked PR: https://github.com/polymetrics-ai/cli/pull/235.",
+  "verificationNotes": "Targeted #205 validation passed (single-connector temp-root validate, all-defs validate, conformance smoke, connectors inspect smoke, docs validate). Full local make verify passed on the stacked branch and after CodeRabbit fixes. Stacked PR: https://github.com/polymetrics-ai/cli/pull/235. Incremental CodeRabbit review for fix commit is rate-limited.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -43,8 +43,8 @@
     },
     {
       "cycle": "review-fixes",
-      "decision": "local_green_pending_push",
-      "reason": "Fixed CodeRabbit findings for numeric pagination hints and incomplete 401 credential hint; make verify passed."
+      "decision": "pushed_green_rate_limited",
+      "reason": "Fixed CodeRabbit findings for numeric pagination hints and incomplete 401 credential hint; make verify passed and fix commit was pushed. Incremental manual CodeRabbit review hit a review limit with next review available in 39 minutes."
     }
   ],
   "updatedAt": "2026-07-10T00:00:00Z"
