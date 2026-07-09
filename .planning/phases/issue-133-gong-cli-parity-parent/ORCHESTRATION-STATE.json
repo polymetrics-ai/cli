@@ -29,12 +29,10 @@
     },
     {
       "number": 141,
-      "status": "planned",
-      "dependencies": [
-        144
-      ],
+      "status": "worker_ready",
+      "dependencies": [],
       "write_scope": "internal/connectors/defs/gong/cli_surface.json; validation/tests",
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 142,
@@ -47,36 +45,29 @@
     },
     {
       "number": 143,
-      "status": "planned",
-      "dependencies": [
-        144
-      ],
+      "status": "worker_ready",
+      "dependencies": [],
       "write_scope": "Gong stream definitions, schemas, fixtures, stream runner tests",
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 145,
-      "status": "planned",
-      "dependencies": [
-        144
-      ],
+      "status": "worker_ready",
+      "dependencies": [],
       "write_scope": "Gong direct-read metadata/executor/tests",
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 146,
-      "status": "planned",
-      "dependencies": [
-        144
-      ],
+      "status": "worker_ready",
+      "dependencies": [],
       "write_scope": "bounded body/binary policy and fixtures",
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 147,
       "status": "planned",
       "dependencies": [
-        144,
         146
       ],
       "write_scope": "Gong writes.json, sensitive/admin policy, preview/redaction tests",
@@ -99,6 +90,17 @@
         144
       ],
       "reason": "Executed #144 inline because no subagent tool is available; targeted local gates passed, PR/review coverage pending."
+    },
+    {
+      "timestamp": "2026-07-09T20:26:15Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [
+        141,
+        143,
+        145,
+        146
+      ],
+      "reason": "After #144 local slice, several lanes are worker-ready, but this Pi API session still has no subagent tool; remaining Gong defs write scopes also collide, so continue sequentially in a future local critical path or isolated worker session."
     }
   ],
   "subissues": [
@@ -133,5 +135,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T19:33:27Z"
+  "updated_at": "2026-07-09T20:26:15Z"
 }

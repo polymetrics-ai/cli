@@ -18,16 +18,31 @@
       "cycle": "plan",
       "decision": "not_spawned_runtime_capability_missing",
       "reason": "This Pi API session does not expose the subagent tool; mutating workers cannot be spawned into isolated worktrees from this session. Proceeding with issue #144 as local_critical_path.",
-      "issue_numbers": [144]
+      "issue_numbers": [
+        144
+      ]
     },
     {
       "cycle": "execute-issue-144",
       "decision": "local_critical_path",
       "reason": "Gong operation ledger red/green slice completed inline; remaining subissues still dependency-blocked on parent coordination and later lanes.",
-      "issue_numbers": [144]
+      "issue_numbers": [
+        144
+      ]
+    },
+    {
+      "cycle": "post-issue-144-ready-queue",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "Remaining ready lanes #141/#143/#145/#146 require either subagent isolation or sequential local critical path; current Pi API session has no subagent tool.",
+      "issue_numbers": [
+        141,
+        143,
+        145,
+        146
+      ]
     }
   ],
   "parentPR": "https://github.com/polymetrics-ai/cli/pull/232",
   "activeSubissue": 144,
-  "updated_at": "2026-07-09T19:33:27Z"
+  "updated_at": "2026-07-09T20:26:15Z"
 }
