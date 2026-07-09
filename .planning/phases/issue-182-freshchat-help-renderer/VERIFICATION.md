@@ -42,5 +42,8 @@ Results:
 - `go build ./cmd/pm`: pass.
 - `make verify`: pass, including docs validation, smoke, lint, and connectorgen validation.
 - `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
+- `cd website && pnpm run gen:website-data`: pass; generated Freshchat website data committed and `git diff --exit-code -- website/data/connectors.generated.json website/lib/connectors.catalog.data.generated.json website/lib/docs.generated.ts` passed.
+
+CI note: initial PR #245 website check failed because generated website data was stale after adding `website/content/docs/freshchat-cli-surface.mdx`; fixed by committing regenerated website data.
 
 No credentialed Freshchat checks, no secret inspection, and no reverse ETL execution are in scope.

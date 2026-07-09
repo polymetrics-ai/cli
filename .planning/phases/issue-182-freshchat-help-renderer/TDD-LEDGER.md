@@ -82,3 +82,12 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
 Result: pass. `make verify` included docs validation, smoke, lint, and connectorgen validation; final standalone connectorgen validation reported `547 connector(s) checked, 0 findings`.
+
+Generated website data repair:
+
+```bash
+cd website && pnpm run gen:website-data
+git diff --exit-code -- website/data/connectors.generated.json website/lib/connectors.catalog.data.generated.json website/lib/docs.generated.ts
+```
+
+Result: pass after committing regenerated Freshchat docs/catalog data for PR #245.

@@ -32,7 +32,21 @@
       "decision": "full_local_gates_passed",
       "reason": "Ran gofmt, go vet ./..., go test ./..., go build ./cmd/pm, make verify, and connectorgen validation successfully.",
       "issue_numbers": [182]
+    },
+    {
+      "timestamp": "2026-07-09T22:37:00Z",
+      "cycle": "stacked-pr",
+      "decision": "opened_pr_245",
+      "reason": "Opened stacked PR #245 against feat/180-freshchat-cli-parity with Refs #182 and Refs #180. CodeRabbit skipped because reviews are disabled for the non-default base branch; parent review coverage is still required.",
+      "issue_numbers": [182, 180]
+    },
+    {
+      "timestamp": "2026-07-09T22:55:00Z",
+      "cycle": "ci-repair",
+      "decision": "generated_website_data_committed",
+      "reason": "PR #245 website check failed due stale generated website data after adding the Freshchat docs page; regenerated and committed website data.",
+      "issue_numbers": [182]
     }
   ],
-  "updated_at": "2026-07-09T22:31:00Z"
+  "updated_at": "2026-07-09T22:55:00Z"
 }
