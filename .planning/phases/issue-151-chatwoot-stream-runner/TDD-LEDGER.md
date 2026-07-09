@@ -2,9 +2,9 @@
 
 | Cycle | Red test / evidence | Expected failure | Green change | Status |
 |---|---|---|---|---|
-| 1 | `go test ./internal/connectors/engine -run TestReadFanOutRequestPaginationOverrideAllowsDifferentChildPagination -count=1` | Fan-out parent id-list request reuses child cursor pagination and cannot model Chatwoot messages' parent conversation page sweep independently. | Add optional `fan_out.ids_from.request.pagination` and use it for id-listing requests. | planned |
-| 2 | `go test ./internal/connectors/conformance -run TestChatwootStreamRunnerSweep -count=1` | Chatwoot message stream still models message pagination with legacy `page` query and cursor metadata does not prove request-param resume. | Update Chatwoot messages stream to official `after` cursor pagination, message cursor field to `id`, and fixtures to include empty cursor-stop pages. | planned |
-| 3 | `go run ./cmd/connectorgen validate internal/connectors/defs` | New DSL field must be accepted by `streams.schema.json`; Chatwoot fixtures/schema must remain valid. | Update schema and bundle structs; validate all connector defs. | planned |
+| 1 | `go test ./internal/connectors/engine -run TestReadFanOutRequestPaginationOverrideAllowsDifferentChildPagination -count=1` | Captured red build failure: `unknown field Pagination in struct literal of type FanOutIDsRequest`. | Added optional `fan_out.ids_from.request.pagination` to bundle schema/structs and used it for id-listing requests. | passed |
+| 2 | `go test ./internal/connectors/conformance -run TestChatwootStreamRunnerSweep -count=1` | Locked the Chatwoot stream sweep after cycle 1 made the DSL expressible; this would have failed against legacy `messages` page pagination/cursor metadata. | Updated Chatwoot messages stream to official `after` cursor pagination, message cursor field to `id`, and fixtures to include empty cursor-stop pages. | passed |
+| 3 | `go run ./cmd/connectorgen validate internal/connectors/defs` | New DSL field had to be accepted by `streams.schema.json`; Chatwoot fixtures/schema had to remain valid. | Updated schema and bundle structs; validated all connector defs. | passed |
 
 ## Notes
 

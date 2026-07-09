@@ -243,11 +243,12 @@ type FanOutSpec struct {
 
 // FanOutIDsFrom is EXACTLY ONE of ConfigKey (a config value holding a
 // comma-separated id list, e.g. appfollow's app_collection_ids) or Request (a
-// preliminary GET, fully paginated to exhaustion using the stream's OWN base
-// pagination spec, whose extracted records yield one id per record at
-// IDField) — declaring both, or neither, is a read-time error (newFanOutIDs),
-// mirroring cursor pagination's token_path/last_record_field mutual
-// exclusivity (bundle.go's own PaginationSpec doc comment).
+// preliminary GET, fully paginated to exhaustion using either its own optional
+// pagination block or the stream's effective pagination spec, whose extracted
+// records yield one id per record at IDField) — declaring both, or neither, is
+// a read-time error (newFanOutIDs), mirroring cursor pagination's
+// token_path/last_record_field mutual exclusivity (bundle.go's own
+// PaginationSpec doc comment).
 type FanOutIDsFrom struct {
 	ConfigKey string            `json:"config_key,omitempty"`
 	Request   *FanOutIDsRequest `json:"request,omitempty"`
@@ -258,13 +259,14 @@ type FanOutIDsFrom struct {
 // urlencoded-by-default path segments); RecordsPath is the dotted path
 // (RecordsSpec.Path semantics) where the id records live in each page's
 // body; IDField names the field on each extracted record holding the id
-// value. Paginated with the stream's own effective pagination spec (base or
-// stream-level override) — a fan-out id-listing request is not itself
-// declared with its own pagination block; it reuses the child stream's.
+// value. Paginated with its own Pagination block when declared, otherwise
+// with the stream's effective pagination spec (base or stream-level override)
+// for backwards compatibility with existing fan-out bundles.
 type FanOutIDsRequest struct {
-	Path        string `json:"path"`
-	RecordsPath string `json:"records_path"`
-	IDField     string `json:"id_field"`
+	Path        string          `json:"path"`
+	RecordsPath string          `json:"records_path"`
+	IDField     string          `json:"id_field"`
+	Pagination  *PaginationSpec `json:"pagination,omitempty"`
 }
 
 // FanOutInto is EXACTLY ONE of QueryParam (the resolved id is added as a

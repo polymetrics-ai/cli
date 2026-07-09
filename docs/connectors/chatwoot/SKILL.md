@@ -56,7 +56,7 @@ Reads Chatwoot support conversations, contacts, inboxes, agents, teams, labels, 
   - fields: color(), description(), id(), show_on_sidebar(), title()
 - messages:
   - primary key: id
-  - cursor: created_at
+  - cursor: id
   - fields: account_id(), attachment(), content(), content_attributes(), content_type(), conversation_id(), created_at(), id(), inbox_id(), message_type(), private(), sender(), sender_id(), sender_type(), source_id(), status(), updated_at()
 
 ## Sync Modes

@@ -1912,6 +1912,48 @@ func TestLoadStreamsFanOutRequestFormRoundTrips(t *testing.T) {
 	}
 }
 
+func TestLoadStreamsFanOutRequestPaginationRoundTrips(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/ping" }
+		},
+		"streams": [
+			{
+				"name": "tasks",
+				"path": "/projects/{{ fanout.id }}/tasks",
+				"pagination": { "type": "cursor", "cursor_param": "after", "last_record_field": "id" },
+				"records": { "path": "data" },
+				"schema": "schemas/widgets.json",
+				"fan_out": {
+					"ids_from": {
+						"request": {
+							"path": "/projects",
+							"records_path": "data",
+							"id_field": "id",
+							"pagination": { "type": "page_number", "page_param": "page", "start_page": 1, "page_size": 50 }
+						}
+					},
+					"into": { "path_var": "parent_id" }
+				}
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	got := b.Streams[0].FanOut.IDsFrom.Request.Pagination
+	if got == nil {
+		t.Fatal("FanOut.IDsFrom.Request.Pagination is nil, want decoded pagination block")
+	}
+	if got.Type != "page_number" || got.PageParam != "page" || got.StartPage == nil || *got.StartPage != 1 || got.PageSize != 50 {
+		t.Fatalf("FanOut.IDsFrom.Request.Pagination = %+v, want page_number page start 1 size 50", got)
+	}
+}
+
 // TestLoadStreamsWithoutFanOutIsNilPointer pins the zero-impact case: an
 // ordinary stream declaring no fan_out block at all decodes to a nil
 // *FanOutSpec, not a zero-valued non-nil struct.

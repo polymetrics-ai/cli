@@ -76,11 +76,9 @@
       "name": "messages",
       "path": "/conversations/{{ fanout.id }}/messages",
       "pagination": {
-        "type": "page_number",
-        "page_param": "page",
-        "size_param": "",
-        "start_page": 1,
-        "page_size": 25
+        "type": "cursor",
+        "cursor_param": "after",
+        "last_record_field": "id"
       },
       "records": { "path": "payload" },
       "fan_out": {
@@ -88,7 +86,14 @@
           "request": {
             "path": "/conversations",
             "records_path": "data.payload",
-            "id_field": "id"
+            "id_field": "id",
+            "pagination": {
+              "type": "page_number",
+              "page_param": "page",
+              "size_param": "",
+              "start_page": 1,
+              "page_size": 25
+            }
           }
         },
         "into": { "path_var": "conversation_id" },

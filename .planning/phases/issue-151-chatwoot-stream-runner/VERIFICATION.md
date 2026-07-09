@@ -2,12 +2,15 @@
 
 ## Planned targeted checks
 
-- [ ] `go test ./internal/connectors/engine -run TestReadFanOutRequestPaginationOverrideAllowsDifferentChildPagination -count=1`
-- [ ] `go test ./internal/connectors/conformance -run TestChatwootStreamRunnerSweep -count=1`
-- [ ] `go test ./internal/connectors/conformance -run 'TestConformance/chatwoot' -count=1`
-- [ ] `go test ./cmd/connectorgen -run Chatwoot -count=1`
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs`
-- [ ] `git diff --check`
+- [x] `go test ./internal/connectors/engine -run TestReadFanOutRequestPaginationOverrideAllowsDifferentChildPagination -count=1`
+- [x] `go test ./internal/connectors/engine -run 'TestReadFanOutRequestPaginationOverrideAllowsDifferentChildPagination|TestLoadStreamsFanOutRequestPaginationRoundTrips' -count=1`
+- [x] `go test ./internal/connectors/conformance -run TestChatwootStreamRunnerSweep -count=1`
+- [x] `go test ./internal/connectors/conformance -run 'TestChatwootStreamRunnerSweep|TestConformance/chatwoot' -count=1`
+- [x] `go test ./cmd/connectorgen -run Chatwoot -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs`
+- [x] `cd website && npm run test:unit -- --run tests/api/connector-data.test.ts`
+- [x] `go run ./cmd/pm docs validate --connectors-dir docs/connectors`
+- [x] `git diff --check`
 
 ## Planned full gates
 

@@ -51,18 +51,25 @@
     },
     {
       "number": 151,
-      "status": "ready",
+      "status": "implemented_targeted_verified",
       "dependencies": [
         149,
         152
       ],
       "write_scope": [
+        "internal/connectors/engine",
+        "internal/connectors/conformance/chatwoot_stream_test.go",
         "internal/connectors/defs/chatwoot/streams.json",
-        "internal/connectors/defs/chatwoot/schemas",
-        "internal/connectors/defs/chatwoot/fixtures",
+        "internal/connectors/defs/chatwoot/schemas/messages.json",
+        "internal/connectors/defs/chatwoot/fixtures/streams/messages",
+        "internal/connectors/defs/chatwoot/spec.json",
+        "internal/connectors/defs/chatwoot/docs.md",
+        "docs/connectors/chatwoot",
+        "website/data/connectors.generated.json",
+        "website/lib/connectors.catalog.data.generated.json",
         ".planning/phases/issue-151-chatwoot-stream-runner"
       ],
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "sub_pr_pending_full_gates_pending"
     },
     {
       "number": 152,
@@ -200,6 +207,14 @@
         152
       ],
       "reason": "PR #244 remote checks passed, was squash-merged into parent commit e9a709fe50dd3832e57ce0a5f8e3b728422e27cb, and parent PR #223 manual CodeRabbit review replied Review finished after the non-default-base sub-PR skip."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "sub_pr_pending_full_gates_pending",
+      "issue_numbers": [
+        151
+      ],
+      "reason": "Issue #151 implementation and targeted verification completed locally on feat/151-chatwoot-stream-runner; full gates, stacked PR, remote checks, and review routing remain pending."
     }
   ],
   "subissues": [
@@ -278,6 +293,39 @@
         "fallback_route": "none",
         "disposition_summary": "CodeRabbit skipped #244 because the base was non-default and skipped #223 automatic review because it is draft. After #244 was squash-merged to parent, manual @coderabbitai review was requested on #223 and CodeRabbit replied Review finished; no actionable inline findings were present.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/223#issuecomment-4930143230"
+      }
+    },
+    {
+      "number": 151,
+      "url": "https://github.com/polymetrics-ai/cli/issues/151",
+      "branch": "feat/151-chatwoot-stream-runner",
+      "pr_url": "pending",
+      "worker": "coordinator-local-critical-path",
+      "status": "implemented_targeted_verified",
+      "write_scope": [
+        "internal/connectors/engine",
+        "internal/connectors/conformance/chatwoot_stream_test.go",
+        "internal/connectors/defs/chatwoot/streams.json",
+        "internal/connectors/defs/chatwoot/schemas/messages.json",
+        "internal/connectors/defs/chatwoot/fixtures/streams/messages",
+        "internal/connectors/defs/chatwoot/spec.json",
+        "internal/connectors/defs/chatwoot/docs.md",
+        "docs/connectors/chatwoot",
+        "website/data/connectors.generated.json",
+        "website/lib/connectors.catalog.data.generated.json",
+        ".planning/phases/issue-151-chatwoot-stream-runner"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
+      "verification": "targeted checks passed; full gates pending before PR",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "not_started_pr_pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
       }
     }
   ],

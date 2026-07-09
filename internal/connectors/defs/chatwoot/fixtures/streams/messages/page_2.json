@@ -1,10 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/conversations/101/messages",
-    "query": {
-      "page": "1"
-    }
+    "path": "/conversations/101/messages"
   },
   "response": {
     "status": 200,

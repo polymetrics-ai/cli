@@ -48,7 +48,7 @@ Connection checks call GET `/agents`.
 Default pagination: single request; no pagination.
 
 Pagination by stream: none: `inboxes`, `agents`, `teams`, `labels`; page_number: `conversations`,
-`contacts`, `messages`.
+`contacts`; cursor: `messages`.
 
 Incremental streams use their declared cursor fields and send lower-bound parameters only when a
 lower bound is available.
@@ -63,10 +63,11 @@ lower bound is available.
 - `agents`: GET `/agents` - records path `.`.
 - `teams`: GET `/teams` - records path `.`.
 - `labels`: GET `/labels` - records path `payload`.
-- `messages`: GET `/conversations/{{ fanout.id }}/messages` - records path `payload`; page-number
-  pagination; page parameter `page`; no page-size parameter; starts at 1; page size 25; fan-out; ids
-  from request `/conversations`; id-list records path `data.payload`; id field `id`; id inserted
-  into the request path; stamps `conversation_id`.
+- `messages`: GET `/conversations/{{ fanout.id }}/messages` - records path `payload`; cursor
+  pagination using `after` from the last message `id`; fan-out; ids from request `/conversations`;
+  the parent conversation sweep uses page-number pagination with page parameter `page`, starts at 1,
+  and records ids from `data.payload.id`; id inserted into the request path; stamps
+  `conversation_id`.
 
 ## Write actions & risks
 

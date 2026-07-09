@@ -114,11 +114,11 @@ func readFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors
 // resolveFanOutIDs resolves stream.FanOut.IDsFrom's id list, exactly one of
 // two mutually-exclusive forms: ConfigKey (a comma-separated config value,
 // trimmed and empty-entries-dropped) or Request (one preliminary GET,
-// paginated to exhaustion using the stream's OWN effective pagination spec,
-// extracting IDField off every record found at RecordsPath). Declaring
-// both, or neither, is a read-time error — mirroring
-// PaginationSpec.token_path/last_record_field's identical mutual-exclusivity
-// error shape (paginate.go's newCursorPaginator).
+// paginated to exhaustion using the request's optional pagination override or
+// the stream's effective pagination spec, extracting IDField off every record
+// found at RecordsPath). Declaring both, or neither, is a read-time error —
+// mirroring PaginationSpec.token_path/last_record_field's identical
+// mutual-exclusivity error shape (paginate.go's newCursorPaginator).
 func resolveFanOutIDs(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime) ([]string, error) {
 	fo := stream.FanOut
 	hasConfigKey := fo.IDsFrom.ConfigKey != ""
@@ -156,13 +156,14 @@ func splitTrimmedCSV(raw string) []string {
 }
 
 // fanOutIDsFromRequest issues the preliminary id-listing GET declared by
-// spec, paginated to exhaustion via the CHILD stream's own effective
-// pagination spec (base or stream-level override — the id-listing request
-// has no pagination block of its own; it reuses the surrounding stream's,
-// exactly like the surrounding stream's own per-page requests do), and
-// extracts spec.IDField off every record found at spec.RecordsPath.
+// spec, paginated to exhaustion via spec.Pagination when present. When absent,
+// it preserves the historical behavior of reusing the CHILD stream's effective
+// pagination spec (base or stream-level override).
 func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, spec *FanOutIDsRequest) ([]string, error) {
-	pag := stream.Pagination
+	pag := spec.Pagination
+	if pag == nil {
+		pag = stream.Pagination
+	}
 	if pag == nil {
 		pag = b.HTTP.Pagination
 	}

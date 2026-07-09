@@ -191,7 +191,27 @@
                     "properties": {
                       "path": { "type": "string" },
                       "records_path": { "type": "string" },
-                      "id_field": { "type": "string" }
+                      "id_field": { "type": "string" },
+                      "pagination": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "type": { "type": "string" },
+                          "size_param": { "type": "string" },
+                          "page_param": { "type": "string" },
+                          "start_page": { "type": "integer" },
+                          "limit_param": { "type": "string" },
+                          "offset_param": { "type": "string" },
+                          "cursor_param": { "type": "string" },
+                          "token_path": { "type": "string" },
+                          "last_record_field": { "type": "string" },
+                          "stop_path": { "type": "string" },
+                          "next_url_path": { "type": "string" },
+                          "page_size": { "type": "integer" },
+                          "max_pages": { "type": "integer" },
+                          "allow_cross_host": { "type": "boolean" }
+                        }
+                      }
                     }
                   }
                 }
