@@ -1,6 +1,6 @@
 # Summary — Issue #180 Freshchat CLI parity parent
 
-Status: parent orchestration active; #181/#184 merged with CodeRabbit coverage pending.
+Status: parent orchestration active; #181/#184 merged with CodeRabbit coverage pending; #182 started.
 
 ## Completed in this checkpoint
 
@@ -20,6 +20,6 @@ Status: parent orchestration active; #181/#184 merged with CodeRabbit coverage p
 
 ## Next
 
-1. Start another ready dependent slice (#182 help/docs, #183 stream runner, #185 direct reads, or #187 sensitive/admin policy) from the updated parent branch.
+1. Complete #182 help/docs TDD slice on `feat/182-freshchat-help-renderer`.
 2. Keep #181/#184 marked review-pending until parent PR #226 is ready for CodeRabbit or an approved fallback is recorded.
 3. Do not mark parent PR human-ready until every integrated sub-issue has automated review coverage or a recorded fallback.

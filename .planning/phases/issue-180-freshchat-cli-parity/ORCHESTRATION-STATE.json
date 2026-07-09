@@ -29,10 +29,10 @@
     },
     {
       "number": 182,
-      "status": "ready_after_181_integration",
-      "dependencies": [181],
-      "write_scope": ["help renderer", "docs/cli/**", "website/**", "generated help/manual artifacts"],
-      "decision": "ready_local_critical_path_or_worker_when_available"
+      "status": "in_progress_local_critical_path",
+      "dependencies": [181, 184],
+      "write_scope": ["help renderer", "docs/cli/**", "website/**", "generated help/manual artifacts", ".planning/phases/issue-182-freshchat-help-renderer/**"],
+      "decision": "started_local_critical_path"
     },
     {
       "number": 183,
@@ -133,5 +133,5 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T22:11:22Z"
+  "updated_at": "2026-07-09T22:12:00Z"
 }

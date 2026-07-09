@@ -76,7 +76,14 @@
       "decision": "merged_to_parent_branch",
       "reason": "PR #243 checks passed and was squash-merged to parent branch as fd359cfb; parent PR #226 CodeRabbit coverage remains pending because the parent PR is still draft.",
       "issue_numbers": [184]
+    },
+    {
+      "timestamp": "2026-07-09T22:12:00Z",
+      "cycle": "subissue-start",
+      "decision": "started_local_critical_path",
+      "reason": "Issue #182 help renderer is unblocked by #181/#184 integration; no Pi subagent tool is available, so start locally on feat/182-freshchat-help-renderer.",
+      "issue_numbers": [182]
     }
   ],
-  "updated_at": "2026-07-09T22:11:22Z"
+  "updated_at": "2026-07-09T22:12:00Z"
 }
