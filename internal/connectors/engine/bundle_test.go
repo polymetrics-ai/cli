@@ -587,7 +587,28 @@ func TestLinearOperationLedgerInventoriesGraphQLOperations(t *testing.T) {
 	if b.Surface == nil || b.Surface.OperationLedgerVersion != 1 {
 		t.Fatalf("linear api surface ledger version = %+v, want v1", b.Surface)
 	}
-	covered, blocked := 0, 0
+	deprecatedQueries := map[string]bool{
+		"attachmentIssue":   true,
+		"roadmap":           true,
+		"roadmapToProject":  true,
+		"roadmapToProjects": true,
+		"roadmaps":          true,
+	}
+	deprecatedMutations := map[string]bool{
+		"integrationIntercomSettingsUpdate": true,
+		"integrationLoom":                   true,
+		"integrationSettingsUpdate":         true,
+		"notificationSubscriptionDelete":    true,
+		"organizationStartTrial":            true,
+		"projectArchive":                    true,
+		"projectUpdateDelete":               true,
+		"roadmapArchive":                    true,
+		"roadmapCreate":                     true,
+		"roadmapDelete":                     true,
+		"roadmapUnarchive":                  true,
+		"roadmapUpdate":                     true,
+	}
+	covered, blocked, queryRows, mutationRows, deprecatedQueryRows, deprecatedMutationRows, rawRows := 0, 0, 0, 0, 0, 0, 0
 	for _, ep := range b.Surface.Endpoints {
 		if ep.CoveredBy != nil {
 			covered++
@@ -598,12 +619,37 @@ func TestLinearOperationLedgerInventoriesGraphQLOperations(t *testing.T) {
 				t.Fatalf("operation row %+v is not blocked by default", ep.Operation)
 			}
 		}
+		if strings.Contains(ep.Path, "(raw arbitrary query or mutation)") {
+			rawRows++
+			continue
+		}
+		if name, ok := graphQLSurfaceName(ep.Path, "query"); ok {
+			queryRows++
+			if deprecatedQueries[name] {
+				deprecatedQueryRows++
+			}
+		}
+		if name, ok := graphQLSurfaceName(ep.Path, "mutation"); ok {
+			mutationRows++
+			if deprecatedMutations[name] {
+				deprecatedMutationRows++
+			}
+		}
 	}
-	if covered < 12 {
-		t.Fatalf("covered endpoint rows = %d, want stream/direct-read/write coverage", covered)
+	if rawRows != 1 {
+		t.Fatalf("raw GraphQL rows = %d, want exactly one blocked raw row", rawRows)
 	}
-	if covered+blocked < 460 {
-		t.Fatalf("ledger rows = covered(%d)+blocked(%d), want full Linear GraphQL operation inventory", covered, blocked)
+	if queryRows != 161 || mutationRows != 370 {
+		t.Fatalf("ledger rows query=%d mutation=%d, want live schema inventory query=161 mutation=370", queryRows, mutationRows)
+	}
+	if got := queryRows - deprecatedQueryRows; got != 156 {
+		t.Fatalf("non-deprecated query rows = %d, want refreshed prompt official count 156", got)
+	}
+	if got := mutationRows - deprecatedMutationRows; got != 358 {
+		t.Fatalf("non-deprecated mutation rows = %d, want refreshed prompt official count 358", got)
+	}
+	if covered < 514 {
+		t.Fatalf("covered endpoint rows = %d, want all official non-deprecated Linear operations covered", covered)
 	}
 }
 
@@ -641,15 +687,23 @@ func TestLinearMutationOperationsModeledAsTypedWrites(t *testing.T) {
 			blocked = append(blocked, ep.Path)
 		}
 	}
-	if mutationRows < 300 {
-		t.Fatalf("mutationRows = %d, want full Linear mutation inventory", mutationRows)
+	if mutationRows != 370 {
+		t.Fatalf("mutationRows = %d, want full Linear live-schema mutation inventory", mutationRows)
 	}
 	if len(blocked) > 0 {
 		t.Fatalf("%d Linear mutation rows are neither typed writes nor exact hard blocks; first rows: %v", len(blocked), blocked[:min(len(blocked), 10)])
 	}
-	if coveredMutationRows < 300 {
-		t.Fatalf("covered mutation rows = %d, want nearly all Linear mutations modeled as typed writes", coveredMutationRows)
+	if coveredMutationRows < 358 {
+		t.Fatalf("covered mutation rows = %d, want all official non-deprecated Linear mutations modeled as typed writes", coveredMutationRows)
 	}
+}
+
+func graphQLSurfaceName(path, kind string) (string, bool) {
+	prefix := "/graphql (" + kind + ": "
+	if !strings.HasPrefix(path, prefix) || !strings.HasSuffix(path, ")") {
+		return "", false
+	}
+	return strings.TrimSuffix(strings.TrimPrefix(path, prefix), ")"), true
 }
 
 func hardBlockedLinearMutation(op *SurfaceOperation) bool {

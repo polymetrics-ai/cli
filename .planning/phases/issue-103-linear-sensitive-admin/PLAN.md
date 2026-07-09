@@ -6,7 +6,7 @@ Parent branch/PR: `feat/80-linear-cli-parity`, draft PR #131
 
 ## Objective
 
-Model Linear sensitive/admin/destructive operation classes as typed fixed-document reverse-ETL actions when an SDK document exists, with preview/approval/typed-confirmation policy and no inline secret/raw mutation escape hatches. Raw arbitrary GraphQL remains blocked by default.
+Model Linear sensitive/admin/destructive operation classes as typed fixed-document reverse-ETL actions for every non-deprecated live mutation root, with preview/approval/typed-confirmation policy and no inline secret/raw mutation escape hatches. Raw arbitrary GraphQL remains blocked by default, and deprecated rows are blocked only with exact schema evidence.
 
 ## GSD / fallback
 

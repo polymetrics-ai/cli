@@ -84,11 +84,13 @@ git diff --check
 
 ## Coverage snapshot after all-ops prompt refresh
 
-- `api_surface.json` rows: 466
-- covered rows: 465
-- blocked rows: 1 raw arbitrary GraphQL row
-- fixed GraphQL write actions: 321
-- fixed GraphQL streams: 144
+- `api_surface.json` rows: 532
+- live Linear GraphQL root fields inventoried: 531 (161 query + 370 mutation)
+- official non-deprecated prompt target: 514 fields (156 query + 358 mutation), all covered
+- covered rows: 530
+- blocked rows: 2 (raw arbitrary GraphQL and deprecated `integrationSettingsUpdate`)
+- fixed GraphQL write actions: 369
+- fixed GraphQL streams: 161
 
 ## Website unit test note
 

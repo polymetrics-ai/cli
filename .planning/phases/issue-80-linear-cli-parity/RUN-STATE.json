@@ -3,7 +3,7 @@
   "parentIssue": 80,
   "branch": "feat/80-linear-cli-parity",
   "parentPR": "https://github.com/polymetrics-ai/cli/pull/131",
-  "status": "verified_all_ops_update_pending_commit_push_review",
+  "status": "verified_full_surface_prompt_target_pending_commit_push_review",
   "gsd": {
     "doctor": "passed",
     "verifyPi": "passed",
@@ -13,7 +13,7 @@
     "manualFallback": "scripts/gsd returned: unknown GSD command: programming-loop"
   },
   "verificationPassed": true,
-  "verificationStatus": "All-ops update passed focused checks, go vet, go test ./..., go build ./cmd/pm, docs validate, connectorgen validate, make verify, and git diff --check",
+  "verificationStatus": "Full-surface prompt update passed focused Linear checks, connectorgen validation, docs validate, go vet, go test ./..., go build ./cmd/pm, make verify, and git diff --check",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -34,6 +34,11 @@
       "cycle": "issue-80-all-ops-refresh",
       "decision": "manual_gsd_all_ops_update",
       "reason": "Refreshed PI_CONNECTOR_PROMPT.md requires all implementable operations to be covered; generated fixed-document stream/write coverage for all SDK operation rows in the ledger."
+    },
+    {
+      "cycle": "issue-80-all-ops-prompt-count-refresh",
+      "decision": "manual_gsd_live_schema_gap_closure",
+      "reason": "Updated PI_CONNECTOR_PROMPT.md calls for 514 official non-deprecated Linear GraphQL fields (156 query, 358 mutation); added missing live-schema query streams and mutation write actions, and exact deprecated evidence for the remaining deprecated row."
     }
   ],
   "subissues": {
@@ -47,11 +52,18 @@
   },
   "updatedAt": "2026-07-09T00:00:00Z",
   "coverage": {
-    "linearApiSurfaceRows": 466,
-    "coveredRows": 465,
-    "blockedRows": 1,
-    "writeActions": 321,
-    "streams": 144,
-    "blockedReason": "raw arbitrary GraphQL remains disallowed"
+    "linearApiSurfaceRows": 532,
+    "liveGraphQLRootFields": 531,
+    "officialNonDeprecatedFields": 514,
+    "officialQueryFields": 156,
+    "officialMutationFields": 358,
+    "coveredRows": 530,
+    "blockedRows": 2,
+    "writeActions": 369,
+    "streams": 161,
+    "blockedReasons": [
+      "raw arbitrary GraphQL remains disallowed",
+      "integrationSettingsUpdate is deprecated by the live Linear GraphQL schema"
+    ]
   }
 }

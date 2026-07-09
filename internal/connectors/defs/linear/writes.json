@@ -21462,6 +21462,3403 @@
       },
       "risk": "Executes the fixed Linear GraphQL mutation `workflowStateUpdate` through reverse ETL (medium risk); changes may affect Linear workspace data and require plan, preview, approval, and execute.",
       "confirm": ""
+    },
+    {
+      "name": "file_upload_dangerously_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "fileUploadDangerouslyDelete",
+        "document": "mutation fileUploadDangerouslyDelete($assetUrl: String!) {\n  fileUploadDangerouslyDelete(assetUrl: $assetUrl) {\n    __typename\n  }\n}",
+        "variables": {
+          "assetUrl": {
+            "source": "record.asset_url",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "asset_url": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "asset_url"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `fileUploadDangerouslyDelete` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "agent_activity_create_prompt",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "agentActivityCreatePrompt",
+        "document": "mutation agentActivityCreatePrompt($input: AgentActivityCreatePromptInput!) {\n  agentActivityCreatePrompt(input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "id": {
+              "source": "record.id",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "agentSessionId": {
+              "source": "record.agent_session_id",
+              "type": "string"
+            },
+            "signal": {
+              "source": "record.signal",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "signalMetadata": {
+              "source": "record.signal_metadata",
+              "type": "json",
+              "omit_when_empty": true
+            },
+            "contextualMetadata": {
+              "source": "record.contextual_metadata",
+              "type": "json",
+              "omit_when_empty": true
+            },
+            "content": {
+              "source": "record.content",
+              "type": "json"
+            },
+            "sourceCommentId": {
+              "source": "record.source_comment_id",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "queued": {
+              "source": "record.queued",
+              "type": "boolean",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "agent_session_id": {
+            "type": "string"
+          },
+          "signal": {
+            "type": "string"
+          },
+          "signal_metadata": {},
+          "contextual_metadata": {},
+          "content": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "body_data": {}
+            },
+            "additionalProperties": false
+          },
+          "source_comment_id": {
+            "type": "string"
+          },
+          "queued": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "agent_session_id",
+          "content"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `agentActivityCreatePrompt` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "agent_activity_send_queued",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "agentActivitySendQueued",
+        "document": "mutation agentActivitySendQueued($id: String!) {\n  agentActivitySendQueued(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `agentActivitySendQueued` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "agent_activity_delete_queued",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "agentActivityDeleteQueued",
+        "document": "mutation agentActivityDeleteQueued($id: String!) {\n  agentActivityDeleteQueued(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `agentActivityDeleteQueued` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "agent_session_create",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "agentSessionCreate",
+        "document": "mutation agentSessionCreate($pullRequestId: String, $input: AgentSessionCreateInput!) {\n  agentSessionCreate(pullRequestId: $pullRequestId, input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "pullRequestId": {
+            "source": "record.pull_request_id",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "input": {
+            "id": {
+              "source": "record.id",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "issueId": {
+              "source": "record.issue_id",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "appUserId": {
+              "source": "record.app_user_id",
+              "type": "string"
+            },
+            "context": {
+              "source": "record.context",
+              "type": "json",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "pull_request_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "issue_id": {
+            "type": "string"
+          },
+          "app_user_id": {
+            "type": "string"
+          },
+          "context": {}
+        },
+        "additionalProperties": false,
+        "required": [
+          "app_user_id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `agentSessionCreate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "passkey_login_start",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "passkeyLoginStart",
+        "document": "mutation passkeyLoginStart($authId: String!) {\n  passkeyLoginStart(authId: $authId) {\n    __typename\n  }\n}",
+        "variables": {
+          "authId": {
+            "source": "record.auth_id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "auth_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "auth_id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `passkeyLoginStart` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "passkey_login_finish",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "passkeyLoginFinish",
+        "document": "mutation passkeyLoginFinish($response: JSONObject!, $authId: String!) {\n  passkeyLoginFinish(response: $response, authId: $authId) {\n    __typename\n  }\n}",
+        "variables": {
+          "response": {
+            "source": "record.response",
+            "type": "json"
+          },
+          "authId": {
+            "source": "record.auth_id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "response": {},
+          "auth_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "response",
+          "auth_id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `passkeyLoginFinish` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_organization_from_onboarding",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "createOrganizationFromOnboarding",
+        "document": "mutation createOrganizationFromOnboarding($sessionId: String, $survey: OnboardingCustomerSurvey, $input: CreateOrganizationInput!) {\n  createOrganizationFromOnboarding(sessionId: $sessionId, survey: $survey, input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "sessionId": {
+            "source": "record.session_id",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "survey": {
+            "companyRole": {
+              "source": "record.company_role",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "companySize": {
+              "source": "record.company_size",
+              "type": "string",
+              "omit_when_empty": true
+            }
+          },
+          "input": {
+            "name": {
+              "source": "record.name",
+              "type": "string"
+            },
+            "urlKey": {
+              "source": "record.url_key",
+              "type": "string"
+            },
+            "domainAccess": {
+              "source": "record.domain_access",
+              "type": "boolean",
+              "omit_when_empty": true
+            },
+            "timezone": {
+              "source": "record.timezone",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "utm": {
+              "source": "record.utm",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "utmFirstTouch": {
+              "source": "record.utm_first_touch",
+              "type": "string",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string"
+          },
+          "company_role": {
+            "type": "string"
+          },
+          "company_size": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "url_key": {
+            "type": "string"
+          },
+          "domain_access": {
+            "type": "boolean"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "utm": {
+            "type": "string"
+          },
+          "utm_first_touch": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "url_key"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `createOrganizationFromOnboarding` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "join_organization_from_onboarding",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "joinOrganizationFromOnboarding",
+        "document": "mutation joinOrganizationFromOnboarding($input: JoinOrganizationInput!) {\n  joinOrganizationFromOnboarding(input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "organizationId": {
+              "source": "record.organization_id",
+              "type": "string"
+            },
+            "inviteLink": {
+              "source": "record.invite_link",
+              "type": "string",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "invite_link": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `joinOrganizationFromOnboarding` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "leave_organization",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "leaveOrganization",
+        "document": "mutation leaveOrganization($organizationId: String!) {\n  leaveOrganization(organizationId: $organizationId) {\n    __typename\n  }\n}",
+        "variables": {
+          "organizationId": {
+            "source": "record.organization_id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `leaveOrganization` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "contact_sales_create",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "contactSalesCreate",
+        "document": "mutation contactSalesCreate($input: ContactSalesCreateInput!) {\n  contactSalesCreate(input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "name": {
+              "source": "record.name",
+              "type": "string"
+            },
+            "email": {
+              "source": "record.email",
+              "type": "string"
+            },
+            "companySize": {
+              "source": "record.company_size",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "message": {
+              "source": "record.message",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "url": {
+              "source": "record.url",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "distinctId": {
+              "source": "record.distinct_id",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "sessionId": {
+              "source": "record.session_id",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "utm": {
+              "source": "record.utm",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "utmFirstTouch": {
+              "source": "record.utm_first_touch",
+              "type": "string",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "company_size": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "distinct_id": {
+            "type": "string"
+          },
+          "session_id": {
+            "type": "string"
+          },
+          "utm": {
+            "type": "string"
+          },
+          "utm_first_touch": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "email"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `contactSalesCreate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "project_create_slack_channel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "projectCreateSlackChannel",
+        "document": "mutation projectCreateSlackChannel($integrationId: String, $slackChannelName: String!, $id: String!) {\n  projectCreateSlackChannel(integrationId: $integrationId, slackChannelName: $slackChannelName, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "integrationId": {
+            "source": "record.integration_id",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "slackChannelName": {
+            "source": "record.slack_channel_name",
+            "type": "string"
+          },
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "integration_id": {
+            "type": "string"
+          },
+          "slack_channel_name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "slack_channel_name",
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `projectCreateSlackChannel` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "project_reassign_status",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "projectReassignStatus",
+        "document": "mutation projectReassignStatus($newProjectStatusId: String!, $originalProjectStatusId: String!) {\n  projectReassignStatus(newProjectStatusId: $newProjectStatusId, originalProjectStatusId: $originalProjectStatusId) {\n    __typename\n  }\n}",
+        "variables": {
+          "newProjectStatusId": {
+            "source": "record.new_project_status_id",
+            "type": "string"
+          },
+          "originalProjectStatusId": {
+            "source": "record.original_project_status_id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "new_project_status_id": {
+            "type": "string"
+          },
+          "original_project_status_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "new_project_status_id",
+          "original_project_status_id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `projectReassignStatus` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "initiative_lead_team_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "initiativeLeadTeamUpdate",
+        "document": "mutation initiativeLeadTeamUpdate($mode: InitiativeLeadTeamChangeMode, $leadTeamId: String, $id: String!) {\n  initiativeLeadTeamUpdate(mode: $mode, leadTeamId: $leadTeamId, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "mode": {
+            "source": "record.mode",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "leadTeamId": {
+            "source": "record.lead_team_id",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string"
+          },
+          "lead_team_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `initiativeLeadTeamUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "initiative_add_label",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "initiativeAddLabel",
+        "document": "mutation initiativeAddLabel($labelId: String!, $id: String!) {\n  initiativeAddLabel(labelId: $labelId, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "labelId": {
+            "source": "record.label_id",
+            "type": "string"
+          },
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "label_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "label_id",
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `initiativeAddLabel` through reverse ETL (medium risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection."
+    },
+    {
+      "name": "initiative_remove_label",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "initiativeRemoveLabel",
+        "document": "mutation initiativeRemoveLabel($labelId: String!, $id: String!) {\n  initiativeRemoveLabel(labelId: $labelId, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "labelId": {
+            "source": "record.label_id",
+            "type": "string"
+          },
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "label_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "label_id",
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `initiativeRemoveLabel` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationUpdate",
+        "document": "mutation integrationUpdate($input: IntegrationUpdateInput!, $id: String!) {\n  integrationUpdate(input: $input, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "settings": {
+              "source": "record.settings",
+              "type": "json",
+              "omit_when_empty": true
+            },
+            "workflowDefinitionId": {
+              "source": "record.workflow_definition_id",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "workflowDefinitionDraftId": {
+              "source": "record.workflow_definition_draft_id",
+              "type": "string",
+              "omit_when_empty": true
+            }
+          },
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "settings": {
+            "type": "object",
+            "properties": {
+              "slack": {
+                "type": "object",
+                "properties": {
+                  "team_name": {
+                    "type": "string"
+                  },
+                  "team_id": {
+                    "type": "string"
+                  },
+                  "enterprise_name": {
+                    "type": "string"
+                  },
+                  "enterprise_id": {
+                    "type": "string"
+                  },
+                  "should_unfurl": {
+                    "type": "boolean"
+                  },
+                  "should_use_default_unfurl": {
+                    "type": "boolean"
+                  },
+                  "external_user_actions": {
+                    "type": "boolean"
+                  },
+                  "link_on_issue_id_mention": {
+                    "type": "boolean"
+                  },
+                  "enable_agent": {
+                    "type": "boolean"
+                  },
+                  "enable_linear_agent_workflow_access": {
+                    "type": "boolean"
+                  },
+                  "enable_code_intelligence": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "link_on_issue_id_mention"
+                ]
+              },
+              "slack_asks": {
+                "type": "object",
+                "properties": {
+                  "team_name": {
+                    "type": "string"
+                  },
+                  "team_id": {
+                    "type": "string"
+                  },
+                  "enterprise_name": {
+                    "type": "string"
+                  },
+                  "enterprise_id": {
+                    "type": "string"
+                  },
+                  "should_unfurl": {
+                    "type": "boolean"
+                  },
+                  "should_use_default_unfurl": {
+                    "type": "boolean"
+                  },
+                  "external_user_actions": {
+                    "type": "boolean"
+                  },
+                  "slack_channel_mapping": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "is_private": {
+                          "type": "boolean"
+                        },
+                        "is_shared": {
+                          "type": "boolean"
+                        },
+                        "bot_added": {
+                          "type": "boolean"
+                        },
+                        "teams": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "has_default_ask": {
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                              "id",
+                              "has_default_ask"
+                            ]
+                          }
+                        },
+                        "auto_create_on_message": {
+                          "type": "boolean"
+                        },
+                        "auto_create_on_emoji": {
+                          "type": "boolean"
+                        },
+                        "auto_create_on_bot_mention": {
+                          "type": "boolean"
+                        },
+                        "auto_create_template_id": {
+                          "type": "string"
+                        },
+                        "post_cancellation_updates": {
+                          "type": "boolean"
+                        },
+                        "post_completion_updates": {
+                          "type": "boolean"
+                        },
+                        "post_accepted_from_triage_updates": {
+                          "type": "boolean"
+                        },
+                        "ai_titles": {
+                          "type": "boolean"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "name",
+                        "teams"
+                      ]
+                    }
+                  },
+                  "can_administrate": {
+                    "type": "string"
+                  },
+                  "customer_visibility": {
+                    "type": "string"
+                  },
+                  "enable_agent": {
+                    "type": "boolean"
+                  },
+                  "enable_linear_agent_workflow_access": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "can_administrate"
+                ]
+              },
+              "slack_post": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string"
+                  },
+                  "channel_id": {
+                    "type": "string"
+                  },
+                  "configuration_url": {
+                    "type": "string"
+                  },
+                  "team_id": {
+                    "type": "string"
+                  },
+                  "channel_type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "channel",
+                  "channel_id",
+                  "configuration_url"
+                ]
+              },
+              "slack_project_post": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string"
+                  },
+                  "channel_id": {
+                    "type": "string"
+                  },
+                  "configuration_url": {
+                    "type": "string"
+                  },
+                  "team_id": {
+                    "type": "string"
+                  },
+                  "channel_type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "channel",
+                  "channel_id",
+                  "configuration_url"
+                ]
+              },
+              "slack_initiative_post": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string"
+                  },
+                  "channel_id": {
+                    "type": "string"
+                  },
+                  "configuration_url": {
+                    "type": "string"
+                  },
+                  "team_id": {
+                    "type": "string"
+                  },
+                  "channel_type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "channel",
+                  "channel_id",
+                  "configuration_url"
+                ]
+              },
+              "slack_custom_view_notifications": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string"
+                  },
+                  "channel_id": {
+                    "type": "string"
+                  },
+                  "configuration_url": {
+                    "type": "string"
+                  },
+                  "team_id": {
+                    "type": "string"
+                  },
+                  "channel_type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "channel",
+                  "channel_id",
+                  "configuration_url"
+                ]
+              },
+              "slack_org_project_updates_post": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string"
+                  },
+                  "channel_id": {
+                    "type": "string"
+                  },
+                  "configuration_url": {
+                    "type": "string"
+                  },
+                  "team_id": {
+                    "type": "string"
+                  },
+                  "channel_type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "channel",
+                  "channel_id",
+                  "configuration_url"
+                ]
+              },
+              "slack_org_initiative_updates_post": {
+                "type": "object",
+                "properties": {
+                  "channel": {
+                    "type": "string"
+                  },
+                  "channel_id": {
+                    "type": "string"
+                  },
+                  "configuration_url": {
+                    "type": "string"
+                  },
+                  "team_id": {
+                    "type": "string"
+                  },
+                  "channel_type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "channel",
+                  "channel_id",
+                  "configuration_url"
+                ]
+              },
+              "google_sheets": {
+                "type": "object",
+                "properties": {
+                  "spreadsheet_id": {
+                    "type": "string"
+                  },
+                  "spreadsheet_url": {
+                    "type": "string"
+                  },
+                  "sheet_id": {
+                    "type": "number"
+                  },
+                  "updated_issues_at": {
+                    "type": "string"
+                  },
+                  "issue": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean"
+                      },
+                      "spreadsheet_id": {
+                        "type": "string"
+                      },
+                      "spreadsheet_url": {
+                        "type": "string"
+                      },
+                      "sheet_id": {
+                        "type": "number"
+                      },
+                      "updated_at": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "project": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean"
+                      },
+                      "spreadsheet_id": {
+                        "type": "string"
+                      },
+                      "spreadsheet_url": {
+                        "type": "string"
+                      },
+                      "sheet_id": {
+                        "type": "number"
+                      },
+                      "updated_at": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "initiative": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean"
+                      },
+                      "spreadsheet_id": {
+                        "type": "string"
+                      },
+                      "spreadsheet_url": {
+                        "type": "string"
+                      },
+                      "sheet_id": {
+                        "type": "number"
+                      },
+                      "updated_at": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              },
+              "git_hub": {
+                "type": "object",
+                "properties": {
+                  "pull_request_review_tool": {
+                    "type": "string"
+                  },
+                  "org_avatar_url": {
+                    "type": "string"
+                  },
+                  "org_login": {
+                    "type": "string"
+                  },
+                  "external_org_id": {
+                    "type": "string"
+                  },
+                  "repositories": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "full_name": {
+                          "type": "string"
+                        },
+                        "archived": {
+                          "type": "boolean"
+                        },
+                        "external_id": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "full_name"
+                      ]
+                    }
+                  },
+                  "repositories_mapping": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "linear_team_id": {
+                          "type": "string"
+                        },
+                        "git_hub_repo_id": {
+                          "type": "number"
+                        },
+                        "git_hub_labels": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "bidirectional": {
+                          "type": "boolean"
+                        },
+                        "default": {
+                          "type": "boolean"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "linear_team_id",
+                        "git_hub_repo_id"
+                      ]
+                    }
+                  },
+                  "org_type": {
+                    "type": "string"
+                  },
+                  "code_access": {
+                    "type": "boolean"
+                  },
+                  "enterprise_url": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "org_login"
+                ]
+              },
+              "git_hub_import": {
+                "type": "object",
+                "properties": {
+                  "org_login": {
+                    "type": "string"
+                  },
+                  "org_avatar_url": {
+                    "type": "string"
+                  },
+                  "repositories": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "full_name": {
+                          "type": "string"
+                        },
+                        "archived": {
+                          "type": "boolean"
+                        },
+                        "external_id": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "full_name"
+                      ]
+                    }
+                  },
+                  "labels": {},
+                  "org_type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "org_login",
+                  "org_avatar_url",
+                  "repositories",
+                  "org_type"
+                ]
+              },
+              "git_hub_personal": {
+                "type": "object",
+                "properties": {
+                  "login": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "login"
+                ]
+              },
+              "git_lab": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "readonly": {
+                    "type": "boolean"
+                  },
+                  "expires_at": {
+                    "type": "string"
+                  },
+                  "validation_project_path": {
+                    "type": "string"
+                  },
+                  "use_rest_pr_sync": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "sentry": {
+                "type": "object",
+                "properties": {
+                  "organization_slug": {
+                    "type": "string"
+                  },
+                  "organization_id": {
+                    "type": "string"
+                  },
+                  "resolving_completes_issues": {
+                    "type": "boolean"
+                  },
+                  "unresolving_reopens_issues": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "organization_slug",
+                  "organization_id",
+                  "resolving_completes_issues",
+                  "unresolving_reopens_issues"
+                ]
+              },
+              "zendesk": {
+                "type": "object",
+                "properties": {
+                  "send_note_on_status_change": {
+                    "type": "boolean"
+                  },
+                  "send_note_on_comment": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_completion": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_cancellation": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_comment": {
+                    "type": "boolean"
+                  },
+                  "disable_customer_requests_auto_creation": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_project_completion": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_project_cancellation": {
+                    "type": "boolean"
+                  },
+                  "enable_ai_intake": {
+                    "type": "boolean"
+                  },
+                  "subdomain": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "bot_user_id": {
+                    "type": "string"
+                  },
+                  "can_read_customers": {
+                    "type": "boolean"
+                  },
+                  "supports_o_auth_refresh": {
+                    "type": "boolean"
+                  },
+                  "host_mappings": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "enable_ai_intake_attachment_processing": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "subdomain",
+                  "url"
+                ]
+              },
+              "intercom": {
+                "type": "object",
+                "properties": {
+                  "send_note_on_status_change": {
+                    "type": "boolean"
+                  },
+                  "send_note_on_comment": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_completion": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_cancellation": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_comment": {
+                    "type": "boolean"
+                  },
+                  "disable_customer_requests_auto_creation": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_project_completion": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_project_cancellation": {
+                    "type": "boolean"
+                  },
+                  "enable_ai_intake": {
+                    "type": "boolean"
+                  },
+                  "enable_ai_intake_attachment_processing": {
+                    "type": "boolean"
+                  },
+                  "enable_automatic_conversation_intake": {
+                    "type": "boolean"
+                  },
+                  "automatic_conversation_intake_team_id": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "front": {
+                "type": "object",
+                "properties": {
+                  "send_note_on_status_change": {
+                    "type": "boolean"
+                  },
+                  "send_note_on_comment": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_completion": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_cancellation": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_comment": {
+                    "type": "boolean"
+                  },
+                  "disable_customer_requests_auto_creation": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_project_completion": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_project_cancellation": {
+                    "type": "boolean"
+                  },
+                  "enable_ai_intake": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "gong": {
+                "type": "object",
+                "properties": {
+                  "import_config": {
+                    "type": "object",
+                    "properties": {
+                      "team_id": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "tag_participants_in_issues": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "microsoft_teams": {
+                "type": "object",
+                "properties": {
+                  "tenant_name": {
+                    "type": "string"
+                  },
+                  "enable_code_intelligence": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "microsoft_teams_project_post": {
+                "type": "object",
+                "properties": {
+                  "team_id": {
+                    "type": "string"
+                  },
+                  "team_name": {
+                    "type": "string"
+                  },
+                  "channel_id": {
+                    "type": "string"
+                  },
+                  "channel_name": {
+                    "type": "string"
+                  },
+                  "membership_type": {
+                    "type": "string"
+                  },
+                  "tenant_id": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "team_id",
+                  "team_name",
+                  "channel_id",
+                  "channel_name",
+                  "membership_type",
+                  "tenant_id"
+                ]
+              },
+              "jira": {
+                "type": "object",
+                "properties": {
+                  "project_mapping": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "jira_project_id": {
+                          "type": "string"
+                        },
+                        "linear_team_id": {
+                          "type": "string"
+                        },
+                        "bidirectional": {
+                          "type": "boolean"
+                        },
+                        "default": {
+                          "type": "boolean"
+                        },
+                        "legacy_unidirectional": {
+                          "type": "boolean"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "jira_project_id",
+                        "linear_team_id"
+                      ]
+                    }
+                  },
+                  "projects": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "key": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "id",
+                        "key",
+                        "name"
+                      ]
+                    }
+                  },
+                  "is_jira_server": {
+                    "type": "boolean"
+                  },
+                  "is_custom_o_auth": {
+                    "type": "boolean"
+                  },
+                  "personal_o_auth_client_id": {
+                    "type": "string"
+                  },
+                  "custom_o_auth_server_url": {
+                    "type": "string"
+                  },
+                  "setup_pending": {
+                    "type": "boolean"
+                  },
+                  "manual_setup": {
+                    "type": "boolean"
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "status_names_per_issue_type": {}
+                },
+                "additionalProperties": false,
+                "required": [
+                  "projects"
+                ]
+              },
+              "notion": {
+                "type": "object",
+                "properties": {
+                  "workspace_id": {
+                    "type": "string"
+                  },
+                  "workspace_name": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "workspace_id",
+                  "workspace_name"
+                ]
+              },
+              "opsgenie": {
+                "type": "object",
+                "properties": {
+                  "api_failed_with_unauthorized_error_at": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "pager_duty": {
+                "type": "object",
+                "properties": {
+                  "api_failed_with_unauthorized_error_at": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "launch_darkly": {
+                "type": "object",
+                "properties": {
+                  "project_key": {
+                    "type": "string"
+                  },
+                  "environment": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "project_key",
+                  "environment"
+                ]
+              },
+              "jira_personal": {
+                "type": "object",
+                "properties": {
+                  "site_name": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "salesforce": {
+                "type": "object",
+                "properties": {
+                  "send_note_on_status_change": {
+                    "type": "boolean"
+                  },
+                  "send_note_on_comment": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_completion": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_cancellation": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_comment": {
+                    "type": "boolean"
+                  },
+                  "disable_customer_requests_auto_creation": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_project_completion": {
+                    "type": "boolean"
+                  },
+                  "automate_ticket_reopening_on_project_cancellation": {
+                    "type": "boolean"
+                  },
+                  "enable_ai_intake": {
+                    "type": "boolean"
+                  },
+                  "subdomain": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "reopen_case_status": {
+                    "type": "string"
+                  },
+                  "restrict_visibility": {
+                    "type": "boolean"
+                  },
+                  "default_team": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "workflow_definition_id": {
+            "type": "string"
+          },
+          "workflow_definition_draft_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_google_calendar_personal_connect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationGoogleCalendarPersonalConnect",
+        "document": "mutation integrationGoogleCalendarPersonalConnect($code: String!) {\n  integrationGoogleCalendarPersonalConnect(code: $code) {\n    __typename\n  }\n}",
+        "variables": {
+          "code": {
+            "source": "record.code",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "code"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationGoogleCalendarPersonalConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_launch_darkly_connect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationLaunchDarklyConnect",
+        "document": "mutation integrationLaunchDarklyConnect($code: String!, $projectKey: String!, $environment: String!) {\n  integrationLaunchDarklyConnect(code: $code, projectKey: $projectKey, environment: $environment) {\n    __typename\n  }\n}",
+        "variables": {
+          "code": {
+            "source": "record.code",
+            "type": "string"
+          },
+          "projectKey": {
+            "source": "record.project_key",
+            "type": "string"
+          },
+          "environment": {
+            "source": "record.environment",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "project_key": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "project_key",
+          "environment"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationLaunchDarklyConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_launch_darkly_personal_connect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationLaunchDarklyPersonalConnect",
+        "document": "mutation integrationLaunchDarklyPersonalConnect($code: String!) {\n  integrationLaunchDarklyPersonalConnect(code: $code) {\n    __typename\n  }\n}",
+        "variables": {
+          "code": {
+            "source": "record.code",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "code"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationLaunchDarklyPersonalConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "jira_integration_connect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "jiraIntegrationConnect",
+        "document": "mutation jiraIntegrationConnect($input: JiraConfigurationInput!) {\n  jiraIntegrationConnect(input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "accessToken": {
+              "source": "record.access_token",
+              "type": "string"
+            },
+            "email": {
+              "source": "record.email",
+              "type": "string"
+            },
+            "hostname": {
+              "source": "record.hostname",
+              "type": "string"
+            },
+            "manualSetup": {
+              "source": "record.manual_setup",
+              "type": "boolean",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "hostname": {
+            "type": "string"
+          },
+          "manual_setup": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "access_token",
+          "email",
+          "hostname"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `jiraIntegrationConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_jira_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationJiraUpdate",
+        "document": "mutation integrationJiraUpdate($input: JiraUpdateInput!) {\n  integrationJiraUpdate(input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "id": {
+              "source": "record.id",
+              "type": "string"
+            },
+            "updateProjects": {
+              "source": "record.update_projects",
+              "type": "boolean",
+              "omit_when_empty": true
+            },
+            "updateMetadata": {
+              "source": "record.update_metadata",
+              "type": "boolean",
+              "omit_when_empty": true
+            },
+            "deleteWebhook": {
+              "source": "record.delete_webhook",
+              "type": "boolean",
+              "omit_when_empty": true
+            },
+            "webhookSecret": {
+              "source": "record.webhook_secret",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "noSecret": {
+              "source": "record.no_secret",
+              "type": "boolean",
+              "omit_when_empty": true
+            },
+            "accessToken": {
+              "source": "record.access_token",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "email": {
+              "source": "record.email",
+              "type": "string",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "update_projects": {
+            "type": "boolean"
+          },
+          "update_metadata": {
+            "type": "boolean"
+          },
+          "delete_webhook": {
+            "type": "boolean"
+          },
+          "webhook_secret": {
+            "type": "string"
+          },
+          "no_secret": {
+            "type": "boolean"
+          },
+          "access_token": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationJiraUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_jira_fetch_project_statuses",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationJiraFetchProjectStatuses",
+        "document": "mutation integrationJiraFetchProjectStatuses($input: JiraFetchProjectStatusesInput!) {\n  integrationJiraFetchProjectStatuses(input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "integrationId": {
+              "source": "record.integration_id",
+              "type": "string"
+            },
+            "projectId": {
+              "source": "record.project_id",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "integration_id": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "integration_id",
+          "project_id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationJiraFetchProjectStatuses` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_customer_data_attributes_refresh",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationCustomerDataAttributesRefresh",
+        "document": "mutation integrationCustomerDataAttributesRefresh($input: IntegrationCustomerDataAttributesRefreshInput!) {\n  integrationCustomerDataAttributesRefresh(input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "service": {
+              "source": "record.service",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "service"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationCustomerDataAttributesRefresh` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_opsgenie_connect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationOpsgenieConnect",
+        "document": "mutation integrationOpsgenieConnect($apiKey: String!) {\n  integrationOpsgenieConnect(apiKey: $apiKey) {\n    __typename\n  }\n}",
+        "variables": {
+          "apiKey": {
+            "source": "record.api_key",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "api_key": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "api_key"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationOpsgenieConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_opsgenie_refresh_schedule_mappings",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationOpsgenieRefreshScheduleMappings",
+        "document": "mutation integrationOpsgenieRefreshScheduleMappings {\n  integrationOpsgenieRefreshScheduleMappings {\n    __typename\n  }\n}"
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationOpsgenieRefreshScheduleMappings` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_pager_duty_connect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationPagerDutyConnect",
+        "document": "mutation integrationPagerDutyConnect($code: String!, $redirectUri: String!) {\n  integrationPagerDutyConnect(code: $code, redirectUri: $redirectUri) {\n    __typename\n  }\n}",
+        "variables": {
+          "code": {
+            "source": "record.code",
+            "type": "string"
+          },
+          "redirectUri": {
+            "source": "record.redirect_uri",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "redirect_uri": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "redirect_uri"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationPagerDutyConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_pager_duty_refresh_schedule_mappings",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationPagerDutyRefreshScheduleMappings",
+        "document": "mutation integrationPagerDutyRefreshScheduleMappings {\n  integrationPagerDutyRefreshScheduleMappings {\n    __typename\n  }\n}"
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationPagerDutyRefreshScheduleMappings` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_integration_slack_scopes",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "updateIntegrationSlackScopes",
+        "document": "mutation updateIntegrationSlackScopes($requestedScopes: [String!], $integrationId: String!, $redirectUri: String!, $code: String!) {\n  updateIntegrationSlackScopes(requestedScopes: $requestedScopes, integrationId: $integrationId, redirectUri: $redirectUri, code: $code) {\n    __typename\n  }\n}",
+        "variables": {
+          "requestedScopes": {
+            "source": "record.requested_scopes",
+            "type": "string_array",
+            "omit_when_empty": true
+          },
+          "integrationId": {
+            "source": "record.integration_id",
+            "type": "string"
+          },
+          "redirectUri": {
+            "source": "record.redirect_uri",
+            "type": "string"
+          },
+          "code": {
+            "source": "record.code",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "requested_scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "integration_id": {
+            "type": "string"
+          },
+          "redirect_uri": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "integration_id",
+          "redirect_uri",
+          "code"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `updateIntegrationSlackScopes` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_slack_initiative_post",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationSlackInitiativePost",
+        "document": "mutation integrationSlackInitiativePost($redirectUri: String!, $initiativeId: String!, $code: String!) {\n  integrationSlackInitiativePost(redirectUri: $redirectUri, initiativeId: $initiativeId, code: $code) {\n    __typename\n  }\n}",
+        "variables": {
+          "redirectUri": {
+            "source": "record.redirect_uri",
+            "type": "string"
+          },
+          "initiativeId": {
+            "source": "record.initiative_id",
+            "type": "string"
+          },
+          "code": {
+            "source": "record.code",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "redirect_uri": {
+            "type": "string"
+          },
+          "initiative_id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "redirect_uri",
+          "initiative_id",
+          "code"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationSlackInitiativePost` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_slack_org_initiative_updates_post",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationSlackOrgInitiativeUpdatesPost",
+        "document": "mutation integrationSlackOrgInitiativeUpdatesPost($redirectUri: String!, $code: String!) {\n  integrationSlackOrgInitiativeUpdatesPost(redirectUri: $redirectUri, code: $code) {\n    __typename\n  }\n}",
+        "variables": {
+          "redirectUri": {
+            "source": "record.redirect_uri",
+            "type": "string"
+          },
+          "code": {
+            "source": "record.code",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "redirect_uri": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "redirect_uri",
+          "code"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationSlackOrgInitiativeUpdatesPost` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_microsoft_teams_project_post",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationMicrosoftTeamsProjectPost",
+        "document": "mutation integrationMicrosoftTeamsProjectPost($membershipType: String!, $channelName: String!, $channelId: String!, $teamName: String!, $teamId: String!, $projectId: String!) {\n  integrationMicrosoftTeamsProjectPost(membershipType: $membershipType, channelName: $channelName, channelId: $channelId, teamName: $teamName, teamId: $teamId, projectId: $projectId) {\n    __typename\n  }\n}",
+        "variables": {
+          "membershipType": {
+            "source": "record.membership_type",
+            "type": "string"
+          },
+          "channelName": {
+            "source": "record.channel_name",
+            "type": "string"
+          },
+          "channelId": {
+            "source": "record.channel_id",
+            "type": "string"
+          },
+          "teamName": {
+            "source": "record.team_name",
+            "type": "string"
+          },
+          "teamId": {
+            "source": "record.team_id",
+            "type": "string"
+          },
+          "projectId": {
+            "source": "record.project_id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "membership_type": {
+            "type": "string"
+          },
+          "channel_name": {
+            "type": "string"
+          },
+          "channel_id": {
+            "type": "string"
+          },
+          "team_name": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "membership_type",
+          "channel_name",
+          "channel_id",
+          "team_name",
+          "team_id",
+          "project_id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationMicrosoftTeamsProjectPost` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_salesforce_metadata_refresh",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationSalesforceMetadataRefresh",
+        "document": "mutation integrationSalesforceMetadataRefresh($id: String!) {\n  integrationSalesforceMetadataRefresh(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationSalesforceMetadataRefresh` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_mcp_server_personal_connect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationMcpServerPersonalConnect",
+        "document": "mutation integrationMcpServerPersonalConnect($customHeaders: [McpServerCustomHeaderInput!], $mcpServerDefinitionId: String, $serverUrl: String!) {\n  integrationMcpServerPersonalConnect(customHeaders: $customHeaders, mcpServerDefinitionId: $mcpServerDefinitionId, serverUrl: $serverUrl) {\n    __typename\n  }\n}",
+        "variables": {
+          "customHeaders": {
+            "source": "record.custom_headers",
+            "type": "json",
+            "omit_when_empty": true
+          },
+          "mcpServerDefinitionId": {
+            "source": "record.mcp_server_definition_id",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "serverUrl": {
+            "source": "record.server_url",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mcp_server_definition_id": {
+            "type": "string"
+          },
+          "server_url": {
+            "type": "string"
+          },
+          "custom_headers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "server_url"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationMcpServerPersonalConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_mcp_server_connect",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationMcpServerConnect",
+        "document": "mutation integrationMcpServerConnect($customHeaders: [McpServerCustomHeaderInput!], $mcpServerDefinitionId: String, $workflowDefinitionDraftId: String, $workflowDefinitionId: String, $teamId: String, $serverUrl: String!) {\n  integrationMcpServerConnect(customHeaders: $customHeaders, mcpServerDefinitionId: $mcpServerDefinitionId, workflowDefinitionDraftId: $workflowDefinitionDraftId, workflowDefinitionId: $workflowDefinitionId, teamId: $teamId, serverUrl: $serverUrl) {\n    __typename\n  }\n}",
+        "variables": {
+          "customHeaders": {
+            "source": "record.custom_headers",
+            "type": "json",
+            "omit_when_empty": true
+          },
+          "mcpServerDefinitionId": {
+            "source": "record.mcp_server_definition_id",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "workflowDefinitionDraftId": {
+            "source": "record.workflow_definition_draft_id",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "workflowDefinitionId": {
+            "source": "record.workflow_definition_id",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "teamId": {
+            "source": "record.team_id",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "serverUrl": {
+            "source": "record.server_url",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "mcp_server_definition_id": {
+            "type": "string"
+          },
+          "workflow_definition_draft_id": {
+            "type": "string"
+          },
+          "workflow_definition_id": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          },
+          "server_url": {
+            "type": "string"
+          },
+          "custom_headers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "server_url"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationMcpServerConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_slack_workflow_access_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "integrationSlackWorkflowAccessUpdate",
+        "document": "mutation integrationSlackWorkflowAccessUpdate($enabled: Boolean!, $integrationId: String!) {\n  integrationSlackWorkflowAccessUpdate(enabled: $enabled, integrationId: $integrationId) {\n    __typename\n  }\n}",
+        "variables": {
+          "enabled": {
+            "source": "record.enabled",
+            "type": "boolean"
+          },
+          "integrationId": {
+            "source": "record.integration_id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "integration_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "enabled",
+          "integration_id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `integrationSlackWorkflowAccessUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "issue_import_create_linear_v2",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "issueImportCreateLinearV2",
+        "document": "mutation issueImportCreateLinearV2($linearSourceOrganizationId: String!, $id: String) {\n  issueImportCreateLinearV2(linearSourceOrganizationId: $linearSourceOrganizationId, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "linearSourceOrganizationId": {
+            "source": "record.linear_source_organization_id",
+            "type": "string"
+          },
+          "id": {
+            "source": "record.id",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "linear_source_organization_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "linear_source_organization_id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `issueImportCreateLinearV2` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "issue_description_update_from_front",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "issueDescriptionUpdateFromFront",
+        "document": "mutation issueDescriptionUpdateFromFront($description: String!, $id: String!) {\n  issueDescriptionUpdateFromFront(description: $description, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "description": {
+            "source": "record.description",
+            "type": "string"
+          },
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "description",
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `issueDescriptionUpdateFromFront` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "oauth_application_create",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "oauthApplicationCreate",
+        "document": "mutation oauthApplicationCreate($input: OAuthApplicationCreateInput!) {\n  oauthApplicationCreate(input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "name": {
+              "source": "record.name",
+              "type": "string"
+            },
+            "description": {
+              "source": "record.description",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "developer": {
+              "source": "record.developer",
+              "type": "string"
+            },
+            "developerUrl": {
+              "source": "record.developer_url",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "redirectUris": {
+              "source": "record.redirect_uris",
+              "type": "string_array"
+            },
+            "grantTypes": {
+              "source": "record.grant_types",
+              "type": "string_array",
+              "omit_when_empty": true
+            },
+            "idempotencyKey": {
+              "source": "record.idempotency_key",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "imageUrl": {
+              "source": "record.image_url",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "webhookUrl": {
+              "source": "record.webhook_url",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "webhookResourceTypes": {
+              "source": "record.webhook_resource_types",
+              "type": "string_array",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "developer": {
+            "type": "string"
+          },
+          "developer_url": {
+            "type": "string"
+          },
+          "redirect_uris": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "grant_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "idempotency_key": {
+            "type": "string"
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "webhook_url": {
+            "type": "string"
+          },
+          "webhook_resource_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "developer",
+          "redirect_uris"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `oauthApplicationCreate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "oauth_application_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "oauthApplicationUpdate",
+        "document": "mutation oauthApplicationUpdate($input: OAuthApplicationUpdateInput!, $id: String!) {\n  oauthApplicationUpdate(input: $input, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "name": {
+              "source": "record.name",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "description": {
+              "source": "record.description",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "developer": {
+              "source": "record.developer",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "developerUrl": {
+              "source": "record.developer_url",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "redirectUris": {
+              "source": "record.redirect_uris",
+              "type": "string_array",
+              "omit_when_empty": true
+            },
+            "grantTypes": {
+              "source": "record.grant_types",
+              "type": "string_array",
+              "omit_when_empty": true
+            },
+            "imageUrl": {
+              "source": "record.image_url",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "webhookUrl": {
+              "source": "record.webhook_url",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "webhookEnabled": {
+              "source": "record.webhook_enabled",
+              "type": "boolean",
+              "omit_when_empty": true
+            },
+            "webhookResourceTypes": {
+              "source": "record.webhook_resource_types",
+              "type": "string_array",
+              "omit_when_empty": true
+            }
+          },
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "developer": {
+            "type": "string"
+          },
+          "developer_url": {
+            "type": "string"
+          },
+          "redirect_uris": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "grant_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "webhook_url": {
+            "type": "string"
+          },
+          "webhook_enabled": {
+            "type": "boolean"
+          },
+          "webhook_resource_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `oauthApplicationUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "oauth_application_archive",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "oauthApplicationArchive",
+        "document": "mutation oauthApplicationArchive($id: String!) {\n  oauthApplicationArchive(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `oauthApplicationArchive` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "oauth_application_rotate_secret",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "oauthApplicationRotateSecret",
+        "document": "mutation oauthApplicationRotateSecret($id: String!) {\n  oauthApplicationRotateSecret(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `oauthApplicationRotateSecret` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "oauth_application_rotate_webhook_secret",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "oauthApplicationRotateWebhookSecret",
+        "document": "mutation oauthApplicationRotateWebhookSecret($id: String!) {\n  oauthApplicationRotateWebhookSecret(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `oauthApplicationRotateWebhookSecret` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "organization_domain_claim",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "organizationDomainClaim",
+        "document": "mutation organizationDomainClaim($id: String!) {\n  organizationDomainClaim(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `organizationDomainClaim` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "organization_domain_verify",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "organizationDomainVerify",
+        "document": "mutation organizationDomainVerify($input: OrganizationDomainVerificationInput!) {\n  organizationDomainVerify(input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "organizationDomainId": {
+              "source": "record.organization_domain_id",
+              "type": "string"
+            },
+            "verificationCode": {
+              "source": "record.verification_code",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "organization_domain_id": {
+            "type": "string"
+          },
+          "verification_code": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "organization_domain_id",
+          "verification_code"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `organizationDomainVerify` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "organization_domain_create",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "organizationDomainCreate",
+        "document": "mutation organizationDomainCreate($triggerEmailVerification: Boolean, $input: OrganizationDomainCreateInput!) {\n  organizationDomainCreate(triggerEmailVerification: $triggerEmailVerification, input: $input) {\n    __typename\n  }\n}",
+        "variables": {
+          "triggerEmailVerification": {
+            "source": "record.trigger_email_verification",
+            "type": "boolean",
+            "omit_when_empty": true
+          },
+          "input": {
+            "id": {
+              "source": "record.id",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "identityProviderId": {
+              "source": "record.identity_provider_id",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "name": {
+              "source": "record.name",
+              "type": "string"
+            },
+            "verificationEmail": {
+              "source": "record.verification_email",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "authType": {
+              "source": "record.auth_type",
+              "type": "string",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "trigger_email_verification": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "identity_provider_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "verification_email": {
+            "type": "string"
+          },
+          "auth_type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `organizationDomainCreate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "organization_domain_update",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "organizationDomainUpdate",
+        "document": "mutation organizationDomainUpdate($input: OrganizationDomainUpdateInput!, $id: String!) {\n  organizationDomainUpdate(input: $input, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "disableOrganizationCreation": {
+              "source": "record.disable_organization_creation",
+              "type": "boolean",
+              "omit_when_empty": true
+            }
+          },
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "disable_organization_creation": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `organizationDomainUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "project_milestone_move",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "projectMilestoneMove",
+        "document": "mutation projectMilestoneMove($input: ProjectMilestoneMoveInput!, $id: String!) {\n  projectMilestoneMove(input: $input, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "input": {
+            "projectId": {
+              "source": "record.project_id",
+              "type": "string"
+            },
+            "newIssueTeamId": {
+              "source": "record.new_issue_team_id",
+              "type": "string",
+              "omit_when_empty": true
+            },
+            "addIssueTeamToProject": {
+              "source": "record.add_issue_team_to_project",
+              "type": "boolean",
+              "omit_when_empty": true
+            },
+            "undoIssueTeamIds": {
+              "source": "record.undo_issue_team_ids",
+              "type": "json",
+              "omit_when_empty": true
+            },
+            "undoProjectTeamIds": {
+              "source": "record.undo_project_team_ids",
+              "type": "json",
+              "omit_when_empty": true
+            }
+          },
+          "id": {
+            "source": "record.id",
+            "type": "string"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "project_id": {
+            "type": "string"
+          },
+          "new_issue_team_id": {
+            "type": "string"
+          },
+          "add_issue_team_to_project": {
+            "type": "boolean"
+          },
+          "undo_issue_team_ids": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "issue_id": {
+                  "type": "string"
+                },
+                "team_id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "issue_id",
+                "team_id"
+              ]
+            }
+          },
+          "undo_project_team_ids": {
+            "type": "object",
+            "properties": {
+              "project_id": {
+                "type": "string"
+              },
+              "team_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "project_id",
+              "team_ids"
+            ]
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "project_id",
+          "id"
+        ]
+      },
+      "risk": "Executes the fixed Linear GraphQL mutation `projectMilestoneMove` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.",
+      "confirm": "destructive"
     }
   ]
 }

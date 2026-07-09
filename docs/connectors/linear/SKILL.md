@@ -474,6 +474,57 @@ Reads and writes Linear issues, teams, projects, users, and approved common muta
 - workflow_states:
   - primary key: id
   - fields: id(), updated_at()
+- agent_session_sandbox:
+  - primary key: id
+  - fields: id(), updated_at()
+- attachment_sources:
+  - primary key: id
+  - fields: id(), updated_at()
+- custom_view_details_suggestion:
+  - primary key: id
+  - fields: id(), updated_at()
+- document_content_history_timeline:
+  - primary key: id
+  - fields: id(), updated_at()
+- document_content_history_entries:
+  - primary key: id
+  - fields: id(), updated_at()
+- fetch_data:
+  - primary key: id
+  - fields: id(), updated_at()
+- initiative_lead_team_change_impact:
+  - primary key: id
+  - fields: id(), updated_at()
+- microsoft_teams_channels:
+  - primary key: id
+  - fields: id(), updated_at()
+- notifications_unread_count:
+  - primary key: id
+  - fields: id(), updated_at()
+- oauth_applications:
+  - primary key: id
+  - fields: id(), updated_at()
+- oauth_application:
+  - primary key: id
+  - fields: id(), updated_at()
+- organization_domain_claim_request:
+  - primary key: id
+  - fields: id(), updated_at()
+- organization_invite_details:
+  - primary key: id
+  - fields: id(), updated_at()
+- archived_teams:
+  - primary key: id
+  - fields: id(), updated_at()
+- organization_meta:
+  - primary key: id
+  - fields: id(), updated_at()
+- project_status_project_count:
+  - primary key: id
+  - fields: id(), updated_at()
+- failures_for_oauth_webhooks:
+  - primary key: id
+  - fields: id(), updated_at()
 
 ## Sync Modes
 
@@ -1444,6 +1495,150 @@ Reads and writes Linear issues, teams, projects, users, and approved common muta
 - workflow_state_update:
   - endpoint: POST /graphql
   - risk: Executes the fixed Linear GraphQL mutation `workflowStateUpdate` through reverse ETL (medium risk); changes may affect Linear workspace data and require plan, preview, approval, and execute.
+- file_upload_dangerously_delete:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `fileUploadDangerouslyDelete` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- agent_activity_create_prompt:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `agentActivityCreatePrompt` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- agent_activity_send_queued:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `agentActivitySendQueued` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- agent_activity_delete_queued:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `agentActivityDeleteQueued` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- agent_session_create:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `agentSessionCreate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- passkey_login_start:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `passkeyLoginStart` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- passkey_login_finish:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `passkeyLoginFinish` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- create_organization_from_onboarding:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `createOrganizationFromOnboarding` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- join_organization_from_onboarding:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `joinOrganizationFromOnboarding` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- leave_organization:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `leaveOrganization` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- contact_sales_create:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `contactSalesCreate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- project_create_slack_channel:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `projectCreateSlackChannel` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- project_reassign_status:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `projectReassignStatus` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- initiative_lead_team_update:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `initiativeLeadTeamUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- initiative_add_label:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `initiativeAddLabel` through reverse ETL (medium risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- initiative_remove_label:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `initiativeRemoveLabel` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_update:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_google_calendar_personal_connect:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationGoogleCalendarPersonalConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_launch_darkly_connect:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationLaunchDarklyConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_launch_darkly_personal_connect:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationLaunchDarklyPersonalConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- jira_integration_connect:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `jiraIntegrationConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_jira_update:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationJiraUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_jira_fetch_project_statuses:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationJiraFetchProjectStatuses` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_customer_data_attributes_refresh:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationCustomerDataAttributesRefresh` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_opsgenie_connect:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationOpsgenieConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_opsgenie_refresh_schedule_mappings:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationOpsgenieRefreshScheduleMappings` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_pager_duty_connect:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationPagerDutyConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_pager_duty_refresh_schedule_mappings:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationPagerDutyRefreshScheduleMappings` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- update_integration_slack_scopes:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `updateIntegrationSlackScopes` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_slack_initiative_post:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationSlackInitiativePost` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_slack_org_initiative_updates_post:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationSlackOrgInitiativeUpdatesPost` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_microsoft_teams_project_post:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationMicrosoftTeamsProjectPost` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_salesforce_metadata_refresh:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationSalesforceMetadataRefresh` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_mcp_server_personal_connect:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationMcpServerPersonalConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_mcp_server_connect:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationMcpServerConnect` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- integration_slack_workflow_access_update:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `integrationSlackWorkflowAccessUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- issue_import_create_linear_v2:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `issueImportCreateLinearV2` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- issue_description_update_from_front:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `issueDescriptionUpdateFromFront` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- oauth_application_create:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `oauthApplicationCreate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- oauth_application_update:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `oauthApplicationUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- oauth_application_archive:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `oauthApplicationArchive` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- oauth_application_rotate_secret:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `oauthApplicationRotateSecret` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- oauth_application_rotate_webhook_secret:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `oauthApplicationRotateWebhookSecret` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- organization_domain_claim:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `organizationDomainClaim` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- organization_domain_verify:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `organizationDomainVerify` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- organization_domain_create:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `organizationDomainCreate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- organization_domain_update:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `organizationDomainUpdate` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
+- project_milestone_move:
+  - endpoint: POST /graphql
+  - risk: Executes the fixed Linear GraphQL mutation `projectMilestoneMove` through reverse ETL (high risk); changes are gated by plan, preview, approval, and typed confirmation when marked destructive. Source: Linear live GraphQL schema introspection.
 
 ## Security
 

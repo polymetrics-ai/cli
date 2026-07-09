@@ -3,7 +3,7 @@
 ## Focused checks
 
 ```bash
-go test ./internal/connectors/engine -run 'TestLinear.*Operation|TestLinearMutationOperationsModeledAsTypedWrites|TestWriteGraphQLVariableSourcePreservesArraysAndObjects|TestLinearWriteActionUsesFixedGraphQLMutation' -count=1
+go test ./internal/connectors/engine -run 'TestLinearOperationLedgerInventoriesGraphQLOperations|TestLinearMutationOperationsModeledAsTypedWrites|TestWriteGraphQLVariableSourcePreservesArraysAndObjects|TestLinearWriteActionUsesFixedGraphQLMutation' -count=1
 # pass
 
 go test ./internal/cli -run 'TestLinear' -count=1
@@ -19,6 +19,9 @@ go run ./cmd/pm docs validate --connectors-dir docs/connectors
 # pass
 
 npm --prefix website run gen:website-data
+# pass
+
+git diff --check
 # pass
 ```
 
@@ -39,17 +42,20 @@ go build ./cmd/pm
 
 make verify
 # pass
-
-git diff --check
-# pass
 ```
+
+Note: the combined parent-gate command timed out during the first `make verify` attempt after earlier gates had passed; rerunning `make verify` with a longer timeout passed.
 
 ## Coverage snapshot
 
-- `api_surface.json` rows: 466
-- covered rows: 465
-- blocked rows: 1 (`/graphql (raw arbitrary query or mutation)`)
-- write actions: 321 fixed GraphQL reverse-ETL actions
-- streams: 144 fixed GraphQL streams
+- `api_surface.json` rows: 532
+- live Linear GraphQL root fields inventoried: 531 (161 query + 370 mutation)
+- official non-deprecated prompt target: 514 fields (156 query + 358 mutation)
+- covered rows: 530
+- blocked rows: 2
+  - raw arbitrary GraphQL query/mutation execution: disallowed
+  - `integrationSettingsUpdate`: deprecated by the live Linear schema, blocked with exact evidence
+- write actions: 369 fixed GraphQL reverse-ETL actions
+- streams: 161 fixed GraphQL streams
 
 No credentialed Linear checks or live Linear writes were run.

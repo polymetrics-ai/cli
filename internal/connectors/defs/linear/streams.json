@@ -5207,6 +5207,316 @@
           }
         }
       }
+    },
+    {
+      "name": "agent_session_sandbox",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.agentSessionSandbox"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "agentSessionSandbox",
+        "document": "query agentSessionSandbox($agentSessionId: String!) {\n  agentSessionSandbox(agentSessionId: $agentSessionId) {\n    __typename\n  }\n}",
+        "variables": {
+          "agentSessionId": {
+            "source": "query.agent_session_id",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "attachment_sources",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.attachmentSources"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "attachmentSources",
+        "document": "query attachmentSources($teamId: String) {\n  attachmentSources(teamId: $teamId) {\n    __typename\n  }\n}",
+        "variables": {
+          "teamId": {
+            "source": "query.team_id",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      }
+    },
+    {
+      "name": "custom_view_details_suggestion",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.customViewDetailsSuggestion"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "customViewDetailsSuggestion",
+        "document": "query customViewDetailsSuggestion($modelName: String, $filter: JSONObject!) {\n  customViewDetailsSuggestion(modelName: $modelName, filter: $filter) {\n    __typename\n  }\n}",
+        "variables": {
+          "modelName": {
+            "source": "query.model_name",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "filter": {
+            "source": "query.filter",
+            "type": "json"
+          }
+        }
+      }
+    },
+    {
+      "name": "document_content_history_timeline",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.documentContentHistoryTimeline"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "documentContentHistoryTimeline",
+        "document": "query documentContentHistoryTimeline($id: String!) {\n  documentContentHistoryTimeline(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "query.id",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "document_content_history_entries",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.documentContentHistoryEntries"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "documentContentHistoryEntries",
+        "document": "query documentContentHistoryEntries($entryIds: [String!]!) {\n  documentContentHistoryEntries(entryIds: $entryIds) {\n    __typename\n  }\n}",
+        "variables": {
+          "entryIds": {
+            "source": "query.entry_ids",
+            "type": "string_array"
+          }
+        }
+      }
+    },
+    {
+      "name": "fetch_data",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.fetchData"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "fetchData",
+        "document": "query fetchData($query: String!) {\n  fetchData(query: $query) {\n    __typename\n  }\n}",
+        "variables": {
+          "query": {
+            "source": "query.query",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "initiative_lead_team_change_impact",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.initiativeLeadTeamChangeImpact"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "initiativeLeadTeamChangeImpact",
+        "document": "query initiativeLeadTeamChangeImpact($leadTeamId: String, $id: String!) {\n  initiativeLeadTeamChangeImpact(leadTeamId: $leadTeamId, id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "leadTeamId": {
+            "source": "query.lead_team_id",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "id": {
+            "source": "query.id",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "microsoft_teams_channels",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.microsoftTeamsChannels"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "microsoftTeamsChannels",
+        "document": "query microsoftTeamsChannels {\n  microsoftTeamsChannels {\n    __typename\n  }\n}"
+      }
+    },
+    {
+      "name": "notifications_unread_count",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "notificationsUnreadCount",
+        "document": "query notificationsUnreadCount {\n  notificationsUnreadCount\n}"
+      }
+    },
+    {
+      "name": "oauth_applications",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.oauthApplications"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "oauthApplications",
+        "document": "query oauthApplications {\n  oauthApplications {\n    __typename\n  }\n}"
+      }
+    },
+    {
+      "name": "oauth_application",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.oauthApplication"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "oauthApplication",
+        "document": "query oauthApplication($id: String!) {\n  oauthApplication(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "query.id",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "organization_domain_claim_request",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.organizationDomainClaimRequest"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "organizationDomainClaimRequest",
+        "document": "query organizationDomainClaimRequest($id: String!) {\n  organizationDomainClaimRequest(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "query.id",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "organization_invite_details",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.organizationInviteDetails"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "organizationInviteDetails",
+        "document": "query organizationInviteDetails($id: String!) {\n  organizationInviteDetails(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "query.id",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "archived_teams",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.archivedTeams"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "archivedTeams",
+        "document": "query archivedTeams {\n  archivedTeams {\n    __typename\n  }\n}"
+      }
+    },
+    {
+      "name": "organization_meta",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.organizationMeta"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "organizationMeta",
+        "document": "query organizationMeta($urlKey: String!) {\n  organizationMeta(urlKey: $urlKey) {\n    __typename\n  }\n}",
+        "variables": {
+          "urlKey": {
+            "source": "query.url_key",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "project_status_project_count",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.projectStatusProjectCount"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "projectStatusProjectCount",
+        "document": "query projectStatusProjectCount($id: String!) {\n  projectStatusProjectCount(id: $id) {\n    __typename\n  }\n}",
+        "variables": {
+          "id": {
+            "source": "query.id",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "failures_for_oauth_webhooks",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.failuresForOauthWebhooks"
+      },
+      "schema": "schemas/graphql_object.json",
+      "graphql": {
+        "operation_name": "failuresForOauthWebhooks",
+        "document": "query failuresForOauthWebhooks($oauthClientId: String!) {\n  failuresForOauthWebhooks(oauthClientId: $oauthClientId) {\n    __typename\n  }\n}",
+        "variables": {
+          "oauthClientId": {
+            "source": "query.oauth_client_id",
+            "type": "string"
+          }
+        }
+      }
     }
   ]
 }

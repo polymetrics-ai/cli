@@ -3,7 +3,7 @@
   "docs": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
   "reviewed_at": "2026-07-09",
   "operation_ledger_version": 1,
-  "scope": "Linear GraphQL operation ledger generated from @linear/sdk generated documents. All SDK mutation rows with fixed documents are modeled as typed reverse-ETL write actions; SDK query rows with fixed documents are modeled as bounded GraphQL streams; raw arbitrary GraphQL remains disallowed.",
+  "scope": "Linear GraphQL operation ledger generated from live Linear schema introspection plus @linear/sdk fixed documents. All non-deprecated live query and mutation fields are modeled as fixed GraphQL streams or typed reverse-ETL write actions; deprecated/raw arbitrary GraphQL rows are blocked with exact evidence.",
   "endpoints": [
     {
       "method": "POST",
@@ -3258,6 +3258,473 @@
       "path": "/graphql (mutation: workflowStateUpdate)",
       "covered_by": {
         "write": "workflow_state_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: agentSessionSandbox)",
+      "covered_by": {
+        "stream": "agent_session_sandbox"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: attachmentSources)",
+      "covered_by": {
+        "stream": "attachment_sources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: customViewDetailsSuggestion)",
+      "covered_by": {
+        "stream": "custom_view_details_suggestion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: documentContentHistoryTimeline)",
+      "covered_by": {
+        "stream": "document_content_history_timeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: documentContentHistoryEntries)",
+      "covered_by": {
+        "stream": "document_content_history_entries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: fetchData)",
+      "covered_by": {
+        "stream": "fetch_data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: initiativeLeadTeamChangeImpact)",
+      "covered_by": {
+        "stream": "initiative_lead_team_change_impact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: microsoftTeamsChannels)",
+      "covered_by": {
+        "stream": "microsoft_teams_channels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: notificationsUnreadCount)",
+      "covered_by": {
+        "stream": "notifications_unread_count"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: oauthApplications)",
+      "covered_by": {
+        "stream": "oauth_applications"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: oauthApplication)",
+      "covered_by": {
+        "stream": "oauth_application"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: organizationDomainClaimRequest)",
+      "covered_by": {
+        "stream": "organization_domain_claim_request"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: organizationInviteDetails)",
+      "covered_by": {
+        "stream": "organization_invite_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: archivedTeams)",
+      "covered_by": {
+        "stream": "archived_teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: organizationMeta)",
+      "covered_by": {
+        "stream": "organization_meta"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: projectStatusProjectCount)",
+      "covered_by": {
+        "stream": "project_status_project_count"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (query: failuresForOauthWebhooks)",
+      "covered_by": {
+        "stream": "failures_for_oauth_webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: fileUploadDangerouslyDelete)",
+      "covered_by": {
+        "write": "file_upload_dangerously_delete"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentActivityCreatePrompt)",
+      "covered_by": {
+        "write": "agent_activity_create_prompt"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentActivitySendQueued)",
+      "covered_by": {
+        "write": "agent_activity_send_queued"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentActivityDeleteQueued)",
+      "covered_by": {
+        "write": "agent_activity_delete_queued"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: agentSessionCreate)",
+      "covered_by": {
+        "write": "agent_session_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: passkeyLoginStart)",
+      "covered_by": {
+        "write": "passkey_login_start"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: passkeyLoginFinish)",
+      "covered_by": {
+        "write": "passkey_login_finish"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: createOrganizationFromOnboarding)",
+      "covered_by": {
+        "write": "create_organization_from_onboarding"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: joinOrganizationFromOnboarding)",
+      "covered_by": {
+        "write": "join_organization_from_onboarding"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: leaveOrganization)",
+      "covered_by": {
+        "write": "leave_organization"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: contactSalesCreate)",
+      "covered_by": {
+        "write": "contact_sales_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectCreateSlackChannel)",
+      "covered_by": {
+        "write": "project_create_slack_channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectReassignStatus)",
+      "covered_by": {
+        "write": "project_reassign_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeLeadTeamUpdate)",
+      "covered_by": {
+        "write": "initiative_lead_team_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeAddLabel)",
+      "covered_by": {
+        "write": "initiative_add_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: initiativeRemoveLabel)",
+      "covered_by": {
+        "write": "initiative_remove_label"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationUpdate)",
+      "covered_by": {
+        "write": "integration_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationGoogleCalendarPersonalConnect)",
+      "covered_by": {
+        "write": "integration_google_calendar_personal_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationLaunchDarklyConnect)",
+      "covered_by": {
+        "write": "integration_launch_darkly_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationLaunchDarklyPersonalConnect)",
+      "covered_by": {
+        "write": "integration_launch_darkly_personal_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: jiraIntegrationConnect)",
+      "covered_by": {
+        "write": "jira_integration_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationJiraUpdate)",
+      "covered_by": {
+        "write": "integration_jira_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationJiraFetchProjectStatuses)",
+      "covered_by": {
+        "write": "integration_jira_fetch_project_statuses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationCustomerDataAttributesRefresh)",
+      "covered_by": {
+        "write": "integration_customer_data_attributes_refresh"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationOpsgenieConnect)",
+      "covered_by": {
+        "write": "integration_opsgenie_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationOpsgenieRefreshScheduleMappings)",
+      "covered_by": {
+        "write": "integration_opsgenie_refresh_schedule_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationPagerDutyConnect)",
+      "covered_by": {
+        "write": "integration_pager_duty_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationPagerDutyRefreshScheduleMappings)",
+      "covered_by": {
+        "write": "integration_pager_duty_refresh_schedule_mappings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: updateIntegrationSlackScopes)",
+      "covered_by": {
+        "write": "update_integration_slack_scopes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackInitiativePost)",
+      "covered_by": {
+        "write": "integration_slack_initiative_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackOrgInitiativeUpdatesPost)",
+      "covered_by": {
+        "write": "integration_slack_org_initiative_updates_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationMicrosoftTeamsProjectPost)",
+      "covered_by": {
+        "write": "integration_microsoft_teams_project_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSalesforceMetadataRefresh)",
+      "covered_by": {
+        "write": "integration_salesforce_metadata_refresh"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationMcpServerPersonalConnect)",
+      "covered_by": {
+        "write": "integration_mcp_server_personal_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationMcpServerConnect)",
+      "covered_by": {
+        "write": "integration_mcp_server_connect"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSlackWorkflowAccessUpdate)",
+      "covered_by": {
+        "write": "integration_slack_workflow_access_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueImportCreateLinearV2)",
+      "covered_by": {
+        "write": "issue_import_create_linear_v2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: issueDescriptionUpdateFromFront)",
+      "covered_by": {
+        "write": "issue_description_update_from_front"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: oauthApplicationCreate)",
+      "covered_by": {
+        "write": "oauth_application_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: oauthApplicationUpdate)",
+      "covered_by": {
+        "write": "oauth_application_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: oauthApplicationArchive)",
+      "covered_by": {
+        "write": "oauth_application_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: oauthApplicationRotateSecret)",
+      "covered_by": {
+        "write": "oauth_application_rotate_secret"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: oauthApplicationRotateWebhookSecret)",
+      "covered_by": {
+        "write": "oauth_application_rotate_webhook_secret"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDomainClaim)",
+      "covered_by": {
+        "write": "organization_domain_claim"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDomainVerify)",
+      "covered_by": {
+        "write": "organization_domain_verify"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDomainCreate)",
+      "covered_by": {
+        "write": "organization_domain_create"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: organizationDomainUpdate)",
+      "covered_by": {
+        "write": "organization_domain_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: projectMilestoneMove)",
+      "covered_by": {
+        "write": "project_milestone_move"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/graphql (mutation: integrationSettingsUpdate)",
+      "operation": {
+        "model": "deprecated",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Use integrationUpdate instead.",
+        "source_url": "https://api.linear.app/graphql"
       }
     },
     {

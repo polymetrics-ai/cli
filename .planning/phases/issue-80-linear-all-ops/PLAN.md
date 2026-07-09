@@ -6,7 +6,7 @@ Prompt source: `PI_CONNECTOR_PROMPT.md`
 
 ## Objective
 
-Update the Linear parity work to follow the refreshed prompt: every official Linear GraphQL operation must be either executable through a narrow typed surface (stream, direct read, reverse-ETL write, binary-read equivalent) or blocked only with exact duplicate/deprecated/disallowed/auth-internal/product-scope/engine-gap evidence.
+Update the Linear parity work to follow the refreshed prompt: every official non-deprecated Linear GraphQL field (514 total: 156 query, 358 mutation) must be either executable through a narrow typed surface (stream, direct read, reverse-ETL write, binary-read equivalent) or blocked only with exact duplicate/deprecated/disallowed/auth-internal/product-scope/engine-gap evidence. Deprecated live-schema rows should also be inventoried or explicitly blocked so no root field is silently absent.
 
 ## GSD path
 
@@ -30,7 +30,7 @@ Update the Linear parity work to follow the refreshed prompt: every official Lin
 
 ## TDD plan
 
-1. RED: add tests that fail while most Linear mutation operation rows remain blocked with generic pending-review reasons and while all-ops coverage is below the refreshed prompt target.
-2. GREEN: generate/curate typed fixed-document GraphQL write actions for every mutation whose variables can be safely represented by explicit scalar/enum/array record fields; update operation ledger coverage for those rows.
-3. REFACTOR: leave only exact blocked evidence for raw GraphQL, auth-internal, deprecated/duplicate, binary/upload, or engine-gap rows. Update docs/website/planning.
+1. RED: tighten Linear ledger tests to the prompt's official counts (156 query + 358 mutation non-deprecated fields) and live-schema inventory counts so the current 465-field SDK-document slice fails.
+2. GREEN: generate/curate fixed-document GraphQL streams for missing query fields and typed reverse-ETL write actions for missing non-deprecated mutation fields using explicit record schemas; add exact deprecated blocked evidence for the remaining deprecated live-schema gap.
+3. REFACTOR: keep raw arbitrary GraphQL as disallowed, keep docs/website/planning counts aligned with the prompt, and avoid adding raw GraphQL or generic JSON write escapes.
 4. VERIFY: focused Linear all-ops tests, connectorgen validation, Linear conformance, `go vet`, `go test`, `go build`, `make verify`, docs/help parity.

@@ -13,8 +13,8 @@ Completed:
   - connector command-surface help for `pm help linear`, bare `pm linear`, and `pm linear --help`;
   - fixed GraphQL Linear streams for list/view reads plus generated fixed-document streams for every SDK query row in the ledger;
   - stream-backed direct-read runner support;
-  - fixed GraphQL write actions for `create_issue`, `update_issue`, `comment_issue`, `create_project`, plus generated typed reverse-ETL actions for every SDK mutation row in the ledger (321 write actions total);
-  - Linear operation ledger v1 with 465 covered rows and only raw arbitrary GraphQL blocked;
+  - fixed GraphQL write actions for `create_issue`, `update_issue`, `comment_issue`, `create_project`, plus generated typed reverse-ETL actions for every non-deprecated live Linear mutation row (369 write actions total, including safe legacy SDK deprecated rows);
+  - Linear operation ledger v1 with all 514 official non-deprecated fields covered, 530 covered fixed-document rows overall, and 2 blocked rows (raw arbitrary GraphQL plus deprecated `integrationSettingsUpdate`);
   - docs and website generated data updates.
 - Local verification passed: `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `go run ./cmd/connectorgen validate internal/connectors/defs --json`, `./pm docs validate --connectors-dir docs/connectors`, `make verify`, and `git diff --check`.
 
