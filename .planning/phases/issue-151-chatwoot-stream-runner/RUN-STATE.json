@@ -3,13 +3,13 @@
   "parentIssue": 148,
   "branch": "feat/151-chatwoot-stream-runner",
   "baseBranch": "feat/148-chatwoot-cli-parity",
-  "status": "implemented_targeted_verified",
+  "status": "implemented_full_verified",
   "gsd": {
     "adapter": "scripts/gsd",
     "programmingLoop": "manual_fallback",
     "reason": "scripts/gsd prompt programming-loop returned unknown GSD command; planning/TDD/verification artifacts are maintained manually"
   },
-  "verificationPassed": false,
+  "verificationPassed": true,
   "targetedVerificationPassed": true,
   "reviewStatus": "not_started",
   "events": [
@@ -31,7 +31,12 @@
     {
       "timestamp": "2026-07-10T00:00:00Z",
       "event": "targeted_verification",
-      "detail": "Engine fan-out tests, Chatwoot conformance sweep, cmd/connectorgen Chatwoot tests, connector validation, website connector unit test, docs validation, and git diff --check passed. Full gates still pending."
+      "detail": "Engine fan-out tests, Chatwoot conformance sweep, cmd/connectorgen Chatwoot tests, connector validation, website connector unit test, docs validation, and git diff --check passed."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "full_verification",
+      "detail": "gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify passed."
     }
   ]
 }

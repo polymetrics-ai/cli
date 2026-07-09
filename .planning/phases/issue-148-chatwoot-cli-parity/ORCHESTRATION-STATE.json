@@ -51,7 +51,7 @@
     },
     {
       "number": 151,
-      "status": "implemented_targeted_verified",
+      "status": "implemented_full_verified",
       "dependencies": [
         149,
         152
@@ -69,7 +69,7 @@
         "website/lib/connectors.catalog.data.generated.json",
         ".planning/phases/issue-151-chatwoot-stream-runner"
       ],
-      "decision": "sub_pr_pending_full_gates_pending"
+      "decision": "sub_pr_pending"
     },
     {
       "number": 152,
@@ -210,11 +210,11 @@
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
-      "decision": "sub_pr_pending_full_gates_pending",
+      "decision": "sub_pr_pending",
       "issue_numbers": [
         151
       ],
-      "reason": "Issue #151 implementation and targeted verification completed locally on feat/151-chatwoot-stream-runner; full gates, stacked PR, remote checks, and review routing remain pending."
+      "reason": "Issue #151 implementation and full local verification completed on feat/151-chatwoot-stream-runner; stacked sub-PR remains to be opened for remote checks and review routing."
     }
   ],
   "subissues": [
@@ -301,7 +301,7 @@
       "branch": "feat/151-chatwoot-stream-runner",
       "pr_url": "pending",
       "worker": "coordinator-local-critical-path",
-      "status": "implemented_targeted_verified",
+      "status": "implemented_full_verified",
       "write_scope": [
         "internal/connectors/engine",
         "internal/connectors/conformance/chatwoot_stream_test.go",
@@ -316,7 +316,7 @@
         ".planning/phases/issue-151-chatwoot-stream-runner"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "targeted checks passed; full gates pending before PR",
+      "verification": "targeted checks and full local gates passed; stacked PR pending",
       "automated_review": {
         "primary_route": "coderabbit_auto",
         "status": "not_started_pr_pending",

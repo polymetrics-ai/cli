@@ -1,6 +1,6 @@
 # Summary — Issue #151 Chatwoot stream runner
 
-Status: implemented with targeted verification; full handoff gates pending.
+Status: implemented and fully verified locally; stacked PR pending.
 
 Completed slice:
 
@@ -9,4 +9,4 @@ Completed slice:
 - Updated Chatwoot message cursor metadata, cursor-stop fixtures, generated docs/catalog/website data, and connector authoring conventions.
 - Added engine coverage for different parent/child fan-out pagination and Chatwoot conformance coverage proving all seven streams replay non-empty fixtures.
 
-Targeted verification passed; see `VERIFICATION.md`.
+Targeted checks and full handoff gates passed; see `VERIFICATION.md`.
