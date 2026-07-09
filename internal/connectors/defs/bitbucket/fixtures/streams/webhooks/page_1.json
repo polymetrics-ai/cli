@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/hooks"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "webhook_subscription",
+          "uuid": "webhook-fixture-1",
+          "url": "https://hooks.example.test/bitbucket",
+          "description": "Synthetic webhook",
+          "subject_type": "repository",
+          "active": true,
+          "events": [
+            "repo:push"
+          ],
+          "created_on": "2026-01-01T00:00:00Z"
+        }
+      ]
+    }
+  }
+}

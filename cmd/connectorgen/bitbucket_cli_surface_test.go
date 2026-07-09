@@ -6,8 +6,10 @@ import (
 	"testing"
 )
 
+const bitbucketDefsDir = "../../internal/connectors/defs/bitbucket"
+
 func TestBitbucketCLISurfaceMetadata(t *testing.T) {
-	raw, err := os.ReadFile("../../internal/connectors/defs/bitbucket/cli_surface.json")
+	raw, err := os.ReadFile(bitbucketDefsDir + "/cli_surface.json")
 	if err != nil {
 		t.Fatalf("read bitbucket cli_surface.json: %v", err)
 	}
@@ -81,8 +83,8 @@ func TestBitbucketCLISurfaceMetadata(t *testing.T) {
 			t.Fatalf("direct write command %q availability = %q, want unsafe_or_disallowed", cmd.Path, cmd.Availability)
 		}
 	}
-	if implemented != 0 {
-		t.Fatalf("implemented commands = %d, want 0 in metadata-only seed slice", implemented)
+	if implemented < 10 {
+		t.Fatalf("implemented commands = %d, want at least 10 executable Bitbucket commands after parity implementation", implemented)
 	}
 
 	wantIntents := map[string]string{
@@ -121,5 +123,127 @@ func TestBitbucketCLISurfaceMetadata(t *testing.T) {
 		if cmd.Intent == "raw_api" && cmd.Availability != "unsafe_or_disallowed" {
 			t.Fatalf("raw API command %q availability = %q, want unsafe_or_disallowed", path, cmd.Availability)
 		}
+	}
+}
+
+func TestBitbucketFullParityMetadata(t *testing.T) {
+	apiRaw, err := os.ReadFile(bitbucketDefsDir + "/api_surface.json")
+	if err != nil {
+		t.Fatalf("read bitbucket api_surface.json: %v", err)
+	}
+	var apiSurface struct {
+		OperationLedgerVersion int `json:"operation_ledger_version"`
+		Endpoints              []struct {
+			Method    string `json:"method"`
+			Path      string `json:"path"`
+			CoveredBy *struct {
+				Stream      string   `json:"stream"`
+				Write       string   `json:"write"`
+				DirectRead  string   `json:"direct_read"`
+				DirectReads []string `json:"direct_reads"`
+			} `json:"covered_by"`
+			Operation *struct {
+				Model            string `json:"model"`
+				Status           string `json:"status"`
+				Risk             string `json:"risk"`
+				BlockedByDefault bool   `json:"blocked_by_default"`
+			} `json:"operation"`
+		} `json:"endpoints"`
+	}
+	if err := json.Unmarshal(apiRaw, &apiSurface); err != nil {
+		t.Fatalf("unmarshal bitbucket api_surface.json: %v", err)
+	}
+	if apiSurface.OperationLedgerVersion != 1 {
+		t.Fatalf("operation_ledger_version = %d, want 1", apiSurface.OperationLedgerVersion)
+	}
+	if len(apiSurface.Endpoints) != 331 {
+		t.Fatalf("api_surface endpoints = %d, want official Bitbucket Swagger count 331", len(apiSurface.Endpoints))
+	}
+
+	covered := map[string]bool{}
+	blocked := 0
+	for _, ep := range apiSurface.Endpoints {
+		if ep.CoveredBy != nil {
+			if ep.CoveredBy.Stream != "" {
+				covered["stream:"+ep.CoveredBy.Stream] = true
+			}
+			if ep.CoveredBy.Write != "" {
+				covered["write:"+ep.CoveredBy.Write] = true
+			}
+			if ep.CoveredBy.DirectRead != "" {
+				covered["direct:"+ep.CoveredBy.DirectRead] = true
+			}
+			for _, name := range ep.CoveredBy.DirectReads {
+				covered["direct:"+name] = true
+			}
+		}
+		if ep.Operation != nil {
+			blocked++
+			if ep.Operation.Status != "blocked" || !ep.Operation.BlockedByDefault {
+				t.Fatalf("operation %s %s status/default = %s/%t, want blocked/default", ep.Method, ep.Path, ep.Operation.Status, ep.Operation.BlockedByDefault)
+			}
+		}
+	}
+	for _, want := range []string{
+		"stream:repositories",
+		"stream:pull_requests",
+		"stream:issues",
+		"stream:pipelines",
+		"write:create_issue",
+		"write:create_pull_request",
+		"direct:repo view",
+		"direct:pull-request view",
+	} {
+		if !covered[want] {
+			t.Fatalf("api_surface missing coverage %q", want)
+		}
+	}
+	if blocked == 0 {
+		t.Fatal("api_surface has no blocked operation rows")
+	}
+
+	opsRaw, err := os.ReadFile(bitbucketDefsDir + "/operations.json")
+	if err != nil {
+		t.Fatalf("read bitbucket operations.json: %v", err)
+	}
+	var ops struct {
+		Operations []struct {
+			ID              string `json:"id"`
+			Kind            string `json:"kind"`
+			MutationClass   string `json:"mutation_class"`
+			Destructive     bool   `json:"destructive"`
+			SecretSensitive bool   `json:"secret_sensitive"`
+			SensitivePolicy *struct {
+				ApprovalMode string `json:"approval_mode"`
+			} `json:"sensitive_policy"`
+		} `json:"operations"`
+	}
+	if err := json.Unmarshal(opsRaw, &ops); err != nil {
+		t.Fatalf("unmarshal bitbucket operations.json: %v", err)
+	}
+	if len(ops.Operations) != 331 {
+		t.Fatalf("operations = %d, want official Bitbucket Swagger count 331", len(ops.Operations))
+	}
+	seenSensitive := false
+	seenDestructive := false
+	for _, op := range ops.Operations {
+		if op.Kind == "graphql_query" || op.Kind == "graphql_mutation" {
+			t.Fatalf("Bitbucket operation %q uses GraphQL kind; want REST-only ledger", op.ID)
+		}
+		if op.Destructive {
+			seenDestructive = true
+			if op.SensitivePolicy == nil || op.SensitivePolicy.ApprovalMode != "typed_confirmation" {
+				t.Fatalf("destructive operation %q missing typed confirmation policy", op.ID)
+			}
+		}
+		if op.SecretSensitive {
+			seenSensitive = true
+			if op.SensitivePolicy == nil {
+				t.Fatalf("secret-sensitive operation %q missing sensitive_policy", op.ID)
+			}
+		}
+	}
+	if !seenDestructive || !seenSensitive {
+		t.Fatalf("operations ledger destructive=%t secret_sensitive=%t, want both classifications", seenDestructive, seenSensitive)
 	}
 }

@@ -1,0 +1,34 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "repository",
+          "uuid": "repo-fixture-1",
+          "name": "Synthetic Repo",
+          "slug": "synthetic-conformance-value",
+          "full_name": "synthetic-conformance-value/synthetic-conformance-value",
+          "scm": "git",
+          "is_private": false,
+          "language": "go",
+          "created_on": "2026-01-01T00:00:00Z",
+          "updated_on": "2026-01-02T00:00:00Z",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.test/workspaces/synthetic/repos/synthetic"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

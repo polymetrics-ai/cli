@@ -1,36 +1,65 @@
 {
   "tagline": "Work with Bitbucket Cloud repositories from the command line.",
   "usage": "pm bitbucket <command> <subcommand> [flags]",
+  "source_cli": {
+    "name": "bb/Bitbucket Cloud REST",
+    "docs": "https://developer.atlassian.com/cloud/bitbucket/rest/",
+    "reference": "https://developer.atlassian.com/cloud/bitbucket/rest/",
+    "source": "https://api.bitbucket.org/swagger.json"
+  },
   "groups": [
     {
       "id": "repositories",
       "title": "Repository Commands",
-      "commands": ["repo", "branch", "commit", "tag", "download"]
+      "commands": [
+        "repo",
+        "branch",
+        "commit",
+        "tag",
+        "download"
+      ]
     },
     {
       "id": "pull_requests",
       "title": "Pull Request Commands",
-      "commands": ["pull-request"]
+      "commands": [
+        "pull-request"
+      ]
     },
     {
       "id": "issues",
       "title": "Issue Tracker Commands",
-      "commands": ["issue"]
+      "commands": [
+        "issue"
+      ]
     },
     {
       "id": "pipelines",
       "title": "Pipelines And Deployments Commands",
-      "commands": ["pipeline", "deployment"]
+      "commands": [
+        "pipeline",
+        "deployment"
+      ]
     },
     {
       "id": "admin",
       "title": "Workspace And Administration Commands",
-      "commands": ["workspace", "project", "webhook", "branch-restriction", "snippet"]
+      "commands": [
+        "workspace",
+        "project",
+        "webhook",
+        "branch-restriction",
+        "snippet"
+      ]
     },
     {
       "id": "local",
       "title": "Local Workflow Commands",
-      "commands": ["auth", "config", "api"]
+      "commands": [
+        "auth",
+        "config",
+        "api"
+      ]
     }
   ],
   "global_flags": [
@@ -40,9 +69,15 @@
       "summary": "Write machine-readable JSON output."
     },
     {
+      "name": "credential",
+      "type": "string",
+      "summary": "Use a saved Bitbucket connector credential.",
+      "maps_to": "connection"
+    },
+    {
       "name": "connection",
       "type": "string",
-      "summary": "Use a saved Bitbucket connector credential and scope.",
+      "summary": "Alias for --credential.",
       "maps_to": "connection"
     },
     {
@@ -56,6 +91,16 @@
       "type": "string",
       "summary": "Bitbucket repository slug.",
       "maps_to": "config.repo_slug"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum records to emit for stream commands."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Maximum bytes for direct-read JSON responses."
     }
   ],
   "commands": [
@@ -63,16 +108,26 @@
       "path": "repo list",
       "summary": "List repositories in a workspace",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "repositories",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-repositories/",
-      "notes": "Future stream-backed command for workspace repository listings."
+      "examples": [
+        "pm bitbucket repo list --workspace acme --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}"
+        }
+      ]
     },
     {
       "path": "repo view",
       "summary": "View repository details",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-repositories/",
+      "output_policy": "bitbucket_json_object",
       "flags": [
         {
           "name": "repo",
@@ -81,17 +136,48 @@
           "maps_to": "path.repo_slug"
         }
       ],
-      "notes": "Safe direct-read candidate; blocked until #94 defines Bitbucket output policy and executor support."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}"
+        }
+      ]
     },
     {
       "path": "repo create",
       "summary": "Create a repository",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "create_repository",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-repositories/",
-      "risk": "Creates a repository in the target workspace.",
-      "approval": "Future reverse ETL writes require plan, preview, approval, execute, and typed confirmation when policy marks the target as admin-level.",
-      "notes": "No write action exists in this metadata slice."
+      "risk": "Creates a repository in the configured workspace.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute. Typed confirmation may be required by policy.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Repository display name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Repository description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "is-private",
+          "type": "boolean",
+          "summary": "Whether the repository is private.",
+          "maps_to": "record.is_private"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}"
+        }
+      ]
     },
     {
       "path": "repo delete",
@@ -99,6 +185,7 @@
       "intent": "direct_write",
       "availability": "unsafe_or_disallowed",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-repositories/",
+      "operation": "bitbucket.delete.repositories_workspace_repo_slug",
       "notes": "Repository deletion is destructive admin behavior and is not exposed as a connector write."
     },
     {
@@ -112,56 +199,100 @@
       "path": "branch list",
       "summary": "List repository branches",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "branches",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-refs/",
-      "notes": "Future stream-backed repository refs command."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/refs/branches"
+        }
+      ]
     },
     {
       "path": "commit list",
       "summary": "List repository commits",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "commits",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-commits/",
-      "notes": "Future stream-backed commit history command."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/commits"
+        }
+      ]
     },
     {
       "path": "tag list",
       "summary": "List repository tags",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "tags",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-refs/",
-      "notes": "Future stream-backed tag command."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/refs/tags"
+        }
+      ]
     },
     {
       "path": "pull-request list",
       "summary": "List pull requests",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "pull_requests",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/",
       "flags": [
         {
           "name": "state",
           "type": "enum",
-          "values": ["OPEN", "MERGED", "DECLINED", "SUPERSEDED"],
           "summary": "Filter by pull request state.",
+          "values": [
+            "OPEN",
+            "MERGED",
+            "DECLINED",
+            "SUPERSEDED"
+          ],
           "maps_to": "query.state"
         }
       ],
-      "notes": "Future stream-backed command."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests"
+        }
+      ]
     },
     {
       "path": "pull-request view",
       "summary": "View pull request details",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/",
-      "notes": "Safe direct-read candidate; output policy and executor deferred to #94."
+      "output_policy": "bitbucket_json_object",
+      "flags": [
+        {
+          "name": "pull-request-id",
+          "type": "integer",
+          "summary": "Pull request id.",
+          "maps_to": "path.pull_request_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
+        }
+      ]
     },
     {
       "path": "pull-request create",
       "summary": "Create a pull request",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "create_pull_request",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/",
       "risk": "Creates a visible pull request in the configured repository.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
@@ -185,33 +316,79 @@
           "maps_to": "record.title"
         }
       ],
-      "notes": "No write action exists in this metadata slice."
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests"
+        }
+      ]
     },
     {
       "path": "pull-request merge",
       "summary": "Merge a pull request",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "merge_pull_request",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/",
       "risk": "Merges code into the destination branch.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute, and may require typed confirmation by policy.",
-      "notes": "High-impact repository mutation; no write action exists in this metadata slice."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute. Typed confirmation may be required by policy.",
+      "flags": [
+        {
+          "name": "pull-request-id",
+          "type": "integer",
+          "summary": "Pull request id.",
+          "maps_to": "record.pull_request_id"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "summary": "Merge message.",
+          "maps_to": "record.message"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge"
+        }
+      ]
     },
     {
       "path": "pull-request decline",
       "summary": "Decline a pull request",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "decline_pull_request",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/",
       "risk": "Declines an open pull request.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "notes": "No write action exists in this metadata slice."
+      "flags": [
+        {
+          "name": "pull-request-id",
+          "type": "integer",
+          "summary": "Pull request id.",
+          "maps_to": "record.pull_request_id"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "summary": "Decline message.",
+          "maps_to": "record.message"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline"
+        }
+      ]
     },
     {
       "path": "issue list",
       "summary": "List issues",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "issues",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-issue-tracker/",
       "flags": [
         {
@@ -221,25 +398,106 @@
           "maps_to": "query.state"
         }
       ],
-      "notes": "Future stream-backed issue tracker command."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/issues"
+        }
+      ]
     },
     {
       "path": "issue view",
       "summary": "View issue details",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-issue-tracker/",
-      "notes": "Safe direct-read candidate; output policy and executor deferred to #94."
+      "output_policy": "bitbucket_json_object",
+      "flags": [
+        {
+          "name": "issue-id",
+          "type": "integer",
+          "summary": "Issue id.",
+          "maps_to": "path.issue_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}"
+        }
+      ]
     },
     {
       "path": "issue create",
       "summary": "Create an issue",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "create_issue",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-issue-tracker/",
       "risk": "Creates a visible issue in the configured repository.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "notes": "No write action exists in this metadata slice."
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Issue title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "summary": "Issue kind.",
+          "maps_to": "record.kind"
+        },
+        {
+          "name": "priority",
+          "type": "string",
+          "summary": "Issue priority.",
+          "maps_to": "record.priority"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}/issues"
+        }
+      ]
+    },
+    {
+      "path": "issue edit",
+      "summary": "Edit an issue",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_issue",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-issue-tracker/",
+      "risk": "Mutates an existing issue.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "issue-id",
+          "type": "integer",
+          "summary": "Issue id.",
+          "maps_to": "record.issue_id"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Issue title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "summary": "Issue state.",
+          "maps_to": "record.state"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}"
+        }
+      ]
     },
     {
       "path": "issue comment",
@@ -249,59 +507,111 @@
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-issue-tracker/",
       "risk": "Adds a visible issue comment.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "notes": "No write action exists in this metadata slice."
+      "notes": "Bitbucket comment bodies require nested content objects; use reverse ETL writes once nested body mapping is modeled."
     },
     {
       "path": "pipeline list",
       "summary": "List pipelines",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "pipelines",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pipelines/",
-      "notes": "Future stream-backed pipeline command."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines"
+        }
+      ]
     },
     {
       "path": "pipeline view",
       "summary": "View pipeline details",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pipelines/",
-      "notes": "Safe direct-read candidate; output policy and executor deferred to #94."
+      "output_policy": "bitbucket_json_object",
+      "flags": [
+        {
+          "name": "pipeline-uuid",
+          "type": "string",
+          "summary": "Pipeline UUID.",
+          "maps_to": "path.pipeline_uuid"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}"
+        }
+      ]
     },
     {
       "path": "pipeline run",
       "summary": "Run a pipeline",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "run_pipeline",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pipelines/",
       "risk": "Starts a Bitbucket pipeline execution.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "notes": "No write action exists in this metadata slice."
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines"
+        }
+      ]
     },
     {
       "path": "pipeline stop",
       "summary": "Stop a pipeline",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "stop_pipeline",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pipelines/",
       "risk": "Stops an in-flight Bitbucket pipeline.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "notes": "No write action exists in this metadata slice."
+      "flags": [
+        {
+          "name": "pipeline-uuid",
+          "type": "string",
+          "summary": "Pipeline UUID.",
+          "maps_to": "record.pipeline_uuid"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline"
+        }
+      ]
     },
     {
       "path": "deployment list",
       "summary": "List deployments",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "deployments",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-deployments/",
-      "notes": "Future stream-backed deployment command."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/deployments"
+        }
+      ]
     },
     {
       "path": "download list",
       "summary": "List repository downloads",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "downloads",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-downloads/",
-      "notes": "Download metadata is a future stream candidate; binary transfer is separate and bounded."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/downloads"
+        }
+      ]
     },
     {
       "path": "download get",
@@ -315,47 +625,113 @@
       "path": "webhook list",
       "summary": "List repository webhooks",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "webhooks",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-webhooks/",
-      "notes": "Future stream-backed webhook metadata command."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/hooks"
+        }
+      ]
     },
     {
       "path": "webhook create",
       "summary": "Create a repository webhook",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "create_webhook",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-webhooks/",
       "risk": "Creates an outbound webhook that can send repository events to an external URL.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute, and URL policy review.",
-      "notes": "No write action exists in this metadata slice."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute. URL policy review is required.",
+      "flags": [
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Webhook target URL.",
+          "maps_to": "record.url"
+        },
+        {
+          "name": "event",
+          "type": "string_array",
+          "summary": "Subscribed events.",
+          "maps_to": "record.events"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}/hooks"
+        }
+      ]
     },
     {
       "path": "webhook delete",
       "summary": "Delete a repository webhook",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "delete_webhook",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-webhooks/",
       "risk": "Deletes an existing webhook and may interrupt downstream automation.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute, and typed confirmation when policy marks the webhook as sensitive.",
-      "notes": "No write action exists in this metadata slice."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute. Typed confirmation may be required by policy.",
+      "flags": [
+        {
+          "name": "uid",
+          "type": "string",
+          "summary": "Webhook uid.",
+          "maps_to": "record.uid"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+        }
+      ]
     },
     {
       "path": "branch-restriction list",
       "summary": "List branch restrictions",
       "intent": "etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "stream": "branch_restrictions",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-branch-restrictions/",
-      "notes": "Future stream-backed branch policy command."
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions"
+        }
+      ]
     },
     {
       "path": "branch-restriction create",
       "summary": "Create a branch restriction",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "create_branch_restriction",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-branch-restrictions/",
       "risk": "Changes repository branch protection behavior.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute, and typed confirmation for admin policy changes.",
-      "notes": "No write action exists in this metadata slice."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute. Typed confirmation may be required for admin policy changes.",
+      "flags": [
+        {
+          "name": "kind",
+          "type": "string",
+          "summary": "Restriction kind.",
+          "maps_to": "record.kind"
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "summary": "Branch pattern.",
+          "maps_to": "record.pattern"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions"
+        }
+      ]
     },
     {
       "path": "branch-restriction delete",
@@ -364,42 +740,87 @@
       "availability": "partial",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-branch-restrictions/",
       "risk": "Removes branch protection behavior.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute, and typed confirmation for admin policy changes.",
-      "notes": "No write action exists in this metadata slice."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute. Typed confirmation is required for admin policy changes.",
+      "operation": "bitbucket.delete.repositories_workspace_repo_slug_branch_restrictions_id",
+      "notes": "Blocked until branch restriction delete confirmation UX is modeled."
     },
     {
       "path": "workspace list",
       "summary": "List accessible workspaces",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-workspaces/",
-      "notes": "Viewer-scoped direct-read candidate; executor deferred to #94."
+      "output_policy": "bitbucket_json_collection",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces"
+        }
+      ]
     },
     {
       "path": "project list",
       "summary": "List workspace projects",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-projects/",
-      "notes": "Workspace-scoped direct-read candidate; executor deferred to #94."
+      "output_policy": "bitbucket_json_collection",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workspaces/{workspace}/projects"
+        }
+      ]
     },
     {
       "path": "snippet list",
       "summary": "List snippets",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-snippets/",
-      "notes": "Direct-read candidate; snippet file content and binary behavior require output policy review."
+      "output_policy": "bitbucket_json_collection",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/snippets/{workspace}"
+        }
+      ]
     },
     {
       "path": "snippet create",
       "summary": "Create a snippet",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
+      "write": "create_snippet",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-snippets/",
       "risk": "Creates a Bitbucket snippet and may publish code or text content.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute, and content redaction review.",
-      "notes": "No write action exists in this metadata slice."
+      "approval": "Reverse ETL writes require plan, preview, approval, execute. Content redaction review is required.",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Snippet title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Snippet content.",
+          "maps_to": "record.content"
+        },
+        {
+          "name": "is-private",
+          "type": "boolean",
+          "summary": "Whether the snippet is private.",
+          "maps_to": "record.is_private"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/snippets/{workspace}"
+        }
+      ]
     },
     {
       "path": "auth status",
@@ -430,7 +851,7 @@
     },
     {
       "name": "coverage",
-      "summary": "This metadata slice is a command map only. Full 331-operation ledger coverage is owned by issue #93."
+      "summary": "All 331 official Swagger operations are enumerated in api_surface.json and operations.json; only reviewed app intents execute."
     }
   ]
 }

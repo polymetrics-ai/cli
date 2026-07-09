@@ -1,0 +1,13 @@
+{
+  "record": {
+    "pull_request_id": 101,
+    "message": "Merge synthetic PR"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/pullrequests/101/merge",
+    "body": {
+      "message": "Merge synthetic PR"
+    }
+  }
+}

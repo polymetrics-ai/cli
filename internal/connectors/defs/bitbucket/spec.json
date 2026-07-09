@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Bitbucket Connection Specification",
   "type": "object",
-  "required": [],
+  "required": [
+    "workspace"
+  ],
   "properties": {
     "base_url": {
       "type": "string",
@@ -12,15 +14,20 @@
     },
     "workspace": {
       "type": "string",
-      "description": "Optional Bitbucket workspace slug for future scoped reads."
+      "description": "Bitbucket workspace slug."
     },
     "repo_slug": {
       "type": "string",
-      "description": "Optional repository slug for future scoped reads."
+      "description": "Optional repository slug for repository-scoped reads and writes."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional lower bound for incremental-capable streams."
     },
     "access_token": {
       "type": "string",
-      "description": "Bitbucket OAuth or app password token supplied through the credential vault.",
+      "description": "Bitbucket OAuth or app password token supplied through the credential vault. Public endpoints may be read without it when Bitbucket allows anonymous access.",
       "x-secret": true
     }
   }

@@ -15,6 +15,7 @@
   - `scripts/gsd list --json`
 - `scripts/gsd prompt plan-phase issue-79-bitbucket-cli-parity --skip-research --tdd` generated an official GSD planning prompt.
 - #90 metadata-only Bitbucket seed bundle, CLI surface, generated docs/catalog artifacts, and generated website data are green.
+- #91-#96 executable Bitbucket CLI parity slice is green: help renderer, stream-backed commands, 331-operation ledger, direct reads/redaction, REST-only disposition, and sensitive/admin/destructive policy metadata.
 - Full local gates passed: `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`.
 
 ## Manual GSD fallback
@@ -37,15 +38,17 @@ Fallback in use: manual GSD universal runtime loop with `.pi/prompts/pm-gsd-loop
 
 - Updated connector/catalog hard-coded count tests for the new Bitbucket bundle.
 - Reverted unrelated broad connector-manual formatting churn from `pm docs generate`; kept only Bitbucket docs/catalog additions needed by `pm docs validate`.
+- Added Bitbucket stream schemas, fixtures, representative write fixtures, and redaction policies to satisfy conformance without live credentials.
+- Regenerated Bitbucket connector docs/catalog and website generated connector data after executable surface changes.
 
 ## Lanes
 
 | Issue | Red | Green | Refactor | Notes |
 |---:|---|---|---|---|
 | #90 | complete | complete | complete | metadata-only seed bundle verified and pushed at `0e359d76` |
-| #91 | blocked | blocked | blocked | waits for #90 metadata |
-| #92 | blocked | blocked | blocked | waits for #90 and stream definitions |
-| #93 | blocked | blocked | blocked | avoid `api_surface.json` collision with #90 seed |
-| #94 | blocked | blocked | blocked | waits for operation ledger |
-| #95 | blocked | blocked | blocked | waits for operation ledger need classification |
-| #96 | blocked | blocked | blocked | waits for operation ledger write risk classification |
+| #91 | complete | complete | complete | help/docs runtime renderer verified with `pm help bitbucket`, bare `pm bitbucket`, and `pm bitbucket --help` |
+| #92 | complete | complete | complete | stream-backed Bitbucket commands and conformance fixtures verified |
+| #93 | complete | complete | complete | full 331-operation official REST ledger verified |
+| #94 | complete | complete | complete | direct-read commands and redaction policy verified |
+| #95 | complete | complete | complete | REST-only disposition verified; no GraphQL/raw API executor added |
+| #96 | complete | complete | complete | sensitive/admin/destructive blocked metadata and approval-gated writes verified |

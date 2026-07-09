@@ -3,78 +3,111 @@
   "docs": "https://developer.atlassian.com/cloud/bitbucket/rest/",
   "reviewed_at": "2026-07-09",
   "operation_ledger_version": 1,
-  "scope": "Seed ledger for CLI surface metadata only. The full #93 operation ledger must replace this with all 331 official Swagger operations (GET 179, POST 50, PUT 48, DELETE 54). No Bitbucket endpoint is executable in this slice.",
+  "scope": "Full official Bitbucket Swagger operation ledger: all 331 operations from https://api.bitbucket.org/swagger.json are enumerated. Safe app-intent reads/writes are mapped to explicit streams, direct reads, or reverse ETL actions; every other operation remains blocked by default with typed risk metadata.",
   "endpoints": [
+    {
+      "method": "PUT",
+      "path": "/addon",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/addon",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/addon/{addon_key}/client-key",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hook_events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hook_events/{subject_type}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}",
+      "covered_by": {
+        "stream": "repositories"
+      }
+    },
     {
       "method": "GET",
       "path": "/repositories/{workspace}/{repo_slug}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Repository detail is a safe direct-read candidate but no Bitbucket direct-read executor or output policy is implemented in #90.",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-repositories/"
+      "covered_by": {
+        "direct_read": "repo view"
       }
     },
     {
-      "method": "GET",
-      "path": "/repositories/{workspace}/{repo_slug}/pullrequests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Pull request listing is an ETL candidate but stream execution is deferred to later Bitbucket lanes.",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/"
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}",
+      "covered_by": {
+        "write": "create_repository"
       }
     },
     {
-      "method": "GET",
-      "path": "/repositories/{workspace}/{repo_slug}/issues",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}",
       "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Issue listing is an ETL candidate but stream execution is deferred to later Bitbucket lanes.",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-issue-tracker/"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/repositories/{workspace}/{repo_slug}/pipelines/",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Pipeline listing is an ETL candidate but stream execution is deferred to later Bitbucket lanes.",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pipelines/"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/repositories/{workspace}/{repo_slug}/downloads",
-      "operation": {
-        "model": "binary_read",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Download metadata and binary file transfer need a bounded binary/local-output policy before execution.",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-downloads/"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/workspaces/{workspace}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Workspace detail is a direct-read candidate; executor support is deferred.",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-workspaces/"
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
       }
     },
     {
@@ -85,20 +118,3715 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Repository deletion is destructive admin behavior and is not exposed as a connector write.",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-repositories/"
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions",
+      "covered_by": {
+        "stream": "branch_restrictions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions",
+      "covered_by": {
+        "write": "create_branch_restriction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branching-model",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/pullrequests",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commits",
+      "covered_by": {
+        "stream": "commits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commits",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/components",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/components/{component_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments",
+      "covered_by": {
+        "stream": "deployments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments/{deployment_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/diff/{spec}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/diffstat/{spec}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads",
+      "covered_by": {
+        "stream": "downloads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/effective-branching-model",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/effective-default-reviewers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/environments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/environments",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/file-conflicts/{spec}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/filehistory/{commit}/{path}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/forks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/forks",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues",
+      "covered_by": {
+        "stream": "issues"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues",
+      "covered_by": {
+        "write": "create_issue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/export",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/export/{repo_name}-issues-{task_id}.zip",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/import",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/import",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}",
+      "covered_by": {
+        "direct_read": "issue view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}",
+      "covered_by": {
+        "write": "update_issue"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes/{change_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/merge-base/{revspec}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/milestones",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/milestones/{milestone_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/override-settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/override-settings",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/patch/{spec}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines",
+      "covered_by": {
+        "stream": "pipelines"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines",
+      "covered_by": {
+        "write": "run_pipeline"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}/content-uri",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}",
+      "covered_by": {
+        "direct_read": "pipeline view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline",
+      "covered_by": {
+        "write": "stop_pipeline"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/build_number",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}/executions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests",
+      "covered_by": {
+        "stream": "pull_requests"
       }
     },
     {
       "method": "POST",
       "path": "/repositories/{workspace}/{repo_slug}/pullrequests",
+      "covered_by": {
+        "write": "create_pull_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/activity",
       "operation": {
-        "model": "disallowed",
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}",
+      "covered_by": {
+        "direct_read": "pull-request view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Pull request creation is a future reverse ETL candidate, but no write action or approval-gated executor is implemented in this metadata slice.",
-        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/"
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline",
+      "covered_by": {
+        "write": "decline_pull_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge",
+      "covered_by": {
+        "write": "merge_pull_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/statuses",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches",
+      "covered_by": {
+        "stream": "branches"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches/{name}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches/{name}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags",
+      "covered_by": {
+        "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags/{name}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags/{name}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/src",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/src",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/src/{commit}/{path}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/versions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/versions/{version_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/watchers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/snippets",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}",
+      "covered_by": {
+        "stream": "snippets",
+        "direct_read": "snippet list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/snippets/{workspace}",
+      "covered_by": {
+        "write": "create_snippet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/comments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/snippets/{workspace}/{encoded_id}/comments",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/commits",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/commits/{revision}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/files/{path}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/watch",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}/watch",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}/watch",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/watchers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{revision}/diff",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{revision}/patch",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary or raw text payloads require a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{username}/pipelines_config/variables",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{username}/pipelines_config/variables",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{username}/search/code",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/emails",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/emails/{email}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/permissions/repositories",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/permissions/workspaces",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/workspaces",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/workspaces/{workspace}/permission",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/workspaces/{workspace}/permissions/repositories",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/gpg-keys",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{selected_user}/gpg-keys",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/gpg-keys/{fingerprint}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{selected_user}/gpg-keys/{fingerprint}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/pipelines_config/variables",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{selected_user}/pipelines_config/variables",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{selected_user}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{selected_user}/properties/{app_key}/{property_name}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/search/code",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/ssh-keys",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{selected_user}/ssh-keys",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{selected_user}/ssh-keys/{key_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{selected_user}/ssh-keys/{key_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{selected_user}/ssh-keys/{key_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces",
+      "covered_by": {
+        "direct_read": "workspace list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/hooks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace}/hooks",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/hooks/{uid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/hooks/{uid}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/hooks/{uid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/members",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/members/{member}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/permissions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/permissions/repositories",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/permissions/repositories/{repo_slug}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/keys.json",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/runners",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace}/pipelines-config/runners",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/variables",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace}/pipelines-config/variables",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects",
+      "covered_by": {
+        "stream": "projects",
+        "direct_read": "project list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace}/projects",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Mutation is tracked in the full ledger but is not mapped to an executable reviewed write action in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Sensitive Bitbucket mutation requires secret-safe input handling, redaction, preflight, and typed confirmation policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Administrative Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Destructive Bitbucket mutation is blocked by default unless modeled as an explicit confirmed reverse ETL action.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pullrequests/{selected_user}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/search/code",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}/settings/gpg/public-key",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read endpoint is tracked in the full ledger but is not mapped to an executable Bitbucket command in this slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/"
       }
     }
   ]

@@ -1,6 +1,6 @@
 {
   "phase": "issue-79-bitbucket-cli-parity",
-  "status": "in_progress",
+  "status": "verified_green_pending_commit_push_review",
   "parent_issue": 79,
   "parent_branch": "feat/79-bitbucket-cli-parity",
   "parent_pr": "https://github.com/polymetrics-ai/cli/pull/128",
@@ -33,7 +33,7 @@
     "caveman"
   ],
   "verificationPassed": true,
-  "verificationNotes": "#90 focused gates and full local gates passed; parent remains in progress for #91-#96. #90 commit pushed: 0e359d76. CodeRabbit direct_write safety finding accepted/fixed; post-fix go test ./... and make verify passed. CodeRabbit comments resolved after fix commit 95874b93; CI passed on PR #128.",
+  "verificationNotes": "#90 focused gates passed and were pushed earlier. #91-#96 completed inline as a local-critical-path slice; targeted Bitbucket tests, conformance fixture replay, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate, Bitbucket help commands, docs/catalog regeneration, and website data generation passed. Pending commit/push and automated review checkpoint for the new parity commits.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -79,6 +79,11 @@
       "cycle": "review-resolved",
       "decision": "coderabbit_resolved",
       "reason": "Inline disposition posted, @coderabbitai resolve completed, follow-up review command completed, and PR CI passed."
+    },
+    {
+      "cycle": "issue-91-96-green",
+      "decision": "completed_inline_local_critical_path",
+      "reason": "No subagent tool was available; completed remaining Bitbucket help, streams, ledger, direct-read, REST-only, and policy lanes in parent worktree with per-issue GSD/TDD artifacts."
     }
   ],
   "human_gates": [

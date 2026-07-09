@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/pipelines"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "pipeline",
+          "uuid": "pipeline-fixture-1",
+          "build_number": 42,
+          "state": "COMPLETED",
+          "creator": {
+            "display_name": "Ada"
+          },
+          "target": {
+            "ref_name": "main"
+          },
+          "trigger": {
+            "name": "manual"
+          },
+          "duration_in_seconds": 12,
+          "created_on": "2026-01-01T00:00:00Z",
+          "completed_on": "2026-01-01T00:01:00Z",
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.test/pipelines/42"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -17,7 +17,7 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi-api",
-    "status": "running"
+    "status": "verified_green_pending_commit_push_review"
   },
   "ready_queue": [
     {
@@ -35,7 +35,7 @@
     },
     {
       "number": 91,
-      "status": "planned",
+      "status": "verified_green_local",
       "dependencies": [
         90
       ],
@@ -43,11 +43,11 @@
         "help renderer paths",
         "Bitbucket docs"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "completed_inline_local_critical_path"
     },
     {
       "number": 92,
-      "status": "planned",
+      "status": "verified_green_local",
       "dependencies": [
         90
       ],
@@ -55,11 +55,11 @@
         "commandrunner",
         "Bitbucket defs"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "completed_inline_local_critical_path"
     },
     {
       "number": 93,
-      "status": "worker_ready",
+      "status": "verified_green_local",
       "dependencies": [
         90
       ],
@@ -67,11 +67,11 @@
         "internal/connectors/defs/bitbucket/api_surface.json",
         "operation ledger tests"
       ],
-      "decision": "ready_after_review_route_decision"
+      "decision": "completed_inline_local_critical_path"
     },
     {
       "number": 94,
-      "status": "planned",
+      "status": "verified_green_local",
       "dependencies": [
         93
       ],
@@ -79,11 +79,11 @@
         "commandrunner direct-read paths",
         "Bitbucket defs"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "completed_inline_local_critical_path"
     },
     {
       "number": 95,
-      "status": "planned",
+      "status": "verified_green_local",
       "dependencies": [
         93
       ],
@@ -91,11 +91,11 @@
         "GraphQL/advanced engine paths",
         "Bitbucket defs"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "completed_inline_local_critical_path"
     },
     {
       "number": 96,
-      "status": "planned",
+      "status": "verified_green_local",
       "dependencies": [
         93
       ],
@@ -103,7 +103,7 @@
         "sensitive/admin policy metadata",
         "Bitbucket defs"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "completed_inline_local_critical_path"
     }
   ],
   "spawn_decisions": [
@@ -127,6 +127,19 @@
         96
       ],
       "reason": "#90 verified in the parent worktree; commit/push checkpoint required before starting new overlapping Bitbucket definition lanes."
+    },
+    {
+      "timestamp": "2026-07-09T00:00:00Z",
+      "decision": "completed_inline_no_subagent",
+      "issue_numbers": [
+        91,
+        92,
+        93,
+        94,
+        95,
+        96
+      ],
+      "reason": "No mutating subagent tool was available; completed the remaining Bitbucket parity lanes in the parent worktree with issue-separated GSD/TDD artifacts and full local verification."
     }
   ],
   "subissues": [
@@ -154,21 +167,126 @@
     {
       "number": 91,
       "url": "https://github.com/polymetrics-ai/cli/issues/91",
-      "branch": "feat/bitbucket-help-renderer",
+      "branch": null,
       "pr_url": null,
-      "worker": null,
-      "status": "planned",
+      "worker": "local_critical_path",
+      "status": "verified_green_local",
       "write_scope": "help renderer/docs",
-      "worker_directory": null,
-      "verification": "blocked on #90",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-79-bitbucket-cli-parity",
+      "verification": "Bitbucket help renderer/docs; pm help bitbucket, bare pm bitbucket, and pm bitbucket --help verified; gates passed: targeted Bitbucket tests, conformance fixture replay, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate.",
       "automated_review": {
-        "primary_route": "blocked",
-        "status": "pending",
+        "primary_route": "pending_after_push",
+        "status": "pending_new_commits",
         "head_sha": null,
         "reviewed_range": null,
-        "coverage_route": "blocked",
+        "coverage_route": "draft_parent_pr_review_after_push",
         "fallback_route": "none",
-        "disposition_summary": "not started",
+        "disposition_summary": "Await CodeRabbit review for post-#90 parity commits after push.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 92,
+      "url": "https://github.com/polymetrics-ai/cli/issues/92",
+      "branch": null,
+      "pr_url": null,
+      "worker": "local_critical_path",
+      "status": "verified_green_local",
+      "write_scope": "stream runner",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-79-bitbucket-cli-parity",
+      "verification": "Stream-backed Bitbucket commands and fixture-backed conformance verified; gates passed: targeted Bitbucket tests, conformance fixture replay, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate.",
+      "automated_review": {
+        "primary_route": "pending_after_push",
+        "status": "pending_new_commits",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "draft_parent_pr_review_after_push",
+        "fallback_route": "none",
+        "disposition_summary": "Await CodeRabbit review for post-#90 parity commits after push.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 93,
+      "url": "https://github.com/polymetrics-ai/cli/issues/93",
+      "branch": null,
+      "pr_url": null,
+      "worker": "local_critical_path",
+      "status": "verified_green_local",
+      "write_scope": "operation ledger",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-79-bitbucket-cli-parity",
+      "verification": "Full 331-operation official Bitbucket REST ledger verified; gates passed: targeted Bitbucket tests, conformance fixture replay, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate.",
+      "automated_review": {
+        "primary_route": "pending_after_push",
+        "status": "pending_new_commits",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "draft_parent_pr_review_after_push",
+        "fallback_route": "none",
+        "disposition_summary": "Await CodeRabbit review for post-#90 parity commits after push.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 94,
+      "url": "https://github.com/polymetrics-ai/cli/issues/94",
+      "branch": null,
+      "pr_url": null,
+      "worker": "local_critical_path",
+      "status": "verified_green_local",
+      "write_scope": "direct reads",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-79-bitbucket-cli-parity",
+      "verification": "Bitbucket direct-read commands and redaction policies verified; gates passed: targeted Bitbucket tests, conformance fixture replay, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate.",
+      "automated_review": {
+        "primary_route": "pending_after_push",
+        "status": "pending_new_commits",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "draft_parent_pr_review_after_push",
+        "fallback_route": "none",
+        "disposition_summary": "Await CodeRabbit review for post-#90 parity commits after push.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 95,
+      "url": "https://github.com/polymetrics-ai/cli/issues/95",
+      "branch": null,
+      "pr_url": null,
+      "worker": "local_critical_path",
+      "status": "verified_green_local",
+      "write_scope": "advanced/REST-only disposition",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-79-bitbucket-cli-parity",
+      "verification": "REST-only ledger recorded; no GraphQL/raw API executor added; gates passed: targeted Bitbucket tests, conformance fixture replay, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate.",
+      "automated_review": {
+        "primary_route": "pending_after_push",
+        "status": "pending_new_commits",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "draft_parent_pr_review_after_push",
+        "fallback_route": "none",
+        "disposition_summary": "Await CodeRabbit review for post-#90 parity commits after push.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 96,
+      "url": "https://github.com/polymetrics-ai/cli/issues/96",
+      "branch": null,
+      "pr_url": null,
+      "worker": "local_critical_path",
+      "status": "verified_green_local",
+      "write_scope": "sensitive/admin policy",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-79-bitbucket-cli-parity",
+      "verification": "Sensitive/admin/destructive policy metadata and blocked raw/direct-write invariants verified; gates passed: targeted Bitbucket tests, conformance fixture replay, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate.",
+      "automated_review": {
+        "primary_route": "pending_after_push",
+        "status": "pending_new_commits",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "draft_parent_pr_review_after_push",
+        "fallback_route": "none",
+        "disposition_summary": "Await CodeRabbit review for post-#90 parity commits after push.",
         "disposition_url": null
       }
     }

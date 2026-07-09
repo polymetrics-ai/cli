@@ -1,0 +1,48 @@
+{
+  "phase": "issue-92-bitbucket-stream-runner",
+  "status": "verified_green_local",
+  "parent_issue": 79,
+  "sub_issue": 92,
+  "parent_branch": "feat/79-bitbucket-cli-parity",
+  "parent_pr": "https://github.com/polymetrics-ai/cli/pull/128",
+  "execution_mode": "local_critical_path",
+  "gsd": {
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json": "passed",
+    "programming_loop_prompt": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "manual_fallback": true
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-documentation",
+    "golang-context",
+    "golang-concurrency",
+    "golang-graphql",
+    "golang-lint",
+    "golang-spf13-cobra"
+  ],
+  "verificationPassed": true,
+  "verificationNotes": "Completed stream runner lane; stream-backed Bitbucket commands and fixtures verified. Gates passed: targeted Bitbucket tests, conformance fixture replay, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate, Bitbucket help commands, website data generation.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No subagent tool exposed; continue parent issue inline after #90."
+    },
+    {
+      "cycle": "green_verify",
+      "decision": "completed_inline_local_critical_path",
+      "reason": "No mutating subagent tool was available; lane completed in parent worktree with issue-separated artifacts and TDD evidence."
+    }
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}

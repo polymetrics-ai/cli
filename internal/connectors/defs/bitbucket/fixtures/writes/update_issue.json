@@ -1,0 +1,15 @@
+{
+  "record": {
+    "issue_id": 7,
+    "title": "Updated synthetic issue",
+    "state": "resolved"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/issues/7",
+    "body": {
+      "title": "Updated synthetic issue",
+      "state": "resolved"
+    }
+  }
+}

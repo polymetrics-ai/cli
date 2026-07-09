@@ -44,19 +44,19 @@ Deliver Bitbucket connector CLI parity across metadata, help/docs, stream-backed
 - Official Bitbucket Swagger: `https://api.bitbucket.org/swagger.json`.
 - Expected official operation count: 331 operations (GET 179, POST 50, PUT 48, DELETE 54).
 - Definition scope: `internal/connectors/defs/bitbucket/`.
-- Current baseline: no Bitbucket definition bundle exists.
+- Current implementation: Bitbucket definition bundle exists with executable reviewed streams, direct reads, approval-gated write actions, full 331-operation REST ledger, conformance fixtures, docs/catalog/website generated data, and blocked metadata for unsupported raw/local/binary/destructive/admin operations.
 
 ## Ready queue
 
 | Issue | Lane | Dependencies | Write scope | Decision |
 |---:|---|---|---|---|
 | #90 | CLI surface metadata | parent plan + parent PR thread | `.planning/phases/issue-90-bitbucket-cli-surface/**`, `internal/connectors/defs/bitbucket/**`, focused tests | `local_critical_path` |
-| #91 | Help renderer/docs | #90 metadata shape | docs/help renderer paths, Bitbucket defs/docs | `not_spawned_dependency_blocked` |
-| #92 | Stream runner | #90 + implemented stream definitions | commandrunner/Bitbucket defs | `not_spawned_dependency_blocked` |
-| #93 | Operation ledger | can run after parent PR; overlaps `api_surface.json` with #90 | Bitbucket `api_surface.json`, optional tests | `not_spawned_write_scope_collision` while #90 creates the seed bundle |
-| #94 | Direct reads | #93 operation ledger + output policy design | commandrunner/Bitbucket defs | `not_spawned_dependency_blocked` |
-| #95 | GraphQL/advanced engine | #93 classification proves need | engine/Bitbucket defs | `not_spawned_dependency_blocked` |
-| #96 | Sensitive/admin policy | #93 write classification | operations/sensitive policy metadata, validation | `not_spawned_dependency_blocked` |
+| #91 | Help renderer/docs | #90 metadata shape | docs/help renderer paths, Bitbucket defs/docs | `verified_green_local` |
+| #92 | Stream runner | #90 + implemented stream definitions | commandrunner/Bitbucket defs | `verified_green_local` |
+| #93 | Operation ledger | #90 seed bundle | Bitbucket `api_surface.json`, `operations.json`, tests | `verified_green_local` |
+| #94 | Direct reads | #93 operation ledger + output policy design | commandrunner/direct-read policy + Bitbucket defs | `verified_green_local` |
+| #95 | GraphQL/advanced engine | #93 classification proves need | Bitbucket docs/operations disposition | `verified_green_local` |
+| #96 | Sensitive/admin policy | #93 write classification | operations/sensitive policy metadata, write confirmations | `verified_green_local` |
 
 ## Execution order
 
@@ -64,7 +64,8 @@ Deliver Bitbucket connector CLI parity across metadata, help/docs, stream-backed
 2. Push `feat/79-bitbucket-cli-parity` and open a draft parent PR to `main` with `Refs #79`.
 3. Execute #90 locally because this runtime does not expose the Pi `subagent` tool and #90 owns the seed bundle needed by later lanes. (Verified green slice complete.)
 4. Commit/push the #90 verified slice. Complete: pushed at `0e359d76` on `feat/79-bitbucket-cli-parity`.
-5. Continue ready queue after #90, preferring isolated workers/worktrees only if a runtime with mutating subagent isolation is available.
+5. Continue ready queue after #90, preferring isolated workers/worktrees only if a runtime with mutating subagent isolation is available. Current Pi API session still has no subagent tool, so #91-#96 proceeded inline as a single verified local-critical-path implementation slice with issue-separated planning artifacts.
+6. #91-#96 completed locally with red tests first, then green implementation, conformance fixtures, docs/catalog/website regeneration, and full local gates (`go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`).
 
 ## TDD policy
 
@@ -74,7 +75,7 @@ Deliver Bitbucket connector CLI parity across metadata, help/docs, stream-backed
 
 ## CLI help/docs/website parity
 
-Applies to connector surfaces and future runtime help. #90 is metadata-only and records runtime command help as not-yet-executable, while adding generated connector manual/catalog and website data for the new bundle. Later #91 owns rendered Bitbucket runtime help/docs. Any code path that changes CLI behavior must verify:
+Applies to connector surfaces and runtime help. #91 added connector-manual fallback help so `pm help bitbucket`, bare `pm bitbucket`, and `pm bitbucket --help` render contextual Bitbucket help successfully. Generated connector manuals/catalogs and website connector data were regenerated after the executable surface changed. Any code path that changes CLI behavior must verify:
 
 - `pm help <topic>` where applicable.
 - `pm <namespace>` bare behavior where applicable.

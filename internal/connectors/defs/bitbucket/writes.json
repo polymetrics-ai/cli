@@ -1,0 +1,419 @@
+{
+  "actions": [
+    {
+      "name": "create_repository",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "is_private": {
+            "type": "boolean"
+          },
+          "scm": {
+            "type": "string"
+          },
+          "project": {
+            "type": "object"
+          },
+          "language": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Bitbucket repository in the configured workspace",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_issue",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "object"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "assignee": {
+            "type": "object"
+          },
+          "component": {
+            "type": "object"
+          },
+          "milestone": {
+            "type": "object"
+          },
+          "version": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "creates a visible Bitbucket issue and may notify repository participants"
+    },
+    {
+      "name": "update_issue",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues/{{ record.issue_id }}",
+      "path_fields": [
+        "issue_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "object"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "assignee": {
+            "type": "object"
+          },
+          "component": {
+            "type": "object"
+          },
+          "milestone": {
+            "type": "object"
+          },
+          "version": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "mutates an existing Bitbucket issue"
+    },
+    {
+      "name": "create_pull_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "source": {
+            "type": "object"
+          },
+          "destination": {
+            "type": "object"
+          },
+          "source_branch": {
+            "type": "string"
+          },
+          "destination_branch": {
+            "type": "string"
+          },
+          "close_source_branch": {
+            "type": "boolean"
+          },
+          "reviewers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "creates a visible pull request and may notify reviewers"
+    },
+    {
+      "name": "merge_pull_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/merge",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "close_source_branch": {
+            "type": "boolean"
+          },
+          "merge_strategy": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "merges a pull request into its destination branch",
+      "confirm": "destructive"
+    },
+    {
+      "name": "decline_pull_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ record.pull_request_id }}/decline",
+      "path_fields": [
+        "pull_request_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pull_request_id"
+        ],
+        "properties": {
+          "pull_request_id": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "declines a Bitbucket pull request"
+    },
+    {
+      "name": "run_pipeline",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {
+          "target": {
+            "type": "object"
+          },
+          "variables": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "selector": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "starts a Bitbucket pipeline run that may consume CI minutes and deploy artifacts"
+    },
+    {
+      "name": "stop_pipeline",
+      "kind": "update",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines/{{ record.pipeline_uuid }}/stopPipeline",
+      "path_fields": [
+        "pipeline_uuid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pipeline_uuid"
+        ],
+        "properties": {
+          "pipeline_uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "stops an in-flight Bitbucket pipeline"
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/hooks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "url",
+          "events"
+        ],
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "creates an outbound webhook that sends repository events to an external URL"
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/hooks/{{ record.uid }}",
+      "path_fields": [
+        "uid"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "uid"
+        ],
+        "properties": {
+          "uid": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes a repository webhook and may interrupt downstream automation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_branch_restriction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/branch-restrictions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "branch_match_kind": {
+            "type": "string"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "value": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "changes repository branch protection behavior",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_snippet",
+      "kind": "create",
+      "method": "POST",
+      "path": "/snippets/{{ config.workspace }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "scm": {
+            "type": "string"
+          },
+          "is_private": {
+            "type": "boolean"
+          },
+          "files": {
+            "type": "object"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Bitbucket snippet that may publish code or text content"
+    }
+  ]
+}

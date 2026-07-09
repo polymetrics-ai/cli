@@ -22,6 +22,8 @@ const (
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
+	directReadPolicyBitbucketJSONObject        = "bitbucket_json_object"
+	directReadPolicyBitbucketJSONCollection    = "bitbucket_json_collection"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -112,6 +114,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
+	case directReadPolicyBitbucketJSONObject, directReadPolicyBitbucketJSONCollection:
+		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
@@ -142,6 +146,14 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 			out = append(out, item)
 		}
 		return out, nil
+	case directReadPolicyBitbucketJSONObject:
+		obj, ok := body.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("direct read output policy %q requires a JSON object", policy)
+		}
+		return redactBitbucketJSON(obj).(map[string]any), nil
+	case directReadPolicyBitbucketJSONCollection:
+		return redactBitbucketJSON(body), nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
@@ -162,6 +174,63 @@ func redactGitHubContentsObject(in map[string]any) map[string]any {
 		}
 	}
 	return out
+}
+
+func redactBitbucketJSON(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed)+2)
+		for k, v := range typed {
+			lower := strings.ToLower(k)
+			if shouldRedactBitbucketKey(lower) {
+				out[k+"_redacted"] = true
+				continue
+			}
+			if lower == "links" {
+				if links, ok := v.(map[string]any); ok {
+					out[k] = redactBitbucketLinks(links)
+					continue
+				}
+			}
+			out[k] = redactBitbucketJSON(v)
+		}
+		return out
+	case []any:
+		out := make([]any, 0, len(typed))
+		for _, item := range typed {
+			out = append(out, redactBitbucketJSON(item))
+		}
+		return out
+	default:
+		return value
+	}
+}
+
+func redactBitbucketLinks(in map[string]any) map[string]any {
+	out := make(map[string]any, len(in)+2)
+	for k, v := range in {
+		switch strings.ToLower(k) {
+		case "clone", "download", "downloads":
+			out[k+"_redacted"] = true
+		default:
+			out[k] = redactBitbucketJSON(v)
+		}
+	}
+	return out
+}
+
+func shouldRedactBitbucketKey(lower string) bool {
+	for _, marker := range []string{"token", "secret", "password", "private_key", "access_token", "client_secret"} {
+		if strings.Contains(lower, marker) {
+			return true
+		}
+	}
+	switch lower {
+	case "content", "raw", "patch", "diff", "key_pair", "private_key", "value":
+		return true
+	default:
+		return false
+	}
 }
 
 func rejectSensitiveRepositoryPath(value string) error {

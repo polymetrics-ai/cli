@@ -42,7 +42,7 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 - [x] `website/**` updated/regenerated (`cd website && pnpm run gen:website-data` twice).
 - [x] Generated help/manual artifacts updated or exemption recorded (`docs/connectors/bitbucket/**` and catalog docs added; `./pm docs validate` passed).
 
-Current parent phase status: #90 verified green slice complete; remaining lanes #91-#96 pending.
+Current parent phase status: #90 verified green slice complete; #91-#96 completed inline as one local-critical-path implementation slice pending commit/push/review checkpoint.
 
 ## #90 focused evidence
 
@@ -69,3 +69,36 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 Results: passed; connector validation reported `connectors_checked=548`, `findings=0`, `warnings=0`; `make verify` passed. Commit/push checkpoint: `0e359d76` pushed to `feat/79-bitbucket-cli-parity`.
 
 CodeRabbit actionable finding disposition: accepted and fixed by tightening the #90 test so `direct_write` commands must be `unsafe_or_disallowed`. Post-review-fix `go test ./...` and `make verify` passed.
+
+## #91-#96 final evidence
+
+```bash
+jq . internal/connectors/defs/bitbucket/*.json internal/connectors/defs/bitbucket/schemas/*.json
+go test ./cmd/connectorgen -run Bitbucket -count=1
+go test ./internal/cli -run Bitbucket -count=1
+go test ./internal/connectors/conformance -run 'TestConformance/bitbucket' -count=1
+go run ./cmd/connectorgen validate internal/connectors/defs
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+./pm help bitbucket
+./pm bitbucket
+./pm bitbucket --help
+npm --prefix website run gen:website-data
+```
+
+Results: passed. `make verify` first exceeded the 900s tool timeout while `internal/connectors/certify` was still running; the rerun with a longer timeout passed. No credentialed Bitbucket checks were run.
+
+CLI/help/docs/website parity:
+
+- [x] `pm help bitbucket` renders Bitbucket connector manual/command surface.
+- [x] bare `pm bitbucket` renders contextual help and exits successfully.
+- [x] `pm bitbucket --help` renders contextual help and exits successfully.
+- [x] Runtime stream command path covered by `pm bitbucket issue list` fixture-backed CLI test.
+- [x] Runtime direct-read command path covered by `pm bitbucket repo view` fixture-backed CLI test with clone-link redaction.
+- [x] Runtime write-plan command path covered by `pm bitbucket issue create` CLI test with approval-gated JSON and no approval token/raw record leakage.
+- [x] `docs/connectors/bitbucket/**`, connector catalog docs, and website generated connector data updated.
+- [x] Website CLI reference notes dispatched Bitbucket connector command surface and blocked raw/local workflows.

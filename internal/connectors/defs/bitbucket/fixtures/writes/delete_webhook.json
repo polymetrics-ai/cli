@@ -1,0 +1,13 @@
+{
+  "record": {
+    "uid": "webhook-fixture-1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/hooks/webhook-fixture-1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

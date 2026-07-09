@@ -2,26 +2,24 @@
 
 ## Overview
 
-Bitbucket Cloud connector metadata is being introduced through the Bitbucket CLI parity parent issue (#79). This seed bundle records a safe command map for repository, pull request, issue, pipeline, deployment, download, webhook, branch-restriction, workspace, project, and snippet workflows.
-
-This slice does not enable live Bitbucket reads or writes. Later lanes add the full operation ledger, streams, direct reads, and approval-gated reverse ETL actions.
+Bitbucket Cloud connector support covers safe CLI parity for repository, branch, commit, tag, pull request, issue, pipeline, deployment, download metadata, webhook, branch restriction, workspace, project, and snippet workflows. The bundle uses the Bitbucket Cloud REST API 2.0 and the official Swagger at https://api.bitbucket.org/swagger.json as its operation source of truth.
 
 ## Auth setup
 
-Future Bitbucket execution will use credentials supplied through the Polymetrics credential vault, such as OAuth or app-password style access tokens. Do not place token values in prompts, command examples, fixtures, logs, or connector metadata.
+Use `pm credentials add <name> --connector bitbucket --config workspace=<workspace> --config repo_slug=<repo> --from-env access_token=BITBUCKET_TOKEN` for authenticated reads and writes. Public reads may omit `access_token` when Bitbucket permits anonymous access. Never put token values in prompts, command examples, fixtures, logs, or connector metadata.
 
 ## Streams notes
 
-No Bitbucket streams are implemented in this metadata seed. `streams.json` is intentionally empty so the bundle can load while #90 focuses on `cli_surface.json`. Planned stream-backed command groups include repositories, branches, commits, tags, pull requests, issues, pipelines, deployments, downloads metadata, webhooks, and branch restrictions.
+Streams use Bitbucket's paginated `values` envelope and `next` URL pagination. Implemented stream-backed command families include repositories, branches, commits, tags, pull requests, issues, pipelines, deployments, downloads metadata, webhooks, branch restrictions, workspace projects, and snippets. Binary download, patch, diff, log, attachment, and repository clone workflows are deliberately not executed as streams.
 
 ## Write actions & risks
 
-No Bitbucket write actions are implemented in this metadata seed. Future writes must be modeled as explicit reverse ETL actions with record schemas, risk text, and plan → preview → approval → execute semantics. Destructive/admin operations such as repository deletion, branch protection changes, and sensitive webhook or snippet content workflows remain blocked by default until #96 defines the policy.
+Selected mutations are modeled as explicit reverse ETL actions: create repository, create/update issue, create/merge/decline pull request, run/stop pipeline, create/delete webhook, create branch restriction, and create snippet. Reverse ETL remains plan → preview → approval → execute. Destructive/admin/sensitive operation rows in `operations.json` carry typed confirmation policy metadata and remain blocked unless represented by an explicit reviewed write action.
 
 ## Known limits
 
-- The full official Bitbucket Swagger has 331 operations (GET 179, POST 50, PUT 48, DELETE 54); #93 owns the complete operation ledger.
-- Direct-read execution and output policies are deferred to #94.
-- GraphQL or advanced fixed-body support is deferred to #95 if Bitbucket needs it.
-- Binary downloads and local git workflows are metadata-only in this slice and require bounded destination/output policy before execution.
+- Full ledger coverage is metadata-first: all 331 Swagger operations are classified, but only reviewed app-intent streams, direct reads, and write actions execute.
+- Bitbucket has no GraphQL surface in the official Swagger; #95 is recorded as REST-only and no GraphQL executor is added.
+- Local git clone, browser, binary download, raw patch/diff/log, issue import/export archive, attachment, and arbitrary raw API workflows remain unsupported until bounded local-output policies exist.
+- Some complex Bitbucket write bodies require callers to provide nested JSON objects through reverse ETL records; generic arbitrary mutation bodies are not exposed.
 - Generic raw API calls are explicitly disallowed.

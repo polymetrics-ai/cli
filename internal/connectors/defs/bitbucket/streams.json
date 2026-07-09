@@ -14,7 +14,217 @@
       {
         "mode": "none"
       }
+    ],
+    "pagination": {
+      "type": "next_url",
+      "next_url_path": "next",
+      "size_param": "pagelen",
+      "page_size": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/workspaces/{{ config.workspace }}"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "bitbucket access token is missing, expired, or invalid; re-run pm credentials add bitbucket"
+      },
+      {
+        "status": 403,
+        "hint": "bitbucket token lacks access for this workspace or repository"
+      },
+      {
+        "status": 404,
+        "hint": "bitbucket workspace, repository, or resource was not found"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "bitbucket rate limit exceeded; retry after the provider window"
+      }
     ]
   },
-  "streams": []
+  "streams": [
+    {
+      "name": "repositories",
+      "path": "/repositories/{{ config.workspace }}",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories.json",
+      "query": {
+        "role": "member"
+      },
+      "computed_fields": {
+        "workspace": "{{ config.workspace }}"
+      }
+    },
+    {
+      "name": "branches",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs/branches",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/branches.json",
+      "computed_fields": {
+        "repository": "{{ config.workspace }}/{{ config.repo_slug }}",
+        "target_hash": "{{ record.target.hash }}"
+      }
+    },
+    {
+      "name": "commits",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/commits",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/commits.json",
+      "incremental": {
+        "cursor_field": "date",
+        "request_param": "since",
+        "param_format": "rfc3339",
+        "start_config_key": "start_date"
+      },
+      "computed_fields": {
+        "repository": "{{ config.workspace }}/{{ config.repo_slug }}"
+      }
+    },
+    {
+      "name": "tags",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/refs/tags",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/tags.json",
+      "computed_fields": {
+        "repository": "{{ config.workspace }}/{{ config.repo_slug }}",
+        "target_hash": "{{ record.target.hash }}"
+      }
+    },
+    {
+      "name": "pull_requests",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/pull_requests.json",
+      "query": {
+        "state": "OPEN"
+      },
+      "incremental": {
+        "cursor_field": "updated_on"
+      },
+      "computed_fields": {
+        "repository": "{{ config.workspace }}/{{ config.repo_slug }}",
+        "author_display_name": "{{ record.author.display_name }}",
+        "source_branch": "{{ record.source.branch.name }}",
+        "destination_branch": "{{ record.destination.branch.name }}"
+      }
+    },
+    {
+      "name": "issues",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/issues",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/issues.json",
+      "incremental": {
+        "cursor_field": "updated_on"
+      },
+      "computed_fields": {
+        "repository": "{{ config.workspace }}/{{ config.repo_slug }}",
+        "reporter_display_name": "{{ record.reporter.display_name }}",
+        "assignee_display_name": "{{ record.assignee.display_name }}"
+      }
+    },
+    {
+      "name": "pipelines",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/pipelines.json",
+      "incremental": {
+        "cursor_field": "created_on"
+      },
+      "computed_fields": {
+        "repository": "{{ config.workspace }}/{{ config.repo_slug }}"
+      }
+    },
+    {
+      "name": "deployments",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deployments",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/deployments.json",
+      "incremental": {
+        "cursor_field": "created_on"
+      },
+      "computed_fields": {
+        "repository": "{{ config.workspace }}/{{ config.repo_slug }}"
+      }
+    },
+    {
+      "name": "downloads",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/downloads",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/downloads.json",
+      "computed_fields": {
+        "repository": "{{ config.workspace }}/{{ config.repo_slug }}"
+      }
+    },
+    {
+      "name": "webhooks",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/hooks",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/webhooks.json",
+      "computed_fields": {
+        "repository": "{{ config.workspace }}/{{ config.repo_slug }}"
+      }
+    },
+    {
+      "name": "branch_restrictions",
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/branch-restrictions",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/branch_restrictions.json",
+      "computed_fields": {
+        "repository": "{{ config.workspace }}/{{ config.repo_slug }}"
+      }
+    },
+    {
+      "name": "projects",
+      "path": "/workspaces/{{ config.workspace }}/projects",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/projects.json",
+      "incremental": {
+        "cursor_field": "updated_on"
+      },
+      "computed_fields": {
+        "workspace": "{{ config.workspace }}"
+      }
+    },
+    {
+      "name": "snippets",
+      "path": "/snippets/{{ config.workspace }}",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/snippets.json",
+      "incremental": {
+        "cursor_field": "updated_on"
+      },
+      "computed_fields": {
+        "workspace": "{{ config.workspace }}"
+      }
+    }
+  ]
 }

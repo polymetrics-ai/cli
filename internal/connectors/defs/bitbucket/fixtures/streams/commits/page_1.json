@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/commits",
+    "query": {
+      "since": "2020-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "commit",
+          "hash": "abc123fixture",
+          "date": "2026-01-02T00:00:00Z",
+          "message": "Synthetic commit",
+          "author": {
+            "raw": "Ada <ada@example.test>"
+          },
+          "parents": [],
+          "summary": {
+            "raw": "Synthetic commit"
+          },
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.test/commit/abc123fixture"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

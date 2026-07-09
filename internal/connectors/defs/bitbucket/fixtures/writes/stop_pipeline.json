@@ -1,0 +1,9 @@
+{
+  "record": {
+    "pipeline_uuid": "pipeline-fixture-1"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/pipelines/pipeline-fixture-1/stopPipeline"
+  }
+}

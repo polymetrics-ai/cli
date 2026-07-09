@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "Synthetic Repo",
+    "description": "Fixture repo",
+    "is_private": false
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value",
+    "body": {
+      "name": "Synthetic Repo",
+      "description": "Fixture repo",
+      "is_private": false
+    }
+  }
+}

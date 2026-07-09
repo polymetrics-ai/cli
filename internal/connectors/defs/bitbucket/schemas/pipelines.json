@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pipelines",
+  "type": "object",
+  "x-primary-key": [
+    "uuid"
+  ],
+  "properties": {
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uuid": {
+      "type": "string"
+    },
+    "id": {
+      "type": [
+        "integer",
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slug": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "full_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updated_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "repository": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workspace": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "build_number": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "creator": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "target": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "trigger": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "duration_in_seconds": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "completed_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    }
+  },
+  "x-cursor-field": "created_on"
+}

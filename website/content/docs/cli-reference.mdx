@@ -44,10 +44,11 @@ This page is the public website contract for the `pm` CLI. When a command is add
 
 ## Connector command metadata
 
-The GitHub connector has gh-inspired command metadata for future help rendering and safe command
-execution, but it is not a dispatched `pm github ...` command tree yet. See
-[/docs/github-cli-surface](/docs/github-cli-surface) for the current metadata, safety labels, and
-staged parity roadmap.
+Connector bundles can expose reviewed command-surface metadata that powers `pm <connector>` help
+and safe app-intent execution. Bitbucket is dispatched as `pm bitbucket ...` for reviewed reads,
+direct reads, and approval-gated write plans; raw API calls, local git clone/download workflows,
+and unmodeled destructive/admin operations remain blocked by policy. GitHub's gh-inspired metadata
+remains documented at [/docs/github-cli-surface](/docs/github-cli-surface).
 
 ## Workspace commands
 

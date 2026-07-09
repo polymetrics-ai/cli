@@ -1,0 +1,168 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pull_requests",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uuid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slug": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "full_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "updated_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "repository": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workspace": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "summary": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "author": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "destination": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "reviewers": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {}
+    },
+    "participants": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {}
+    },
+    "comment_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "task_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "close_source_branch": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "author_display_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_branch": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "destination_branch": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "x-cursor-field": "updated_on"
+}

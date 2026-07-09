@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/refs/tags"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pagelen": 100,
+      "page": 1,
+      "size": 1,
+      "next": null,
+      "values": [
+        {
+          "type": "tag",
+          "name": "v1.0.0",
+          "target": {
+            "hash": "abc123fixture"
+          },
+          "links": {
+            "html": {
+              "href": "https://bitbucket.example.test/tag/v1.0.0"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -445,6 +445,127 @@ func TestGitHubCommandSurfaceClampsOversizedLimit(t *testing.T) {
 	}
 }
 
+func TestBitbucketCommandSurfaceHelpAndRunsImplementedCommands(t *testing.T) {
+	for _, args := range [][]string{{"help", "bitbucket"}, {"bitbucket"}, {"bitbucket", "--help"}} {
+		var stdout, stderr bytes.Buffer
+		code := cli.Run(args, &stdout, &stderr)
+		if code != 0 {
+			t.Fatalf("Run(%v) code = %d stderr=%s stdout=%s", args, code, stderr.String(), stdout.String())
+		}
+		out := stdout.String()
+		for _, want := range []string{"NAME", "COMMAND SURFACE", "pm bitbucket <command> <subcommand> [flags]", "issue list", "pull-request create"} {
+			if !strings.Contains(out, want) {
+				t.Fatalf("Run(%v) output missing %q:\n%s", args, want, out)
+			}
+		}
+	}
+
+	var gotIssuePath, gotRepoPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/repositories/acme/widgets/issues":
+			gotIssuePath = r.URL.Path
+			if r.URL.Query().Get("state") != "open" {
+				t.Fatalf("issue state query = %q, want open", r.URL.Query().Get("state"))
+			}
+			_, _ = w.Write([]byte(`{"values":[{"id":7,"repository":{"full_name":"acme/widgets"},"title":"bug","state":"open","reporter":{"display_name":"Ada","uuid":"{ada}"},"created_on":"2026-07-01T00:00:00Z","updated_on":"2026-07-02T00:00:00Z"}]}`))
+		case "/repositories/acme/widgets":
+			gotRepoPath = r.URL.Path
+			_, _ = w.Write([]byte(`{"uuid":"{repo}","full_name":"acme/widgets","name":"widgets","scm":"git","is_private":false,"links":{"clone":[{"href":"https://example.test/acme/widgets.git"}],"html":{"href":"https://bitbucket.test/acme/widgets"}}}`))
+		default:
+			t.Fatalf("unexpected path %s", r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "bitbucket-local",
+		"--connector", "bitbucket",
+		"--config", "workspace=acme",
+		"--config", "repo_slug=widgets",
+		"--config", "base_url=" + srv.URL,
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"bitbucket", "issue", "list",
+		"--credential", "bitbucket-local",
+		"--state", "open",
+		"--limit", "1",
+		"--root", root,
+		"--json",
+	})
+	if gotIssuePath != "/repositories/acme/widgets/issues" {
+		t.Fatalf("issue request path = %q, want Bitbucket issues path", gotIssuePath)
+	}
+	var readEnv struct {
+		Kind    string `json:"kind"`
+		Command string `json:"command"`
+		Stream  string `json:"stream"`
+		Count   int    `json:"count"`
+		Records []struct {
+			ID         int    `json:"id"`
+			Repository string `json:"repository"`
+			Reporter   string `json:"reporter_display_name"`
+		} `json:"records"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &readEnv); err != nil {
+		t.Fatalf("decode issue list json: %v\n%s", err, stdout)
+	}
+	if readEnv.Kind != "ConnectorCommandRead" || readEnv.Command != "issue list" || readEnv.Stream != "issues" || readEnv.Count != 1 {
+		t.Fatalf("issue list envelope = %+v", readEnv)
+	}
+	if len(readEnv.Records) != 1 || readEnv.Records[0].Repository != "acme/widgets" || readEnv.Records[0].Reporter != "Ada" {
+		t.Fatalf("issue records = %+v", readEnv.Records)
+	}
+
+	stdout, _ = runCLI(t, []string{
+		"bitbucket", "repo", "view",
+		"--credential", "bitbucket-local",
+		"--root", root,
+		"--json",
+	})
+	if gotRepoPath != "/repositories/acme/widgets" {
+		t.Fatalf("repo view path = %q, want repository path", gotRepoPath)
+	}
+	var directEnv struct {
+		Kind     string         `json:"kind"`
+		Command  string         `json:"command"`
+		Response map[string]any `json:"response"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &directEnv); err != nil {
+		t.Fatalf("decode repo view json: %v\n%s", err, stdout)
+	}
+	if directEnv.Kind != "ConnectorCommandDirectRead" || directEnv.Command != "repo view" || directEnv.Response["full_name"] != "acme/widgets" {
+		t.Fatalf("direct read envelope = %+v", directEnv)
+	}
+	if links, ok := directEnv.Response["links"].(map[string]any); ok {
+		if _, leaked := links["clone"]; leaked {
+			t.Fatalf("repo view leaked clone links: %+v", directEnv.Response)
+		}
+	}
+
+	stdout, _ = runCLI(t, []string{
+		"bitbucket", "issue", "create",
+		"--credential", "bitbucket-local",
+		"--title", "Ship Bitbucket parity",
+		"--root", root,
+		"--json",
+	})
+	for _, want := range []string{`"kind": "ConnectorCommandWritePlan"`, `"connector_command": "issue create"`, `"action": "create_issue"`, `"approval_required": true`} {
+		if !strings.Contains(stdout, want) {
+			t.Fatalf("issue create plan missing %q:\n%s", want, stdout)
+		}
+	}
+	if strings.Contains(stdout, "approval_token") || strings.Contains(stdout, "connector_command_record") {
+		t.Fatalf("issue create plan leaked approval/raw record:\n%s", stdout)
+	}
+}
+
 func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	var gotPath string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
