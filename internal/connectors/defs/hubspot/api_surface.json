@@ -1,0 +1,8 @@
+{
+  "api": "HubSpot Public APIs",
+  "docs": "https://github.com/HubSpot/HubSpot-public-api-spec-collection",
+  "reviewed_at": "2026-07-10",
+  "operation_ledger_version": 1,
+  "scope": "Issue #134 metadata scaffold only. Issue #137 owns the full 3,060-operation method/path ledger from the official HubSpot public OpenAPI collection; this file is intentionally empty until that ledger lands so this slice does not overclaim endpoint coverage.",
+  "endpoints": []
+}

@@ -798,16 +798,33 @@ func checkCLISurfaceReferences(
 		}
 	}
 	if cmd.Operation != "" {
-		if _, ok := operations[cmd.Operation]; !ok {
+		op, ok := operations[cmd.Operation]
+		if !ok {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceUnknownTarget,
 				Message:   fmt.Sprintf("command %d (%q) references unknown operation %q", i, cmd.Path, cmd.Operation),
 			})
+		} else if cmd.Intent == "binary" && !cliSurfaceBinaryOperationKind(op.Kind) {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) binary intent references operation %q with non-binary kind %q", i, cmd.Path, cmd.Operation, op.Kind),
+			})
 		}
 	}
 	return findings
+}
+
+func cliSurfaceBinaryOperationKind(kind string) bool {
+	switch kind {
+	case "binary_download", "file_upload", "local_file":
+		return true
+	default:
+		return false
+	}
 }
 
 func checkCLISurfaceWriteFlags(
@@ -934,6 +951,16 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 		if len(findings) > 0 {
 			return findings
 		}
+	case "binary":
+		if cmd.Operation != "" {
+			return nil
+		}
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented binary command %d (%q) must reference a typed operation", i, cmd.Path),
+		}}
 	case "local_workflow":
 		if cmd.Operation != "" {
 			return nil

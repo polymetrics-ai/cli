@@ -29,14 +29,39 @@
     "golang-graphql",
     "golang-lint"
   ],
-  "status": "planned",
-  "verificationPassed": false,
-  "verificationBlocker": "red/green implementation not yet run",
+  "status": "pr_open_review_blocked_auto_skipped",
+  "verificationPassed": true,
+  "verificationBlocker": "none",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "selected first sub-issue lane after parent plan; no subagent tool available in current harness"
+    },
+    {
+      "cycle": "tdd-red",
+      "decision": "local_critical_path",
+      "reason": "added failing CLISurface/HubSpot tests before production edits"
+    },
+    {
+      "cycle": "targeted-green",
+      "decision": "local_critical_path",
+      "reason": "implemented binary intent validation and HubSpot metadata scaffold; targeted tests and connectorgen validation passed"
+    },
+    {
+      "cycle": "broad-gates",
+      "decision": "local_critical_path",
+      "reason": "updated connector counts and bundle-load caching after cold full-suite failures; final gofmt/vet/test/build/make verify/connectorgen validate passed"
+    },
+    {
+      "cycle": "sub_pr",
+      "decision": "opened_stacked_pr",
+      "reason": "opened https://github.com/polymetrics-ai/cli/pull/233 against parent branch feat/132-hubspot-cli-parity"
+    },
+    {
+      "cycle": "automated_review",
+      "decision": "blocked_auto_skipped_no_review_artifact",
+      "reason": "CodeRabbit auto skipped stacked PR; posted one allowed manual @coderabbitai review after skip, but no GitHub review or inline comments were created; Copilot reviewer API request did not create an active review request"
     }
   ],
   "human_gates": [
@@ -48,5 +73,5 @@
     "binary transfer runtime enablement without explicit destination policy",
     "generic raw write tools"
   ],
-  "updated_at": "2026-07-10T00:00:00Z"
+  "updated_at": "2026-07-09T20:24:57Z"
 }

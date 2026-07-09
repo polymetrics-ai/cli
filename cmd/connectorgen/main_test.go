@@ -327,6 +327,99 @@ func TestValidate_CLISurfaceUnknownOperationIsHardFinding(t *testing.T) {
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceUnknownTarget)
 }
 
+func TestValidate_CLISurfaceImplementedBinaryOperationPasses(t *testing.T) {
+	report, err := validateDir(operationCLISurfaceBundleFS(validBinaryCLISurfaceJSON(), validBinaryOperationsJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for operation-backed binary cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceImplementedBinaryRequiresTypedOperation(t *testing.T) {
+	cliSurface := strings.Replace(validBinaryCLISurfaceJSON(), `,
+				"operation": "cli-surface.widgets.export"`, "", 1)
+	report, err := validateDir(operationCLISurfaceBundleFS(cliSurface, validBinaryOperationsJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_HubSpotCLISurfaceMetadata(t *testing.T) {
+	defsRoot := filepath.Join("..", "..", "internal", "connectors", "defs")
+	report, err := validateDir(singleBundleFS(t, defsRoot, "hubspot"))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if report.ConnectorsChecked != 1 {
+		t.Fatalf("ConnectorsChecked = %d, want 1 for hubspot bundle", report.ConnectorsChecked)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for HubSpot bundle, got %+v", report.Findings)
+	}
+
+	raw, err := os.ReadFile(filepath.Join(defsRoot, "hubspot", "cli_surface.json"))
+	if err != nil {
+		t.Fatalf("read hubspot cli_surface.json: %v", err)
+	}
+	var surface struct {
+		Tagline string `json:"tagline"`
+		Usage   string `json:"usage"`
+		Groups  []struct {
+			ID string `json:"id"`
+		} `json:"groups"`
+		Commands []struct {
+			Path         string `json:"path"`
+			Intent       string `json:"intent"`
+			Availability string `json:"availability"`
+			Stream       string `json:"stream"`
+			Write        string `json:"write"`
+			Operation    string `json:"operation"`
+		} `json:"commands"`
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("unmarshal hubspot cli_surface.json: %v", err)
+	}
+	if !strings.Contains(surface.Usage, "pm hubspot") {
+		t.Fatalf("HubSpot usage = %q, want pm hubspot command surface", surface.Usage)
+	}
+
+	groupIDs := map[string]bool{}
+	for _, group := range surface.Groups {
+		groupIDs[group.ID] = true
+	}
+	for _, want := range []string{"crm", "marketing", "commerce", "files", "admin"} {
+		if !groupIDs[want] {
+			t.Fatalf("HubSpot cli_surface missing group %q; groups=%+v", want, groupIDs)
+		}
+	}
+
+	intents := map[string]int{}
+	commands := map[string]bool{}
+	for _, cmd := range surface.Commands {
+		commands[cmd.Path] = true
+		intents[cmd.Intent]++
+		if cmd.Intent == "raw_api" || cmd.Intent == "direct_write" {
+			t.Fatalf("HubSpot command %q uses forbidden intent %q", cmd.Path, cmd.Intent)
+		}
+		if cmd.Availability == "implemented" && cmd.Operation != "" {
+			t.Fatalf("HubSpot command %q must not be executable through operation metadata in the metadata slice", cmd.Path)
+		}
+	}
+	for _, want := range []string{"crm contacts list", "crm contacts create", "crm contacts delete", "files download", "settings users list"} {
+		if !commands[want] {
+			t.Fatalf("HubSpot cli_surface missing command %q", want)
+		}
+	}
+	for _, want := range []string{"etl", "direct_read", "reverse_etl", "binary"} {
+		if intents[want] == 0 {
+			t.Fatalf("HubSpot cli_surface has no commands with intent %q; intents=%+v", want, intents)
+		}
+	}
+}
+
 func TestValidate_CLISurfaceRejectsCommandWithStreamAndOperation(t *testing.T) {
 	cliSurface := strings.ReplaceAll(
 		validOperationCLISurfaceJSON(),
@@ -1206,6 +1299,52 @@ func validOperationCLISurfaceJSON() string {
 				"operation": "cli-surface.widgets.get",
 				"source_cli_path": "clis widget view",
 				"examples": ["pm cli-surface widget view --id w_1 --json"]
+			}
+		]
+	}`
+}
+
+func validBinaryOperationsJSON() string {
+	return `{
+		"operations": [
+			{
+				"id": "cli-surface.widgets.export",
+				"kind": "binary_download",
+				"summary": "Export widget archive",
+				"risk": "medium",
+				"approval": "filesystem writes require explicit destination approval",
+				"output_policy": "file_manifest",
+				"binary": {
+					"method": "GET",
+					"path": "/widgets/{id}/export",
+					"max_bytes": 1048576,
+					"allow_overwrite": false,
+					"extract_archives": false
+				}
+			}
+		]
+	}`
+}
+
+func validBinaryCLISurfaceJSON() string {
+	return `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget export",
+				"summary": "Export a widget archive",
+				"intent": "binary",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.export",
+				"source_cli_path": "clis widget export",
+				"flags": [
+					{ "name": "id", "type": "string", "summary": "Widget ID.", "maps_to": "path.id" },
+					{ "name": "output", "type": "string", "summary": "Safe destination path.", "maps_to": "file.destination" }
+				],
+				"risk": "downloads a bounded binary archive to an explicitly approved local destination",
+				"approval": "binary file transfers require max-bytes and destination approval",
+				"examples": ["pm cli-surface widget export --id w_1 --output ./widget.zip --json"]
 			}
 		]
 	}`

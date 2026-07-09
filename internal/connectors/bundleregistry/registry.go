@@ -1,6 +1,8 @@
 package bundleregistry
 
 import (
+	"sync"
+
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
@@ -12,11 +14,14 @@ func init() {
 	connectors.RegisterDefaultRegistryBuilder(New)
 }
 
+var (
+	loadOnce      sync.Once
+	loadedBundles []engine.Bundle
+	loadErr       error
+)
+
 func New() *connectors.Registry {
-	bundles, err := engine.LoadAll(defs.FS)
-	if err != nil {
-		panic("load connector definition bundles: " + err.Error())
-	}
+	bundles := loadDeclarativeBundles()
 
 	registry := connectors.NewEmptyRegistry()
 	registry.RegisterBuiltins()
@@ -25,4 +30,14 @@ func New() *connectors.Registry {
 	}
 	nativeset.RegisterInto(registry)
 	return registry
+}
+
+func loadDeclarativeBundles() []engine.Bundle {
+	loadOnce.Do(func() {
+		loadedBundles, loadErr = engine.LoadAll(defs.FS)
+	})
+	if loadErr != nil {
+		panic("load connector definition bundles: " + loadErr.Error())
+	}
+	return loadedBundles
 }

@@ -78,6 +78,8 @@ Out of scope for this slice:
 
 ## Targeted verification
 
+Passed:
+
 ```bash
 gofmt -w cmd internal
 go test ./cmd/connectorgen -run 'CLISurface|HubSpot'
@@ -85,7 +87,17 @@ go test ./internal/connectors/engine -run 'CLISurface|HubSpot'
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
+Additional targeted checks passed:
+
+```bash
+go test ./cmd/connectorgen ./internal/connectors/engine
+go run ./cmd/pm docs validate --connectors-dir docs/connectors
+go run ./cmd/pm connectors inspect hubspot --json
+```
+
 ## Broader verification before sub-issue handoff
+
+Passed:
 
 ```bash
 go vet ./...

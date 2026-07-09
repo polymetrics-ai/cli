@@ -17,12 +17,12 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi-api-harness",
-    "status": "waiting_for_workers"
+    "status": "subissue_134_verified"
   },
   "ready_queue": [
     {
       "number": 134,
-      "status": "worker_ready",
+      "status": "verified",
       "dependencies": ["parent_pr_open"],
       "write_scope": [".planning/phases/issue-134-hubspot-cli-surface-metadata/**", "internal/connectors/defs/hubspot/cli_surface.json", "internal/connectors/defs/hubspot/metadata.json", "internal/connectors/defs/hubspot/spec.json", "internal/connectors/defs/hubspot/streams.json", "internal/connectors/defs/hubspot/docs.md", "cmd/connectorgen/**", "internal/connectors/engine/**"],
       "decision": "local_critical_path"
@@ -89,20 +89,20 @@
       "number": 134,
       "url": "https://github.com/polymetrics-ai/cli/issues/134",
       "branch": "feat/134-hubspot-cli-surface-metadata",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/233",
       "worker": "local_critical_path",
-      "status": "worker_ready",
+      "status": "pr_open_checks_pending",
       "write_scope": "hubspot CLI surface metadata and validator support",
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-132-hubspot-cli-parity",
-      "verification": "pending",
+      "verification": "passed: gofmt -w cmd internal; go vet ./...; go test ./...; go build ./cmd/pm; make verify; go run ./cmd/connectorgen validate internal/connectors/defs",
       "automated_review": {
-        "primary_route": "blocked",
-        "status": "pending",
-        "head_sha": "pending",
-        "reviewed_range": "pending",
-        "coverage_route": "blocked",
-        "fallback_route": "none",
-        "disposition_summary": "pending",
+        "primary_route": "coderabbit_manual_after_stacked_pr_auto_skip",
+        "status": "blocked_auto_skipped_no_review_artifact",
+        "head_sha": "branch_latest_pr_233",
+        "reviewed_range": "unreviewed",
+        "coverage_route": "blocked_until_coderabbit_reviews_parent_pr_after_integration_or_human_fallback",
+        "fallback_route": "copilot_request_attempted_not_available_as_request",
+        "disposition_summary": "CodeRabbit auto skipped stacked PR and manual review command produced no GitHub review or inline comments; not retrying; GitHub Copilot reviewer API request returned no active review request", 
         "disposition_url": "pending"
       }
     },

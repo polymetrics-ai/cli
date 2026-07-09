@@ -1,0 +1,322 @@
+{
+  "operations": [
+    {
+      "id": "hubspot.crm.contacts.list",
+      "kind": "rest_read",
+      "summary": "List CRM contacts from the official HubSpot CRM objects API.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/contacts",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/objects/contacts"
+      }
+    },
+    {
+      "id": "hubspot.crm.contacts.view",
+      "kind": "rest_read",
+      "summary": "Read one CRM contact by ID.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/contacts",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/objects/contacts/{contactId}"
+      }
+    },
+    {
+      "id": "hubspot.crm.contacts.search",
+      "kind": "composite",
+      "summary": "Search CRM contacts with a fixed HubSpot search request schema.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/search",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "validate_fixed_search_schema",
+          "post_/crm/v3/objects/contacts/search",
+          "redact_response"
+        ]
+      }
+    },
+    {
+      "id": "hubspot.crm.companies.list",
+      "kind": "rest_read",
+      "summary": "List CRM companies.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/companies",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/objects/companies"
+      }
+    },
+    {
+      "id": "hubspot.crm.deals.list",
+      "kind": "rest_read",
+      "summary": "List CRM deals.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/deals",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/objects/deals"
+      }
+    },
+    {
+      "id": "hubspot.crm.tickets.list",
+      "kind": "rest_read",
+      "summary": "List CRM tickets.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/tickets",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/objects/tickets"
+      }
+    },
+    {
+      "id": "hubspot.crm.line-items.list",
+      "kind": "rest_read",
+      "summary": "List CRM line items.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/line-items",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/objects/line_items"
+      }
+    },
+    {
+      "id": "hubspot.crm.products.list",
+      "kind": "rest_read",
+      "summary": "List CRM products.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/products",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/objects/products"
+      }
+    },
+    {
+      "id": "hubspot.crm.quotes.list",
+      "kind": "rest_read",
+      "summary": "List CRM quotes.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/quotes",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/objects/quotes"
+      }
+    },
+    {
+      "id": "hubspot.crm.properties.list",
+      "kind": "rest_read",
+      "summary": "List CRM object properties.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/properties",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/properties/{objectType}"
+      }
+    },
+    {
+      "id": "hubspot.crm.pipelines.list",
+      "kind": "rest_read",
+      "summary": "List CRM pipelines.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/pipelines",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/pipelines/{objectType}"
+      }
+    },
+    {
+      "id": "hubspot.crm.associations.list",
+      "kind": "rest_read",
+      "summary": "List CRM association types.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/associations",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v4/associations/{fromObjectType}/{toObjectType}/labels"
+      }
+    },
+    {
+      "id": "hubspot.crm.owners.list",
+      "kind": "rest_read",
+      "summary": "List HubSpot owners.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/owners",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/owners"
+      }
+    },
+    {
+      "id": "hubspot.marketing.forms.list",
+      "kind": "rest_read",
+      "summary": "List marketing forms.",
+      "source_url": "https://developers.hubspot.com/docs/api/marketing/forms",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/marketing/v3/forms"
+      }
+    },
+    {
+      "id": "hubspot.marketing.lists.list",
+      "kind": "rest_read",
+      "summary": "List HubSpot lists.",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/lists",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/v3/lists"
+      }
+    },
+    {
+      "id": "hubspot.marketing.emails.list",
+      "kind": "rest_read",
+      "summary": "List marketing emails where the official API exposes them.",
+      "source_url": "https://developers.hubspot.com/docs/api/marketing/marketing-emails",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/marketing/v3/emails"
+      }
+    },
+    {
+      "id": "hubspot.commerce.payment-links.list",
+      "kind": "rest_read",
+      "summary": "List commerce payment links.",
+      "source_url": "https://developers.hubspot.com/docs/api/commerce/payment-links",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/commerce/v3/payment-links"
+      }
+    },
+    {
+      "id": "hubspot.commerce.invoices.list",
+      "kind": "rest_read",
+      "summary": "List commerce invoices.",
+      "source_url": "https://developers.hubspot.com/docs/api/commerce/invoices",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/commerce/v3/invoices"
+      }
+    },
+    {
+      "id": "hubspot.commerce.discounts.list",
+      "kind": "rest_read",
+      "summary": "List commerce discounts.",
+      "source_url": "https://developers.hubspot.com/docs/api/commerce/discounts",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/commerce/v3/discounts"
+      }
+    },
+    {
+      "id": "hubspot.files.list",
+      "kind": "rest_read",
+      "summary": "List HubSpot file metadata.",
+      "source_url": "https://developers.hubspot.com/docs/api/files/files",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/files/v3/files"
+      }
+    },
+    {
+      "id": "hubspot.files.download",
+      "kind": "binary_download",
+      "summary": "Download a HubSpot file with a future bounded binary policy.",
+      "source_url": "https://developers.hubspot.com/docs/api/files/files",
+      "risk": "medium",
+      "approval": "binary file transfers require max-bytes and explicit safe destination approval",
+      "output_policy": "file_manifest",
+      "binary": {
+        "method": "GET",
+        "path": "/files/v3/files/{fileId}/signed-url",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "hubspot.settings.users.list",
+      "kind": "rest_read",
+      "summary": "List HubSpot users.",
+      "source_url": "https://developers.hubspot.com/docs/api/settings/user-provisioning",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/settings/v3/users"
+      }
+    },
+    {
+      "id": "hubspot.settings.business-units.list",
+      "kind": "rest_read",
+      "summary": "List HubSpot business units.",
+      "source_url": "https://developers.hubspot.com/docs/api/settings/business-units",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/business-units/v3/business-units"
+      }
+    },
+    {
+      "id": "hubspot.automation.flows.list",
+      "kind": "rest_read",
+      "summary": "List automation flows where the official API exposes them.",
+      "source_url": "https://developers.hubspot.com/docs/api/automation",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "records",
+      "rest": {
+        "method": "GET",
+        "path": "/automation/v4/flows"
+      }
+    }
+  ]
+}

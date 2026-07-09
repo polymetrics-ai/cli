@@ -29,15 +29,27 @@ Before production edits, add failing tests for:
 
 ## Red evidence
 
-Pending. No production edits yet.
+Issue #134 added failing tests before production edits:
+
+- Binary `cli_surface.json` intent rejected by schema before adding the enum.
+- Implemented binary command without a typed operation produced the expected safety finding after validator work.
+- HubSpot bundle metadata test failed before the HubSpot definition scaffold existed.
 
 ## Green evidence
 
-Pending.
+Issue #134 passed targeted and broad gates:
+
+- `go test ./cmd/connectorgen -run 'CLISurface|HubSpot' -count=1`
+- `go test ./cmd/connectorgen ./internal/connectors/engine`
+- `go run ./cmd/pm docs validate --connectors-dir docs/connectors`
+- `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify && go run ./cmd/connectorgen validate internal/connectors/defs`
 
 ## Refactor evidence
 
-Pending.
+- Added `binary` CLI intent validation with typed operation enforcement.
+- Added HubSpot metadata-only bundle scaffold and docs/catalog entries.
+- Updated connector counts for the 548th declarative bundle.
+- Cached declarative bundle loading inside `bundleregistry.New()` so cold full-suite tests stay under the default package timeout while callers still receive fresh registries.
 
 ## Safety/TDD notes
 

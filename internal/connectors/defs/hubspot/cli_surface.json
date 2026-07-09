@@ -1,0 +1,508 @@
+{
+  "tagline": "Work with HubSpot CRM, marketing, commerce, files, and settings APIs from typed connector commands.",
+  "usage": "pm hubspot <group> <resource> <action> [flags]",
+  "source_cli": {
+    "name": "HubSpot public OpenAPI collection",
+    "docs": "https://developers.hubspot.com/docs/api/overview",
+    "reference": "https://github.com/HubSpot/HubSpot-public-api-spec-collection",
+    "source": "https://github.com/HubSpot/HubSpot-public-api-spec-collection"
+  },
+  "groups": [
+    {
+      "id": "crm",
+      "title": "CRM Commands",
+      "commands": [
+        "crm"
+      ]
+    },
+    {
+      "id": "marketing",
+      "title": "Marketing Commands",
+      "commands": [
+        "marketing"
+      ]
+    },
+    {
+      "id": "commerce",
+      "title": "Commerce Commands",
+      "commands": [
+        "commerce"
+      ]
+    },
+    {
+      "id": "files",
+      "title": "Files Commands",
+      "commands": [
+        "files"
+      ]
+    },
+    {
+      "id": "admin",
+      "title": "Settings And Admin Commands",
+      "commands": [
+        "settings",
+        "automation"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved HubSpot connector credential.",
+      "maps_to": "connection"
+    },
+    {
+      "name": "batch-size",
+      "type": "integer",
+      "summary": "Bound ETL reads with an explicit batch size.",
+      "maps_to": "read.batch_size"
+    }
+  ],
+  "commands": [
+    {
+      "path": "crm contacts list",
+      "summary": "List CRM contacts",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.crm.contacts.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/contacts",
+      "flags": [
+        {
+          "name": "properties",
+          "type": "string_array",
+          "summary": "Contact properties to include.",
+          "maps_to": "query.properties"
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read in this command invocation.",
+          "maps_to": "read.limit"
+        }
+      ],
+      "examples": [
+        "pm hubspot crm contacts list --properties email,firstname --json"
+      ],
+      "notes": "Planned stream-backed command; issue #136 owns executable stream coverage."
+    },
+    {
+      "path": "crm contacts view",
+      "summary": "View one CRM contact",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "hubspot.crm.contacts.view",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/contacts",
+      "flags": [
+        {
+          "name": "contact-id",
+          "type": "string",
+          "summary": "HubSpot contact ID.",
+          "maps_to": "path.contactId"
+        },
+        {
+          "name": "properties",
+          "type": "string_array",
+          "summary": "Contact properties to include.",
+          "maps_to": "query.properties"
+        }
+      ],
+      "notes": "Planned bounded direct-read command; issue #138 owns output policy and redaction."
+    },
+    {
+      "path": "crm contacts search",
+      "summary": "Search CRM contacts with a fixed request schema",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "hubspot.crm.contacts.search",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/search",
+      "flags": [
+        {
+          "name": "filter",
+          "type": "string_array",
+          "summary": "Structured filter tokens accepted by the future fixed search schema.",
+          "maps_to": "body.filter_groups"
+        },
+        {
+          "name": "sort",
+          "type": "string_array",
+          "summary": "Sort fields accepted by the future fixed search schema.",
+          "maps_to": "body.sorts"
+        }
+      ],
+      "notes": "Planned POST search direct-read; issue #139 owns fixed body schemas and rejects arbitrary JSON bodies."
+    },
+    {
+      "path": "crm contacts create",
+      "summary": "Create a CRM contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/contacts",
+      "risk": "Creates a contact record in the configured HubSpot portal.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Contact email.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "firstname",
+          "type": "string",
+          "summary": "Contact first name.",
+          "maps_to": "record.firstname"
+        },
+        {
+          "name": "lastname",
+          "type": "string",
+          "summary": "Contact last name.",
+          "maps_to": "record.lastname"
+        }
+      ],
+      "notes": "Planned named reverse ETL action; no direct write execution is exposed."
+    },
+    {
+      "path": "crm contacts update",
+      "summary": "Update a CRM contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/contacts",
+      "risk": "Mutates properties on an existing HubSpot contact.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "contact-id",
+          "type": "string",
+          "summary": "HubSpot contact ID.",
+          "maps_to": "record.contact_id"
+        },
+        {
+          "name": "property",
+          "type": "string_array",
+          "summary": "Allowed property assignments for the future action schema.",
+          "maps_to": "record.properties"
+        }
+      ],
+      "notes": "Planned named reverse ETL action with a fixed record schema."
+    },
+    {
+      "path": "crm contacts delete",
+      "summary": "Archive a CRM contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/contacts",
+      "risk": "Archives a contact; destructive/admin policy must require typed confirmation before dispatch.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute plus typed confirmation for destructive actions.",
+      "flags": [
+        {
+          "name": "contact-id",
+          "type": "string",
+          "summary": "HubSpot contact ID to archive.",
+          "maps_to": "record.contact_id"
+        }
+      ],
+      "notes": "Planned destructive reverse ETL action; issue #140 owns confirmation and redaction policy."
+    },
+    {
+      "path": "crm companies list",
+      "summary": "List CRM companies",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.crm.companies.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/companies",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "crm deals list",
+      "summary": "List CRM deals",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.crm.deals.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/deals",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "crm tickets list",
+      "summary": "List CRM tickets",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.crm.tickets.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/tickets",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "crm line-items list",
+      "summary": "List CRM line items",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.crm.line-items.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/line-items",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "crm products list",
+      "summary": "List CRM products",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.crm.products.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/products",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "crm quotes list",
+      "summary": "List CRM quotes",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.crm.quotes.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/quotes",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "crm properties list",
+      "summary": "List CRM object properties",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "hubspot.crm.properties.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/properties",
+      "flags": [
+        {
+          "name": "object-type",
+          "type": "string",
+          "summary": "CRM object type.",
+          "maps_to": "path.objectType"
+        }
+      ],
+      "notes": "Planned bounded direct-read command; issue #138 owns output policy."
+    },
+    {
+      "path": "crm pipelines list",
+      "summary": "List CRM pipelines",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "hubspot.crm.pipelines.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/pipelines",
+      "flags": [
+        {
+          "name": "object-type",
+          "type": "string",
+          "summary": "Pipeline object type such as deals or tickets.",
+          "maps_to": "path.objectType"
+        }
+      ],
+      "notes": "Planned bounded direct-read command; issue #138 owns output policy."
+    },
+    {
+      "path": "crm associations list",
+      "summary": "List CRM association labels",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "hubspot.crm.associations.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/associations",
+      "flags": [
+        {
+          "name": "from-object-type",
+          "type": "string",
+          "summary": "Source CRM object type.",
+          "maps_to": "path.fromObjectType"
+        },
+        {
+          "name": "to-object-type",
+          "type": "string",
+          "summary": "Target CRM object type.",
+          "maps_to": "path.toObjectType"
+        }
+      ],
+      "notes": "Planned bounded direct-read command; issue #138 owns output policy."
+    },
+    {
+      "path": "crm owners list",
+      "summary": "List HubSpot owners",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.crm.owners.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/owners",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "marketing forms list",
+      "summary": "List marketing forms",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.marketing.forms.list",
+      "source_url": "https://developers.hubspot.com/docs/api/marketing/forms",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "marketing lists list",
+      "summary": "List HubSpot lists",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.marketing.lists.list",
+      "source_url": "https://developers.hubspot.com/docs/api/crm/lists",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "marketing emails list",
+      "summary": "List marketing emails",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.marketing.emails.list",
+      "source_url": "https://developers.hubspot.com/docs/api/marketing/marketing-emails",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "commerce payment-links list",
+      "summary": "List commerce payment links",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.commerce.payment-links.list",
+      "source_url": "https://developers.hubspot.com/docs/api/commerce/payment-links",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "commerce invoices list",
+      "summary": "List commerce invoices",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.commerce.invoices.list",
+      "source_url": "https://developers.hubspot.com/docs/api/commerce/invoices",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "commerce discounts list",
+      "summary": "List commerce discounts",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.commerce.discounts.list",
+      "source_url": "https://developers.hubspot.com/docs/api/commerce/discounts",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "files list",
+      "summary": "List HubSpot file metadata",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.files.list",
+      "source_url": "https://developers.hubspot.com/docs/api/files/files",
+      "notes": "Planned stream-backed file metadata command; issue #136 owns schemas and fixtures."
+    },
+    {
+      "path": "files download",
+      "summary": "Download a HubSpot file with a bounded destination policy",
+      "intent": "binary",
+      "availability": "planned",
+      "operation": "hubspot.files.download",
+      "source_url": "https://developers.hubspot.com/docs/api/files/files",
+      "risk": "Downloads binary content; destination path, max bytes, no-overwrite, and redaction policy must be enforced before execution.",
+      "approval": "Binary file transfers require explicit destination approval and bounded max bytes.",
+      "flags": [
+        {
+          "name": "file-id",
+          "type": "string",
+          "summary": "HubSpot file ID.",
+          "maps_to": "path.fileId"
+        },
+        {
+          "name": "output",
+          "type": "string",
+          "summary": "Safe local destination path.",
+          "maps_to": "file.destination"
+        }
+      ],
+      "notes": "Planned binary command; issue #139 owns bounded binary executor and destination policy."
+    },
+    {
+      "path": "files upload",
+      "summary": "Upload a file to HubSpot",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.hubspot.com/docs/api/files/files",
+      "risk": "Uploads local file content to HubSpot; source path and max bytes must be explicitly approved.",
+      "approval": "Reverse ETL/file writes require plan, preview, approval, execute and bounded file policy.",
+      "flags": [
+        {
+          "name": "file",
+          "type": "string",
+          "summary": "Safe local file path to upload.",
+          "maps_to": "record.file_path"
+        },
+        {
+          "name": "folder-id",
+          "type": "string",
+          "summary": "HubSpot folder ID.",
+          "maps_to": "record.folder_id"
+        }
+      ],
+      "notes": "Planned file-upload reverse ETL action; no raw upload execution is exposed."
+    },
+    {
+      "path": "settings users list",
+      "summary": "List HubSpot users",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "hubspot.settings.users.list",
+      "source_url": "https://developers.hubspot.com/docs/api/settings/user-provisioning",
+      "risk": "Lists account user metadata; output redaction policy must avoid exposing sensitive admin details.",
+      "notes": "Planned bounded direct-read command; issue #138 owns output policy."
+    },
+    {
+      "path": "settings users create",
+      "summary": "Provision a HubSpot user",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.hubspot.com/docs/api/settings/user-provisioning",
+      "risk": "Admin action that can grant portal access; must require explicit scopes and typed confirmation.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute plus typed admin confirmation.",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "User email.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "role-id",
+          "type": "string",
+          "summary": "HubSpot role ID to assign.",
+          "maps_to": "record.role_id"
+        }
+      ],
+      "notes": "Planned admin reverse ETL action; issue #140 owns sensitive/admin policy."
+    },
+    {
+      "path": "settings business-units list",
+      "summary": "List business units",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "hubspot.settings.business-units.list",
+      "source_url": "https://developers.hubspot.com/docs/api/settings/business-units",
+      "notes": "Planned bounded direct-read command; issue #138 owns output policy."
+    },
+    {
+      "path": "automation flows list",
+      "summary": "List automation flows",
+      "intent": "etl",
+      "availability": "planned",
+      "operation": "hubspot.automation.flows.list",
+      "source_url": "https://developers.hubspot.com/docs/api/automation",
+      "risk": "Workflow metadata may reveal automation structure; output policy must avoid sensitive payloads.",
+      "notes": "Planned stream-backed command; issue #136 owns schemas and fixtures."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "hubspot-safety",
+      "summary": "HubSpot writes are reverse ETL only: plan, preview, approval, execute, with typed confirmation for destructive/admin/sensitive actions."
+    },
+    {
+      "name": "hubspot-official-inventory",
+      "summary": "Full operation ledger is owned by issue #137 and must account for all 3,060 unique official method/path operations."
+    }
+  ]
+}

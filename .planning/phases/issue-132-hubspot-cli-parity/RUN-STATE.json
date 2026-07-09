@@ -27,9 +27,9 @@
     "golang-graphql",
     "golang-lint"
   ],
-  "status": "parent_pr_open",
+  "status": "subissue_134_verified",
   "verificationPassed": false,
-  "verificationBlocker": "full verification not yet run; parent PR seed only",
+  "verificationBlocker": "parent roadmap incomplete; sub-issue #134 local gates passed",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -40,6 +40,11 @@
       "cycle": "worker_spawn",
       "decision": "not_spawned_runtime_capability_missing",
       "reason": "current Pi API harness exposes read/bash/edit/write only; no subagent tool or isolated mutating worker cwd is available"
+    },
+    {
+      "cycle": "subissue_134",
+      "decision": "local_critical_path_verified",
+      "reason": "HubSpot CLI surface metadata scaffold passed gofmt/vet/test/build/make verify/connectorgen validate"
     }
   ],
   "human_gates": [
@@ -52,5 +57,5 @@
     "binary transfer runtime enablement without explicit destination policy",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T00:00:00Z"
+  "updated_at": "2026-07-09T20:24:57Z"
 }
