@@ -1,22 +1,22 @@
 # Verification: Chatwoot CLI Surface Metadata
 
-## Targeted gates
+## Completed targeted gates
 
 ```bash
 python3 .planning/phases/issue-149-chatwoot-cli-surface-metadata/traces/verify-official-surface-count.py
-jq empty internal/connectors/defs/chatwoot/api_surface.json internal/connectors/defs/chatwoot/cli_surface.json
+jq empty internal/connectors/defs/chatwoot/api_surface.json internal/connectors/defs/chatwoot/cli_surface.json internal/connectors/defs/chatwoot/metadata.json
 go test ./cmd/connectorgen -run CLISurface -count=1
 go test ./internal/connectors/engine -run CLISurface -count=1
-go run ./cmd/connectorgen validate internal/connectors/defs/chatwoot
-```
-
-## Broader issue gate
-
-```bash
+go test ./internal/connectors/conformance -run 'TestConformance/chatwoot' -count=1
 go run ./cmd/connectorgen validate internal/connectors/defs
+git diff --check
 ```
 
-## Final parent gate (not required before #149 sub-slice handoff unless parent is being marked ready)
+Result: pass.
+
+Note: `go run ./cmd/connectorgen validate internal/connectors/defs/chatwoot` is not used because the current validator expects the defs root; when pointed at a connector subdirectory it interprets nested `fixtures/` and `schemas/` as connector directories.
+
+## Completed broader/local handoff gates
 
 ```bash
 gofmt -w cmd internal
@@ -26,6 +26,8 @@ go build ./cmd/pm
 make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Result: pass. The first uncached `go test ./...` attempt timed out in `internal/connectors/certify` at the default 10m package timeout. `make verify` then passed with its project timeout (`go test -timeout 20m ./...`), and a follow-up `go test ./...` passed with cached package results including `internal/connectors/certify`.
 
 ## CLI help/docs/website parity status
 

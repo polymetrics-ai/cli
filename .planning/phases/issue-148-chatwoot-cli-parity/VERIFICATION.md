@@ -35,7 +35,7 @@ python3 .planning/phases/issue-149-chatwoot-cli-surface-metadata/traces/verify-o
 jq empty internal/connectors/defs/chatwoot/api_surface.json internal/connectors/defs/chatwoot/cli_surface.json
 go test ./cmd/connectorgen -run CLISurface -count=1
 go test ./internal/connectors/engine -run CLISurface -count=1
-go run ./cmd/connectorgen validate internal/connectors/defs/chatwoot
+go test ./internal/connectors/conformance -run 'TestConformance/chatwoot' -count=1
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 

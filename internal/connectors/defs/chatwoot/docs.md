@@ -1,15 +1,18 @@
 # Overview
 
-Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, and
-conversation-scoped messages, and writes contact/conversation/message/label mutations through the
-Chatwoot Application API.
+Reads Chatwoot support conversations, contacts, inboxes, agents, teams, labels, and
+conversation-scoped messages, and writes approved contact/conversation/message/label mutations
+through the account-scoped Chatwoot Application API. The connector also tracks the full official
+Swagger inventory as blocked-by-default operation metadata so later direct-read, binary/file, and
+sensitive/admin reverse-ETL slices can add typed commands without exposing a raw generic API tool.
 
 Readable streams: `conversations`, `contacts`, `inboxes`, `agents`, `teams`, `labels`, `messages`.
 
 Write actions: `create_contact`, `update_contact`, `create_conversation`, `send_message`,
 `toggle_conversation_status`, `create_label`.
 
-Service API documentation: https://developers.chatwoot.com/api-reference.
+Service API documentation: https://developers.chatwoot.com/api-reference. Official inventory source:
+https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json.
 
 ## Auth setup
 
@@ -26,8 +29,8 @@ Connection fields:
   every request; do not include /api/v1 yourself. Also usable as a base URL override for
   tests/proxies.
 - `start_date` (optional, string); format `date-time`; RFC3339 lower bound for the first incremental
-  sync of conversations, contacts, and messages (e.g. 2026-01-01T00:00:00Z). Ignored once a cursor
-  has been persisted.
+  sync of conversations (e.g. 2026-01-01T00:00:00Z). Contacts use their persisted cursor when one
+  exists. Ignored once a cursor has been persisted.
 
 Secret fields are redacted in logs and write previews: `api_access_token`.
 
@@ -102,7 +105,15 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=15.
-- API coverage includes 7 stream-backed endpoint group(s), 6 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=6, duplicate_of=10, non_data_endpoint=2, out_of_scope=36,
-  requires_elevated_scope=4.
+- The official Swagger inventory currently accounts for 144 operations across 89 paths: GET 62,
+  POST 41, PATCH 21, DELETE 18, PUT 2.
+- Executable coverage in this slice remains 7 stream-backed endpoints and 6 write-backed endpoints.
+  The remaining official operations are blocked-by-default operation metadata: direct_read=53,
+  admin_reverse_etl=35, sensitive_reverse_etl=19, destructive_action=19, disallowed=4, duplicate=1.
+- Direct-read commands for single records, search/filter endpoints, reports, audit logs, and public
+  inbox resources are planned but not executable until typed bounded output policies exist.
+- Admin/configuration and destructive operations are not blanket-excluded. They remain blocked until
+  later slices add named reverse-ETL actions with exact schemas, risk text, preview, approval, and
+  typed confirmation where required.
+- Message attachment and profile/avatar multipart variants are not implemented by the current JSON
+  write actions; they require the later binary/file policy slice.

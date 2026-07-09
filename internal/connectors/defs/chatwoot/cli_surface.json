@@ -1,0 +1,511 @@
+{
+  "tagline": "Work with Chatwoot support-desk data and approved account-scoped mutations.",
+  "usage": "pm chatwoot <command> <subcommand> [flags]",
+  "source_cli": {
+    "name": "chatwoot-api",
+    "docs": "https://developers.chatwoot.com/api-reference",
+    "reference": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json",
+    "source": "https://github.com/chatwoot/chatwoot"
+  },
+  "groups": [
+    {
+      "id": "support",
+      "title": "Support Desk Commands",
+      "commands": ["conversation", "contact", "message"]
+    },
+    {
+      "id": "workspace",
+      "title": "Workspace Metadata Commands",
+      "commands": ["inbox", "agent", "team", "label"]
+    },
+    {
+      "id": "admin",
+      "title": "Blocked Admin And Configuration Commands",
+      "commands": ["account", "automation", "webhook", "portal", "platform"]
+    },
+    {
+      "id": "reports",
+      "title": "Planned Reporting And Audit Commands",
+      "commands": ["report", "audit-log"]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved Chatwoot connector credential and account scope.",
+      "maps_to": "connection"
+    }
+  ],
+  "commands": [
+    {
+      "path": "conversation list",
+      "summary": "List account conversations",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversations",
+      "source_url": "https://developers.chatwoot.com/api-reference/conversations/conversations-list",
+      "flags": [
+        {
+          "name": "status",
+          "type": "enum",
+          "values": ["all", "open", "resolved", "pending", "snoozed"],
+          "summary": "Filter conversations by status when the runner supports query overrides.",
+          "maps_to": "query.status"
+        }
+      ],
+      "examples": ["pm chatwoot conversation list --json"],
+      "api_surface": [
+        { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations" }
+      ]
+    },
+    {
+      "path": "conversation view",
+      "summary": "View one conversation",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.chatwoot.com/api-reference/conversations/conversation-details",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "integer",
+          "summary": "Conversation ID to fetch.",
+          "maps_to": "path.conversation_id"
+        }
+      ],
+      "notes": "Blocked until the direct-read slice adds typed GET execution with bounded output."
+    },
+    {
+      "path": "conversation create",
+      "summary": "Create a conversation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_conversation",
+      "source_url": "https://developers.chatwoot.com/api-reference/conversations/create-new-conversation",
+      "risk": "Creates a new Chatwoot conversation in the configured account and may become customer-visible through the inbox channel.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "source-id",
+          "type": "string",
+          "summary": "External source identifier for the conversation.",
+          "maps_to": "record.source_id"
+        },
+        {
+          "name": "inbox-id",
+          "type": "integer",
+          "summary": "Inbox ID for the conversation.",
+          "maps_to": "record.inbox_id"
+        },
+        {
+          "name": "contact-id",
+          "type": "integer",
+          "summary": "Existing contact ID to associate.",
+          "maps_to": "record.contact_id"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "values": ["open", "resolved", "pending"],
+          "summary": "Initial conversation status.",
+          "maps_to": "record.status"
+        }
+      ],
+      "examples": ["pm chatwoot conversation create --source-id customer-123 --json"],
+      "api_surface": [
+        { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations" }
+      ]
+    },
+    {
+      "path": "conversation toggle-status",
+      "summary": "Change a conversation status",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "toggle_conversation_status",
+      "source_url": "https://developers.chatwoot.com/api-reference/conversations/toggle-status",
+      "risk": "Changes a conversation's workflow status and can affect routing, reporting, and agent queues.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "integer",
+          "summary": "Conversation ID to update.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "values": ["open", "resolved", "pending", "snoozed"],
+          "summary": "Target status.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "snoozed-until",
+          "type": "integer",
+          "summary": "Unix timestamp for snoozed status.",
+          "maps_to": "record.snoozed_until"
+        }
+      ],
+      "examples": ["pm chatwoot conversation toggle-status --conversation-id 42 --status resolved --json"],
+      "api_surface": [
+        { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status" }
+      ]
+    },
+    {
+      "path": "message list",
+      "summary": "List messages for each conversation",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "source_url": "https://developers.chatwoot.com/api-reference/messages/get-messages",
+      "examples": ["pm chatwoot message list --json"],
+      "api_surface": [
+        { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages" }
+      ],
+      "notes": "The messages stream fans out across conversations; single-conversation message direct reads are planned separately."
+    },
+    {
+      "path": "message send",
+      "summary": "Send a conversation message",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_message",
+      "source_url": "https://developers.chatwoot.com/api-reference/messages/create-new-message",
+      "risk": "Sends a message into a Chatwoot conversation; customer-visible unless private is true and may trigger notifications.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute. Attachment/multipart variants remain blocked until the binary policy slice.",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "integer",
+          "summary": "Conversation ID to send into.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Message body.",
+          "maps_to": "record.content"
+        },
+        {
+          "name": "message-type",
+          "type": "enum",
+          "values": ["outgoing", "incoming"],
+          "summary": "Chatwoot message type.",
+          "maps_to": "record.message_type"
+        },
+        {
+          "name": "private",
+          "type": "boolean",
+          "summary": "Mark message as private/internal note.",
+          "maps_to": "record.private"
+        }
+      ],
+      "examples": ["pm chatwoot message send --conversation-id 42 --content 'Follow-up sent from approved plan' --json"],
+      "api_surface": [
+        { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages" }
+      ]
+    },
+    {
+      "path": "contact list",
+      "summary": "List contacts",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.chatwoot.com/api-reference/contacts/list-contacts",
+      "examples": ["pm chatwoot contact list --json"],
+      "api_surface": [
+        { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts" }
+      ]
+    },
+    {
+      "path": "contact view",
+      "summary": "View one contact",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.chatwoot.com/api-reference/contacts/show-contact",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Contact ID to fetch.",
+          "maps_to": "path.id"
+        }
+      ],
+      "notes": "Blocked until the direct-read slice adds typed GET execution."
+    },
+    {
+      "path": "contact search",
+      "summary": "Search contacts",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.chatwoot.com/api-reference/contacts/search-contacts",
+      "flags": [
+        {
+          "name": "q",
+          "type": "string",
+          "summary": "Search query.",
+          "maps_to": "query.q"
+        }
+      ],
+      "notes": "Blocked until bounded query/direct-read support is implemented."
+    },
+    {
+      "path": "contact create",
+      "summary": "Create a contact",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://developers.chatwoot.com/api-reference/contacts/create-contact",
+      "risk": "Creates a Chatwoot contact record; visible to agents and usable in conversations.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "inbox-id",
+          "type": "integer",
+          "summary": "Inbox ID required by Chatwoot contact creation.",
+          "maps_to": "record.inbox_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Contact display name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Contact email address.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "phone-number",
+          "type": "string",
+          "summary": "Contact phone number.",
+          "maps_to": "record.phone_number"
+        }
+      ],
+      "examples": ["pm chatwoot contact create --inbox-id 7 --email user@example.invalid --json"],
+      "api_surface": [
+        { "method": "POST", "path": "/api/v1/accounts/{account_id}/contacts" }
+      ]
+    },
+    {
+      "path": "contact update",
+      "summary": "Update a contact",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://developers.chatwoot.com/api-reference/contacts/update-contact",
+      "risk": "Mutates an existing Chatwoot contact profile; visible to agents and downstream automations.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Contact ID to update.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Contact display name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Contact email address.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "phone-number",
+          "type": "string",
+          "summary": "Contact phone number.",
+          "maps_to": "record.phone_number"
+        }
+      ],
+      "examples": ["pm chatwoot contact update --id 123 --name 'Updated name' --json"],
+      "api_surface": [
+        { "method": "PUT", "path": "/api/v1/accounts/{account_id}/contacts/{id}" }
+      ]
+    },
+    {
+      "path": "contact delete",
+      "summary": "Delete a contact",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_url": "https://developers.chatwoot.com/api-reference/contacts/delete-contact",
+      "risk": "Deletes a contact record and can remove conversation context.",
+      "approval": "Blocked until a destructive typed reverse-ETL action with confirmation is approved.",
+      "notes": "No generic direct-write fallback is exposed."
+    },
+    {
+      "path": "inbox list",
+      "summary": "List inboxes",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "inboxes",
+      "source_url": "https://developers.chatwoot.com/api-reference/inboxes/list-all-inboxes",
+      "examples": ["pm chatwoot inbox list --json"],
+      "api_surface": [
+        { "method": "GET", "path": "/api/v1/accounts/{account_id}/inboxes" }
+      ]
+    },
+    {
+      "path": "agent list",
+      "summary": "List account agents",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agents",
+      "source_url": "https://developers.chatwoot.com/api-reference/agents/list-agents-in-account",
+      "examples": ["pm chatwoot agent list --json"],
+      "api_surface": [
+        { "method": "GET", "path": "/api/v1/accounts/{account_id}/agents" }
+      ]
+    },
+    {
+      "path": "team list",
+      "summary": "List teams",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://developers.chatwoot.com/api-reference/teams/list-all-teams",
+      "examples": ["pm chatwoot team list --json"],
+      "api_surface": [
+        { "method": "GET", "path": "/api/v1/accounts/{account_id}/teams" }
+      ]
+    },
+    {
+      "path": "label list",
+      "summary": "List labels",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "labels",
+      "source_url": "https://developers.chatwoot.com/api-reference/labels/list-all-labels",
+      "examples": ["pm chatwoot label list --json"],
+      "api_surface": [
+        { "method": "GET", "path": "/api/v1/accounts/{account_id}/labels" }
+      ]
+    },
+    {
+      "path": "label create",
+      "summary": "Create a label",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_label",
+      "source_url": "https://developers.chatwoot.com/api-reference/labels/create-a-label",
+      "risk": "Creates an account-wide label visible to Chatwoot agents.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Label title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Label description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "summary": "Label color.",
+          "maps_to": "record.color"
+        },
+        {
+          "name": "show-on-sidebar",
+          "type": "boolean",
+          "summary": "Show label in the sidebar.",
+          "maps_to": "record.show_on_sidebar"
+        }
+      ],
+      "examples": ["pm chatwoot label create --title priority --json"],
+      "api_surface": [
+        { "method": "POST", "path": "/api/v1/accounts/{account_id}/labels" }
+      ]
+    },
+    {
+      "path": "report account",
+      "summary": "Read account report metrics",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.chatwoot.com/api-reference/reports/get-account-reports",
+      "notes": "Blocked until report direct reads add required bounds and redacted output policy."
+    },
+    {
+      "path": "audit-log list",
+      "summary": "List audit logs",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.chatwoot.com/api-reference/audit-logs/list-audit-logs-in-account",
+      "notes": "Blocked until direct reads support bounded audit-log pagination and redaction."
+    },
+    {
+      "path": "account update",
+      "summary": "Update account settings",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.chatwoot.com/api-reference/account/update-account",
+      "risk": "Mutates account configuration.",
+      "approval": "Blocked until admin reverse-ETL policy and typed confirmation are implemented."
+    },
+    {
+      "path": "automation rule create",
+      "summary": "Create an automation rule",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.chatwoot.com/api-reference/automation-rule/add-a-new-automation-rule",
+      "risk": "Changes automated Chatwoot behavior.",
+      "approval": "Blocked until admin reverse-ETL policy and typed confirmation are implemented."
+    },
+    {
+      "path": "webhook create",
+      "summary": "Create an outbound webhook",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.chatwoot.com/api-reference/webhooks/add-a-webhook",
+      "risk": "Creates an outbound integration that can exfiltrate event payloads.",
+      "approval": "Blocked until admin reverse-ETL policy, endpoint validation, and typed confirmation are implemented."
+    },
+    {
+      "path": "portal create",
+      "summary": "Create a help-center portal",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.chatwoot.com/api-reference/help-center/add-a-new-portal",
+      "risk": "Creates help-center content configuration.",
+      "approval": "Blocked until admin reverse-ETL policy and typed confirmation are implemented."
+    },
+    {
+      "path": "platform account create",
+      "summary": "Create a platform account",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_url": "https://developers.chatwoot.com/api-reference/accounts/create-an-account",
+      "risk": "Requires elevated Platform API credentials and provisions a new account.",
+      "approval": "Blocked by default; no generic platform write command is exposed."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "chatwoot-auth",
+      "summary": "Use a saved Chatwoot API access token; never pass token values in command text."
+    },
+    {
+      "name": "chatwoot-writes",
+      "summary": "Chatwoot reverse ETL writes require plan, preview, approval, execute; destructive/admin operations remain blocked until typed policies exist."
+    },
+    {
+      "name": "chatwoot-direct-reads",
+      "summary": "Direct-read commands are planned for single-record, report, audit-log, and search endpoints with bounded output."
+    }
+  ]
+}

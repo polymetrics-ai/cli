@@ -51,7 +51,7 @@ Out of scope for #149:
    - `jq empty` passes;
    - `go test ./cmd/connectorgen -run CLISurface -count=1` passes;
    - `go test ./internal/connectors/engine -run CLISurface -count=1` passes;
-   - `go run ./cmd/connectorgen validate internal/connectors/defs/chatwoot` passes.
+   - `go run ./cmd/connectorgen validate internal/connectors/defs` passes (current validator expects the defs root; validating the connector subdirectory treats nested `fixtures/` and `schemas/` as connector dirs).
 
 ## CLI help/docs/website parity
 

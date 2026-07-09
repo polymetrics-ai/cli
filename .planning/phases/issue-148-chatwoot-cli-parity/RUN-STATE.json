@@ -2,7 +2,8 @@
   "phase": "issue-148-chatwoot-cli-parity",
   "status": "in_progress",
   "parent_issue": 148,
-  "parent_pr": null,
+  "parent_pr": 223,
+  "parent_pr_url": "https://github.com/polymetrics-ai/cli/pull/223",
   "parent_branch": "feat/148-chatwoot-cli-parity",
   "default_branch": "main",
   "gsd": {
@@ -33,10 +34,25 @@
     {
       "cycle": "plan",
       "decision": "local_critical_path",
-      "reason": "Parent PR is missing and current Pi API tool surface lacks subagent; coordinator will create parent seed planning artifacts and handle issue #149 locally."
+      "reason": "Parent PR was missing and current Pi API tool surface lacks subagent; coordinator created parent seed planning artifacts and handled issue #149 locally."
+    },
+    {
+      "cycle": "parent-pr",
+      "decision": "local_critical_path",
+      "reason": "Committed and pushed parent seed, then opened draft parent PR #223."
+    },
+    {
+      "cycle": "issue-149",
+      "decision": "local_critical_path",
+      "reason": "Implemented Chatwoot CLI surface metadata locally because mutating worker fanout is unavailable in this harness."
+    },
+    {
+      "cycle": "issue-149-full-local-verification",
+      "decision": "not_spawned_review_blocked",
+      "reason": "Full local gates passed on the #149 branch, but sub-PR #227 remote verify and parent PR fallback review coverage are still pending."
     }
   ],
   "verificationPassed": false,
-  "verificationStatus": "preflight complete; full verification pending",
+  "verificationStatus": "#149 full local gates passed on sub-branch; parent branch final verification pending after integration",
   "updated_at": "2026-07-10T00:00:00Z"
 }

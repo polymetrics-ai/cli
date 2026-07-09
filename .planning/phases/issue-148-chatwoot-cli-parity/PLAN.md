@@ -2,7 +2,7 @@
 
 Parent issue: #148
 Parent branch: `feat/148-chatwoot-cli-parity`
-Parent PR: pending creation
+Parent PR: #223 (`https://github.com/polymetrics-ai/cli/pull/223`, draft)
 Default branch: `main`
 Connector: `chatwoot`
 Definition scope: `internal/connectors/defs/chatwoot/`
@@ -69,7 +69,7 @@ Current Pi API tool surface in this session does not expose the `subagent` tool,
 
 - Create parent/issue planning artifacts.
 - Commit the plan checkpoint as the deliberate parent seed diff so a draft parent PR can be opened.
-- Push `feat/148-chatwoot-cli-parity`; open parent PR to `main` as draft with `Refs #148`.
+- Push `feat/148-chatwoot-cli-parity`; open parent PR to `main` as draft with `Refs #148`. Completed as PR #223.
 
 ### Slice 1 — issue #149 local critical path
 
