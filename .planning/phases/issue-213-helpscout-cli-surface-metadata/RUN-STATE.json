@@ -2,10 +2,12 @@
   "phase": "issue-213-helpscout-cli-surface-metadata",
   "issue": 213,
   "parent_issue": 212,
-  "status": "implemented_local_green",
+  "status": "sub_pr_open",
   "branch": "feat/213-helpscout-cli-surface-metadata",
   "parent_branch": "feat/212-helpscout-cli-parity",
   "parent_pr": "https://github.com/polymetrics-ai/cli/pull/230",
+  "sub_pr": "https://github.com/polymetrics-ai/cli/pull/236",
+  "head_sha": "ece6a1a9806dd107072ba6ff8c492afc4150708a",
   "gsd": {
     "adapter": "scripts/gsd",
     "plan_prompt": "scripts/gsd prompt plan-phase 213 --skip-research --tdd",

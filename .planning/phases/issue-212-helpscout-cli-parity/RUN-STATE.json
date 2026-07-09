@@ -1,7 +1,7 @@
 {
   "phase": "issue-212-helpscout-cli-parity",
   "issue": 212,
-  "status": "subissue_213_local_green",
+  "status": "subissue_213_sub_pr_open",
   "gsd": {
     "adapter": "scripts/gsd",
     "doctor": "passed",

@@ -130,7 +130,7 @@
       "number": 213,
       "url": "https://github.com/polymetrics-ai/cli/issues/213",
       "branch": "feat/213-helpscout-cli-surface-metadata",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/236",
       "worker": "local-orchestrator-critical-path",
       "status": "sub_pr_open",
       "write_scope": [
@@ -142,16 +142,16 @@
         "website/lib/connectors.catalog.data.generated.json"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-212-helpscout-cli-parity",
-      "verification": "focused validation passed; website typecheck blocked by missing node_modules; see issue-213 VERIFICATION.md",
+      "verification": "make verify passed; website typecheck blocked by missing node_modules; see issue-213 VERIFICATION.md",
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
-        "head_sha": "pending commit/push",
+        "head_sha": "ece6a1a9806dd107072ba6ff8c492afc4150708a",
         "reviewed_range": "pending",
-        "coverage_route": "blocked",
+        "coverage_route": "parent_pr_fallback_if_sub_pr_skipped",
         "fallback_route": "none",
-        "disposition_summary": "pending sub-PR",
-        "disposition_url": "pending"
+        "disposition_summary": "sub-PR #236 open; automated review coverage pending",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/236"
       }
     },
     {

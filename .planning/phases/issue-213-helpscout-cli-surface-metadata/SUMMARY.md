@@ -1,6 +1,6 @@
 # Summary: Help Scout CLI Surface Metadata
 
-Status: implemented locally; sub-PR/automated review pending.
+Status: sub-PR open: https://github.com/polymetrics-ai/cli/pull/236. Automated review coverage pending.
 
 ## Delivered
 

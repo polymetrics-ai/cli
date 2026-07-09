@@ -2,6 +2,9 @@
 
 Date: 2026-07-09
 
+Sub-PR: https://github.com/polymetrics-ai/cli/pull/236
+Head SHA: `ece6a1a9806dd107072ba6ff8c492afc4150708a`
+
 ## Commands and Results
 
 ```bash

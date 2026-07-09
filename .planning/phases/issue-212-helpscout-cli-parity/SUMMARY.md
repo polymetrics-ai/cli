@@ -15,13 +15,14 @@ Status: planning checkpoint in progress.
 
 - Created local branch `feat/213-helpscout-cli-surface-metadata` from the parent branch.
 - Refreshed Help Scout API surface metadata and added CLI surface metadata.
-- Focused validation passed; website typecheck is blocked by missing `node_modules`/`tsc`.
+- Full `make verify` passed; standalone website typecheck is blocked by missing `node_modules`/`tsc`.
+- Opened stacked sub-PR #236: https://github.com/polymetrics-ai/cli/pull/236.
 
 ## Next
 
-1. Commit and push #213 green slice.
-2. Open a stacked #213 PR against `feat/212-helpscout-cli-parity`.
-3. Record automated review route; because the sub-PR base is non-default, parent PR fallback coverage may be needed.
+1. Record automated review coverage for sub-PR #236.
+2. If CodeRabbit skips stacked PR #236, request/record parent PR #230 fallback coverage for commit range `ece6a1a9`.
+3. Continue with #214/#216 only after review routing is recorded.
 
 ## Blockers
 
