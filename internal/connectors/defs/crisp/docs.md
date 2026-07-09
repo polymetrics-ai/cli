@@ -15,7 +15,7 @@ Connection fields:
 - `key` (required, secret, string); Crisp REST API key for HTTP Basic authentication. Never logged.
 - `website_id` (required, string); Crisp website identifier for website-scoped operations.
 - `start_date` (optional, string); future incremental lower-bound timestamp.
-- `page_size` and `max_pages` (optional, string); future bounded read hints.
+- `page_size` and `max_pages` (optional, integer); future bounded read hints.
 
 Add credentials from environment variables or stdin. Do not put secret values in prompt text, logs, docs, fixtures, shell history, or command-line flags.
 

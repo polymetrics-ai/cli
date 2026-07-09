@@ -115,4 +115,4 @@ Current #205 metadata-only scaffold exemption: runtime provider-specific `pm cri
 
 - Full parent verification for the current #205 branch: passed via `make verify`.
 - Targeted #205 validation: passed.
-- Automated review route: blocked on #235 CodeRabbit rate limit after non-default-base auto-review skip; do not retry until reported window elapses or parent/fallback coverage is selected.
+- Automated review route: CodeRabbit reviewed #235 after the non-default-base auto-skip and initial rate-limit window; two findings fixed locally, pending push and incremental review.

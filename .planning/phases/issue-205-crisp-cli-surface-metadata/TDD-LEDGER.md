@@ -16,6 +16,7 @@
 | Inspect smoke | `go run ./cmd/pm connectors inspect crisp --json` parsed via Python | pass | output `connector.name=crisp` | complete |
 | Catalog count regression | `go test ./...` after adding bundle | failed on fixed connector-count assertions (`count 551`, bundle count `547`) and default 10m certify timeout | updated expected counts/help/docs artifacts; re-ran with project timeout | complete |
 | Full local gate | `make verify` | pass | passed: fmt, tidy-check, vet, test, build, docs validate, smoke, lint, connectorgen validate | complete |
+| CodeRabbit review fixes | CodeRabbit review on PR #235 | actionable comments: string numeric pagination hints and incomplete 401 credentials hint | fixed `page_size`/`max_pages` to integer defaults without unsupported `minimum`, updated 401 hint, regenerated catalog Crisp object, `make verify` passed | complete |
 
 ## Behavior-change note
 

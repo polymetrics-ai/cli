@@ -3,13 +3,13 @@
   "issue": 205,
   "parentIssue": 204,
   "connector": "crisp",
-  "status": "pr_open_review_blocked",
+  "status": "review_fixes_local_green",
   "gsd": {
     "planCommand": "scripts/gsd prompt plan-phase 204 --skip-research",
     "programmingLoopStatus": "manual_fallback_command_unavailable"
   },
   "verificationPassed": true,
-  "verificationNotes": "Targeted #205 validation passed (single-connector temp-root validate, all-defs validate, conformance smoke, connectors inspect smoke, docs validate). Full local make verify passed on the stacked branch. Stacked PR: https://github.com/polymetrics-ai/cli/pull/235. CodeRabbit review is blocked by rate limit after non-default-base auto-review skip.",
+  "verificationNotes": "Targeted #205 validation passed (single-connector temp-root validate, all-defs validate, conformance smoke, connectors inspect smoke, docs validate). Full local make verify passed on the stacked branch and after CodeRabbit fixes. Stacked PR: https://github.com/polymetrics-ai/cli/pull/235.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -38,8 +38,13 @@
     },
     {
       "cycle": "automated-review-routing",
-      "decision": "blocked_rate_limit",
-      "reason": "PR #235 marked ready. CodeRabbit auto review skipped because base branch is not default; manual @coderabbitai review hit a review limit with next review available in 26 minutes. Copilot reviewer request was unavailable/not enabled via gh."
+      "decision": "reviewed_after_rate_limit_window",
+      "reason": "PR #235 marked ready. CodeRabbit auto review skipped because base branch is not default; manual review initially hit a review limit, then succeeded after the reported window."
+    },
+    {
+      "cycle": "review-fixes",
+      "decision": "local_green_pending_push",
+      "reason": "Fixed CodeRabbit findings for numeric pagination hints and incomplete 401 credential hint; make verify passed."
     }
   ],
   "updatedAt": "2026-07-10T00:00:00Z"

@@ -97,12 +97,12 @@
       "verification": "passed: temp-root connectorgen validate, all-defs connectorgen validate, conformance smoke, connectors inspect/docs smokes, make verify",
       "automated_review": {
         "primary_route": "coderabbit_status",
-        "status": "rate_limited_after_manual_request",
-        "head_sha": "latest pushed; see PR #235",
-        "reviewed_range": "unreviewed; CodeRabbit skipped auto review for non-default base and manual request hit review limit",
-        "coverage_route": "retry_after_reported_window_or_parent_pr_fallback",
+        "status": "reviewed_findings_fixed_pending_incremental",
+        "head_sha": "local review-fix commit pending push",
+        "reviewed_range": "b035549ce5d7a2698de3fce97a1a1f6157224236..767056d38754bd458183a12632fe58c44547e2fe",
+        "coverage_route": "manual_coderabbit_review_after_non_default_base_skip",
         "fallback_route": "copilot_unavailable_or_not_enabled",
-        "disposition_summary": "PR #235 marked ready; CodeRabbit auto review skipped because base is non-default, manual @coderabbitai review hit review limit with next review available in 26 minutes; do not retry immediately", 
+        "disposition_summary": "CodeRabbit reviewed PR #235 after rate-limit window and reported two actionable findings; fixed integer pagination hints and 401 credential hint locally, pending push/incremental review", 
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/235"
       }
     }
@@ -116,5 +116,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T02:55:00Z"
+  "updated_at": "2026-07-10T03:30:00Z"
 }

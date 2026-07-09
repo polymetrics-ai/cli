@@ -17,7 +17,7 @@
       {
         "status": 401,
         "class": "auth",
-        "hint": "Crisp credentials are missing or invalid; re-run pm credentials add crisp from environment variables or stdin."
+        "hint": "Crisp credentials are missing or invalid; run pm credentials add <name> --connector crisp with identifier/key from --from-env or --value-stdin and website_id from --config."
       },
       {
         "status": 403,

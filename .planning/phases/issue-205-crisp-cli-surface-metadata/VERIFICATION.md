@@ -76,7 +76,7 @@ go build ./cmd/pm
 make verify
 ```
 
-Result: pass. `make verify` completed fmt, tidy-check, vet, test, build, docs validate, smoke, lint, and connectorgen validate.
+Result: pass. `make verify` completed fmt, tidy-check, vet, test, build, docs validate, smoke, lint, and connectorgen validate. Re-run after CodeRabbit fixes also passed.
 
 ## CLI help/docs/website parity
 
@@ -95,4 +95,4 @@ Website docs remain deferred to #206 because #205 exposes no provider-specific r
 
 ## Current result
 
-Targeted #205 validation and full local `make verify` passed on the stacked branch. Stacked PR #235 is open/ready against `feat/204-crisp-cli-parity`. CI verify is still in progress. CodeRabbit auto review skipped the non-default base; manual `@coderabbitai review` hit a review-limit window (next review available in 26 minutes), so automated review coverage is blocked and must not be retried immediately. Full parent verification will need to be re-run after later implementation slices.
+Targeted #205 validation and full local `make verify` passed on the stacked branch. Stacked PR #235 is open/ready against `feat/204-crisp-cli-parity`; CI checks passed before the review-fix commit. CodeRabbit reviewed the full range through `767056d` and reported two actionable findings; both were fixed locally, and `make verify` passed again. A follow-up push/incremental review remains pending. Full parent verification will need to be re-run after later implementation slices.

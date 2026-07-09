@@ -34,13 +34,13 @@
       "description": "Optional lower-bound timestamp for future incremental streams."
     },
     "page_size": {
-      "type": "string",
-      "default": "100",
+      "type": "integer",
+      "default": 100,
       "description": "Future read page-size hint where supported by Crisp endpoints."
     },
     "max_pages": {
-      "type": "string",
-      "default": "0",
+      "type": "integer",
+      "default": 0,
       "description": "Future maximum pages hint; 0 means no connector-level page cap."
     }
   }
