@@ -1,6 +1,6 @@
 # Summary — Issue #182 Freshchat help renderer
 
-Status: implemented locally; focused gates pass.
+Status: implemented locally; full verification passed.
 
 ## Completed
 
@@ -12,9 +12,10 @@ Status: implemented locally; focused gates pass.
 - Implemented credential-free connector command-surface help routing.
 - Updated Freshchat generated manual/skill artifacts plus CLI and website docs.
 - Ran focused CLI, validation, docs, and no-credential help smoke checks.
+- Ran full handoff gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs` pass.
 
 ## Next
 
-1. Run full handoff gates.
-2. Commit/push implementation checkpoint.
-3. Open a stacked PR against `feat/180-freshchat-cli-parity` with `Refs #182` and `Refs #180`.
+1. Commit/push verification checkpoint.
+2. Open a stacked PR against `feat/180-freshchat-cli-parity` with `Refs #182` and `Refs #180`.
+3. Route automated review coverage without treating a stacked/draft skip as success.

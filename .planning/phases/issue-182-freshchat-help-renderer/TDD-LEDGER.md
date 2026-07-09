@@ -70,11 +70,15 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 ./pm docs validate --connectors-dir docs/connectors
 ```
 
-Full handoff gates when practical:
+Full handoff gates:
 
 ```bash
+gofmt -w cmd internal
 go vet ./...
 go test ./...
 go build ./cmd/pm
 make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Result: pass. `make verify` included docs validation, smoke, lint, and connectorgen validation; final standalone connectorgen validation reported `547 connector(s) checked, 0 findings`.
