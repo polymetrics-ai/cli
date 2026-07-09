@@ -16,6 +16,7 @@ Status: draft parent PR #129 opened; #104 and #105 verified locally with full ga
 - Added #105 red tests and generic connector command-surface help rendering for `pm jira --help`, `pm jira help`, bare `pm jira`, `pm help jira`, and JSON help.
 - Regenerated Jira connector manual/skill plus website connector data for Jira `cliSurface`; website connector-data tests and `pnpm build` passed.
 - Ran full #105 local gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `cd website && pnpm build`.
+- Routed automated review for #105: CodeRabbit reported a 51 minute review-limit window; Copilot backup review produced three comments, all fixed and re-verified with full gates.
 
 ## Current Blockers
 
@@ -24,6 +25,6 @@ Status: draft parent PR #129 opened; #104 and #105 verified locally with full ga
 
 ## Next
 
-1. Commit/push #105 verified slice and update parent PR.
-2. Route automated review per parent PR/stacked PR policy for the new implementation commit.
+1. Commit/push #105 review-fix slice and update parent PR.
+2. Confirm final PR checks complete on the review-fix head.
 3. Start the next dependency-ready lane: #106 stream runner or #107 operation ledger.

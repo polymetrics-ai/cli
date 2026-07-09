@@ -58,7 +58,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	case "init":
 		err = runInit(root, stdout, jsonOut)
 	case "help", "man":
-		err = runHelp(rest, stdout)
+		err = runHelp(rest, stdout, jsonOut)
 	case "connectors":
 		err = runConnectors(ctx, root, rest, stdout, jsonOut)
 	case "credentials":
@@ -123,17 +123,15 @@ func runInit(root string, stdout io.Writer, jsonOut bool) error {
 	return nil
 }
 
-func runHelp(args []string, stdout io.Writer) error {
+func runHelp(args []string, stdout io.Writer, jsonOut bool) error {
 	topic := ""
 	if len(args) > 0 {
 		topic = args[0]
 	}
-	text, ok := docs[topic]
-	if ok {
-		fmt.Fprint(stdout, text)
-		return nil
+	if topic == "" {
+		return writeRootManual(stdout, jsonOut)
 	}
-	return writeConnectorCommandManual(topic, stdout, false)
+	return writeCommandOrConnectorManual(topic, stdout, jsonOut)
 }
 
 func isManualCommand(cmd string) bool {

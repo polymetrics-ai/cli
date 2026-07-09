@@ -108,6 +108,38 @@ Final connector validation: `connectorgen validate: 547 connector(s) checked, 0 
 
 Note: two early full-suite attempts hit `internal/connectors/certify` timeout/timing flakes under local load. Focused certify reruns passed, `go test -timeout 20m ./...` passed, and the required `go test ./...` subsequently passed before `make verify`.
 
+## Review Fix Evidence
+
+Copilot backup review was requested after CodeRabbit reported a rate-limit window on the #105 head. Three actionable comments were dispositioned and fixed:
+
+- Threaded `jsonOut` through `runHelp`, so `pm --json help jira` returns the same `CommandManual` JSON envelope as `pm --json jira --help`.
+- Added CLI test coverage for `pm --json help jira`.
+- Reformatted command-surface flag metadata so generated docs render `Use a saved Jira connector credential and site scope. (maps_to=connection)` instead of `site scope.: maps_to=connection`.
+
+Review-fix verification passed:
+
+```bash
+gofmt -w internal/cli/cli.go internal/cli/cli_test.go internal/connectors/guide.go
+go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors
+go run ./cmd/pm docs validate --connectors-dir docs/connectors
+go test ./internal/cli -run 'TestJiraConnectorCommandSurfaceHelp|TestBareJiraConnectorCommandShowsHelp' -count=1
+go test ./internal/connectors -run TestEveryRegisteredConnectorHasGuideManualAndSkill -count=1
+go run ./cmd/pm --json help jira
+rg -n "site scope" docs/connectors/jira/MANUAL.md docs/connectors/jira/SKILL.md
+```
+
+Full review-fix verification passed:
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+cd website && pnpm build
+```
+
 ## Refactor Evidence
 
 - Added generic connector command-surface manual routing instead of Jira-specific special cases.

@@ -96,6 +96,23 @@ Final connector validation result:
 connectorgen validate: 547 connector(s) checked, 0 findings
 ```
 
+Review-fix checks after Copilot backup comments also passed:
+
+```bash
+go test ./internal/cli -run 'TestJiraConnectorCommandSurfaceHelp|TestBareJiraConnectorCommandShowsHelp' -count=1
+go test ./internal/connectors -run TestEveryRegisteredConnectorHasGuideManualAndSkill -count=1
+go run ./cmd/pm docs validate --connectors-dir docs/connectors
+go run ./cmd/pm --json help jira
+rg -n "site scope" docs/connectors/jira/MANUAL.md docs/connectors/jira/SKILL.md
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+cd website && pnpm build
+```
+
 Note: two early full-suite attempts hit `internal/connectors/certify` timeout/timing flakes under local load. Focused certify reruns passed, `go test -timeout 20m ./...` passed, and the required `go test ./...` subsequently passed before `make verify`.
 
 ## Exemptions

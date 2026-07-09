@@ -56,7 +56,7 @@ COMMAND SURFACE
   Source CLI: jira (https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json)
   Global flags:
     --json (boolean): Write machine-readable JSON output.
-    --connection (string): Use a saved Jira connector credential and site scope.: maps_to=connection
+    --connection (string): Use a saved Jira connector credential and site scope. (maps_to=connection)
   Issue Commands
     issue list - List Jira issues [intent=etl availability=implemented stream=issues]; notes: Executes the existing Jira issues stream. Advanced JQL, field selection, and single-issue rendering are deferred to later direct-read or stream-runner slices.
     issue search - Search issues with Jira query parameters [intent=etl availability=partial stream=issues]; notes: The connector has an issue-search stream, but gh-style/Jira-style ad-hoc JQL flags are not yet exposed as command flags.

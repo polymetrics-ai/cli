@@ -189,16 +189,24 @@ func TestBareJiraConnectorCommandShowsHelp(t *testing.T) {
 }
 
 func TestJiraConnectorCommandSurfaceHelpJSON(t *testing.T) {
-	var stdout, stderr bytes.Buffer
-	code := cli.Run([]string{"--json", "jira", "--help"}, &stdout, &stderr)
-	if code != 0 {
-		t.Fatalf("Run(--json jira --help) code = %d stderr = %s", code, stderr.String())
+	tests := [][]string{
+		{"--json", "jira", "--help"},
+		{"--json", "help", "jira"},
 	}
-	out := stdout.String()
-	for _, want := range []string{`"kind": "CommandManual"`, `"command": "jira"`, `"manual":`, "COMMAND SURFACE"} {
-		if !strings.Contains(out, want) {
-			t.Fatalf("jira json help missing %q:\n%s", want, out)
-		}
+	for _, args := range tests {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr = %s", args, code, stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{`"kind": "CommandManual"`, `"command": "jira"`, `"manual":`, "COMMAND SURFACE"} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("jira json help missing %q:\n%s", want, out)
+				}
+			}
+		})
 	}
 }
 

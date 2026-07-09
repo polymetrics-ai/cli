@@ -146,20 +146,27 @@ func commandSurfaceSection(surface *CommandSurface) GuideSection {
 
 func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 	name := "--" + strings.TrimLeft(flag.Name, "-")
-	parts := []string{name}
 	if flag.Type != "" {
-		parts[0] += " (" + flag.Type + ")"
+		name += " (" + flag.Type + ")"
 	}
-	if flag.Summary != "" {
-		parts = append(parts, flag.Summary)
-	}
+	meta := []string{}
 	if len(flag.Values) > 0 {
-		parts = append(parts, "values="+strings.Join(flag.Values, "|"))
+		meta = append(meta, "values="+strings.Join(flag.Values, "|"))
 	}
 	if flag.MapsTo != "" {
-		parts = append(parts, "maps_to="+flag.MapsTo)
+		meta = append(meta, "maps_to="+flag.MapsTo)
 	}
-	return strings.Join(parts, ": ")
+	summary := strings.TrimSpace(flag.Summary)
+	if summary == "" && len(meta) == 0 {
+		return name
+	}
+	if summary == "" {
+		return name + ": " + strings.Join(meta, ", ")
+	}
+	if len(meta) == 0 {
+		return name + ": " + summary
+	}
+	return name + ": " + summary + " (" + strings.Join(meta, ", ") + ")"
 }
 
 func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
