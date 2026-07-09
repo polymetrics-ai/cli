@@ -22,15 +22,27 @@ Before production edits:
 
 ## Red evidence
 
-Pending.
+- `go test ./cmd/connectorgen -run 'HubSpotOperationLedgerOfficialCounts|APISurfaceOperationLedgerAppCandidateModels' -count=1` failed before production edits:
+  - HubSpot endpoint count was `0`, expected `3060`.
+  - `stream_etl` app-candidate operation model was rejected by `api_surface.schema.json` enum.
 
 ## Green evidence
 
-Pending.
+Passed after implementation:
+
+- `gofmt -w cmd/connectorgen/main_test.go cmd/connectorgen/validate.go`
+- `go test ./cmd/connectorgen -run 'HubSpot|APISurfaceOperationLedger' -count=1`
+- `go run ./cmd/connectorgen validate internal/connectors/defs` — 548 connector(s), 0 findings.
+- `python3 -m json.tool internal/connectors/defs/hubspot/api_surface.json >/dev/null`
+- `go run ./cmd/pm help connectors`
+- `go run ./cmd/pm connectors inspect hubspot --json`
+- `go run ./cmd/pm docs validate --connectors-dir docs/connectors`
 
 ## Refactor evidence
 
-Pending.
+- Expanded operation-ledger blocked-candidate vocabulary to include `stream_etl`, `query_etl`, `reverse_etl`, and `binary_write`, preserving blocked-by-default semantics.
+- Generated deterministic HubSpot `api_surface.json` from the official public OpenAPI collection: 401 OpenAPI files, 4,396 raw operations, 3,060 unique method/path operations.
+- Classification counts: `stream_etl` 244, `query_etl` 223, `direct_read` 759, `reverse_etl` 850, `binary_read` 30, `binary_write` 31, `sensitive_reverse_etl` 40, `admin_reverse_etl` 291, `destructive_action` 556, `deprecated` 22, `disallowed` 14.
 
 ## Safety/TDD notes
 

@@ -17,15 +17,16 @@ scripts/gsd prompt plan-phase issue-137-hubspot-operation-ledger --skip-research
 
 ## Targeted checks
 
-Pending:
+Passed:
 
 ```bash
-gofmt -w cmd internal
+gofmt -w cmd/connectorgen/main_test.go cmd/connectorgen/validate.go
 go test ./cmd/connectorgen -run 'HubSpot|APISurfaceOperationLedger' -count=1
 go run ./cmd/connectorgen validate internal/connectors/defs
 python3 -m json.tool internal/connectors/defs/hubspot/api_surface.json >/dev/null
 go run ./cmd/pm help connectors
 go run ./cmd/pm connectors inspect hubspot --json
+go run ./cmd/pm docs validate --connectors-dir docs/connectors
 ```
 
 ## Broad checks
@@ -42,11 +43,11 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 
 ## CLI help/docs/website parity
 
-- [ ] `pm help connectors` checked.
-- [ ] `pm connectors inspect hubspot --json` checked; manifest inspection is credential-free.
-- [ ] `docs/connectors/hubspot/**` updated if generated manual/skill output changes.
-- [ ] Connector catalog/docs validation updated or marked not applicable.
-- [ ] Website docs explicitly marked not applicable for this ledger-only slice unless touched.
+- [x] `pm help connectors` checked with `go run ./cmd/pm help connectors`.
+- [x] `pm connectors inspect hubspot --json` checked; manifest inspection is credential-free.
+- [x] `docs/connectors/hubspot/**` generated manual/skill output did not change for this ledger-only update; internal HubSpot `docs.md` ledger status updated.
+- [x] Connector catalog/docs validation passed with `go run ./cmd/pm docs validate --connectors-dir docs/connectors`.
+- [x] Website docs explicitly marked not applicable for this ledger-only slice unless touched.
 
 ## Review route
 
