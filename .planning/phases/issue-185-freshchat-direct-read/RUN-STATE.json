@@ -1,0 +1,24 @@
+{
+  "phase": "issue-185-freshchat-direct-read",
+  "issue": 185,
+  "parent_issue": 180,
+  "status": "planned",
+  "gsd": {
+    "plan_phase_command": "scripts/gsd prompt plan-phase issue-185-freshchat-direct-read --skip-research",
+    "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-185-freshchat-direct-read --dry-run",
+    "programming_loop_result": "unavailable_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "planned only; red tests not added yet",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T23:36:00Z",
+      "cycle": "issue-plan",
+      "decision": "local_critical_path",
+      "reason": "Issue #185 is unblocked by #181/#184 integration; Pi subagent tool is unavailable, so run locally on a stacked branch.",
+      "issue_numbers": [185]
+    }
+  ],
+  "updated_at": "2026-07-09T23:36:00Z"
+}
