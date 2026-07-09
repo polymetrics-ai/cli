@@ -2,7 +2,7 @@
   "phase": "issue-165-intercom-cli-surface-metadata",
   "issue": 165,
   "parent_issue": 164,
-  "status": "planned",
+  "status": "verified",
   "gsd": {
     "adapter": "scripts/gsd",
     "doctor_passed": true,
@@ -17,13 +17,65 @@
       "cycle": "issue-plan",
       "decision": "local_critical_path",
       "reason": "Metadata slice is the parent critical path; no subagent tool is available in this Pi session."
+    },
+    {
+      "cycle": "red-green-metadata",
+      "decision": "local_critical_path",
+      "reason": "Executed data-contract test and Intercom metadata refresh inline on sub-issue branch."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Ran focused gates, full Go tests with project timeout, build, and make verify locally."
     }
   ],
   "tdd": {
-    "red": [],
-    "green": [],
-    "refactor": []
+    "red": [
+      {
+        "command": "go test ./cmd/connectorgen -run TestIntercomAPISurfaceOperationLedgerMetrics -count=1",
+        "result": "fail",
+        "evidence": "operation_ledger_version = 0, want 1"
+      }
+    ],
+    "green": [
+      {
+        "command": "go test ./cmd/connectorgen -run TestIntercomAPISurfaceOperationLedgerMetrics -count=1",
+        "result": "pass"
+      },
+      {
+        "command": "go run ./cmd/connectorgen validate internal/connectors/defs",
+        "result": "pass: 547 connector(s) checked, 0 findings"
+      },
+      {
+        "command": "go test ./cmd/connectorgen ./internal/connectors/engine",
+        "result": "pass"
+      },
+      {
+        "command": "go test ./internal/connectors/conformance -run 'TestConformance/intercom' -count=1",
+        "result": "pass"
+      },
+      {
+        "command": "go test ./... -timeout=20m",
+        "result": "pass"
+      },
+      {
+        "command": "go build ./cmd/pm",
+        "result": "pass"
+      },
+      {
+        "command": "make verify",
+        "result": "pass"
+      }
+    ],
+    "refactor": [
+      "api_surface.json switched to operation_ledger_version mode with zero legacy excluded rows",
+      "cli_surface.json added as docs/help metadata only"
+    ]
   },
-  "verificationPassed": false,
-  "updated_at": "2026-07-09T19:35:34Z"
+  "verificationPassed": true,
+  "verificationNotes": [
+    "Default go test ./... timed out in internal/connectors/certify due package timeout; focused retry and go test ./... -timeout=20m passed.",
+    "make verify passed with the repository Makefile's go test -timeout 20m ./... gate."
+  ],
+  "updated_at": "2026-07-09T20:55:00Z"
 }
