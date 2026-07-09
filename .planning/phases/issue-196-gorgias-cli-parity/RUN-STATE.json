@@ -3,7 +3,7 @@
   "status": "in_progress",
   "parent_issue": 196,
   "parent_branch": "feat/196-gorgias-cli-parity",
-  "parent_pr": null,
+  "parent_pr": "https://github.com/polymetrics-ai/cli/pull/229",
   "default_branch": "main",
   "gsd": {
     "doctor": "passed",
@@ -36,10 +36,21 @@
       "timestamp": "2026-07-09T19:55:16Z",
       "cycle": "parent-planning",
       "decision": "local_critical_path",
-      "issue_numbers": [197],
+      "issue_numbers": [
+        197
+      ],
       "reason": "Parent PR is missing and this Pi harness lacks the subagent tool; create parent seed then run #197 locally before production edits. Parallel worker blocker: not_spawned_runtime_capability_missing."
+    },
+    {
+      "timestamp": "2026-07-09T20:02:00Z",
+      "cycle": "parent-pr-seed",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        196
+      ],
+      "reason": "Pushed parent planning seed and opened draft parent PR #229 to satisfy stacked sub-issue precondition."
     }
   ],
   "verificationPassed": false,
-  "verificationBlocker": "parent planning JSON validation pending"
+  "verificationBlocker": "full parent gate not run; planning preflight passed"
 }

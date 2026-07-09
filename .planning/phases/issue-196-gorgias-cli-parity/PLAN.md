@@ -2,7 +2,7 @@
 
 Parent issue: #196  
 Parent branch: `feat/196-gorgias-cli-parity`  
-Parent PR: pending parent-seed push/open  
+Parent PR: https://github.com/polymetrics-ai/cli/pull/229 (draft)  
 Default branch: `main`
 
 ## GSD command path
@@ -48,7 +48,7 @@ Coordinate parent issue #196 and sub-issues #197-#203 for Gorgias connector CLI 
 
 ## Slice boundaries
 
-- Parent slice: planning, orchestration state, parent PR seed, review routing, final integration readiness.
+- Parent slice: planning, orchestration state, parent PR #229 seed, review routing, final integration readiness.
 - #197 slice: `internal/connectors/defs/gorgias/metadata.json`, `api_surface.json`, optional `cli_surface.json`, and issue-specific planning/verification artifacts. No runtime command behavior beyond validation unless tests prove metadata loader gaps.
 - Later slices own streams, direct reads, binary policy, write actions, help/docs rendering, and sensitive/admin safeguards.
 

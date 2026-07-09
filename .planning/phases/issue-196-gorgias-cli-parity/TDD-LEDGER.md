@@ -6,9 +6,10 @@ Manual GSD universal runtime fallback. `scripts/gsd prompt programming-loop ...`
 
 ## Parent planning red/validation evidence
 
-- Parent PR does not exist yet for `feat/196-gorgias-cli-parity`.
+- Parent PR did not exist yet for `feat/196-gorgias-cli-parity` during initial planning.
   - Command: `gh pr list --head feat/196-gorgias-cli-parity --json number,title,state,isDraft,baseRefName,headRefName,url,body`
-  - Result: `[]`.
+  - Initial result: `[]`.
+  - Green follow-up: draft parent PR opened at https://github.com/polymetrics-ai/cli/pull/229.
 - Parallel worker spawn is unavailable in this Pi harness.
   - Evidence: available tools are `read`, `bash`, `edit`, `write`; no `subagent` tool is available.
   - Decision: run #197 as `local_critical_path` after parent seed.

@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/196-gorgias-cli-parity",
   "parent_pr": {
-    "url": "",
+    "url": "https://github.com/polymetrics-ai/cli/pull/229",
     "base": "main",
     "head": "feat/196-gorgias-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -35,7 +35,9 @@
     {
       "number": 200,
       "status": "planned",
-      "dependencies": [197],
+      "dependencies": [
+        197
+      ],
       "write_scope": [
         "internal/connectors/defs/gorgias/api_surface.json",
         ".planning/phases/issue-200-gorgias-operation-ledger"
@@ -45,7 +47,10 @@
     {
       "number": 199,
       "status": "planned",
-      "dependencies": [197, 200],
+      "dependencies": [
+        197,
+        200
+      ],
       "write_scope": [
         "internal/connectors/defs/gorgias/streams.json",
         "internal/connectors/defs/gorgias/schemas",
@@ -57,7 +62,11 @@
     {
       "number": 201,
       "status": "planned",
-      "dependencies": [197, 200, 202],
+      "dependencies": [
+        197,
+        200,
+        202
+      ],
       "write_scope": [
         "internal/connectors/defs/gorgias",
         "internal/connectors/commandrunner",
@@ -69,7 +78,10 @@
     {
       "number": 202,
       "status": "planned",
-      "dependencies": [197, 200],
+      "dependencies": [
+        197,
+        200
+      ],
       "write_scope": [
         "internal/connectors/engine",
         "internal/connectors/defs/gorgias",
@@ -80,7 +92,10 @@
     {
       "number": 203,
       "status": "planned",
-      "dependencies": [197, 200],
+      "dependencies": [
+        197,
+        200
+      ],
       "write_scope": [
         "internal/connectors/defs/gorgias/writes.json",
         "internal/connectors/engine",
@@ -92,7 +107,12 @@
     {
       "number": 198,
       "status": "planned",
-      "dependencies": [197, 199, 201, 203],
+      "dependencies": [
+        197,
+        199,
+        201,
+        203
+      ],
       "write_scope": [
         "internal/cli",
         "docs/cli",
@@ -107,8 +127,18 @@
     {
       "timestamp": "2026-07-09T19:55:16Z",
       "decision": "local_critical_path",
-      "issue_numbers": [197],
+      "issue_numbers": [
+        197
+      ],
       "reason": "No subagent tool is available in this Pi harness, so the orchestrator cannot spawn pm-gsd-worker. Parent PR is missing; seed parent branch, open draft parent PR, then execute #197 locally. Parallel worker blocker: not_spawned_runtime_capability_missing."
+    },
+    {
+      "timestamp": "2026-07-09T20:02:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        196
+      ],
+      "reason": "Opened draft parent PR #229 after parent planning seed push; sub-issue execution can now start with #197."
     }
   ],
   "subissues": [
@@ -119,7 +149,10 @@
       "pr_url": "",
       "worker": "local_critical_path_pi_orchestrator",
       "status": "worker_ready",
-      "write_scope": ["internal/connectors/defs/gorgias", ".planning/phases/issue-197-gorgias-cli-surface-metadata"],
+      "write_scope": [
+        "internal/connectors/defs/gorgias",
+        ".planning/phases/issue-197-gorgias-cli-surface-metadata"
+      ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
       "verification": "pending",
       "automated_review": {
@@ -140,7 +173,13 @@
       "pr_url": "",
       "worker": "pending",
       "status": "planned",
-      "write_scope": ["internal/cli", "docs/cli", "docs/connectors", "website", ".planning/phases/issue-198-gorgias-help-renderer"],
+      "write_scope": [
+        "internal/cli",
+        "docs/cli",
+        "docs/connectors",
+        "website",
+        ".planning/phases/issue-198-gorgias-help-renderer"
+      ],
       "worker_directory": "",
       "verification": "blocked_on_dependencies",
       "automated_review": {
@@ -161,7 +200,12 @@
       "pr_url": "",
       "worker": "pending",
       "status": "planned",
-      "write_scope": ["internal/connectors/defs/gorgias/streams.json", "internal/connectors/defs/gorgias/schemas", "internal/connectors/defs/gorgias/fixtures", ".planning/phases/issue-199-gorgias-stream-runner"],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/streams.json",
+        "internal/connectors/defs/gorgias/schemas",
+        "internal/connectors/defs/gorgias/fixtures",
+        ".planning/phases/issue-199-gorgias-stream-runner"
+      ],
       "worker_directory": "",
       "verification": "blocked_on_dependencies",
       "automated_review": {
@@ -182,7 +226,10 @@
       "pr_url": "",
       "worker": "pending",
       "status": "planned",
-      "write_scope": ["internal/connectors/defs/gorgias/api_surface.json", ".planning/phases/issue-200-gorgias-operation-ledger"],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/api_surface.json",
+        ".planning/phases/issue-200-gorgias-operation-ledger"
+      ],
       "worker_directory": "",
       "verification": "blocked_on_dependencies",
       "automated_review": {
@@ -203,7 +250,12 @@
       "pr_url": "",
       "worker": "pending",
       "status": "planned",
-      "write_scope": ["internal/connectors/defs/gorgias", "internal/connectors/commandrunner", "internal/cli", ".planning/phases/issue-201-gorgias-direct-read"],
+      "write_scope": [
+        "internal/connectors/defs/gorgias",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        ".planning/phases/issue-201-gorgias-direct-read"
+      ],
       "worker_directory": "",
       "verification": "blocked_on_dependencies",
       "automated_review": {
@@ -224,7 +276,11 @@
       "pr_url": "",
       "worker": "pending",
       "status": "planned",
-      "write_scope": ["internal/connectors/engine", "internal/connectors/defs/gorgias", ".planning/phases/issue-202-gorgias-advanced-query-binary"],
+      "write_scope": [
+        "internal/connectors/engine",
+        "internal/connectors/defs/gorgias",
+        ".planning/phases/issue-202-gorgias-advanced-query-binary"
+      ],
       "worker_directory": "",
       "verification": "blocked_on_dependencies",
       "automated_review": {
@@ -245,7 +301,12 @@
       "pr_url": "",
       "worker": "pending",
       "status": "planned",
-      "write_scope": ["internal/connectors/defs/gorgias/writes.json", "internal/connectors/engine", "internal/app", ".planning/phases/issue-203-gorgias-sensitive-admin-policy"],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/writes.json",
+        "internal/connectors/engine",
+        "internal/app",
+        ".planning/phases/issue-203-gorgias-sensitive-admin-policy"
+      ],
       "worker_directory": "",
       "verification": "blocked_on_dependencies",
       "automated_review": {
@@ -270,5 +331,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T19:55:16Z"
+  "updated_at": "2026-07-09T20:02:00Z"
 }
