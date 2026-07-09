@@ -9,6 +9,10 @@ This connector is read-only; no write actions are declared.
 
 Service API documentation: https://developers.gorgias.com/reference.
 
+CLI surface metadata is present for provider-inspired Gorgias commands. Only the four stream-backed
+`list` commands are marked implemented in this slice; write, direct-read, binary/file, and
+sensitive/admin commands are planned for later issue lanes and are not exposed as raw API tools.
+
 ## Auth setup
 
 Connection fields:
@@ -59,6 +63,9 @@ customers, messages, and satisfaction surveys.
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 4 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  out_of_scope=7.
+- API coverage currently includes 4 stream-backed endpoint group(s) and 7 legacy out-of-scope rows.
+- The public Gorgias llms.txt plus linked ReadMe OpenAPI pages expose 114 operations. Issue #200
+  owns the complete operation ledger; this metadata slice does not claim full 114-operation runtime
+  parity.
+- Planned CLI entries in `cli_surface.json` are discovery/help metadata only until later lanes add
+  streams, direct reads, binary policies, or typed reverse-ETL actions.
