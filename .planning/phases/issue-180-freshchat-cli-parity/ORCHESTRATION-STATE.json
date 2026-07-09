@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/180-freshchat-cli-parity",
   "parent_pr": {
-    "url": "",
+    "url": "https://github.com/polymetrics-ai/cli/pull/226",
     "base": "main",
     "head": "feat/180-freshchat-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "open"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -110,5 +110,5 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T19:37:13Z"
+  "updated_at": "2026-07-09T19:45:00Z"
 }
