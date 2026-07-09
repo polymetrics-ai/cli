@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/business-hours/within-bh", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "within_business_hours": true,
+      "business_hours_id": "business_hours_fixture_1",
+      "timezone": "UTC"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "path": "/conversations/fields", "query": {} },
+  "response": {
+    "status": 200,
+    "body": [
+      { "name": "priority", "label": "Priority", "type": "dropdown", "required": false, "choices": ["low", "medium", "high"] }
+    ]
+  }
+}

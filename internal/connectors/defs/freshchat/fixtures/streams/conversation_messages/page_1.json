@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/conversations/synthetic-conformance-value/messages",
+    "query": { "page": "1", "items_per_page": "50" }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "messages": [
+        {
+          "id": "message_fixture_1",
+          "app_id": "app_fixture_1",
+          "message_type": "normal",
+          "actor_type": "agent",
+          "actor_id": "agent_fixture_1",
+          "message_parts": [],
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

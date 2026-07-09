@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/agents/status", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "statuses": [
+        { "id": "status_fixture_1", "name": "Available", "type": "available", "enabled": true }
+      ]
+    }
+  }
+}

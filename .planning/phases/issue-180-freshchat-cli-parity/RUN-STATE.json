@@ -127,7 +127,16 @@
       "issue_numbers": [
         182
       ]
+    },
+    {
+      "timestamp": "2026-07-09T23:12:00Z",
+      "cycle": "subissue-start",
+      "decision": "started_local_critical_path",
+      "reason": "Issue #183 stream runner is unblocked by #181/#184 integration; no Pi subagent tool is available, so start locally on feat/183-freshchat-stream-runner.",
+      "issue_numbers": [
+        183
+      ]
     }
   ],
-  "updated_at": "2026-07-09T23:07:17Z"
+  "updated_at": "2026-07-09T23:12:00Z"
 }

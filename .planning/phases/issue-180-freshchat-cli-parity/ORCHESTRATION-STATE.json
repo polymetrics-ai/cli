@@ -51,7 +51,7 @@
     },
     {
       "number": 183,
-      "status": "ready_after_181_184_integration",
+      "status": "in_progress_local_critical_path",
       "dependencies": [
         181,
         184
@@ -61,7 +61,7 @@
         "internal/connectors/defs/freshchat/schemas/**",
         "internal/connectors/defs/freshchat/fixtures/**"
       ],
-      "decision": "ready_local_critical_path_or_worker_when_available"
+      "decision": "started_local_critical_path"
     },
     {
       "number": 184,
@@ -137,6 +137,14 @@
         182
       ],
       "reason": "PR #245 CI passed and was squash-merged to parent branch as f50a2298; automated review remains pending through parent PR coverage/fallback."
+    },
+    {
+      "timestamp": "2026-07-09T23:12:00Z",
+      "decision": "started_local_critical_path",
+      "issue_numbers": [
+        183
+      ],
+      "reason": "Issue #183 stream runner is unblocked; no Pi subagent tool is available, so start locally on feat/183-freshchat-stream-runner."
     }
   ],
   "subissues": [
@@ -216,5 +224,5 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T23:07:17Z"
+  "updated_at": "2026-07-09T23:12:00Z"
 }

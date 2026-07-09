@@ -1,0 +1,13 @@
+{
+  "request": { "method": "GET", "path": "/reports/raw/synthetic-conformance-value", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "report_fixture_1",
+      "status": "completed",
+      "interval": "2026-01-01T00:00:00.000Z/2026-01-02T00:00:00.000Z",
+      "links": [],
+      "link": null
+    }
+  }
+}
