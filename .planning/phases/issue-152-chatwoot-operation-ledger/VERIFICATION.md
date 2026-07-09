@@ -1,6 +1,6 @@
 # Verification: Chatwoot Operation Ledger
 
-## Planned gates
+## Completed targeted gates
 
 ```bash
 go test ./cmd/connectorgen -run ChatwootAPISurfaceOperationLedgerMetrics -count=1
@@ -10,7 +10,9 @@ go test ./internal/connectors/conformance -run 'TestConformance/chatwoot' -count
 git diff --check
 ```
 
-## Full handoff gates
+Result: pass.
+
+## Completed full handoff gates
 
 ```bash
 gofmt -w cmd internal
@@ -20,6 +22,4 @@ go build ./cmd/pm
 make verify
 ```
 
-## Results
-
-Pending.
+Result: pass. `make verify` completed `go test -timeout 20m ./...`, `go build ./cmd/pm`, connector docs validation, smoke test, `golangci-lint`, and `go run ./cmd/connectorgen validate internal/connectors/defs`.

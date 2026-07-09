@@ -70,9 +70,19 @@
       "cycle": "issue-150-integration",
       "decision": "integrated_parent_review_complete",
       "reason": "PR #240 remote checks passed, was squash-merged into parent commit 80db5020b297f1323f94c0c965f4a80ab6b08eb3, and parent PR #223 manual CodeRabbit review replied Review finished with no inline findings returned by GitHub API."
+    },
+    {
+      "cycle": "issue-152",
+      "decision": "local_critical_path",
+      "reason": "Issue #152 is dependency-unblocked after #149 integration; mutating worker fanout remains unavailable, so the coordinator created #152 GSD/TDD artifacts locally before production edits."
+    },
+    {
+      "cycle": "issue-152-local-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #152 implementation passed targeted operation-ledger checks, go vet ./..., go test ./..., go build ./cmd/pm, and make verify locally."
     }
   ],
   "verificationPassed": false,
-  "verificationStatus": "#149 and #150 integrated into parent; parent branch final verification pending after remaining sub-issues",
+  "verificationStatus": "#149 and #150 integrated into parent; #152 local verification passed on sub-branch; parent branch final verification pending after remaining sub-issues",
   "updated_at": "2026-07-10T00:00:00Z"
 }

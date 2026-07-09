@@ -30,12 +30,19 @@ Command:
 go test ./cmd/connectorgen -run ChatwootAPISurfaceOperationLedgerMetrics -count=1
 ```
 
-Expected after test edit: pass if #149 accounting is already complete; fail if a row is unclassified or unsafe.
+Result after test edit: failed because `PUT /api/v1/profile` did not explicitly record the official multipart avatar/profile policy.
+
+```text
+PUT /api/v1/profile must record the blocked multipart avatar/profile policy
+```
 
 ## Green implementation notes
 
-Pending.
+- Added a `notes` field to the `PUT /api/v1/profile` operation row documenting that multipart avatar/profile updates require the later bounded binary/file policy before file-bearing actions are exposed.
+- Tightened that row's reason to call out profile/password/avatar mutation risk.
+- Re-ran Chatwoot operation-ledger metrics, GitHub/Chatwoot API surface tests, connector definition validation, and Chatwoot conformance.
 
 ## Refactor notes
 
-Pending.
+- Reused existing `githubOperation`, `requiresSourceOrNotes`, and `assertStringIntMap` test helpers from the connectorgen package.
+- No runtime execution path was added.

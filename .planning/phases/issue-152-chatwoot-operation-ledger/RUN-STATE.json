@@ -3,7 +3,7 @@
   "parentIssue": 148,
   "branch": "feat/152-chatwoot-operation-ledger",
   "base": "feat/148-chatwoot-cli-parity",
-  "status": "planned",
+  "status": "implemented_local_verified",
   "decisions": [
     {
       "cycle": "gsd-adapter",
@@ -16,8 +16,8 @@
       "reason": "Issue #152 locks operation accounting and safety invariants without enabling new runtime execution."
     }
   ],
-  "verificationPassed": false,
-  "verificationStatus": "planned; red test pending",
-  "reviewStatus": "not_started",
+  "verificationPassed": true,
+  "verificationStatus": "targeted operation-ledger checks, go vet, go test ./..., go build ./cmd/pm, and make verify passed locally",
+  "reviewStatus": "not_started_pr_pending",
   "updated": "2026-07-10"
 }

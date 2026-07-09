@@ -24,7 +24,7 @@ Status: in progress.
 1. Continue the next dependency-unblocked lane (#152 operation ledger, then #151/#153/#154/#155 as dependencies permit).
 2. Keep parent PR #223 draft until all sub-issues are integrated and the human gate is ready.
 3. Route automated review for each subsequent sub-PR and use parent PR coverage/fallback whenever non-default-base sub-PRs are skipped.
-4. Started #152 operation-ledger lane locally with GSD/TDD artifacts because worker fanout remains unavailable.
+4. Implemented #152 operation-ledger lane locally with GSD/TDD artifacts because worker fanout remains unavailable; targeted checks and full handoff gates passed, sub-PR pending.
 
 ## Safety
 
