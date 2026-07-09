@@ -1,12 +1,19 @@
 # Verification — Issue #183
 
-## Planned focused gates
+## Focused gates run
 
 ```bash
 go test ./internal/connectors/conformance -run TestFreshchatImplementedETLCommandsHaveReplayFixtures
+go test ./internal/connectors/conformance
 go run ./cmd/connectorgen validate internal/connectors/defs
-go test ./internal/connectors/conformance ./internal/connectors/engine ./cmd/connectorgen
 ```
+
+Results:
+
+- `go test ./internal/connectors/conformance -run TestFreshchatImplementedETLCommandsHaveReplayFixtures`: pass.
+- `go test ./internal/connectors/conformance`: pass.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
+- `go test ./internal/connectors/conformance ./internal/connectors/engine ./cmd/connectorgen`: pass.
 
 ## Planned full gates
 

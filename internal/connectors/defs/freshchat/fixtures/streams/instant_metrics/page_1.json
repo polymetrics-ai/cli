@@ -1,0 +1,11 @@
+{
+  "request": { "method": "GET", "path": "/metrics/instant", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "metrics": ["online_agents"],
+      "filters": {},
+      "data": []
+    }
+  }
+}

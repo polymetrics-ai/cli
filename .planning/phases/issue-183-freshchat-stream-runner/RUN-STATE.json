@@ -2,7 +2,7 @@
   "phase": "issue-183-freshchat-stream-runner",
   "issue": 183,
   "parent_issue": 180,
-  "status": "planned",
+  "status": "implemented_focused_green",
   "gsd": {
     "plan_phase_command": "scripts/gsd prompt plan-phase issue-183-freshchat-stream-runner --skip-research",
     "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-183-freshchat-stream-runner --dry-run",
@@ -10,7 +10,7 @@
     "manual_fallback": true
   },
   "verificationPassed": false,
-  "verificationBlocker": "planned only; red test not added yet",
+  "verificationBlocker": "focused gates pass; full handoff gates not run yet",
   "orchestrationDecisions": [
     {
       "timestamp": "2026-07-09T23:12:00Z",
@@ -18,7 +18,14 @@
       "decision": "local_critical_path",
       "reason": "Issue #183 is unblocked by #181/#184 integration; Pi subagent tool is unavailable, so run locally on a stacked branch.",
       "issue_numbers": [183]
+    },
+    {
+      "timestamp": "2026-07-09T23:24:00Z",
+      "cycle": "red-green",
+      "decision": "focused_green",
+      "reason": "Added Freshchat stream replay regression coverage plus missing fixture pages; focused conformance and connectorgen validation gates pass.",
+      "issue_numbers": [183]
     }
   ],
-  "updated_at": "2026-07-09T23:12:00Z"
+  "updated_at": "2026-07-09T23:24:00Z"
 }

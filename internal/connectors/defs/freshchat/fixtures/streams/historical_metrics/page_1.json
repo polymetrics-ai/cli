@@ -1,0 +1,15 @@
+{
+  "request": { "method": "GET", "path": "/metrics/historical", "query": {} },
+  "response": {
+    "status": 200,
+    "body": {
+      "metrics": ["conversations_created"],
+      "start": "2026-01-01T00:00:00.000Z",
+      "end": "2026-01-02T00:00:00.000Z",
+      "filters": {},
+      "aggregator": "sum",
+      "interval": "day",
+      "data": []
+    }
+  }
+}
