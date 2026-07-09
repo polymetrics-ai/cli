@@ -16,13 +16,14 @@ Status: in progress.
 - Requested manual CodeRabbit review on parent PR #223 because #227 skipped review and #223 had new integrated commits while still draft.
 - Started issue #150 locally as the next dependency-unblocked lane and created its GSD/TDD/verification artifacts before production edits.
 - Implemented #150 help/docs/website parity and passed targeted tests, website typecheck/build, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` locally.
+- Opened PR #240 for #150; remote checks passed, CodeRabbit skipped the non-default-base sub-PR, and the branch was squash-merged into the parent as `80db5020b297f1323f94c0c965f4a80ab6b08eb3`.
+- Requested parent PR #223 manual CodeRabbit review after #150 integration; CodeRabbit replied `Review finished` and GitHub returned no inline CodeRabbit findings.
 
 ## Next
 
-1. Commit and push issue #150 implementation.
-2. Open a stacked sub-PR against `feat/148-chatwoot-cli-parity` with `Refs #150` and `Refs #148`.
-3. Route automated review; if CodeRabbit skips the non-default-base sub-PR, rely on parent PR #223 review coverage/fallback for the integrated commit range.
-4. Continue the next dependency-unblocked lane (#152 operation ledger, then #151/#153/#154/#155 as dependencies permit).
+1. Continue the next dependency-unblocked lane (#152 operation ledger, then #151/#153/#154/#155 as dependencies permit).
+2. Keep parent PR #223 draft until all sub-issues are integrated and the human gate is ready.
+3. Route automated review for each subsequent sub-PR and use parent PR coverage/fallback whenever non-default-base sub-PRs are skipped.
 
 ## Safety
 
