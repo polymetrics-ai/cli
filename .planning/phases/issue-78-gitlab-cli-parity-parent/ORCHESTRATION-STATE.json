@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/78-gitlab-cli-parity",
   "parent_pr": {
-    "url": "pending",
+    "url": "https://github.com/polymetrics-ai/cli/pull/127",
     "base": "main",
     "head": "feat/78-gitlab-cli-parity",
     "draft": true,
-    "state": "planned"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -120,7 +120,7 @@
       "number": 83,
       "url": "https://github.com/polymetrics-ai/cli/issues/83",
       "branch": "feat/78-gitlab-cli-parity",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
       "worker": "inline-pi-orchestrator",
       "status": "worker_in_progress",
       "write_scope": [
@@ -152,5 +152,5 @@
     "credentialed connector checks",
     "reverse ETL execution"
   ],
-  "updated_at": "2026-07-09T12:34:52Z"
+  "updated_at": "2026-07-09T12:38:00Z"
 }

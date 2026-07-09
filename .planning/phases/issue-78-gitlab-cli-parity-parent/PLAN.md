@@ -1,6 +1,7 @@
 # Plan: GitLab CLI Parity Parent Orchestration
 
 Parent issue: #78
+Parent PR: #127 (draft)
 Parent branch: `feat/78-gitlab-cli-parity`
 Default branch: `main`
 Connector: `gitlab`
