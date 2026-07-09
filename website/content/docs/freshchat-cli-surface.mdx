@@ -1,0 +1,69 @@
+---
+title: Freshchat CLI Surface
+description: Freshchat connector commands, operation ledger coverage, and safety rules for stream reads and approval-gated writes.
+---
+
+Freshchat command metadata lives in `internal/connectors/defs/freshchat/cli_surface.json` and is
+accounted for by the Freshchat operation ledger in `api_surface.json`. The runtime help path is
+credential-free: `pm freshchat` and `pm freshchat --help` render the connector command surface without
+reading saved credentials or secret values.
+
+## Current surface
+
+| Metric | Value |
+|---|---:|
+| Declared command entries | 34 |
+| Implemented ETL command entries | 18 |
+| Implemented/partial reverse ETL entries | 13 |
+| Planned direct-read entries | 1 |
+| Excluded multipart upload entries | 2 |
+| Operation ledger endpoints | 34 |
+| Stream-covered endpoints | 18 |
+| Write-covered endpoints | 13 |
+| Blocked operation endpoints | 3 |
+
+## Help and discovery
+
+```bash
+pm freshchat
+pm freshchat --help
+pm connectors inspect freshchat --json
+```
+
+The help output includes account, user, conversation, agent, directory, outbound, report, metrics,
+and file command groups. It also preserves safety labels such as `availability=planned` and
+`availability=excluded`, so blocked operations are visible without becoming executable.
+
+## Runtime model
+
+| Intent | Runtime rule |
+|---|---|
+| `etl` | Runs an implemented Freshchat stream through a saved credential, bounded by `--limit`. |
+| `reverse_etl` | Creates an approval-gated reverse plan; execution still requires preview and approval. |
+| `direct_read` | Tracked for request-body reads such as `user fetch`, but blocked until bounded body support exists. |
+| `direct_write` | Multipart file/image upload metadata is excluded; no raw upload command is exposed. |
+
+<Callout type="warn">
+  Freshchat command parity does not add a generic HTTP client, raw upload command, shell escape, or
+  SQL write surface. Writes must stay on the reverse ETL plan → preview → approval → execute path.
+</Callout>
+
+## Examples
+
+```bash
+pm freshchat user list --credential freshchat-prod --limit 50 --json
+pm freshchat conversation fields --credential freshchat-prod --json
+pm freshchat report status --credential freshchat-prod --config report_id=report_123 --json
+```
+
+For detail streams such as `user view`, `agent view`, or `conversation messages`, pass the required
+identifier with `--config` until the direct-read slice adds typed path flags.
+
+## Known gaps
+
+| Gap | Follow-up |
+|---|---|
+| Request-body reads (`POST /users/fetch`) | Direct-read/body support in #185/#186. |
+| Multipart file and image uploads | Bounded file-transfer policy in #186. |
+| Sensitive/destructive admin policy refinement | #187. |
+| Website/generated help parity completion | Parent #180 tracks the remaining waves. |

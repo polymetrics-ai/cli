@@ -23,50 +23,93 @@
     {
       "number": 181,
       "status": "integrated_parent_review_pending",
-      "dependencies": ["parent_pr_open"],
-      "write_scope": ["internal/connectors/defs/freshchat/cli_surface.json", "internal/connectors/engine/*_test.go", ".planning/phases/issue-181-freshchat-cli-surface-metadata/**"],
+      "dependencies": [
+        "parent_pr_open"
+      ],
+      "write_scope": [
+        "internal/connectors/defs/freshchat/cli_surface.json",
+        "internal/connectors/engine/*_test.go",
+        ".planning/phases/issue-181-freshchat-cli-surface-metadata/**"
+      ],
       "decision": "merged_to_parent_branch"
     },
     {
       "number": 182,
-      "status": "ready_after_181_integration",
-      "dependencies": [181],
-      "write_scope": ["help renderer", "docs/cli/**", "website/**", "generated help/manual artifacts"],
-      "decision": "ready_local_critical_path_or_worker_when_available"
+      "status": "pr_open_ci_repair_pending",
+      "dependencies": [
+        181,
+        184
+      ],
+      "write_scope": [
+        "help renderer",
+        "docs/cli/**",
+        "website/**",
+        "generated help/manual artifacts",
+        ".planning/phases/issue-182-freshchat-help-renderer/**"
+      ],
+      "decision": "stacked_pr_245_opened_generated_website_data_fix_pushed_next"
     },
     {
       "number": 183,
       "status": "ready_after_181_184_integration",
-      "dependencies": [181, 184],
-      "write_scope": ["internal/connectors/defs/freshchat/streams.json", "internal/connectors/defs/freshchat/schemas/**", "internal/connectors/defs/freshchat/fixtures/**"],
+      "dependencies": [
+        181,
+        184
+      ],
+      "write_scope": [
+        "internal/connectors/defs/freshchat/streams.json",
+        "internal/connectors/defs/freshchat/schemas/**",
+        "internal/connectors/defs/freshchat/fixtures/**"
+      ],
       "decision": "ready_local_critical_path_or_worker_when_available"
     },
     {
       "number": 184,
       "status": "integrated_parent_review_pending",
-      "dependencies": [181],
-      "write_scope": ["internal/connectors/defs/freshchat/api_surface.json", "internal/connectors/defs/freshchat/operations.json", "cmd/connectorgen/*freshchat*test.go", ".planning/phases/issue-184-freshchat-operation-ledger/**"],
+      "dependencies": [
+        181
+      ],
+      "write_scope": [
+        "internal/connectors/defs/freshchat/api_surface.json",
+        "internal/connectors/defs/freshchat/operations.json",
+        "cmd/connectorgen/*freshchat*test.go",
+        ".planning/phases/issue-184-freshchat-operation-ledger/**"
+      ],
       "decision": "merged_to_parent_branch"
     },
     {
       "number": 185,
       "status": "ready_after_181_184_integration",
-      "dependencies": [181, 184],
-      "write_scope": ["direct-read metadata/engine/tests for Freshchat"],
+      "dependencies": [
+        181,
+        184
+      ],
+      "write_scope": [
+        "direct-read metadata/engine/tests for Freshchat"
+      ],
       "decision": "ready_local_critical_path_or_worker_when_available"
     },
     {
       "number": 186,
       "status": "planned",
-      "dependencies": [184, 185],
-      "write_scope": ["advanced query/binary metadata/engine/tests for Freshchat"],
+      "dependencies": [
+        184,
+        185
+      ],
+      "write_scope": [
+        "advanced query/binary metadata/engine/tests for Freshchat"
+      ],
       "decision": "not_spawned_dependency_blocked"
     },
     {
       "number": 187,
       "status": "ready_after_184_integration",
-      "dependencies": [184],
-      "write_scope": ["sensitive/admin policy metadata/tests for Freshchat"],
+      "dependencies": [
+        184
+      ],
+      "write_scope": [
+        "sensitive/admin policy metadata/tests for Freshchat"
+      ],
       "decision": "ready_local_critical_path_or_worker_when_available"
     }
   ],
@@ -74,8 +117,18 @@
     {
       "timestamp": "2026-07-09T19:37:13Z",
       "decision": "not_spawned_runtime_capability_missing",
-      "issue_numbers": [181],
+      "issue_numbers": [
+        181
+      ],
       "reason": "No Pi subagent tool is available in this API harness; run issue #181 as a local critical-path stacked branch after parent PR setup."
+    },
+    {
+      "timestamp": "2026-07-09T22:55:00Z",
+      "decision": "opened_stacked_pr_ci_repair_pending",
+      "issue_numbers": [
+        182
+      ],
+      "reason": "Opened PR #245 against parent branch; local gates passed. Initial website CI failed on stale generated website data, so a generated-data fix was committed and needs CI rerun."
     }
   ],
   "subissues": [
@@ -122,6 +175,27 @@
         "disposition_summary": "CodeRabbit skipped stacked PR #243 because non-default base branch reviews are disabled, then skipped parent PR #226 because it is draft. Do not count #184 as review-complete until parent PR #226 receives coverage for fd359cfb or an approved fallback is recorded.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
       }
+    },
+    {
+      "number": 182,
+      "url": "https://github.com/polymetrics-ai/cli/issues/182",
+      "branch": "feat/182-freshchat-help-renderer",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/245",
+      "worker": "local_critical_path",
+      "status": "pr_open_ci_repair_pending",
+      "write_scope": "Freshchat command-surface help routing, generated manual/skill docs, CLI docs, and website docs",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
+      "verification": "passed_local_full_gates; initial_ci_website_generated_data_failure_fixed_pending_rerun",
+      "automated_review": {
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base",
+        "head_sha": "2d0f7e64",
+        "reviewed_range": "pending_parent_pr_ready_or_approved_fallback",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_parent_ready_or_human_approved_backup",
+        "disposition_summary": "CodeRabbit skipped stacked PR #245 because reviews are disabled for the non-default base branch. Do not count #182 as review-complete until parent PR #226 receives coverage for this range or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
+      }
     }
   ],
   "human_gates": [
@@ -133,5 +207,5 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T22:11:22Z"
+  "updated_at": "2026-07-09T22:55:00Z"
 }
