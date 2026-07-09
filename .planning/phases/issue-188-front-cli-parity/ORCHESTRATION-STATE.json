@@ -32,13 +32,13 @@
     },
     {
       "number": 192,
-      "status": "planned",
+      "status": "worker_in_progress",
       "dependencies": [189],
       "write_scope": [
         "internal/connectors/defs/front/api_surface.json",
         ".planning/phases/issue-192-front-operation-ledger"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path"
     },
     {
       "number": 194,
@@ -119,6 +119,18 @@
       "decision": "not_spawned_runtime_capability_missing",
       "issue_numbers": [189],
       "reason": "The active API session has no Pi subagent tool; #189 is ready but cannot be spawned here."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [192],
+      "reason": "CodeRabbit/Copilot review coverage for #189 is temporarily blocked by review/quota limits; starting #192 locally from the parent branch with separate evidence artifacts."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [192],
+      "reason": "Opened #192 sub-PR #242 against feat/188-front-cli-parity after focused verification passed."
     }
   ],
   "subissues": [
@@ -189,21 +201,21 @@
       "number": 192,
       "url": "https://github.com/polymetrics-ai/cli/issues/192",
       "branch": "feat/192-front-operation-ledger",
-      "pr_url": "",
-      "worker": "pending",
-      "status": "planned",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/242",
+      "worker": "local_critical_path",
+      "status": "sub_pr_open",
       "write_scope": ["internal/connectors/defs/front/api_surface.json", ".planning/phases/issue-192-front-operation-ledger"],
       "worker_directory": "",
-      "verification": "pending",
+      "verification": "focused gates plus go vet/build passed; full go test not rerun due prior certify timeout blocker",
       "automated_review": {
         "primary_route": "blocked",
-        "status": "pending",
-        "head_sha": "",
-        "reviewed_range": "",
-        "coverage_route": "blocked",
-        "fallback_route": "none",
-        "disposition_summary": "blocked on #189 official inventory",
-        "disposition_url": ""
+        "status": "blocked",
+        "head_sha": "5862eaf6",
+        "reviewed_range": "pending",
+        "coverage_route": "parent_pr_fallback_needed",
+        "fallback_route": "blocked_by_coderabbit_and_copilot_quota_window",
+        "disposition_summary": "CodeRabbit skipped #242 because automatic reviews are disabled for non-default base branches; parent PR fallback or approved fallback required before integration is considered complete.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/242"
       }
     },
     {

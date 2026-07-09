@@ -1,14 +1,711 @@
 {
-  "api": "Front Core REST API",
+  "api": "Front Core and Channel REST APIs",
   "docs": "https://dev.frontapp.com/reference/introduction",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (contacts, conversations, inboxes, tags, teammates, channels); Front's write/action endpoints (send message, create draft, archive/assign conversation) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "reviewed_at": "2026-07-10",
+  "operation_ledger_version": 1,
+  "scope": "Complete ledger for the public Front ReadMe Core and Channel OpenAPI registries captured without credentials. Six legacy-parity streams remain executable; all other REST operations are blocked ledger rows for follow-up stream, direct-read, binary, or reverse-ETL lanes.",
   "endpoints": [
+    {
+      "method": "GET",
+      "path": "/accounts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-accounts",
+        "notes": "Front core-api OpenAPI tag: Accounts; summary: List Accounts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-account",
+        "notes": "Front core-api OpenAPI tag: Accounts; summary: Create account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/custom_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-account-custom-fields",
+        "notes": "Front core-api OpenAPI tag: Custom Fields; summary: List Account's custom fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/fetch-an-account",
+        "notes": "Front core-api OpenAPI tag: Accounts; summary: Fetch an account"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/{account_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-account",
+        "notes": "Front core-api OpenAPI tag: Accounts; summary: Update account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts/{account_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-an-account",
+        "notes": "Front core-api OpenAPI tag: Accounts; summary: Delete an account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/contacts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-account-contacts",
+        "notes": "Front core-api OpenAPI tag: Accounts; summary: List account contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts/{account_id}/contacts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-contact-to-account",
+        "notes": "Front core-api OpenAPI tag: Accounts; summary: Add contact to Account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/contacts",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/remove-contact-from-account",
+        "notes": "Front core-api OpenAPI tag: Accounts; summary: Remove contact from Account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/analytics/exports",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-analytics-export",
+        "notes": "Front core-api OpenAPI tag: Analytics; summary: Create a new analytics export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/exports/{export_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-analytics-export",
+        "notes": "Front core-api OpenAPI tag: Analytics; summary: Fetch an analytics export"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/analytics/reports",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-analytics-report",
+        "notes": "Front core-api OpenAPI tag: Analytics; summary: Create a new analytics report"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/reports/{report_uid}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-analytics-report",
+        "notes": "Front core-api OpenAPI tag: Analytics; summary: Fetch an analytics report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/{application_uid}/events",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/trigger-app-event",
+        "notes": "Front core-api OpenAPI tag: Applications; summary: Trigger application event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/channels",
+      "covered_by": {
+        "stream": "channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/channels/{channel_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-channel",
+        "notes": "Front core-api OpenAPI tag: Channels; summary: Get channel"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/channels/{channel_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-channel",
+        "notes": "Front core-api OpenAPI tag: Channels; summary: Update Channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/drafts",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-draft",
+        "notes": "Front core-api OpenAPI tag: Drafts; summary: Create draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/incoming_messages",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/receive-custom-messages",
+        "notes": "Front core-api OpenAPI tag: Messages; summary: Receive custom messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/messages",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-message",
+        "notes": "Front core-api OpenAPI tag: Messages; summary: Create message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/validate",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/validate-channel",
+        "notes": "Front core-api OpenAPI tag: Channels; summary: Validate channel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comments/{comment_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-comment",
+        "notes": "Front core-api OpenAPI tag: Comments; summary: Get comment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/comments/{comment_id}/",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-comment",
+        "notes": "Front core-api OpenAPI tag: Comments; summary: Update comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comments/{comment_id}/download/{attachment_link_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary/file response is blocked until #194 defines bounded output policy, filename handling, and local workflow safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-comment",
+        "notes": "Front core-api OpenAPI tag: Attachments; summary: Download attachment for a comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comments/{comment_id}/mentions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-comment-mentions",
+        "notes": "Front core-api OpenAPI tag: Comments; summary: List comment mentions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/comments/{comment_id}/replies",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-comment-reply",
+        "notes": "Front core-api OpenAPI tag: Comments; summary: Add comment reply"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/rules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-all-company-rules",
+        "notes": "Front core-api OpenAPI tag: Rules; summary: List all company rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/statuses",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-company-ticket-statuses",
+        "notes": "Front core-api OpenAPI tag: Statuses; summary: List company ticket statuses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/statuses/{status_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-ticket-status-by-id",
+        "notes": "Front core-api OpenAPI tag: Statuses; summary: Get ticket status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/tags",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-company-tags",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: List company tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/company/tags",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-company-tag",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: Create company tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_groups",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-groups",
+        "notes": "Front core-api OpenAPI tag: Contact Groups; summary: List groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact_groups",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-group",
+        "notes": "Front core-api OpenAPI tag: Contact Groups; summary: Create group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_groups/{contact_group_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-group",
+        "notes": "Front core-api OpenAPI tag: Contact Groups; summary: Delete group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_groups/{contact_group_id}/contacts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-contacts-in-group",
+        "notes": "Front core-api OpenAPI tag: Contact Groups; summary: List contacts in group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact_groups/{contact_group_id}/contacts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-contacts-to-group",
+        "notes": "Front core-api OpenAPI tag: Contact Groups; summary: Add contacts to group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_groups/{contact_group_id}/contacts",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/remove-contacts-from-group",
+        "notes": "Front core-api OpenAPI tag: Contact Groups; summary: Remove contacts from group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_lists",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-contact-lists",
+        "notes": "Front core-api OpenAPI tag: Contact Lists; summary: List contact lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact_lists",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-contact-list",
+        "notes": "Front core-api OpenAPI tag: Contact Lists; summary: Create contact list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_lists/{contact_list_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-contact-list",
+        "notes": "Front core-api OpenAPI tag: Contact Lists; summary: Delete contact list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_lists/{contact_list_id}/contacts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-contacts-in-contact-list",
+        "notes": "Front core-api OpenAPI tag: Contact Lists; summary: List contacts in contact list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact_lists/{contact_list_id}/contacts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-contacts-to-contact-list",
+        "notes": "Front core-api OpenAPI tag: Contact Lists; summary: Add contacts to contact list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_lists/{contact_list_id}/contacts",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/remove-contacts-from-contact-list",
+        "notes": "Front core-api OpenAPI tag: Contact Lists; summary: Remove contacts from contact list"
+      }
+    },
     {
       "method": "GET",
       "path": "/contacts",
       "covered_by": {
         "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-contact",
+        "notes": "Front core-api OpenAPI tag: Contacts; summary: Create contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/custom_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-contact-custom-fields",
+        "notes": "Front core-api OpenAPI tag: Custom Fields; summary: List Contact's custom fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/merge",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/merge-contacts",
+        "notes": "Front core-api OpenAPI tag: Contacts; summary: Merge contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-contact",
+        "notes": "Front core-api OpenAPI tag: Contacts; summary: Get contact"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/contacts/{contact_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-a-contact",
+        "notes": "Front core-api OpenAPI tag: Contacts; summary: Update a contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-a-contact",
+        "notes": "Front core-api OpenAPI tag: Contacts; summary: Delete a contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-contact-conversations",
+        "notes": "Front core-api OpenAPI tag: Contacts; summary: List contact conversations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/handles",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-contact-handle",
+        "notes": "Front core-api OpenAPI tag: Contact Handles; summary: Add contact handle"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/handles",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-contact-handle",
+        "notes": "Front core-api OpenAPI tag: Contact Handles; summary: Delete contact handle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/notes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-notes",
+        "notes": "Front core-api OpenAPI tag: Contact Notes; summary: List notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/notes",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-note",
+        "notes": "Front core-api OpenAPI tag: Contact Notes; summary: Add note"
       }
     },
     {
@@ -19,6 +716,383 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/conversations",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-conversation",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Create discussion/task conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/custom_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-conversation-custom-fields",
+        "notes": "Front core-api OpenAPI tag: Custom Fields; summary: List Conversation's custom fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/search/{query}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/search-conversations",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Search conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-conversation-by-id",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Get conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-conversation",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Update conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-conversation",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Delete conversation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/conversations/{conversation_id}/assignee",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-conversation-assignee",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Update conversation assignee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/comments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-conversation-comments",
+        "notes": "Front core-api OpenAPI tag: Comments; summary: List conversation comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/comments",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-comment",
+        "notes": "Front core-api OpenAPI tag: Comments; summary: Add comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/drafts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-conversation-drafts",
+        "notes": "Front core-api OpenAPI tag: Drafts; summary: List conversation drafts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/drafts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-draft-reply",
+        "notes": "Front core-api OpenAPI tag: Drafts; summary: Create draft reply"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-conversation-events",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: List conversation events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/followers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-conversation-followers",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: List conversation followers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/followers",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-conversation-followers",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Add conversation followers"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/followers",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-conversation-followers",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Delete conversation followers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/inboxes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-conversation-inboxes",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: List conversation inboxes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/links",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-conversation-link",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Add conversation link"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/links",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/remove-conversation-links",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Remove conversation links"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/messages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-conversation-messages",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: List conversation messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/messages",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-message-reply",
+        "notes": "Front core-api OpenAPI tag: Messages; summary: Create message reply"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}/reminders",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-conversation-reminders",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Update conversation reminders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/tags",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-conversation-tag",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Add conversation tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/tags",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/remove-conversation-tag",
+        "notes": "Front core-api OpenAPI tag: Conversations; summary: Remove conversation tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-custom-fields",
+        "notes": "Front core-api OpenAPI tag: Custom Fields; summary: List Contact's custom fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/download/{attachment_link_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary/file response is blocked until #194 defines bounded output policy, filename handling, and local workflow safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/download-attachment",
+        "notes": "Front core-api OpenAPI tag: Attachments; summary: Download attachment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/drafts/{draft_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-draft",
+        "notes": "Front core-api OpenAPI tag: Drafts; summary: Delete draft"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/drafts/{message_id}/",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/edit-draft",
+        "notes": "Front core-api OpenAPI tag: Drafts; summary: Edit draft"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-events",
+        "notes": "Front core-api OpenAPI tag: Events; summary: List events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-event",
+        "notes": "Front core-api OpenAPI tag: Events; summary: Get event"
+      }
+    },
+    {
       "method": "GET",
       "path": "/inboxes",
       "covered_by": {
@@ -26,10 +1100,1258 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/inboxes",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-inbox",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: Create inbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes/custom_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-inbox-custom-fields",
+        "notes": "Front core-api OpenAPI tag: Custom Fields; summary: List Inbox's custom fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes/{inbox_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-inbox",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: Get inbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes/{inbox_id}/channels",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-inbox-channels",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: List inbox channels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inboxes/{inbox_id}/channels",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-a-channel",
+        "notes": "Front core-api OpenAPI tag: Channels; summary: Create a channel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes/{inbox_id}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-inbox-conversations",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: List inbox conversations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inboxes/{inbox_id}/imported_messages",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/import-inbox-message",
+        "notes": "Front core-api OpenAPI tag: Messages; summary: Import message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes/{inbox_id}/teammates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-inbox-access",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: List inbox access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inboxes/{inbox_id}/teammates",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-inbox-access",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: Add inbox access"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/inboxes/{inbox_id}/teammates",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/removes-inbox-access",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: Removes inbox access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_articles/{article_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-a-knowledge-base-article",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Articles; summary: Get a knowledge base article"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/knowledge_base_articles/{article_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-an-article",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Articles; summary: Delete an article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_articles/{article_id}/content",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-knowledge-base-article-with-content-in-default-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Articles; summary: Get knowledge base article with content in default locale"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_base_articles/{article_id}/content",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-article-content-in-default-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Articles; summary: Update article content in default locale."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_articles/{article_id}/download/{attachment_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary/file response is blocked until #194 defines bounded output policy, filename handling, and local workflow safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/download-attachment-from-an-article",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Articles; summary: Download attachment from an article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_articles/{article_id}/locales/{locale}/content",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-knowledge-base-article-with-content-in-specified-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Articles; summary: Get knowledge base article with content in specified locale"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_base_articles/{article_id}/locales/{locale}/content",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-article-content-in-specified-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Articles; summary: Update article content in specified locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_categories/{category_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-a-knowledge-base-category",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Categories; summary: Get a knowledge base category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/knowledge_base_categories/{category_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-a-knowledge-base-category",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Categories; summary: Delete a knowledge base category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_categories/{category_id}/articles",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-articles-in-a-category",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Articles; summary: List articles in a category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_categories/{category_id}/content",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-knowledge-base-category-content-in-default-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Categories; summary: Get knowledge base category content in default locale"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_base_categories/{category_id}/content",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-knowledge-base-category-in-default-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Categories; summary: Update knowledge base category in default locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_categories/{category_id}/locales/{locale}/content",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-knowledge-base-category-with-content-in-specified-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Categories; summary: Get knowledge base category with content in specified locale"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_base_categories/{category_id}/locales/{locale}/content",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-knowledge-base-category-in-specified-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Categories; summary: Update knowledge base category in specified locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-knowledge-bases",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: List knowledge bases"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge_bases",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-a-knowledge-base",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: Create a knowledge base"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases/{knowledge_base_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-a-knowledge-base",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: Get a knowledge base"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases/{knowledge_base_id}/articles",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-articles-in-a-knowledge-base",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Articles; summary: List articles in a knowledge base"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge_bases/{knowledge_base_id}/articles",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-article-in-a-knowledge-base-in-default-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: Create article in a knowledge base in default locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases/{knowledge_base_id}/categories",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-categories-in-a-knowledge-base",
+        "notes": "Front core-api OpenAPI tag: Knowledge Base Categories; summary: List categories in a knowledge base"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge_bases/{knowledge_base_id}/categories",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-knowledge-base-category-in-default-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: Create knowledge base category in default locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases/{knowledge_base_id}/content",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-a-knowledge-base-with-content-in-default-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: Get a knowledge base with content in default locale"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_bases/{knowledge_base_id}/content",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-knowledge-base-in-default-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: Update knowledge base in default locale"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge_bases/{knowledge_base_id}/locales/{locale}/articles",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-article-in-a-knowledge-base-in-specified-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: Create article in a knowledge base in specified locale"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge_bases/{knowledge_base_id}/locales/{locale}/categories",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-knowledge-base-category-in-specified-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: Create knowledge base category in specified locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases/{knowledge_base_id}/locales/{locale}/content",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-a-knowledge-base-with-content-in-specified-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: Get a knowledge base with content in specified locale"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_bases/{knowledge_base_id}/locales/{locale}/content",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-knowledge-base-in-specified-locale",
+        "notes": "Front core-api OpenAPI tag: Knowledge Bases; summary: Update knowledge base in specified locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/links",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-links",
+        "notes": "Front core-api OpenAPI tag: Links; summary: List links"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/links",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-link",
+        "notes": "Front core-api OpenAPI tag: Links; summary: Create link"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/links/custom_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-link-custom-fields",
+        "notes": "Front core-api OpenAPI tag: Custom Fields; summary: List Link's custom fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/links/{link_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-link",
+        "notes": "Front core-api OpenAPI tag: Links; summary: Get link"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/links/{link_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-a-link",
+        "notes": "Front core-api OpenAPI tag: Links; summary: Update a link"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/links/{link_id}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-link-conversations",
+        "notes": "Front core-api OpenAPI tag: Links; summary: List link conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "API token identity introspection is not a syncable record collection or bounded connector read command.",
+        "source_url": "https://dev.frontapp.com/reference/api-token-details",
+        "notes": "Front core-api OpenAPI tag: Token Identity; summary: API Token details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_template_folders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-folders",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: List folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message_template_folders",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-folder",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: Create folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_template_folders/{message_template_folder_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-folder",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: Get folder"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/message_template_folders/{message_template_folder_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-folder",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: Update folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/message_template_folders/{message_template_folder_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-folder",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: Delete folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_template_folders/{message_template_folder_id}/message_template_folders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-child-folders",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: Get child folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message_template_folders/{message_template_folder_id}/message_template_folders",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-child-folder",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: Create child folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_template_folders/{message_template_folder_id}/message_templates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-child-templates",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: Get child templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message_template_folders/{message_template_folder_id}/message_templates",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-child-template",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: Create child template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_templates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-message-templates",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: List message templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message_templates",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-message-template",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: Create message template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_templates/{message_template_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-message-template",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: Get message template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/message_templates/{message_template_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-message-template",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: Update message template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/message_templates/{message_template_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-message-template",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: Delete message template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_templates/{message_template_id}/download/{attachment_link_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary/file response is blocked until #194 defines bounded output policy, filename handling, and local workflow safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-message-template",
+        "notes": "Front core-api OpenAPI tag: Attachments; summary: Download attachment for a message template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/{message_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-message",
+        "notes": "Front core-api OpenAPI tag: Messages; summary: Get message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/{message_id}/download/{attachment_link_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Binary/file response is blocked until #194 defines bounded output policy, filename handling, and local workflow safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-message",
+        "notes": "Front core-api OpenAPI tag: Attachments; summary: Download attachment for a message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/{message_id}/seen",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-message-seen-status",
+        "notes": "Front core-api OpenAPI tag: Messages; summary: Get message seen status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messages/{message_id}/seen",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/mark-message-seen",
+        "notes": "Front core-api OpenAPI tag: Messages; summary: Mark message seen"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-rules",
+        "notes": "Front core-api OpenAPI tag: Rules; summary: List rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rules/{rule_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-rule",
+        "notes": "Front core-api OpenAPI tag: Rules; summary: Get rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shifts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-shifts",
+        "notes": "Front core-api OpenAPI tag: Shifts; summary: List Shifts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shifts",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-shift",
+        "notes": "Front core-api OpenAPI tag: Shifts; summary: Create shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shifts/{shift_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-shift",
+        "notes": "Front core-api OpenAPI tag: Shifts; summary: Get shift"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/shifts/{shift_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-shift",
+        "notes": "Front core-api OpenAPI tag: Shifts; summary: Update shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shifts/{shift_id}/teammates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-shifts-teammates",
+        "notes": "Front core-api OpenAPI tag: Shifts; summary: List shift's teammates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shifts/{shift_id}/teammates",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-teammates-to-shift",
+        "notes": "Front core-api OpenAPI tag: Shifts; summary: Add teammates to shift"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/shifts/{shift_id}/teammates",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/remove-teammates-from-shift",
+        "notes": "Front core-api OpenAPI tag: Shifts; summary: Remove teammates from shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/signatures/{signature_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-signatures",
+        "notes": "Front core-api OpenAPI tag: Signatures; summary: Get signatures"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/signatures/{signature_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-signature",
+        "notes": "Front core-api OpenAPI tag: Signatures; summary: Update signature"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/signatures/{signature_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-signature",
+        "notes": "Front core-api OpenAPI tag: Signatures; summary: Delete signature"
+      }
+    },
+    {
       "method": "GET",
       "path": "/tags",
       "covered_by": {
         "stream": "tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-tag",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: Create tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tag_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-tag",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: Get tag"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tags/{tag_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-a-tag",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: Update a tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{tag_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-tag",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: Delete tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tag_id}/children",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-tag-children",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: List tag children"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags/{tag_id}/children",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-child-tag",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: Create child tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tag_id}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-tagged-conversations",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: List tagged conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammate_groups",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-company-teammate-groups",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: List teammate groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammate_groups",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-company-teammate-group",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: Create teammate group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammate_groups/{teammate_group_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-company-teammate-group",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: Get teammate group"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/teammate_groups/{teammate_group_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-a-company-teammate-group",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: Update a teammate group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teammate_groups/{teammate_group_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-company-teammate-group",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: Delete teammate group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammate_groups/{teammate_group_id}/inboxes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-company-teammate-group-team-inboxes",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: List teammate group team inboxes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammate_groups/{teammate_group_id}/inboxes",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-company-teammate-group-team-inboxes",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: Add teammate group team inboxes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teammate_groups/{teammate_group_id}/inboxes",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/remove-company-teammate-group-team-inboxes",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: Remove teammate group team inboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammate_groups/{teammate_group_id}/teammates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-company-teammate-group-teammates",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: List teammate group teammates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammate_groups/{teammate_group_id}/teammates",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-company-teammate-group-teammates",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: Add teammate group teammates"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teammate_groups/{teammate_group_id}/teammates",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/remove-company-teammate-group-teammates",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: Remove teammate group teammates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammate_groups/{teammate_group_id}/teams",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-company-teammate-group-teams",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: List teammate group teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammate_groups/{teammate_group_id}/teams",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-company-teammate-group-teams",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: Add teammate group teams"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teammate_groups/{teammate_group_id}/teams",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/remove-company-teammate-group-teams",
+        "notes": "Front core-api OpenAPI tag: Teammate groups; summary: Remove teammate group teams"
       }
     },
     {
@@ -41,41 +2363,926 @@
     },
     {
       "method": "GET",
-      "path": "/channels",
-      "covered_by": {
-        "stream": "channels"
+      "path": "/teammates/custom_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-custom-fields",
+        "notes": "Front core-api OpenAPI tag: Custom Fields; summary: List Teammate's custom fields"
       }
     },
     {
-      "method": "POST",
-      "path": "/conversations/{conversation_id}/messages",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented writes; not implemented in this bundle"
+      "method": "GET",
+      "path": "/teammates/{teammate_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-teammate",
+        "notes": "Front core-api OpenAPI tag: Teammates; summary: Get teammate"
       }
     },
     {
       "method": "PATCH",
-      "path": "/conversations/{conversation_id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented writes; not implemented in this bundle"
+      "path": "/teammates/{teammate_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-teammate",
+        "notes": "Front core-api OpenAPI tag: Teammates; summary: Update teammate"
       }
     },
     {
       "method": "GET",
-      "path": "/conversations/{conversation_id}/comments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not modeled by legacy; not implemented in this bundle"
+      "path": "/teammates/{teammate_id}/channels",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-channels",
+        "notes": "Front core-api OpenAPI tag: Channels; summary: List teammate channels"
       }
     },
     {
       "method": "GET",
-      "path": "/me",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "authenticated-teammate profile introspection, not a syncable object stream"
+      "path": "/teammates/{teammate_id}/contact_groups",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-groups",
+        "notes": "Front core-api OpenAPI tag: Contact Groups; summary: List teammate groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/contact_groups",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-teammate-group",
+        "notes": "Front core-api OpenAPI tag: Contact Groups; summary: Create teammate group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/contact_lists",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-contact-lists",
+        "notes": "Front core-api OpenAPI tag: Contact Lists; summary: List teammate contact lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/contact_lists",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-teammate-contact-list",
+        "notes": "Front core-api OpenAPI tag: Contact Lists; summary: Create teammate contact list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/contacts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-contacts",
+        "notes": "Front core-api OpenAPI tag: Contacts; summary: List teammate contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/contacts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Front write operation is blocked until a named typed reverse-ETL action implements plan, preview, approval, and execution safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-teammate-contact",
+        "notes": "Front core-api OpenAPI tag: Contacts; summary: Create teammate contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-assigned-conversations",
+        "notes": "Front core-api OpenAPI tag: Teammates; summary: List assigned conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/inboxes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-inboxes",
+        "notes": "Front core-api OpenAPI tag: Teammates; summary: List teammate inboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/message_template_folders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-folders",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: List teammate folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/message_template_folders",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-teammate-folder",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: Create teammate folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/message_templates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-message-templates",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: List teammate message templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/message_templates",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-teammate-message-template",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: Create teammate message template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/private_inboxes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-private-inboxes",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: List teammate private inboxes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/private_inboxes",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-teammate-private-inbox",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: Create teammate private inbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/rules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-rules",
+        "notes": "Front core-api OpenAPI tag: Rules; summary: List teammate rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/shifts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-shifts",
+        "notes": "Front core-api OpenAPI tag: Shifts; summary: List Teammate Shifts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/signatures",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-signatures",
+        "notes": "Front core-api OpenAPI tag: Signatures; summary: List teammate signatures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/signatures",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-teammate-signature",
+        "notes": "Front core-api OpenAPI tag: Signatures; summary: Create teammate signature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/tags",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-tags",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: List teammate tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/tags",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-teammate-tag",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: Create teammate tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/time_offs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teammate-time-offs",
+        "notes": "Front core-api OpenAPI tag: Time Off; summary: List teammate time offs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/time_offs",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-time-off",
+        "notes": "Front core-api OpenAPI tag: Time Off; summary: Create time off"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-teams",
+        "notes": "Front core-api OpenAPI tag: Teams; summary: List teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-team",
+        "notes": "Front core-api OpenAPI tag: Teams; summary: Get team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/channels",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-channels",
+        "notes": "Front core-api OpenAPI tag: Channels; summary: List team channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/contact_groups",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-groups",
+        "notes": "Front core-api OpenAPI tag: Contact Groups; summary: List team groups"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/contact_groups",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-team-group",
+        "notes": "Front core-api OpenAPI tag: Contact Groups; summary: Create team group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/contact_lists",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-contact-lists",
+        "notes": "Front core-api OpenAPI tag: Contact Lists; summary: List team contact lists"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/contact_lists",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-team-contact-list",
+        "notes": "Front core-api OpenAPI tag: Contact Lists; summary: Create team contact list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/contacts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-contacts",
+        "notes": "Front core-api OpenAPI tag: Contacts; summary: List team contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/contacts",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-team-contact",
+        "notes": "Front core-api OpenAPI tag: Contacts; summary: Create team contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/inboxes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-inboxes",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: List team inboxes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/inboxes",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-team-inbox",
+        "notes": "Front core-api OpenAPI tag: Inboxes; summary: Create team inbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/message_template_folders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-folders",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: List team folders"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/message_template_folders",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-team-folder",
+        "notes": "Front core-api OpenAPI tag: Message Template Folders; summary: Create team folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/message_templates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-message-templates",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: List team message templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/message_templates",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-team-message-template",
+        "notes": "Front core-api OpenAPI tag: Message Templates; summary: Create team message template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/rules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-rules",
+        "notes": "Front core-api OpenAPI tag: Rules; summary: List team rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/shifts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-shifts",
+        "notes": "Front core-api OpenAPI tag: Shifts; summary: List team Shifts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/shifts",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-team-shift",
+        "notes": "Front core-api OpenAPI tag: Shifts; summary: Create team shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/signatures",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-signatures",
+        "notes": "Front core-api OpenAPI tag: Signatures; summary: List team signatures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/signatures",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-team-signature",
+        "notes": "Front core-api OpenAPI tag: Signatures; summary: Create team signature"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/tags",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-tags",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: List team tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/tags",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-team-tag",
+        "notes": "Front core-api OpenAPI tag: Tags; summary: Create team tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/teammates",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-teammates-to-team",
+        "notes": "Front core-api OpenAPI tag: Teams; summary: Add teammates to team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{team_id}/teammates",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/remove-teammates-from-team",
+        "notes": "Front core-api OpenAPI tag: Teams; summary: Remove teammates from team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/time_offs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-time-offs",
+        "notes": "Front core-api OpenAPI tag: Time Off; summary: List team time offs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/views",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-team-views",
+        "notes": "Front core-api OpenAPI tag: Views; summary: List team views"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/views",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-team-view",
+        "notes": "Front core-api OpenAPI tag: Views; summary: Create team view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_offs/{time_off_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-time-off",
+        "notes": "Front core-api OpenAPI tag: Time Off; summary: Get time off"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/time_offs/{time_off_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-time-off",
+        "notes": "Front core-api OpenAPI tag: Time Off; summary: Update time off"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/time_offs/{time_off_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Deletes, removes, merges, or otherwise irreversibly changes Front data or associations; #195 must gate with typed confirmation before execution.",
+        "source_url": "https://dev.frontapp.com/reference/delete-time-off",
+        "notes": "Front core-api OpenAPI tag: Time Off; summary: Delete time off"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/list-views",
+        "notes": "Front core-api OpenAPI tag: Views; summary: List views"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/{view_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Read operation is ledgered but not executable in this slice; #191/#193 must add typed stream or bounded direct-read support.",
+        "source_url": "https://dev.frontapp.com/reference/get-view",
+        "notes": "Front core-api OpenAPI tag: Views; summary: Get view"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/views/{view_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-view",
+        "notes": "Front core-api OpenAPI tag: Views; summary: Update view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/views/{view_id}/teammates",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-view-teammates",
+        "notes": "Front core-api OpenAPI tag: Views; summary: Add view to teammate sidebars"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/channels/{channel_id}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Duplicate Front OpenAPI method/path row; canonical operation row already accounts for this endpoint.",
+        "source_url": "https://dev.frontapp.com/reference/update-channel",
+        "notes": "Front channel-api OpenAPI tag: Channels; summary: Update Channel",
+        "duplicate_of": "PATCH /channels/{channel_id}"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/channels/{channel_id}/application_message_templates",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/sync-application-message-template",
+        "notes": "Front channel-api OpenAPI tag: Application Message Templates; summary: Sync application message template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/channels/{channel_id}/application_message_templates/{external_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-application-message-template",
+        "notes": "Front channel-api OpenAPI tag: Application Message Templates; summary: Update application message template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/calls",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/create-call",
+        "notes": "Front channel-api OpenAPI tag: Calls; summary: Create a call"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/channels/{channel_id}/calls/{external_call_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-call",
+        "notes": "Front channel-api OpenAPI tag: Calls; summary: Update call status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/calls/{external_call_id}/recording",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-call-recording",
+        "notes": "Front channel-api OpenAPI tag: Calls; summary: Add call recording"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/calls/{external_call_id}/summary",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-call-summary",
+        "notes": "Front channel-api OpenAPI tag: Calls; summary: Add call summary"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/calls/{external_call_id}/transcript",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/add-call-transcript",
+        "notes": "Front channel-api OpenAPI tag: Calls; summary: Add call transcript"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/update-external-message-status",
+        "notes": "Front channel-api OpenAPI tag: Messages; summary: Update external message status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/inbound_messages",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/sync-inbound-message",
+        "notes": "Front channel-api OpenAPI tag: Messages; summary: Sync inbound message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/outbound_messages",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Admin/configuration mutation is blocked until #195 defines typed reverse-ETL plan, preview, approval, and policy safeguards.",
+        "source_url": "https://dev.frontapp.com/reference/sync-outbound-message",
+        "notes": "Front channel-api OpenAPI tag: Messages; summary: Sync outbound message"
       }
     }
   ]
