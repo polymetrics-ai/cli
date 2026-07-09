@@ -1,0 +1,43 @@
+{
+  "phase": "issue-105-jira-help-renderer",
+  "parentIssue": 81,
+  "issue": 105,
+  "branch": "feat/81-jira-cli-parity",
+  "status": "planned",
+  "gsd": {
+    "planCommand": "scripts/gsd prompt plan-phase issue-105-jira-help-renderer --skip-research",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase issue-105-jira-help-renderer --dry-run",
+    "programmingLoopStatus": "unavailable_unknown_command",
+    "manualFallback": true
+  },
+  "verificationPassed": false,
+  "verificationSummary": "Planning complete after #104 verification; red tests pending.",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T14:30:00Z",
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Issue #104 is verified; current Pi harness exposes no subagent tool, so #105 starts locally."
+    }
+  ],
+  "redTests": [
+    {
+      "command": "go test ./internal/cli -run 'TestJiraConnectorCommandSurfaceHelp|TestBareJiraConnectorCommandShowsHelp' -count=1",
+      "status": "pending"
+    },
+    {
+      "command": "cd website && pnpm test:unit -- connector-data",
+      "status": "pending"
+    }
+  ],
+  "humanGates": [
+    "new dependencies",
+    "auth scope changes",
+    "secrets or credentialed connector checks",
+    "destructive external actions",
+    "generic write tools",
+    "reverse ETL execution",
+    "parent PR merge to main"
+  ],
+  "updatedAt": "2026-07-09T14:30:00Z"
+}
