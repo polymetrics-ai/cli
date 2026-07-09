@@ -1,0 +1,148 @@
+{
+  "parent_issue": {
+    "number": 164,
+    "url": "https://github.com/polymetrics-ai/cli/issues/164",
+    "title": "Intercom: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/164-intercom-cli-parity",
+  "parent_pr": {
+    "url": "",
+    "base": "main",
+    "head": "feat/164-intercom-cli-parity",
+    "draft": true,
+    "state": "missing"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 165,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "cmd/connectorgen/*intercom*test.go",
+        ".planning/phases/issue-165-intercom-cli-surface-metadata"
+      ],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 168,
+      "status": "planned",
+      "dependencies": [165],
+      "write_scope": [
+        "internal/connectors/defs/intercom/api_surface.json",
+        ".planning/phases/issue-168-intercom-operation-ledger"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 166,
+      "status": "planned",
+      "dependencies": [165],
+      "write_scope": [
+        "docs/cli",
+        "website",
+        "internal/connectors/defs/intercom/cli_surface.json",
+        ".planning/phases/issue-166-intercom-help-renderer"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 167,
+      "status": "planned",
+      "dependencies": [165, 168],
+      "write_scope": [
+        "internal/connectors/defs/intercom/streams.json",
+        "internal/connectors/defs/intercom/schemas",
+        "internal/connectors/defs/intercom/fixtures",
+        ".planning/phases/issue-167-intercom-stream-runner"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 169,
+      "status": "planned",
+      "dependencies": [165, 168],
+      "write_scope": [
+        "internal/connectors/defs/intercom/cli_surface.json",
+        "internal/connectors/engine/direct_read.go",
+        ".planning/phases/issue-169-intercom-direct-read"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 170,
+      "status": "planned",
+      "dependencies": [168, 169],
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        ".planning/phases/issue-170-intercom-advanced-query-binary"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 171,
+      "status": "planned",
+      "dependencies": [168, 170],
+      "write_scope": [
+        "internal/connectors/defs/intercom/writes.json",
+        "internal/connectors/defs/intercom/cli_surface.json",
+        ".planning/phases/issue-171-intercom-sensitive-admin-policy"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:35:34Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [165],
+      "reason": "Parent PR is missing and this Pi tool surface has no subagent tool; coordinator will create the planning checkpoint and execute the first metadata slice inline before any production edits."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 165,
+      "url": "https://github.com/polymetrics-ai/cli/issues/165",
+      "branch": "feat/165-intercom-cli-surface-metadata",
+      "pr_url": "",
+      "worker": "pi-coordinator-inline",
+      "status": "worker_ready",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "cmd/connectorgen/*intercom*test.go",
+        ".planning/phases/issue-165-intercom-cli-surface-metadata"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "planned",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Parent PR must be opened before stacked review coverage can be complete.",
+        "disposition_url": ""
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "credentialed connector checks",
+    "destructive external actions",
+    "reverse ETL execution",
+    "production deployment",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-09T19:35:34Z"
+}

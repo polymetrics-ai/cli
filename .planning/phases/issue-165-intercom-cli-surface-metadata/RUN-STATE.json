@@ -1,0 +1,29 @@
+{
+  "phase": "issue-165-intercom-cli-surface-metadata",
+  "issue": 165,
+  "parent_issue": 164,
+  "status": "planned",
+  "gsd": {
+    "adapter": "scripts/gsd",
+    "doctor_passed": true,
+    "verify_pi_passed": true,
+    "registered_commands": 69,
+    "requested_programming_loop": "scripts/gsd prompt programming-loop init --phase issue-164-intercom-cli-parity --dry-run",
+    "programming_loop_available": false,
+    "fallback": "manual GSD loop with scripts/gsd prompt quick --full"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "issue-plan",
+      "decision": "local_critical_path",
+      "reason": "Metadata slice is the parent critical path; no subagent tool is available in this Pi session."
+    }
+  ],
+  "tdd": {
+    "red": [],
+    "green": [],
+    "refactor": []
+  },
+  "verificationPassed": false,
+  "updated_at": "2026-07-09T19:35:34Z"
+}

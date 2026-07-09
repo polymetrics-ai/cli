@@ -1,0 +1,26 @@
+{
+  "phase": "issue-164-intercom-cli-parity",
+  "issue": 164,
+  "status": "in_progress",
+  "gsd": {
+    "adapter": "scripts/gsd",
+    "doctor_passed": true,
+    "verify_pi_passed": true,
+    "registered_commands": 69,
+    "requested_programming_loop": "scripts/gsd prompt programming-loop init --phase issue-164-intercom-cli-parity --dry-run",
+    "programming_loop_available": false,
+    "fallback": "manual GSD loop with scripts/gsd prompt quick --full"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "parent-plan",
+      "decision": "local_critical_path",
+      "reason": "Parent PR is missing and no subagent tool is available in this Pi session; coordinator owns planning seed and issue #165 first slice inline."
+    }
+  ],
+  "verificationPassed": false,
+  "blockers": [
+    "parent PR missing before sub-issue review coverage can be complete"
+  ],
+  "updated_at": "2026-07-09T19:35:34Z"
+}
