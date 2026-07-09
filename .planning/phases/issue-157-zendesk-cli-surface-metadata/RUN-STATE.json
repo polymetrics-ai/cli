@@ -1,0 +1,23 @@
+{
+  "phase": "issue-157-zendesk-cli-surface-metadata",
+  "issue": 157,
+  "parent_issue": 156,
+  "status": "planned",
+  "runtime": "pi",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-156-zendesk-cli-parity --skip-research",
+    "execute_prompt": "scripts/gsd prompt execute-phase issue-157-zendesk-cli-surface-metadata --plan 1",
+    "programming_loop_status": "blocked_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationNotes": "Implementation pending; metadata-only CLI parity exemptions recorded.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No Pi subagent tool is available; #157 will run locally after parent PR creation."
+    }
+  ],
+  "updated_at": "2026-07-09T19:34:19Z"
+}

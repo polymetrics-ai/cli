@@ -1,0 +1,148 @@
+{
+  "parent_issue": {
+    "number": 156,
+    "url": "https://github.com/polymetrics-ai/cli/issues/156",
+    "title": "Zendesk: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/156-zendesk-cli-parity",
+  "parent_pr": {
+    "url": "",
+    "base": "main",
+    "head": "feat/156-zendesk-cli-parity",
+    "draft": true,
+    "state": "missing"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 157,
+      "status": "worker_ready",
+      "dependencies": ["parent_pr_open"],
+      "write_scope": [
+        "internal/connectors/defs/zendesk",
+        ".planning/phases/issue-157-zendesk-cli-surface-metadata"
+      ],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 158,
+      "status": "planned",
+      "dependencies": [157, 159, 161, 163],
+      "write_scope": [
+        "cmd",
+        "internal/cli",
+        "internal/connectors/commandrunner",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-158-zendesk-help-renderer"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 159,
+      "status": "planned",
+      "dependencies": [157, 160],
+      "write_scope": [
+        "internal/connectors/defs/zendesk/streams.json",
+        "internal/connectors/defs/zendesk/schemas",
+        "internal/connectors/defs/zendesk/fixtures",
+        ".planning/phases/issue-159-zendesk-stream-runner"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 160,
+      "status": "planned",
+      "dependencies": [157],
+      "write_scope": [
+        "internal/connectors/defs/zendesk/api_surface.json",
+        ".planning/phases/issue-160-zendesk-operation-ledger"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 161,
+      "status": "planned",
+      "dependencies": [157, 160],
+      "write_scope": [
+        "internal/connectors/defs/zendesk/cli_surface.json",
+        "internal/connectors/defs/zendesk/operations.json",
+        ".planning/phases/issue-161-zendesk-direct-read"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 162,
+      "status": "planned",
+      "dependencies": [160],
+      "write_scope": [
+        "internal/connectors/defs/zendesk",
+        "internal/connectors/engine",
+        ".planning/phases/issue-162-zendesk-advanced-query-binary-engine"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 163,
+      "status": "planned",
+      "dependencies": [157, 160],
+      "write_scope": [
+        "internal/connectors/defs/zendesk/writes.json",
+        "internal/connectors/defs/zendesk/operations.json",
+        ".planning/phases/issue-163-zendesk-sensitive-admin-policy"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:34:19Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [157],
+      "reason": "No subagent tool is exposed in this Pi harness. The orchestrator will execute #157 locally after the parent PR exists."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 157,
+      "url": "https://github.com/polymetrics-ai/cli/issues/157",
+      "branch": "feat/157-zendesk-cli-surface-metadata",
+      "pr_url": "",
+      "worker": "local-pi-orchestrator",
+      "status": "worker_ready",
+      "write_scope": [
+        "internal/connectors/defs/zendesk",
+        ".planning/phases/issue-157-zendesk-cli-surface-metadata"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-156-zendesk-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending sub-PR",
+        "disposition_url": ""
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "credentialed connector checks",
+    "destructive external actions",
+    "production deployment",
+    "quality gate reductions",
+    "reverse ETL execution"
+  ],
+  "updated_at": "2026-07-09T19:34:19Z"
+}
