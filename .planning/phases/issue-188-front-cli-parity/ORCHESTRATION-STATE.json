@@ -32,13 +32,13 @@
     },
     {
       "number": 192,
-      "status": "planned",
+      "status": "worker_in_progress",
       "dependencies": [189],
       "write_scope": [
         "internal/connectors/defs/front/api_surface.json",
         ".planning/phases/issue-192-front-operation-ledger"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path"
     },
     {
       "number": 194,
@@ -119,6 +119,12 @@
       "decision": "not_spawned_runtime_capability_missing",
       "issue_numbers": [189],
       "reason": "The active API session has no Pi subagent tool; #189 is ready but cannot be spawned here."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [192],
+      "reason": "CodeRabbit/Copilot review coverage for #189 is temporarily blocked by review/quota limits; starting #192 locally from the parent branch with separate evidence artifacts."
     }
   ],
   "subissues": [
@@ -190,11 +196,11 @@
       "url": "https://github.com/polymetrics-ai/cli/issues/192",
       "branch": "feat/192-front-operation-ledger",
       "pr_url": "",
-      "worker": "pending",
-      "status": "planned",
+      "worker": "local_critical_path",
+      "status": "plan_checkpoint",
       "write_scope": ["internal/connectors/defs/front/api_surface.json", ".planning/phases/issue-192-front-operation-ledger"],
       "worker_directory": "",
-      "verification": "pending",
+      "verification": "plan checkpoint pending commit",
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
@@ -202,7 +208,7 @@
         "reviewed_range": "",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "blocked on #189 official inventory",
+        "disposition_summary": "#192 local critical-path branch feat/192-front-operation-ledger in progress; review pending sub-PR",
         "disposition_url": ""
       }
     },

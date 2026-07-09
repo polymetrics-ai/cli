@@ -1,0 +1,36 @@
+{
+  "issue": 192,
+  "parent_issue": 188,
+  "parent_pr": 224,
+  "branch": "feat/192-front-operation-ledger",
+  "parent_branch": "feat/188-front-cli-parity",
+  "status": "plan_checkpoint",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase 192 --skip-research --tdd",
+    "programming_loop_prompt": "scripts/gsd prompt programming-loop init --phase issue-192-front-operation-ledger --dry-run",
+    "programming_loop_available": false,
+    "fallback": "manual_gsd_universal_loop"
+  },
+  "sources": {
+    "front_llms_links": 346,
+    "rest_openapi_operations": 255,
+    "method_counts": {
+      "GET": 123,
+      "POST": 76,
+      "PATCH": 26,
+      "PUT": 3,
+      "DELETE": 27
+    },
+    "parent_issue_baseline": 342,
+    "baseline_disposition": "current_public_readme_registry_does_not_reproduce_parent_baseline"
+  },
+  "verificationPassed": false,
+  "verificationStatus": "plan_checkpoint_only",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No Pi subagent tool is available in this API session; #192 is being executed locally on a stacked branch after parent PR #224 was opened."
+    }
+  ]
+}
