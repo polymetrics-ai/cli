@@ -2,43 +2,43 @@
   "phase": "issue-80-linear-cli-parity",
   "parentIssue": 80,
   "branch": "feat/80-linear-cli-parity",
-  "status": "in_progress_parent_pr_open",
+  "parentPR": "https://github.com/polymetrics-ai/cli/pull/131",
+  "status": "verified_pending_commit_push_review",
   "gsd": {
     "doctor": "passed",
     "verifyPi": "passed",
-    "listJson": "ran",
+    "listJson": "passed",
     "planPrompt": "scripts/gsd prompt plan-phase issue-80-linear-cli-parity --skip-research",
-    "programmingLoopPrompt": "scripts/gsd prompt programming-loop init --phase issue-80-linear-cli-parity --dry-run",
     "programmingLoopAvailable": false,
     "manualFallback": "scripts/gsd returned: unknown GSD command: programming-loop"
   },
   "verificationPassed": true,
-  "verificationStatus": "make verify passed for current #97 slice; parent #80 remains in_progress because sub-issues #98-#103 are not complete",
+  "verificationStatus": "#98-#103 local critical-path implementation passed go vet, go test ./..., go build ./cmd/pm, docs validate, connectorgen validate, make verify, and git diff --check",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
       "decision": "not_spawned_runtime_capability_missing",
-      "reason": "The current Pi harness exposes read/bash/edit/write only and no subagent tool for isolated mutating workers. The parent orchestrator will run the first critical-path sub-issue locally and record separate evidence."
+      "reason": "The current Pi harness exposes read/bash/edit/write only and no subagent tool for isolated mutating workers."
     },
     {
       "cycle": "issue-97-start",
       "decision": "local_critical_path",
-      "reason": "Issue #97 is the first dependency for Linear command metadata and can be implemented safely in the active parent checkout with issue-scoped phase artifacts."
+      "reason": "Issue #97 was the first dependency for Linear command metadata."
     },
     {
-      "cycle": "parent-pr",
-      "decision": "local_critical_path",
-      "reason": "Pushed parent branch and opened draft parent PR https://github.com/polymetrics-ai/cli/pull/131 after the first verified green slice."
+      "cycle": "issue-98-103-complete-ops",
+      "decision": "consolidated_local_critical_path",
+      "reason": "The user requested complete Linear operation parity in this checkout; subagent spawning was unavailable, so #98-#103 were implemented locally with separate phase artifacts."
     }
   ],
   "subissues": {
     "97": "verified_green_slice",
-    "98": "dependency_blocked",
-    "99": "dependency_blocked",
-    "100": "planned",
-    "101": "dependency_blocked",
-    "102": "planned",
-    "103": "dependency_blocked"
+    "98": "verified_green_slice",
+    "99": "verified_green_slice",
+    "100": "verified_green_slice",
+    "101": "verified_green_slice",
+    "102": "verified_green_slice",
+    "103": "verified_green_slice"
   },
   "updatedAt": "2026-07-09T00:00:00Z"
 }

@@ -69,9 +69,16 @@ Deliver a parent PR for Linear CLI parity with issue-scoped evidence, tests, val
 
 ## Execution decision
 
-No mutating subagent was spawned in this harness: `not_spawned_runtime_capability_missing` (the exposed toolset has no Pi `subagent` tool). The orchestrator takes `local_critical_path` for #97 in this checkout with separate phase artifacts.
+No mutating subagent was spawned in this harness: `not_spawned_runtime_capability_missing` (the exposed toolset has no Pi `subagent` tool). The orchestrator took `local_critical_path` for #97 and now takes a consolidated local critical path for #98-#103 because the user requested complete Linear operations implementation in this checkout.
 
 ## TDD slice plan
+
+### Slice 2 — #98-#103 Linear complete operations
+
+1. RED: add focused tests for dynamic `pm linear` help, Linear GraphQL stream request bodies, commandrunner stream/direct-read behavior, operation ledger counts/classes, and blocked raw/admin operations.
+2. GREEN: update Linear streams to fixed GraphQL documents with cursor variables; add constrained direct-read view streams; add reviewed GraphQL write actions for common reverse-ETL operations; inventory remaining Linear operations as blocked-by-default ledger rows; render connector help from `cli_surface` metadata.
+3. REFACTOR: regenerate website data/docs, update docs and planning artifacts, keep raw GraphQL/admin/sensitive operations non-executable.
+4. VERIFY: focused tests, Linear conformance, connectorgen validation, CLI help/docs/website parity, then parent gates.
 
 ### Slice 1 — #97 Linear CLI surface metadata
 
@@ -90,7 +97,7 @@ No mutating subagent was spawned in this harness: `not_spawned_runtime_capabilit
 - No credentialed Linear checks.
 - No raw generic GraphQL mutation/read escape hatch.
 - No new dependencies.
-- No reverse ETL execution; writes remain plan → preview → approval → execute and blocked until explicit write actions/policy exist.
+- No live Linear reverse ETL execution; implemented writes remain plan → preview → approval → execute, and tests execute only against local `httptest` fixtures or dry-run previews.
 - Destructive/admin/elevated actions are blocked by default and human-gated.
 
 ## Commit checkpoints

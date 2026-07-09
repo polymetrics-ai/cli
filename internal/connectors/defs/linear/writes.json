@@ -1,0 +1,240 @@
+{
+  "actions": [
+    {
+      "name": "create_issue",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "CreateLinearIssue",
+        "document": "mutation CreateLinearIssue($input: IssueCreateInput!) { issueCreate(input: $input) { success issue { id identifier title url createdAt updatedAt } } }",
+        "variables": {
+          "input": {
+            "teamId": "{{ record.team_id }}",
+            "title": "{{ record.title }}",
+            "description": {
+              "template": "{{ record.description }}",
+              "omit_when_empty": true
+            },
+            "priority": {
+              "template": "{{ record.priority }}",
+              "type": "integer",
+              "omit_when_empty": true
+            },
+            "estimate": {
+              "template": "{{ record.estimate }}",
+              "type": "number",
+              "omit_when_empty": true
+            },
+            "assigneeId": {
+              "template": "{{ record.assignee_id }}",
+              "omit_when_empty": true
+            },
+            "projectId": {
+              "template": "{{ record.project_id }}",
+              "omit_when_empty": true
+            },
+            "stateId": {
+              "template": "{{ record.state_id }}",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "title"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "estimate": {
+            "type": "number"
+          },
+          "assignee_id": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          },
+          "state_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Creates a visible Linear issue in the configured workspace.",
+      "confirm": ""
+    },
+    {
+      "name": "update_issue",
+      "kind": "update",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "UpdateLinearIssue",
+        "document": "mutation UpdateLinearIssue($id: String!, $input: IssueUpdateInput!) { issueUpdate(id: $id, input: $input) { success issue { id identifier title url updatedAt } } }",
+        "variables": {
+          "id": "{{ record.issue_id }}",
+          "input": {
+            "title": {
+              "template": "{{ record.title }}",
+              "omit_when_empty": true
+            },
+            "description": {
+              "template": "{{ record.description }}",
+              "omit_when_empty": true
+            },
+            "priority": {
+              "template": "{{ record.priority }}",
+              "type": "integer",
+              "omit_when_empty": true
+            },
+            "estimate": {
+              "template": "{{ record.estimate }}",
+              "type": "number",
+              "omit_when_empty": true
+            },
+            "assigneeId": {
+              "template": "{{ record.assignee_id }}",
+              "omit_when_empty": true
+            },
+            "projectId": {
+              "template": "{{ record.project_id }}",
+              "omit_when_empty": true
+            },
+            "stateId": {
+              "template": "{{ record.state_id }}",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "issue_id"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "estimate": {
+            "type": "number"
+          },
+          "assignee_id": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string"
+          },
+          "state_id": {
+            "type": "string"
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "Mutates an existing Linear issue.",
+      "confirm": ""
+    },
+    {
+      "name": "comment_issue",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "CreateLinearComment",
+        "document": "mutation CreateLinearComment($input: CommentCreateInput!) { commentCreate(input: $input) { success comment { id body createdAt issue { id identifier } } } }",
+        "variables": {
+          "input": {
+            "issueId": "{{ record.issue_id }}",
+            "body": "{{ record.body }}"
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "issue_id",
+          "body"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Creates a visible comment on a Linear issue.",
+      "confirm": ""
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/graphql",
+      "body_type": "graphql",
+      "graphql": {
+        "operation_name": "CreateLinearProject",
+        "document": "mutation CreateLinearProject($input: ProjectCreateInput!) { projectCreate(input: $input) { success project { id name url createdAt updatedAt } } }",
+        "variables": {
+          "input": {
+            "teamIds": [
+              "{{ record.team_id }}"
+            ],
+            "name": "{{ record.name }}",
+            "description": {
+              "template": "{{ record.description }}",
+              "omit_when_empty": true
+            }
+          }
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "team_id",
+          "name"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Creates a visible Linear project.",
+      "confirm": ""
+    }
+  ]
+}

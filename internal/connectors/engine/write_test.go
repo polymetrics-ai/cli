@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
 )
 
 // newWriteTestBundle builds a minimal Bundle wired against srv with a single
@@ -239,6 +240,53 @@ func TestWriteGraphQLBodyUsesFixedDocumentAndDeclaredVariables(t *testing.T) {
 	}
 	if vars["issueId"] != "I_kwDO123" {
 		t.Fatalf("variables.issueId = %#v, want record issue id", vars["issueId"])
+	}
+}
+
+func TestLinearWriteActionUsesFixedGraphQLMutation(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"data":{"issueCreate":{"success":true,"issue":{"id":"iss_1","identifier":"ENG-1","title":"Ship Linear CLI"}}}}`)
+	b, err := Load(defs.FS, "linear")
+	if err != nil {
+		t.Fatalf("Load linear: %v", err)
+	}
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "create_issue",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": srv.URL},
+			Secrets: map[string]string{"api_key": "sample-linear-token"},
+		},
+	}, []connectors.Record{{"team_id": "team_1", "title": "Ship Linear CLI"}}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("result = %+v", result)
+	}
+	if cap.method != http.MethodPost || cap.path != "/graphql" {
+		t.Fatalf("request = %s %s, want POST /graphql", cap.method, cap.path)
+	}
+	got := cap.json()
+	query, _ := got["query"].(string)
+	if !strings.Contains(query, "mutation CreateLinearIssue") || strings.Contains(query, "delete") {
+		t.Fatalf("query = %q, want fixed Linear create mutation", query)
+	}
+	if got["operationName"] != "CreateLinearIssue" {
+		t.Fatalf("operationName = %v, want CreateLinearIssue", got["operationName"])
+	}
+	vars, ok := got["variables"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables = %#v, want object", got["variables"])
+	}
+	input, ok := vars["input"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables.input = %#v, want object", vars["input"])
+	}
+	if input["teamId"] != "team_1" || input["title"] != "Ship Linear CLI" {
+		t.Fatalf("input = %+v, want teamId/title from approved record fields", input)
+	}
+	if _, ok := input["labelIds"]; ok {
+		t.Fatalf("input = %+v, optional labelIds must be absent unless explicitly supported", input)
 	}
 }
 

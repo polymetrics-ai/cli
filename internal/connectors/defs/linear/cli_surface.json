@@ -66,7 +66,7 @@
       ],
       "api_surface": [
         {
-          "method": "GET",
+          "method": "POST",
           "path": "/graphql (query: issues)"
         }
       ]
@@ -75,47 +75,155 @@
       "path": "issue view",
       "summary": "View one Linear issue.",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "linear issue view",
       "flags": [
         {
           "name": "issue-id",
           "type": "string",
           "summary": "Linear issue UUID or key.",
-          "maps_to": "query.issue_id"
+          "maps_to": "query.id"
         }
       ],
-      "notes": "Requires a fixed GraphQL document with bounded variables and redacted JSON output; not implemented in this metadata slice."
+      "stream": "issue",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql (query: issue)"
+        }
+      ],
+      "examples": [
+        "pm linear issue view --issue-id <id-or-key> --json"
+      ]
     },
     {
       "path": "issue create",
       "summary": "Create a Linear issue.",
       "intent": "reverse_etl",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "linear issue create",
       "risk": "Creates a visible issue in the configured Linear workspace.",
       "approval": "Reverse ETL writes require plan, preview, approval token, execute, and typed confirmation when sensitive or destructive.",
-      "notes": "Deferred until Linear GraphQL mutation write actions and sensitive/admin policy are implemented."
+      "write": "create_issue",
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "string",
+          "summary": "Linear team UUID for the new issue.",
+          "maps_to": "record.team_id"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Issue title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Issue description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "assignee-id",
+          "type": "string",
+          "summary": "Assignee user UUID.",
+          "maps_to": "record.assignee_id"
+        },
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Project UUID.",
+          "maps_to": "record.project_id"
+        },
+        {
+          "name": "state-id",
+          "type": "string",
+          "summary": "Workflow state UUID.",
+          "maps_to": "record.state_id"
+        }
+      ],
+      "examples": [
+        "pm linear issue create --team-id <team-id> --title \"Ship connector commands\" --json"
+      ]
     },
     {
       "path": "issue update",
       "summary": "Update a Linear issue.",
       "intent": "reverse_etl",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "linear issue update",
       "risk": "Mutates an existing Linear issue.",
       "approval": "Reverse ETL writes require plan, preview, approval token, execute, and typed confirmation when sensitive or destructive.",
-      "notes": "Deferred until Linear GraphQL mutation write actions and sensitive/admin policy are implemented."
+      "write": "update_issue",
+      "flags": [
+        {
+          "name": "issue-id",
+          "type": "string",
+          "summary": "Linear issue UUID or key.",
+          "maps_to": "record.issue_id"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Issue title.",
+          "maps_to": "record.title"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Issue description.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "assignee-id",
+          "type": "string",
+          "summary": "Assignee user UUID.",
+          "maps_to": "record.assignee_id"
+        },
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Project UUID.",
+          "maps_to": "record.project_id"
+        },
+        {
+          "name": "state-id",
+          "type": "string",
+          "summary": "Workflow state UUID.",
+          "maps_to": "record.state_id"
+        }
+      ],
+      "examples": [
+        "pm linear issue update --issue-id ENG-1 --title \"Updated title\" --json"
+      ]
     },
     {
       "path": "comment create",
       "summary": "Create a comment on a Linear issue.",
       "intent": "reverse_etl",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "linear comment create",
       "risk": "Creates a visible comment in Linear.",
       "approval": "Reverse ETL writes require plan, preview, approval token, execute, and typed confirmation when sensitive or destructive.",
-      "notes": "Deferred until explicit GraphQL mutation actions exist; no arbitrary mutation body is accepted."
+      "write": "comment_issue",
+      "flags": [
+        {
+          "name": "issue-id",
+          "type": "string",
+          "summary": "Linear issue UUID or key.",
+          "maps_to": "record.issue_id"
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Comment body.",
+          "maps_to": "record.body"
+        }
+      ],
+      "examples": [
+        "pm linear comment create --issue-id ENG-1 --body \"Looks good\" --json"
+      ]
     },
     {
       "path": "project list",
@@ -129,7 +237,7 @@
       ],
       "api_surface": [
         {
-          "method": "GET",
+          "method": "POST",
           "path": "/graphql (query: projects)"
         }
       ]
@@ -138,27 +246,59 @@
       "path": "project view",
       "summary": "View one Linear project.",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "linear project view",
       "flags": [
         {
           "name": "project-id",
           "type": "string",
           "summary": "Linear project UUID.",
-          "maps_to": "query.project_id"
+          "maps_to": "query.id"
         }
       ],
-      "notes": "Requires a fixed GraphQL document with bounded variables and redacted JSON output; not implemented in this metadata slice."
+      "stream": "project",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql (query: project)"
+        }
+      ],
+      "examples": [
+        "pm linear project view --project-id <id-or-key> --json"
+      ]
     },
     {
       "path": "project create",
       "summary": "Create a Linear project.",
       "intent": "reverse_etl",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "linear project create",
       "risk": "Creates a visible project in Linear.",
       "approval": "Reverse ETL writes require plan, preview, approval token, execute, and typed confirmation when sensitive or destructive.",
-      "notes": "Deferred until explicit GraphQL mutation actions exist; no arbitrary mutation body is accepted."
+      "write": "create_project",
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "string",
+          "summary": "Linear team UUID for the project.",
+          "maps_to": "record.team_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Project name.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Project description.",
+          "maps_to": "record.description"
+        }
+      ],
+      "examples": [
+        "pm linear project create --team-id <team-id> --name \"CLI parity\" --json"
+      ]
     },
     {
       "path": "team list",
@@ -172,7 +312,7 @@
       ],
       "api_surface": [
         {
-          "method": "GET",
+          "method": "POST",
           "path": "/graphql (query: teams)"
         }
       ]
@@ -181,17 +321,26 @@
       "path": "team view",
       "summary": "View one Linear team.",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "linear team view",
       "flags": [
         {
           "name": "team-id",
           "type": "string",
           "summary": "Linear team UUID or key.",
-          "maps_to": "query.team_id"
+          "maps_to": "query.id"
         }
       ],
-      "notes": "Requires a fixed GraphQL document with bounded variables and redacted JSON output; not implemented in this metadata slice."
+      "stream": "team",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql (query: team)"
+        }
+      ],
+      "examples": [
+        "pm linear team view --team-id <id-or-key> --json"
+      ]
     },
     {
       "path": "cycle list",
@@ -229,7 +378,7 @@
       ],
       "api_surface": [
         {
-          "method": "GET",
+          "method": "POST",
           "path": "/graphql (query: users)"
         }
       ]
@@ -238,17 +387,26 @@
       "path": "user view",
       "summary": "View one Linear user.",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "linear user view",
       "flags": [
         {
           "name": "user-id",
           "type": "string",
           "summary": "Linear user UUID.",
-          "maps_to": "query.user_id"
+          "maps_to": "query.id"
         }
       ],
-      "notes": "Requires a fixed GraphQL document with bounded variables and redacted JSON output; not implemented in this metadata slice."
+      "stream": "user",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/graphql (query: user)"
+        }
+      ],
+      "examples": [
+        "pm linear user view --user-id <id-or-key> --json"
+      ]
     },
     {
       "path": "webhook create",
@@ -314,11 +472,11 @@
     },
     {
       "name": "graphql-safety",
-      "summary": "Linear GraphQL operations are exposed only as reviewed fixed streams, direct reads, or reverse-ETL actions; raw arbitrary GraphQL is disallowed."
+      "summary": "Linear GraphQL operations are exposed only as reviewed fixed streams, direct reads, or reverse-ETL actions; Raw arbitrary GraphQL is disallowed."
     },
     {
       "name": "writes",
-      "summary": "Linear mutations remain blocked until explicit write actions, previews, approvals, and sensitive/admin policy are implemented."
+      "summary": "Implemented Linear mutations use fixed GraphQL documents and reverse ETL plan \u2192 preview \u2192 approval \u2192 execute; sensitive/admin/destructive mutations remain blocked by default."
     }
   ]
 }

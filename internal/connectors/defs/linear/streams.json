@@ -3,54 +3,328 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
-      { "mode": "bearer", "token": "{{ secrets.api_key }}", "when": "{{ config.auth_type in ['oauth', 'oauth2.0'] }}" },
-      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "", "when": "{{ secrets.api_key }}" },
-      { "mode": "none" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}",
+        "when": "{{ config.auth_type in ['oauth', 'oauth2.0'] }}"
+      },
+      {
+        "mode": "api_key_header",
+        "header": "Authorization",
+        "value": "{{ secrets.api_key }}",
+        "prefix": "",
+        "when": "{{ secrets.api_key }}"
+      },
+      {
+        "mode": "none"
+      }
     ],
-    "pagination": { "type": "none" },
-    "check": { "method": "POST", "path": "" },
+    "pagination": {
+      "type": "none"
+    },
     "error_map": [
-      { "status": 401, "hint": "linear api_key/access_token is missing or invalid; re-run pm credentials add linear" },
-      { "status": 429, "class": "rate_limited", "hint": "linear rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "linear api_key/access_token is missing or invalid; re-run pm credentials add linear"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "linear rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "issues",
       "method": "POST",
-      "path": "",
-      "records": { "path": "data.issues.nodes" },
-      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "path": "/graphql",
+      "records": {
+        "path": "data.issues.nodes"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.issues.pageInfo.endCursor",
+        "stop_path": "data.issues.pageInfo.hasNextPage",
+        "page_size": 50
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "param_format": "rfc3339",
+        "client_filtered": true
+      },
+      "computed_fields": {
+        "branch_name": "{{ record.branchName }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "completed_at": "{{ record.completedAt }}",
+        "canceled_at": "{{ record.canceledAt }}",
+        "state_id": "{{ record.state.id }}",
+        "state_name": "{{ record.state.name }}",
+        "state_type": "{{ record.state.type }}",
+        "team_id": "{{ record.team.id }}",
+        "team_key": "{{ record.team.key }}",
+        "assignee_id": "{{ record.assignee.id }}",
+        "assignee_email": "{{ record.assignee.email }}",
+        "creator_id": "{{ record.creator.id }}"
+      },
       "schema": "schemas/issues.json",
-      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+      "graphql": {
+        "operation_name": "ListLinearIssues",
+        "document": "query ListLinearIssues($first: Int!, $after: String) { issues(first: $first, after: $after, orderBy: updatedAt) { nodes { id identifier title description priority estimate url branchName createdAt updatedAt completedAt canceledAt state { id name type } team { id key name } assignee { id name email } creator { id name email } } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": {
+            "template": "{{ query.first }}",
+            "type": "integer",
+            "default": "50"
+          },
+          "after": {
+            "template": "{{ cursor }}",
+            "omit_when_empty": true
+          }
+        }
+      }
     },
     {
       "name": "teams",
       "method": "POST",
-      "path": "",
-      "records": { "path": "data.teams.nodes" },
-      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "path": "/graphql",
+      "records": {
+        "path": "data.teams.nodes"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.teams.pageInfo.endCursor",
+        "stop_path": "data.teams.pageInfo.hasNextPage",
+        "page_size": 50
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "param_format": "rfc3339",
+        "client_filtered": true
+      },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
       "schema": "schemas/teams.json",
-      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+      "graphql": {
+        "operation_name": "ListLinearTeams",
+        "document": "query ListLinearTeams($first: Int!, $after: String) { teams(first: $first, after: $after) { nodes { id key name description private createdAt updatedAt } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": {
+            "template": "{{ query.first }}",
+            "type": "integer",
+            "default": "50"
+          },
+          "after": {
+            "template": "{{ cursor }}",
+            "omit_when_empty": true
+          }
+        }
+      }
     },
     {
       "name": "projects",
       "method": "POST",
-      "path": "",
-      "records": { "path": "data.projects.nodes" },
-      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "path": "/graphql",
+      "records": {
+        "path": "data.projects.nodes"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.projects.pageInfo.endCursor",
+        "stop_path": "data.projects.pageInfo.hasNextPage",
+        "page_size": 50
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "param_format": "rfc3339",
+        "client_filtered": true
+      },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "started_at": "{{ record.startedAt }}",
+        "completed_at": "{{ record.completedAt }}",
+        "canceled_at": "{{ record.canceledAt }}"
+      },
       "schema": "schemas/projects.json",
-      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+      "graphql": {
+        "operation_name": "ListLinearProjects",
+        "document": "query ListLinearProjects($first: Int!, $after: String) { projects(first: $first, after: $after) { nodes { id name description state progress url createdAt updatedAt startedAt completedAt canceledAt } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": {
+            "template": "{{ query.first }}",
+            "type": "integer",
+            "default": "50"
+          },
+          "after": {
+            "template": "{{ cursor }}",
+            "omit_when_empty": true
+          }
+        }
+      }
     },
     {
       "name": "users",
       "method": "POST",
-      "path": "",
-      "records": { "path": "data.users.nodes" },
-      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "path": "/graphql",
+      "records": {
+        "path": "data.users.nodes"
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.users.pageInfo.endCursor",
+        "stop_path": "data.users.pageInfo.hasNextPage",
+        "page_size": 50
+      },
+      "incremental": {
+        "cursor_field": "updated_at",
+        "param_format": "rfc3339",
+        "client_filtered": true
+      },
+      "computed_fields": {
+        "display_name": "{{ record.displayName }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
       "schema": "schemas/users.json",
-      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+      "graphql": {
+        "operation_name": "ListLinearUsers",
+        "document": "query ListLinearUsers($first: Int!, $after: String) { users(first: $first, after: $after) { nodes { id name displayName email active admin createdAt updatedAt } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": {
+            "template": "{{ query.first }}",
+            "type": "integer",
+            "default": "50"
+          },
+          "after": {
+            "template": "{{ cursor }}",
+            "omit_when_empty": true
+          }
+        }
+      }
+    },
+    {
+      "name": "issue",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.issue",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "branch_name": "{{ record.branchName }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "completed_at": "{{ record.completedAt }}",
+        "canceled_at": "{{ record.canceledAt }}",
+        "state_id": "{{ record.state.id }}",
+        "state_name": "{{ record.state.name }}",
+        "state_type": "{{ record.state.type }}",
+        "team_id": "{{ record.team.id }}",
+        "team_key": "{{ record.team.key }}",
+        "assignee_id": "{{ record.assignee.id }}",
+        "assignee_email": "{{ record.assignee.email }}",
+        "creator_id": "{{ record.creator.id }}"
+      },
+      "schema": "schemas/issues.json",
+      "graphql": {
+        "operation_name": "ViewLinearIssue",
+        "document": "query ViewLinearIssue($id: String!) { issue(id: $id) { id identifier title description priority estimate url branchName createdAt updatedAt completedAt canceledAt state { id name type } team { id key name } assignee { id name email } creator { id name email } } }",
+        "variables": {
+          "id": "{{ query.id }}"
+        }
+      }
+    },
+    {
+      "name": "team",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.team",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/teams.json",
+      "graphql": {
+        "operation_name": "ViewLinearTeam",
+        "document": "query ViewLinearTeam($id: String!) { team(id: $id) { id key name description private createdAt updatedAt } }",
+        "variables": {
+          "id": "{{ query.id }}"
+        }
+      }
+    },
+    {
+      "name": "project",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.project",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}",
+        "started_at": "{{ record.startedAt }}",
+        "completed_at": "{{ record.completedAt }}",
+        "canceled_at": "{{ record.canceledAt }}"
+      },
+      "schema": "schemas/projects.json",
+      "graphql": {
+        "operation_name": "ViewLinearProject",
+        "document": "query ViewLinearProject($id: String!) { project(id: $id) { id name description state progress url createdAt updatedAt startedAt completedAt canceledAt } }",
+        "variables": {
+          "id": "{{ query.id }}"
+        }
+      }
+    },
+    {
+      "name": "user",
+      "method": "POST",
+      "path": "/graphql",
+      "records": {
+        "path": "data.user",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "display_name": "{{ record.displayName }}",
+        "created_at": "{{ record.createdAt }}",
+        "updated_at": "{{ record.updatedAt }}"
+      },
+      "schema": "schemas/users.json",
+      "graphql": {
+        "operation_name": "ViewLinearUser",
+        "document": "query ViewLinearUser($id: String!) { user(id: $id) { id name displayName email active admin createdAt updatedAt } }",
+        "variables": {
+          "id": "{{ query.id }}"
+        }
+      }
     }
   ]
 }

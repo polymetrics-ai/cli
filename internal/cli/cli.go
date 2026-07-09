@@ -58,7 +58,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	case "init":
 		err = runInit(root, stdout, jsonOut)
 	case "help", "man":
-		err = runHelp(rest, stdout)
+		err = runHelp(rest, stdout, jsonOut)
 	case "connectors":
 		err = runConnectors(ctx, root, rest, stdout, jsonOut)
 	case "credentials":
@@ -123,17 +123,12 @@ func runInit(root string, stdout io.Writer, jsonOut bool) error {
 	return nil
 }
 
-func runHelp(args []string, stdout io.Writer) error {
+func runHelp(args []string, stdout io.Writer, jsonOut bool) error {
 	topic := ""
 	if len(args) > 0 {
 		topic = args[0]
 	}
-	text, ok := docs[topic]
-	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
-	}
-	fmt.Fprint(stdout, text)
-	return nil
+	return writeManual(topic, stdout, jsonOut)
 }
 
 func isManualCommand(cmd string) bool {
@@ -147,12 +142,37 @@ func isManualCommand(cmd string) bool {
 func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	text, ok := docs[topic]
 	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
+		return writeConnectorManual(topic, stdout, jsonOut)
 	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": text})
 	}
 	fmt.Fprint(stdout, text)
+	return nil
+}
+
+func writeConnectorManual(topic string, stdout io.Writer, jsonOut bool) error {
+	if strings.TrimSpace(topic) == "" {
+		return fmt.Errorf("help topic %q not found", topic)
+	}
+	if err := safety.ValidateIdentifier(topic, "connector"); err != nil {
+		return fmt.Errorf("help topic %q not found", topic)
+	}
+	if err := connectors.RejectLegacyConnectorName(topic); err != nil {
+		return err
+	}
+	connector, ok := appRegistry().Get(topic)
+	if !ok {
+		return fmt.Errorf("help topic %q not found", topic)
+	}
+	if provider, ok := connector.(connectors.CommandSurfaceProvider); !ok || provider.CommandSurface() == nil {
+		return fmt.Errorf("help topic %q not found", topic)
+	}
+	manual := connectors.RenderConnectorManual(connector)
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": manual})
+	}
+	fmt.Fprint(stdout, manual)
 	return nil
 }
 
@@ -610,7 +630,7 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
-		return usageErrorf("missing connector command path")
+		return writeConnectorManual(connectorName, stdout, jsonOut)
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError

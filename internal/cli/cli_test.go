@@ -315,6 +315,230 @@ func TestRuntimeDoctorJSONDoesNotLeakPostgresPassword(t *testing.T) {
 	}
 }
 
+func TestLinearConnectorHelpRendersCommandSurface(t *testing.T) {
+	tests := [][]string{
+		{"help", "linear"},
+		{"linear"},
+		{"linear", "--help"},
+	}
+	for _, args := range tests {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr=%s stdout=%s", args, code, stderr.String(), stdout.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{"NAME", "pm linear", "COMMAND SURFACE", "issue list", "api graphql", "Raw arbitrary GraphQL is disallowed"} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("help output missing %q:\n%s", want, out)
+				}
+			}
+		})
+	}
+}
+
+func TestLinearCommandSurfaceRunsGraphQLIssueList(t *testing.T) {
+	var gotPath string
+	var gotBody map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		if r.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", r.Method)
+		}
+		if err := json.NewDecoder(r.Body).Decode(&gotBody); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"data": {
+				"issues": {
+					"nodes": [{
+						"id": "iss_1",
+						"identifier": "ENG-1",
+						"title": "Ship Linear CLI",
+						"description": "fixture",
+						"priority": 1,
+						"estimate": 2,
+						"url": "https://linear.app/acme/issue/ENG-1",
+						"branchName": "eng-1",
+						"createdAt": "2026-07-01T00:00:00Z",
+						"updatedAt": "2026-07-02T00:00:00Z",
+						"completedAt": null,
+						"canceledAt": null,
+						"state": {"id": "state_1", "name": "Todo", "type": "unstarted"},
+						"team": {"id": "team_1", "key": "ENG", "name": "Engineering"},
+						"assignee": {"id": "user_1", "name": "Ada", "email": "ada@example.test"},
+						"creator": {"id": "user_2", "name": "Grace", "email": "grace@example.test"}
+					}],
+					"pageInfo": {"hasNextPage": false, "endCursor": null}
+				}
+			}
+		}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	t.Setenv("LINEAR_TEST_TOKEN", "sample-linear-token")
+	runCLI(t, []string{
+		"credentials", "add", "linear-local",
+		"--connector", "linear",
+		"--config", "base_url=" + srv.URL,
+		"--from-env", "api_key=LINEAR_TEST_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"linear", "issue", "list",
+		"--credential", "linear-local",
+		"--limit", "1",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/graphql" {
+		t.Fatalf("request path = %q, want /graphql", gotPath)
+	}
+	if gotBody["operationName"] != "ListLinearIssues" {
+		t.Fatalf("operationName = %v, want ListLinearIssues; body=%+v", gotBody["operationName"], gotBody)
+	}
+	vars, ok := gotBody["variables"].(map[string]any)
+	if !ok || vars["first"] == nil {
+		t.Fatalf("variables = %#v, want first variable", gotBody["variables"])
+	}
+
+	var env struct {
+		Kind    string `json:"kind"`
+		Command string `json:"command"`
+		Stream  string `json:"stream"`
+		Count   int    `json:"count"`
+		Records []struct {
+			ID            string `json:"id"`
+			Identifier    string `json:"identifier"`
+			Title         string `json:"title"`
+			BranchName    string `json:"branch_name"`
+			StateName     string `json:"state_name"`
+			TeamKey       string `json:"team_key"`
+			AssigneeEmail string `json:"assignee_email"`
+		} `json:"records"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandRead" || env.Command != "issue list" || env.Stream != "issues" || env.Count != 1 {
+		t.Fatalf("envelope = %+v, want Linear issue list read", env)
+	}
+	if len(env.Records) != 1 || env.Records[0].Identifier != "ENG-1" || env.Records[0].BranchName != "eng-1" || env.Records[0].StateName != "Todo" || env.Records[0].TeamKey != "ENG" {
+		t.Fatalf("records = %+v, want projected Linear issue", env.Records)
+	}
+}
+
+func TestLinearCommandSurfacePlansReverseETLWritePreview(t *testing.T) {
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	t.Setenv("LINEAR_TEST_TOKEN", "sample-linear-token")
+	runCLI(t, []string{
+		"credentials", "add", "linear-local",
+		"--connector", "linear",
+		"--from-env", "api_key=LINEAR_TEST_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"linear", "issue", "create",
+		"--credential", "linear-local",
+		"--team-id", "team_1",
+		"--title", "Ship Linear CLI",
+		"--preview",
+		"--root", root,
+		"--json",
+	})
+	var env map[string]any
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env["kind"] != "ConnectorCommandWritePlan" || env["approval_required"] != true {
+		t.Fatalf("envelope = %+v, want write plan requiring approval", env)
+	}
+	plan, ok := env["plan"].(map[string]any)
+	if !ok {
+		t.Fatalf("plan = %#v, want object", env["plan"])
+	}
+	if plan["destination_connector"] != "linear" || plan["action"] != "create_issue" || plan["connector_command"] != "issue create" {
+		t.Fatalf("plan = %+v, want Linear create_issue command plan", plan)
+	}
+	if _, leaked := plan["approval_token"]; leaked {
+		t.Fatalf("plan leaked approval_token in JSON output: %+v", plan)
+	}
+	preview, ok := env["write_preview"].(map[string]any)
+	if !ok {
+		t.Fatalf("write_preview = %#v, want object", env["write_preview"])
+	}
+	if preview["action"] != "create_issue" || preview["records_staged"] != float64(1) {
+		t.Fatalf("write_preview = %+v, want one staged create_issue", preview)
+	}
+	if !strings.Contains(stdout, "POST https://api.linear.app/graphql") {
+		t.Fatalf("preview output missing resolved Linear GraphQL endpoint:\n%s", stdout)
+	}
+}
+
+func TestLinearCommandSurfaceRunsStreamBackedDirectRead(t *testing.T) {
+	var gotBody map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := json.NewDecoder(r.Body).Decode(&gotBody); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"data":{"issue":{"id":"iss_1","identifier":"ENG-1","title":"Ship Linear CLI","description":"fixture","priority":1,"estimate":2,"url":"https://linear.app/acme/issue/ENG-1","branchName":"eng-1","createdAt":"2026-07-01T00:00:00Z","updatedAt":"2026-07-02T00:00:00Z","completedAt":null,"canceledAt":null,"state":{"id":"state_1","name":"Todo","type":"unstarted"},"team":{"id":"team_1","key":"ENG","name":"Engineering"},"assignee":{"id":"user_1","name":"Ada","email":"ada@example.test"},"creator":{"id":"user_2","name":"Grace","email":"grace@example.test"}}}}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	t.Setenv("LINEAR_TEST_TOKEN", "sample-linear-token")
+	runCLI(t, []string{
+		"credentials", "add", "linear-local",
+		"--connector", "linear",
+		"--config", "base_url=" + srv.URL,
+		"--from-env", "api_key=LINEAR_TEST_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"linear", "issue", "view",
+		"--credential", "linear-local",
+		"--issue-id", "ENG-1",
+		"--root", root,
+		"--json",
+	})
+	vars, ok := gotBody["variables"].(map[string]any)
+	if !ok || vars["id"] != "ENG-1" {
+		t.Fatalf("variables = %#v, want id ENG-1", gotBody["variables"])
+	}
+	var env struct {
+		Kind     string         `json:"kind"`
+		Command  string         `json:"command"`
+		Method   string         `json:"method"`
+		Path     string         `json:"path"`
+		Status   int            `json:"status"`
+		Response map[string]any `json:"response"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandDirectRead" || env.Command != "issue view" || env.Method != "STREAM" || env.Path != "issue" || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want stream-backed direct-read issue", env)
+	}
+	if env.Response["identifier"] != "ENG-1" || env.Response["branch_name"] != "eng-1" {
+		t.Fatalf("response = %+v, want projected issue", env.Response)
+	}
+}
+
+func GitHubCommandSurfaceRunsStreamBackedIssueListSentinel() {}
+
 func TestGitHubCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
 	var gotPath, gotState string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

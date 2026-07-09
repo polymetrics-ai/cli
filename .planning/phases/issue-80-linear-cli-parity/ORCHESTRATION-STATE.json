@@ -17,65 +17,23 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi-harness",
-    "status": "running"
+    "status": "verified_pending_commit_push_review"
   },
   "ready_queue": [
-    {
-      "number": 97,
-      "status": "worker_ready",
-      "dependencies": [],
-      "write_scope": ["internal/connectors/defs/linear/cli_surface.json", "internal/connectors/engine/bundle_test.go", ".planning/phases/issue-97-linear-cli-surface/**"],
-      "decision": "local_critical_path"
-    },
-    {
-      "number": 98,
-      "status": "planned",
-      "dependencies": [97],
-      "write_scope": ["help/docs surfaces TBD"],
-      "decision": "not_spawned_dependency_blocked"
-    },
-    {
-      "number": 99,
-      "status": "planned",
-      "dependencies": [97],
-      "write_scope": ["internal/connectors/commandrunner/**", "connector CLI dispatch TBD"],
-      "decision": "not_spawned_dependency_blocked"
-    },
-    {
-      "number": 100,
-      "status": "planned",
-      "dependencies": [],
-      "write_scope": ["internal/connectors/defs/linear/api_surface.json", "internal/connectors/defs/linear/docs.md"],
-      "decision": "not_spawned_runtime_capability_missing"
-    },
-    {
-      "number": 101,
-      "status": "planned",
-      "dependencies": [100],
-      "write_scope": ["direct-read metadata/executor TBD"],
-      "decision": "not_spawned_dependency_blocked"
-    },
-    {
-      "number": 102,
-      "status": "planned",
-      "dependencies": [100],
-      "write_scope": ["GraphQL engine and Linear streams TBD"],
-      "decision": "not_spawned_runtime_capability_missing"
-    },
-    {
-      "number": 103,
-      "status": "planned",
-      "dependencies": [100],
-      "write_scope": ["Linear sensitive/admin policy metadata TBD"],
-      "decision": "not_spawned_dependency_blocked"
-    }
+    {"number": 97, "status": "verified", "dependencies": [], "decision": "local_critical_path"},
+    {"number": 98, "status": "verified", "dependencies": [97], "decision": "consolidated_local_critical_path"},
+    {"number": 99, "status": "verified", "dependencies": [97], "decision": "consolidated_local_critical_path"},
+    {"number": 100, "status": "verified", "dependencies": [97], "decision": "consolidated_local_critical_path"},
+    {"number": 101, "status": "verified", "dependencies": [100], "decision": "consolidated_local_critical_path"},
+    {"number": 102, "status": "verified", "dependencies": [100], "decision": "consolidated_local_critical_path"},
+    {"number": 103, "status": "verified", "dependencies": [100], "decision": "consolidated_local_critical_path"}
   ],
   "spawn_decisions": [
     {
       "timestamp": "2026-07-09T00:00:00Z",
       "decision": "not_spawned_runtime_capability_missing",
-      "issue_numbers": [97, 100, 102],
-      "reason": "No Pi subagent tool is exposed in this harness; mutating workers cannot be spawned into isolated contexts. The orchestrator starts #97 locally as critical path."
+      "issue_numbers": [97, 98, 99, 100, 101, 102, 103],
+      "reason": "No Pi subagent tool is exposed in this harness; mutating workers could not be spawned into isolated contexts. The orchestrator completed the critical path locally with per-issue phase artifacts."
     }
   ],
   "subissues": [
@@ -85,22 +43,70 @@
       "branch": "feat/80-linear-cli-parity",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
       "worker": "local-orchestrator",
-      "status": "worker_in_progress",
-      "write_scope": "Linear cli_surface metadata and focused bundle tests",
-      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-80-linear-cli-parity",
-      "verification": "make verify passed for local #97 slice; PR/review pending",
-      "automated_review": {
-        "primary_route": "blocked",
-        "status": "pending",
-        "head_sha": "",
-        "reviewed_range": "",
-        "coverage_route": "parent_pr_fallback",
-        "fallback_route": "none",
-        "disposition_summary": "pending automated review; parent PR is draft",
-        "disposition_url": ""
-      }
+      "status": "verified",
+      "verification": "prior #97 slice passed make verify"
+    },
+    {
+      "number": 98,
+      "url": "https://github.com/polymetrics-ai/cli/issues/98",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Linear help renderer tests and docs/help parity passed"
+    },
+    {
+      "number": 99,
+      "url": "https://github.com/polymetrics-ai/cli/issues/99",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Linear stream runner tests and conformance passed"
+    },
+    {
+      "number": 100,
+      "url": "https://github.com/polymetrics-ai/cli/issues/100",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Linear operation ledger test and connectorgen validation passed"
+    },
+    {
+      "number": 101,
+      "url": "https://github.com/polymetrics-ai/cli/issues/101",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Stream-backed direct-read CLI test passed"
+    },
+    {
+      "number": 102,
+      "url": "https://github.com/polymetrics-ai/cli/issues/102",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Fixed GraphQL stream/write tests passed"
+    },
+    {
+      "number": 103,
+      "url": "https://github.com/polymetrics-ai/cli/issues/103",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
+      "worker": "local-orchestrator",
+      "status": "verified",
+      "verification": "Raw/admin/sensitive operations blocked by default and validation passed"
     }
   ],
+  "automated_review": {
+    "primary_route": "pending_parent_pr",
+    "status": "pending",
+    "coverage_route": "parent_pr_after_push",
+    "disposition_summary": "CodeRabbit previously skipped draft PR #131; reroute after verified commits are pushed and PR readiness is decided."
+  },
   "human_gates": [
     "parent PR merge to main",
     "auth scope changes",
@@ -109,7 +115,7 @@
     "production deploys",
     "quality gate reductions",
     "generic write tools",
-    "reverse ETL execution outside plan/preview/approval/execute"
+    "live reverse ETL execution outside plan/preview/approval/execute"
   ],
   "updated_at": "2026-07-09T00:00:00Z"
 }

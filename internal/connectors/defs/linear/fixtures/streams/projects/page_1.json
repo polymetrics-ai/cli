@@ -1,5 +1,8 @@
 {
-  "request": { "method": "POST", "path": "/" },
+  "request": {
+    "method": "POST",
+    "path": "/graphql"
+  },
   "response": {
     "status": 200,
     "body": {
@@ -20,7 +23,10 @@
               "canceledAt": null
             }
           ],
-          "pageInfo": { "hasNextPage": false, "endCursor": "cursor_fixture_2" }
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": "cursor_fixture_2"
+          }
         }
       }
     }

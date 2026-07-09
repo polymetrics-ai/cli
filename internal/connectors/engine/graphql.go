@@ -125,14 +125,17 @@ func resolveGraphQLVariableTemplate(spec map[string]any, vars Vars) (any, error)
 		return nil, fmt.Errorf("graphql variable template must be a string")
 	}
 	resolved, err := Interpolate(tmpl, vars)
+	omit, _ := spec["omit_when_empty"].(bool)
 	if err != nil {
 		if def, ok := spec["default"].(string); ok && isUnresolvedGraphQLDefaultable(err) {
 			resolved = def
+		} else if omit && isUnresolvedGraphQLDefaultable(err) {
+			return omittedGraphQLVariable{}, nil
 		} else {
 			return nil, err
 		}
 	}
-	if omit, _ := spec["omit_when_empty"].(bool); omit && resolved == "" {
+	if omit && resolved == "" {
 		return omittedGraphQLVariable{}, nil
 	}
 	typ, _ := spec["type"].(string)
@@ -168,7 +171,7 @@ func isUnresolvedGraphQLDefaultable(err error) bool {
 		return false
 	}
 	switch unresolved.Namespace {
-	case "config", "query", "incremental":
+	case "config", "query", "record", "incremental":
 		return true
 	default:
 		return false

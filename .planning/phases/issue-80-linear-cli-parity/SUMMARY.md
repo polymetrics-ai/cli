@@ -1,21 +1,32 @@
 # Summary — Issue #80 Linear CLI parity parent
 
-Status: in progress.
+Status: implementation verified locally; parent PR remains draft/human-gated.
 
-Completed so far:
+Completed:
 
 - Read required repo, GSD, parent-orchestration, review-routing, CLI parity, connector migration, and Go skill references.
 - Validated GSD/Pi adapter with `scripts/gsd doctor`, `scripts/gsd verify-pi`, and `scripts/gsd list --json`.
 - Generated the parent planning prompt with `scripts/gsd prompt plan-phase issue-80-linear-cli-parity --skip-research`.
 - Recorded manual-GSD fallback because `scripts/gsd prompt programming-loop ...` is not available in this checkout.
-- Created parent issue #80 plan, TDD ledger, verification checklist, run state, and orchestration state.
-- Selected issue #97 (Linear CLI surface metadata) as the first local critical-path lane.
-- Completed the #97 red/green slice with focused tests, full `make verify`, and generated website data.
-- Committed and pushed `c9d1fa75 feat(linear): add CLI surface metadata` to `origin/feat/80-linear-cli-parity`.
-- Opened draft parent PR #131: https://github.com/polymetrics-ai/cli/pull/131.
+- Completed #97 CLI surface metadata and opened draft parent PR #131.
+- Completed local critical-path slices #98-#103:
+  - connector command-surface help for `pm help linear`, bare `pm linear`, and `pm linear --help`;
+  - fixed GraphQL Linear streams for list and view reads;
+  - stream-backed direct-read runner support;
+  - fixed GraphQL write actions for `create_issue`, `update_issue`, `comment_issue`, and `create_project` through reverse ETL plan/preview/approval/execute;
+  - Linear operation ledger v1 with remaining SDK-derived/raw/admin/sensitive operations blocked by default;
+  - docs and website generated data updates.
+- Local verification passed: `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `go run ./cmd/connectorgen validate internal/connectors/defs --json`, `./pm docs validate --connectors-dir docs/connectors`, `make verify`, and `git diff --check`.
+
+Safety:
+
+- No credentialed Linear checks were run.
+- No live Linear writes were executed.
+- No secrets were requested, printed, or stored.
+- Raw arbitrary GraphQL remains disallowed.
 
 Next:
 
-1. Continue with #98 help renderer/docs or #100 operation ledger, keeping evidence separate.
-2. Keep parent PR draft while #98-#103 are incomplete.
-3. Route automated review per CodeRabbit/Copilot policy after the parent PR is ready for review or when fallback coverage is required.
+1. Commit and push the verified Linear parity slice on `feat/80-linear-cli-parity`.
+2. Update PR #131 body with verification and issue mapping.
+3. Keep parent PR draft or mark ready only after applying the project review-routing policy.

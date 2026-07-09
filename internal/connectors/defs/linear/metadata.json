@@ -1,14 +1,14 @@
 {
   "name": "linear",
   "display_name": "Linear",
-  "description": "Reads Linear issues, teams, projects, and users through the Linear GraphQL API. Read-only.",
+  "description": "Reads and writes Linear issues, teams, projects, users, and approved common mutations through fixed Linear GraphQL operations.",
   "integration_type": "api",
   "docs_url": "https://developers.linear.app/docs",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 50
   },
   "risk": {
-    "read": "external Linear GraphQL API read of issues/teams/projects/users",
-    "approval": "none; read-only source connector"
+    "read": "external Linear GraphQL API read of approved fixed documents",
+    "write": "approved Linear GraphQL mutations through reverse ETL plan, preview, approval, execute",
+    "approval": "writes require connector command plan/preview/approval; sensitive/admin/destructive operations remain blocked by default"
   }
 }

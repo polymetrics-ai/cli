@@ -553,6 +553,60 @@ func TestLinearCLISurfaceMapsImplementedStreams(t *testing.T) {
 	}
 }
 
+func TestLinearStreamsUseFixedGraphQLDocuments(t *testing.T) {
+	b, err := Load(defs.FS, "linear")
+	if err != nil {
+		t.Fatalf("Load linear: %v", err)
+	}
+	streams := map[string]StreamSpec{}
+	for _, stream := range b.Streams {
+		streams[stream.Name] = stream
+	}
+	for _, name := range []string{"issues", "teams", "projects", "users", "issue", "team", "project", "user"} {
+		stream, ok := streams[name]
+		if !ok {
+			t.Fatalf("linear stream %q missing", name)
+		}
+		if stream.GraphQL == nil {
+			t.Fatalf("linear stream %q GraphQL = nil, want fixed document", name)
+		}
+		if stream.Method != "POST" || stream.Path != "/graphql" {
+			t.Fatalf("linear stream %q method/path = %s %s, want POST /graphql", name, stream.Method, stream.Path)
+		}
+		if stream.Conformance != nil && stream.Conformance.SkipDynamic {
+			t.Fatalf("linear stream %q still has skip_dynamic marker: %s", name, stream.Conformance.Reason)
+		}
+	}
+}
+
+func TestLinearOperationLedgerInventoriesGraphQLOperations(t *testing.T) {
+	b, err := Load(os.DirFS("../defs"), "linear")
+	if err != nil {
+		t.Fatalf("Load linear: %v", err)
+	}
+	if b.Surface == nil || b.Surface.OperationLedgerVersion != 1 {
+		t.Fatalf("linear api surface ledger version = %+v, want v1", b.Surface)
+	}
+	covered, blocked := 0, 0
+	for _, ep := range b.Surface.Endpoints {
+		if ep.CoveredBy != nil {
+			covered++
+		}
+		if ep.Operation != nil {
+			blocked++
+			if !ep.Operation.BlockedByDefault || ep.Operation.Status != "blocked" {
+				t.Fatalf("operation row %+v is not blocked by default", ep.Operation)
+			}
+		}
+	}
+	if covered < 12 {
+		t.Fatalf("covered endpoint rows = %d, want stream/direct-read/write coverage", covered)
+	}
+	if blocked < 400 {
+		t.Fatalf("blocked operation rows = %d, want full Linear GraphQL operation inventory", blocked)
+	}
+}
+
 func TestBundleLoadParsesCLISurface(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

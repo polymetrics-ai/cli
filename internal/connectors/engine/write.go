@@ -110,6 +110,7 @@ func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, rec
 // never leak a secret value even though the method/path is otherwise fully
 // resolved for operator review (THREAT-MODEL §1).
 func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record, cfg connectors.RuntimeConfig) (method, path string, err error) {
+	cfg = materializeConfigDefaults(b, cfg)
 	redactedSecrets := make(map[string]string, len(cfg.Secrets))
 	for k := range cfg.Secrets {
 		redactedSecrets[k] = "***"
