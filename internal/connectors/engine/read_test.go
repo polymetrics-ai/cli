@@ -2827,6 +2827,93 @@ func TestReadFanOutRequestIDsPreliminaryPaginatedRequest(t *testing.T) {
 	}
 }
 
+// TestReadFanOutRequestPaginationOverrideAllowsDifferentChildPagination proves
+// parent id-listing requests can use a different pagination model than the
+// child fan-out stream. Chatwoot messages need this shape: conversations are
+// swept with page-number pagination, then each conversation's messages page
+// forward with the endpoint's official `after` cursor.
+func TestReadFanOutRequestPaginationOverrideAllowsDifferentChildPagination(t *testing.T) {
+	var seq []string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		page := r.URL.Query().Get("page")
+		after := r.URL.Query().Get("after")
+		switch {
+		case r.URL.Path == "/projects" && page == "1":
+			seq = append(seq, "project-page-1")
+			_, _ = w.Write([]byte(`{"data":[{"id":"p1"},{"id":"p2"}]}`))
+		case r.URL.Path == "/projects" && page == "2":
+			seq = append(seq, "project-page-2")
+			_, _ = w.Write([]byte(`{"data":[{"id":"p3"}]}`))
+		case r.URL.Path == "/projects/p1/tasks" && after == "":
+			seq = append(seq, "tasks-p1-page-1")
+			_, _ = w.Write([]byte(`{"data":[{"id":"t1"}]}`))
+		case r.URL.Path == "/projects/p1/tasks" && after == "t1":
+			seq = append(seq, "tasks-p1-stop")
+			_, _ = w.Write([]byte(`{"data":[]}`))
+		case r.URL.Path == "/projects/p2/tasks" && after == "":
+			seq = append(seq, "tasks-p2-page-1")
+			_, _ = w.Write([]byte(`{"data":[{"id":"t2"}]}`))
+		case r.URL.Path == "/projects/p2/tasks" && after == "t2":
+			seq = append(seq, "tasks-p2-stop")
+			_, _ = w.Write([]byte(`{"data":[]}`))
+		case r.URL.Path == "/projects/p3/tasks" && after == "":
+			seq = append(seq, "tasks-p3-page-1")
+			_, _ = w.Write([]byte(`{"data":[{"id":"t3"}]}`))
+		case r.URL.Path == "/projects/p3/tasks" && after == "t3":
+			seq = append(seq, "tasks-p3-stop")
+			_, _ = w.Write([]byte(`{"data":[]}`))
+		default:
+			t.Fatalf("unexpected request: %s %s", r.URL.Path, r.URL.RawQuery)
+		}
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Path:    "/projects/{{ fanout.id }}/tasks",
+		Records: RecordsSpec{Path: "data"},
+		Pagination: &PaginationSpec{
+			Type:            "cursor",
+			CursorParam:     "after",
+			LastRecordField: "id",
+		},
+		FanOut: &FanOutSpec{
+			IDsFrom: FanOutIDsFrom{Request: &FanOutIDsRequest{
+				Path:        "/projects",
+				RecordsPath: "data",
+				IDField:     "id",
+				Pagination: &PaginationSpec{
+					Type:      "page_number",
+					PageParam: "page",
+					StartPage: intPtr(1),
+					PageSize:  2,
+				},
+			}},
+			Into:       FanOutInto{PathVar: "parent_id"},
+			StampField: "project_id",
+		},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	wantSeq := []string{
+		"project-page-1", "project-page-2",
+		"tasks-p1-page-1", "tasks-p1-stop",
+		"tasks-p2-page-1", "tasks-p2-stop",
+		"tasks-p3-page-1", "tasks-p3-stop",
+	}
+	if !reflect.DeepEqual(seq, wantSeq) {
+		t.Fatalf("seq = %v, want %v", seq, wantSeq)
+	}
+	if len(records) != 3 {
+		t.Fatalf("got %d records, want 3", len(records))
+	}
+	for i, wantProjectID := range []string{"p1", "p2", "p3"} {
+		if records[i]["project_id"] != wantProjectID {
+			t.Fatalf("records[%d][project_id] = %v, want %s", i, records[i]["project_id"], wantProjectID)
+		}
+	}
+}
+
 // TestReadFanOutEachIDSequenceOwnPagination proves each id's sub-sequence
 // paginates independently: id A's sequence needs 2 pages, id B's needs 1.
 func TestReadFanOutEachIDSequenceOwnPagination(t *testing.T) {

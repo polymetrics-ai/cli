@@ -85,6 +85,16 @@
       "cycle": "issue-152-integration",
       "decision": "integrated_parent_review_complete",
       "reason": "PR #244 remote checks passed, was squash-merged into parent commit e9a709fe50dd3832e57ce0a5f8e3b728422e27cb, and parent PR #223 manual CodeRabbit review replied Review finished with no inline findings returned by GitHub API."
+    },
+    {
+      "cycle": "issue-151-targeted-verification",
+      "decision": "sub_pr_pending_full_gates_pending",
+      "reason": "Issue #151 stream runner implementation passed targeted engine/conformance/connectorgen/docs/website checks."
+    },
+    {
+      "cycle": "issue-151-full-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #151 passed gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify; stacked PR, remote checks, and review routing remain pending."
     }
   ],
   "verificationPassed": false,

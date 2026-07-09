@@ -21,7 +21,7 @@
     "start_date": {
       "type": "string",
       "format": "date-time",
-      "description": "RFC3339 lower bound for the first incremental sync of conversations, contacts, and messages (e.g. 2026-01-01T00:00:00Z). Ignored once a cursor has been persisted."
+      "description": "RFC3339 lower bound for the first incremental sync of conversations (e.g. 2026-01-01T00:00:00Z). Contacts use their persisted cursor when one exists; messages use message-id pagination and do not consume start_date. Ignored once a cursor has been persisted."
     }
   }
 }

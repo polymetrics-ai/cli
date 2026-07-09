@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/conversations/102/messages",
+    "query": {
+      "after": "1002"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payload": []
+    }
+  }
+}

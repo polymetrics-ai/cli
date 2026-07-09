@@ -583,17 +583,29 @@ retires for every bundle it now covers):
 
 `ids_from` is EXACTLY ONE of `config_key` (a comma-separated config value, split/trimmed/
 empty-entries-dropped — appfollow's `app_collection_ids`) or `request` (one preliminary GET, fully
-paginated to exhaustion using the CHILD STREAM'S OWN effective pagination spec — base or
-stream-level override, the id-listing request declares no pagination block of its own —
+paginated to exhaustion using `request.pagination` when present, otherwise the child stream's
+own effective pagination spec for backwards compatibility — base or stream-level override —
 extracting `id_field` off every record found at `records_path`):
 
 ```json
 "fan_out": {
-  "ids_from": { "request": { "path": "/projects", "records_path": "data", "id_field": "id" } },
+  "ids_from": {
+    "request": {
+      "path": "/projects",
+      "records_path": "data",
+      "id_field": "id",
+      "pagination": { "type": "page_number", "page_param": "page", "start_page": 1, "page_size": 100 }
+    }
+  },
   "into": { "path_var": "parent_id" },
   "stamp_field": "project_id"
 }
 ```
+
+Declare `request.pagination` when the parent id-list endpoint and child stream endpoint use
+different pagination models (for example Chatwoot conversations use `page`, while the child
+messages endpoint uses an `after` cursor). Omit it only when the id-list endpoint intentionally
+shares the child stream's pagination shape.
 
 Declaring both `config_key` and `request`, or neither, is a **read-time** error (mirroring cursor
 pagination's `token_path`/`last_record_field` mutual exclusivity) — `connectorgen validate` does
