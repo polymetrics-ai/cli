@@ -1,0 +1,39 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "basic",
+        "username": "{{ secrets.email }}/token",
+        "password": "{{ secrets.api_token }}",
+        "when": "{{ secrets.api_token }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/api/v2/account/settings"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "zendesk credentials are missing or invalid; re-run pm credentials add zendesk"
+      },
+      {
+        "status": 403,
+        "hint": "zendesk account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "zendesk rate limit exceeded; retry after the provider window"
+      }
+    ]
+  },
+  "streams": []
+}

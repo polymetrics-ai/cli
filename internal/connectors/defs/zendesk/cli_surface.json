@@ -1,0 +1,112 @@
+{
+  "tagline": "Work with Zendesk Support API metadata from the command line.",
+  "usage": "pm zendesk <command> [flags]",
+  "source_cli": {
+    "name": "Zendesk API reference",
+    "docs": "https://developer.zendesk.com/api-reference/",
+    "reference": "https://developer.zendesk.com/zendesk/oas.yaml"
+  },
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read Candidates",
+      "commands": [
+        "read candidates",
+        "binary candidates"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Write Candidates",
+      "commands": [
+        "write candidates",
+        "destructive candidates"
+      ]
+    },
+    {
+      "id": "blocked",
+      "title": "Blocked Metadata",
+      "commands": [
+        "deprecated operations"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved Zendesk connector credential/account scope.",
+      "maps_to": "connection"
+    }
+  ],
+  "commands": [
+    {
+      "path": "read candidates",
+      "summary": "Review Zendesk read candidates from the official OAS",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "Zendesk OAS GET operations",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "notes": "Metadata inventory only. api_surface.json tracks 282 structured direct-read candidates and later lanes map durable collections to ETL streams or bounded direct reads."
+    },
+    {
+      "path": "binary candidates",
+      "summary": "Review Zendesk binary/file read candidates from the official OAS",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "Zendesk OAS GET binary/file-like operations",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "notes": "Metadata inventory only. api_surface.json tracks 37 binary/file read candidates; #162 must define bounded size/path/download policy before execution."
+    },
+    {
+      "path": "write candidates",
+      "summary": "Review Zendesk sensitive/admin write candidates from the official OAS",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "Zendesk OAS POST PUT PATCH operations",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "risk": "Zendesk mutation candidates remain blocked until typed reverse-ETL schemas, risk text, approval text, redaction, and policy gates are added.",
+      "approval": "Reverse ETL execution remains plan → preview → approval → execute.",
+      "notes": "Metadata inventory only. api_surface.json tracks 210 sensitive/admin reverse-ETL candidates."
+    },
+    {
+      "path": "destructive candidates",
+      "summary": "Review Zendesk destructive write candidates from the official OAS",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "Zendesk OAS DELETE operations",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "risk": "Zendesk DELETE operations are destructive and remain blocked until typed reverse-ETL schemas, risk text, approval text, redaction, and destructive confirmation are added.",
+      "approval": "Reverse ETL execution remains plan → preview → approval → execute with typed confirmation for destructive actions.",
+      "notes": "Metadata inventory only. api_surface.json tracks 85 destructive-action candidates."
+    },
+    {
+      "path": "deprecated operations",
+      "summary": "Review deprecated Zendesk operations from the official OAS",
+      "intent": "docs_only",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "Zendesk OAS deprecated operations",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "notes": "Metadata inventory only. api_surface.json tracks 3 deprecated operation rows; #160 must confirm replacements or blockers."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "zendesk-auth",
+      "summary": "Zendesk authentication uses OAuth bearer tokens or email/API-token Basic auth with secrets stored in credentials."
+    },
+    {
+      "name": "zendesk-safety",
+      "summary": "Zendesk writes remain reverse-ETL gated: plan, preview, approval, execute, with destructive confirmation where required."
+    },
+    {
+      "name": "zendesk-operation-ledger",
+      "summary": "The initial operation ledger blocks all official OAS operations until later lanes map exact executable surfaces."
+    }
+  ]
+}

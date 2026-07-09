@@ -924,6 +924,22 @@ func TestBundleLoadEmbeddedGitHubCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedZendeskCLISurface(t *testing.T) {
+	b, err := Load(defs.FS, "zendesk")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, zendesk): %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("Zendesk CLISurface is nil; defs.FS must embed cli_surface.json")
+	}
+	if b.CLISurface.Usage != "pm zendesk <command> [flags]" {
+		t.Fatalf("Zendesk CLISurface usage = %q", b.CLISurface.Usage)
+	}
+	if len(b.CLISurface.Commands) == 0 {
+		t.Fatalf("Zendesk CLISurface has no commands")
+	}
+}
+
 func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

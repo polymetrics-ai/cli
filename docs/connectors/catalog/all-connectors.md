@@ -180,7 +180,7 @@
 | `getlago` | [`icons/getlago.svg`](../icons/getlago.svg) | Lago | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://doc.getlago.com/api-reference/intro) | bundle definition |
 | `giphy` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Giphy | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.giphy.com/docs/api/) | bundle definition |
 | `gitbook` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | GitBook | `api` | ga | check, catalog, read, write | 185 | 170 | [Documentation](https://gitbook.com/docs/developers/gitbook-api/api-reference) | bundle definition |
-| `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 33 | 67 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
+| `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 37 | 231 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
 | `gitlab` | [`icons/gitlab.svg`](../icons/gitlab.svg) | GitLab | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.gitlab.com/ee/api/rest/) | bundle definition |
 | `glassfrog` | [`icons/glassfrog.svg`](../icons/glassfrog.svg) | GlassFrog | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY) | bundle definition |
 | `gmail` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Gmail | `api` | ga | check, catalog, read, write | 10 | 35 | [Documentation](https://developers.google.com/gmail/api/reference/rest) | bundle definition |
@@ -539,6 +539,7 @@
 | `youtube-data` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | YouTube Data | `api` | ga | check, catalog, read | 9 | 0 | [Documentation](https://developers.google.com/youtube/v3) | bundle definition |
 | `zapier-supported-storage` | [`icons/zapiersupportedstorage.svg`](../icons/zapiersupportedstorage.svg) | Zapier Supported Storage | `api` | ga | check, catalog, read, write | 1 | 4 | [Documentation](https://help.zapier.com/hc/en-us/articles/8496293271053-Save-and-retrieve-data-from-Zaps) | bundle definition |
 | `zapsign` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | ZapSign | `api` | ga | check, catalog, read, write | 4 | 8 | [Documentation](https://docs.zapsign.com.br/) | bundle definition |
+| `zendesk` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Zendesk | `api` | alpha | check, catalog | 0 | 0 | [Documentation](https://developer.zendesk.com/api-reference/) | bundle definition |
 | `zendesk-chat` | [`icons/zendesk-chat.svg`](../icons/zendesk-chat.svg) | Zendesk Chat | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developer.zendesk.com/api-reference/live-chat/chat-api/introduction/) | bundle definition |
 | `zendesk-sunshine` | [`icons/zendesk-sunshine.svg`](../icons/zendesk-sunshine.svg) | Zendesk Sunshine | `api` | ga | check, catalog, read, write | 4 | 7 | [Documentation](https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/) | bundle definition |
 | `zendesk-support` | [`icons/zendesk-support.svg`](../icons/zendesk-support.svg) | Zendesk Support | `api` | ga | check, catalog, read, write | 33 | 27 | [Documentation](https://developer.zendesk.com/api-reference/ticketing/introduction/) | bundle definition |

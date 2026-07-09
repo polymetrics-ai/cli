@@ -1,0 +1,24 @@
+{
+  "name": "zendesk",
+  "display_name": "Zendesk",
+  "description": "Metadata inventory for the official Zendesk Support API surface; executable streams, bounded direct reads, and reverse-ETL writes are mapped by the Zendesk CLI parity sub-issues.",
+  "integration_type": "api",
+  "docs_url": "https://developer.zendesk.com/api-reference/",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": false,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "metadata-only bundle in issue #157; later lanes enable safe ETL streams and bounded direct reads from the official Zendesk OAS",
+    "write": "metadata-only bundle in issue #157; Zendesk mutations remain blocked until typed reverse-ETL schemas, approval text, redaction, and destructive confirmation are added",
+    "approval": "all external writes remain plan → preview → approval → execute and blocked in this slice"
+  }
+}

@@ -2,7 +2,7 @@
   "phase": "issue-157-zendesk-cli-surface-metadata",
   "issue": 157,
   "parent_issue": 156,
-  "status": "planned",
+  "status": "verified_green",
   "runtime": "pi",
   "gsd": {
     "plan_prompt": "scripts/gsd prompt plan-phase issue-156-zendesk-cli-parity --skip-research",
@@ -10,14 +10,29 @@
     "programming_loop_status": "blocked_unknown_command",
     "manual_fallback": true
   },
-  "verificationPassed": false,
-  "verificationNotes": "Implementation pending; metadata-only CLI parity exemptions recorded.",
+  "verificationPassed": true,
+  "verificationNotes": "Full local verification passed, including make verify and connectorgen validation.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "No Pi subagent tool is available; #157 will run locally after parent PR creation."
+    },
+    {
+      "cycle": "red-test",
+      "decision": "local_critical_path",
+      "reason": "Added failing embedded Zendesk CLI surface test before bundle implementation."
+    },
+    {
+      "cycle": "targeted-green",
+      "decision": "local_critical_path",
+      "reason": "Implemented metadata bundle and passed focused tests plus connectorgen validation."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Ran full local verification including gofmt, vet, go test, build, make verify, and connectorgen validation."
     }
   ],
-  "updated_at": "2026-07-09T19:34:19Z"
+  "updated_at": "2026-07-09T21:15:00Z"
 }
