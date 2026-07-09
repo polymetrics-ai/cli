@@ -33,7 +33,7 @@
     "caveman"
   ],
   "verificationPassed": true,
-  "verificationNotes": "#90 focused gates and full local gates passed; parent remains in progress for #91-#96.",
+  "verificationNotes": "#90 focused gates and full local gates passed; parent remains in progress for #91-#96. #90 commit pushed: 0e359d76.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -64,6 +64,11 @@
       "cycle": "issue-90-verified",
       "decision": "local_critical_path",
       "reason": "Full local gates passed, including make verify and connectorgen validate; ready for commit/push checkpoint before next lane."
+    },
+    {
+      "cycle": "issue-90-pushed",
+      "decision": "pushed_to_parent_branch",
+      "reason": "#90 verified slice pushed at 0e359d76; next lane can start after review-route decision."
     }
   ],
   "human_gates": [

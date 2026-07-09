@@ -63,7 +63,7 @@ Deliver Bitbucket connector CLI parity across metadata, help/docs, stream-backed
 1. Commit parent planning artifacts as a deliberate seed diff.
 2. Push `feat/79-bitbucket-cli-parity` and open a draft parent PR to `main` with `Refs #79`.
 3. Execute #90 locally because this runtime does not expose the Pi `subagent` tool and #90 owns the seed bundle needed by later lanes. (Verified green slice complete.)
-4. Commit/push the #90 verified slice. If the slice is large enough to review independently, open a stacked PR targeting `feat/79-bitbucket-cli-parity`; otherwise keep it on the parent branch with issue-scoped evidence.
+4. Commit/push the #90 verified slice. Complete: pushed at `0e359d76` on `feat/79-bitbucket-cli-parity`.
 5. Continue ready queue after #90, preferring isolated workers/worktrees only if a runtime with mutating subagent isolation is available.
 
 ## TDD policy

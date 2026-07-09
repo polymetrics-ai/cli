@@ -42,7 +42,7 @@ Fallback in use: manual GSD universal runtime loop with `.pi/prompts/pm-gsd-loop
 
 | Issue | Red | Green | Refactor | Notes |
 |---:|---|---|---|---|
-| #90 | complete | complete | complete | metadata-only seed bundle verified; commit/push pending |
+| #90 | complete | complete | complete | metadata-only seed bundle verified and pushed at `0e359d76` |
 | #91 | blocked | blocked | blocked | waits for #90 metadata |
 | #92 | blocked | blocked | blocked | waits for #90 and stream definitions |
 | #93 | blocked | blocked | blocked | avoid `api_surface.json` collision with #90 seed |

@@ -48,3 +48,4 @@ make verify
 - `./pm docs validate --connectors-dir docs/connectors`: passed after adding Bitbucket connector docs/catalog artifacts.
 - `make verify`: passed.
 - `go run ./cmd/connectorgen validate internal/connectors/defs`: passed; `connectors_checked=548`, `findings=0`.
+- Commit/push checkpoint: `0e359d76` pushed to `feat/79-bitbucket-cli-parity`.

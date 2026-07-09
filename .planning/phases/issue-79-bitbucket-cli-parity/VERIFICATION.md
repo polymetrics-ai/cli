@@ -66,4 +66,4 @@ make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-Results: passed; connector validation reported `connectors_checked=548`, `findings=0`, `warnings=0`; `make verify` passed.
+Results: passed; connector validation reported `connectors_checked=548`, `findings=0`, `warnings=0`; `make verify` passed. Commit/push checkpoint: `0e359d76` pushed to `feat/79-bitbucket-cli-parity`.

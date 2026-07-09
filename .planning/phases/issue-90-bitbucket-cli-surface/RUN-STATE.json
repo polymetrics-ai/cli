@@ -1,6 +1,6 @@
 {
   "phase": "issue-90-bitbucket-cli-surface",
-  "status": "verified_green_slice_complete",
+  "status": "pushed_verified_green_slice",
   "parent_issue": 79,
   "sub_issue": 90,
   "parent_branch": "feat/79-bitbucket-cli-parity",
@@ -29,7 +29,7 @@
     "golang-spf13-cobra"
   ],
   "verificationPassed": true,
-  "verificationNotes": "Focused #90 gates and full local gates passed, including go vet ./..., go test ./..., go build ./cmd/pm, make verify, docs validate, and connectorgen validate.",
+  "verificationNotes": "Focused #90 gates and full local gates passed, including go vet ./..., go test ./..., go build ./cmd/pm, make verify, docs validate, and connectorgen validate. Commit pushed: 0e359d76.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -50,6 +50,11 @@
       "cycle": "verify",
       "decision": "local_critical_path",
       "reason": "Full required gates passed after updating connector catalog/bundle counts and generated Bitbucket docs/website artifacts."
+    },
+    {
+      "cycle": "commit-push",
+      "decision": "pushed_to_parent_branch",
+      "reason": "#90 verified slice committed and pushed to feat/79-bitbucket-cli-parity at 0e359d76."
     }
   ],
   "updated_at": "2026-07-09T00:00:00Z"
