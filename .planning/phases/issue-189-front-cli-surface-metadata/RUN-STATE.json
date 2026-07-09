@@ -4,6 +4,7 @@
   "parent_issue": 188,
   "sub_issue": 189,
   "parent_pr": 224,
+  "sub_pr": 231,
   "parent_branch": "feat/188-front-cli-parity",
   "branch": "feat/189-front-cli-surface-metadata",
   "gsd": {
@@ -51,6 +52,11 @@
       "cycle": "broader-verification",
       "decision": "not_spawned_verification_blocked",
       "reason": "go vet ./... and go build ./cmd/pm passed; go test ./... timed out in internal/connectors/certify TestWriteStagesSkipWhenDisabled after 10m."
+    },
+    {
+      "cycle": "sub-pr",
+      "decision": "local_critical_path",
+      "reason": "Opened draft sub-PR #231 against feat/188-front-cli-parity."
     }
   ],
   "updated_at": "2026-07-09T19:36:00Z"

@@ -108,6 +108,14 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 
 Result: pass; 547 connectors checked, 0 findings.
 
+## Sub-PR
+
+```bash
+gh pr create --draft --base feat/188-front-cli-parity --head feat/189-front-cli-surface-metadata --title "feat(front): add CLI surface metadata" --body-file /tmp/front_189_pr_body.md
+```
+
+Result: pass; draft sub-PR opened at https://github.com/polymetrics-ai/cli/pull/231.
+
 ## CLI help/docs/website parity
 
 Runtime renderer/docs/website changes are #190. For this slice, verify metadata only and record that

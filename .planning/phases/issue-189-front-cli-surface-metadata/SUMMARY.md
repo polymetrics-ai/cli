@@ -1,6 +1,6 @@
 # Summary: Front CLI Surface Metadata
 
-Status: implementation slice in progress.
+Status: draft sub-PR open (#231).
 
 ## Completed
 
@@ -15,12 +15,13 @@ Status: implementation slice in progress.
 - Focused green gates passed: `jq empty`, `go test ./cmd/connectorgen -run CLISurface`, `go test ./internal/connectors/engine -run CLISurface`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `git diff --check`.
 - Broader `go vet ./...` and `go build ./cmd/pm` passed.
 - Broader `go test ./...` is blocked by an existing/full-suite timeout in `internal/connectors/certify` (`TestWriteStagesSkipWhenDisabled` timed out after 10m), not by the Front metadata files.
+- Opened draft sub-PR #231 against the parent branch: https://github.com/polymetrics-ai/cli/pull/231.
 
 ## Next
 
-1. Commit and push this implementation checkpoint.
-2. Open a draft #189 sub-PR against the parent branch with the full-test timeout recorded.
-3. Decide whether to keep #189 as a draft/partial metadata PR or wait for #192 full operation-ledger capture before marking #189 complete.
+1. Monitor draft sub-PR #231 checks.
+2. Decide whether to keep #189 as a draft/partial metadata PR or wait for #192 full operation-ledger capture before marking #189 complete.
+3. If proceeding, route automated review per stacked PR rules; if CodeRabbit skips the non-default base, use parent PR #224 fallback after integration.
 
 ## Safety notes
 

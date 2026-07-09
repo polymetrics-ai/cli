@@ -125,6 +125,12 @@
       "decision": "local_critical_path",
       "issue_numbers": [189],
       "reason": "Created local stacked branch feat/189-front-cli-surface-metadata and #189 plan checkpoint before connector edits."
+    },
+    {
+      "timestamp": "2026-07-09T19:36:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [189],
+      "reason": "Opened draft sub-PR #231 against feat/188-front-cli-parity."
     }
   ],
   "subissues": [
@@ -132,21 +138,21 @@
       "number": 189,
       "url": "https://github.com/polymetrics-ai/cli/issues/189",
       "branch": "feat/189-front-cli-surface-metadata",
-      "pr_url": "",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/231",
       "worker": "local_critical_path",
-      "status": "worker_in_progress",
+      "status": "sub_pr_open",
       "write_scope": ["internal/connectors/defs/front", ".planning/phases/issue-189-front-cli-surface-metadata"],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-188-front-cli-parity",
-      "verification": "plan checkpoint pending commit",
+      "verification": "focused gates passed; go vet and go build passed; go test full suite timed out in internal/connectors/certify TestWriteStagesSkipWhenDisabled",
       "automated_review": {
         "primary_route": "blocked",
-        "status": "blocked",
-        "head_sha": "",
-        "reviewed_range": "",
+        "status": "pending",
+        "head_sha": "285da4ce",
+        "reviewed_range": "pending",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "#189 local critical-path branch feat/189-front-cli-surface-metadata in progress; review pending sub-PR",
-        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/224"
+        "disposition_summary": "Draft sub-PR #231 open; automated review pending and may require parent PR fallback for non-default base.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/231"
       }
     },
     {
