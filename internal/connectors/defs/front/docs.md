@@ -64,5 +64,8 @@ tag, teammate, and channel data.
 
 - Batch defaults: read_page_size=50.
 - API coverage includes 6 stream-backed endpoint group(s).
+- CLI surface metadata currently marks those 6 stream-backed commands as implemented and leaves
+  representative write, direct-read, binary, admin, analytics, and event surfaces planned for
+  follow-up issue lanes (#190-#195).
 - Other documented endpoints are not exposed by this connector where they are classified as
   non_data_endpoint=1, out_of_scope=3.

@@ -1,0 +1,363 @@
+{
+  "tagline": "Work with Front conversations, contacts, inboxes, teammates, tags, and channels from the command line.",
+  "usage": "pm front <command> <subcommand> [flags]",
+  "groups": [
+    {
+      "id": "core",
+      "title": "Core read commands",
+      "commands": [
+        "conversations",
+        "contacts",
+        "inboxes",
+        "teammates",
+        "tags",
+        "channels"
+      ]
+    },
+    {
+      "id": "planned_reads",
+      "title": "Planned read commands",
+      "commands": [
+        "accounts",
+        "messages",
+        "comments",
+        "analytics",
+        "events",
+        "links",
+        "views"
+      ]
+    },
+    {
+      "id": "planned_writes",
+      "title": "Planned reverse-ETL commands",
+      "commands": [
+        "message",
+        "conversation",
+        "contact",
+        "tag",
+        "account",
+        "channel"
+      ]
+    },
+    {
+      "id": "binary_and_local",
+      "title": "Binary and local-workflow commands",
+      "commands": [
+        "attachments"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved Front connector credential and account scope.",
+      "maps_to": "connection"
+    }
+  ],
+  "commands": [
+    {
+      "path": "conversations list",
+      "summary": "List conversations",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversations",
+      "source_url": "https://dev.frontapp.com/reference/list-conversations",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Records per page; maps to the connector page_limit setting.",
+          "maps_to": "query.limit"
+        }
+      ],
+      "examples": [
+        "pm front conversations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "List contacts",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://dev.frontapp.com/reference/list-contacts",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Records per page; maps to the connector page_limit setting.",
+          "maps_to": "query.limit"
+        }
+      ],
+      "examples": [
+        "pm front contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "inboxes list",
+      "summary": "List inboxes",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "inboxes",
+      "source_url": "https://dev.frontapp.com/reference/list-inboxes",
+      "examples": [
+        "pm front inboxes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inboxes"
+        }
+      ]
+    },
+    {
+      "path": "teammates list",
+      "summary": "List teammates",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teammates",
+      "source_url": "https://dev.frontapp.com/reference/list-teammates",
+      "examples": [
+        "pm front teammates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teammates"
+        }
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "List tags",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://dev.frontapp.com/reference/list-tags",
+      "examples": [
+        "pm front tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ]
+    },
+    {
+      "path": "channels list",
+      "summary": "List channels",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "channels",
+      "source_url": "https://dev.frontapp.com/reference/list-channels",
+      "examples": [
+        "pm front channels list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/channels"
+        }
+      ]
+    },
+    {
+      "path": "accounts list",
+      "summary": "List accounts",
+      "intent": "etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/list-accounts",
+      "notes": "Planned durable stream; #192 owns full operation-ledger classification and #191 owns stream implementation."
+    },
+    {
+      "path": "accounts create",
+      "summary": "Create an account",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/create-account",
+      "risk": "Creates an account in Front.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Planned typed write; not implemented in this metadata slice."
+    },
+    {
+      "path": "accounts update",
+      "summary": "Update an account",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/update-account",
+      "risk": "Mutates an account in Front.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Planned typed write; not implemented in this metadata slice."
+    },
+    {
+      "path": "accounts delete",
+      "summary": "Delete an account",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/delete-account",
+      "risk": "Deletes an account association in Front and may affect account-linked records.",
+      "approval": "Destructive reverse ETL writes require plan, preview, approval, execute, and typed confirmation.",
+      "notes": "Destructive write candidate for #195 policy review; not implemented in this metadata slice."
+    },
+    {
+      "path": "messages get",
+      "summary": "Fetch a message",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/get-message",
+      "notes": "Bounded direct-read candidate; #193 owns implementation and output policy."
+    },
+    {
+      "path": "messages send",
+      "summary": "Send a message",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/send-message",
+      "risk": "Sends a visible message through Front.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Typed write candidate; must not become a raw HTTP write escape hatch."
+    },
+    {
+      "path": "drafts create",
+      "summary": "Create a draft message",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/create-draft",
+      "risk": "Creates a draft message in Front.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Typed write candidate for #195 policy review."
+    },
+    {
+      "path": "comments list",
+      "summary": "List conversation comments",
+      "intent": "etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/list-conversation-comments",
+      "notes": "Sub-resource stream candidate; #191 owns stream implementation."
+    },
+    {
+      "path": "comments create",
+      "summary": "Create a conversation comment",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/create-comment",
+      "risk": "Adds a visible internal comment to a Front conversation.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Typed write candidate for #195 policy review."
+    },
+    {
+      "path": "conversation update",
+      "summary": "Update a conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/update-conversation",
+      "risk": "Mutates conversation metadata or state in Front.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Typed write candidate; not implemented in this metadata slice."
+    },
+    {
+      "path": "conversation search",
+      "summary": "Search conversations",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/search-conversations",
+      "notes": "Bounded read-query candidate; #193/#194 own query/body support and output policy."
+    },
+    {
+      "path": "analytics export create",
+      "summary": "Create an analytics export",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/create-analytics-export",
+      "risk": "Creates an analytics export job in Front.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Asynchronous report/export candidate; #194 owns provider-specific body/query support."
+    },
+    {
+      "path": "analytics export fetch",
+      "summary": "Fetch an analytics export",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/get-analytics-export",
+      "notes": "Bounded direct-read/report metadata candidate; binary/download handling is #194 scope."
+    },
+    {
+      "path": "attachments download",
+      "summary": "Download an attachment",
+      "intent": "local_workflow",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/download-attachment",
+      "notes": "Binary/file candidate; #194 must define bounded output policy before execution."
+    },
+    {
+      "path": "events list",
+      "summary": "List events",
+      "intent": "etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/list-events",
+      "notes": "Durable event stream candidate for #191."
+    },
+    {
+      "path": "links list",
+      "summary": "List links",
+      "intent": "etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/list-links",
+      "notes": "Durable stream candidate for #191."
+    },
+    {
+      "path": "views list",
+      "summary": "List views",
+      "intent": "etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/list-views",
+      "notes": "Durable stream candidate for #191."
+    },
+    {
+      "path": "admin rules list",
+      "summary": "List rules",
+      "intent": "etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/list-rules",
+      "notes": "Admin/configuration read candidate; #192/#195 own risk classification."
+    },
+    {
+      "path": "admin rules update",
+      "summary": "Update a rule",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://dev.frontapp.com/reference/update-rule",
+      "risk": "Mutates Front automation behavior.",
+      "approval": "Admin reverse ETL writes require plan, preview, approval, execute, and typed confirmation where destructive.",
+      "notes": "Sensitive/admin write candidate for #195; not implemented in this metadata slice."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "front safety",
+      "summary": "Front writes remain gated by reverse ETL plan, preview, approval, execute; this metadata does not expose raw HTTP writes."
+    },
+    {
+      "name": "front binary",
+      "summary": "Front attachments and exports require bounded binary/file output policies before execution."
+    }
+  ]
+}

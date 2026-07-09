@@ -28,7 +28,7 @@
         "internal/connectors/defs/front",
         ".planning/phases/issue-189-front-cli-surface-metadata"
       ],
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "local_critical_path"
     },
     {
       "number": 192,
@@ -118,7 +118,25 @@
       "timestamp": "2026-07-09T19:36:00Z",
       "decision": "not_spawned_runtime_capability_missing",
       "issue_numbers": [189],
-      "reason": "The active API session has no Pi subagent tool; #189 is ready but cannot be spawned here."
+      "reason": "The active API session has no Pi subagent tool; #189 could not be spawned."
+    },
+    {
+      "timestamp": "2026-07-09T19:36:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [189],
+      "reason": "Created local stacked branch feat/189-front-cli-surface-metadata and #189 plan checkpoint before connector edits."
+    },
+    {
+      "timestamp": "2026-07-09T19:36:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [189],
+      "reason": "Opened draft sub-PR #231 against feat/188-front-cli-parity."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "coderabbit_auto_pending",
+      "issue_numbers": [189],
+      "reason": "Marked sub-PR #231 ready after CI passed; CodeRabbit skipped the draft revision, so automatic review coverage remains pending."
     }
   ],
   "subissues": [
@@ -126,21 +144,21 @@
       "number": 189,
       "url": "https://github.com/polymetrics-ai/cli/issues/189",
       "branch": "feat/189-front-cli-surface-metadata",
-      "pr_url": "",
-      "worker": "not_spawned_runtime_capability_missing",
-      "status": "worker_ready",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/231",
+      "worker": "local_critical_path",
+      "status": "ready_sub_pr_open",
       "write_scope": ["internal/connectors/defs/front", ".planning/phases/issue-189-front-cli-surface-metadata"],
-      "worker_directory": "",
-      "verification": "pending",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-188-front-cli-parity",
+      "verification": "focused gates passed; go vet and go build passed; go test full suite timed out in internal/connectors/certify TestWriteStagesSkipWhenDisabled",
       "automated_review": {
         "primary_route": "blocked",
-        "status": "blocked",
-        "head_sha": "",
-        "reviewed_range": "",
+        "status": "pending",
+        "head_sha": "307be0c3",
+        "reviewed_range": "pending",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "pending sub-PR and parent PR review fallback if needed",
-        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/224"
+        "disposition_summary": "Sub-PR #231 marked ready after draft-skip; automatic review pending and may require parent PR fallback for non-default base.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/231"
       }
     },
     {

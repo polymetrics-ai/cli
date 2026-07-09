@@ -1,0 +1,68 @@
+{
+  "phase": "issue-189-front-cli-surface-metadata",
+  "status": "ready_sub_pr_open",
+  "parent_issue": 188,
+  "sub_issue": 189,
+  "parent_pr": 224,
+  "sub_pr": 231,
+  "parent_branch": "feat/188-front-cli-parity",
+  "branch": "feat/189-front-cli-surface-metadata",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase 189 --skip-research --tdd",
+    "programming_loop_prompt": "scripts/gsd prompt programming-loop init --phase issue-189-front-cli-surface-metadata --dry-run",
+    "programming_loop_status": "unavailable_unknown_command",
+    "manual_fallback": true
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-spf13-cobra",
+    "golang-spf13-viper",
+    "golang-lint"
+  ],
+  "verificationPassed": false,
+  "verificationStatus": "focused_gates_passed_go_vet_and_build_passed_go_test_full_suite_timeout",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No Pi subagent tool is available in this API session; #189 is being executed locally on a stacked branch after parent PR #224 was opened."
+    },
+    {
+      "cycle": "red-validation",
+      "decision": "local_critical_path",
+      "reason": "Captured failing metadata completeness check before connector edits."
+    },
+    {
+      "cycle": "green-metadata",
+      "decision": "local_critical_path",
+      "reason": "Added Front cli_surface.json and validated focused CLISurface/connectorgen gates."
+    },
+    {
+      "cycle": "broader-verification",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "go vet ./... and go build ./cmd/pm passed; go test ./... timed out in internal/connectors/certify TestWriteStagesSkipWhenDisabled after 10m."
+    },
+    {
+      "cycle": "sub-pr",
+      "decision": "local_critical_path",
+      "reason": "Opened draft sub-PR #231 against feat/188-front-cli-parity."
+    },
+    {
+      "cycle": "review-routing",
+      "decision": "coderabbit_auto_pending",
+      "reason": "PR #231 was marked ready after CodeRabbit skipped the draft; pushed a status-only update to trigger automatic review without a manual review command."
+    }
+  ],
+  "updated_at": "2026-07-09T19:36:00Z"
+}
