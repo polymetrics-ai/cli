@@ -31,11 +31,26 @@ FAIL	polymetrics.ai/cmd/connectorgen	0.384s
 
 This matches the expected failure: current Freshchat api surface has no `operation_ledger_version` and still uses legacy `excluded` rows.
 
-## Green target
+## Green result
 
-- Update `api_surface.json` to ledger mode and replace the three legacy excluded rows with blocked operation rows.
-- Preserve all existing stream/write coverage references.
-- `go run ./cmd/connectorgen validate internal/connectors/defs` reports zero findings.
+```bash
+gofmt -w cmd internal
+go test ./cmd/connectorgen -run TestFreshchatAPISurfaceOperationLedger
+go test ./cmd/connectorgen -run 'TestValidate_APISurfaceOperationLedger|TestValidate_CLISurface'
+go run ./cmd/connectorgen validate internal/connectors/defs
+```
+
+Results:
+
+- `go test ./cmd/connectorgen -run TestFreshchatAPISurfaceOperationLedger`: pass.
+- `go test ./cmd/connectorgen -run 'TestValidate_APISurfaceOperationLedger|TestValidate_CLISurface'`: pass.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
+
+Green changes:
+
+- Updated `api_surface.json` to ledger mode and replaced the three legacy excluded rows with blocked operation rows.
+- Preserved all existing stream/write coverage references.
+- Verified all Freshchat 34 endpoints are accounted: 18 streams, 13 writes, 3 blocked operations.
 
 ## Verification commands
 
