@@ -2,7 +2,7 @@
 
 Parent issue: #133
 Parent branch: `feat/133-gong-cli-parity`
-Parent PR: pending — `gh pr list --head feat/133-gong-cli-parity --base main` returned `[]` on 2026-07-09.
+Parent PR: https://github.com/polymetrics-ai/cli/pull/232 (draft, base `main`)
 Default branch: `main`
 
 ## GSD command path
@@ -67,7 +67,7 @@ Reason: this Pi API session exposes only `read`, `bash`, `edit`, and `write`; no
 2. Land green #144 slice locally.
 3. Commit only scoped files; do not add untracked `PI_CONNECTOR_PROMPT.md` unless explicitly requested.
 4. Push `feat/133-gong-cli-parity` after local targeted validation.
-5. Open draft parent PR to `main` with `Refs #133` if missing; keep draft until all required sub-issues are integrated and final verification passes.
+5. Keep draft parent PR #232 open until all required sub-issues are integrated and final verification passes.
 6. Do not merge parent PR to `main`; final merge is human-gated.
 
 ## Full-surface safety constraints

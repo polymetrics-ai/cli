@@ -3,6 +3,7 @@
 Issue: #144
 Parent issue: #133
 Parent branch: `feat/133-gong-cli-parity`
+Parent PR: https://github.com/polymetrics-ai/cli/pull/232 (draft)
 Suggested sub-branch: `feat/144-gong-operation-ledger`
 Active mode: local critical path inside parent branch because this Pi API session has no `subagent` tool.
 

@@ -2,7 +2,7 @@
   "phase": "issue-133-gong-cli-parity-parent",
   "parent_issue": 133,
   "branch": "feat/133-gong-cli-parity",
-  "status": "in_progress",
+  "status": "parent_pr_open",
   "gsd": {
     "doctor": "pass",
     "verify_pi": "pass",
@@ -27,6 +27,7 @@
       "issue_numbers": [144]
     }
   ],
+  "parentPR": "https://github.com/polymetrics-ai/cli/pull/232",
   "activeSubissue": 144,
   "updated_at": "2026-07-09T19:33:27Z"
 }

@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/133-gong-cli-parity",
   "parent_pr": {
-    "url": "pending",
+    "url": "https://github.com/polymetrics-ai/cli/pull/232",
     "base": "main",
     "head": "feat/133-gong-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -106,7 +106,7 @@
       "number": 144,
       "url": "https://github.com/polymetrics-ai/cli/issues/144",
       "branch": "feat/144-gong-operation-ledger",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
       "worker": "local_critical_path",
       "status": "sub_pr_green",
       "write_scope": "internal/connectors/defs/gong/api_surface.json; internal/connectors/defs/gong/docs.md; cmd/connectorgen connector-specific tests; .planning/phases/issue-144-gong-operation-ledger/**",
@@ -115,11 +115,11 @@
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
-        "head_sha": "pending",
+        "head_sha": "3febf19ac9aef5805a16927d7807d26096495860",
         "reviewed_range": "pending",
-        "coverage_route": "blocked",
+        "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "pending",
+        "disposition_summary": "Draft parent PR opened; automated review coverage pending until parent PR is ready or fallback route is chosen.",
         "disposition_url": "pending"
       }
     }
