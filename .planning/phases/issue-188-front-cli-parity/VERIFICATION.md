@@ -49,7 +49,7 @@ Result: pass; all issues are open and reference #188.
 gh pr list --head feat/188-front-cli-parity --base main --state all --json number,title,state,url,isDraft,headRefName,baseRefName
 ```
 
-Result: no parent PR exists yet.
+Result: no parent PR existed at initial check.
 
 ```bash
 python3 - <<'PY'
@@ -64,12 +64,21 @@ PY
 
 Result: pass; public Front docs index fetched (69,184 bytes). No credentials used.
 
-## Pending before parent seed commit
+## Parent seed verification
 
 ```bash
 jq empty .planning/phases/issue-188-front-cli-parity/*.json
 git diff --check
 ```
+
+Result: pass before the parent seed commit.
+
+```bash
+git push -u origin feat/188-front-cli-parity
+gh pr create --draft --base main --head feat/188-front-cli-parity --title "docs(front): seed CLI parity parent plan" --body-file /tmp/front_parent_pr_body.md
+```
+
+Result: pass; draft parent PR opened at https://github.com/polymetrics-ai/cli/pull/224.
 
 ## Required before implementation handoff
 

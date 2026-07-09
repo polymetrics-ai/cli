@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/188-front-cli-parity",
   "parent_pr": {
-    "url": "",
+    "url": "https://github.com/polymetrics-ai/cli/pull/224",
     "base": "main",
     "head": "feat/188-front-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -23,7 +23,7 @@
     {
       "number": 189,
       "status": "worker_ready",
-      "dependencies": ["parent_pr_open"],
+      "dependencies": [],
       "write_scope": [
         "internal/connectors/defs/front",
         ".planning/phases/issue-189-front-cli-surface-metadata"
@@ -110,9 +110,15 @@
     },
     {
       "timestamp": "2026-07-09T19:36:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [188],
+      "reason": "Pushed feat/188-front-cli-parity and opened draft parent PR #224 to main."
+    },
+    {
+      "timestamp": "2026-07-09T19:36:00Z",
       "decision": "not_spawned_runtime_capability_missing",
       "issue_numbers": [189],
-      "reason": "The active API session has no Pi subagent tool; #189 is ready after parent PR creation but cannot be spawned here."
+      "reason": "The active API session has no Pi subagent tool; #189 is ready but cannot be spawned here."
     }
   ],
   "subissues": [
@@ -133,8 +139,8 @@
         "reviewed_range": "",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "pending parent PR seed and sub-PR",
-        "disposition_url": ""
+        "disposition_summary": "pending sub-PR and parent PR review fallback if needed",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/224"
       }
     },
     {

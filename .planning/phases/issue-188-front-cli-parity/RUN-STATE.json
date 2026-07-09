@@ -2,7 +2,7 @@
   "phase": "issue-188-front-cli-parity",
   "status": "in_progress",
   "parent_issue": 188,
-  "parent_pr": null,
+  "parent_pr": 224,
   "parent_branch": "feat/188-front-cli-parity",
   "default_branch": "main",
   "gsd": {
@@ -39,6 +39,11 @@
       "cycle": "parent-planning",
       "decision": "local_critical_path",
       "reason": "Seed parent orchestration artifacts before production edits and before opening the parent PR."
+    },
+    {
+      "cycle": "parent-pr-seed",
+      "decision": "local_critical_path",
+      "reason": "Pushed feat/188-front-cli-parity and opened draft parent PR #224 to main."
     },
     {
       "cycle": "worker-dispatch",

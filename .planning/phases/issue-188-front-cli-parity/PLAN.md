@@ -2,7 +2,7 @@
 
 Parent issue: #188
 Parent branch: `feat/188-front-cli-parity`
-Parent PR: pending creation
+Parent PR: https://github.com/polymetrics-ai/cli/pull/224 (draft)
 Connector: `front`
 Definition folder: `internal/connectors/defs/front/`
 
@@ -135,7 +135,7 @@ Initial parent seed:
 
 - [ ] `jq empty .planning/phases/issue-188-front-cli-parity/*.json`
 - [ ] `git diff --check`
-- [ ] confirm parent PR exists after push
+- [x] confirm parent PR exists after push (`https://github.com/polymetrics-ai/cli/pull/224`)
 
 Issue implementation gates before handoff:
 

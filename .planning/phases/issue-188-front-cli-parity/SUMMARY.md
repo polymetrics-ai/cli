@@ -9,18 +9,18 @@ Status: in progress.
 - Generated a GSD planning prompt with `scripts/gsd prompt plan-phase 188 --skip-research --tdd`.
 - Confirmed `scripts/gsd prompt programming-loop ...` is unavailable in the shell adapter and recorded manual GSD fallback.
 - Read parent issue #188 and sub-issues #189-#195.
-- Confirmed no parent PR currently exists for `feat/188-front-cli-parity`.
+- Confirmed no parent PR existed initially for `feat/188-front-cli-parity`.
 - Inspected the current Front bundle baseline: 10 API entries, 6 streams, no writes.
 - Fetched the public Front `llms.txt` index without credentials.
 - Created parent orchestration plan, TDD ledger, verification checklist, source list, run state, and orchestration state.
+- Pushed `feat/188-front-cli-parity` and opened draft parent PR #224: https://github.com/polymetrics-ai/cli/pull/224.
 
 ## Current blocker / spawn decision
 
 No subagent worker was spawned because this API session does not expose the Pi `subagent` tool.
 Recorded blocker: `not_spawned_runtime_capability_missing`.
 
-Local critical path: commit this planning seed, push `feat/188-front-cli-parity`, open a draft parent
-PR to `main`, then run #189 locally or in an isolated Pi worker if available.
+Local critical path: run #189 locally from a stacked branch or in an isolated Pi worker if available.
 
 ## Safety notes
 
