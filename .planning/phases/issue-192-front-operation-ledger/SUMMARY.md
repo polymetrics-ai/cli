@@ -1,6 +1,6 @@
 # Summary: Front Operation Ledger (#192)
 
-Status: implementation checkpoint in progress.
+Status: sub-PR open (#242).
 
 ## Completed
 
@@ -12,6 +12,7 @@ Status: implementation checkpoint in progress.
 - Added `REST-OPERATION-SUMMARY.json` and `NON-REST-REFERENCE-LINKS.md` source artifacts for auditability.
 - Focused validation passed: JSON parse, method/count/classifier check, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `git diff --check`.
 - Broader focused gates passed: `go vet ./...`, `go test ./cmd/connectorgen -run APISurface`, `go test ./internal/connectors/engine -run APISurface`, and `go build ./cmd/pm`.
+- Opened sub-PR #242 against the parent branch: https://github.com/polymetrics-ai/cli/pull/242.
 
 ## Key source facts
 
@@ -23,6 +24,6 @@ Status: implementation checkpoint in progress.
 
 ## Next steps
 
-1. Commit and push the implementation checkpoint.
-2. Open a #192 sub-PR against `feat/188-front-cli-parity`.
-3. Route automated review; CodeRabbit/Copilot quota limits are currently blocking #189 and may also affect #192.
+1. Monitor sub-PR #242 checks and automated review coverage.
+2. Do not retry CodeRabbit immediately if quota/rate-limit comments appear; #189 already has a recorded CodeRabbit/Copilot quota blocker.
+3. Keep #192 open until automated review coverage or an allowed fallback is recorded.

@@ -89,6 +89,14 @@ go test ./...
 
 Result: not rerun in this slice. Previous #189 local run timed out in `internal/connectors/certify/TestWriteStagesSkipWhenDisabled`; GitHub Verify passed on #189.
 
+## Sub-PR
+
+```bash
+gh pr create --base feat/188-front-cli-parity --head feat/192-front-operation-ledger --title "feat(front): add operation ledger" --body-file /tmp/front_192_pr_body.md
+```
+
+Result: passed; sub-PR opened at https://github.com/polymetrics-ai/cli/pull/242.
+
 ## CLI/help/docs/website parity
 
 This slice changes operation-ledger metadata only. Runtime help renderer and docs/website command parity remain #190 scope. No executable CLI command is added here.

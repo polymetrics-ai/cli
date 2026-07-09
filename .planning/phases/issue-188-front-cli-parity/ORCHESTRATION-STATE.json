@@ -125,6 +125,12 @@
       "decision": "local_critical_path",
       "issue_numbers": [192],
       "reason": "CodeRabbit/Copilot review coverage for #189 is temporarily blocked by review/quota limits; starting #192 locally from the parent branch with separate evidence artifacts."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [192],
+      "reason": "Opened #192 sub-PR #242 against feat/188-front-cli-parity after focused verification passed."
     }
   ],
   "subissues": [
@@ -195,9 +201,9 @@
       "number": 192,
       "url": "https://github.com/polymetrics-ai/cli/issues/192",
       "branch": "feat/192-front-operation-ledger",
-      "pr_url": "",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/242",
       "worker": "local_critical_path",
-      "status": "implementation_checkpoint",
+      "status": "sub_pr_open",
       "write_scope": ["internal/connectors/defs/front/api_surface.json", ".planning/phases/issue-192-front-operation-ledger"],
       "worker_directory": "",
       "verification": "focused gates plus go vet/build passed; full go test not rerun due prior certify timeout blocker",
@@ -208,8 +214,8 @@
         "reviewed_range": "",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "#192 local critical-path branch feat/192-front-operation-ledger in progress; review pending sub-PR",
-        "disposition_url": ""
+        "disposition_summary": "Sub-PR #242 open; automated review pending and may be affected by current CodeRabbit/Copilot quota blockers.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/242"
       }
     },
     {

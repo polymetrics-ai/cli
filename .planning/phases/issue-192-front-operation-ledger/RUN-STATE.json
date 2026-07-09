@@ -2,9 +2,10 @@
   "issue": 192,
   "parent_issue": 188,
   "parent_pr": 224,
+  "sub_pr": 242,
   "branch": "feat/192-front-operation-ledger",
   "parent_branch": "feat/188-front-cli-parity",
-  "status": "implementation_checkpoint",
+  "status": "sub_pr_open",
   "gsd": {
     "plan_prompt": "scripts/gsd prompt plan-phase 192 --skip-research --tdd",
     "programming_loop_prompt": "scripts/gsd prompt programming-loop init --phase issue-192-front-operation-ledger --dry-run",
@@ -43,6 +44,11 @@
       "cycle": "green-ledger",
       "decision": "local_critical_path",
       "reason": "Rewrote Front api_surface.json in operation-ledger mode and validated focused gates."
+    },
+    {
+      "cycle": "sub-pr",
+      "decision": "local_critical_path",
+      "reason": "Opened sub-PR #242 against feat/188-front-cli-parity."
     }
   ]
 }
