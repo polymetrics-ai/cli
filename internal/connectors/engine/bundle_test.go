@@ -965,6 +965,25 @@ func TestBundleLoadEmbeddedMondayCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedMondayOperationLedger(t *testing.T) {
+	b, err := Load(os.DirFS("../../../internal/connectors/defs"), "monday")
+	if err != nil {
+		t.Fatalf("Load(os.DirFS, monday): %v", err)
+	}
+	if b.Surface == nil {
+		t.Fatalf("Monday Surface is nil; api_surface.json must load from disk")
+	}
+	if b.Surface.OperationLedgerVersion != 1 {
+		t.Fatalf("Monday operation_ledger_version = %d, want 1", b.Surface.OperationLedgerVersion)
+	}
+	if got := len(b.Surface.Endpoints); got != 367 {
+		t.Fatalf("Monday api_surface endpoints = %d, want 367", got)
+	}
+	if got := len(b.Operations); got != 367 {
+		t.Fatalf("Monday operations = %d, want 367", got)
+	}
+}
+
 func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

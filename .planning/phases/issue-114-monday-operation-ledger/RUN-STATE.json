@@ -1,0 +1,21 @@
+{
+  "phase": "issue-114-monday-operation-ledger",
+  "issue": 114,
+  "parent_issue": 82,
+  "branch": "feat/82-monday-cli-parity",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-114-monday-operation-ledger --skip-research",
+    "programming_loop": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "targeted #114 tests passed; full parent verification pending",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "#114 is a parent critical dependency for #115-#117; execute locally due missing subagent tool."
+    }
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}
