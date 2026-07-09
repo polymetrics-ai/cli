@@ -69,6 +69,7 @@
               "etl",
               "reverse_etl",
               "direct_read",
+              "binary",
               "direct_write",
               "local_workflow",
               "auth",

@@ -219,6 +219,7 @@
 - [high-level](high-level/MANUAL.md): Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipelines, custom fields, and form submissions for a location through the HighLevel REST API.
 - [hoorayhr](hoorayhr/MANUAL.md): Reads HoorayHR users, time-off, leave-types, and sick-leave records through the HoorayHR REST API using session-token authentication.
 - [hubplanner](hubplanner/MANUAL.md): Reads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through the Hubplanner REST API.
+- [hubspot](hubspot/MANUAL.md): HubSpot public API command-surface metadata scaffold. Safe execution lanes are added by the HubSpot CLI parity sub-issues.
 - [hugging-face-datasets](hugging-face-datasets/MANUAL.md): Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer REST API. Read-only; an optional user access token unlocks gated and private datasets.
 - [humanitix](humanitix/MANUAL.md): Reads Humanitix events, orders, tickets, and tags through the Humanitix public REST API.
 - [huntr](huntr/MANUAL.md): Reads Huntr organization members, candidates, activities, notes, and actions through the Huntr REST API.

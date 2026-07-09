@@ -1,0 +1,25 @@
+{
+  "name": "hubspot",
+  "display_name": "HubSpot",
+  "description": "HubSpot public API command-surface metadata scaffold. Safe execution lanes are added by the HubSpot CLI parity sub-issues.",
+  "integration_type": "api",
+  "docs_url": "https://developers.hubspot.com/docs/api/overview",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": false,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "metadata-only scaffold; HubSpot read execution is added through typed stream and direct-read lanes",
+    "write": "metadata-only scaffold; HubSpot mutations must be modeled as named reverse ETL actions before execution",
+    "approval": "reverse ETL writes require plan, preview, approval, execute; destructive/admin/sensitive actions require typed confirmation"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json"
+    },
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.private_app_token }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/crm/v3/objects/contacts",
+      "query": {
+        "limit": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "HubSpot private app token is missing, expired, or lacks the required scopes"
+      },
+      {
+        "status": 403,
+        "hint": "HubSpot token lacks access to the requested object or settings area"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "HubSpot API rate limit exceeded; retry after the provider window resets"
+      }
+    ]
+  },
+  "streams": []
+}

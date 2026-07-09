@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HubSpot Connection Specification",
+  "type": "object",
+  "required": ["private_app_token"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.hubapi.com",
+      "description": "HubSpot API base URL. Override only for approved test fixtures or regional endpoints."
+    },
+    "private_app_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "HubSpot private app access token supplied from an environment variable or stdin; never pass in command text."
+    }
+  }
+}
