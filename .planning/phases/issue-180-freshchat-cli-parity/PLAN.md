@@ -47,7 +47,7 @@ No generic HTTP write, shell, SQL write, raw mutation, credential prompt, or cre
 | ---: | --- | --- | --- | --- |
 | #181 | CLI surface metadata | parent PR open | `internal/connectors/defs/freshchat/cli_surface.json`, narrowly-scoped tests, Freshchat docs/api metadata if needed | merged: `feat/181-freshchat-cli-surface-metadata` → ef7cfda1 |
 | #182 | Help renderer/docs | #181 | help/docs renderer and docs surfaces | merged: `feat/182-freshchat-help-renderer` → f50a2298 |
-| #183 | Stream runner | #181/#184 | Freshchat streams/schemas/fixtures/runner tests | TBD |
+| #183 | Stream runner | #181/#184 | Freshchat streams/schemas/fixtures/runner tests | merged: `feat/183-freshchat-stream-runner` → fd49739a |
 | #184 | Operation ledger | #181 | Freshchat `api_surface.json`, operation ledger artifacts | merged: `feat/184-freshchat-operation-ledger` → fd359cfb |
 | #185 | Direct reads | #181/#184 | direct-read engine/metadata/tests | TBD |
 | #186 | Advanced query/binary engine | #184/#185 | engine/query/binary policy metadata/tests | TBD |

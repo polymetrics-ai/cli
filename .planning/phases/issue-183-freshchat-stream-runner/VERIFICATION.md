@@ -35,4 +35,6 @@ Results:
 - `make verify`: pass, including docs validation, smoke, lint, and connectorgen validation.
 - `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
 
+PR #247 CI passed: verify, CodeQL, govulncheck, Dependency Review, repository conventions, GSD workflow evidence, and issue guard. CodeRabbit status was success with `Review skipped: reviews are disabled for this base branch`, which is not counted as review completion.
+
 No credentialed Freshchat checks, no secret inspection, and no reverse ETL execution are in scope.

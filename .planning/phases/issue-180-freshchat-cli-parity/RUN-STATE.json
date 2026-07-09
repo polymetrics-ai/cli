@@ -1,7 +1,7 @@
 {
   "phase": "issue-180-freshchat-cli-parity",
   "parent_issue": 180,
-  "status": "subissues_181_182_184_integrated_parent_review_pending",
+  "status": "subissues_181_182_183_184_integrated_parent_review_pending",
   "gsd": {
     "doctor": "pass",
     "verify_pi": "pass",
@@ -12,7 +12,7 @@
     "manual_fallback": true
   },
   "verificationPassed": false,
-  "verificationBlocker": "parent PR opened as draft; #181/#182/#184 verified locally/CI and merged to parent, but parent CodeRabbit coverage/final verification not complete",
+  "verificationBlocker": "parent PR opened as draft; #181/#182/#183/#184 verified locally/CI and merged to parent, but parent CodeRabbit coverage/final verification not complete",
   "orchestrationDecisions": [
     {
       "timestamp": "2026-07-09T19:37:13Z",
@@ -136,7 +136,16 @@
       "issue_numbers": [
         183
       ]
+    },
+    {
+      "timestamp": "2026-07-09T23:31:42Z",
+      "cycle": "subissue-merge",
+      "decision": "merged_to_parent_branch",
+      "reason": "PR #247 checks passed and was squash-merged to parent branch as fd49739a; parent PR #226 CodeRabbit coverage remains pending because stacked review was skipped and parent PR is still draft.",
+      "issue_numbers": [
+        183
+      ]
     }
   ],
-  "updated_at": "2026-07-09T23:12:00Z"
+  "updated_at": "2026-07-09T23:31:42Z"
 }

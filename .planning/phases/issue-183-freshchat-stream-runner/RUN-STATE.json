@@ -2,7 +2,7 @@
   "phase": "issue-183-freshchat-stream-runner",
   "issue": 183,
   "parent_issue": 180,
-  "status": "verified_local",
+  "status": "merged_to_parent_review_pending",
   "gsd": {
     "plan_phase_command": "scripts/gsd prompt plan-phase issue-183-freshchat-stream-runner --skip-research",
     "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-183-freshchat-stream-runner --dry-run",
@@ -17,22 +17,38 @@
       "cycle": "issue-plan",
       "decision": "local_critical_path",
       "reason": "Issue #183 is unblocked by #181/#184 integration; Pi subagent tool is unavailable, so run locally on a stacked branch.",
-      "issue_numbers": [183]
+      "issue_numbers": [
+        183
+      ]
     },
     {
       "timestamp": "2026-07-09T23:24:00Z",
       "cycle": "red-green",
       "decision": "focused_green",
       "reason": "Added Freshchat stream replay regression coverage plus missing fixture pages; focused conformance and connectorgen validation gates pass.",
-      "issue_numbers": [183]
+      "issue_numbers": [
+        183
+      ]
     },
     {
       "timestamp": "2026-07-09T23:37:00Z",
       "cycle": "verification",
       "decision": "full_local_gates_passed",
       "reason": "Ran gofmt, go vet ./..., go test ./..., go build ./cmd/pm, make verify, and connectorgen validation successfully.",
-      "issue_numbers": [183]
+      "issue_numbers": [
+        183
+      ]
+    },
+    {
+      "timestamp": "2026-07-09T23:31:42Z",
+      "cycle": "subissue-merge",
+      "decision": "merged_to_parent_branch",
+      "reason": "PR #247 checks passed and was squash-merged to feat/180-freshchat-cli-parity as fd49739a; CodeRabbit skipped the stacked PR, so parent review coverage/fallback remains required.",
+      "issue_numbers": [
+        183,
+        180
+      ]
     }
   ],
-  "updated_at": "2026-07-09T23:37:00Z"
+  "updated_at": "2026-07-09T23:31:42Z"
 }

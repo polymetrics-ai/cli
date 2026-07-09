@@ -1,6 +1,6 @@
 # Summary — Issue #183 Freshchat stream runner
 
-Status: implemented locally; full verification passed.
+Status: merged to parent branch; parent automated review coverage pending.
 
 ## Notes
 
@@ -11,3 +11,5 @@ Status: implemented locally; full verification passed.
 - Added missing replay fixtures for the 12 Freshchat ETL streams that lacked fixture pages.
 - Focused conformance and connectorgen validation gates pass.
 - Full handoff gates pass: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs`.
+- PR #247 CI passed and was squash-merged into `feat/180-freshchat-cli-parity` as fd49739a.
+- CodeRabbit skipped the stacked PR because reviews are disabled for the non-default base; parent review coverage/fallback remains required.

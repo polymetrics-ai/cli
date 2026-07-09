@@ -51,7 +51,7 @@
     },
     {
       "number": 183,
-      "status": "in_progress_local_critical_path",
+      "status": "integrated_parent_review_pending",
       "dependencies": [
         181,
         184
@@ -61,7 +61,7 @@
         "internal/connectors/defs/freshchat/schemas/**",
         "internal/connectors/defs/freshchat/fixtures/**"
       ],
-      "decision": "started_local_critical_path"
+      "decision": "merged_to_parent_branch"
     },
     {
       "number": 184,
@@ -145,6 +145,14 @@
         183
       ],
       "reason": "Issue #183 stream runner is unblocked; no Pi subagent tool is available, so start locally on feat/183-freshchat-stream-runner."
+    },
+    {
+      "timestamp": "2026-07-09T23:31:42Z",
+      "decision": "merged_stacked_pr_to_parent_review_pending",
+      "issue_numbers": [
+        183
+      ],
+      "reason": "PR #247 CI passed and was squash-merged to parent branch as fd49739a; automated review remains pending through parent PR coverage/fallback."
     }
   ],
   "subissues": [
@@ -213,6 +221,28 @@
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
       },
       "merge_commit": "f50a229812acf6e7edf05822669769827c8fdee2"
+    },
+    {
+      "number": 183,
+      "url": "https://github.com/polymetrics-ai/cli/issues/183",
+      "branch": "feat/183-freshchat-stream-runner",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/247",
+      "worker": "local_critical_path",
+      "status": "merged_to_parent_review_pending",
+      "merge_commit": "fd49739af89ca6b2acb12c0be09232c053c98a7e",
+      "write_scope": "Freshchat implemented ETL stream replay fixtures and conformance regression coverage",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
+      "verification": "passed_local_and_ci",
+      "automated_review": {
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base_then_parent_pending",
+        "head_sha": "fd49739af89ca6b2acb12c0be09232c053c98a7e",
+        "reviewed_range": "pending_parent_pr_ready_or_approved_fallback",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_parent_ready_or_human_approved_backup",
+        "disposition_summary": "CodeRabbit skipped stacked PR #247 because reviews are disabled for the non-default base branch. Do not count #183 as review-complete until parent PR #226 receives coverage for fd49739a or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
+      }
     }
   ],
   "human_gates": [
@@ -224,5 +254,5 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T23:12:00Z"
+  "updated_at": "2026-07-09T23:31:42Z"
 }
