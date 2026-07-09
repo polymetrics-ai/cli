@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/79-bitbucket-cli-parity",
   "parent_pr": {
-    "url": null,
+    "url": "https://github.com/polymetrics-ai/cli/pull/128",
     "base": "main",
     "head": "feat/79-bitbucket-cli-parity",
     "draft": true,
-    "state": "pending_creation"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -22,51 +22,87 @@
   "ready_queue": [
     {
       "number": 90,
-      "status": "worker_ready",
-      "dependencies": ["parent planning seed"],
-      "write_scope": [".planning/phases/issue-90-bitbucket-cli-surface/**", "internal/connectors/defs/bitbucket/**", "cmd/connectorgen/*bitbucket*test.go"],
-      "decision": "local_critical_path"
+      "status": "verified_green_slice",
+      "dependencies": [
+        "parent planning seed"
+      ],
+      "write_scope": [
+        ".planning/phases/issue-90-bitbucket-cli-surface/**",
+        "internal/connectors/defs/bitbucket/**",
+        "cmd/connectorgen/*bitbucket*test.go"
+      ],
+      "decision": "local_critical_path_verified"
     },
     {
       "number": 91,
       "status": "planned",
-      "dependencies": [90],
-      "write_scope": ["help renderer paths", "Bitbucket docs"],
+      "dependencies": [
+        90
+      ],
+      "write_scope": [
+        "help renderer paths",
+        "Bitbucket docs"
+      ],
       "decision": "not_spawned_dependency_blocked"
     },
     {
       "number": 92,
       "status": "planned",
-      "dependencies": [90],
-      "write_scope": ["commandrunner", "Bitbucket defs"],
+      "dependencies": [
+        90
+      ],
+      "write_scope": [
+        "commandrunner",
+        "Bitbucket defs"
+      ],
       "decision": "not_spawned_dependency_blocked"
     },
     {
       "number": 93,
-      "status": "planned",
-      "dependencies": [90],
-      "write_scope": ["internal/connectors/defs/bitbucket/api_surface.json", "operation ledger tests"],
-      "decision": "not_spawned_write_scope_collision"
+      "status": "worker_ready",
+      "dependencies": [
+        90
+      ],
+      "write_scope": [
+        "internal/connectors/defs/bitbucket/api_surface.json",
+        "operation ledger tests"
+      ],
+      "decision": "ready_after_issue_90_commit_push"
     },
     {
       "number": 94,
       "status": "planned",
-      "dependencies": [93],
-      "write_scope": ["commandrunner direct-read paths", "Bitbucket defs"],
+      "dependencies": [
+        93
+      ],
+      "write_scope": [
+        "commandrunner direct-read paths",
+        "Bitbucket defs"
+      ],
       "decision": "not_spawned_dependency_blocked"
     },
     {
       "number": 95,
       "status": "planned",
-      "dependencies": [93],
-      "write_scope": ["GraphQL/advanced engine paths", "Bitbucket defs"],
+      "dependencies": [
+        93
+      ],
+      "write_scope": [
+        "GraphQL/advanced engine paths",
+        "Bitbucket defs"
+      ],
       "decision": "not_spawned_dependency_blocked"
     },
     {
       "number": 96,
       "status": "planned",
-      "dependencies": [93],
-      "write_scope": ["sensitive/admin policy metadata", "Bitbucket defs"],
+      "dependencies": [
+        93
+      ],
+      "write_scope": [
+        "sensitive/admin policy metadata",
+        "Bitbucket defs"
+      ],
       "decision": "not_spawned_dependency_blocked"
     }
   ],
@@ -74,8 +110,23 @@
     {
       "timestamp": "2026-07-09T00:00:00Z",
       "decision": "not_spawned_runtime_capability_missing",
-      "issue_numbers": [90],
+      "issue_numbers": [
+        90
+      ],
       "reason": "No subagent tool exposed in this Pi API session; execute #90 inline as local_critical_path."
+    },
+    {
+      "timestamp": "2026-07-09T00:00:00Z",
+      "decision": "not_spawned_commit_checkpoint_required",
+      "issue_numbers": [
+        93,
+        91,
+        92,
+        94,
+        95,
+        96
+      ],
+      "reason": "#90 verified in the parent worktree; commit/push checkpoint required before starting new overlapping Bitbucket definition lanes."
     }
   ],
   "subissues": [
@@ -85,10 +136,10 @@
       "branch": "feat/bitbucket-cli-surface",
       "pr_url": null,
       "worker": "local_critical_path",
-      "status": "worker_ready",
+      "status": "verified_green_slice",
       "write_scope": "Bitbucket seed bundle and CLI surface validation evidence",
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-79-bitbucket-cli-parity",
-      "verification": "pending",
+      "verification": "focused and full local gates passed: go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate",
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
@@ -96,7 +147,7 @@
         "reviewed_range": null,
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "not ready for review",
+        "disposition_summary": "parent PR is draft; automated review coverage pending after push/non-draft route",
         "disposition_url": null
       }
     },

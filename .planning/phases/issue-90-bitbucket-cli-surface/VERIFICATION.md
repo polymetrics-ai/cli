@@ -25,10 +25,26 @@ make verify
 
 - Runtime help: exempt for #90 because no dispatcher/help renderer behavior is changed.
 - Bare namespace behavior: exempt for #90.
-- `docs/cli/**`: exempt for #90.
-- `website/**`: run generation/idempotency only if connector metadata generation changes website data.
-- #91 owns rendered help/docs parity.
+- `docs/cli/**`: no CLI command behavior changed; connector manual/catalog docs were updated because docs validation requires every registered connector.
+- `website/**`: generated website connector data updated and re-run idempotently.
+- #91 still owns rendered Bitbucket runtime help/docs parity.
 
 ## Results
 
-Pending red/green implementation.
+- `jq . internal/connectors/defs/bitbucket/*.json`: passed.
+- `go test ./cmd/connectorgen -run TestBitbucketCLISurfaceMetadata -count=1`: red failed before bundle existed, green passed after implementation.
+- `go run ./cmd/connectorgen validate internal/connectors/defs --json`: passed; `connectors_checked=548`, `findings=0`, `warnings=0`.
+- `go test ./cmd/connectorgen -count=1`: passed.
+- `go test ./internal/connectors/engine ./internal/connectors/commandrunner ./cmd/connectorgen -count=1`: passed.
+- `go build ./cmd/pm`: passed.
+- `./pm help connectors`: passed before connector inspection.
+- `./pm connectors inspect bitbucket --json`: passed without reading credentials.
+- `cd website && pnpm run gen:website-data` twice: passed; second run idempotent.
+- `git diff --check`: passed.
+- `go test ./internal/cli ./internal/connectors/bundleregistry -count=1`: passed after catalog/bundle count updates.
+- `go vet ./...`: passed.
+- `go test ./...`: passed.
+- `go build ./cmd/pm`: passed after final changes.
+- `./pm docs validate --connectors-dir docs/connectors`: passed after adding Bitbucket connector docs/catalog artifacts.
+- `make verify`: passed.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: passed; `connectors_checked=548`, `findings=0`.

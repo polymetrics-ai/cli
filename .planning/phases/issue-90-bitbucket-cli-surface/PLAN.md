@@ -3,6 +3,7 @@
 Sub-issue: #90
 Parent issue: #79
 Parent branch: `feat/79-bitbucket-cli-parity`
+Parent PR: https://github.com/polymetrics-ai/cli/pull/128 (draft)
 Nominal sub-issue branch: `feat/bitbucket-cli-surface`
 Execution mode for this worktree: `local_critical_path` (no subagent tool available; #90 creates the seed Bitbucket bundle and should not run in parallel with #93).
 
@@ -97,7 +98,8 @@ This slice adds metadata only. #91 owns help rendering and connector docs update
 - Runtime `pm bitbucket --help`: not applicable yet; no dispatcher behavior added.
 - `pm help bitbucket`: not applicable yet; no runtime help topic added.
 - `docs/cli/**`: not applicable yet; no user-facing command behavior added.
-- `website/**`: not applicable unless generated connector data changes during validation.
+- `docs/connectors/**`: generated Bitbucket manual/catalog artifacts are applicable because `pm docs validate` requires every registered connector.
+- `website/**`: generated connector data changes are applicable because the Bitbucket bundle adds a catalog entry.
 
 ## Verification checklist
 
@@ -109,7 +111,7 @@ go test ./cmd/connectorgen -count=1
 go build ./cmd/pm
 ```
 
-Broader gates after a green slice as time permits:
+Broader gates after a green slice:
 
 ```bash
 gofmt -w cmd internal

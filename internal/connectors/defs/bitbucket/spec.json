@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bitbucket Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.bitbucket.org/2.0",
+      "description": "Bitbucket Cloud REST API base URL."
+    },
+    "workspace": {
+      "type": "string",
+      "description": "Optional Bitbucket workspace slug for future scoped reads."
+    },
+    "repo_slug": {
+      "type": "string",
+      "description": "Optional repository slug for future scoped reads."
+    },
+    "access_token": {
+      "type": "string",
+      "description": "Bitbucket OAuth or app password token supplied through the credential vault.",
+      "x-secret": true
+    }
+  }
+}

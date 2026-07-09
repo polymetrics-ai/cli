@@ -3,7 +3,7 @@
   "status": "in_progress",
   "parent_issue": 79,
   "parent_branch": "feat/79-bitbucket-cli-parity",
-  "parent_pr": null,
+  "parent_pr": "https://github.com/polymetrics-ai/cli/pull/128",
   "default_branch": "main",
   "gsd": {
     "doctor": "passed",
@@ -32,8 +32,8 @@
     "golang-spf13-cobra",
     "caveman"
   ],
-  "verificationPassed": false,
-  "verificationNotes": "Planning seed only. Full gates pending implementation.",
+  "verificationPassed": true,
+  "verificationNotes": "#90 focused gates and full local gates passed; parent remains in progress for #91-#96.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -49,6 +49,21 @@
       "cycle": "issue-90-start",
       "decision": "local_critical_path",
       "reason": "CLI surface lane creates the Bitbucket seed bundle and would collide with operation-ledger work; execute inline with TDD evidence."
+    },
+    {
+      "cycle": "issue-90-green",
+      "decision": "local_critical_path",
+      "reason": "Focused #90 tests, full defs validation, website data generation, and connector inspect passed."
+    },
+    {
+      "cycle": "post-90-ready-queue",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "#90 green slice needs commit/push checkpoint before starting #93 operation-ledger edits in the same paths."
+    },
+    {
+      "cycle": "issue-90-verified",
+      "decision": "local_critical_path",
+      "reason": "Full local gates passed, including make verify and connectorgen validate; ready for commit/push checkpoint before next lane."
     }
   ],
   "human_gates": [

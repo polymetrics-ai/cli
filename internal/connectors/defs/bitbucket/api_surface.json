@@ -1,0 +1,105 @@
+{
+  "api": "Bitbucket Cloud REST API 2.0",
+  "docs": "https://developer.atlassian.com/cloud/bitbucket/rest/",
+  "reviewed_at": "2026-07-09",
+  "operation_ledger_version": 1,
+  "scope": "Seed ledger for CLI surface metadata only. The full #93 operation ledger must replace this with all 331 official Swagger operations (GET 179, POST 50, PUT 48, DELETE 54). No Bitbucket endpoint is executable in this slice.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Repository detail is a safe direct-read candidate but no Bitbucket direct-read executor or output policy is implemented in #90.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-repositories/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pull request listing is an ETL candidate but stream execution is deferred to later Bitbucket lanes.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/issues",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Issue listing is an ETL candidate but stream execution is deferred to later Bitbucket lanes.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-issue-tracker/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Pipeline listing is an ETL candidate but stream execution is deferred to later Bitbucket lanes.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pipelines/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Download metadata and binary file transfer need a bounded binary/local-output policy before execution.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-downloads/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspace}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Workspace detail is a direct-read candidate; executor support is deferred.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-workspaces/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Repository deletion is destructive admin behavior and is not exposed as a connector write.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-repositories/"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pull request creation is a future reverse ETL candidate, but no write action or approval-gated executor is implemented in this metadata slice.",
+        "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/api-group-pullrequests/"
+      }
+    }
+  ]
+}

@@ -2,8 +2,9 @@
 
 ## Red evidence
 
-- Pending for implementation lanes. Parent orchestration setup is planning-only.
-- #90 will start with a focused red test for Bitbucket CLI surface/bundle validation before production Bitbucket defs are added.
+- Parent orchestration setup is planning-only.
+- #90 started with `go test ./cmd/connectorgen -run TestBitbucketCLISurfaceMetadata -count=1`, which failed because `internal/connectors/defs/bitbucket/cli_surface.json` did not exist yet.
+- Broader regression red: `go test ./...` initially failed in catalog-count tests after Bitbucket increased the registered connector/bundle counts.
 
 ## Green evidence
 
@@ -13,6 +14,8 @@
   - `scripts/gsd verify-pi`
   - `scripts/gsd list --json`
 - `scripts/gsd prompt plan-phase issue-79-bitbucket-cli-parity --skip-research --tdd` generated an official GSD planning prompt.
+- #90 metadata-only Bitbucket seed bundle, CLI surface, generated docs/catalog artifacts, and generated website data are green.
+- Full local gates passed: `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`.
 
 ## Manual GSD fallback
 
@@ -32,13 +35,14 @@ Fallback in use: manual GSD universal runtime loop with `.pi/prompts/pm-gsd-loop
 
 ## Refactor evidence
 
-- Not started.
+- Updated connector/catalog hard-coded count tests for the new Bitbucket bundle.
+- Reverted unrelated broad connector-manual formatting churn from `pm docs generate`; kept only Bitbucket docs/catalog additions needed by `pm docs validate`.
 
 ## Lanes
 
 | Issue | Red | Green | Refactor | Notes |
 |---:|---|---|---|---|
-| #90 | pending | pending | pending | first local critical path lane |
+| #90 | complete | complete | complete | metadata-only seed bundle verified; commit/push pending |
 | #91 | blocked | blocked | blocked | waits for #90 metadata |
 | #92 | blocked | blocked | blocked | waits for #90 and stream definitions |
 | #93 | blocked | blocked | blocked | avoid `api_surface.json` collision with #90 seed |

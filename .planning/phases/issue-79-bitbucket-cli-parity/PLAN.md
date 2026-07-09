@@ -3,7 +3,7 @@
 Parent issue: #79
 Parent branch: `feat/79-bitbucket-cli-parity`
 Default branch: `main`
-Parent PR: pending creation (no existing PR found for `feat/79-bitbucket-cli-parity` or legacy `feat/bitbucket-cli-parity` when checked with `gh pr list`).
+Parent PR: https://github.com/polymetrics-ai/cli/pull/128 (draft). Initial checks/review pending.
 
 ## GSD command path
 
@@ -62,8 +62,8 @@ Deliver Bitbucket connector CLI parity across metadata, help/docs, stream-backed
 
 1. Commit parent planning artifacts as a deliberate seed diff.
 2. Push `feat/79-bitbucket-cli-parity` and open a draft parent PR to `main` with `Refs #79`.
-3. Execute #90 locally because this runtime does not expose the Pi `subagent` tool and #90 owns the seed bundle needed by later lanes.
-4. After #90 is green, commit/push the green slice. If the slice is large enough to review independently, open a stacked PR targeting `feat/79-bitbucket-cli-parity`; otherwise keep it on the parent branch with issue-scoped evidence.
+3. Execute #90 locally because this runtime does not expose the Pi `subagent` tool and #90 owns the seed bundle needed by later lanes. (Verified green slice complete.)
+4. Commit/push the #90 verified slice. If the slice is large enough to review independently, open a stacked PR targeting `feat/79-bitbucket-cli-parity`; otherwise keep it on the parent branch with issue-scoped evidence.
 5. Continue ready queue after #90, preferring isolated workers/worktrees only if a runtime with mutating subagent isolation is available.
 
 ## TDD policy
@@ -74,7 +74,7 @@ Deliver Bitbucket connector CLI parity across metadata, help/docs, stream-backed
 
 ## CLI help/docs/website parity
 
-Applies to connector surfaces and future runtime help. #90 is metadata-only and must record docs/help parity as not-yet-executable. Later #91 owns rendered help/docs. Any code path that changes CLI behavior must verify:
+Applies to connector surfaces and future runtime help. #90 is metadata-only and records runtime command help as not-yet-executable, while adding generated connector manual/catalog and website data for the new bundle. Later #91 owns rendered Bitbucket runtime help/docs. Any code path that changes CLI behavior must verify:
 
 - `pm help <topic>` where applicable.
 - `pm <namespace>` bare behavior where applicable.
