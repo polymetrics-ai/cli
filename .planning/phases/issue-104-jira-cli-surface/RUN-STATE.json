@@ -1,0 +1,39 @@
+{
+  "phase": "issue-104-jira-cli-surface",
+  "parentIssue": 81,
+  "issue": 104,
+  "branch": "feat/81-jira-cli-parity",
+  "status": "planned",
+  "gsd": {
+    "planCommand": "scripts/gsd prompt plan-phase issue-104-jira-cli-surface --skip-research",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase issue-104-jira-cli-surface --dry-run",
+    "programmingLoopStatus": "unavailable_unknown_command",
+    "manualFallback": true
+  },
+  "verificationPassed": false,
+  "verificationSummary": "Planning complete; red test pending.",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T12:49:58Z",
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No Pi subagent tool is available and #104 is the first parent-unblocking metadata lane."
+    }
+  ],
+  "redTests": [
+    {
+      "command": "go test ./internal/connectors/engine -run TestBundleLoadEmbeddedJiraCLISurface -count=1",
+      "status": "pending"
+    }
+  ],
+  "humanGates": [
+    "new dependencies",
+    "auth scope changes",
+    "secrets or credentialed connector checks",
+    "destructive external actions",
+    "generic write tools",
+    "reverse ETL execution",
+    "parent PR merge to main"
+  ],
+  "updatedAt": "2026-07-09T12:49:58Z"
+}
