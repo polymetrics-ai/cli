@@ -1,7 +1,7 @@
 {
   "phase": "issue-172-freshdesk-cli-parity",
   "issue": 172,
-  "status": "in_progress",
+  "status": "parent_pr_open",
   "gsd": {
     "doctor": "passed",
     "verify_pi": "passed",
@@ -42,6 +42,6 @@
     "refactorEvidence": []
   },
   "verificationPassed": false,
-  "verificationNotes": "Planning/red-baseline only; full verification pending implementation.",
-  "updated_at": "2026-07-09T19:35:31Z"
+  "verificationNotes": "Planning/red-baseline only; draft parent PR #222 opened; full verification pending implementation.",
+  "updated_at": "2026-07-09T19:40:00Z"
 }

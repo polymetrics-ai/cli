@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/172-freshdesk-cli-parity",
   "parent_pr": {
-    "url": "",
+    "url": "https://github.com/polymetrics-ai/cli/pull/222",
     "base": "main",
     "head": "feat/172-freshdesk-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -99,7 +99,7 @@
         "reviewed_range": "",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "parent PR not yet opened",
+        "disposition_summary": "draft parent PR #222 opened; automated review coverage pending implementation and ready-for-review transition",
         "disposition_url": ""
       }
     }
@@ -114,5 +114,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T19:35:31Z"
+  "updated_at": "2026-07-09T19:40:00Z"
 }

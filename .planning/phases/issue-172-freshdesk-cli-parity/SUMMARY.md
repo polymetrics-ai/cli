@@ -1,6 +1,6 @@
 # Summary: Freshdesk CLI Parity Parent
 
-Status: planning initialized; first implementation lane is #173.
+Status: planning initialized; draft parent PR #222 is open; first implementation lane is #173.
 
 ## Completed
 
@@ -9,6 +9,7 @@ Status: planning initialized; first implementation lane is #173.
 - Verified GSD adapter health with `scripts/gsd doctor`, `scripts/gsd verify-pi`, and `scripts/gsd list --json`.
 - Recorded programming-loop command gap: `scripts/gsd prompt programming-loop ...` is not present in the current registry; manual universal-loop fallback is active.
 - Captured red baseline: Freshdesk `api_surface.json` has 10 entries, not 170, and `cli_surface.json` is absent.
+- Opened draft parent PR #222 from `feat/172-freshdesk-cli-parity` to `main`.
 
 ## Current Decision
 
@@ -16,6 +17,6 @@ Execute #173 inline as the local critical path because this Pi harness has no `s
 
 ## Next
 
-1. Commit/push this planning checkpoint to `feat/172-freshdesk-cli-parity`.
-2. Open/confirm a draft parent PR from `feat/172-freshdesk-cli-parity` to `main`.
-3. Implement #173 metadata/CLI-surface slice with TDD/validation evidence.
+1. Implement #173 metadata/CLI-surface slice with TDD/validation evidence.
+2. Push the #173 green slice to the parent branch or split to a stacked branch if the diff grows beyond metadata scope.
+3. Re-evaluate the remaining sub-issue queue after #173 lands.

@@ -2,7 +2,7 @@
 
 Parent issue: #172
 Parent branch: `feat/172-freshdesk-cli-parity`
-Parent PR: pending draft PR creation
+Parent PR: https://github.com/polymetrics-ai/cli/pull/222 (draft)
 Default branch: `main`
 Connector: `freshdesk`
 
