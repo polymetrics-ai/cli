@@ -7,8 +7,8 @@
     "programming_loop": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
     "manual_fallback": true
   },
-  "verificationPassed": false,
-  "verificationBlocker": "targeted all-ops tests passed; full parent verification pending",
+  "verificationPassed": true,
+  "verificationBlocker": "local gates passed; PR CI/review pending",
   "orchestrationDecisions": [
     {
       "cycle": "plan",

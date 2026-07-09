@@ -15,3 +15,10 @@ Results:
 - `go test ./internal/connectors/bundleregistry -run 'TestMondayGuideIncludesCLISurfaceHelp' -count=1` — pass.
 - `go test ./internal/connectors/commandrunner -run 'TestRunMonday' -count=1` — pass.
 - `go run ./cmd/connectorgen validate internal/connectors/defs --json` — pass: 547 connectors, 0 findings, 0 warnings.
+- Full gates passed after the all-ops update:
+  - `gofmt -w cmd internal`
+  - `go vet ./...`
+  - `go test ./...`
+  - `go build ./cmd/pm`
+  - `go run ./cmd/connectorgen validate internal/connectors/defs`
+  - `make verify`

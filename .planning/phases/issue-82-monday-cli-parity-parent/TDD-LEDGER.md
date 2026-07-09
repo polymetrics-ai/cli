@@ -18,4 +18,4 @@ Manual programming-loop fallback is active because `scripts/gsd prompt programmi
 
 ## Current red target
 
-All #111-#117 red/green slices are captured; current target is parent PR verification/review readiness.
+All #111-#117 red/green slices are captured. Additional all-ops update captured in `issue-82-monday-all-ops-update`: red test showed unmodeled blocked rows; green mapped all 367 operations (5 streams, 82 direct reads, 280 write actions) with Monday WriteHook safety gate.
