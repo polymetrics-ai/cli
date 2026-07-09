@@ -29,7 +29,7 @@
     "golang-graphql",
     "golang-lint"
   ],
-  "status": "pr_open_checks_pending",
+  "status": "pr_open_review_blocked_auto_skipped",
   "verificationPassed": true,
   "verificationBlocker": "none",
   "orchestrationDecisions": [
@@ -57,6 +57,11 @@
       "cycle": "sub_pr",
       "decision": "opened_stacked_pr",
       "reason": "opened https://github.com/polymetrics-ai/cli/pull/239 against #134 branch because #137 depends on #134 scaffold"
+    },
+    {
+      "cycle": "automated_review",
+      "decision": "blocked_auto_skipped_no_review_artifact",
+      "reason": "CodeRabbit auto skipped stacked PR because base is non-default; Copilot reviewer API request returned no active reviewer; coverage must route through parent PR after integration or human fallback"
     }
   ],
   "human_gates": [
