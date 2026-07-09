@@ -121,6 +121,15 @@ var mutationMethods = map[string]bool{
 	"DELETE": true,
 }
 
+func isReadOnlySurfaceMethod(method string) bool {
+	switch strings.ToUpper(strings.TrimSpace(method)) {
+	case "GET", "HEAD":
+		return true
+	default:
+		return false
+	}
+}
+
 // requiredDocHeadings are the fixed docs.md headings (design §F.6 /
 // DATA-MODEL §1).
 var requiredDocHeadings = []string{
@@ -621,10 +630,10 @@ func checkAPISurface(b engine.Bundle) []Finding {
 						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead),
 					})
 				}
-				if !strings.EqualFold(ep.Method, "GET") {
+				if !isReadOnlySurfaceMethod(ep.Method) {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path),
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET or HEAD", i, ep.Method, ep.Path),
 					})
 				}
 			}

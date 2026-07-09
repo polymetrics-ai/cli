@@ -987,14 +987,23 @@ func TestBundleLoadGitLabOperationLedgerFromDisk(t *testing.T) {
 	}
 	coveredStreams := map[string]bool{}
 	directReads := map[string]bool{}
+	coveredWrites := map[string]bool{}
 	blockedModels := map[string]int{}
+	coveredEndpointRows := 0
 	for _, ep := range b.Surface.Endpoints {
 		if ep.CoveredBy != nil {
+			coveredEndpointRows++
 			if ep.CoveredBy.Stream != "" {
 				coveredStreams[ep.CoveredBy.Stream] = true
 			}
 			if ep.CoveredBy.DirectRead != "" {
 				directReads[ep.CoveredBy.DirectRead] = true
+			}
+			for _, command := range ep.CoveredBy.DirectReads {
+				directReads[command] = true
+			}
+			if ep.CoveredBy.Write != "" {
+				coveredWrites[ep.CoveredBy.Write] = true
 			}
 			continue
 		}
@@ -1013,10 +1022,14 @@ func TestBundleLoadGitLabOperationLedgerFromDisk(t *testing.T) {
 			t.Fatalf("direct-read command %q missing api_surface coverage", command)
 		}
 	}
-	for _, model := range []string{"direct_read", "binary_read", "sensitive_reverse_etl", "admin_reverse_etl", "destructive_action"} {
-		if blockedModels[model] == 0 {
-			t.Fatalf("blocked model %q missing from GitLab operation ledger: %+v", model, blockedModels)
-		}
+	if coveredEndpointRows != 1142 {
+		t.Fatalf("covered endpoint rows = %d, want 1142", coveredEndpointRows)
+	}
+	if len(coveredWrites) != 637 {
+		t.Fatalf("covered write actions = %d, want 637", len(coveredWrites))
+	}
+	if blockedModels["deprecated"] != 3 || len(blockedModels) != 1 {
+		t.Fatalf("blocked models = %+v, want only 3 deprecated rows", blockedModels)
 	}
 
 	var sawSensitiveWrite, sawDestructiveWrite bool

@@ -1,0 +1,21 @@
+{
+  "phase": "issue-78-gitlab-full-operation-parity",
+  "issue": 78,
+  "parent_pr": 127,
+  "status": "implementation-green-focused",
+  "gsd_prompt": "scripts/gsd prompt execute-phase issue-78-gitlab-full-operation-parity --tdd",
+  "manual_fallback": "programming-loop command unavailable in scripts/gsd registry",
+  "coverage": {
+    "api_surface_rows": 1145,
+    "covered_rows": 1142,
+    "deprecated_blocked_rows": 3,
+    "implemented_commands": 1142,
+    "write_actions": 637,
+    "operation_backed_read_commands": 497,
+    "runnable_stream_commands": 4,
+    "runnable_direct_read_commands": 4
+  },
+  "verificationPassed": true,
+  "focusedVerificationPassed": true,
+  "updated_at": "2026-07-09T23:55:00Z"
+}

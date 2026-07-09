@@ -4,13 +4,15 @@ Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
 
 Readable streams: `projects`, `groups`, `users`, `issues`.
 
-The connector declares a command surface in `cli_surface.json`. Implemented commands map to the four
-stream-backed reads plus four bounded direct reads (`project view`, `group view`, `user events`, and
-`issue view`). Direct reads use a 1 MiB default response cap and the `json_redacted` output policy.
-Binary, local workflow, raw API, GraphQL mutation, and reverse-ETL commands remain blocked or deferred
-until their dedicated lanes add bounded executors and approval policy.
+The connector declares a full operation-parity command surface in `cli_surface.json`, modeled after
+the GitHub parity scaffold. Implemented commands cover all non-deprecated official GitLab REST
+operations plus the existing `/users` compatibility stream row. The four durable ETL streams and four
+bounded direct reads are runnable today; operation-backed read/binary/HEAD commands remain
+feature-gated until an operation executor exists. Generated write commands are typed reverse-ETL write
+actions and still require plan → preview → approval → execute before any live mutation.
 
-This connector is read-only for durable ETL/reverse ETL; no write actions are declared.
+This connector now declares typed write actions for non-deprecated GitLab mutation endpoints, but no
+write runs from a plain command invocation and no raw generic API command is exposed.
 
 Service API documentation: https://docs.gitlab.com/ee/api/rest/.
 
@@ -59,21 +61,26 @@ Default pagination: follows RFC 5988 Link headers with rel=next.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external GitLab API read of projects, groups, users,
-issues, and bounded direct-read detail endpoints.
+Read behavior: external GitLab API read of projects, groups, users, issues, and bounded direct-read
+detail endpoints. Operation-backed direct/binary/HEAD read commands are present for parity metadata
+but remain feature-gated by the command runner until a bounded operation executor is implemented.
 
 The operation ledger inventories 1,144 official GitLab OpenAPI REST operations plus one `/users`
-compatibility row for the existing stream. Non-enabled operations are blocked by default as direct
-read candidates, binary reads, sensitive/admin reverse ETL candidates, destructive actions, or
-deprecated endpoints. Sensitive/admin/destructive operations require reverse ETL plan → preview →
-approval → execute plus typed confirmation before any future execution can be considered.
+compatibility row for the existing stream. All non-deprecated official operations are now covered by a
+stream, bounded direct read, operation-backed command, or typed reverse-ETL write action. The three
+deprecated operations remain blocked-by-default operation-ledger rows. Sensitive/admin/destructive
+write actions require reverse ETL plan → preview → approval → execute plus typed confirmation before
+execution.
 
 ## Known limits
 
 - Batch defaults: read_page_size=50.
-- API coverage includes 4 stream-backed endpoint group(s), 4 bounded direct-read commands, and a
-  complete blocked-by-default operation ledger.
-- `cli_surface.json` intentionally does not expose generic raw API commands, unsafe binary downloads,
-  generic shell/SQL writes, arbitrary GraphQL mutations, or GitLab write execution.
+- API coverage includes 1,142 covered endpoint rows: 4 stream-backed endpoint groups, 4 runnable
+  bounded direct-read commands, 497 operation-backed read/binary/HEAD commands, and 637 typed
+  reverse-ETL write actions. Three deprecated endpoints remain blocked.
+- Operation-backed direct reads and binary/HEAD commands are parity metadata until the operation
+  executor exists; this avoids unsafe binary downloads or raw dispatch.
+- `cli_surface.json` intentionally does not expose generic raw API commands, generic shell/SQL writes,
+  or arbitrary GraphQL mutations.
 - GitLab GraphQL is not required for the current REST-backed commands. Future GraphQL support must use
   fixed documents, typed variables, bounded pagination, and no generic mutation escape hatch.
