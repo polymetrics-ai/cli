@@ -18,6 +18,10 @@ Status: sub-PR open (#227); remote checks/review coverage pending.
 - `go test ./internal/connectors/engine -run CLISurface -count=1`: pass.
 - `go run ./cmd/connectorgen validate internal/connectors/defs`: pass.
 - `go test ./internal/connectors/conformance -run 'TestConformance/chatwoot' -count=1`: pass.
+- `go vet ./...`: pass.
+- `go test ./...`: pass after project-timeout `make verify` populated the long-running certify result cache.
+- `go build ./cmd/pm`: pass.
+- `make verify`: pass.
 
 ## Next
 

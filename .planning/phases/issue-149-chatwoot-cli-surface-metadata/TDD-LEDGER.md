@@ -88,4 +88,21 @@ Result: pass (`ok polymetrics.ai/internal/connectors/conformance 1.280s`).
 
 Note: `go run ./cmd/connectorgen validate internal/connectors/defs/chatwoot` was tried and failed because the current validator treats nested `fixtures/` and `schemas/` as connector directories when the root is a connector subdirectory. The green gate uses the repository-supported defs root command.
 
+### Broader verification evidence — 2026-07-10
+
+```bash
+gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify && go run ./cmd/connectorgen validate internal/connectors/defs
+```
+
+Result: initial chain failed at `go test ./...` because `internal/connectors/certify` hit the default 10m package timeout while `TestWriteCleanupFailureRecordsLeak` was still running. No production files changed from `gofmt`.
+
+```bash
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+go test ./...
+```
+
+Result: pass. `make verify` uses `go test -timeout 20m ./...` and completed successfully; the follow-up `go test ./...` also passed with cached results.
+
 - Refactor evidence: metadata/docs wording updated after validation to avoid overclaiming unsupported direct-read, binary, and admin execution.

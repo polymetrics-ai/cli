@@ -11,6 +11,7 @@ Status: in progress.
 - Created parent planning, TDD, verification, run-state, and orchestration-state artifacts.
 - Recorded runtime fanout blocker: current Pi API tool surface lacks `subagent`, so issue #149 is local critical path.
 - Opened sub-PR #227 for issue #149; CodeRabbit skipped automatic review because the base branch is non-default.
+- Ran full local handoff gates on the #149 branch: `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs` passed. The first uncached `go test ./...` attempt timed out at the default 10m package timeout in `internal/connectors/certify`; `make verify` passed using the project timeout and a follow-up `go test ./...` passed from cache.
 
 ## Next
 

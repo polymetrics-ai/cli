@@ -139,7 +139,7 @@
         ".planning/phases/issue-149-chatwoot-cli-surface-metadata"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "targeted local gates passed; PR #227 remote checks pending",
+      "verification": "full local gates passed on #149 branch; PR #227 remote verify pending/long-running at last check",
       "automated_review": {
         "primary_route": "coderabbit_auto",
         "status": "skipped",

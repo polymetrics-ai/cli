@@ -36,7 +36,12 @@
     {
       "cycle": "review-route",
       "decision": "not_spawned_review_blocked",
-      "reason": "Sub-PR #227 is open with checks pending. CodeRabbit skipped automatic review because the base branch is non-default; parent PR #223 fallback coverage is required after integration or an allowed fallback must be recorded."
+      "reason": "Sub-PR #227 is open. CodeRabbit skipped automatic review because the base branch is non-default; parent PR #223 fallback coverage is required after integration or an allowed fallback must be recorded."
+    },
+    {
+      "cycle": "full-local-verification",
+      "decision": "local_critical_path",
+      "reason": "Ran full local handoff gates. make verify passed; follow-up go test ./... passed after cached certify result."
     }
   ],
   "redEvidence": "official_total=144, surface_total=71, missing_count=73, exit=1",
@@ -56,7 +61,7 @@
     "review_url": "https://github.com/polymetrics-ai/cli/pull/227",
     "disposition_summary": "CodeRabbit skip is informational, not approval. Parent PR #223 fallback coverage pending after integration."
   },
-  "verificationPassed": false,
-  "verificationStatus": "targeted #149 gates passed; remote PR checks pending; full parent make verify not run",
+  "verificationPassed": true,
+  "verificationStatus": "local #149 and full handoff gates passed; PR #227 remote verify was still in progress when last checked; CodeRabbit skipped non-default-base review",
   "updated_at": "2026-07-10T00:00:00Z"
 }

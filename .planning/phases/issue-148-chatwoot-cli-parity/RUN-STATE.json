@@ -45,9 +45,14 @@
       "cycle": "issue-149",
       "decision": "local_critical_path",
       "reason": "Implemented Chatwoot CLI surface metadata locally because mutating worker fanout is unavailable in this harness."
+    },
+    {
+      "cycle": "issue-149-full-local-verification",
+      "decision": "not_spawned_review_blocked",
+      "reason": "Full local gates passed on the #149 branch, but sub-PR #227 remote verify and parent PR fallback review coverage are still pending."
     }
   ],
   "verificationPassed": false,
-  "verificationStatus": "#149 targeted gates passed; full parent verification pending",
+  "verificationStatus": "#149 full local gates passed on sub-branch; parent branch final verification pending after integration",
   "updated_at": "2026-07-10T00:00:00Z"
 }
