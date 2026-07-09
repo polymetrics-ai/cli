@@ -1,0 +1,42 @@
+{
+  "phase": "issue-189-front-cli-surface-metadata",
+  "status": "plan_checkpoint",
+  "parent_issue": 188,
+  "sub_issue": 189,
+  "parent_pr": 224,
+  "parent_branch": "feat/188-front-cli-parity",
+  "branch": "feat/189-front-cli-surface-metadata",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase 189 --skip-research --tdd",
+    "programming_loop_prompt": "scripts/gsd prompt programming-loop init --phase issue-189-front-cli-surface-metadata --dry-run",
+    "programming_loop_status": "unavailable_unknown_command",
+    "manual_fallback": true
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-spf13-cobra",
+    "golang-spf13-viper",
+    "golang-lint"
+  ],
+  "verificationPassed": false,
+  "verificationStatus": "plan_checkpoint_only_full_gates_not_run",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No Pi subagent tool is available in this API session; #189 is being executed locally on a stacked branch after parent PR #224 was opened."
+    }
+  ],
+  "updated_at": "2026-07-09T19:36:00Z"
+}

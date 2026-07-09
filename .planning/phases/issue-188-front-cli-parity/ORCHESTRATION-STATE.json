@@ -28,7 +28,7 @@
         "internal/connectors/defs/front",
         ".planning/phases/issue-189-front-cli-surface-metadata"
       ],
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "local_critical_path"
     },
     {
       "number": 192,
@@ -118,7 +118,13 @@
       "timestamp": "2026-07-09T19:36:00Z",
       "decision": "not_spawned_runtime_capability_missing",
       "issue_numbers": [189],
-      "reason": "The active API session has no Pi subagent tool; #189 is ready but cannot be spawned here."
+      "reason": "The active API session has no Pi subagent tool; #189 could not be spawned."
+    },
+    {
+      "timestamp": "2026-07-09T19:36:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [189],
+      "reason": "Created local stacked branch feat/189-front-cli-surface-metadata and #189 plan checkpoint before connector edits."
     }
   ],
   "subissues": [
@@ -127,11 +133,11 @@
       "url": "https://github.com/polymetrics-ai/cli/issues/189",
       "branch": "feat/189-front-cli-surface-metadata",
       "pr_url": "",
-      "worker": "not_spawned_runtime_capability_missing",
-      "status": "worker_ready",
+      "worker": "local_critical_path",
+      "status": "worker_in_progress",
       "write_scope": ["internal/connectors/defs/front", ".planning/phases/issue-189-front-cli-surface-metadata"],
-      "worker_directory": "",
-      "verification": "pending",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-188-front-cli-parity",
+      "verification": "plan checkpoint pending commit",
       "automated_review": {
         "primary_route": "blocked",
         "status": "blocked",
@@ -139,7 +145,7 @@
         "reviewed_range": "",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "pending sub-PR and parent PR review fallback if needed",
+        "disposition_summary": "#189 local critical-path branch feat/189-front-cli-surface-metadata in progress; review pending sub-PR",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/224"
       }
     },
