@@ -10,7 +10,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAccountRolesGetAccountRoles",
-        "document": "query MondayAccountRolesGetAccountRoles { __typename }"
+        "document": "query MondayAccountRolesGetAccountRoles {\n  account_roles {\n    id\n    name\n    roleType\n  }\n}"
       }
     },
     {
@@ -23,7 +23,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAccountGetAccount",
-        "document": "query MondayAccountGetAccount { account { id name slug } }"
+        "document": "query MondayAccountGetAccount {\n  users {\n    account {\n      id\n      slug\n      tier\n      show_timeline_weekends\n      is_during_trial\n      plan {\n        period\n      }\n      product {\n        kind\n        id\n        tier\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -36,7 +36,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayPlanGetPlan",
-        "document": "query MondayPlanGetPlan { __typename }"
+        "document": "query MondayPlanGetPlan {\n  account {\n    plan {\n      max_users\n      period\n      tier\n      version\n    }\n  }\n}"
       }
     },
     {
@@ -49,7 +49,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayActivityLogsNewGetBoardActivityLogs",
-        "document": "query MondayActivityLogsNewGetBoardActivityLogs { __typename }"
+        "document": "query MondayActivityLogsNewGetBoardActivityLogs {\n  boards(ids: [1234567890]) {\n    activity_logs(\n      from: \"2026-03-01T00:00:00Z\"\n      to: \"2026-04-09T23:59:59Z\"\n      limit: 25\n      page: 1\n    ) {\n      id\n      event\n      entity\n      data\n      user_id\n      created_at\n    }\n  }\n}"
       }
     },
     {
@@ -62,7 +62,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayActivityLogsNewGetUserActivityLogs",
-        "document": "query MondayActivityLogsNewGetUserActivityLogs { __typename }"
+        "document": "query MondayActivityLogsNewGetUserActivityLogs {\n  users(ids: [1234567890]) {\n    id\n    activity_logs(\n      from: \"2026-03-01T00:00:00Z\"\n      to: \"2026-04-09T23:59:59Z\"\n      limit: 25\n    ) {\n      cursor\n      logs {\n        id\n        account_id\n        user_id\n        event\n        entity\n        data\n        created_at\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -75,7 +75,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAggregateGetAggregate",
-        "document": "query MondayAggregateGetAggregate { __typename }"
+        "document": "query MondayAggregateGetAggregate {\n  aggregate(query: {\n    from: { type: TABLE, id: 1234567890 },\n    select: [\n      {\n        type: FUNCTION,\n        function: { function: COUNT_ITEMS },\n        as: \"total_items\"\n      },\n      {\n        type: FUNCTION,\n        function: {\n          function: AVERAGE,\n          params: [{ type: COLUMN, column: { column_id: \"numbers\" }, as: \"numbers\" }]\n        },\n        as: \"avg_value\"\n      }\n    ]\n  }) {\n    results {\n      entries {\n        alias\n        value {\n          ... on AggregateBasicAggregationResult { result }\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -119,7 +119,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayArticlesGetArticles",
-        "document": "query MondayArticlesGetArticles { __typename }"
+        "document": "query MondayArticlesGetArticles {\n  articles(\n    object_ids: [1234567890]\n    workspace_ids: [9876543210]\n    limit: 25\n    page: 1\n  ) {\n    metadata {\n      object_id\n      name\n      state\n    }\n    blocks {\n      id\n    }\n  }\n}"
       }
     },
     {
@@ -132,7 +132,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayArticlesGetArticleBlocks",
-        "document": "query MondayArticlesGetArticleBlocks { __typename }"
+        "document": "query MondayArticlesGetArticleBlocks {\n  article_blocks(object_id: \"1234567890\", limit: 25, page: 1) {\n    id\n  }\n}"
       }
     },
     {
@@ -145,7 +145,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayArticlesKnowledgeBaseSearch",
-        "document": "query MondayArticlesKnowledgeBaseSearch { __typename }"
+        "document": "query MondayArticlesKnowledgeBaseSearch {\n  knowledge_base_search(query: \"How do I reset a password?\", limit: 5) {\n    answer\n    raw_snippets {\n      id\n      title\n      text\n      url\n    }\n  }\n}"
       }
     },
     {
@@ -235,7 +235,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAssets1GetAssets",
-        "document": "query MondayAssets1GetAssets { __typename }"
+        "document": "query MondayAssets1GetAssets {\n  boards (ids:1234567890) {\n    items_page (limit:100) {\n      items {\n        assets {\n          id\n          url\n          name\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -310,7 +310,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAuditEventCatalogueGetAuditEventCatalogue",
-        "document": "query MondayAuditEventCatalogueGetAuditEventCatalogue { __typename }"
+        "document": "query MondayAuditEventCatalogueGetAuditEventCatalogue {\n  audit_event_catalogue {\n    description\n    metadata_details\n    name\n  }\n}"
       }
     },
     {
@@ -323,7 +323,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAuditLogsGetAuditLogs",
-        "document": "query MondayAuditLogsGetAuditLogs { __typename }"
+        "document": "query MondayAuditLogsGetAuditLogs {\n  audit_logs(\n    user_id: 1234567890\n    events: [\n      \"login\"\n      \"logout\"\n    ]\n    limit: 100\n  ) {\n    logs {\n      timestamp\n      event\n      user_agent\n      user {\n        id\n        name\n        email\n      }\n      ip_address\n    }\n    pagination {\n      has_more_pages\n      next_page_number\n    }\n  }\n}"
       }
     },
     {
@@ -336,7 +336,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayActivityLogsGetBoardActivityLogs",
-        "document": "query MondayActivityLogsGetBoardActivityLogs { __typename }"
+        "document": "query MondayActivityLogsGetBoardActivityLogs {\n  boards(\n    ids: [1234567890]\n  ) {\n    activity_logs(\n      from: \"2021-07-23T00:00:00Z\"\n      to: \"2021-07-26T00:00:00Z\"\n    ) {\n      id\n      event\n      data\n    }\n  }\n}"
       }
     },
     {
@@ -349,7 +349,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayGetViewSchemaByTypeGetViewSchemaByType",
-        "document": "query MondayGetViewSchemaByTypeGetViewSchemaByType { __typename }"
+        "document": "query MondayGetViewSchemaByTypeGetViewSchemaByType {\n  get_view_schema_by_type(\n    type: TABLE\n    mutationType: CREATE\n  )\n}"
       }
     },
     {
@@ -362,7 +362,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayBoardViewsGetViews",
-        "document": "query MondayBoardViewsGetViews { __typename }"
+        "document": "query MondayBoardViewsGetViews {\n  boards(\n    ids: [1234567890]\n\t) {\n    views {\n      type\n      settings_str\n      view_specific_data_str\n      name\n      id\n    }\n  }\n}"
       }
     },
     {
@@ -713,7 +713,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayBackfillItemsApiReferenceFetchJobStatus",
-        "document": "query MondayBackfillItemsApiReferenceFetchJobStatus { __typename }"
+        "document": "query MondayBackfillItemsApiReferenceFetchJobStatus {\n  fetch_job_status(job_id: \"550e8400-e29b-41d4-a716-446655440000\") {\n    ... on ItemsJobStatus {\n      status\n      counts {\n        submitted\n        invalid\n        skipped\n        created\n        updated\n        failed\n      }\n      progress_percentage\n      failure_reason\n      failure_message\n      fully_imported\n      report_created\n      report_url\n    }\n  }\n}"
       }
     },
     {
@@ -757,7 +757,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayIngestItemsApiReferenceFetchJobStatus",
-        "document": "query MondayIngestItemsApiReferenceFetchJobStatus { __typename }"
+        "document": "query MondayIngestItemsApiReferenceFetchJobStatus {\n  fetch_job_status(job_id: \"550e8400-e29b-41d4-a716-446655440000\") {\n    ... on ItemsJobStatus {\n      status\n      counts {\n        submitted\n        invalid\n        skipped\n        created\n        updated\n        failed\n      }\n      progress_percentage\n      failure_reason\n      failure_message\n      fully_imported\n      report_created\n      report_url\n    }\n  }\n}"
       }
     },
     {
@@ -1372,7 +1372,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayConnectGetConnectedBoardIds",
-        "document": "query MondayConnectGetConnectedBoardIds { __typename }"
+        "document": "query MondayConnectGetConnectedBoardIds {\n  connection_board_ids(connection_id: \"1234567890\")\n}"
       }
     },
     {
@@ -2124,7 +2124,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayHourCompareValues",
-        "document": "query MondayHourCompareValues { __typename }"
+        "document": "query MondayHourCompareValues {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        rules: [\n          {\n            column_id: \"hour\"\n            compare_value: [\"Afternoon\"]\n            operator: any_of\n          }\n        ]\n      }\n    ) {\n      items {\n        id\n        name\n        column_values {\n          ... on HourValue {\n            hour\n            minute\n            text\n          }\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -2245,7 +2245,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayLastUpdatedExampleResponse",
-        "document": "query MondayLastUpdatedExampleResponse { __typename }"
+        "document": "query MondayLastUpdatedExampleResponse {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        rules: [\n          {\n            column_id: \"__last_updated__\"\n            compare_value: [\"TODAY\"]\n            operator: any_of\n            compare_attribute: \"UPDATED_AT\"\n          }\n        ]\n      }\n    ) {\n      items {\n        id\n        name\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -2396,7 +2396,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayLongTextExampleResponse",
-        "document": "query MondayLongTextExampleResponse { __typename }"
+        "document": "query MondayLongTextExampleResponse {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        rules: [\n          {\n            column_id: \"long_text\"\n            compare_value: \"description\"\n            operator: contains_text\n          }\n        ]\n      }\n    ) {\n      items {\n        id\n        name\n        column_values {\n          ... on LongTextValue {\n            text\n          }\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -2517,7 +2517,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayMirrorMirroredvalue",
-        "document": "query MondayMirrorMirroredvalue { __typename }"
+        "document": "query MondayMirrorMirroredvalue {\n  items(ids: [1234567890]) {\n    id\n    name\n    column_values {\n      id\n      type\n      text\n      ... on MirrorValue {\n        display_value\n        mirrored_items {\n          id\n          name\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -2592,7 +2592,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayNameReadViaTheNameField",
-        "document": "query MondayNameReadViaTheNameField { __typename }"
+        "document": "query MondayNameReadViaTheNameField {\n  items(ids: [1234567890, 9876543210]) {\n    id\n    name\n  }\n}"
       }
     },
     {
@@ -2605,7 +2605,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayNameReadViaItemsPageByColumnValues",
-        "document": "query MondayNameReadViaItemsPageByColumnValues { __typename }"
+        "document": "query MondayNameReadViaItemsPageByColumnValues {\n  items_page_by_column_values(\n    board_id: 1234567890\n    columns: {\n      column_id: \"name\"\n      column_values: \"Task A\"\n    }\n  ) {\n    items {\n      id\n      name\n    }\n  }\n}"
       }
     },
     {
@@ -2818,7 +2818,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayPhoneExampleResponse",
-        "document": "query MondayPhoneExampleResponse { __typename }"
+        "document": "query MondayPhoneExampleResponse {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        rules: [\n          {\n            column_id: \"phone\"\n            compare_value: [\"US\"]\n            operator: any_of\n          }\n        ]\n      }\n    ) {\n      items {\n        id\n        name\n        column_values {\n          ... on PhoneValue {\n            phone\n            country_short_name\n          }\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -2908,7 +2908,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayProgressTrackingProgressvalue",
-        "document": "query MondayProgressTrackingProgressvalue { __typename }"
+        "document": "query MondayProgressTrackingProgressvalue {\n  items(ids: [1234567890, 9876543210]) {\n    name\n    column_values {\n      ... on ProgressValue {\n        id\n        text\n        value\n        type\n        is_leaf\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -3029,7 +3029,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayStatusStatusvalueClassicBoards",
-        "document": "query MondayStatusStatusvalueClassicBoards { __typename }"
+        "document": "query MondayStatusStatusvalueClassicBoards {\n  items(ids: [1234567890, 9876543210]) {\n    name\n    column_values {\n      ... on StatusValue {\n        id\n        index\n        label\n        text\n        is_done\n        label_style {\n          color\n          border\n        }\n        value\n        updated_at\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -3042,7 +3042,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayStatusBatteryvalueMultiLevelBoards",
-        "document": "query MondayStatusBatteryvalueMultiLevelBoards { __typename }"
+        "document": "query MondayStatusBatteryvalueMultiLevelBoards {\n  items(ids: [1234567890, 9876543210]) {\n    name\n    column_values(capabilities: [CALCULATED]) {\n      ... on BatteryValue {\n        id\n        text\n        is_leaf\n        battery_value {\n          key\n          count\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -3194,7 +3194,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondaySubitemsColumnSubtasksvalue",
-        "document": "query MondaySubitemsColumnSubtasksvalue { __typename }"
+        "document": "query MondaySubitemsColumnSubtasksvalue {\n  items(ids: [1234567890]) {\n    name\n    column_values {\n      ... on SubtasksValue {\n        id\n        display_value\n        is_leaf\n        subitems_ids\n        subitems {\n          id\n          name\n        }\n        text\n        type\n        value\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -3284,7 +3284,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayTagsQueryTagsDirectly",
-        "document": "query MondayTagsQueryTagsDirectly { __typename }"
+        "document": "query MondayTagsQueryTagsDirectly {\n  tags(ids: [295026, 295064]) {\n    id\n    name\n    color\n  }\n}"
       }
     },
     {
@@ -3482,7 +3482,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayTimeTrackingHistoryFields",
-        "document": "query MondayTimeTrackingHistoryFields { __typename }"
+        "document": "query MondayTimeTrackingHistoryFields {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        rules: [\n          {\n            column_id: \"time_tracking\"\n            compare_value: [2]\n            operator: any_of\n          }\n        ]\n      }\n    ) {\n      items {\n        id\n        name\n        column_values {\n          ... on TimeTrackingValue {\n            duration\n            running\n            started_at\n          }\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -3634,7 +3634,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayVoteExampleResponse",
-        "document": "query MondayVoteExampleResponse { __typename }"
+        "document": "query MondayVoteExampleResponse {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        rules: [\n          {\n            column_id: \"vote\"\n            compare_value: [12345]\n            operator: any_of\n          }\n        ]\n      }\n    ) {\n      items {\n        id\n        name\n        column_values {\n          ... on VoteValue {\n            vote_count\n            voter_ids\n          }\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -3909,7 +3909,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayGetColumnTypeSchemaGetColumnTypeSchema",
-        "document": "query MondayGetColumnTypeSchemaGetColumnTypeSchema { __typename }"
+        "document": "query MondayGetColumnTypeSchemaGetColumnTypeSchema {\n  get_column_type_schema(\n    type: board_relation\n  )\n}"
       }
     },
     {
@@ -3922,7 +3922,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayGetColumnTypeSchemaStatusColumn",
-        "document": "query MondayGetColumnTypeSchemaStatusColumn { __typename }"
+        "document": "query MondayGetColumnTypeSchemaStatusColumn {\n  get_column_type_schema(\n    type: status\n  )\n}"
       }
     },
     {
@@ -3935,7 +3935,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayGetColumnTypeSchemaDateColumn",
-        "document": "query MondayGetColumnTypeSchemaDateColumn { __typename }"
+        "document": "query MondayGetColumnTypeSchemaDateColumn {\n  get_column_type_schema(\n    type: date\n  )\n}"
       }
     },
     {
@@ -3948,7 +3948,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayColumnsGetColumns",
-        "document": "query MondayColumnsGetColumns { __typename }"
+        "document": "query MondayColumnsGetColumns {\n  boards(ids: [1234567890]) {\n    columns {\n      id\n      title\n    }\n  }\n}"
       }
     },
     {
@@ -4193,7 +4193,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayComplexityGetComplexity",
-        "document": "query MondayComplexityGetComplexity { __typename }"
+        "document": "query MondayComplexityGetComplexity {\n  complexity {\n    before\n    query\n    after\n    reset_in_x_seconds\n  }\n  boards (ids: 1234567890) {\n    items {\n      id\n      name\n    }\n  }\n}"
       }
     },
     {
@@ -4206,7 +4206,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAllWidgetsSchemaGetAllWidgetsSchema",
-        "document": "query MondayAllWidgetsSchemaGetAllWidgetsSchema { __typename }"
+        "document": "query MondayAllWidgetsSchemaGetAllWidgetsSchema {\n  all_widgets_schema {\n    widget_type\n    schema\n  }\n}"
       }
     },
     {
@@ -4373,7 +4373,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayDepartmentsGetDepartments",
-        "document": "query MondayDepartmentsGetDepartments { __typename }"
+        "document": "query MondayDepartmentsGetDepartments {\n  departments(ids: [12345, 54321]) {\n    id\n    name\n    assigned_seats\n    reserved_seats\n    members {\n      id\n      name\n    }\n    owners {\n      id\n      name\n    }\n  }\n}"
       }
     },
     {
@@ -4571,7 +4571,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayExportMarkdownFromDocGetExportMarkdownFromDoc",
-        "document": "query MondayExportMarkdownFromDocGetExportMarkdownFromDoc { __typename }"
+        "document": "query MondayExportMarkdownFromDocGetExportMarkdownFromDoc {\n  export_markdown_from_doc(\n    docId: 12345,\n    blockIds: [\"e4b1c79a-5f2d-4c83-b1a7-0f9e2d6c3a58\", \"3a7f2c18-91d4-4b6e-a3f2-7c9e12b4d5a6\"]\n  ){\n    error\n    markdown\n    success\n  }\n}"
       }
     },
     {
@@ -4584,7 +4584,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayDocsGetDocs",
-        "document": "query MondayDocsGetDocs { __typename }"
+        "document": "query MondayDocsGetDocs {\n  docs(\n    object_ids: [123456789]\n    limit: 1\n  ) {\n    id\n    object_id\n    settings\n    created_by {\n      id\n      name\n    }\n  }\n}"
       }
     },
     {
@@ -4829,7 +4829,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayFavoritesGetFavorites",
-        "document": "query MondayFavoritesGetFavorites { __typename }"
+        "document": "query MondayFavoritesGetFavorites {\n  favorites {\n    accountId\n    createdAt\n    folderId\n    hierarchyListData {\n      id\n      type\n    }\n    id\n    object {\n      id\n      type\n    }\n    position\n    updatedAt\n  }\n}"
       }
     },
     {
@@ -4919,7 +4919,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayFoldersGetFolders",
-        "document": "query MondayFoldersGetFolders { __typename }"
+        "document": "query MondayFoldersGetFolders {\n  folders(workspace_ids: [1234567890]) {\n    id\n    name\n    children {\n      id\n      name\n    }\n  }\n}"
       }
     },
     {
@@ -5009,7 +5009,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayFormGetForm",
-        "document": "query MondayFormGetForm { __typename }"
+        "document": "query MondayFormGetForm {\n  form(formToken: \"YOUR_FORM_TOKEN\") {\n    id\n    title\n    active\n    appearance {\n      primaryColor\n      showProgressBar\n    }\n    features {\n      responseLimit {\n        enabled\n        limit\n      }\n    }\n    questions {\n      id\n      title\n      type\n      required\n      visible\n    }\n  }\n}"
       }
     },
     {
@@ -5346,7 +5346,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayGroupsGetGroups",
-        "document": "query MondayGroupsGetGroups { __typename }"
+        "document": "query MondayGroupsGetGroups {\n  boards(ids: 1234567890) {\n    groups {\n      title\n      id\n    }\n  }\n}"
       }
     },
     {
@@ -5513,7 +5513,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayItemsPageByColumnValuesGetItemsPageByColumnValues",
-        "document": "query MondayItemsPageByColumnValuesGetItemsPageByColumnValues { __typename }"
+        "document": "query MondayItemsPageByColumnValuesGetItemsPageByColumnValues {\n  items_page_by_column_values(\n    limit: 50\n    board_id: 1234567890\n    columns: [\n      {\n        column_id: \"text\"\n        column_values: [\"This is a text column\"]\n      }\n      {\n        column_id: \"country\"\n        column_values: [\"US\", \"IL\"]\n      }\n    ]\n  ) {\n    cursor\n    items {\n      id\n      name\n    }\n  }\n}"
       }
     },
     {
@@ -5540,7 +5540,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayItemsPageFilteringItemsByName",
-        "document": "query MondayItemsPageFilteringItemsByName { __typename }"
+        "document": "query MondayItemsPageFilteringItemsByName {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        rules: [\n          {\n            column_id: \"name\"\n            compare_value: [\"New item\"]\n          }\n        ]\n      }\n    ) {\n      cursor\n      items {\n        id\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -5553,7 +5553,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayItemsPageFilteringItemsAssignedToYourselfWithACheckmark",
-        "document": "query MondayItemsPageFilteringItemsAssignedToYourselfWithACheckmark { __typename }"
+        "document": "query MondayItemsPageFilteringItemsAssignedToYourselfWithACheckmark {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        rules: [\n          {\n            column_id: \"people\"\n            compare_value: [\"assigned_to_me\"]\n            operator: any_of\n          }\n          {\n            column_id: \"check\"\n            compare_value: null\n            operator: is_not_empty\n          }\n        ]\n        operator: and\n      }\n    ) {\n      cursor\n      items {\n        id\n        name\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -5566,7 +5566,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayItemsPageFilteringItemsWithSpecificStatusAndPeopleColumnValues",
-        "document": "query MondayItemsPageFilteringItemsWithSpecificStatusAndPeopleColumnValues { __typename }"
+        "document": "query MondayItemsPageFilteringItemsWithSpecificStatusAndPeopleColumnValues {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        rules: [\n          {\n            column_id: \"people\"\n            compare_value: [\"Person 1\", \"Person 2\"]\n            operator: contains_text\n          }\n          {\n            column_id: \"status\"\n            compare_value: [1, 0]\n          }\n        ]\n        operator: and\n      }\n    ) {\n      cursor\n      items {\n        id\n        name\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -5579,7 +5579,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayItemsPageFilteringItemsWithSpecificDateColumnValuesInAParticularGroupThatAreNotAssignedToYourself",
-        "document": "query MondayItemsPageFilteringItemsWithSpecificDateColumnValuesInAParticularGroupThatAreNotAssignedToYourself { __typename }"
+        "document": "query MondayItemsPageFilteringItemsWithSpecificDateColumnValuesInAParticularGroupThatAreNotAssignedToYourself {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        rules: [\n          {\n            column_id: \"date\"\n            compare_value: [\"2023-06-01\", \"2023-06-30\"]\n            operator: between\n          }\n          {\n            column_id: \"group\"\n            compare_value: [\"new_group12345\"]\n            operator: any_of\n          }\n          {\n            column_id: \"people\"\n            compare_value: [\"assigned_to_me\"]\n            operator: not_any_of\n          }\n        ]\n        operator: and\n      }\n    ) {\n      cursor\n      items {\n        id\n        name\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -5592,7 +5592,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayItemsPageSortingItemsByColumnType",
-        "document": "query MondayItemsPageSortingItemsByColumnType { __typename }"
+        "document": "query MondayItemsPageSortingItemsByColumnType {\n  boards(ids: 1234567890) {\n    items_page(\n      query_params: {\n        order_by: [\n          {\n            column_id: \"name\"\n          }\n        ]\n      }\n    ) {\n      cursor\n      items {\n        id\n        name\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -5605,7 +5605,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayNextItemsPageGetNextItemsPage",
-        "document": "query MondayNextItemsPageGetNextItemsPage { __typename }"
+        "document": "query MondayNextItemsPageGetNextItemsPage {\n  boards(ids: 1234567890) {\n    items_page(\n      limit: 50\n      query_params: {\n        rules: [\n          {\n            column_id: \"timeline\"\n            compare_value: [\"2023-06-30\", \"2023-07-01\"]\n            compare_attribute: \"START_DATE\"\n            operator: between\n          }\n        ]\n      }\n    ) {\n      cursor\n      items {\n        id\n        name\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -5618,7 +5618,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayColumnValuesV2GetColumnValues",
-        "document": "query MondayColumnValuesV2GetColumnValues { __typename }"
+        "document": "query MondayColumnValuesV2GetColumnValues {\n  items(ids: 1234567890) {\n    column_values {\n      column {\n        title\n      }\n      id\n      type\n      value\n    }\n  }\n}"
       }
     },
     {
@@ -5631,7 +5631,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayColumnValuesV2UsingFragmentsToGetColumnSpecificFields",
-        "document": "query MondayColumnValuesV2UsingFragmentsToGetColumnSpecificFields { __typename }"
+        "document": "query MondayColumnValuesV2UsingFragmentsToGetColumnSpecificFields {\n  items (ids: 1234567890) {\n    column_values {\n      value\n      type\n      ... on StatusValue  { # will only run for status columns\n        label\n        update_id\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -5644,7 +5644,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayItemsGetItems",
-        "document": "query MondayItemsGetItems { __typename }"
+        "document": "query MondayItemsGetItems {\n  items(ids: [1234567890, 9876543210, 2345678901]) {\n    name\n  }\n}"
       }
     },
     {
@@ -5919,7 +5919,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayManagedColumnsGetManagedColumn",
-        "document": "query MondayManagedColumnsGetManagedColumn { __typename }"
+        "document": "query MondayManagedColumnsGetManagedColumn {\n  managed_column(state: active) {\n    created_by\n    revision\n    settings {\n      ...on StatusColumnSettings {\n        type\n        labels {\n          id\n          description\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -6179,7 +6179,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayMeGetMe",
-        "document": "query MondayMeGetMe { me { id name } }"
+        "document": "query MondayMeGetMe {\n  me {\n    is_guest\n    created_at\n    name\n    id\n  }\n}"
       }
     },
     {
@@ -6192,7 +6192,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayNotetakerNotetakerMeetings",
-        "document": "query MondayNotetakerNotetakerMeetings { __typename }"
+        "document": "query MondayNotetakerNotetakerMeetings {\n  notetaker {\n    meetings(limit: 10, filters: { access: ALL }) {\n      meetings {\n        title\n        start_time\n        end_time\n        recording_duration\n        summary\n        access_type\n        meeting_link\n        participants { email }\n        topics {\n          title\n          talking_points { content }\n        }\n        action_items {\n          content\n          is_completed\n          owner\n          due_date\n        }\n      }\n      page_info {\n        has_next_page\n        cursor\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -6205,7 +6205,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayNotificationGetNotifications",
-        "document": "query MondayNotificationGetNotifications { __typename }"
+        "document": "query MondayNotificationGetNotifications {\n  notifications(filter_read: true) {\n    text\n    title\n    id\n  }\n}"
       }
     },
     {
@@ -6249,7 +6249,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayMuteBoardSettingsGetMuteBoardSettings",
-        "document": "query MondayMuteBoardSettingsGetMuteBoardSettings { __typename }"
+        "document": "query MondayMuteBoardSettingsGetMuteBoardSettings {\n  mute_board_settings(board_ids: [1234567890]) {\n    board_id\n    mute_state\n  }\n}"
       }
     },
     {
@@ -6293,7 +6293,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayNotificationsSettingsGetNotificationsSettings",
-        "document": "query MondayNotificationsSettingsGetNotificationsSettings { __typename }"
+        "document": "query MondayNotificationsSettingsGetNotificationsSettings {\n  notifications_settings(\n    channels: [Email, Slack]\n    scope_type: AccountNewUserDefaults\n  ) {\n    kind\n    description\n    is_for_admins_only\n    is_for_non_guests_only\n    channels {\n      name\n      enabled\n      editable_status\n    }\n  }\n}"
       }
     },
     {
@@ -6306,7 +6306,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayObjectRelationsObjectRelations",
-        "document": "query MondayObjectRelationsObjectRelations { __typename }"
+        "document": "query MondayObjectRelationsObjectRelations {\n  object_relations(\n    object_id: \"1234567890\"\n    direction: OUTGOING\n    kind: DEPENDENCY\n  ) {\n    id\n    source_object_id\n    target_id\n    target_object_type\n    kind\n  }\n}"
       }
     },
     {
@@ -6365,7 +6365,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayObjectSchemasGetObjectSchemas",
-        "document": "query MondayObjectSchemasGetObjectSchemas { __typename }"
+        "document": "query MondayObjectSchemasGetObjectSchemas {\n  get_object_schemas(limit: 10, page: 1) {\n    id\n    name\n    description\n    revision\n    columns {\n      id\n      title\n      type\n    }\n    connected_boards_count\n  }\n}"
       }
     },
     {
@@ -6656,7 +6656,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayObjectsGetObjects",
-        "document": "query MondayObjectsGetObjects { __typename }"
+        "document": "query MondayObjectsGetObjects {\n  objects(\n    limit: 4,\n    state: ACTIVE,\n    order_by: CREATED_AT\n  ) {\n    id\n    name\n    owners {\n      id\n      name\n    }\n  }\n}"
       }
     },
     {
@@ -6792,7 +6792,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayObjectTypesUniqueKeysGetObjectTypesUniqueKeys",
-        "document": "query MondayObjectTypesUniqueKeysGetObjectTypesUniqueKeys { __typename }"
+        "document": "query MondayObjectTypesUniqueKeysGetObjectTypesUniqueKeys {\n  object_types_unique_keys {\n    app_name\n    app_feature_name\n    description\n    object_type_unique_key\n  }\n}"
       }
     },
     {
@@ -6929,7 +6929,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayRepliesGetReplies",
-        "document": "query MondayRepliesGetReplies { __typename }"
+        "document": "query MondayRepliesGetReplies {\n  replies(\n    board_ids: [1234567890],\n    created_at_to: \"2025-08-02\",\n    created_at_from: \"2025-01-01\"\n\t) {\n    body\n    created_at\n    edited_at\n    creator {\n      id\n      name\n    }\n  }\n}"
       }
     },
     {
@@ -6942,7 +6942,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayResourceDirectoryGetDirectoryResources",
-        "document": "query MondayResourceDirectoryGetDirectoryResources { __typename }"
+        "document": "query MondayResourceDirectoryGetDirectoryResources {\n  get_directory_resources(limit: 25) {\n    resources {\n      id\n      name\n      email\n    }\n    cursor\n    id\n  }\n}"
       }
     },
     {
@@ -6986,7 +6986,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondaySearchSearchAcrossEntities",
-        "document": "query MondaySearchSearchAcrossEntities { __typename }"
+        "document": "query MondaySearchSearchAcrossEntities {\n  search {\n    items(query: \"Q1 planning\", limit: 10, board_ids: [\"1234567890\"]) {\n      results {\n        id\n        indexed_data {\n          name\n          board_id\n          url\n        }\n        live_data {\n          id\n          name\n          state\n        }\n      }\n    }\n    boards(query: \"Q1 planning\", limit: 10) {\n      results {\n        id\n        indexed_data {\n          name\n          url\n        }\n      }\n    }\n    docs(query: \"Q1 planning\", limit: 5) {\n      results {\n        id\n        indexed_data {\n          name\n        }\n      }\n    }\n    users(query: \"Ada\", limit: 5) {\n      results {\n        id\n        indexed_data {\n          name\n          email\n        }\n      }\n    }\n    workspaces(query: \"Q1 planning\", limit: 5) {\n      results {\n        id\n        indexed_data {\n          name\n        }\n      }\n    }\n    updates(query: \"Q1 planning\", limit: 5, board_ids: [\"1234567890\"]) {\n      results {\n        id\n        indexed_data {\n          body\n          creator_id\n          item_id\n          board_id\n          created_at\n          updated_at\n        }\n        live_data {\n          id\n          body\n        }\n      }\n    }\n    timeline_items(query: \"kickoff call\", limit: 5, type: email) {\n      results {\n        id\n        indexed_data {\n          title\n          summary\n          type\n          product_kind\n          item_id\n          board_id\n        }\n        live_data {\n          id\n        }\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -6999,7 +6999,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondaySequencesAllowedSequencesToEnroll",
-        "document": "query MondaySequencesAllowedSequencesToEnroll { __typename }"
+        "document": "query MondaySequencesAllowedSequencesToEnroll {\n  allowed_sequences_to_enroll(board_id: \"1234567890\") {\n    id\n    title\n    status\n    context_type\n    context_id\n    user_id\n    step_count\n    duration\n    created_at\n    updated_at\n  }\n}"
       }
     },
     {
@@ -7043,7 +7043,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondaySubitemsGetSubitems",
-        "document": "query MondaySubitemsGetSubitems { __typename }"
+        "document": "query MondaySubitemsGetSubitems {\n  items(ids: 1234567890) {\n    subitems {\n      id\n      column_values {\n        value\n        text\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -7376,7 +7376,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayTemplatesGetTemplateInstallationStatus",
-        "document": "query MondayTemplatesGetTemplateInstallationStatus { __typename }"
+        "document": "query MondayTemplatesGetTemplateInstallationStatus {\n  template_installation_status(process_id: \"c072acaf68e0be9fd0e451f0884383b6\") {\n    process_id\n    status\n    is_complete\n    is_failed\n    board_ids\n    board_ids_map {\n      source_board_id\n      created_board_id\n    }\n  }\n}"
       }
     },
     {
@@ -7420,7 +7420,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayUpdatesGetUpdates",
-        "document": "query MondayUpdatesGetUpdates { __typename }"
+        "document": "query MondayUpdatesGetUpdates {\n  updates(\n    limit: 50\n    to_date: \"2025-06-04\"\n    from_date: \"2025-01-01\"\n\t) {\n    body\n      id\n      created_at\n      creator {\n        name\n        id\n    }\n  }\n}"
       }
     },
     {
@@ -7649,7 +7649,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayViewersGetViewers",
-        "document": "query MondayViewersGetViewers { __typename }"
+        "document": "query MondayViewersGetViewers {\n  updates {\n    viewers {\n      user_id\n      medium\n      user {\n        name\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -7676,7 +7676,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayUsersGetUserConfigs",
-        "document": "query MondayUsersGetUserConfigs { __typename }"
+        "document": "query MondayUsersGetUserConfigs {\n  user_configs {\n    kind\n    role_id\n    visibility\n  }\n}"
       }
     },
     {
@@ -8012,7 +8012,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayValidationsGetValidations",
-        "document": "query MondayValidationsGetValidations { __typename }"
+        "document": "query MondayValidationsGetValidations {\n  validations(id: 1234567890) {\n    required_column_ids\n    rules\n  }\n}"
       }
     },
     {
@@ -8148,7 +8148,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayVersionGetVersion",
-        "document": "query MondayVersionGetVersion { __typename }"
+        "document": "query MondayVersionGetVersion {\n  version {\n    kind\n    value\n    display_name\n  }\n}"
       }
     },
     {
@@ -8161,7 +8161,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayVersionsGetVersions",
-        "document": "query MondayVersionsGetVersions { __typename }"
+        "document": "query MondayVersionsGetVersions {\n  versions {\n    kind\n    value\n    display_name\n  }\n}"
       }
     },
     {
@@ -8174,7 +8174,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayWebhooksGetWebhooks",
-        "document": "query MondayWebhooksGetWebhooks { __typename }"
+        "document": "query MondayWebhooksGetWebhooks {\n  webhooks(board_id: 1234567890){\n    id\n    event\n    board_id\n    config\n  }\n}"
       }
     },
     {
@@ -8233,7 +8233,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayWorkspacesGetWorkspaces",
-        "document": "query MondayWorkspacesGetWorkspaces { __typename }"
+        "document": "query MondayWorkspacesGetWorkspaces {\n  workspaces(ids: 1234567) {\n    id\n    name\n    kind\n    description\n  }\n}"
       }
     },
     {
@@ -8415,7 +8415,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayCustomActivityGetCustomActivity",
-        "document": "query MondayCustomActivityGetCustomActivity { __typename }"
+        "document": "query MondayCustomActivityGetCustomActivity {\n  custom_activity {\n    color\n    icon_id\n    id\n    name\n    type\n  }\n}"
       }
     },
     {
@@ -8474,7 +8474,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayTimelineEaGetTimeline",
-        "document": "query MondayTimelineEaGetTimeline { __typename }"
+        "document": "query MondayTimelineEaGetTimeline {\n  timeline (id: 1234567890) {\n    timeline_items_page {\n      cursor\n      timeline_items {\n        id\n        content\n      }\n    }\n  }\n}"
       }
     },
     {
@@ -8487,7 +8487,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayTimelineItemEaGetTimelineItem",
-        "document": "query MondayTimelineItemEaGetTimelineItem { __typename }"
+        "document": "query MondayTimelineItemEaGetTimelineItem {\n  timeline_item(\n    id: 1234567890\n\t) {\n    board {\n      id\n    }\n    item {\n      name\n    }\n    id\n    user {\n      id\n      name\n    }\n    title\n    type\n    content\n    created_at\n  }\n}"
       }
     },
     {

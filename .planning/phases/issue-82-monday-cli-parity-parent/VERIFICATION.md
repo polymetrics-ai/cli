@@ -51,3 +51,4 @@ Record not-applicable cases explicitly when a command/help surface is generated 
 - First full gate run exposed one stale commandrunner test expectation; fixed in `test(connectors): update GraphQL direct-read gate`, then reran the full gate list successfully.
 - All-ops update targeted tests: pass (`go test ./cmd/connectorgen -run 'TestMondayFullSurfaceAllOpsCovered' -count=1`; `go test ./internal/connectors/hooks/monday -run 'TestMondayWriteHookBlocksModeledMutations' -count=1`).
 - Full gate list rerun after all-ops update: pass (`gofmt -w cmd internal`; `go vet ./...`; `go test ./...`; `go build ./cmd/pm`; `go run ./cmd/connectorgen validate internal/connectors/defs`; `make verify`).
+- Direct-read refinement after automated fallback: replaced all placeholder `__typename` documents for the 82 implemented direct reads with bundled official example query documents; targeted tests and full gate list reran successfully.

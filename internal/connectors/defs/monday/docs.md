@@ -69,7 +69,9 @@ filter or advance reads.
 ## Write actions & risks
 
 Read behavior: external monday.com GraphQL API reads through declared streams and bounded fixed
-GraphQL direct-read operations.
+GraphQL direct-read operations. Direct-read documents are bundled from the official monday.com
+examples and cannot be replaced by user-supplied GraphQL; operations whose official examples require
+object IDs remain bounded example reads until a follow-up adds typed selector flags.
 
 Write behavior: all 280 documented GraphQL mutations are modeled as named reverse-ETL actions in
 `writes.json`. Live mutation dispatch is owned by the Monday WriteHook and remains blocked until each

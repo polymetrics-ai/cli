@@ -15,7 +15,9 @@ Results:
 - `go test ./internal/connectors/bundleregistry -run 'TestMondayGuideIncludesCLISurfaceHelp' -count=1` — pass.
 - `go test ./internal/connectors/commandrunner -run 'TestRunMonday' -count=1` — pass.
 - `go run ./cmd/connectorgen validate internal/connectors/defs --json` — pass: 547 connectors, 0 findings, 0 warnings.
-- Full gates passed after the all-ops update:
+- `go test ./cmd/connectorgen -run 'TestMondayDirectReadMetadataAndSafety|TestMondayFullSurfaceAllOpsCovered' -count=1` — pass after replacing direct-read placeholders with bundled official example query documents.
+- `go test ./internal/connectors/commandrunner -run 'TestRunMondayDirectReadCommands' -count=1` — pass.
+- Full gates passed after the all-ops update and direct-read document refinement:
   - `gofmt -w cmd internal`
   - `go vet ./...`
   - `go test ./...`

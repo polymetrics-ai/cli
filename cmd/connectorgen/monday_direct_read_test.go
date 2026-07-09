@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
@@ -68,10 +69,25 @@ func TestMondayDirectReadMetadataAndSafety(t *testing.T) {
 	for _, op := range b.Operations {
 		ops[op.ID] = op
 	}
-	if op := ops["monday.me.get_me"]; op.Kind != "graphql_query" || op.GraphQL == nil || op.GraphQL.Document == "query MondayMeGetMe { __typename }" {
-		t.Fatalf("monday.me.get_me operation = %+v, want fixed real query document", op)
+	for path, cmd := range commands {
+		op := ops[cmd.Operation]
+		if op.Kind != "graphql_query" || op.GraphQL == nil {
+			t.Fatalf("direct read command %q operation = %+v, want graphql_query with document", path, op)
+		}
+		doc := strings.TrimSpace(op.GraphQL.Document)
+		if !strings.HasPrefix(doc, "query "+op.GraphQL.OperationName) {
+			t.Fatalf("direct read command %q document starts %q, want named fixed query %q", path, firstLine(doc), op.GraphQL.OperationName)
+		}
+		if strings.Contains(doc, "__typename") {
+			t.Fatalf("direct read command %q still uses placeholder __typename document", path)
+		}
+		if strings.Contains(doc, "$") && len(cmd.Flags) == 0 {
+			t.Fatalf("direct read command %q requires GraphQL variables but declares no CLI flags", path)
+		}
 	}
-	if op := ops["monday.account.get_account"]; op.Kind != "graphql_query" || op.GraphQL == nil || op.GraphQL.Document == "query MondayAccountGetAccount { __typename }" {
-		t.Fatalf("monday.account.get_account operation = %+v, want fixed real query document", op)
-	}
+}
+
+func firstLine(s string) string {
+	line, _, _ := strings.Cut(s, "\n")
+	return line
 }
