@@ -1,0 +1,56 @@
+{
+  "phase": "issue-132-hubspot-cli-parity",
+  "parent_issue": 132,
+  "branch": "feat/132-hubspot-cli-parity",
+  "runtime": "pi-api-harness",
+  "gsd": {
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json": "passed_69_commands",
+    "programming_loop_prompt": "blocked_unknown_command",
+    "fallback": "manual_universal_programming_loop_with_scripts_gsd_plan_phase_and_execute_phase_prompts"
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-spf13-cobra",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-graphql",
+    "golang-lint"
+  ],
+  "status": "planned",
+  "verificationPassed": false,
+  "verificationBlocker": "full verification not yet run; parent planning seed only",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "create parent GSD plan and seed parent PR before sub-issue execution"
+    },
+    {
+      "cycle": "worker_spawn",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "current Pi API harness exposes read/bash/edit/write only; no subagent tool or isolated mutating worker cwd is available"
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "live HubSpot credentials or live write tests",
+    "auth scope changes",
+    "new dependencies",
+    "destructive/admin external actions",
+    "reverse ETL execution beyond plan/preview/approval",
+    "binary transfer runtime enablement without explicit destination policy",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-10T00:00:00Z"
+}
