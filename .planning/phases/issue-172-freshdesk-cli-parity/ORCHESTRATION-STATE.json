@@ -95,7 +95,7 @@
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
-        "head_sha": "f502876e",
+        "head_sha": "5d0d50ea",
         "reviewed_range": "parent PR #222 after #173 integration; review pending while draft",
         "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
