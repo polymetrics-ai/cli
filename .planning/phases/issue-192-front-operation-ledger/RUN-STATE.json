@@ -28,7 +28,7 @@
     "baseline_disposition": "current_public_readme_registry_does_not_reproduce_parent_baseline"
   },
   "verificationPassed": true,
-  "verificationStatus": "focused_gates_vet_build_passed_full_go_test_not_rerun",
+  "verificationStatus": "focused_gates_vet_build_passed_full_go_test_not_rerun_review_blocked",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -49,6 +49,11 @@
       "cycle": "sub-pr",
       "decision": "local_critical_path",
       "reason": "Opened sub-PR #242 against feat/188-front-cli-parity."
+    },
+    {
+      "cycle": "review-routing",
+      "decision": "blocked_parent_pr_fallback_needed",
+      "reason": "CodeRabbit skipped #242 because automatic reviews are disabled on non-default base branches; #189 already exhausted CodeRabbit/Copilot fallback quota for the current blocker window."
     }
   ]
 }

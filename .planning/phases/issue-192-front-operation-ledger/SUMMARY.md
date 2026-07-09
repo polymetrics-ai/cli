@@ -1,6 +1,6 @@
 # Summary: Front Operation Ledger (#192)
 
-Status: sub-PR open (#242).
+Status: sub-PR open (#242); automated review blocked/pending.
 
 ## Completed
 
@@ -13,6 +13,7 @@ Status: sub-PR open (#242).
 - Focused validation passed: JSON parse, method/count/classifier check, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `git diff --check`.
 - Broader focused gates passed: `go vet ./...`, `go test ./cmd/connectorgen -run APISurface`, `go test ./internal/connectors/engine -run APISurface`, and `go build ./cmd/pm`.
 - Opened sub-PR #242 against the parent branch: https://github.com/polymetrics-ai/cli/pull/242.
+- CodeRabbit skipped #242 because automatic reviews are disabled on non-default base branches; review coverage remains pending/blocked and must use parent-PR fallback or another approved route before integration is considered complete.
 
 ## Key source facts
 

@@ -97,6 +97,12 @@ gh pr create --base feat/188-front-cli-parity --head feat/192-front-operation-le
 
 Result: passed; sub-PR opened at https://github.com/polymetrics-ai/cli/pull/242.
 
+## Automated review routing
+
+- CodeRabbit automatic review skipped #242 because auto reviews are disabled on base/target branches other than the default branch.
+- #189 already has CodeRabbit review-limit and Copilot quota blockers in the current review window.
+- Coverage status: pending/blocked; do not treat the skip as approval. Parent PR fallback or another approved fallback route is required before integration is considered complete.
+
 ## CLI/help/docs/website parity
 
 This slice changes operation-ledger metadata only. Runtime help renderer and docs/website command parity remain #190 scope. No executable CLI command is added here.
