@@ -20,12 +20,97 @@ Expected first failures:
 
 ## Red Evidence
 
-Pending.
+Runtime CLI red test after adding tests:
+
+```bash
+go test ./internal/cli -run 'TestJiraConnectorCommandSurfaceHelp|TestBareJiraConnectorCommandShowsHelp' -count=1
+```
+
+Result: failed as expected.
+
+```text
+--- FAIL: TestJiraConnectorCommandSurfaceHelp/help_flag
+    cli_test.go:155: Run([jira --help]) code = 1 stderr = error: help topic "jira" not found
+--- FAIL: TestJiraConnectorCommandSurfaceHelp/help_subcommand
+    cli_test.go:155: Run([jira help]) code = 1 stderr = error: help topic "jira" not found
+--- FAIL: TestBareJiraConnectorCommandShowsHelp
+    cli_test.go:181: Run(jira) code = 2 stderr = error: missing connector command path
+--- FAIL: TestJiraConnectorCommandSurfaceHelpJSON
+    cli_test.go:195: Run(--json jira --help) code = 1 stderr = error: help topic "jira" not found
+```
+
+Website red test after adding Jira expectation:
+
+```bash
+cd website && npm ci
+cd website && pnpm test:unit -- connector-data
+```
+
+Result: failed as expected once dependencies were installed from the existing lockfile.
+
+```text
+FAIL tests/api/connector-data.test.ts > connector data route > returns Jira CLI surface metadata for docs rendering
+AssertionError: expected null to match object ...
+Received: null
+```
+
+Note: `pnpm install --frozen-lockfile` was attempted first and failed with `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`; no lockfile changes were made. `npm ci` succeeded without modifying tracked files.
 
 ## Green Evidence
 
-Pending.
+Runtime CLI implementation passed:
+
+```bash
+gofmt -w internal/cli/cli.go internal/cli/cli_test.go internal/connectors/guide.go
+go test ./internal/cli -run 'TestJiraConnectorCommandSurfaceHelp|TestBareJiraConnectorCommandShowsHelp' -count=1
+go run ./cmd/pm jira --help
+go run ./cmd/pm jira
+go run ./cmd/pm --json jira --help
+```
+
+Website/docs implementation passed:
+
+```bash
+go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors
+go run ./cmd/pm docs validate --connectors-dir docs/connectors
+cd website && pnpm gen:website-data
+cd website && pnpm test:unit -- connector-data
+```
+
+Connector validation passed:
+
+```bash
+go test ./internal/connectors -run TestEveryRegisteredConnectorHasGuideManualAndSkill -count=1
+go test ./internal/connectors/bundleregistry -run CLISurface -count=1
+go run ./cmd/connectorgen validate internal/connectors/defs --json
+```
+
+Results:
+
+- `pm jira --help`, `pm jira help`, bare `pm jira`, and `--json jira --help` render the Jira connector manual with `COMMAND SURFACE` and exit successfully.
+- Website connector data route returns non-null Jira `cliSurface` metadata.
+- Connector docs validate with the Jira `COMMAND SURFACE` section retained in generated manual/skill artifacts.
+- Connector validation passed with `connectors_checked=547`, `findings=0`, `warnings=0`.
+
+Full verification passed:
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+cd website && pnpm build
+```
+
+Final connector validation: `connectorgen validate: 547 connector(s) checked, 0 findings`.
+
+Note: two early full-suite attempts hit `internal/connectors/certify` timeout/timing flakes under local load. Focused certify reruns passed, `go test -timeout 20m ./...` passed, and the required `go test ./...` subsequently passed before `make verify`.
 
 ## Refactor Evidence
 
-Pending.
+- Added generic connector command-surface manual routing instead of Jira-specific special cases.
+- Bare connector command namespaces with no command path now render contextual connector help successfully.
+- Kept unknown connectors and connectors without command surfaces returning usage/help errors.
+- Removed trailing empty descriptions from rendered stream/write labels via a shared helper.

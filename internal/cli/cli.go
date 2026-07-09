@@ -42,13 +42,13 @@ func Run(args []string, stdout, stderr io.Writer) int {
 		return 0
 	}
 	if len(rest) > 0 && (rest[0] == "--help" || rest[0] == "-h" || rest[0] == "help") {
-		if err := writeManual(cmd, stdout, jsonOut); err != nil {
+		if err := writeCommandOrConnectorManual(cmd, stdout, jsonOut); err != nil {
 			return writeError(stdout, stderr, err, jsonOut)
 		}
 		return 0
 	}
-	if len(rest) == 0 && isManualCommand(cmd) {
-		if err := writeManual(cmd, stdout, jsonOut); err != nil {
+	if len(rest) == 0 && (isManualCommand(cmd) || isConnectorCommandSurface(cmd)) {
+		if err := writeCommandOrConnectorManual(cmd, stdout, jsonOut); err != nil {
 			return writeError(stdout, stderr, err, jsonOut)
 		}
 		return 0
@@ -129,11 +129,11 @@ func runHelp(args []string, stdout io.Writer) error {
 		topic = args[0]
 	}
 	text, ok := docs[topic]
-	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
+	if ok {
+		fmt.Fprint(stdout, text)
+		return nil
 	}
-	fmt.Fprint(stdout, text)
-	return nil
+	return writeConnectorCommandManual(topic, stdout, false)
 }
 
 func isManualCommand(cmd string) bool {
@@ -153,6 +153,45 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": text})
 	}
 	fmt.Fprint(stdout, text)
+	return nil
+}
+
+func writeCommandOrConnectorManual(topic string, stdout io.Writer, jsonOut bool) error {
+	if _, ok := docs[topic]; ok {
+		return writeManual(topic, stdout, jsonOut)
+	}
+	return writeConnectorCommandManual(topic, stdout, jsonOut)
+}
+
+func isConnectorCommandSurface(name string) bool {
+	connector, ok := appRegistry().Get(name)
+	if !ok {
+		return false
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	return ok && provider.CommandSurface() != nil
+}
+
+func writeConnectorCommandManual(name string, stdout io.Writer, jsonOut bool) error {
+	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
+		return fmt.Errorf("help topic %q not found", name)
+	}
+	if err := connectors.RejectLegacyConnectorName(name); err != nil {
+		return err
+	}
+	connector, ok := appRegistry().Get(name)
+	if !ok {
+		return fmt.Errorf("help topic %q not found", name)
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		return fmt.Errorf("help topic %q not found", name)
+	}
+	manual := connectors.RenderConnectorManual(connector)
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": name, "manual": manual})
+	}
+	fmt.Fprint(stdout, manual)
 	return nil
 }
 
@@ -610,7 +649,7 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
-		return usageErrorf("missing connector command path")
+		return writeConnectorCommandManual(connectorName, stdout, jsonOut)
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError

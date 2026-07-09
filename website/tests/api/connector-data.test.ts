@@ -84,6 +84,37 @@ describe('connector data route', () => {
     });
   });
 
+  it('returns Jira CLI surface metadata for docs rendering', async () => {
+    const { response, json } = await connectorData('jira');
+
+    expect(response.status).toBe(200);
+    expect(json.cliSurface).toMatchObject({
+      usage: 'pm jira <command> [flags]',
+      globalFlags: expect.arrayContaining([
+        expect.objectContaining({ name: 'json', type: 'boolean' }),
+      ]),
+      groups: expect.arrayContaining([
+        expect.objectContaining({
+          title: 'Issue Commands',
+          commands: expect.arrayContaining(['issue', 'comment', 'worklog', 'attachment']),
+        }),
+      ]),
+      commands: expect.arrayContaining([
+        expect.objectContaining({
+          path: 'issue list',
+          intent: 'etl',
+          availability: 'implemented',
+          stream: 'issues',
+        }),
+        expect.objectContaining({
+          path: 'issue delete',
+          intent: 'direct_write',
+          availability: 'unsafe_or_disallowed',
+        }),
+      ]),
+    });
+  });
+
   it('returns a 404 JSON payload for unknown connectors', async () => {
     const { response, json } = await connectorData('missing-connector');
 

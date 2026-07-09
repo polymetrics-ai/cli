@@ -139,6 +139,69 @@ func TestBareCommandJSONShowsManualForAgents(t *testing.T) {
 	}
 }
 
+func TestJiraConnectorCommandSurfaceHelp(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "help flag", args: []string{"jira", "--help"}},
+		{name: "help subcommand", args: []string{"jira", "help"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tt.args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr = %s", tt.args, code, stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{
+				"COMMAND SURFACE",
+				"Usage: pm jira <command> [flags]",
+				"Issue Commands",
+				"issue list - List Jira issues [intent=etl availability=implemented stream=issues]",
+				"issue delete - Delete an issue [intent=direct_write availability=unsafe_or_disallowed]",
+				"Help topics:",
+			} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("jira help missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+				}
+			}
+			if strings.Contains(out, "invalid usage") || strings.Contains(stderr.String(), "invalid usage") {
+				t.Fatalf("jira help returned usage error; stdout=%q stderr=%q", out, stderr.String())
+			}
+		})
+	}
+}
+
+func TestBareJiraConnectorCommandShowsHelp(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"jira"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(jira) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"NAME", "SYNOPSIS", "COMMAND SURFACE", "project list", "user list"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("bare jira manual missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+		}
+	}
+}
+
+func TestJiraConnectorCommandSurfaceHelpJSON(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"--json", "jira", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(--json jira --help) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"kind": "CommandManual"`, `"command": "jira"`, `"manual":`, "COMMAND SURFACE"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("jira json help missing %q:\n%s", want, out)
+		}
+	}
+}
+
 func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"connectors"}, &stdout, &stderr)
