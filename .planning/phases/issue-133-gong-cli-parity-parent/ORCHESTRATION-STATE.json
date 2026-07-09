@@ -1,0 +1,137 @@
+{
+  "parent_issue": {
+    "number": 133,
+    "url": "https://github.com/polymetrics-ai/cli/issues/133",
+    "title": "Gong CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/133-gong-cli-parity",
+  "parent_pr": {
+    "url": "pending",
+    "base": "main",
+    "head": "feat/133-gong-cli-parity",
+    "draft": true,
+    "state": "missing"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-api",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 144,
+      "status": "sub_pr_green",
+      "dependencies": [],
+      "write_scope": "internal/connectors/defs/gong/api_surface.json; internal/connectors/defs/gong/docs.md; cmd/connectorgen connector-specific tests; planning artifacts",
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 141,
+      "status": "planned",
+      "dependencies": [
+        144
+      ],
+      "write_scope": "internal/connectors/defs/gong/cli_surface.json; validation/tests",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 142,
+      "status": "planned",
+      "dependencies": [
+        141
+      ],
+      "write_scope": "help/docs/website/generated artifacts",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 143,
+      "status": "planned",
+      "dependencies": [
+        144
+      ],
+      "write_scope": "Gong stream definitions, schemas, fixtures, stream runner tests",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 145,
+      "status": "planned",
+      "dependencies": [
+        144
+      ],
+      "write_scope": "Gong direct-read metadata/executor/tests",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 146,
+      "status": "planned",
+      "dependencies": [
+        144
+      ],
+      "write_scope": "bounded body/binary policy and fixtures",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 147,
+      "status": "planned",
+      "dependencies": [
+        144,
+        146
+      ],
+      "write_scope": "Gong writes.json, sensitive/admin policy, preview/redaction tests",
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:33:27Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [
+        144
+      ],
+      "reason": "No subagent tool exposed in this Pi API session; #144 executed inline as local critical path."
+    },
+    {
+      "timestamp": "2026-07-09T19:33:27Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        144
+      ],
+      "reason": "Executed #144 inline because no subagent tool is available; targeted local gates passed, PR/review coverage pending."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 144,
+      "url": "https://github.com/polymetrics-ai/cli/issues/144",
+      "branch": "feat/144-gong-operation-ledger",
+      "pr_url": "pending",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "internal/connectors/defs/gong/api_surface.json; internal/connectors/defs/gong/docs.md; cmd/connectorgen connector-specific tests; .planning/phases/issue-144-gong-operation-ledger/**",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "targeted local checks passed: go test ./cmd/connectorgen -run GongAPISurfaceOperationLedger -count=1; go test ./cmd/connectorgen -count=1; go test ./internal/connectors/conformance -run TestConformance/gong|Static -count=1; go run ./cmd/connectorgen validate internal/connectors/defs",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "credentialed Gong checks",
+    "destructive external actions",
+    "reverse ETL execution",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-09T19:33:27Z"
+}

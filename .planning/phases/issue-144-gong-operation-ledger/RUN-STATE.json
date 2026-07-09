@@ -1,0 +1,31 @@
+{
+  "phase": "issue-144-gong-operation-ledger",
+  "issue": 144,
+  "parent_issue": 133,
+  "branch": "feat/133-gong-cli-parity",
+  "status": "planned",
+  "gsd": {
+    "doctor": "pass",
+    "verify_pi": "pass",
+    "list_json": "pass",
+    "plan_phase_prompt": "scripts/gsd prompt plan-phase 133 --skip-research --tdd",
+    "programming_loop_prompt": "failed: scripts/gsd unknown GSD command: programming-loop",
+    "fallback": "manual GSD via repo-local Pi prompts and universal runtime loop"
+  },
+  "tdd": {
+    "red": "go test ./cmd/connectorgen -run GongAPISurfaceOperationLedger -count=1 failed as expected: operation_ledger_version = 0, want 1",
+    "green": "go test ./cmd/connectorgen -run GongAPISurfaceOperationLedger -count=1 passed; connectorgen validate internal/connectors/defs passed with 0 findings",
+    "refactor": "metadata-only operation ledger; no executor paths added"
+  },
+  "verificationPassed": true,
+  "verificationStatus": "make_verify_passed; exact go test ./... default-timeout failed in existing internal/connectors/certify tests, go test -timeout 20m ./... passed",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Issue #144 unlocks the remaining Gong lanes and no subagent tool is available in this Pi API session.",
+      "issue_numbers": [144]
+    }
+  ],
+  "updated_at": "2026-07-09T19:33:27Z"
+}

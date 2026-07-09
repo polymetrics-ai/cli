@@ -6,7 +6,7 @@ Readable streams: `users`, `calls`, `scorecards`.
 
 This connector is read-only; no write actions are declared.
 
-Service API documentation: https://us-66463.app.gong.io/settings/api/documentation.
+Service API documentation: https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=.
 
 ## Auth setup
 
@@ -65,6 +65,13 @@ data.
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 3 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  out_of_scope=7.
+- API coverage is inventoried from the public Gong OpenAPI 3.0.1 spec fetched on 2026-07-09:
+  57 paths and 67 operations.
+- Current executable coverage remains 3 stream-backed endpoints: `users`, `calls`, and
+  `scorecards`.
+- The remaining official operations are tracked as blocked operation-ledger metadata for follow-up
+  direct-read, bounded body/binary, and typed reverse-ETL lanes. They are not executable from this
+  connector until those lanes add schemas, fixtures, policies, and approval gates.
+- `/v2/calls/extensive`, `/v2/calls/transcript`, and `/v2/stats/interaction` are POST read-query
+  operations in the official spec; they are no longer treated as permanent out-of-scope GET
+  exclusions.
