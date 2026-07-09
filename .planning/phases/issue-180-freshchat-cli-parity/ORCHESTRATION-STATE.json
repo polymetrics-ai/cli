@@ -43,10 +43,10 @@
     },
     {
       "number": 184,
-      "status": "ready_after_181_integration",
+      "status": "in_progress_local_critical_path",
       "dependencies": [181],
-      "write_scope": ["internal/connectors/defs/freshchat/api_surface.json", "internal/connectors/defs/freshchat/operations.json"],
-      "decision": "ready_local_critical_path_or_worker_when_available"
+      "write_scope": ["internal/connectors/defs/freshchat/api_surface.json", "internal/connectors/defs/freshchat/operations.json", "cmd/connectorgen/*freshchat*test.go", ".planning/phases/issue-184-freshchat-operation-ledger/**"],
+      "decision": "started_local_critical_path"
     },
     {
       "number": 185,
@@ -111,5 +111,5 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T21:45:17Z"
+  "updated_at": "2026-07-09T21:50:00Z"
 }

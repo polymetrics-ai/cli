@@ -1,0 +1,24 @@
+{
+  "phase": "issue-184-freshchat-operation-ledger",
+  "issue": 184,
+  "parent_issue": 180,
+  "status": "planned",
+  "gsd": {
+    "plan_phase_command": "scripts/gsd prompt plan-phase issue-184-freshchat-operation-ledger --skip-research",
+    "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-184-freshchat-operation-ledger --dry-run",
+    "programming_loop_result": "unavailable_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "planned only; red test not added yet",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T21:45:17Z",
+      "cycle": "issue-plan",
+      "decision": "local_critical_path",
+      "reason": "Issue #184 is unblocked by #181 integration; Pi subagent tool is unavailable, so run locally on a stacked branch.",
+      "issue_numbers": [184]
+    }
+  ],
+  "updated_at": "2026-07-09T21:45:17Z"
+}
