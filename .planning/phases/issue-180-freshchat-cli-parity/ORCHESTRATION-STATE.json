@@ -22,10 +22,10 @@
   "ready_queue": [
     {
       "number": 181,
-      "status": "worker_ready_after_parent_pr",
+      "status": "pr_open_verified",
       "dependencies": ["parent_pr_open"],
       "write_scope": ["internal/connectors/defs/freshchat/cli_surface.json", "internal/connectors/engine/*_test.go", ".planning/phases/issue-181-freshchat-cli-surface-metadata/**"],
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "local_critical_path_pr_open"
     },
     {
       "number": 182,
@@ -83,21 +83,21 @@
       "number": 181,
       "url": "https://github.com/polymetrics-ai/cli/issues/181",
       "branch": "feat/181-freshchat-cli-surface-metadata",
-      "pr_url": "",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/241",
       "worker": "local_critical_path",
-      "status": "worker_ready",
+      "status": "pr_open_verified",
       "write_scope": "Freshchat CLI surface metadata and narrow tests",
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
-      "verification": "pending",
+      "verification": "passed",
       "automated_review": {
-        "primary_route": "blocked",
-        "status": "pending",
-        "head_sha": "",
-        "reviewed_range": "",
-        "coverage_route": "blocked",
-        "fallback_route": "none",
-        "disposition_summary": "pending",
-        "disposition_url": ""
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base",
+        "head_sha": "see_pr_head",
+        "reviewed_range": "pending_parent_pr_after_integration",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_subissue_integration",
+        "disposition_summary": "CodeRabbit skipped PR #241 because non-default base branch reviews are disabled; do not count as review-complete until parent PR #226 receives coverage for the integrated commit range or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/241"
       }
     }
   ],
@@ -110,5 +110,5 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T19:45:00Z"
+  "updated_at": "2026-07-09T21:28:00Z"
 }

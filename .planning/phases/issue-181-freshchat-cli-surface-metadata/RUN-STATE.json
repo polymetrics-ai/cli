@@ -2,15 +2,17 @@
   "phase": "issue-181-freshchat-cli-surface-metadata",
   "issue": 181,
   "parent_issue": 180,
-  "status": "planned",
+  "pr_url": "https://github.com/polymetrics-ai/cli/pull/241",
+  "implementation_sha": "acd8d2387ee98c21ceb486221f1f03bdf8542b9f",
+  "status": "pr_open_verified_review_fallback_pending",
   "gsd": {
     "plan_phase_command": "scripts/gsd prompt plan-phase issue-181-freshchat-cli-surface-metadata --skip-research",
     "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-181-freshchat-cli-surface-metadata --dry-run",
     "programming_loop_result": "unavailable_unknown_command",
     "manual_fallback": true
   },
-  "verificationPassed": false,
-  "verificationBlocker": "planned only; red test not added yet",
+  "verificationPassed": true,
+  "verificationBlocker": "none",
   "orchestrationDecisions": [
     {
       "timestamp": "2026-07-09T19:37:13Z",
@@ -18,7 +20,42 @@
       "decision": "local_critical_path",
       "reason": "Pi subagent tool unavailable; issue will run as local critical path on a stacked branch after parent PR exists.",
       "issue_numbers": [181]
+    },
+    {
+      "timestamp": "2026-07-09T20:05:00Z",
+      "cycle": "red-green",
+      "decision": "local_critical_path",
+      "reason": "Added failing Freshchat CLISurface embed test, added cli_surface.json, and focused gates now pass.",
+      "issue_numbers": [181]
+    },
+    {
+      "timestamp": "2026-07-09T20:47:06Z",
+      "cycle": "verification",
+      "decision": "handoff_ready",
+      "reason": "Focused gates, no-credential CLI smoke, full go gates, make verify, and connectorgen validation pass locally.",
+      "issue_numbers": [181]
+    },
+    {
+      "timestamp": "2026-07-09T21:24:57Z",
+      "cycle": "verification",
+      "decision": "final_handoff_ready",
+      "reason": "After safety-validation cleanup for planned/excluded command metadata, full gates and connectorgen validation pass with zero findings.",
+      "issue_numbers": [181]
+    },
+    {
+      "timestamp": "2026-07-09T21:28:00Z",
+      "cycle": "pull_request",
+      "decision": "stacked_pr_open",
+      "reason": "Opened PR #241 targeting parent branch feat/180-freshchat-cli-parity; awaiting automated review coverage.",
+      "issue_numbers": [181]
+    },
+    {
+      "timestamp": "2026-07-09T21:33:00Z",
+      "cycle": "automated_review_routing",
+      "decision": "parent_pr_fallback_pending",
+      "reason": "CodeRabbit skipped PR #241 because auto reviews are disabled for non-default base branches. Per stacked-PR rules, #181 is not review-complete until parent PR #226 receives CodeRabbit coverage for the integrated commit range or an approved fallback is recorded.",
+      "issue_numbers": [181]
     }
   ],
-  "updated_at": "2026-07-09T19:37:13Z"
+  "updated_at": "2026-07-09T21:33:00Z"
 }

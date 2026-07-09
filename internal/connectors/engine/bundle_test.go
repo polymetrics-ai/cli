@@ -924,6 +924,34 @@ func TestBundleLoadEmbeddedGitHubCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedFreshchatCLISurface(t *testing.T) {
+	b, err := Load(defs.FS, "freshchat")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, freshchat): %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("Freshchat CLISurface is nil; defs.FS must embed cli_surface.json")
+	}
+	if b.CLISurface.Usage != "pm freshchat <command> [flags]" {
+		t.Fatalf("Freshchat CLISurface usage = %q", b.CLISurface.Usage)
+	}
+	if !cliSurfaceHasCommand(b.CLISurface, "user list", "etl", "users", "") {
+		t.Fatalf("Freshchat CLISurface missing implemented user list stream command: %+v", b.CLISurface.Commands)
+	}
+	if !cliSurfaceHasCommand(b.CLISurface, "user create", "reverse_etl", "", "create_user") {
+		t.Fatalf("Freshchat CLISurface missing implemented user create write command: %+v", b.CLISurface.Commands)
+	}
+}
+
+func cliSurfaceHasCommand(surface *CLISurface, path, intent, stream, write string) bool {
+	for _, cmd := range surface.Commands {
+		if cmd.Path == path && cmd.Intent == intent && cmd.Stream == stream && cmd.Write == write {
+			return true
+		}
+	}
+	return false
+}
+
 func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
