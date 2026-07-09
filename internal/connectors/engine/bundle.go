@@ -1047,12 +1047,24 @@ func validateGraphQLDefaultForType(def, typ string) error {
 	return nil
 }
 
+func isSupportedGraphQLVariableType(typ string) bool {
+	switch typ {
+	case "", "string", "integer", "number", "boolean", "json", "string_array", "integer_array", "number_array", "boolean_array":
+		return true
+	default:
+		return false
+	}
+}
+
 func validateGraphQLVariableValue(name string, value any) error {
 	obj, ok := value.(map[string]any)
 	if !ok {
 		return nil
 	}
 	if _, isTemplate := obj["template"]; isTemplate {
+		if _, hasSource := obj["source"]; hasSource {
+			return fmt.Errorf("graphql variable %q must not declare both template and source", name)
+		}
 		if _, ok := obj["template"].(string); !ok {
 			return fmt.Errorf("graphql variable %q template must be a string", name)
 		}
@@ -1078,9 +1090,28 @@ func validateGraphQLVariableValue(name string, value any) error {
 			}
 		}
 		if typ, ok := obj["type"].(string); ok {
-			switch typ {
-			case "", "string", "integer", "number", "boolean":
-			default:
+			if !isSupportedGraphQLVariableType(typ) {
+				return fmt.Errorf("graphql variable %q has unsupported type %q", name, typ)
+			}
+		}
+		return nil
+	}
+	if _, isSource := obj["source"]; isSource {
+		if _, ok := obj["source"].(string); !ok {
+			return fmt.Errorf("graphql variable %q source must be a string", name)
+		}
+		for key := range obj {
+			if key != "source" && key != "type" && key != "omit_when_empty" {
+				return fmt.Errorf("graphql variable %q source object has unsupported key %q", name, key)
+			}
+		}
+		if omit, ok := obj["omit_when_empty"]; ok {
+			if _, ok := omit.(bool); !ok {
+				return fmt.Errorf("graphql variable %q omit_when_empty must be a boolean", name)
+			}
+		}
+		if typ, ok := obj["type"].(string); ok {
+			if !isSupportedGraphQLVariableType(typ) {
 				return fmt.Errorf("graphql variable %q has unsupported type %q", name, typ)
 			}
 		}

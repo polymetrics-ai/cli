@@ -1,16 +1,16 @@
 # Overview
 
 Linear is a GraphQL-first connector. The implemented surface uses fixed, reviewed GraphQL
-documents for approved reads and writes; it does not expose arbitrary GraphQL query or mutation
-execution.
+documents for reads and writes; it does not expose arbitrary GraphQL query or mutation execution.
 
-Readable streams: `issues`, `teams`, `projects`, `users`.
+Runtime reads include the original issue/team/project/user streams plus generated fixed-document
+streams for every `@linear/sdk` query root present in `api_surface.json`. The provider-style CLI
+surface intentionally highlights common commands (`issue/team/project/user list|view`) while the
+connector manifest exposes the broader stream catalog for ETL.
 
-Direct-read view streams back `pm linear issue view`, `team view`, `project view`, and `user view`.
-
-Approved write actions: `create_issue`, `update_issue`, `comment_issue`, and `create_project`.
-They execute only through reverse ETL connector-command planning: plan, preview, approval token, and
-execute. No write action is run during connector inspection or help rendering.
+Write coverage is modeled as fixed GraphQL reverse-ETL actions for every SDK mutation row in the
+Linear operation ledger. These writes execute only through reverse ETL planning: plan, preview,
+approval token, and execute. No write action is run during connector inspection or help rendering.
 
 Service API documentation: https://developers.linear.app/docs.
 
@@ -25,7 +25,7 @@ Connection fields:
   by default. Set `auth_type=oauth` or `auth_type=oauth2.0` to send it with a Bearer prefix.
 - `auth_type` (optional, string); allowed values `oauth`, `oauth2.0`; default empty.
 - `base_url` (optional, string); default `https://api.linear.app`; tests may override it with a
-  local server origin. Streams append `/graphql`.
+  local server origin. Streams and writes append `/graphql`.
 - `max_pages` (optional, string); reserved for future configured page caps. Use command `--limit`
   or ETL `--batch-size` for bounded local reads today.
 
@@ -45,34 +45,42 @@ Authentication behavior:
 All Linear runtime reads use `POST /graphql` with fixed documents stored in `streams.json`.
 Connection streams use cursor pagination through `pageInfo.hasNextPage` and `pageInfo.endCursor`.
 
+Curated CLI-backed streams:
+
 - `issues`: records path `data.issues.nodes`; cursor `updated_at`; includes state, team, assignee,
   creator, branch, and timestamp projections.
 - `teams`: records path `data.teams.nodes`; cursor `updated_at`.
 - `projects`: records path `data.projects.nodes`; cursor `updated_at`.
 - `users`: records path `data.users.nodes`; cursor `updated_at`.
-- `issue`, `team`, `project`, `user`: single-object GraphQL view streams used only by constrained
+- `issue`, `team`, `project`, `user`: single-object GraphQL view streams used by constrained
   direct-read CLI commands.
+
+Generated query streams cover the remaining SDK query roots with fixed documents and explicit
+query-variable mappings. Streams that require IDs or filters expect those values in the request query
+map; connector inspection and help rendering never call Linear.
 
 ## Write actions & risks
 
-Linear write actions are fixed GraphQL mutations and are never raw user-supplied GraphQL.
+Linear write actions are fixed GraphQL mutations and are never raw user-supplied GraphQL. The common
+CLI-backed actions are:
 
-- `create_issue`: creates a visible Linear issue. Required fields: `team_id`, `title`.
-- `update_issue`: mutates an existing Linear issue. Required field: `issue_id` plus at least one
-  update field.
-- `comment_issue`: creates a visible comment on a Linear issue. Required fields: `issue_id`, `body`.
-- `create_project`: creates a visible Linear project. Required fields: `team_id`, `name`.
+- `create_issue`: creates a visible Linear issue.
+- `update_issue`: mutates an existing Linear issue.
+- `comment_issue`: creates a visible comment on a Linear issue.
+- `create_project`: creates a visible Linear project.
 
-Every write is approval-gated through reverse ETL plan → preview → approval → execute. Sensitive,
-admin, destructive, upload, auth, integration, webhook, invite, organization, and user-management
-mutations are inventoried in `api_surface.json` and blocked by default.
+The generated write catalog covers every SDK mutation root in the operation ledger using explicit
+`record_schema` fields and fixed GraphQL variables. Every write is approval-gated through reverse ETL
+plan → preview → approval → execute. Destructive/admin/sensitive-shaped mutations carry risk text and
+`confirm: destructive` so the reverse-ETL execution path requires typed confirmation.
 
 ## Known limits
 
-- Raw arbitrary GraphQL is disallowed.
-- The operation ledger inventories current `@linear/sdk` generated GraphQL root operations; only the
-  approved stream/direct-read/write subset is executable.
-- Binary/file uploads and admin/sensitive mutations require future operation-specific policy before
-  they can become executable.
+- Raw arbitrary GraphQL is disallowed and remains the only blocked ledger row.
+- The operation ledger is generated from current `@linear/sdk` GraphQL documents, which currently
+  expose 465 fixed query/mutation roots plus the explicit blocked raw-GraphQL row in this bundle.
+- Generated query streams use a generic object schema unless a curated stream schema already exists;
+  add operation-specific schemas/fixtures as follow-up hardening when a query becomes a primary CLI
+  workflow.
 - Connector checks are metadata-safe locally; do not run credentialed Linear checks unless explicitly
   requested.

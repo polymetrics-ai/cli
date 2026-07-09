@@ -602,8 +602,65 @@ func TestLinearOperationLedgerInventoriesGraphQLOperations(t *testing.T) {
 	if covered < 12 {
 		t.Fatalf("covered endpoint rows = %d, want stream/direct-read/write coverage", covered)
 	}
-	if blocked < 400 {
-		t.Fatalf("blocked operation rows = %d, want full Linear GraphQL operation inventory", blocked)
+	if covered+blocked < 460 {
+		t.Fatalf("ledger rows = covered(%d)+blocked(%d), want full Linear GraphQL operation inventory", covered, blocked)
+	}
+}
+
+func TestLinearMutationOperationsModeledAsTypedWrites(t *testing.T) {
+	b, err := Load(os.DirFS("../defs"), "linear")
+	if err != nil {
+		t.Fatalf("Load linear: %v", err)
+	}
+	writes := map[string]bool{}
+	for _, action := range b.Writes {
+		writes[action.Name] = true
+		if action.BodyType != "graphql" || action.GraphQL == nil {
+			t.Fatalf("linear write %q is not a fixed GraphQL action", action.Name)
+		}
+		if strings.TrimSpace(action.Risk) == "" {
+			t.Fatalf("linear write %q missing risk text", action.Name)
+		}
+	}
+
+	mutationRows, coveredMutationRows := 0, 0
+	var blocked []string
+	for _, ep := range b.Surface.Endpoints {
+		if !strings.Contains(ep.Path, "(mutation:") {
+			continue
+		}
+		mutationRows++
+		if ep.CoveredBy != nil && ep.CoveredBy.Write != "" {
+			coveredMutationRows++
+			if !writes[ep.CoveredBy.Write] {
+				t.Fatalf("mutation row %s covered_by.write %q is not declared", ep.Path, ep.CoveredBy.Write)
+			}
+			continue
+		}
+		if ep.Operation == nil || !hardBlockedLinearMutation(ep.Operation) {
+			blocked = append(blocked, ep.Path)
+		}
+	}
+	if mutationRows < 300 {
+		t.Fatalf("mutationRows = %d, want full Linear mutation inventory", mutationRows)
+	}
+	if len(blocked) > 0 {
+		t.Fatalf("%d Linear mutation rows are neither typed writes nor exact hard blocks; first rows: %v", len(blocked), blocked[:min(len(blocked), 10)])
+	}
+	if coveredMutationRows < 300 {
+		t.Fatalf("covered mutation rows = %d, want nearly all Linear mutations modeled as typed writes", coveredMutationRows)
+	}
+}
+
+func hardBlockedLinearMutation(op *SurfaceOperation) bool {
+	if op == nil || op.Status != "blocked" || !op.BlockedByDefault {
+		return false
+	}
+	switch op.Model {
+	case "duplicate", "deprecated", "disallowed", "binary_read":
+		return true
+	default:
+		return false
 	}
 }
 

@@ -11,10 +11,10 @@ Completed:
 - Completed #97 CLI surface metadata and opened draft parent PR #131.
 - Completed local critical-path slices #98-#103:
   - connector command-surface help for `pm help linear`, bare `pm linear`, and `pm linear --help`;
-  - fixed GraphQL Linear streams for list and view reads;
+  - fixed GraphQL Linear streams for list/view reads plus generated fixed-document streams for every SDK query row in the ledger;
   - stream-backed direct-read runner support;
-  - fixed GraphQL write actions for `create_issue`, `update_issue`, `comment_issue`, and `create_project` through reverse ETL plan/preview/approval/execute;
-  - Linear operation ledger v1 with remaining SDK-derived/raw/admin/sensitive operations blocked by default;
+  - fixed GraphQL write actions for `create_issue`, `update_issue`, `comment_issue`, `create_project`, plus generated typed reverse-ETL actions for every SDK mutation row in the ledger (321 write actions total);
+  - Linear operation ledger v1 with 465 covered rows and only raw arbitrary GraphQL blocked;
   - docs and website generated data updates.
 - Local verification passed: `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `go run ./cmd/connectorgen validate internal/connectors/defs --json`, `./pm docs validate --connectors-dir docs/connectors`, `make verify`, and `git diff --check`.
 

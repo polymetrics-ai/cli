@@ -268,11 +268,11 @@ func TestLinearWriteActionUsesFixedGraphQLMutation(t *testing.T) {
 	}
 	got := cap.json()
 	query, _ := got["query"].(string)
-	if !strings.Contains(query, "mutation CreateLinearIssue") || strings.Contains(query, "delete") {
+	if !strings.Contains(query, "mutation createIssue") || !strings.Contains(query, "issueCreate(input: $input)") || strings.Contains(query, "delete") {
 		t.Fatalf("query = %q, want fixed Linear create mutation", query)
 	}
-	if got["operationName"] != "CreateLinearIssue" {
-		t.Fatalf("operationName = %v, want CreateLinearIssue", got["operationName"])
+	if got["operationName"] != "createIssue" {
+		t.Fatalf("operationName = %v, want createIssue", got["operationName"])
 	}
 	vars, ok := got["variables"].(map[string]any)
 	if !ok {
@@ -287,6 +287,43 @@ func TestLinearWriteActionUsesFixedGraphQLMutation(t *testing.T) {
 	}
 	if _, ok := input["labelIds"]; ok {
 		t.Fatalf("input = %+v, optional labelIds must be absent unless explicitly supported", input)
+	}
+}
+
+func TestWriteGraphQLVariableSourcePreservesArraysAndObjects(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"data":{"updateLabels":{"ok":true}}}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:     "update_labels",
+		Kind:     "update",
+		Method:   http.MethodPost,
+		Path:     "/graphql",
+		BodyType: "graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "mutation UpdateLabels($ids: [String!]!, $metadata: JSON) { updateLabels(ids: $ids, metadata: $metadata) { ok } }",
+			OperationName: "UpdateLabels",
+			Variables: map[string]any{
+				"ids":      map[string]any{"source": "record.ids", "type": "string_array"},
+				"metadata": map[string]any{"source": "record.metadata", "type": "json", "omit_when_empty": true},
+			},
+		},
+		RecordSchema: json.RawMessage(`{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","items":{"type":"string"}},"metadata":{"type":"object"}}}`),
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_labels"}, []connectors.Record{{
+		"ids":      []any{"label_1", "label_2"},
+		"metadata": map[string]any{"source": "test"},
+	}}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	vars := cap.json()["variables"].(map[string]any)
+	ids, ok := vars["ids"].([]any)
+	if !ok || len(ids) != 2 || ids[0] != "label_1" || ids[1] != "label_2" {
+		t.Fatalf("ids = %#v, want preserved string array", vars["ids"])
+	}
+	metadata, ok := vars["metadata"].(map[string]any)
+	if !ok || metadata["source"] != "test" {
+		t.Fatalf("metadata = %#v, want preserved object", vars["metadata"])
 	}
 }
 

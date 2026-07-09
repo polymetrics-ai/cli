@@ -1,0 +1,16 @@
+{
+  "phase": "issue-80-linear-all-ops",
+  "parentIssue": 80,
+  "branch": "feat/80-linear-cli-parity",
+  "status": "green_focused_checks_passed",
+  "manualGsdFallback": true,
+  "promptSource": "PI_CONNECTOR_PROMPT.md",
+  "coverage": {
+    "linearApiSurfaceRows": 466,
+    "coveredRows": 465,
+    "blockedRows": 1,
+    "writeActions": 321,
+    "streams": 144,
+    "blockedReason": "raw arbitrary GraphQL remains disallowed"
+  }
+}

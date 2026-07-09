@@ -13,6 +13,9 @@ Date: 2026-07-09
 ## Focused Linear gates
 
 ```bash
+go test ./internal/connectors/engine -run 'TestLinear.*Operation|TestLinearMutationOperationsModeledAsTypedWrites|TestWriteGraphQLVariableSourcePreservesArraysAndObjects|TestLinearWriteActionUsesFixedGraphQLMutation' -count=1
+# pass
+
 go test ./internal/cli ./internal/connectors/engine -run 'TestLinear' -count=1
 # pass
 
@@ -78,6 +81,14 @@ make verify
 git diff --check
 # pass
 ```
+
+## Coverage snapshot after all-ops prompt refresh
+
+- `api_surface.json` rows: 466
+- covered rows: 465
+- blocked rows: 1 raw arbitrary GraphQL row
+- fixed GraphQL write actions: 321
+- fixed GraphQL streams: 144
 
 ## Website unit test note
 

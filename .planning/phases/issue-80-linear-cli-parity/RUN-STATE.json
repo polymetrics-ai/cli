@@ -3,7 +3,7 @@
   "parentIssue": 80,
   "branch": "feat/80-linear-cli-parity",
   "parentPR": "https://github.com/polymetrics-ai/cli/pull/131",
-  "status": "verified_pending_commit_push_review",
+  "status": "verified_all_ops_update_pending_commit_push_review",
   "gsd": {
     "doctor": "passed",
     "verifyPi": "passed",
@@ -13,7 +13,7 @@
     "manualFallback": "scripts/gsd returned: unknown GSD command: programming-loop"
   },
   "verificationPassed": true,
-  "verificationStatus": "#98-#103 local critical-path implementation passed go vet, go test ./..., go build ./cmd/pm, docs validate, connectorgen validate, make verify, and git diff --check",
+  "verificationStatus": "All-ops update passed focused checks, go vet, go test ./..., go build ./cmd/pm, docs validate, connectorgen validate, make verify, and git diff --check",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -29,6 +29,11 @@
       "cycle": "issue-98-103-complete-ops",
       "decision": "consolidated_local_critical_path",
       "reason": "The user requested complete Linear operation parity in this checkout; subagent spawning was unavailable, so #98-#103 were implemented locally with separate phase artifacts."
+    },
+    {
+      "cycle": "issue-80-all-ops-refresh",
+      "decision": "manual_gsd_all_ops_update",
+      "reason": "Refreshed PI_CONNECTOR_PROMPT.md requires all implementable operations to be covered; generated fixed-document stream/write coverage for all SDK operation rows in the ledger."
     }
   ],
   "subissues": {
@@ -40,5 +45,13 @@
     "102": "verified_green_slice",
     "103": "verified_green_slice"
   },
-  "updatedAt": "2026-07-09T00:00:00Z"
+  "updatedAt": "2026-07-09T00:00:00Z",
+  "coverage": {
+    "linearApiSurfaceRows": 466,
+    "coveredRows": 465,
+    "blockedRows": 1,
+    "writeActions": 321,
+    "streams": 144,
+    "blockedReason": "raw arbitrary GraphQL remains disallowed"
+  }
 }
