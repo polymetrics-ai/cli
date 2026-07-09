@@ -1,0 +1,41 @@
+{
+  "phase": "issue-90-bitbucket-cli-surface",
+  "status": "planned",
+  "parent_issue": 79,
+  "sub_issue": 90,
+  "parent_branch": "feat/79-bitbucket-cli-parity",
+  "sub_issue_branch": "feat/bitbucket-cli-surface",
+  "execution_mode": "local_critical_path",
+  "gsd": {
+    "plan_phase_prompt": "scripts/gsd prompt plan-phase issue-90-bitbucket-cli-surface --skip-research --tdd",
+    "programming_loop_prompt": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "manual_fallback": true
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-documentation",
+    "golang-context",
+    "golang-concurrency",
+    "golang-graphql",
+    "golang-lint",
+    "golang-spf13-cobra"
+  ],
+  "verificationPassed": false,
+  "verificationNotes": "Plan created before production edits; red test pending.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No subagent tool exposed; #90 creates the seed Bitbucket bundle and cannot safely run concurrently with #93."
+    }
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}
