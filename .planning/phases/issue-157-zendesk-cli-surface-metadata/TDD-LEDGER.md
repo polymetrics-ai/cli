@@ -1,9 +1,17 @@
 # TDD Ledger: Zendesk CLI Surface Metadata
 
-## Planned red evidence
+## Red evidence
 
-- `test -d internal/connectors/defs/zendesk` initially fails because the umbrella Zendesk bundle is absent.
-- A focused embedded-bundle test for `engine.Load(defs.FS, "zendesk")` should fail before adding the bundle, then pass after `metadata.json`, `spec.json`, `streams.json`, `cli_surface.json`, and `docs.md` are embedded.
+- `test -d internal/connectors/defs/zendesk` failed with exit code 1 because the umbrella Zendesk bundle is absent.
+- Added `TestBundleLoadEmbeddedZendeskCLISurface`.
+- `go test ./internal/connectors/engine -run TestBundleLoadEmbeddedZendeskCLISurface -count=1` failed as expected:
+
+```text
+Load(defs.FS, zendesk): load bundle zendesk: missing required file metadata.json
+```
+
+## Planned validation
+
 - `go run ./cmd/connectorgen validate internal/connectors/defs` should remain clean after adding Zendesk metadata.
 
 ## Planned green evidence
