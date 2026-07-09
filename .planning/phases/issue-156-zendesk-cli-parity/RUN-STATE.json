@@ -1,7 +1,7 @@
 {
   "phase": "issue-156-zendesk-cli-parity",
   "issue": 156,
-  "status": "planned",
+  "status": "parent_pr_open",
   "runtime": "pi",
   "gsd": {
     "adapter": "scripts/gsd",
@@ -26,7 +26,12 @@
       "cycle": "worker-dispatch",
       "decision": "not_spawned_runtime_capability_missing",
       "reason": "This Pi harness exposes read/bash/edit/write only and no subagent tool; mutating worker spawn is unavailable."
+    },
+    {
+      "cycle": "parent-pr-open",
+      "decision": "local_critical_path",
+      "reason": "Draft parent PR #225 is open; proceed with #157 locally."
     }
   ],
-  "updated_at": "2026-07-09T19:34:19Z"
+  "updated_at": "2026-07-09T19:45:00Z"
 }

@@ -1,6 +1,6 @@
 # Summary: Zendesk CLI Parity Parent Orchestration
 
-Status: planned, parent PR seed pending.
+Status: planned, draft parent PR #225 open.
 
 ## Completed
 
@@ -11,13 +11,11 @@ Status: planned, parent PR seed pending.
 
 ## Current blockers
 
-- Parent PR does not exist yet. Next step is to commit this plan seed, push `feat/156-zendesk-cli-parity`, and open a draft parent PR to `main`.
 - `scripts/gsd prompt programming-loop ...` is not registered in this adapter; manual GSD fallback is recorded and active.
 - This Pi harness has no `subagent` tool; #157 will run locally as the critical-path sub-issue unless a worker-capable runtime is provided.
 
 ## Next
 
-1. Validate JSON/diff for the planning artifacts.
-2. Commit and push the parent seed.
-3. Open a draft parent PR.
-4. Branch `feat/157-zendesk-cli-surface-metadata` from the parent branch and execute #157 with red/green verification.
+1. Branch `feat/157-zendesk-cli-surface-metadata` from the parent branch.
+2. Execute #157 with red/green verification.
+3. Open a stacked sub-PR against `feat/156-zendesk-cli-parity`.

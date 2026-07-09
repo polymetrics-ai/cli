@@ -2,7 +2,7 @@
 
 Parent issue: #156
 Parent branch: `feat/156-zendesk-cli-parity`
-Parent PR: pending creation after this plan seed commit
+Parent PR: #225 (`https://github.com/polymetrics-ai/cli/pull/225`, draft)
 Default branch: `main`
 
 ## GSD Command Path

@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/156-zendesk-cli-parity",
   "parent_pr": {
-    "url": "",
+    "url": "https://github.com/polymetrics-ai/cli/pull/225",
     "base": "main",
     "head": "feat/156-zendesk-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -23,7 +23,7 @@
     {
       "number": 157,
       "status": "worker_ready",
-      "dependencies": ["parent_pr_open"],
+      "dependencies": [],
       "write_scope": [
         "internal/connectors/defs/zendesk",
         ".planning/phases/issue-157-zendesk-cli-surface-metadata"
@@ -106,6 +106,12 @@
       "decision": "not_spawned_runtime_capability_missing",
       "issue_numbers": [157],
       "reason": "No subagent tool is exposed in this Pi harness. The orchestrator will execute #157 locally after the parent PR exists."
+    },
+    {
+      "timestamp": "2026-07-09T19:45:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [157],
+      "reason": "Draft parent PR #225 now exists; proceed locally with #157 because mutating worker spawn is unavailable."
     }
   ],
   "subissues": [
@@ -144,5 +150,5 @@
     "quality gate reductions",
     "reverse ETL execution"
   ],
-  "updated_at": "2026-07-09T19:34:19Z"
+  "updated_at": "2026-07-09T19:45:00Z"
 }
