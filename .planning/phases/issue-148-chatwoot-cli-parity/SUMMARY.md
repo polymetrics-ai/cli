@@ -12,13 +12,16 @@ Status: in progress.
 - Recorded runtime fanout blocker: current Pi API tool surface lacks `subagent`, so issue #149 is local critical path.
 - Opened sub-PR #227 for issue #149; CodeRabbit skipped automatic review because the base branch is non-default.
 - Ran full local handoff gates on the #149 branch: `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs` passed. The first uncached `go test ./...` attempt timed out at the default 10m package timeout in `internal/connectors/certify`; `make verify` passed using the project timeout and a follow-up `go test ./...` passed from cache.
+- PR #227 remote checks passed and the branch was squash-merged into the parent as `573b89f5cf8952723213cd55bfa19cb5e3165618`.
+- Requested manual CodeRabbit review on parent PR #223 because #227 skipped review and #223 had new integrated commits while still draft.
+- Started issue #150 locally as the next dependency-unblocked lane and created its GSD/TDD/verification artifacts before production edits.
 
 ## Next
 
-1. Commit and push issue #149 implementation branch.
-2. Open a stacked sub-PR against `feat/148-chatwoot-cli-parity` with `Refs #149` and `Refs #148`.
-3. Record automated review routing status; for a non-default-base PR, parent PR fallback coverage may be needed if CodeRabbit skips the sub-PR.
-4. Continue dependency queue after #149 is reviewed/integrated.
+1. Add #150 red tests for Chatwoot runtime manual and website connector data.
+2. Regenerate checked-in connector docs and website data for Chatwoot command surface parity.
+3. Run targeted and docs/website parity verification.
+4. Open a stacked sub-PR against `feat/148-chatwoot-cli-parity` with `Refs #150` and `Refs #148`.
 
 ## Safety
 

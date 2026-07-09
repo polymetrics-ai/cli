@@ -22,7 +22,7 @@
   "ready_queue": [
     {
       "number": 149,
-      "status": "sub_pr_open",
+      "status": "merged_to_parent",
       "dependencies": [],
       "write_scope": [
         "internal/connectors/defs/chatwoot/metadata.json",
@@ -31,12 +31,14 @@
         "internal/connectors/defs/chatwoot/docs.md",
         ".planning/phases/issue-149-chatwoot-cli-surface-metadata"
       ],
-      "decision": "not_spawned_review_blocked"
+      "decision": "integrated_parent_review_pending"
     },
     {
       "number": 150,
-      "status": "planned",
-      "dependencies": [149],
+      "status": "in_progress",
+      "dependencies": [
+        149
+      ],
       "write_scope": [
         "cmd",
         "internal/cli",
@@ -45,12 +47,15 @@
         "website",
         ".planning/phases/issue-150-chatwoot-help-renderer"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path"
     },
     {
       "number": 151,
       "status": "planned",
-      "dependencies": [149, 152],
+      "dependencies": [
+        149,
+        152
+      ],
       "write_scope": [
         "internal/connectors/defs/chatwoot/streams.json",
         "internal/connectors/defs/chatwoot/schemas",
@@ -62,7 +67,9 @@
     {
       "number": 152,
       "status": "planned",
-      "dependencies": [149],
+      "dependencies": [
+        149
+      ],
       "write_scope": [
         "internal/connectors/defs/chatwoot/api_surface.json",
         ".planning/phases/issue-152-chatwoot-operation-ledger"
@@ -72,7 +79,10 @@
     {
       "number": 153,
       "status": "planned",
-      "dependencies": [149, 152],
+      "dependencies": [
+        149,
+        152
+      ],
       "write_scope": [
         "internal/connectors/defs/chatwoot/cli_surface.json",
         "internal/connectors/commandrunner",
@@ -84,7 +94,10 @@
     {
       "number": 154,
       "status": "planned",
-      "dependencies": [149, 152],
+      "dependencies": [
+        149,
+        152
+      ],
       "write_scope": [
         "internal/connectors/defs/chatwoot",
         "internal/connectors/engine",
@@ -96,7 +109,10 @@
     {
       "number": 155,
       "status": "planned",
-      "dependencies": [149, 152],
+      "dependencies": [
+        149,
+        152
+      ],
       "write_scope": [
         "internal/connectors/defs/chatwoot/writes.json",
         "internal/connectors/defs/chatwoot/api_surface.json",
@@ -110,20 +126,40 @@
     {
       "timestamp": "2026-07-10T00:00:00Z",
       "decision": "local_critical_path",
-      "issue_numbers": [148, 149],
+      "issue_numbers": [
+        148,
+        149
+      ],
       "reason": "Parent PR was missing and the current Pi API session has no subagent tool. Coordinator opened draft parent PR #223, then implemented issue #149 locally instead of claiming spawned workers."
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
       "decision": "not_spawned_runtime_capability_missing",
-      "issue_numbers": [150, 151, 152, 153, 154, 155],
+      "issue_numbers": [
+        150,
+        151,
+        152,
+        153,
+        154,
+        155
+      ],
       "reason": "Mutating worker fanout requires Pi subagent support and isolated cwd/worktree per worker; no subagent tool is available in this API harness."
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
       "decision": "not_spawned_review_blocked",
-      "issue_numbers": [149],
+      "issue_numbers": [
+        149
+      ],
       "reason": "Sub-PR #227 is open with remote checks pending. CodeRabbit skipped because the base branch is non-default; parent PR #223 fallback coverage is pending after integration."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        150
+      ],
+      "reason": "Issue #149 is merged to the parent branch. Mutating worker fanout remains unavailable in this Pi API harness, so issue #150 is continuing locally with GSD/TDD artifacts before production edits."
     }
   ],
   "subissues": [
@@ -133,22 +169,50 @@
       "branch": "feat/149-chatwoot-cli-surface-metadata",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/227",
       "worker": "coordinator-local-critical-path",
-      "status": "sub_pr_open",
+      "status": "merged_to_parent",
       "write_scope": [
         "internal/connectors/defs/chatwoot",
         ".planning/phases/issue-149-chatwoot-cli-surface-metadata"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "full local gates passed on #149 branch; PR #227 remote verify pending/long-running at last check",
+      "verification": "full local gates and PR #227 remote checks passed; squash-merged into parent as 573b89f5cf8952723213cd55bfa19cb5e3165618",
       "automated_review": {
         "primary_route": "coderabbit_auto",
         "status": "skipped",
-        "head_sha": "pending_latest_push",
+        "head_sha": "79b7bd1026615e1cc45e01b48a8c19e96b1854e6",
         "reviewed_range": "not reviewed; CodeRabbit skipped non-default-base PR #227",
-        "coverage_route": "parent_pr_fallback",
+        "coverage_route": "parent_pr_manual_review_requested",
         "fallback_route": "none",
-        "disposition_summary": "CodeRabbit skip is informational, not approval. Parent PR #223 fallback coverage is pending after integration.",
+        "disposition_summary": "CodeRabbit skipped #227 because the base was non-default. After squash-merge to parent, manual @coderabbitai review was requested on parent PR #223 for the integrated commit range.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/227"
+      }
+    },
+    {
+      "number": 150,
+      "url": "https://github.com/polymetrics-ai/cli/issues/150",
+      "branch": "feat/150-chatwoot-help-renderer",
+      "pr_url": null,
+      "worker": "coordinator-local-critical-path",
+      "status": "in_progress",
+      "write_scope": [
+        "internal/connectors/bundleregistry/registry_test.go",
+        "website/tests/api/connector-data.test.ts",
+        "docs/connectors/chatwoot",
+        "website/content/docs/cli-reference.mdx",
+        "website/lib/connectors.catalog.data.generated.json",
+        ".planning/phases/issue-150-chatwoot-help-renderer"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
+      "verification": "planned; red tests pending",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "not_started",
+        "head_sha": null,
+        "reviewed_range": "not reviewed; no PR yet",
+        "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
+        "fallback_route": "none",
+        "disposition_summary": "Pending implementation and PR.",
+        "disposition_url": null
       }
     }
   ],
