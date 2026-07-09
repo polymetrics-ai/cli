@@ -74,8 +74,11 @@ func TestBitbucketCLISurfaceMetadata(t *testing.T) {
 		if cmd.Intent == "reverse_etl" && (cmd.Risk == "" || cmd.Approval == "") {
 			t.Fatalf("reverse_etl command %q missing risk/approval", cmd.Path)
 		}
-		if (cmd.Intent == "raw_api" || cmd.Intent == "direct_write") && cmd.Availability == "implemented" {
-			t.Fatalf("unsafe command %q must not be implemented", cmd.Path)
+		if cmd.Intent == "raw_api" && cmd.Availability != "unsafe_or_disallowed" {
+			t.Fatalf("raw API command %q availability = %q, want unsafe_or_disallowed", cmd.Path, cmd.Availability)
+		}
+		if cmd.Intent == "direct_write" && cmd.Availability != "unsafe_or_disallowed" {
+			t.Fatalf("direct write command %q availability = %q, want unsafe_or_disallowed", cmd.Path, cmd.Availability)
 		}
 	}
 	if implemented != 0 {

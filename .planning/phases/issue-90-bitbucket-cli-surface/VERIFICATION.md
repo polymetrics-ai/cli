@@ -49,3 +49,5 @@ make verify
 - `make verify`: passed.
 - `go run ./cmd/connectorgen validate internal/connectors/defs`: passed; `connectors_checked=548`, `findings=0`.
 - Commit/push checkpoint: `0e359d76` pushed to `feat/79-bitbucket-cli-parity`.
+- CodeRabbit actionable finding disposition: accepted; tightened `direct_write` safety assertion in `cmd/connectorgen/bitbucket_cli_surface_test.go`.
+- Post-review-fix gates: `go test ./cmd/connectorgen -run TestBitbucketCLISurfaceMetadata -count=1`, `go test ./cmd/connectorgen -count=1`, `go test ./...`, and `make verify` passed.

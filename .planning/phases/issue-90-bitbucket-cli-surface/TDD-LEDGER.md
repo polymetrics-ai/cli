@@ -64,6 +64,18 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 
 Result: passed after updating catalog/bundle count tests and adding generated Bitbucket connector manual/catalog docs.
 
+CodeRabbit review fix:
+
+```bash
+gofmt -w cmd/connectorgen/bitbucket_cli_surface_test.go
+go test ./cmd/connectorgen -run TestBitbucketCLISurfaceMetadata -count=1
+go test ./cmd/connectorgen -count=1
+go test ./...
+make verify
+```
+
+Result: passed after tightening the test so `direct_write` commands must be `unsafe_or_disallowed`, not merely non-implemented.
+
 ```bash
 cd website && pnpm run gen:website-data
 cd website && pnpm run gen:website-data

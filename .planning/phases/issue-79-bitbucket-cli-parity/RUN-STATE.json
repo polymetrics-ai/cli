@@ -33,7 +33,7 @@
     "caveman"
   ],
   "verificationPassed": true,
-  "verificationNotes": "#90 focused gates and full local gates passed; parent remains in progress for #91-#96. #90 commit pushed: 0e359d76.",
+  "verificationNotes": "#90 focused gates and full local gates passed; parent remains in progress for #91-#96. #90 commit pushed: 0e359d76. CodeRabbit direct_write safety finding accepted/fixed; post-fix go test ./... and make verify passed.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -69,6 +69,11 @@
       "cycle": "issue-90-pushed",
       "decision": "pushed_to_parent_branch",
       "reason": "#90 verified slice pushed at 0e359d76; next lane can start after review-route decision."
+    },
+    {
+      "cycle": "review-fix",
+      "decision": "accepted_coderabbit_finding",
+      "reason": "Tightened Bitbucket CLI surface test so direct_write commands must be unsafe_or_disallowed; post-fix gates passed."
     }
   ],
   "human_gates": [

@@ -29,7 +29,7 @@
     "golang-spf13-cobra"
   ],
   "verificationPassed": true,
-  "verificationNotes": "Focused #90 gates and full local gates passed, including go vet ./..., go test ./..., go build ./cmd/pm, make verify, docs validate, and connectorgen validate. Commit pushed: 0e359d76.",
+  "verificationNotes": "Focused #90 gates and full local gates passed, including go vet ./..., go test ./..., go build ./cmd/pm, make verify, docs validate, and connectorgen validate. Commit pushed: 0e359d76. CodeRabbit direct_write safety finding accepted/fixed; post-fix go test ./... and make verify passed.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -55,6 +55,11 @@
       "cycle": "commit-push",
       "decision": "pushed_to_parent_branch",
       "reason": "#90 verified slice committed and pushed to feat/79-bitbucket-cli-parity at 0e359d76."
+    },
+    {
+      "cycle": "review-fix",
+      "decision": "accepted_coderabbit_finding",
+      "reason": "Tightened Bitbucket CLI surface test so direct_write commands must be unsafe_or_disallowed; post-fix gates passed."
     }
   ],
   "updated_at": "2026-07-09T00:00:00Z"

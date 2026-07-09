@@ -67,3 +67,5 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
 Results: passed; connector validation reported `connectors_checked=548`, `findings=0`, `warnings=0`; `make verify` passed. Commit/push checkpoint: `0e359d76` pushed to `feat/79-bitbucket-cli-parity`.
+
+CodeRabbit actionable finding disposition: accepted and fixed by tightening the #90 test so `direct_write` commands must be `unsafe_or_disallowed`. Post-review-fix `go test ./...` and `make verify` passed.
