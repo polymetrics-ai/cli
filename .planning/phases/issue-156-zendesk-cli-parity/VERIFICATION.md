@@ -24,6 +24,8 @@ git diff --check
 
 ## Required implementation gates before handoff
 
+#157 PR #238 passed local and CI gates:
+
 ```bash
 gofmt -w cmd internal
 go vet ./...
@@ -32,6 +34,8 @@ go build ./cmd/pm
 make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Parent integration remains gated on external automated review or human fallback because CodeRabbit is currently rate-limited for the stacked PR.
 
 ## Runtime / credential gates
 

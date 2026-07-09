@@ -1,7 +1,7 @@
 {
   "phase": "issue-156-zendesk-cli-parity",
   "issue": 156,
-  "status": "parent_pr_open",
+  "status": "subissue_157_pr_open_review_blocked",
   "runtime": "pi",
   "gsd": {
     "adapter": "scripts/gsd",
@@ -15,7 +15,7 @@
     "execute_prompt": "scripts/gsd prompt execute-phase issue-157-zendesk-cli-surface-metadata --plan 1"
   },
   "verificationPassed": false,
-  "verificationNotes": "Parent seed planning only; full make verify is pending implementation slices.",
+  "verificationNotes": "Parent seed planning is open. #157 local and CI verification passed in stacked PR #238; integration is waiting on external automated review or human fallback because CodeRabbit is rate-limited for the stacked PR.",
   "orchestrationDecisions": [
     {
       "cycle": "parent-seed-plan",
@@ -31,7 +31,12 @@
       "cycle": "parent-pr-open",
       "decision": "local_critical_path",
       "reason": "Draft parent PR #225 is open; proceed with #157 locally."
+    },
+    {
+      "cycle": "subissue-157-pr-open",
+      "decision": "await_external_review_or_human_fallback",
+      "reason": "#157 PR #238 is green locally and in CI. CodeRabbit skipped stacked auto-review and remains rate-limited after manual retry; Copilot fallback did not create a review request."
     }
   ],
-  "updated_at": "2026-07-09T19:45:00Z"
+  "updated_at": "2026-07-09T21:30:00Z"
 }
