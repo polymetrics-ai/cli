@@ -1,0 +1,47 @@
+{
+  "phase": "issue-184-freshchat-operation-ledger",
+  "issue": 184,
+  "parent_issue": 180,
+  "pr_url": "https://github.com/polymetrics-ai/cli/pull/243",
+  "implementation_sha": "14c2c808",
+  "status": "pr_open_local_verified_review_fallback_pending",
+  "gsd": {
+    "plan_phase_command": "scripts/gsd prompt plan-phase issue-184-freshchat-operation-ledger --skip-research",
+    "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-184-freshchat-operation-ledger --dry-run",
+    "programming_loop_result": "unavailable_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": true,
+  "verificationBlocker": "none",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T21:45:17Z",
+      "cycle": "issue-plan",
+      "decision": "local_critical_path",
+      "reason": "Issue #184 is unblocked by #181 integration; Pi subagent tool is unavailable, so run locally on a stacked branch.",
+      "issue_numbers": [184]
+    },
+    {
+      "timestamp": "2026-07-09T21:52:32Z",
+      "cycle": "red-green",
+      "decision": "focused_green",
+      "reason": "Added Freshchat operation-ledger metrics test, converted api_surface.json to operation_ledger_version 1, and focused gates pass.",
+      "issue_numbers": [184]
+    },
+    {
+      "timestamp": "2026-07-09T21:54:21Z",
+      "cycle": "verification",
+      "decision": "handoff_ready",
+      "reason": "Full go gates, make verify, and connectorgen validation pass locally.",
+      "issue_numbers": [184]
+    },
+    {
+      "timestamp": "2026-07-09T21:55:09Z",
+      "cycle": "automated_review_routing",
+      "decision": "parent_pr_fallback_pending",
+      "reason": "Opened PR #243 against parent branch; CodeRabbit skipped because non-default base auto reviews are disabled. Parent PR #226 must receive coverage after integration or an approved fallback must be recorded.",
+      "issue_numbers": [184]
+    }
+  ],
+  "updated_at": "2026-07-09T21:55:09Z"
+}
