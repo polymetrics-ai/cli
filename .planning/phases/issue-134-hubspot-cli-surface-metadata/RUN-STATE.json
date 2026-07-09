@@ -29,7 +29,7 @@
     "golang-graphql",
     "golang-lint"
   ],
-  "status": "pr_open_checks_pending",
+  "status": "pr_open_review_blocked_rate_limited",
   "verificationPassed": true,
   "verificationBlocker": "none",
   "orchestrationDecisions": [
@@ -56,7 +56,12 @@
     {
       "cycle": "sub_pr",
       "decision": "opened_stacked_pr",
-      "reason": "opened https://github.com/polymetrics-ai/cli/pull/233 against parent branch feat/132-hubspot-cli-parity; CodeRabbit status pending"
+      "reason": "opened https://github.com/polymetrics-ai/cli/pull/233 against parent branch feat/132-hubspot-cli-parity"
+    },
+    {
+      "cycle": "automated_review",
+      "decision": "blocked_rate_limited",
+      "reason": "CodeRabbit auto skipped/rate-limited on stacked PR; posted one allowed manual @coderabbitai review after skip, did not retry after limit; Copilot reviewer API request did not create an active review request"
     }
   ],
   "human_gates": [

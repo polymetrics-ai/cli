@@ -96,13 +96,13 @@
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-132-hubspot-cli-parity",
       "verification": "passed: gofmt -w cmd internal; go vet ./...; go test ./...; go build ./cmd/pm; make verify; go run ./cmd/connectorgen validate internal/connectors/defs",
       "automated_review": {
-        "primary_route": "coderabbit_auto_on_stacked_pr",
-        "status": "pending",
+        "primary_route": "coderabbit_manual_after_stacked_pr_auto_skip",
+        "status": "blocked_rate_limited",
         "head_sha": "branch_latest_pr_233",
-        "reviewed_range": "pending",
-        "coverage_route": "pending",
-        "fallback_route": "none",
-        "disposition_summary": "pending",
+        "reviewed_range": "unreviewed",
+        "coverage_route": "blocked_until_coderabbit_window_or_parent_pr_review_after_integration",
+        "fallback_route": "copilot_request_attempted_not_available_as_request",
+        "disposition_summary": "CodeRabbit auto skipped/rate-limited on stacked PR; manual review requested once and not retried; GitHub Copilot reviewer API request returned no active review request", 
         "disposition_url": "pending"
       }
     },
