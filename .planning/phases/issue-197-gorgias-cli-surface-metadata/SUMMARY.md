@@ -1,6 +1,6 @@
 # Summary: Gorgias CLI Surface Metadata
 
-Status: implementation checkpoint ready.
+Status: verified implementation checkpoint ready for sub-PR.
 
 ## Completed
 
@@ -13,6 +13,7 @@ Status: implementation checkpoint ready.
 - Added `internal/connectors/defs/gorgias/cli_surface.json` with implemented current stream list commands and planned write/direct-read/binary/admin command metadata.
 - Updated `api_surface.json` and `docs.md` scope wording so this slice does not claim full runtime parity.
 - Focused green gates passed: `jq empty`, `go test ./cmd/connectorgen -run CLISurface`, `go test ./internal/connectors/engine -run CLISurface`, `go run ./cmd/connectorgen validate internal/connectors/defs`, `git diff --check`, and Gorgias conformance.
+- Broader gates passed: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `make verify` (second run; first run hit a flaky certify concurrency timing test that passed on targeted rerun).
 
 ## #200 handoff
 

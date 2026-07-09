@@ -13,7 +13,7 @@ git diff --check
 go test ./internal/connectors/conformance -run 'TestConformance/gorgias'
 ```
 
-## Results
+## Focused results
 
 - JSON parse checks passed.
 - Focused CLI surface validator tests passed.
@@ -29,7 +29,23 @@ gofmt -w cmd internal
 go vet ./...
 go test ./...
 go build ./cmd/pm
+go run ./cmd/connectorgen validate internal/connectors/defs
 make verify
 ```
 
-Status: not run for this JSON/docs-only metadata slice. `gofmt` is not applicable because no Go files changed. Broader gates remain required before parent handoff or if production Go behavior changes.
+## Broader results
+
+- `gofmt -w cmd internal`: ran; no tracked Go changes remained.
+- `go vet ./...`: passed.
+- `go test ./...`: passed on rerun. An earlier combined command timed out while full tests were still running.
+- `go build ./cmd/pm`: passed.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: passed: 547 connector(s) checked, 0 findings.
+- `make verify`: first run failed flaky `internal/connectors/certify` concurrency timing test; targeted rerun passed; second `make verify` passed.
+
+## CLI help/docs/website parity
+
+- Applies partially: this slice adds metadata consumed by later renderer work.
+- Runtime help checked: not applicable; #198 owns renderer/runtime help.
+- `docs/cli/**` updated: not applicable for #197.
+- `website/**` updated: not applicable for #197.
+- Generated help/manual artifacts updated: not applicable for #197.

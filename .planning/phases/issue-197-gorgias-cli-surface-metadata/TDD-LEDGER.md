@@ -44,6 +44,12 @@ This red check is intentionally broader than this slice's safe green path: #197 
 - `go run ./cmd/connectorgen validate internal/connectors/defs` — passed: 547 connector(s) checked, 0 findings.
 - `git diff --check` — passed.
 - `go test ./internal/connectors/conformance -run 'TestConformance/gorgias'` — passed.
+- `gofmt -w cmd internal` — ran; no tracked Go changes remained.
+- `go vet ./...` — passed.
+- `go test ./...` — passed on rerun after an earlier combined command timed out while full tests were still running.
+- `go build ./cmd/pm` — passed.
+- `go run ./cmd/connectorgen validate internal/connectors/defs` — passed.
+- `make verify` — first run hit flaky `TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit`; targeted rerun passed; second `make verify` passed.
 
 ## Refactor notes
 
