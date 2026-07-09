@@ -1,0 +1,41 @@
+{
+  "phase": "issue-78-gitlab-cli-parity-parent",
+  "issue": 78,
+  "status": "in_progress",
+  "parent_branch": "feat/78-gitlab-cli-parity",
+  "default_branch": "main",
+  "gsd": {
+    "adapter": "pi-project-local",
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json": "completed",
+    "planning_prompt": "scripts/gsd prompt plan-phase issue-78-gitlab-cli-parity --skip-research",
+    "programming_loop_prompt": "scripts/gsd prompt programming-loop init --phase issue-78-gitlab-cli-parity --dry-run",
+    "programming_loop_available": false,
+    "manual_fallback": "scripts/gsd reported unknown GSD command: programming-loop; following manual universal programming loop with TDD ledger and verification artifacts"
+  },
+  "required_skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-documentation",
+    "golang-spf13-cobra"
+  ],
+  "verificationPassed": false,
+  "verificationNote": "Only GSD preflight has run; parent final gates are pending.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No Pi subagent tool is exposed in this harness; orchestrator is creating parent artifacts and executing first ready lane #83 inline while recording worker-spawn limits."
+    }
+  ],
+  "human_gate": "parent PR merge to main",
+  "updated_at": "2026-07-09T12:34:52Z"
+}

@@ -1,0 +1,35 @@
+{
+  "phase": "issue-83-gitlab-cli-surface",
+  "issue": 83,
+  "parent_issue": 78,
+  "status": "planned",
+  "branch": "feat/78-gitlab-cli-parity",
+  "gsd": {
+    "execute_prompt": "scripts/gsd prompt execute-phase issue-83-gitlab-cli-surface --tdd",
+    "programming_loop_available": false,
+    "manual_fallback": "scripts/gsd prompt programming-loop ... is unavailable; following manual universal programming loop"
+  },
+  "required_skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-documentation",
+    "golang-spf13-cobra"
+  ],
+  "verificationPassed": false,
+  "verificationNote": "Planning complete; red test pending.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "The parent orchestrator selected #83 as the first lane and is executing it inline due no exposed Pi subagent tool."
+    }
+  ],
+  "updated_at": "2026-07-09T12:34:52Z"
+}

@@ -1,0 +1,156 @@
+{
+  "parent_issue": {
+    "number": 78,
+    "url": "https://github.com/polymetrics-ai/cli/issues/78",
+    "title": "GitLab CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/78-gitlab-cli-parity",
+  "parent_pr": {
+    "url": "pending",
+    "base": "main",
+    "head": "feat/78-gitlab-cli-parity",
+    "draft": true,
+    "state": "planned"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 83,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/gitlab/cli_surface.json",
+        "internal/connectors/engine/*_test.go",
+        ".planning/phases/issue-83-gitlab-cli-surface"
+      ],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 84,
+      "status": "planned",
+      "dependencies": [83],
+      "write_scope": [
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-84-gitlab-help-renderer"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 85,
+      "status": "planned",
+      "dependencies": [83, 84],
+      "write_scope": [
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        ".planning/phases/issue-85-gitlab-stream-runner"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 86,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/gitlab/api_surface.json",
+        "internal/connectors/defs/gitlab/operations.json",
+        ".planning/phases/issue-86-gitlab-operation-ledger"
+      ],
+      "decision": "not_spawned_write_scope_collision"
+    },
+    {
+      "number": 87,
+      "status": "planned",
+      "dependencies": [86],
+      "write_scope": [
+        "internal/connectors/defs/gitlab",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        ".planning/phases/issue-87-gitlab-direct-read"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 88,
+      "status": "planned",
+      "dependencies": [86],
+      "write_scope": [
+        "internal/connectors/defs/gitlab",
+        "internal/connectors/engine",
+        ".planning/phases/issue-88-gitlab-graphql-engine"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 89,
+      "status": "planned",
+      "dependencies": [86],
+      "write_scope": [
+        "internal/connectors/defs/gitlab",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        ".planning/phases/issue-89-gitlab-sensitive-admin"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T12:34:52Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [83],
+      "reason": "This Pi harness exposes no subagent tool; #83 is the first ready lane and shares no dependency blockers, so the orchestrator executes it inline with separate artifacts."
+    },
+    {
+      "timestamp": "2026-07-09T12:34:52Z",
+      "decision": "not_spawned_write_scope_collision",
+      "issue_numbers": [86],
+      "reason": "#86 touches the same GitLab definition bundle while #83 creates cli_surface metadata; run sequentially to avoid bundle conflicts."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 83,
+      "url": "https://github.com/polymetrics-ai/cli/issues/83",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "pending",
+      "worker": "inline-pi-orchestrator",
+      "status": "worker_in_progress",
+      "write_scope": [
+        "internal/connectors/defs/gitlab/cli_surface.json",
+        "internal/connectors/engine/*_test.go",
+        ".planning/phases/issue-83-gitlab-cli-surface"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-78-gitlab-cli-parity",
+      "verification": "pending red/green #83 tests",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending PR and verification",
+        "disposition_url": "pending"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "production deploys",
+    "quality gate reductions",
+    "credentialed connector checks",
+    "reverse ETL execution"
+  ],
+  "updated_at": "2026-07-09T12:34:52Z"
+}
