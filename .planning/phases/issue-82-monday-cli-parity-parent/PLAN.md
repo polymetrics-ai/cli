@@ -17,8 +17,8 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 ## Parent orchestration state
 
 - Parent branch: `feat/82-monday-cli-parity` (current worktree).
-- Parent PR: not yet open; create after the parent planning seed commit is pushed.
-- Worker spawning: not spawned in this harness because no Pi `subagent` tool is available in the active tool set. Decision for this cycle: `local_critical_path` for #111, then continue lanes sequentially or split to worktrees if a worker runtime becomes available.
+- Parent PR: draft PR #130 (`https://github.com/polymetrics-ai/cli/pull/130`).
+- Worker spawning: not spawned in this harness because no Pi `subagent` tool is available in the active tool set. Decision for this cycle: `local_critical_path`; #111-#117 were completed sequentially in this worktree with issue-specific artifacts.
 - Human gates: parent PR merge to `main`, auth-scope changes, secrets, new dependencies, destructive external actions, production deploys, quality-gate reductions, generic write tools, credentialed connector checks, and reverse ETL execution.
 
 ## Lane order and dependencies
@@ -27,8 +27,8 @@ Loaded: `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-err
 2. **#112 help/docs parity** — update Monday connector docs and help-rendered metadata; verify runtime help surfaces.
 3. **#113 stream runner** — prove implemented stream commands run through the generic connector command runner using fixture/mock runtime, no credentials.
 4. **#114 operation ledger** — replace legacy 8-row `api_surface.json` with operation-ledger mode covering the 367 official GraphQL operations (87 query, 280 mutation) from the canonical monday reference pages.
-5. **#115 direct reads** — expose only bounded safe direct-call metadata. Do not add raw GraphQL/HTTP escape hatches. If executable direct GraphQL operation runner is not available, keep command availability blocked/planned and record the gap.
-6. **#116 GraphQL/advanced engine** — use existing fixed-document GraphQL stream/write support where applicable; add tests or record not-applicable if no new engine work is safe/required.
+5. **#115 direct reads** — expose bounded safe `me view` and `account view` direct reads through fixed bundled GraphQL query documents. No raw GraphQL/HTTP escape hatches.
+6. **#116 GraphQL/advanced engine** — fixed-document `graphql_query` direct-read support only; mutations rejected and GraphQL errors fail closed.
 7. **#117 sensitive/admin policy** — classify mutation risks, redaction/input modes, typed confirmation requirements, and blocked-by-default policy for sensitive/admin/destructive operations.
 
 ## Safety rules

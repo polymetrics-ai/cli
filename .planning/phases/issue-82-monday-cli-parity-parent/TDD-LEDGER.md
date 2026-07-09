@@ -9,13 +9,13 @@ Manual programming-loop fallback is active because `scripts/gsd prompt programmi
 | Lane | Issue | Red evidence | Green evidence | Refactor/notes |
 | --- | ---: | --- | --- | --- |
 | CLI surface metadata | #111 | Captured: Monday `cli_surface.json` load tests failed before metadata existed. | Captured: added `cli_surface.json`; targeted engine/connectorgen tests and full `connectorgen validate internal/connectors/defs --json` pass. | First local critical-path lane green. |
-| Help renderer/docs | #112 | Pending | Pending | CLI help/docs/website parity applies. |
-| Stream runner | #113 | Pending | Pending | No credentialed live checks. |
-| Operation ledger | #114 | Pending | Pending | Count assertions: 367 official operations; 87 queries, 280 mutations; implemented streams 5. |
-| Direct reads | #115 | Pending | Pending | Bounded safe direct-read only; no raw GraphQL/HTTP escape hatch. |
-| GraphQL engine | #116 | Pending | Pending | Existing fixed-document support may make this metadata/tests-only. |
-| Sensitive/admin policy | #117 | Pending | Pending | Blocked-by-default + typed confirmation metadata. |
+| Help renderer/docs | #112 | Captured: Monday manual test failed because overlapping groups rendered `board list` twice. | Captured: regrouped command surface and docs; connector manual/render tests pass. | Runtime connector manual is `pm connectors inspect monday`; dynamic `pm help monday` is not a CLI route. |
+| Stream runner | #113 | Honest test-only verification: runner was already enabled by #111 metadata. | Captured: `TestRunMondayBoardListCommand` passes against local GraphQL replay server. | No credentialed live checks. |
+| Operation ledger | #114 | Captured: legacy `api_surface.json` failed `operation_ledger_version = 0, want 1`. | Captured: operation ledger + operations.json cover 367 operations; 87 query rows, 280 mutation rows; validation clean. | Implemented streams remain executable; other rows blocked metadata. |
+| Direct reads | #115 | Captured: missing implemented `me view` direct-read command. | Captured: fixed `me view` and `account view` direct reads execute bundled GraphQL query docs through local replay tests. | No raw GraphQL/HTTP escape hatch. |
+| GraphQL engine | #116 | Captured: GraphQL direct-read tests failed to compile before `DirectReadRequest.Operation`. | Captured: fixed-operation `graphql_query` direct-read path with `graphql_json` output policy; GraphQL errors fail closed. | Mutations rejected; no user-supplied GraphQL documents. |
+| Sensitive/admin policy | #117 | Captured: policy test failed because docs lacked `Sensitive/admin mutation policy`. | Captured: mutation policy docs plus blocked metadata tests pass. | 280 mutations remain blocked by default with typed confirmation metadata for high/critical/admin/secret/delete classes. |
 
 ## Current red target
 
-#111 will add tests before production metadata edits.
+All #111-#117 red/green slices are captured; current target is parent PR verification/review readiness.
