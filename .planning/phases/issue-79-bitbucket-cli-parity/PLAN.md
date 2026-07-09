@@ -44,7 +44,7 @@ Deliver Bitbucket connector CLI parity across metadata, help/docs, stream-backed
 - Official Bitbucket Swagger: `https://api.bitbucket.org/swagger.json`.
 - Expected official operation count: 331 operations (GET 179, POST 50, PUT 48, DELETE 54).
 - Definition scope: `internal/connectors/defs/bitbucket/`.
-- Current implementation: Bitbucket definition bundle exists with executable reviewed streams, direct reads, approval-gated write actions, full 331-operation REST ledger, conformance fixtures, docs/catalog/website generated data, and blocked metadata for unsupported raw/local/binary/destructive/admin operations.
+- Current implementation: Bitbucket definition bundle exists with executable reviewed streams, direct reads, approval-gated write actions, full 331-operation REST ledger, conformance fixtures, docs/catalog/website generated data, and typed coverage for all official Bitbucket Swagger operations. Raw API/local shell/git/browser/generic write tools remain blocked; binary/text GET operations use bounded JSON/base64 direct reads with no filesystem writes.
 
 ## Ready queue
 
@@ -66,6 +66,7 @@ Deliver Bitbucket connector CLI parity across metadata, help/docs, stream-backed
 4. Commit/push the #90 verified slice. Complete: pushed at `0e359d76` on `feat/79-bitbucket-cli-parity`.
 5. Continue ready queue after #90, preferring isolated workers/worktrees only if a runtime with mutating subagent isolation is available. Current Pi API session still has no subagent tool, so #91-#96 proceeded inline as a single verified local-critical-path implementation slice with issue-separated planning artifacts.
 6. #91-#96 completed locally with red tests first, then green implementation, conformance fixtures, docs/catalog/website regeneration, and full local gates (`go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`).
+7. Full-surface follow-up completed after the user requested all operations: 331/331 endpoints covered, 179 direct reads, 152 reverse-ETL writes, 0 blocked operation rows, and full local gates passed.
 
 ## TDD policy
 

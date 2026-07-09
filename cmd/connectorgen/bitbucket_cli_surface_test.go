@@ -161,20 +161,31 @@ func TestBitbucketFullParityMetadata(t *testing.T) {
 	}
 
 	covered := map[string]bool{}
+	coveredEndpoints := 0
+	coveredGET := 0
+	coveredWrites := 0
+	coveredDirectReads := 0
 	blocked := 0
 	for _, ep := range apiSurface.Endpoints {
 		if ep.CoveredBy != nil {
+			coveredEndpoints++
 			if ep.CoveredBy.Stream != "" {
 				covered["stream:"+ep.CoveredBy.Stream] = true
 			}
 			if ep.CoveredBy.Write != "" {
+				coveredWrites++
 				covered["write:"+ep.CoveredBy.Write] = true
 			}
 			if ep.CoveredBy.DirectRead != "" {
+				coveredDirectReads++
 				covered["direct:"+ep.CoveredBy.DirectRead] = true
 			}
 			for _, name := range ep.CoveredBy.DirectReads {
+				coveredDirectReads++
 				covered["direct:"+name] = true
+			}
+			if ep.Method == "GET" {
+				coveredGET++
 			}
 		}
 		if ep.Operation != nil {
@@ -198,8 +209,20 @@ func TestBitbucketFullParityMetadata(t *testing.T) {
 			t.Fatalf("api_surface missing coverage %q", want)
 		}
 	}
-	if blocked == 0 {
-		t.Fatal("api_surface has no blocked operation rows")
+	if coveredEndpoints != 331 {
+		t.Fatalf("covered endpoints = %d, want all 331 Bitbucket Swagger operations covered by typed surfaces", coveredEndpoints)
+	}
+	if coveredGET != 179 {
+		t.Fatalf("covered GET endpoints = %d, want all 179 GET operations covered", coveredGET)
+	}
+	if coveredWrites != 152 {
+		t.Fatalf("covered write endpoints = %d, want all 152 POST/PUT/DELETE operations covered", coveredWrites)
+	}
+	if coveredDirectReads != 179 {
+		t.Fatalf("covered direct reads = %d, want all 179 GET operations covered by direct_read commands", coveredDirectReads)
+	}
+	if blocked != 0 {
+		t.Fatalf("api_surface blocked operation rows = %d, want 0 after full typed Bitbucket coverage", blocked)
 	}
 
 	opsRaw, err := os.ReadFile(bitbucketDefsDir + "/operations.json")

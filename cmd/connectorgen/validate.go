@@ -104,6 +104,7 @@ var directReadOutputPolicies = map[string]bool{
 	"github_contents_directory":     true,
 	"bitbucket_json_object":         true,
 	"bitbucket_json_collection":     true,
+	"bitbucket_binary_base64":       true,
 }
 
 var sourceRequiredOperationModels = map[string]bool{

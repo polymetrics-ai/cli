@@ -16,6 +16,10 @@
           "kind": { "type": "string", "enum": ["create", "update", "upsert", "delete", "custom"] },
           "method": { "type": "string" },
           "path": { "type": "string" },
+          "query": {
+            "type": "object",
+            "additionalProperties": true
+          },
           "path_fields": { "type": "array", "items": { "type": "string" } },
           "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql"] },
           "body_fields": { "type": "array", "items": { "type": "string" } },

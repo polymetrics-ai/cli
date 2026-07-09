@@ -17,7 +17,7 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi-api",
-    "status": "verified_green_pending_commit_push_review"
+    "status": "full_surface_verified_pending_commit_push_review"
   },
   "ready_queue": [
     {
@@ -140,6 +140,20 @@
         96
       ],
       "reason": "No mutating subagent tool was available; completed the remaining Bitbucket parity lanes in the parent worktree with issue-separated GSD/TDD artifacts and full local verification."
+    },
+    {
+      "timestamp": "2026-07-09T00:00:00Z",
+      "decision": "completed_full_surface_inline_no_subagent",
+      "issue_numbers": [
+        79,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96
+      ],
+      "reason": "User requested all Bitbucket operations; completed typed full-surface coverage inline with 331/331 endpoints covered and no raw generic executor."
     }
   ],
   "subissues": [

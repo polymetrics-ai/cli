@@ -9,19 +9,25 @@
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "admin",
+      "mutation_class": "secret",
       "destructive": false,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.update",
       "rest": {
         "method": "PUT",
         "path": "/addon"
       },
       "sensitive_policy": {
-        "input_mode": "inline",
+        "input_mode": "env_or_stdin",
         "redact_fields": [
+          "value",
           "content",
-          "value"
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -37,19 +43,25 @@
       "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "destructive",
+      "mutation_class": "secret",
       "destructive": true,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.delete",
       "rest": {
         "method": "DELETE",
         "path": "/addon"
       },
       "sensitive_policy": {
-        "input_mode": "inline",
+        "input_mode": "env_or_stdin",
         "redact_fields": [
+          "value",
           "content",
-          "value"
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -203,7 +215,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -246,7 +260,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -289,7 +305,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -317,7 +335,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -360,11 +380,11 @@
       "summary": "Update the branching model config for a repository",
       "description": "Update the branching model configuration for a repository.\n\nThe `development` branch can be configured to a specific branch or to\ntrack the main branch. When set to a specific branch it must\ncurrently exist. Only the passed properties will be updated. The\nproperties not passed will be left unchanged. A request without a\n`development` property will leave the development branch unchanged.\n\nIt is possible for the `development` branch to be invalid. This\nhappens when it points at a specific branch that has been\ndeleted. This is indicated in the `is_valid` field for the branch. It is\nnot possible to update the settings for `development` if that\nwould leave the branch in an invalid state. Such a request will be\nrejected.\n\nThe `production` branch can be a specific branch, the main\nbranch or disabled. When set to a specific branch it must currently\nexist. The `enabled` property can be used to enable (`true`) or\ndisable (`false`) it. Only the passed properties will be updated. The\nproperties not passed will be left unchanged. A request without a\n`production` property will leave the production branch unchanged.\n\nIt is possible for the `production` branch to be invalid. This\nhappens when it points at a specific branch that has been\ndeleted. This is indicated in the `is_valid` field for the branch. A\nrequest that would leave `production` enabled and invalid will be\nrejected. It is possible to update `production` and make it invalid if\nit would also be left disabled.\n\nThe `branch_types` property contains the branch types to be updated.\nOnly the branch types passed will be updated. All updates will be\nrejected if it would leave the branching model in an invalid state.\nFor branch types this means that:\n\n1. The prefixes for all enabled branch types are valid. For example,\n   it is not possible to use '*' inside a Git prefix.\n2. A prefix of an enabled branch type must not be a prefix of another\n   enabled branch type. This is to ensure that a branch can be easily\n   classified by its prefix unambiguously.\n\nIt is possible to store an invalid prefix if that branch type would be\nleft disabled. Only the passed properties will be updated. The\nproperties not passed will be left unchanged. Each branch type must\nhave a `kind` property to identify it.\n\nThe `default_branch_deletion` property is a string. The value of `true`\nindicates to delete branches by default. The value of `false` indicates\nthat branches will not be deleted by default. A request without a\n`default_branch_deletion` property will leave it unchanged. Other values\nwould be ignored.\n\nThere is currently a side effect when using this API endpoint. If the\nrepository is inheriting branching model settings from its project,\nupdating the branching model for this repository will disable the\nproject setting inheritance.\n\n\nWe have deprecated this side effect and will remove it on 1 August 2022.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "high",
+      "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "admin",
-      "destructive": false,
+      "mutation_class": "destructive",
+      "destructive": true,
       "secret_sensitive": false,
       "audit_event": "bitbucket.update",
       "rest": {
@@ -375,7 +395,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -436,7 +458,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -530,7 +554,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -591,7 +617,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -682,7 +710,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -776,7 +806,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -804,16 +836,32 @@
       "summary": "Create a build status for a commit",
       "description": "Creates a new build status against the specified commit.\n\nIf the specified key already exists, the existing status object will\nbe overwritten.\n\nExample:\n\n```\ncurl https://api.bitbucket.org/2.0/repositories/my-workspace/my-repo/commit/e10dae226959c2194f2b07b077c07762d93821cf/statuses/build/           -X POST -u jdoe -H 'Content-Type: application/json'           -d '{\n    \"key\": \"MY-BUILD\",\n    \"state\": \"SUCCESSFUL\",\n    \"description\": \"42 tests passed\",\n    \"url\": \"https://www.example.org/my-build-result\"\n  }'\n```\n\nWhen creating a new commit status, you can use a URI template for the URL.\nTemplates are URLs that contain variable names that Bitbucket will\nevaluate at runtime whenever the URL is displayed anywhere similar to\nparameter substitution in\n[Bitbucket Connect](https://developer.atlassian.com/bitbucket/concepts/context-parameters.html).\nFor example, one could use `https://foo.com/builds/{repository.full_name}`\nwhich Bitbucket will turn into `https://foo.com/builds/foo/bar` at render time.\nThe context variables available are `repository` and `commit`.\n\nTo associate a commit status to a pull request, the refname field must be set to the source branch\nof the pull request.\n\nExample:\n```\ncurl https://api.bitbucket.org/2.0/repositories/my-workspace/my-repo/commit/e10dae226959c2194f2b07b077c07762d93821cf/statuses/build/           -X POST -u jdoe -H 'Content-Type: application/json'           -d '{\n    \"key\": \"MY-BUILD\",\n    \"state\": \"SUCCESSFUL\",\n    \"description\": \"42 tests passed\",\n    \"url\": \"https://www.example.org/my-build-result\",\n    \"refname\": \"my-pr-branch\"\n  }'\n```",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "medium",
+      "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "create",
+      "mutation_class": "secret",
       "destructive": false,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.create",
       "rest": {
         "method": "POST",
         "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build"
+      },
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value",
+          "content",
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
+        ],
+        "preflight": "scope_check",
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
       }
     },
     {
@@ -996,7 +1044,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1024,7 +1074,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1071,7 +1123,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1118,7 +1172,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1150,7 +1206,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1227,7 +1285,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1259,7 +1319,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1291,7 +1353,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1305,8 +1369,8 @@
       "description": "Produces a raw git-style diff.\n\n#### Single commit spec\n\nIf the `spec` argument to this API is a single commit, the diff is\nproduced against the first parent of the specified commit.\n\n#### Two commit spec\n\nTwo commits separated by `..` may be provided as the `spec`, e.g.,\n`3a8b42..9ff173`. When two commits are provided and the `topic` query\nparameter is true, this API produces a 2-way three dot diff.\nThis is the diff between source commit and the merge base of the source\ncommit and the destination commit. When the `topic` query param is false,\na simple git-style diff is produced.\n\nThe two commits are interpreted as follows:\n\n* First commit: the commit containing the changes we wish to preview\n* Second commit: the commit representing the state to which we want to\n  compare the first commit\n* **Note**: This is the opposite of the order used in `git diff`.\n\n#### Comparison to patches\n\nWhile similar to patches, diffs:\n\n* Don't have a commit header (username, commit message, etc)\n* Support the optional `path=foo/bar.py` query param to filter\n  the diff to just that one file diff\n\n#### Response\n\nThe raw diff is returned as-is, in whatever encoding the files in the\nrepository use. It is not decoded into unicode. As such, the\ncontent-type is `text/plain`.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/diff/{spec}",
@@ -1322,8 +1386,8 @@
       "description": "Produces a response in JSON format with a record for every path\nmodified, including information on the type of the change and the\nnumber of lines added and removed.\n\n#### Single commit spec\n\nIf the `spec` argument to this API is a single commit, the diff is\nproduced against the first parent of the specified commit.\n\n#### Two commit spec\n\nTwo commits separated by `..` may be provided as the `spec`, e.g.,\n`3a8b42..9ff173`. When two commits are provided and the `topic` query\nparameter is true, this API produces a 2-way three dot diff.\nThis is the diff between source commit and the merge base of the source\ncommit and the destination commit. When the `topic` query param is false,\na simple git-style diff is produced.\n\nThe two commits are interpreted as follows:\n\n* First commit: the commit containing the changes we wish to preview\n* Second commit: the commit representing the state to which we want to\n  compare the first commit\n* **Note**: This is the opposite of the order used in `git diff`.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/diffstat/{spec}",
@@ -1372,8 +1436,8 @@
       "description": "Return a redirect to the contents of a download artifact.\n\nThis endpoint returns the actual file contents and not the artifact's\nmetadata.\n\n    $ curl -s -L https://api.bitbucket.org/2.0/repositories/evzijst/git-tests/downloads/hello.txt\n    Hello World",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}",
@@ -1403,7 +1467,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1509,7 +1575,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1585,16 +1653,28 @@
       "summary": "Fork a repository",
       "description": "Creates a new fork of the specified repository.\n\n#### Forking a repository\n\nTo create a fork, specify the workspace explicitly as part of the\nrequest body:\n\n```\n$ curl -X POST -u jdoe https://api.bitbucket.org/2.0/repositories/atlassian/bbql/forks \\\n  -H 'Content-Type: application/json' -d '{\n    \"name\": \"bbql_fork\",\n    \"workspace\": {\n      \"slug\": \"atlassian\"\n    }\n}'\n```\n\nTo fork a repository into the same workspace, also specify a new `name`.\n\nWhen you specify a value for `name`, it will also affect the `slug`.\nThe `slug` is reflected in the repository URL of the new fork. It is\nderived from `name` by substituting non-ASCII characters, removes\nwhitespace, and changes characters to lower case. For example,\n`My repo` would turn into `my_repo`.\n\nYou need contributor access to create new forks within a workspace.\n\n\n#### Change the properties of a new fork\n\nBy default the fork inherits most of its properties from the parent.\nHowever, since the optional POST body document follows the normal\n`repository` JSON schema and you can override the new fork's\nproperties.\n\nProperties that can be overridden include:\n\n* description\n* fork_policy\n* language\n* mainbranch\n* is_private (note that a private repo's fork_policy might prohibit\n  the creation of public forks, in which `is_private=False` would fail)\n* has_issues (to initialize or disable the new repo's issue tracker --\n  note that the actual contents of the parent repository's issue\n  tracker are not copied during forking)\n* has_wiki (to initialize or disable the new repo's wiki --\n  note that the actual contents of the parent repository's wiki are not\n  copied during forking)\n* project (when forking into a private project, the fork's `is_private`\n  must be `true`)\n\nProperties that cannot be modified include:\n\n* scm\n* parent\n* full_name",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "medium",
+      "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "create",
-      "destructive": false,
+      "mutation_class": "destructive",
+      "destructive": true,
       "secret_sensitive": false,
       "audit_event": "bitbucket.create",
       "rest": {
         "method": "POST",
         "path": "/repositories/{workspace}/{repo_slug}/forks"
+      },
+      "sensitive_policy": {
+        "input_mode": "inline",
+        "redact_fields": [
+          "content",
+          "value",
+          "payload",
+          "body"
+        ],
+        "preflight": "scope_check",
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
       }
     },
     {
@@ -1621,19 +1701,25 @@
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "admin",
+      "mutation_class": "secret",
       "destructive": false,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.create",
       "rest": {
         "method": "POST",
         "path": "/repositories/{workspace}/{repo_slug}/hooks"
       },
       "sensitive_policy": {
-        "input_mode": "inline",
+        "input_mode": "env_or_stdin",
         "redact_fields": [
+          "value",
           "content",
-          "value"
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1661,22 +1747,28 @@
       "summary": "Update a webhook for a repository",
       "description": "Updates the specified webhook subscription.\n\nThe following properties can be mutated:\n\n* `description`\n* `url`\n* `secret`\n* `active`\n* `events`\n\nThe hook's secret is used as a key to generate the HMAC hex digest sent in the\n`X-Hub-Signature` header at delivery time. This signature is only generated\nwhen the hook has a secret.\n\nSet the hook's secret by passing the new value in the `secret` field. Passing a\n`null` value in the `secret` field will remove the secret from the hook. The\nhook's secret can be left unchanged by not passing the `secret` field in the\nrequest.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "high",
+      "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "admin",
-      "destructive": false,
-      "secret_sensitive": false,
+      "mutation_class": "secret",
+      "destructive": true,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.update",
       "rest": {
         "method": "PUT",
         "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
       },
       "sensitive_policy": {
-        "input_mode": "inline",
+        "input_mode": "env_or_stdin",
         "redact_fields": [
+          "value",
           "content",
-          "value"
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1704,7 +1796,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1769,8 +1863,8 @@
       "description": "This endpoint is used to poll for the progress of an issue export\njob and return the zip file after the job is complete.\nAs long as the job is running, this will return a 202 response\nwith in the response body a description of the current status.\n\nAfter the job has been scheduled, but before it starts executing, the endpoint\nreturns a 202 response with status `ACCEPTED`.\n\nOnce it starts running, it is a 202 response with status `STARTED` and progress filled.\n\nAfter it is finished, it becomes a 200 response with status `SUCCESS` or `FAILURE`.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/issues/export/{repo_name}-issues-{task_id}.zip",
@@ -1866,7 +1960,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -1913,8 +2009,8 @@
       "description": "Returns the contents of the specified file attachment.\n\nNote that this endpoint does not return a JSON response, but instead\nreturns a redirect pointing to the actual file that in turn will return\nthe raw contents.\n\nThe redirect URL contains a one-time token that has a limited lifetime.\nAs a result, the link should not be persisted, stored, or shared.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}",
@@ -1944,7 +2040,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2086,7 +2184,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2147,7 +2247,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2208,7 +2310,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2300,8 +2404,8 @@
       "description": "Produces a raw patch for a single commit (diffed against its first\nparent), or a patch-series for a revspec of 2 commits (e.g.\n`3a8b42..9ff173` where the first commit represents the source and the\nsecond commit the destination).\n\nIn case of the latter (diffing a revspec), a patch series is returned\nfor the commits on the source branch (`3a8b42` and its ancestors in\nour example).\n\nWhile similar to diffs, patches:\n\n* Have a commit header (username, commit message, etc)\n* Do not support the `path=foo/bar.py` query parameter\n\nThe raw patch is returned as-is, in whatever encoding the files in the\nrepository use. It is not decoded into unicode. As such, the\ncontent-type is `text/plain`.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/patch/{spec}",
@@ -2349,19 +2453,25 @@
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "admin",
+      "mutation_class": "secret",
       "destructive": false,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.update",
       "rest": {
         "method": "PUT",
         "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
       },
       "sensitive_policy": {
-        "input_mode": "inline",
+        "input_mode": "env_or_stdin",
         "redact_fields": [
+          "value",
           "content",
-          "value"
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2377,19 +2487,25 @@
       "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "destructive",
+      "mutation_class": "secret",
       "destructive": true,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.delete",
       "rest": {
         "method": "DELETE",
         "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
       },
       "sensitive_policy": {
-        "input_mode": "inline",
+        "input_mode": "env_or_stdin",
         "redact_fields": [
+          "value",
           "content",
-          "value"
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2435,19 +2551,25 @@
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "admin",
+      "mutation_class": "secret",
       "destructive": false,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.update",
       "rest": {
         "method": "PUT",
         "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
       },
       "sensitive_policy": {
-        "input_mode": "inline",
+        "input_mode": "env_or_stdin",
         "redact_fields": [
+          "value",
           "content",
-          "value"
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2463,19 +2585,25 @@
       "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "destructive",
+      "mutation_class": "secret",
       "destructive": true,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.delete",
       "rest": {
         "method": "DELETE",
         "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
       },
       "sensitive_policy": {
-        "input_mode": "inline",
+        "input_mode": "env_or_stdin",
         "redact_fields": [
+          "value",
           "content",
-          "value"
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2503,16 +2631,32 @@
       "summary": "Run a pipeline",
       "description": "Endpoint to create and initiate a pipeline.\nThere are a number of different options to initiate a pipeline, where the payload of the request will determine which type of pipeline will be instantiated.\n\n## Trigger a pipeline for a branch\n\nOne way to trigger pipelines is by specifying the branch for which you want to trigger a pipeline.\nThe specified branch will be used to determine which pipeline definition from the `bitbucket-pipelines.yml` file will be applied to initiate the pipeline. The pipeline will then do a clone of the repository and checkout the latest revision of the specified branch.\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/json' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines/ \\\n      -d '\n      {\n        \"target\": {\n          \"ref_type\": \"branch\",\n          \"type\": \"pipeline_ref_target\",\n          \"ref_name\": \"master\"\n        }\n      }'\n```\n\n## Trigger a pipeline for a commit on a branch or tag\n\nYou can initiate a pipeline for a specific commit and in the context of a specified reference (e.g. a branch, tag or bookmark).\nThe specified reference will be used to determine which pipeline definition from the bitbucket-pipelines.yml file will be applied to initiate the pipeline. The pipeline will clone the repository and then do a checkout the specified reference.\n\nThe following reference types are supported:\n\n* `branch`\n* `named_branch`\n* `bookmark`\n * `tag`\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/json' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines/ \\\n      -d '\n      {\n        \"target\": {\n          \"commit\": {\n            \"type\": \"commit\",\n            \"hash\": \"ce5b7431602f7cbba007062eeb55225c6e18e956\"\n          },\n          \"ref_type\": \"branch\",\n          \"type\": \"pipeline_ref_target\",\n          \"ref_name\": \"master\"\n        }\n      }'\n```\n\n## Trigger a specific pipeline definition for a commit\n\nYou can trigger a specific pipeline that is defined in your `bitbucket-pipelines.yml` file for a specific commit.\nIn addition to the commit revision, you specify the type and pattern of the selector that identifies the pipeline definition. The resulting pipeline will then clone the repository and checkout the specified revision.\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/json' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines/ \\\n      -d '\n      {\n        \"target\": {\n          \"commit\": {\n            \"hash\":\"a3c4e02c9a3755eccdc3764e6ea13facdf30f923\",\n            \"type\":\"commit\"\n          },\n          \"selector\": {\n            \"type\":\"custom\",\n            \"pattern\":\"Deploy to production\"\n          },\n          \"type\":\"pipeline_commit_target\"\n        }\n      }'\n```\n\n## Trigger a specific pipeline definition for a commit on a branch or tag\n\nYou can trigger a specific pipeline that is defined in your `bitbucket-pipelines.yml` file for a specific commit in the context of a specified reference.\nIn addition to the commit revision, you specify the type and pattern of the selector that identifies the pipeline definition, as well as the reference information. The resulting pipeline will then clone the repository a checkout the specified reference.\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/json' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines/ \\\n      -d '\n      {\n        \"target\": {\n          \"commit\": {\n            \"hash\":\"a3c4e02c9a3755eccdc3764e6ea13facdf30f923\",\n            \"type\":\"commit\"\n          },\n          \"selector\": {\n            \"type\": \"custom\",\n            \"pattern\": \"Deploy to production\"\n          },\n          \"type\": \"pipeline_ref_target\",\n          \"ref_name\": \"master\",\n          \"ref_type\": \"branch\"\n        }\n      }'\n```\n\n## Trigger a custom pipeline with variables\n\nIn addition to triggering a custom pipeline that is defined in your `bitbucket-pipelines.yml` file as shown in the examples above, you can specify variables that will be available for your build. In the request, provide a list of variables, specifying the following for each variable: key, value, and whether it should be secured or not (this field is optional and defaults to not secured).\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/json' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines/ \\\n      -d '\n      {\n        \"target\": {\n          \"type\": \"pipeline_ref_target\",\n          \"ref_type\": \"branch\",\n          \"ref_name\": \"master\",\n          \"selector\": {\n            \"type\": \"custom\",\n            \"pattern\": \"Deploy to production\"\n          }\n        },\n        \"variables\": [\n          {\n            \"key\": \"var1key\",\n            \"value\": \"var1value\",\n            \"secured\": true\n          },\n          {\n            \"key\": \"var2key\",\n            \"value\": \"var2value\"\n          }\n        ]\n      }'\n```\n\n## Trigger a pull request pipeline\n\nYou can also initiate a pipeline for a specific pull request.\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/json' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines/ \\\n      -d '\n      {\n        \"target\": {\n          \"type\": \"pipeline_pullrequest_target\",\n          \"source\": \"pull-request-branch\",\n          \"destination\": \"master\",\n          \"destination_commit\": {\n            \"hash\": \"9f848b7\"\n          },\n          \"commit\": {\n            \"hash\": \"1a372fc\"\n          },\n          \"pullrequest\": {\n            \"id\": \"3\"\n          },\n          \"selector\": {\n            \"type\": \"pull-requests\",\n            \"pattern\": \"**\"\n          }\n        }\n      }'\n```\n\n# On-demand pipeline\n\nBy default, pipelines run using the YAML in the repository’s `bitbucket-pipelines.yml` configuration file.\nWith an _on-demand_ pipeline, you include the pipeline’s YAML in the request body. That YAML applies only\nto that run and overrides the YAML in `bitbucket-pipelines.yml`.\n\nJust like with regular pipelines, there is a number of different options to initiate an on-demand pipeline.\nHowever, since the payload contains YAML configuration in this case, _query parameters_ are used to supply\nthe necessary metadata to determine which type of pipeline will be instantiated. These query parameters\nare derived from the JSON equivalent by turning each property into a key-value pair with the JSON path\nof the property as the new key.\n\n## Trigger on-demand pipeline for a branch\n\nYou can initiate an on-demand pipeline for a specific branch. This branch will be used to determine\nwhich pipeline definition from the supplied YAML configuration will be applied to initiate the pipeline.\nThe pipeline will then do a clone of the repository and check out the latest revision of the specified branch.\n\nTo trigger an on-demand pipeline for a _branch_ the requesting user must have **write permission** for\nthat branch (which can be limited by [branch restrictions](https://support.atlassian.com/bitbucket-cloud/docs/use-branch-permissions/)).\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/yaml' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines?target.type=pipeline_ref_target&target.ref_type=branch&target.ref_name=master \\\n      -d '\npipelines:\n  default:\n    - step:\n        script:\n          - echo This is an on-demand pipeline'\n```\n\n## Trigger on-demand pipeline for a commit on a branch or tag\n\nYou can initiate an on-demand pipeline for a specific commit and in the context of a specified reference\n(branch or tag). The specified reference will be used to determine which pipeline definition from the supplied\nYAML configuration will be applied to initiate the pipeline. The pipeline will clone the repository and\ncheck out the specified reference.\n\nTo trigger an on-demand pipeline for a _branch_ the requesting user must have **write permission** for\nthat branch (which can be limited by [branch restrictions](https://support.atlassian.com/bitbucket-cloud/docs/use-branch-permissions/)).\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/yaml' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines?target.type=pipeline_ref_target&target.ref_type=branch&target.ref_name=master&target.commit.hash=ce5b7431602f7cbba007062eeb55225c6e18e956 \\\n      -d '\npipelines:\n  default:\n    - step:\n        script:\n          - echo This is an on-demand pipeline'\n```\n\n## Trigger a specific on-demand pipeline definition for a commit\n\nYou can trigger a specific pipeline that is defined in the supplied YAML configuration for a specific commit.\nIn addition to the commit revision, you specify the type and pattern of the selector that identifies\nthe pipeline definition. The resulting pipeline will then clone the repository and checkout the specified revision.\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/yaml' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines?target.type=pipeline_commit_target&target.commit.hash=a3c4e02c9a3755eccdc3764e6ea13facdf30f923&target.selector.type=custom&target.selector.pattern=security-scan \\\n      -d '\npipelines:\n  custom:\n    security-scan:\n      - step:\n          script:\n            - echo Run on-demand security scan\n```\n\n## Trigger a custom on-demand pipeline with variables\n\nIn addition to triggering a custom on-demand pipeline that is defined in the supplied YAML configuration\nas shown in the examples above, you can specify variables that will be available for your build.\nIn the request, provide each variable as an indexed set of query parameters representing its key, value,\nand whether it should be secured or not (this field is optional and defaults to not secured).\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/yaml' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines?target.type=pipeline_ref_target&target.ref_type=branch&target.ref_name=master&target.selector.type=custom&target.selector.pattern=security-scan&variables[0].key=var1key&variables[0].value=var1value&variables[0].secured=true&variables[1].key=var2key&variables[1].value=var2value \\\n      -d '\npipelines:\n  custom:\n    security-scan:\n      - variables:\n          - name: var1key\n          - name: var2key\n      - step:\n          script:\n            - echo Run on-demand security scan'\n```\n\n## Trigger a pull request pipeline\n\nYou can also initiate an on-demand pipeline for a specific pull request.\n\n### Example\n\n```\n$ curl -X POST -is -u '{atlassian_account_email}:{api_token}' \\\n      -H 'Content-Type: application/yaml' \\\n      https://api.bitbucket.org/2.0/repositories/{workspace}/{repo_slug}/pipelines?target.type=pipeline_pullrequest_target&target.source=pull-request-branch&target.destination=destination&target.destination_commit.hash=9f848b7&target.commit.hash=1a372fc&target.pullrequest.id=3&target.selector.type=pull-requests&target.selector.pattern=** \\\n      -d '\npipelines:\n  pull-requests:\n    \"**\":\n      - step:\n          script:\n            - echo This is an on-demand pipeline'\n```",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "medium",
+      "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "create",
+      "mutation_class": "secret",
       "destructive": false,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.create",
       "rest": {
         "method": "POST",
         "path": "/repositories/{workspace}/{repo_slug}/pipelines"
+      },
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value",
+          "content",
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
+        ],
+        "preflight": "scope_check",
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
       }
     },
     {
@@ -2551,7 +2695,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2579,7 +2725,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2593,8 +2741,8 @@
       "description": "Retrieve the URI of the content of the specified cache.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}/content-uri",
@@ -2639,7 +2787,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2682,7 +2832,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2710,7 +2862,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2769,8 +2923,8 @@
       "description": "Retrieve the log file for a given step of a pipeline.\n\nThis endpoint supports (and encourages!) the use of [HTTP Range requests](https://tools.ietf.org/html/rfc7233) to deal with potentially very large log files.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log",
@@ -2786,8 +2940,8 @@
       "description": "Retrieve the log file for a build container or service container.\n\nThis endpoint supports (and encourages!) the use of [HTTP Range requests](https://tools.ietf.org/html/rfc7233) to deal with potentially very large log files.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}",
@@ -2847,16 +3001,28 @@
       "summary": "Stop a pipeline",
       "description": "Signal the stop of a pipeline and all of its steps that not have completed yet.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "medium",
+      "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "create",
-      "destructive": false,
+      "mutation_class": "destructive",
+      "destructive": true,
       "secret_sensitive": false,
       "audit_event": "bitbucket.create",
       "rest": {
         "method": "POST",
         "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline"
+      },
+      "sensitive_policy": {
+        "input_mode": "inline",
+        "redact_fields": [
+          "content",
+          "value",
+          "payload",
+          "body"
+        ],
+        "preflight": "scope_check",
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
       }
     },
     {
@@ -2895,7 +3061,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2923,7 +3091,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -2966,7 +3136,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3009,7 +3181,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3037,7 +3211,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3099,7 +3275,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3131,7 +3309,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3178,7 +3358,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3225,7 +3407,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3257,7 +3441,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3304,7 +3490,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3351,7 +3539,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3383,7 +3573,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3444,7 +3636,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3472,16 +3666,32 @@
       "summary": "Create a pull request",
       "description": "Creates a new pull request where the destination repository is\nthis repository and the author is the authenticated user.\n\nThe minimum required fields to create a pull request are `title` and\n`source`, specified by a branch name.\n\n```\ncurl https://api.bitbucket.org/2.0/repositories/my-workspace/my-repository/pullrequests \\\n    -u my-username:my-password \\\n    --request POST \\\n    --header 'Content-Type: application/json' \\\n    --data '{\n        \"title\": \"My Title\",\n        \"source\": {\n            \"branch\": {\n                \"name\": \"staging\"\n            }\n        }\n    }'\n```\n\nIf the pull request's `destination` is not specified, it will default\nto the `repository.mainbranch`. To open a pull request to a\ndifferent branch, say from a feature branch to a staging branch,\nspecify a `destination` (same format as the `source`):\n\n```\n{\n    \"title\": \"My Title\",\n    \"source\": {\n        \"branch\": {\n            \"name\": \"my-feature-branch\"\n        }\n    },\n    \"destination\": {\n        \"branch\": {\n            \"name\": \"staging\"\n        }\n    }\n}\n```\n\nReviewers can be specified by adding an array of user objects as the\n`reviewers` property.\n\n```\n{\n    \"title\": \"My Title\",\n    \"source\": {\n        \"branch\": {\n            \"name\": \"my-feature-branch\"\n        }\n    },\n    \"reviewers\": [\n        {\n            \"uuid\": \"{504c3b62-8120-4f0c-a7bc-87800b9d6f70}\"\n        }\n    ]\n}\n```\n\nOther fields:\n\n* `description` - a string\n* `close_source_branch` - boolean that specifies if the source branch should be closed upon merging\n* `draft` - boolean that specifies whether the pull request is a draft",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "medium",
+      "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "create",
+      "mutation_class": "secret",
       "destructive": false,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.create",
       "rest": {
         "method": "POST",
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests"
+      },
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value",
+          "content",
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
+        ],
+        "preflight": "scope_check",
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
       }
     },
     {
@@ -3586,7 +3796,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3680,7 +3892,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3726,7 +3940,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -3788,8 +4004,8 @@
       "description": "Redirects to the [repository diff](/cloud/bitbucket/rest/api-group-commits/#api-repositories-workspace-repo-slug-diff-spec-get)\nwith the revspec that corresponds to the pull request.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff",
@@ -3805,8 +4021,8 @@
       "description": "Redirects to the [repository diffstat](/cloud/bitbucket/rest/api-group-commits/#api-repositories-workspace-repo-slug-diffstat-spec-get)\nwith the revspec that corresponds to the pull request.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat",
@@ -3855,8 +4071,8 @@
       "description": "Redirects to the [repository patch](/cloud/bitbucket/rest/api-group-commits/#api-repositories-workspace-repo-slug-patch-spec-get)\nwith the revspec that corresponds to pull request.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch",
@@ -3904,7 +4120,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4013,7 +4231,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4074,7 +4294,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4165,7 +4387,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4241,7 +4465,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4362,16 +4588,32 @@
       "summary": "Create a snippet",
       "description": "Creates a new snippet under the authenticated user's account.\n\nSnippets can contain multiple files. Both text and binary files are\nsupported.\n\nThe simplest way to create a new snippet from a local file:\n\n    $ curl -u username:password -X POST https://api.bitbucket.org/2.0/snippets               -F file=@image.png\n\nCreating snippets through curl has a few limitations and so let's look\nat a more complicated scenario.\n\nSnippets are created with a multipart POST. Both `multipart/form-data`\nand `multipart/related` are supported. Both allow the creation of\nsnippets with both meta data (title, etc), as well as multiple text\nand binary files.\n\nThe main difference is that `multipart/related` can use rich encoding\nfor the meta data (currently JSON).\n\n\nmultipart/related (RFC-2387)\n----------------------------\n\nThis is the most advanced and efficient way to create a paste.\n\n    POST /2.0/snippets/evzijst HTTP/1.1\n    Content-Length: 1188\n    Content-Type: multipart/related; start=\"snippet\"; boundary=\"===============1438169132528273974==\"\n    MIME-Version: 1.0\n\n    --===============1438169132528273974==\n    Content-Type: application/json; charset=\"utf-8\"\n    MIME-Version: 1.0\n    Content-ID: snippet\n\n    {\n      \"title\": \"My snippet\",\n      \"is_private\": true,\n      \"scm\": \"git\",\n      \"files\": {\n          \"foo.txt\": {},\n          \"image.png\": {}\n        }\n    }\n\n    --===============1438169132528273974==\n    Content-Type: text/plain; charset=\"us-ascii\"\n    MIME-Version: 1.0\n    Content-Transfer-Encoding: 7bit\n    Content-ID: \"foo.txt\"\n    Content-Disposition: attachment; filename=\"foo.txt\"\n\n    foo\n\n    --===============1438169132528273974==\n    Content-Type: image/png\n    MIME-Version: 1.0\n    Content-Transfer-Encoding: base64\n    Content-ID: \"image.png\"\n    Content-Disposition: attachment; filename=\"image.png\"\n\n    iVBORw0KGgoAAAANSUhEUgAAABQAAAAoCAYAAAD+MdrbAAABD0lEQVR4Ae3VMUoDQRTG8ccUaW2m\n    TKONFxArJYJamCvkCnZTaa+VnQdJSBFl2SMsLFrEWNjZBZs0JgiL/+KrhhVmJRbCLPx4O+/DT2TB\n    cbblJxf+UWFVVRNsEGAtgvJxnLm2H+A5RQ93uIl+3632PZyl/skjfOn9Gvdwmlcw5aPUwimG+NT5\n    EnNN036IaZePUuIcK533NVfal7/5yjWeot2z9ta1cAczHEf7I+3J0ws9Cgx0fsOFpmlfwKcWPuBQ\n    73Oc4FHzBaZ8llq4q1mr5B2mOUCt815qYR8eB1hG2VJ7j35q4RofaH7IG+Xrf/PfJhfmwtfFYoIN\n    AqxFUD6OMxcvkO+UfKfkOyXfKdsv/AYCHMLVkHAFWgAAAABJRU5ErkJggg==\n    --===============1438169132528273974==--\n\nThe request contains multiple parts and is structured as follows.\n\nThe first part is the JSON document that describes the snippet's\nproperties or meta data. It either has to be the first part, or the\nrequest's `Content-Type` header must contain the `start` parameter to\npoint to it.\n\nThe remaining parts are the files of which there can be zero or more.\nEach file part should contain the `Content-ID` MIME header through\nwhich the JSON meta data's `files` element addresses it. The value\nshould be the name of the file.\n\n`Content-Disposition` is an optional MIME header. The header's\noptional `filename` parameter can be used to specify the file name\nthat Bitbucket should use when writing the file to disk. When present,\n`filename` takes precedence over the value of `Content-ID`.\n\nWhen the JSON body omits the `files` element, the remaining parts are\nnot ignored. Instead, each file is added to the new snippet as if its\nname was explicitly linked (the use of the `files` elements is\nmandatory for some operations like deleting or renaming files).\n\n\nmultipart/form-data\n-------------------\n\nThe use of JSON for the snippet's meta data is optional. Meta data can\nalso be supplied as regular form fields in a more conventional\n`multipart/form-data` request:\n\n    $ curl -X POST -u credentials https://api.bitbucket.org/2.0/snippets               -F title=\"My snippet\"               -F file=@foo.txt -F file=@image.png\n\n    POST /2.0/snippets HTTP/1.1\n    Content-Length: 951\n    Content-Type: multipart/form-data; boundary=----------------------------63a4b224c59f\n\n    ------------------------------63a4b224c59f\n    Content-Disposition: form-data; name=\"file\"; filename=\"foo.txt\"\n    Content-Type: text/plain\n\n    foo\n\n    ------------------------------63a4b224c59f\n    Content-Disposition: form-data; name=\"file\"; filename=\"image.png\"\n    Content-Type: application/octet-stream\n\n    ?PNG\n\n    IHDR?1??I.....\n    ------------------------------63a4b224c59f\n    Content-Disposition: form-data; name=\"title\"\n\n    My snippet\n    ------------------------------63a4b224c59f--\n\nHere the meta data properties are included as flat, top-level form\nfields. The file attachments use the `file` field name. To attach\nmultiple files, simply repeat the field.\n\nThe advantage of `multipart/form-data` over `multipart/related` is\nthat it can be easier to build clients.\n\nEssentially all properties are optional, `title` and `files` included.\n\n\nSharing and Visibility\n----------------------\n\nSnippets can be either public (visible to anyone on Bitbucket, as well\nas anonymous users), or private (visible only to members of the workspace).\nThis is controlled through the snippet's `is_private` element:\n\n* **is_private=false** -- everyone, including anonymous users can view\n  the snippet\n* **is_private=true** -- only workspace members can view the snippet\n\nTo create the snippet under a workspace, just append the workspace ID\nto the URL. See [`/2.0/snippets/{workspace}`](/cloud/bitbucket/rest/api-group-snippets/#api-snippets-workspace-post).",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "medium",
+      "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "create",
+      "mutation_class": "secret",
       "destructive": false,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.create",
       "rest": {
         "method": "POST",
         "path": "/snippets"
+      },
+      "sensitive_policy": {
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value",
+          "content",
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
+        ],
+        "preflight": "scope_check",
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
       }
     },
     {
@@ -4428,16 +4670,28 @@
       "summary": "Update a snippet",
       "description": "Used to update a snippet. Use this to add and delete files and to\nchange a snippet's title.\n\nTo update a snippet, one can either PUT a full snapshot, or only the\nparts that need to be changed.\n\nThe contract for PUT on this API is that properties missing from the\nrequest remain untouched so that snippets can be efficiently\nmanipulated with differential payloads.\n\nTo delete a property (e.g. the title, or a file), include its name in\nthe request, but omit its value (use `null`).\n\nAs in Git, explicit renaming of files is not supported. Instead, to\nrename a file, delete it and add it again under another name. This can\nbe done atomically in a single request. Rename detection is left to\nthe SCM.\n\nPUT supports three different content types for both request and\nresponse bodies:\n\n* `application/json`\n* `multipart/related`\n* `multipart/form-data`\n\nThe content type used for the request body can be different than that\nused for the response. Content types are specified using standard HTTP\nheaders.\n\nUse the `Content-Type` and `Accept` headers to select the desired\nrequest and response format.\n\n\napplication/json\n----------------\n\nAs with creation and retrieval, the content type determines what\nproperties can be manipulated. `application/json` does not support\nfile contents and is therefore limited to a snippet's meta data.\n\nTo update the title, without changing any of its files:\n\n    $ curl -X POST -H \"Content-Type: application/json\" https://api.bitbucket.org/2.0/snippets/evzijst/kypj             -d '{\"title\": \"Updated title\"}'\n\n\nTo delete the title:\n\n    $ curl -X POST -H \"Content-Type: application/json\" https://api.bitbucket.org/2.0/snippets/evzijst/kypj             -d '{\"title\": null}'\n\nNot all parts of a snippet can be manipulated. The owner and creator\nfor instance are immutable.\n\n\nmultipart/related\n-----------------\n\n`multipart/related` can be used to manipulate all of a snippet's\nproperties. The body is identical to a POST. properties omitted from\nthe request are left unchanged. Since the `start` part contains JSON,\nthe mechanism for manipulating the snippet's meta data is identical\nto `application/json` requests.\n\nTo update one of a snippet's file contents, while also changing its\ntitle:\n\n    PUT /2.0/snippets/evzijst/kypj HTTP/1.1\n    Content-Length: 288\n    Content-Type: multipart/related; start=\"snippet\"; boundary=\"===============1438169132528273974==\"\n    MIME-Version: 1.0\n\n    --===============1438169132528273974==\n    Content-Type: application/json; charset=\"utf-8\"\n    MIME-Version: 1.0\n    Content-ID: snippet\n\n    {\n      \"title\": \"My updated snippet\",\n      \"files\": {\n          \"foo.txt\": {}\n        }\n    }\n\n    --===============1438169132528273974==\n    Content-Type: text/plain; charset=\"us-ascii\"\n    MIME-Version: 1.0\n    Content-Transfer-Encoding: 7bit\n    Content-ID: \"foo.txt\"\n    Content-Disposition: attachment; filename=\"foo.txt\"\n\n    Updated file contents.\n\n    --===============1438169132528273974==--\n\nHere only the parts that are changed are included in the body. The\nother files remain untouched.\n\nNote the use of the `files` list in the JSON part. This list contains\nthe files that are being manipulated. This list should have\ncorresponding multiparts in the request that contain the new contents\nof these files.\n\nIf a filename in the `files` list does not have a corresponding part,\nit will be deleted from the snippet, as shown below:\n\n    PUT /2.0/snippets/evzijst/kypj HTTP/1.1\n    Content-Length: 188\n    Content-Type: multipart/related; start=\"snippet\"; boundary=\"===============1438169132528273974==\"\n    MIME-Version: 1.0\n\n    --===============1438169132528273974==\n    Content-Type: application/json; charset=\"utf-8\"\n    MIME-Version: 1.0\n    Content-ID: snippet\n\n    {\n      \"files\": {\n        \"image.png\": {}\n      }\n    }\n\n    --===============1438169132528273974==--\n\nTo simulate a rename, delete a file and add the same file under\nanother name:\n\n    PUT /2.0/snippets/evzijst/kypj HTTP/1.1\n    Content-Length: 212\n    Content-Type: multipart/related; start=\"snippet\"; boundary=\"===============1438169132528273974==\"\n    MIME-Version: 1.0\n\n    --===============1438169132528273974==\n    Content-Type: application/json; charset=\"utf-8\"\n    MIME-Version: 1.0\n    Content-ID: snippet\n\n    {\n        \"files\": {\n          \"foo.txt\": {},\n          \"bar.txt\": {}\n        }\n    }\n\n    --===============1438169132528273974==\n    Content-Type: text/plain; charset=\"us-ascii\"\n    MIME-Version: 1.0\n    Content-Transfer-Encoding: 7bit\n    Content-ID: \"bar.txt\"\n    Content-Disposition: attachment; filename=\"bar.txt\"\n\n    foo\n\n    --===============1438169132528273974==--\n\n\nmultipart/form-data\n-----------------\n\nAgain, one can also use `multipart/form-data` to manipulate file\ncontents and meta data atomically.\n\n    $ curl -X PUT http://localhost:12345/2.0/snippets/evzijst/kypj             -F title=\"My updated snippet\" -F file=@foo.txt\n\n    PUT /2.0/snippets/evzijst/kypj HTTP/1.1\n    Content-Length: 351\n    Content-Type: multipart/form-data; boundary=----------------------------63a4b224c59f\n\n    ------------------------------63a4b224c59f\n    Content-Disposition: form-data; name=\"file\"; filename=\"foo.txt\"\n    Content-Type: text/plain\n\n    foo\n\n    ------------------------------63a4b224c59f\n    Content-Disposition: form-data; name=\"title\"\n\n    My updated snippet\n    ------------------------------63a4b224c59f\n\nTo delete a file, omit its contents while including its name in the\n`files` field:\n\n    $ curl -X PUT https://api.bitbucket.org/2.0/snippets/evzijst/kypj -F files=image.png\n\n    PUT /2.0/snippets/evzijst/kypj HTTP/1.1\n    Content-Length: 149\n    Content-Type: multipart/form-data; boundary=----------------------------ef8871065a86\n\n    ------------------------------ef8871065a86\n    Content-Disposition: form-data; name=\"files\"\n\n    image.png\n    ------------------------------ef8871065a86--\n\nThe explicit use of the `files` element in `multipart/related` and\n`multipart/form-data` is only required when deleting files.\nThe default mode of operation is for file parts to be processed,\nregardless of whether or not they are listed in `files`, as a\nconvenience to the client.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "medium",
+      "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "update",
-      "destructive": false,
+      "mutation_class": "destructive",
+      "destructive": true,
       "secret_sensitive": false,
       "audit_event": "bitbucket.update",
       "rest": {
         "method": "PUT",
         "path": "/snippets/{workspace}/{encoded_id}"
+      },
+      "sensitive_policy": {
+        "input_mode": "inline",
+        "redact_fields": [
+          "content",
+          "value",
+          "payload",
+          "body"
+        ],
+        "preflight": "scope_check",
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
       }
     },
     {
@@ -4461,7 +4715,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4555,7 +4811,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4599,8 +4857,8 @@
       "description": "Convenience resource for getting to a snippet's raw files without the\nneed for first having to retrieve the snippet itself and having to pull\nout the versioned file links.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/snippets/{workspace}/{encoded_id}/files/{path}",
@@ -4663,7 +4921,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4739,7 +4999,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4753,8 +5015,8 @@
       "description": "Retrieves the raw contents of a specific file in the snippet. The\n`Content-Disposition` header will be \"attachment\" to avoid issues with\nmalevolent executable files.\n\nThe file's mime type is derived from its filename and returned in the\n`Content-Type` header.\n\nNote that for text files, no character encoding is included as part of\nthe content type.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}",
@@ -4770,8 +5032,8 @@
       "description": "Returns the diff of the specified commit against its first parent.\n\nNote that this resource is different in functionality from the `patch`\nresource.\n\nThe differences between a diff and a patch are:\n\n* patches have a commit header with the username, message, etc\n* diffs support the optional `path=foo/bar.py` query param to filter the\n  diff to just that one file diff (not supported for patches)\n* for a merge, the diff will show the diff between the merge commit and\n  its first parent (identical to how PRs work), while patch returns a\n  response containing separate patches for each commit on the second\n  parent's ancestry, up to the oldest common ancestor (identical to\n  its reachability).\n\nNote that the character encoding of the contents of the diff is\nunspecified as Git does not track this, making it hard for\nBitbucket to reliably determine this.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/snippets/{workspace}/{encoded_id}/{revision}/diff",
@@ -4787,8 +5049,8 @@
       "description": "Returns the patch of the specified commit against its first\nparent.\n\nNote that this resource is different in functionality from the `diff`\nresource.\n\nThe differences between a diff and a patch are:\n\n* patches have a commit header with the username, message, etc\n* diffs support the optional `path=foo/bar.py` query param to filter the\n  diff to just that one file diff (not supported for patches)\n* for a merge, the diff will show the diff between the merge commit and\n  its first parent (identical to how PRs work), while patch returns a\n  response containing separate patches for each commit on the second\n  parent's ancestry, up to the oldest common ancestor (identical to\n  its reachability).\n\nNote that the character encoding of the contents of the patch is\nunspecified as Git does not track this, making it hard for\nBitbucket to reliably determine this.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
       "risk": "medium",
-      "approval": "Binary downloads are blocked until bounded destination, overwrite, archive, and max-byte policy is approved.",
-      "output_policy": "binary_blocked",
+      "approval": "bounded direct read only; no filesystem writes, overwrites, archive extraction, shell, or git execution",
+      "output_policy": "bitbucket_binary_base64",
       "binary": {
         "method": "GET",
         "path": "/snippets/{workspace}/{encoded_id}/{revision}/patch",
@@ -4837,7 +5099,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4884,7 +5148,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -4916,7 +5182,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5142,7 +5410,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5189,7 +5459,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5236,7 +5508,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5268,7 +5542,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5329,7 +5605,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5391,7 +5669,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5419,11 +5699,11 @@
       "summary": "Update a SSH key",
       "description": "Updates a specific SSH public key on a user's account\n\nNote: Only the 'comment' field can be updated using this API. To modify the key or comment values, you must delete and add the key again.\n\nExample:\n\n```\n$ curl -X PUT -H \"Content-Type: application/json\" -d '{\"label\": \"Work key\"}' https://api.bitbucket.org/2.0/users/{ed08f5e1-605b-4f4a-aee4-6c97628a673e}/ssh-keys/{b15b6026-9c02-4626-b4ad-b905f99f763a}\n```",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "high",
+      "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
       "mutation_class": "secret",
-      "destructive": false,
+      "destructive": true,
       "secret_sensitive": true,
       "audit_event": "bitbucket.update",
       "rest": {
@@ -5438,7 +5718,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5470,7 +5752,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5531,19 +5815,25 @@
       "risk": "high",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "admin",
+      "mutation_class": "secret",
       "destructive": false,
-      "secret_sensitive": false,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.create",
       "rest": {
         "method": "POST",
         "path": "/workspaces/{workspace}/hooks"
       },
       "sensitive_policy": {
-        "input_mode": "inline",
+        "input_mode": "env_or_stdin",
         "redact_fields": [
+          "value",
           "content",
-          "value"
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5571,22 +5861,28 @@
       "summary": "Update a webhook for a workspace",
       "description": "Updates the specified webhook subscription.\n\nThe following properties can be mutated:\n\n* `description`\n* `url`\n* `secret`\n* `active`\n* `events`\n\nThe hook's secret is used as a key to generate the HMAC hex digest sent in the\n`X-Hub-Signature` header at delivery time. This signature is only generated\nwhen the hook has a secret.\n\nSet the hook's secret by passing the new value in the `secret` field. Passing a\n`null` value in the `secret` field will remove the secret from the hook. The\nhook's secret can be left unchanged by not passing the `secret` field in the\nrequest.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "high",
+      "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "admin",
-      "destructive": false,
-      "secret_sensitive": false,
+      "mutation_class": "secret",
+      "destructive": true,
+      "secret_sensitive": true,
       "audit_event": "bitbucket.update",
       "rest": {
         "method": "PUT",
         "path": "/workspaces/{workspace}/hooks/{uid}"
       },
       "sensitive_policy": {
-        "input_mode": "inline",
+        "input_mode": "env_or_stdin",
         "redact_fields": [
+          "value",
           "content",
-          "value"
+          "secret",
+          "password",
+          "token",
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5614,7 +5910,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5762,7 +6060,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5805,7 +6105,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5833,7 +6135,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5880,7 +6184,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5927,7 +6233,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -5959,7 +6267,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -6053,7 +6363,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -6096,11 +6408,11 @@
       "summary": "Update the branching model config for a project",
       "description": "Update the branching model configuration for a project.\n\nThe `development` branch can be configured to a specific branch or to\ntrack the main branch. Any branch name can be supplied, but will only\nsuccessfully be applied to a repository via inheritance if that branch\nexists for that repository. Only the passed properties will be updated. The\nproperties not passed will be left unchanged. A request without a\n`development` property will leave the development branch unchanged.\n\nThe `production` branch can be a specific branch, the main\nbranch or disabled. Any branch name can be supplied, but will only\nsuccessfully be applied to a repository via inheritance if that branch\nexists for that repository. The `enabled` property can be used to enable (`true`)\nor disable (`false`) it. Only the passed properties will be updated. The\nproperties not passed will be left unchanged. A request without a\n`production` property will leave the production branch unchanged.\n\nThe `branch_types` property contains the branch types to be updated.\nOnly the branch types passed will be updated. All updates will be\nrejected if it would leave the branching model in an invalid state.\nFor branch types this means that:\n\n1. The prefixes for all enabled branch types are valid. For example,\n   it is not possible to use '*' inside a Git prefix.\n2. A prefix of an enabled branch type must not be a prefix of another\n   enabled branch type. This is to ensure that a branch can be easily\n   classified by its prefix unambiguously.\n\nIt is possible to store an invalid prefix if that branch type would be\nleft disabled. Only the passed properties will be updated. The\nproperties not passed will be left unchanged. Each branch type must\nhave a `kind` property to identify it.\n\nThe `default_branch_deletion` property is a string. The value of `true`\nindicates to delete branches by default. The value of `false` indicates\nthat branches will not be deleted by default. A request without a\n`default_branch_deletion` property will leave it unchanged. Other values\nwould be ignored.",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
-      "risk": "high",
+      "risk": "critical",
       "approval": "Reverse ETL writes require plan, preview, approval, execute; typed confirmation is required for destructive/admin/sensitive operations.",
       "output_policy": "reverse_etl_plan_preview_approval",
-      "mutation_class": "admin",
-      "destructive": false,
+      "mutation_class": "destructive",
+      "destructive": true,
       "secret_sensitive": false,
       "audit_event": "bitbucket.update",
       "rest": {
@@ -6111,7 +6423,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -6169,7 +6483,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -6197,7 +6513,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -6244,7 +6562,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -6291,7 +6611,9 @@
           "secret",
           "password",
           "token",
-          "key"
+          "key",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -6349,7 +6671,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -6377,7 +6701,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -6435,7 +6761,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",
@@ -6463,7 +6791,9 @@
         "input_mode": "inline",
         "redact_fields": [
           "content",
-          "value"
+          "value",
+          "payload",
+          "body"
         ],
         "preflight": "scope_check",
         "transform": "none",

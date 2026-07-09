@@ -102,3 +102,17 @@ CLI/help/docs/website parity:
 - [x] Runtime write-plan command path covered by `pm bitbucket issue create` CLI test with approval-gated JSON and no approval token/raw record leakage.
 - [x] `docs/connectors/bitbucket/**`, connector catalog docs, and website generated connector data updated.
 - [x] Website CLI reference notes dispatched Bitbucket connector command surface and blocked raw/local workflows.
+
+## Full-surface follow-up evidence
+
+After the user requested full Bitbucket operation implementation, a follow-up GSD phase was added at `.planning/phases/issue-79-bitbucket-full-surface/`.
+
+Results:
+
+- 331/331 official Bitbucket Swagger operations covered by typed surfaces.
+- 179/179 GET operations covered by direct-read commands.
+- 152/152 POST/PUT/DELETE operations covered by named reverse-ETL write actions.
+- 0 blocked `api_surface.operation` rows remain.
+- 342 implemented Bitbucket CLI commands are declared.
+- Bounded binary/text GET policy added as `bitbucket_binary_base64` with no filesystem writes.
+- Full local gates passed, including `make verify` and `go run ./cmd/connectorgen validate internal/connectors/defs`.

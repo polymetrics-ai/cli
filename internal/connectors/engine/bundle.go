@@ -378,6 +378,7 @@ type WriteAction struct {
 	Kind         string              `json:"kind"` // create|update|upsert|delete|custom
 	Method       string              `json:"method"`
 	Path         string              `json:"path"`
+	Query        map[string]string   `json:"query,omitempty"`
 	PathFields   []string            `json:"path_fields,omitempty"`
 	BodyType     string              `json:"body_type,omitempty"` // json (default) | form | none | graphql
 	BodyFields   []string            `json:"body_fields,omitempty"`

@@ -3,6 +3,7 @@ package engine
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -14,6 +15,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -24,6 +26,7 @@ const (
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
 	directReadPolicyBitbucketJSONObject        = "bitbucket_json_object"
 	directReadPolicyBitbucketJSONCollection    = "bitbucket_json_collection"
+	directReadPolicyBitbucketBinaryBase64      = "bitbucket_binary_base64"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -82,14 +85,18 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 
 	var body any
-	dec := json.NewDecoder(io.LimitReader(bytes.NewReader(resp.Body), int64(maxBytes)+1))
-	dec.UseNumber()
-	if err := dec.Decode(&body); err != nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("direct read response is not JSON: %w", err)
-	}
-	body, err = applyDirectReadOutputPolicy(req.OutputPolicy, body)
-	if err != nil {
-		return connectors.DirectReadResult{}, err
+	if req.OutputPolicy == directReadPolicyBitbucketBinaryBase64 {
+		body = applyBinaryDirectReadOutputPolicy(resp)
+	} else {
+		dec := json.NewDecoder(io.LimitReader(bytes.NewReader(resp.Body), int64(maxBytes)+1))
+		dec.UseNumber()
+		if err := dec.Decode(&body); err != nil {
+			return connectors.DirectReadResult{}, fmt.Errorf("direct read response is not JSON: %w", err)
+		}
+		body, err = applyDirectReadOutputPolicy(req.OutputPolicy, body)
+		if err != nil {
+			return connectors.DirectReadResult{}, err
+		}
 	}
 	return connectors.DirectReadResult{
 		Connector: b.Name,
@@ -114,7 +121,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
-	case directReadPolicyBitbucketJSONObject, directReadPolicyBitbucketJSONCollection:
+	case directReadPolicyBitbucketJSONObject, directReadPolicyBitbucketJSONCollection,
+		directReadPolicyBitbucketBinaryBase64:
 		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
@@ -156,6 +164,19 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 		return redactBitbucketJSON(body), nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
+	}
+}
+
+func applyBinaryDirectReadOutputPolicy(resp *connsdk.Response) map[string]any {
+	contentType := resp.Header.Get("Content-Type")
+	if idx := strings.Index(contentType, ";"); idx >= 0 {
+		contentType = strings.TrimSpace(contentType[:idx])
+	}
+	return map[string]any{
+		"encoding":       "base64",
+		"bytes":          len(resp.Body),
+		"content_type":   contentType,
+		"content_base64": base64.StdEncoding.EncodeToString(resp.Body),
 	}
 }
 
@@ -226,7 +247,7 @@ func shouldRedactBitbucketKey(lower string) bool {
 		}
 	}
 	switch lower {
-	case "content", "raw", "patch", "diff", "key_pair", "private_key", "value":
+	case "content", "raw", "patch", "diff", "key", "key_pair", "private_key", "value":
 		return true
 	default:
 		return false

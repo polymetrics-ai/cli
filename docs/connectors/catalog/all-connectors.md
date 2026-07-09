@@ -43,7 +43,7 @@
 | `beamer` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Beamer | `api` | ga | check, catalog, read, write | 7 | 14 | [Documentation](https://www.getbeamer.com/api/docs) | bundle definition |
 | `bigmailer` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | BigMailer | `api` | beta | check, catalog, read, write | 15 | 27 | [Documentation](https://www.bigmailer.io/api) | bundle definition |
 | `bing-ads` | [`icons/bingads.svg`](../icons/bingads.svg) | Bing Ads | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://learn.microsoft.com/en-us/advertising/customer-management-service/customer-management-service-rest-api) | bundle definition |
-| `bitbucket` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bitbucket | `api` | alpha | check, catalog, read, write | 13 | 12 | [Documentation](https://developer.atlassian.com/cloud/bitbucket/rest/) | bundle definition |
+| `bitbucket` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bitbucket | `api` | alpha | check, catalog, read, write | 13 | 152 | [Documentation](https://developer.atlassian.com/cloud/bitbucket/rest/) | bundle definition |
 | `bitly` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bitly | `api` | ga | check, catalog, read, write | 9 | 19 | [Documentation](https://dev.bitly.com/api-reference/) | bundle definition |
 | `blogger` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Blogger | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developers.google.com/blogger/docs/3.0/reference) | bundle definition |
 | `bluetally` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | BlueTally | `api` | ga | check, catalog, read | 18 | 0 | [Documentation](https://bluetally.readme.io/) | bundle definition |
