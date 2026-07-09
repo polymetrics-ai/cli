@@ -3,7 +3,7 @@
   "display_name": "Help Scout",
   "description": "Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.",
   "integration_type": "api",
-  "docs_url": "https://developer.helpscout.com/",
+  "docs_url": "https://developer.helpscout.com/mailbox-api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
@@ -18,7 +18,8 @@
   },
   "risk": {
     "read": "external Help Scout API read of conversation, customer, mailbox, and user data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "write": "documented Help Scout mutations are tracked as blocked-by-default operation metadata until typed reverse-ETL actions and approval policies are implemented",
+    "approval": "no runtime writes are executable in this slice; future reverse-ETL writes must use plan, preview, approval, and execute"
   },
   "conformance": {
     "skip_dynamic": true,

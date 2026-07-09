@@ -11,11 +11,17 @@ Status: planning checkpoint in progress.
 - Confirmed existing canonical connector slug is `help-scout`; this plan avoids creating a duplicate `helpscout` connector.
 - Crawled the official Help Scout Inbox API docs navigation for planning: 146 endpoint pages, 145 unique method/path pairs, one duplicate endpoint path for thread original source JSON/RFC822 variants.
 
+## #213 Progress
+
+- Created local branch `feat/213-helpscout-cli-surface-metadata` from the parent branch.
+- Refreshed Help Scout API surface metadata and added CLI surface metadata.
+- Focused validation passed; website typecheck is blocked by missing `node_modules`/`tsc`.
+
 ## Next
 
-1. Push the parent PR URL artifact update.
-2. Create #213 branch from the parent branch and run the metadata/validation slice.
-3. Open a stacked #213 PR against `feat/212-helpscout-cli-parity` after local green gates.
+1. Commit and push #213 green slice.
+2. Open a stacked #213 PR against `feat/212-helpscout-cli-parity`.
+3. Record automated review route; because the sub-PR base is non-default, parent PR fallback coverage may be needed.
 
 ## Blockers
 

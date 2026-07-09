@@ -1,17 +1,47 @@
 # Summary: Help Scout CLI Surface Metadata
 
-Status: planned; implementation pending parent PR creation.
+Status: implemented locally; sub-PR/automated review pending.
 
-## Completed
+## Delivered
 
-- GSD planning prompt captured.
-- Official docs navigation crawl recorded: 146 endpoint pages, 145 unique method/path pairs.
-- Existing canonical connector slug confirmed as `help-scout`.
-- Red validation targets defined before production edits.
+- Refreshed `internal/connectors/defs/help-scout/api_surface.json` from the official Help Scout Inbox API docs navigation.
+- Added `internal/connectors/defs/help-scout/cli_surface.json` with safe command metadata.
+- Updated `metadata.json` and `docs.md` to point at the Inbox API docs and avoid read-only overclaiming.
+- Added source inventory evidence in `SOURCES.md`.
+- Updated generated Help Scout connector docs/catalog and website connector data.
 
-## Next
+## Surface Counts
 
-1. Create/confirm parent PR.
-2. Create #213 sub-issue branch from parent.
-3. Refresh `api_surface.json` and add `cli_surface.json`.
-4. Run focused validation and update this artifact with red/green evidence.
+- Official endpoint pages crawled: 146.
+- Unique normalized method/path rows: 145.
+- Method split: GET 79, POST 21, PUT 20, PATCH 6, DELETE 19.
+- Runtime executable coverage in this slice: 4 stream-backed reads.
+- Other operations: blocked-by-default direct-read, binary, reverse-ETL, admin, or destructive operation rows for follow-up lanes.
+
+## Verification
+
+Passed:
+
+- JSON parse checks.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`.
+- `go test ./cmd/connectorgen -run CLISurface`.
+- `go test ./internal/connectors/engine -run CLISurface`.
+- `go test ./cmd/connectorgen ./internal/connectors/engine`.
+- `go test ./internal/connectors/conformance -run 'TestConformance/help-scout'`.
+- `go build ./cmd/pm`.
+- `./pm docs validate --connectors-dir docs/connectors`.
+- `cd website && pnpm run gen:website-data`.
+- Runtime help checks for `pm help connectors`, `pm connectors`, and `pm connectors inspect help-scout --help`.
+- Full `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and final `connectorgen validate` gates.
+
+Blocked:
+
+- `cd website && pnpm run typecheck` because `tsc` is not installed and `website/node_modules` is missing. No dependency install was run.
+
+## Safety
+
+- No secrets requested, printed, stored, or summarized.
+- No credentialed Help Scout checks run.
+- No reverse ETL execution run.
+- No raw generic HTTP write, shell write, SQL write, or raw mutation tool exposed.
+- Destructive/admin/sensitive operations remain blocked by default.

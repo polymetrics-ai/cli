@@ -34,7 +34,7 @@ A credential-free crawl of the official docs navigation found:
 
 ## Implementation Steps
 
-1. Confirm the parent PR exists before production edits on the sub-issue branch.
+1. Confirm the parent PR exists before production edits on the sub-issue branch. Done: draft parent PR #230.
 2. Add a metadata red gate:
    - Add/refresh `cli_surface.json` and `api_surface.json`.
    - Run `go run ./cmd/connectorgen validate internal/connectors/defs` and capture any expected failures.

@@ -180,7 +180,7 @@
 | `getlago` | [`icons/getlago.svg`](../icons/getlago.svg) | Lago | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://doc.getlago.com/api-reference/intro) | bundle definition |
 | `giphy` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Giphy | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.giphy.com/docs/api/) | bundle definition |
 | `gitbook` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | GitBook | `api` | ga | check, catalog, read, write | 185 | 170 | [Documentation](https://gitbook.com/docs/developers/gitbook-api/api-reference) | bundle definition |
-| `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 33 | 67 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
+| `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 37 | 231 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
 | `gitlab` | [`icons/gitlab.svg`](../icons/gitlab.svg) | GitLab | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.gitlab.com/ee/api/rest/) | bundle definition |
 | `glassfrog` | [`icons/glassfrog.svg`](../icons/glassfrog.svg) | GlassFrog | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY) | bundle definition |
 | `gmail` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Gmail | `api` | ga | check, catalog, read, write | 10 | 35 | [Documentation](https://developers.google.com/gmail/api/reference/rest) | bundle definition |
@@ -210,7 +210,7 @@
 | `harvest` | [`icons/harvest.svg`](../icons/harvest.svg) | Harvest | `api` | ga | check, catalog, read | 15 | 0 | [Documentation](https://help.getharvest.com/api-v2/) | bundle definition |
 | `height` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Height | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.height.app/api) | bundle definition |
 | `hellobaton` | [`icons/hellobaton.svg`](../icons/hellobaton.svg) | Hellobaton | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](manual intervention needed) | bundle definition |
-| `help-scout` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Help Scout | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.helpscout.com/) | bundle definition |
+| `help-scout` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Help Scout | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.helpscout.com/mailbox-api/) | bundle definition |
 | `hibob` | [`icons/hibob.svg`](../icons/hibob.svg) | HiBob | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://apidocs.hibob.com/) | bundle definition |
 | `high-level` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | High Level | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://highlevel.stoplight.io/) | bundle definition |
 | `hoorayhr` | [`icons/hoorayhr.svg`](../icons/hoorayhr.svg) | HoorayHR | `api` | beta | check, catalog, read | 4 | 0 | [Documentation](https://hoorayhr.io) | bundle definition |

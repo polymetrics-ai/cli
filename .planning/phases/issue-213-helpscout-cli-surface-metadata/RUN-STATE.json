@@ -2,7 +2,10 @@
   "phase": "issue-213-helpscout-cli-surface-metadata",
   "issue": 213,
   "parent_issue": 212,
-  "status": "planned",
+  "status": "implemented_local_green",
+  "branch": "feat/213-helpscout-cli-surface-metadata",
+  "parent_branch": "feat/212-helpscout-cli-parity",
+  "parent_pr": "https://github.com/polymetrics-ai/cli/pull/230",
   "gsd": {
     "adapter": "scripts/gsd",
     "plan_prompt": "scripts/gsd prompt plan-phase 213 --skip-research --tdd",
@@ -23,16 +26,50 @@
     "golang-context",
     "golang-concurrency",
     "golang-documentation",
-    "golang-lint"
+    "golang-lint",
+    "frontend-design",
+    "web-design-guidelines",
+    "vercel-react-best-practices",
+    "vercel-composition-patterns"
   ],
-  "verificationPassed": false,
-  "verificationStatus": "pending implementation",
+  "verificationPassed": true,
+  "verificationStatus": "make verify and final connectorgen validation passed; website typecheck remains blocked by missing node_modules but is outside the Go make verify gate",
   "orchestrationDecisions": [
     {
       "cycle": "issue-planning",
       "decision": "local_critical_path",
-      "reason": "Parent orchestrator will run #213 locally because no subagent tool is exposed in this harness."
+      "reason": "Parent orchestrator ran #213 locally because no subagent tool is exposed in this harness."
+    },
+    {
+      "cycle": "red-validation",
+      "decision": "local_critical_path",
+      "reason": "Official docs endpoint count failed against the existing narrow api_surface.json before production metadata edits."
+    },
+    {
+      "cycle": "green-validation",
+      "decision": "local_critical_path",
+      "reason": "Metadata/docs changes passed focused validation and connector conformance checks."
     }
+  ],
+  "checks": [
+    { "command": "jq empty internal/connectors/defs/help-scout/*.json internal/connectors/defs/help-scout/schemas/*.json", "result": "pass" },
+    { "command": "go run ./cmd/connectorgen validate internal/connectors/defs", "result": "pass" },
+    { "command": "go test ./cmd/connectorgen -run CLISurface", "result": "pass" },
+    { "command": "go test ./internal/connectors/engine -run CLISurface", "result": "pass" },
+    { "command": "go test ./cmd/connectorgen ./internal/connectors/engine", "result": "pass" },
+    { "command": "go test ./internal/connectors/conformance -run 'TestConformance/help-scout'", "result": "pass" },
+    { "command": "go build ./cmd/pm", "result": "pass" },
+    { "command": "./pm docs validate --connectors-dir docs/connectors", "result": "pass" },
+    { "command": "cd website && pnpm run gen:website-data", "result": "pass" },
+    { "command": "cd website && pnpm run typecheck", "result": "blocked", "reason": "tsc not found; website/node_modules missing" },
+    { "command": "./pm help connectors && ./pm connectors && ./pm connectors inspect help-scout --help", "result": "pass" },
+    { "command": "./pm connectors inspect help-scout --json", "result": "pass" },
+    { "command": "gofmt -w cmd internal", "result": "pass" },
+    { "command": "go vet ./...", "result": "pass" },
+    { "command": "go test ./...", "result": "pass", "note": "initial 600s run timed out; rerun with 1200s passed" },
+    { "command": "go build ./cmd/pm", "result": "pass" },
+    { "command": "make verify", "result": "pass" },
+    { "command": "go run ./cmd/connectorgen validate internal/connectors/defs", "result": "pass" }
   ],
   "updated_at": "2026-07-09T19:57:02Z"
 }
