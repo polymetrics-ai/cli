@@ -75,6 +75,12 @@ filter or advance reads.
 This connector is read-only. Read behavior: external monday.com GraphQL API read of
 boards/items/users/teams/tags.
 
+Sensitive/admin mutation policy: No Monday mutation is executable in this connector slice. All 280
+documented GraphQL mutations are operation-ledger metadata blocked by default. Sensitive or admin
+mutation specs require non-inline input handling (`env_or_stdin`), redaction fields for tokens,
+webhook URLs, email/file-like inputs, and typed confirmation before any future reverse ETL executor
+could run plan → preview → approval → execute.
+
 ## Known limits
 
 - Batch defaults: read_page_size=50.
