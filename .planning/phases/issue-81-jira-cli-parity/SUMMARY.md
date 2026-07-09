@@ -1,6 +1,6 @@
 # Summary: Jira CLI Parity Parent
 
-Status: draft parent PR #129 opened; #104 selected as first local critical-path lane.
+Status: draft parent PR #129 opened; #104 verified locally with full gates.
 
 ## Completed
 
@@ -11,6 +11,8 @@ Status: draft parent PR #129 opened; #104 selected as first local critical-path 
 - Created parent planning artifacts and orchestration state.
 - Committed and pushed parent seed commit `982fa4c1`.
 - Opened draft parent PR #129: https://github.com/polymetrics-ai/cli/pull/129.
+- Added #104 red test and Jira CLI-surface metadata; targeted engine/connectorgen/conformance checks passed.
+- Ran full #104 local gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs`.
 
 ## Current Blockers
 
@@ -19,7 +21,6 @@ Status: draft parent PR #129 opened; #104 selected as first local critical-path 
 
 ## Next
 
-1. Add and run the red `TestBundleLoadEmbeddedJiraCLISurface` test.
-2. Add `internal/connectors/defs/jira/cli_surface.json`.
-3. Run targeted tests and connector validation.
-4. Commit/push coherent green slice and update parent PR.
+1. Commit/push #104 verified slice and update parent PR.
+2. Route automated review per parent PR/stacked PR policy.
+3. Start the next dependency-ready lane: #105 help renderer/docs or #107 operation ledger.

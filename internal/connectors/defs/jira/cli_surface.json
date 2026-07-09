@@ -1,0 +1,393 @@
+{
+  "tagline": "Work with Jira Cloud issues, projects, and users from the command line.",
+  "usage": "pm jira <command> [flags]",
+  "source_cli": {
+    "name": "jira",
+    "docs": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/",
+    "reference": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+    "source": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/"
+  },
+  "groups": [
+    {
+      "id": "work",
+      "title": "Issue Commands",
+      "commands": ["issue", "comment", "worklog", "attachment"]
+    },
+    {
+      "id": "projects",
+      "title": "Project Commands",
+      "commands": ["project", "component", "version"]
+    },
+    {
+      "id": "people",
+      "title": "User And Team Commands",
+      "commands": ["user", "myself", "group"]
+    },
+    {
+      "id": "agile",
+      "title": "Agile Commands",
+      "commands": ["board", "sprint", "epic"]
+    },
+    {
+      "id": "admin",
+      "title": "Administration Commands",
+      "commands": ["workflow", "field", "permission", "screen", "webhook"]
+    },
+    {
+      "id": "local",
+      "title": "Local Workflow Commands",
+      "commands": ["auth", "config", "api"]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved Jira connector credential and site scope.",
+      "maps_to": "connection"
+    }
+  ],
+  "commands": [
+    {
+      "path": "issue list",
+      "summary": "List Jira issues",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issues",
+      "source_cli_path": "jira issue list",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/",
+      "notes": "Executes the existing Jira issues stream. Advanced JQL, field selection, and single-issue rendering are deferred to later direct-read or stream-runner slices.",
+      "examples": ["pm jira issue list --json"],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/api/3/search"
+        }
+      ]
+    },
+    {
+      "path": "issue search",
+      "summary": "Search issues with Jira query parameters",
+      "intent": "etl",
+      "availability": "partial",
+      "stream": "issues",
+      "source_cli_path": "jira issue search",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/",
+      "notes": "The connector has an issue-search stream, but gh-style/Jira-style ad-hoc JQL flags are not yet exposed as command flags."
+    },
+    {
+      "path": "issue view",
+      "summary": "View one Jira issue",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira issue view",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get",
+      "notes": "Requires a bounded direct-read executor for caller-supplied issue IDs."
+    },
+    {
+      "path": "issue create",
+      "summary": "Create an issue",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "jira issue create",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post",
+      "risk": "Creates visible Jira project data.",
+      "approval": "Future reverse ETL writes must use plan, preview, approval, and execute.",
+      "notes": "No Jira write action is declared in this metadata slice."
+    },
+    {
+      "path": "issue edit",
+      "summary": "Edit an issue",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "jira issue edit",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-put",
+      "risk": "Mutates existing Jira issue fields.",
+      "approval": "Future reverse ETL writes must use plan, preview, approval, and execute.",
+      "notes": "Blocked until #107 classifies the operation and #110 defines sensitive/admin policy."
+    },
+    {
+      "path": "issue transition",
+      "summary": "Transition an issue through a Jira workflow",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "jira issue transition",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-transitions-post",
+      "risk": "Changes issue workflow state and may trigger Jira automation.",
+      "approval": "Future reverse ETL writes must use plan, preview, approval, and execute.",
+      "notes": "Workflow transitions require explicit typed approval and field validation before execution."
+    },
+    {
+      "path": "issue delete",
+      "summary": "Delete an issue",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "jira issue delete",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-delete",
+      "notes": "Issue deletion is destructive and is blocked by default."
+    },
+    {
+      "path": "comment list",
+      "summary": "List comments for an issue",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira comment list",
+      "notes": "Requires per-issue fan-out or a bounded direct-read command for caller-supplied issue IDs."
+    },
+    {
+      "path": "comment add",
+      "summary": "Add an issue comment",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "jira comment add",
+      "risk": "Adds visible comment text to a Jira issue.",
+      "approval": "Future reverse ETL writes must use plan, preview, approval, and execute.",
+      "notes": "No comment write action is declared in this metadata slice."
+    },
+    {
+      "path": "worklog list",
+      "summary": "List issue worklogs",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira worklog list",
+      "notes": "Requires per-issue fan-out or a bounded direct-read command for caller-supplied issue IDs."
+    },
+    {
+      "path": "worklog add",
+      "summary": "Add issue worklog time",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "jira worklog add",
+      "risk": "Writes time-tracking data to Jira issues.",
+      "approval": "Any future support must use plan, preview, approval, and execute with typed confirmation.",
+      "notes": "Time-tracking writes are sensitive business records and remain blocked by default."
+    },
+    {
+      "path": "attachment metadata",
+      "summary": "Read issue attachment metadata",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira attachment metadata",
+      "notes": "Structured attachment metadata is a candidate for a bounded direct-read or fan-out stream after the operation ledger slice."
+    },
+    {
+      "path": "attachment download",
+      "summary": "Download attachment content",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "jira attachment download",
+      "notes": "Attachment content returns binary payloads and needs an explicit bounded file-output policy before enabling."
+    },
+    {
+      "path": "project list",
+      "summary": "List Jira projects",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_cli_path": "jira project list",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-search-get",
+      "examples": ["pm jira project list --json"],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/api/3/project/search"
+        }
+      ]
+    },
+    {
+      "path": "project view",
+      "summary": "View one Jira project",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira project view",
+      "notes": "Requires a bounded direct-read executor for caller-supplied project keys or IDs."
+    },
+    {
+      "path": "project create",
+      "summary": "Create a Jira project",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "jira project create",
+      "notes": "Project creation is an administrative action and is blocked by default."
+    },
+    {
+      "path": "project delete",
+      "summary": "Delete a Jira project",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "jira project delete",
+      "notes": "Project deletion is destructive admin and is not exposed."
+    },
+    {
+      "path": "component list",
+      "summary": "List project components",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira component list",
+      "notes": "Project subresources need project-ID fan-out or bounded direct reads."
+    },
+    {
+      "path": "version list",
+      "summary": "List project versions",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira version list",
+      "notes": "Project version reads need project-ID fan-out or bounded direct reads."
+    },
+    {
+      "path": "user list",
+      "summary": "List Jira users visible to the site",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_cli_path": "jira user list",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get",
+      "examples": ["pm jira user list --json"],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/api/3/users/search"
+        }
+      ]
+    },
+    {
+      "path": "user view",
+      "summary": "View one Jira user",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira user view",
+      "notes": "Requires a bounded direct-read executor for caller-supplied account IDs."
+    },
+    {
+      "path": "myself view",
+      "summary": "View the authenticated Jira user",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira myself view",
+      "notes": "The endpoint is currently used as the connector health check and is not yet exposed as a command."
+    },
+    {
+      "path": "group list",
+      "summary": "List Jira groups",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira group list",
+      "notes": "Group APIs require elevated permissions on many sites and need operation-ledger risk classification."
+    },
+    {
+      "path": "board list",
+      "summary": "List Jira Software boards",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira board list",
+      "notes": "Jira Software Agile APIs are outside the current REST v3 legacy stream set and need a separate ledger row."
+    },
+    {
+      "path": "sprint list",
+      "summary": "List board sprints",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira sprint list",
+      "notes": "Requires Agile API coverage and board-ID scoping."
+    },
+    {
+      "path": "epic list",
+      "summary": "List epics",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira epic list",
+      "notes": "Requires Agile API or JQL-backed operation design; not part of the current legacy streams."
+    },
+    {
+      "path": "workflow list",
+      "summary": "List Jira workflows",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira workflow list",
+      "notes": "Workflow metadata commonly requires admin permissions and needs #107/#110 classification."
+    },
+    {
+      "path": "workflow publish",
+      "summary": "Publish a workflow draft",
+      "intent": "direct_write",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "jira workflow publish",
+      "notes": "Workflow mutations are administrative and blocked by default."
+    },
+    {
+      "path": "field list",
+      "summary": "List Jira fields",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira field list",
+      "notes": "Field metadata is useful but outside the current issue/project/user legacy stream set."
+    },
+    {
+      "path": "permission scheme list",
+      "summary": "List permission schemes",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira permission scheme list",
+      "notes": "Permission scheme APIs are admin-oriented and need elevated-scope classification."
+    },
+    {
+      "path": "screen list",
+      "summary": "List Jira screens",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira screen list",
+      "notes": "Screen configuration APIs are admin-oriented and need elevated-scope classification."
+    },
+    {
+      "path": "webhook list",
+      "summary": "List Jira webhooks",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "jira webhook list",
+      "notes": "Webhook APIs require explicit permission/risk review before command exposure."
+    },
+    {
+      "path": "auth login",
+      "summary": "Configure Jira credentials",
+      "intent": "auth",
+      "availability": "unsupported_local",
+      "source_cli_path": "jira auth login",
+      "notes": "Use `pm credentials add jira ...` with environment variables, stdin, or secret manager input; do not pass secrets in prompt text or examples."
+    },
+    {
+      "path": "config set",
+      "summary": "Set local Jira CLI configuration",
+      "intent": "config",
+      "availability": "unsupported_local",
+      "source_cli_path": "jira config set",
+      "notes": "Connector metadata does not write local CLI config. Use Polymetrics connection and credential commands."
+    },
+    {
+      "path": "api",
+      "summary": "Call an arbitrary Jira REST endpoint",
+      "intent": "raw_api",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "jira api",
+      "notes": "Generic raw Jira API calls are intentionally not exposed. Use typed streams, direct reads, or reverse ETL actions only."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "auth",
+      "summary": "Use Polymetrics credentials for Jira site URL, email, and API token; never place secrets in command examples."
+    },
+    {
+      "name": "writes",
+      "summary": "Jira writes are metadata-only in this slice and remain blocked until reverse ETL policy and operation ledger slices are complete."
+    },
+    {
+      "name": "attachments",
+      "summary": "Attachment content is binary and requires explicit output bounds before any download executor can be enabled."
+    }
+  ]
+}
