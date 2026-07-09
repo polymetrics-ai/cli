@@ -1,0 +1,49 @@
+{
+  "phase": "issue-197-gorgias-cli-surface-metadata",
+  "status": "in_progress",
+  "parent_issue": 196,
+  "sub_issue": 197,
+  "parent_pr": "https://github.com/polymetrics-ai/cli/pull/229",
+  "parent_branch": "feat/196-gorgias-cli-parity",
+  "branch": "feat/197-gorgias-cli-surface-metadata",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase 197 --skip-research",
+    "execute_prompt": "scripts/gsd prompt execute-phase issue-197-gorgias-cli-surface-metadata --dry-run",
+    "programming_loop_prompt": "blocked_unknown_command",
+    "manual_fallback": true
+  },
+  "required_skills_loaded": [
+    "gsd-core",
+    "caveman",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-lint",
+    "golang-spf13-cobra"
+  ],
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T20:08:00Z",
+      "cycle": "issue-197-plan",
+      "decision": "local_critical_path",
+      "issue_numbers": [197],
+      "reason": "No subagent tool is available; #197 is the parent critical path and runs in this branch."
+    }
+  ],
+  "redEvidence": [
+    {
+      "command": "python3 metadata completeness check for 114-operation baseline and cli_surface presence",
+      "result": "failed: gorgias api_surface endpoint count 11 != official baseline 114"
+    }
+  ],
+  "verificationPassed": false,
+  "verificationBlocker": "implementation and focused gates pending"
+}
