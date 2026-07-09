@@ -116,6 +116,12 @@ gh pr create --draft --base feat/188-front-cli-parity --head feat/189-front-cli-
 
 Result: pass; draft sub-PR opened at https://github.com/polymetrics-ai/cli/pull/231.
 
+```bash
+gh pr ready 231
+```
+
+Result: pass; PR #231 marked ready after checks completed. CodeRabbit had skipped the draft revision, so automatic review coverage remains pending on the ready/update commit.
+
 ## CLI help/docs/website parity
 
 Runtime renderer/docs/website changes are #190. For this slice, verify metadata only and record that

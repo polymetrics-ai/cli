@@ -131,6 +131,12 @@
       "decision": "local_critical_path",
       "issue_numbers": [189],
       "reason": "Opened draft sub-PR #231 against feat/188-front-cli-parity."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "coderabbit_auto_pending",
+      "issue_numbers": [189],
+      "reason": "Marked sub-PR #231 ready after CI passed; CodeRabbit skipped the draft revision, so automatic review coverage remains pending."
     }
   ],
   "subissues": [
@@ -140,18 +146,18 @@
       "branch": "feat/189-front-cli-surface-metadata",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/231",
       "worker": "local_critical_path",
-      "status": "sub_pr_open",
+      "status": "ready_sub_pr_open",
       "write_scope": ["internal/connectors/defs/front", ".planning/phases/issue-189-front-cli-surface-metadata"],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-188-front-cli-parity",
       "verification": "focused gates passed; go vet and go build passed; go test full suite timed out in internal/connectors/certify TestWriteStagesSkipWhenDisabled",
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
-        "head_sha": "285da4ce",
+        "head_sha": "307be0c3",
         "reviewed_range": "pending",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "Draft sub-PR #231 open; automated review pending and may require parent PR fallback for non-default base.",
+        "disposition_summary": "Sub-PR #231 marked ready after draft-skip; automatic review pending and may require parent PR fallback for non-default base.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/231"
       }
     },

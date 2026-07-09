@@ -1,6 +1,6 @@
 # Summary: Front CLI Surface Metadata
 
-Status: draft sub-PR open (#231).
+Status: ready sub-PR open (#231); automated review pending.
 
 ## Completed
 
@@ -16,12 +16,13 @@ Status: draft sub-PR open (#231).
 - Broader `go vet ./...` and `go build ./cmd/pm` passed.
 - Broader `go test ./...` is blocked by an existing/full-suite timeout in `internal/connectors/certify` (`TestWriteStagesSkipWhenDisabled` timed out after 10m), not by the Front metadata files.
 - Opened draft sub-PR #231 against the parent branch: https://github.com/polymetrics-ai/cli/pull/231.
+- Marked PR #231 ready after CI passed; CodeRabbit had skipped the original draft, so automatic review coverage is pending on the ready/update commit.
 
 ## Next
 
-1. Monitor draft sub-PR #231 checks.
-2. Decide whether to keep #189 as a draft/partial metadata PR or wait for #192 full operation-ledger capture before marking #189 complete.
-3. If proceeding, route automated review per stacked PR rules; if CodeRabbit skips the non-default base, use parent PR #224 fallback after integration.
+1. Monitor ready sub-PR #231 checks and CodeRabbit coverage.
+2. Decide whether to keep #189 as a partial metadata PR or wait for #192 full operation-ledger capture before marking #189 complete.
+3. If CodeRabbit skips the non-default base, use parent PR #224 fallback after integration rather than treating the skip as review-complete.
 
 ## Safety notes
 

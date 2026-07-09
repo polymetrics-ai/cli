@@ -1,6 +1,6 @@
 {
   "phase": "issue-189-front-cli-surface-metadata",
-  "status": "implementation_in_progress",
+  "status": "ready_sub_pr_open",
   "parent_issue": 188,
   "sub_issue": 189,
   "parent_pr": 224,
@@ -57,6 +57,11 @@
       "cycle": "sub-pr",
       "decision": "local_critical_path",
       "reason": "Opened draft sub-PR #231 against feat/188-front-cli-parity."
+    },
+    {
+      "cycle": "review-routing",
+      "decision": "coderabbit_auto_pending",
+      "reason": "PR #231 was marked ready after CodeRabbit skipped the draft; pushed a status-only update to trigger automatic review without a manual review command."
     }
   ],
   "updated_at": "2026-07-09T19:36:00Z"
