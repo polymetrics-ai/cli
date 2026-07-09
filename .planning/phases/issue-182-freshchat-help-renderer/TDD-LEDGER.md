@@ -90,4 +90,4 @@ cd website && pnpm run gen:website-data
 git diff --exit-code -- website/data/connectors.generated.json website/lib/connectors.catalog.data.generated.json website/lib/docs.generated.ts
 ```
 
-Result: pass after committing regenerated Freshchat docs/catalog data for PR #245.
+Result: pass after committing regenerated Freshchat docs/catalog data for PR #245. CI rerun passed all non-skipped checks; CodeRabbit skipped due non-default base and remains parent-review pending.

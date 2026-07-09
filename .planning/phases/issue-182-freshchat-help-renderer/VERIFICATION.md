@@ -44,6 +44,6 @@ Results:
 - `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
 - `cd website && pnpm run gen:website-data`: pass; generated Freshchat website data committed and `git diff --exit-code -- website/data/connectors.generated.json website/lib/connectors.catalog.data.generated.json website/lib/docs.generated.ts` passed.
 
-CI note: initial PR #245 website check failed because generated website data was stale after adding `website/content/docs/freshchat-cli-surface.mdx`; fixed by committing regenerated website data.
+CI note: initial PR #245 website check failed because generated website data was stale after adding `website/content/docs/freshchat-cli-surface.mdx`; fixed by committing regenerated website data. PR #245 rerun passed: verify, Website checks/image, CodeQL, govulncheck, Dependency Review, repository conventions, GSD workflow evidence, and issue guard. CodeRabbit status was success with `Review skipped: reviews are disabled for this base branch`, which is not counted as review completion.
 
 No credentialed Freshchat checks, no secret inspection, and no reverse ETL execution are in scope.

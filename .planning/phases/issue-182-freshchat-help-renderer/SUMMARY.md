@@ -1,6 +1,6 @@
 # Summary — Issue #182 Freshchat help renderer
 
-Status: implemented locally; full verification passed.
+Status: merged to parent branch; parent automated review coverage pending.
 
 ## Completed
 
@@ -15,9 +15,9 @@ Status: implemented locally; full verification passed.
 - Ran full handoff gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs` pass.
 - Opened stacked PR #245 against `feat/180-freshchat-cli-parity`; CodeRabbit skipped because reviews are disabled for the non-default base branch.
 - Fixed the initial PR website check failure by committing regenerated website data for the new Freshchat docs page.
+- PR #245 CI passed and was squash-merged into `feat/180-freshchat-cli-parity` as f50a2298.
 
 ## Next
 
-1. Push the generated website data fix and wait for CI rerun.
-2. Route parent-level automated review coverage without treating the stacked CodeRabbit skip as success.
-3. Merge #245 into the parent branch after CI is green and policy gates are satisfied.
+1. Route parent-level automated review coverage without treating the stacked CodeRabbit skip as success.
+2. Continue the next unblocked Freshchat parity slice from parent issue #180.

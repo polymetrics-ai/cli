@@ -60,4 +60,10 @@ go build ./cmd/pm
 rg -n "freshchat|Freshchat" docs/cli website internal/connectors/defs/freshchat
 ```
 
+## Integrated sub-issue verification checkpoints
+
+- #181: local focused gates passed; PR #241 CI passed; merged to parent as ef7cfda1. CodeRabbit skipped stacked/draft review; parent review coverage remains pending.
+- #184: local focused/full gates passed; PR #243 CI passed; merged to parent as fd359cfb. CodeRabbit skipped stacked/draft review; parent review coverage remains pending.
+- #182: local focused/full gates passed; PR #245 CI passed after regenerated website data was committed; merged to parent as f50a2298. CodeRabbit skipped stacked review; parent review coverage remains pending.
+
 Do not run credentialed `pm freshchat ...` commands or reverse ETL execution.

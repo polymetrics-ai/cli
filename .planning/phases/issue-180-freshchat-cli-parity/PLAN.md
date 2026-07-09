@@ -45,10 +45,10 @@ No generic HTTP write, shell, SQL write, raw mutation, credential prompt, or cre
 
 | Issue | Lane | Dependency | Write scope | Planned branch |
 | ---: | --- | --- | --- | --- |
-| #181 | CLI surface metadata | parent PR open | `internal/connectors/defs/freshchat/cli_surface.json`, narrowly-scoped tests, Freshchat docs/api metadata if needed | `feat/181-freshchat-cli-surface-metadata` |
-| #182 | Help renderer/docs | #181 | help/docs renderer and docs surfaces | TBD |
+| #181 | CLI surface metadata | parent PR open | `internal/connectors/defs/freshchat/cli_surface.json`, narrowly-scoped tests, Freshchat docs/api metadata if needed | merged: `feat/181-freshchat-cli-surface-metadata` → ef7cfda1 |
+| #182 | Help renderer/docs | #181 | help/docs renderer and docs surfaces | merged: `feat/182-freshchat-help-renderer` → f50a2298 |
 | #183 | Stream runner | #181/#184 | Freshchat streams/schemas/fixtures/runner tests | TBD |
-| #184 | Operation ledger | #181 | Freshchat `api_surface.json`, operation ledger artifacts | TBD |
+| #184 | Operation ledger | #181 | Freshchat `api_surface.json`, operation ledger artifacts | merged: `feat/184-freshchat-operation-ledger` → fd359cfb |
 | #185 | Direct reads | #181/#184 | direct-read engine/metadata/tests | TBD |
 | #186 | Advanced query/binary engine | #184/#185 | engine/query/binary policy metadata/tests | TBD |
 | #187 | Sensitive/admin policy | #184 | Freshchat writes/operations policy/tests | TBD |
@@ -76,15 +76,15 @@ No generic HTTP write, shell, SQL write, raw mutation, credential prompt, or cre
 
 ## CLI help/docs/website parity checklist
 
-Applies to all CLI-visible lanes. For #181, command metadata becomes visible through the existing connector command runner/help path, but no help renderer/docs generator changes are planned in this first slice.
+Applies to all CLI-visible lanes. #182 completed the Freshchat command-surface help/docs slice for current metadata; remaining parity lanes must extend the same checklist when they add new command behavior.
 
-- [ ] `pm help <topic>` checked where the topic exists or marked blocked/not applicable.
-- [ ] `pm freshchat` or connector command dispatch checked after metadata lands, without credentials.
-- [ ] `pm freshchat <command> --help` checked if the help renderer supports it, otherwise deferred to #182.
-- [ ] `docs/cli/**` updates handled in #182 or explicitly deferred.
-- [ ] `website/**` updates handled in #182 or explicitly deferred.
-- [ ] Generated help/manual artifacts handled in #182 or explicitly deferred.
-- [ ] Tests cover metadata parsing/validation in #181.
+- [x] `pm help <topic>` checked where the topic exists or marked blocked/not applicable (`./pm help connectors`).
+- [x] `pm freshchat` or connector command dispatch checked after metadata lands, without credentials.
+- [x] `pm freshchat --help` checked without credentials.
+- [x] `docs/cli/**` updates handled for Freshchat command-surface help in #182.
+- [x] `website/**` updates handled for Freshchat command-surface help in #182.
+- [x] Generated help/manual artifacts handled for Freshchat command-surface help in #182.
+- [x] Tests cover metadata parsing/validation in #181 and help rendering in #182.
 
 ## Safety gates
 

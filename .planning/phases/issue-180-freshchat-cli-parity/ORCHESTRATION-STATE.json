@@ -35,7 +35,7 @@
     },
     {
       "number": 182,
-      "status": "pr_open_ci_repair_pending",
+      "status": "integrated_parent_review_pending",
       "dependencies": [
         181,
         184
@@ -47,7 +47,7 @@
         "generated help/manual artifacts",
         ".planning/phases/issue-182-freshchat-help-renderer/**"
       ],
-      "decision": "stacked_pr_245_opened_generated_website_data_fix_pushed_next"
+      "decision": "merged_to_parent_branch"
     },
     {
       "number": 183,
@@ -129,6 +129,14 @@
         182
       ],
       "reason": "Opened PR #245 against parent branch; local gates passed. Initial website CI failed on stale generated website data, so a generated-data fix was committed and needs CI rerun."
+    },
+    {
+      "timestamp": "2026-07-09T23:07:17Z",
+      "decision": "merged_stacked_pr_to_parent_review_pending",
+      "issue_numbers": [
+        182
+      ],
+      "reason": "PR #245 CI passed and was squash-merged to parent branch as f50a2298; automated review remains pending through parent PR coverage/fallback."
     }
   ],
   "subissues": [
@@ -182,20 +190,21 @@
       "branch": "feat/182-freshchat-help-renderer",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/245",
       "worker": "local_critical_path",
-      "status": "pr_open_ci_repair_pending",
+      "status": "merged_to_parent_review_pending",
       "write_scope": "Freshchat command-surface help routing, generated manual/skill docs, CLI docs, and website docs",
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
-      "verification": "passed_local_full_gates; initial_ci_website_generated_data_failure_fixed_pending_rerun",
+      "verification": "passed_local_and_ci",
       "automated_review": {
         "primary_route": "coderabbit_automatic",
-        "status": "skipped_non_default_base",
-        "head_sha": "2d0f7e64",
+        "status": "skipped_non_default_base_then_parent_pending",
+        "head_sha": "f50a229812acf6e7edf05822669769827c8fdee2",
         "reviewed_range": "pending_parent_pr_ready_or_approved_fallback",
         "coverage_route": "parent_pr_fallback_pending",
         "fallback_route": "parent_pr_coderabbit_after_parent_ready_or_human_approved_backup",
-        "disposition_summary": "CodeRabbit skipped stacked PR #245 because reviews are disabled for the non-default base branch. Do not count #182 as review-complete until parent PR #226 receives coverage for this range or an approved fallback is recorded.",
+        "disposition_summary": "CodeRabbit skipped stacked PR #245 because reviews are disabled for the non-default base branch. Do not count #182 as review-complete until parent PR #226 receives coverage for f50a2298 or an approved fallback is recorded.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
-      }
+      },
+      "merge_commit": "f50a229812acf6e7edf05822669769827c8fdee2"
     }
   ],
   "human_gates": [
@@ -207,5 +216,5 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T22:55:00Z"
+  "updated_at": "2026-07-09T23:07:17Z"
 }
