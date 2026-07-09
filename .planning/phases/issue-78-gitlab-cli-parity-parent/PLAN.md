@@ -33,13 +33,13 @@ Definition scope: `internal/connectors/defs/gitlab/`
 
 | Issue | Lane | Status | Dependency / collision note |
 | ---: | --- | --- | --- |
-| #83 | CLI surface metadata | local critical path | First slice; owns `internal/connectors/defs/gitlab/cli_surface.json` and focused metadata tests. |
-| #84 | Help renderer/docs | planned | Depends on #83 metadata. |
-| #85 | Stream runner | planned | Depends on #83 metadata and existing generic command runner behavior. |
-| #86 | Operation ledger | planned | Write-scope collision with #83 inside `defs/gitlab`; run after metadata slice. |
-| #87 | Direct reads | planned | Depends on #86 ledger classifications. |
-| #88 | GraphQL/advanced engine | planned | Depends on #86 and direct/read operation needs. |
-| #89 | Sensitive/admin policy | planned | Depends on #86 operation classifications and write inventory. |
+| #83 | CLI surface metadata | completed local / pushed | Added 73 glab-inspired command entries and 4 implemented stream commands. |
+| #84 | Help renderer/docs | completed local | `pm help gitlab`, `pm gitlab`, and `pm gitlab --help` render connector manual/help from metadata. |
+| #85 | Stream runner | completed local | Fixture test proves `pm gitlab issue list` dispatches through generic stream runner. |
+| #86 | Operation ledger | completed local | Inventoried 1,144 official GitLab OpenAPI operations plus `/users` compatibility row; non-enabled operations blocked by default. |
+| #87 | Direct reads | completed local | Added `json_redacted` policy and four bounded direct-read commands. |
+| #88 | GraphQL/advanced engine | completed local / not-enabled | Recorded GraphQL as not required for this REST slice; no generic GraphQL/raw body executor added. |
+| #89 | Sensitive/admin policy | completed local | Operation ledger risk tiers, approval policy, typed confirmation markers, and redaction coverage added while writes remain disabled. |
 
 ## Parent Deliverables
 
@@ -87,4 +87,4 @@ make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-Focused #83 gates are listed in `.planning/phases/issue-83-gitlab-cli-surface/VERIFICATION.md`.
+Focused per-lane gates are listed in `.planning/phases/issue-83-*` through `.planning/phases/issue-89-*` verification files.

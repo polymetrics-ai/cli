@@ -41,7 +41,25 @@ cd website && pnpm run gen:website-data
 Result: passed. Website typecheck/build remain blocked locally because `node_modules` is absent and
 `pnpm install --frozen-lockfile` fails with `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`.
 
-## Required Final Parent Gates
+## #84-#89 Focused Local Checks
+
+```bash
+go test ./internal/cli -run 'TestGitLabCommandSurfaceHelp' -count=1
+go test ./internal/cli -run 'TestGitLabCommandSurfaceRunsStreamBackedIssueList' -count=1
+go test ./internal/connectors/engine -run TestBundleLoadGitLabOperationLedgerFromDisk -count=1
+go test ./internal/connectors/engine -run TestDirectReadJSONRedactedPolicyRemovesSensitiveFields -count=1
+go test ./internal/cli -run 'TestGitLabCommandSurfaceRunsBoundedDirectReadProjectView' -count=1
+go test ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/cli -count=1
+go run ./cmd/connectorgen validate internal/connectors/defs --json
+go run ./cmd/pm help gitlab
+go run ./cmd/pm gitlab
+go run ./cmd/pm --json gitlab --help
+cd website && pnpm run gen:website-data
+```
+
+Result: passed locally. `connectors_checked=547`, `findings=[]`.
+
+## Final Parent Gates
 
 ```bash
 gofmt -w cmd internal
@@ -51,6 +69,22 @@ go build ./cmd/pm
 make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Result: passed on 2026-07-09. `make verify` included `go mod tidy`, `go vet ./...`,
+`go test -timeout 20m ./...`, `go build ./cmd/pm`, `./pm docs validate`, smoke test, golangci-lint,
+and connectorgen validation.
+
+## Website Blocker
+
+```bash
+cd website && pnpm run typecheck
+cd website && pnpm install --frozen-lockfile
+```
+
+Result: blocked locally. `pnpm run typecheck` fails with `tsc: command not found` because
+`node_modules` is absent. `pnpm install --frozen-lockfile` fails with
+`ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`. Generated website data was refreshed with
+`pnpm run gen:website-data`; no non-frozen install was run.
 
 ## Review Route
 

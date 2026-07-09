@@ -17,88 +17,50 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi",
-    "status": "running"
+    "status": "local_verified_website_typecheck_blocked"
   },
   "ready_queue": [
     {
       "number": 83,
-      "status": "worker_ready",
+      "status": "completed_pushed",
       "dependencies": [],
-      "write_scope": [
-        "internal/connectors/defs/gitlab/cli_surface.json",
-        "internal/connectors/engine/*_test.go",
-        ".planning/phases/issue-83-gitlab-cli-surface"
-      ],
       "decision": "local_critical_path"
     },
     {
       "number": 84,
-      "status": "planned",
+      "status": "completed_local",
       "dependencies": [83],
-      "write_scope": [
-        "internal/cli",
-        "docs/cli",
-        "website",
-        ".planning/phases/issue-84-gitlab-help-renderer"
-      ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path"
     },
     {
       "number": 85,
-      "status": "planned",
+      "status": "completed_local",
       "dependencies": [83, 84],
-      "write_scope": [
-        "internal/connectors/commandrunner",
-        "internal/cli",
-        ".planning/phases/issue-85-gitlab-stream-runner"
-      ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path"
     },
     {
       "number": 86,
-      "status": "worker_ready",
+      "status": "completed_local",
       "dependencies": [],
-      "write_scope": [
-        "internal/connectors/defs/gitlab/api_surface.json",
-        "internal/connectors/defs/gitlab/operations.json",
-        ".planning/phases/issue-86-gitlab-operation-ledger"
-      ],
-      "decision": "not_spawned_write_scope_collision"
+      "decision": "local_critical_path_after_83"
     },
     {
       "number": 87,
-      "status": "planned",
+      "status": "completed_local",
       "dependencies": [86],
-      "write_scope": [
-        "internal/connectors/defs/gitlab",
-        "internal/connectors/engine",
-        "internal/connectors/commandrunner",
-        ".planning/phases/issue-87-gitlab-direct-read"
-      ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_after_86"
     },
     {
       "number": 88,
-      "status": "planned",
+      "status": "completed_local_not_enabled",
       "dependencies": [86],
-      "write_scope": [
-        "internal/connectors/defs/gitlab",
-        "internal/connectors/engine",
-        ".planning/phases/issue-88-gitlab-graphql-engine"
-      ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_after_86"
     },
     {
       "number": 89,
-      "status": "planned",
+      "status": "completed_local",
       "dependencies": [86],
-      "write_scope": [
-        "internal/connectors/defs/gitlab",
-        "internal/connectors/engine",
-        "internal/connectors/commandrunner",
-        ".planning/phases/issue-89-gitlab-sensitive-admin"
-      ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_after_86"
     }
   ],
   "spawn_decisions": [
@@ -106,13 +68,13 @@
       "timestamp": "2026-07-09T12:34:52Z",
       "decision": "local_critical_path",
       "issue_numbers": [83],
-      "reason": "This Pi harness exposes no subagent tool; #83 is the first ready lane and shares no dependency blockers, so the orchestrator executes it inline with separate artifacts."
+      "reason": "This Pi harness exposes no subagent tool; #83 was the first ready lane and executed inline with separate artifacts."
     },
     {
-      "timestamp": "2026-07-09T12:34:52Z",
-      "decision": "not_spawned_write_scope_collision",
-      "issue_numbers": [86],
-      "reason": "#86 touches the same GitLab definition bundle while #83 creates cli_surface metadata; run sequentially to avoid bundle conflicts."
+      "timestamp": "2026-07-09T15:35:00Z",
+      "decision": "local_critical_path_sequential",
+      "issue_numbers": [84, 85, 86, 87, 88, 89],
+      "reason": "Remaining lanes shared GitLab bundle, CLI, docs, and validator files; orchestrator ran them sequentially inline to avoid write-scope collisions."
     }
   ],
   "subissues": [
@@ -122,26 +84,70 @@
       "branch": "feat/78-gitlab-cli-parity",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
       "worker": "inline-pi-orchestrator",
-      "status": "sub_pr_green",
-      "write_scope": [
-        "internal/connectors/defs/gitlab/cli_surface.json",
-        "internal/connectors/engine/*_test.go",
-        ".planning/phases/issue-83-gitlab-cli-surface"
-      ],
-      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-78-gitlab-cli-parity",
-      "verification": "Go/connector gates and make verify passed; website generated data refreshed; website typecheck/build blocked by local pnpm lockfile config mismatch",
-      "automated_review": {
-        "primary_route": "blocked",
-        "status": "pending",
-        "head_sha": "pending",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_pr_fallback",
-        "fallback_route": "none",
-        "disposition_summary": "pending parent PR review after push",
-        "disposition_url": "pending"
-      }
+      "status": "sub_pr_green_pushed",
+      "verification": "Full Go/connector gates and make verify passed for #83; website generated data refreshed; website typecheck/build blocked by local pnpm lockfile config mismatch"
+    },
+    {
+      "number": 84,
+      "url": "https://github.com/polymetrics-ai/cli/issues/84",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local",
+      "verification": "GitLab connector help tests and runtime help smoke checks passed"
+    },
+    {
+      "number": 85,
+      "url": "https://github.com/polymetrics-ai/cli/issues/85",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local",
+      "verification": "Local fixture stream-runner test for pm gitlab issue list passed"
+    },
+    {
+      "number": 86,
+      "url": "https://github.com/polymetrics-ai/cli/issues/86",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local",
+      "verification": "GitLab OpenAPI operation ledger disk-load test and connectorgen validation passed"
+    },
+    {
+      "number": 87,
+      "url": "https://github.com/polymetrics-ai/cli/issues/87",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local",
+      "verification": "json_redacted policy and GitLab direct-read CLI fixture tests passed"
+    },
+    {
+      "number": 88,
+      "url": "https://github.com/polymetrics-ai/cli/issues/88",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local_not_enabled",
+      "verification": "GraphQL recorded as not required for REST-backed slice; no generic GraphQL/raw executor added"
+    },
+    {
+      "number": 89,
+      "url": "https://github.com/polymetrics-ai/cli/issues/89",
+      "branch": "feat/78-gitlab-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
+      "worker": "inline-pi-orchestrator",
+      "status": "completed_local",
+      "verification": "Sensitive/admin/destructive policy assertions and connectorgen validation passed"
     }
   ],
+  "automated_review": {
+    "primary_route": "parent_pr_automatic_review_after_push",
+    "status": "pending_push_after_local_verification",
+    "coverage_route": "parent_pr",
+    "fallback_route": "none"
+  },
   "human_gates": [
     "parent PR merge to main",
     "auth scope changes",
@@ -152,5 +158,5 @@
     "credentialed connector checks",
     "reverse ETL execution"
   ],
-  "updated_at": "2026-07-09T13:21:00Z"
+  "updated_at": "2026-07-09T16:05:00Z"
 }

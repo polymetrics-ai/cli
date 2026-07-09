@@ -22,6 +22,7 @@ const (
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
+	directReadPolicyJSONRedacted               = "json_redacted"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -112,6 +113,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
+	case directReadPolicyJSONRedacted:
+		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
@@ -142,6 +145,8 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 			out = append(out, item)
 		}
 		return out, nil
+	case directReadPolicyJSONRedacted:
+		return redactJSONValue(body), nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
@@ -162,6 +167,47 @@ func redactGitHubContentsObject(in map[string]any) map[string]any {
 		}
 	}
 	return out
+}
+
+func redactJSONValue(value any) any {
+	switch typed := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, nested := range typed {
+			if isSensitiveJSONField(key) {
+				out[key+"_redacted"] = true
+				continue
+			}
+			out[key] = redactJSONValue(nested)
+		}
+		return out
+	case []any:
+		out := make([]any, 0, len(typed))
+		for _, item := range typed {
+			out = append(out, redactJSONValue(item))
+		}
+		return out
+	default:
+		return value
+	}
+}
+
+func isSensitiveJSONField(key string) bool {
+	lower := strings.ToLower(key)
+	for _, marker := range []string{
+		"token", "secret", "password", "credential", "private", "authorization",
+		"access_key", "client_secret", "refresh_token", "content",
+	} {
+		if strings.Contains(lower, marker) {
+			return true
+		}
+	}
+	switch lower {
+	case "auth", "authentication", "value":
+		return true
+	default:
+		return false
+	}
 }
 
 func rejectSensitiveRepositoryPath(value string) error {

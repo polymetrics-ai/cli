@@ -1,7 +1,7 @@
 {
   "phase": "issue-78-gitlab-cli-parity-parent",
   "issue": 78,
-  "status": "in_progress",
+  "status": "local_verified_website_typecheck_blocked",
   "parent_branch": "feat/78-gitlab-cli-parity",
   "parent_pr": 127,
   "default_branch": "main",
@@ -28,25 +28,35 @@
     "golang-documentation",
     "golang-spf13-cobra"
   ],
-  "verificationPassed": false,
-  "verificationNote": "#83 Go/connector gates and make verify passed; website typecheck/build are blocked by local dependency installation state after generated data changed.",
+  "verificationPassed": true,
+  "verificationNote": "Final Go/connector gates passed: gofmt, go vet ./..., go test ./..., go build ./cmd/pm, make verify, and connectorgen validate. Website generated data refreshed; website typecheck/build remain blocked by local dependency installation state (node_modules absent; frozen install lockfile config mismatch).",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
       "decision": "local_critical_path",
-      "reason": "No Pi subagent tool is exposed in this harness; orchestrator created parent artifacts and selected first ready lane #83 inline while recording worker-spawn limits."
+      "reason": "No Pi subagent tool is exposed in this harness; orchestrator created parent artifacts and selected ready lanes inline while recording worker-spawn limits."
     },
     {
       "cycle": "issue-83-red-green",
-      "decision": "local_critical_path",
+      "decision": "completed_pushed",
       "reason": "Added red embedded GitLab CLI-surface test, created cli_surface metadata, refreshed website data, and ran full Go/connector gates inline."
     },
     {
-      "cycle": "issue-83-website-checks",
-      "decision": "not_spawned_verification_blocked",
+      "cycle": "issue-84-through-89",
+      "decision": "completed_local",
+      "reason": "Implemented help renderer, stream runner evidence, operation ledger, direct reads, GraphQL not-enabled decision, and sensitive/admin blocked-by-default policy inline after per-lane planning artifacts."
+    },
+    {
+      "cycle": "final-gates",
+      "decision": "passed",
+      "reason": "gofmt, go vet ./..., go test ./..., go build ./cmd/pm, make verify, and go run ./cmd/connectorgen validate internal/connectors/defs passed."
+    },
+    {
+      "cycle": "website-checks",
+      "decision": "verification_blocked",
       "reason": "website typecheck/build could not run because node_modules is absent and pnpm install --frozen-lockfile is blocked by ERR_PNPM_LOCKFILE_CONFIG_MISMATCH."
     }
   ],
   "human_gate": "parent PR merge to main",
-  "updated_at": "2026-07-09T13:21:00Z"
+  "updated_at": "2026-07-09T16:05:00Z"
 }

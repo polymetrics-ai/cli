@@ -240,33 +240,111 @@
       "path": "project view",
       "summary": "View one GitLab project",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "glab repo view",
-      "notes": "Direct project lookup needs the operation ledger and bounded direct-read executor before dispatch."
+      "notes": "Bounded direct read of one project; response is recursively redacted before output.",
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Numeric GitLab project ID. Path-style project identifiers are intentionally not accepted by this direct-read mapping.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm gitlab project view --id 123 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}"
+        }
+      ]
     },
     {
       "path": "group view",
       "summary": "View one GitLab group",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "glab api groups/:id",
-      "notes": "Direct group lookup is deferred until the operation ledger accounts for ID/path parameters."
+      "notes": "Bounded direct read of one group; response is recursively redacted before output.",
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Numeric GitLab group ID. Path-style group identifiers are intentionally not accepted by this direct-read mapping.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm gitlab group view --id 123 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{id}"
+        }
+      ]
     },
     {
       "path": "user events",
       "summary": "View events for a GitLab user",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "glab user events",
-      "notes": "Event reads are bounded direct-read candidates, not current durable streams."
+      "notes": "Bounded direct read of a user event page; response is recursively redacted before output.",
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Numeric GitLab user ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm gitlab user events --id 123 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}/events"
+        }
+      ]
     },
     {
       "path": "issue view",
       "summary": "View issue details",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_cli_path": "glab issue view",
-      "notes": "The connector currently exposes issue records as an ETL stream; single issue lookup is deferred to the direct-read lane."
+      "notes": "Bounded direct read of one project issue; response is recursively redacted before output.",
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "Numeric GitLab project ID.",
+          "maps_to": "path.id"
+        },
+        {
+          "name": "issue-iid",
+          "type": "string",
+          "summary": "Project-scoped issue IID.",
+          "maps_to": "path.issue_iid"
+        }
+      ],
+      "examples": [
+        "pm gitlab issue view --project-id 123 --issue-iid 7 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}/issues/{issue_iid}"
+        }
+      ]
     },
     {
       "path": "issue create",

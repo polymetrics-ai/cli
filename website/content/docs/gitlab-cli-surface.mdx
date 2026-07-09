@@ -1,0 +1,72 @@
+---
+title: GitLab CLI Surface
+description: GitLab connector command parity, operation-ledger coverage, and guarded pm command execution.
+---
+
+The GitLab connector has a JSON-first command surface contract at
+`internal/connectors/defs/gitlab/cli_surface.json`. It is inspired by
+[`glab`](https://gitlab.com/gitlab-org/cli), but `pm` only enables commands with typed connector
+mappings, bounded output, and explicit safety policy.
+
+## Current surface
+
+| Metric | Value |
+|---|---:|
+| Declared command entries | 73 |
+| Implemented stream commands | 4 |
+| Implemented direct-read commands | 4 |
+| Planned or blocked command entries | 65 |
+| GitLab read streams | 4 |
+| GitLab write actions | 0 |
+| Official OpenAPI operations inventoried | 1,144 |
+| Compatibility stream rows | 1 (`GET /users`) |
+| Runtime-enabled raw API commands | 0 |
+
+## Implemented commands
+
+| Command | Backing mode | Endpoint |
+|---|---|---|
+| `pm gitlab project list` | ETL stream | `GET /projects` |
+| `pm gitlab group list` | ETL stream | `GET /groups` |
+| `pm gitlab user list` | ETL stream | `GET /users` |
+| `pm gitlab issue list` | ETL stream | `GET /issues` |
+| `pm gitlab project view --id <id>` | bounded direct read | `GET /projects/{id}` |
+| `pm gitlab group view --id <id>` | bounded direct read | `GET /groups/{id}` |
+| `pm gitlab user events --id <id>` | bounded direct read | `GET /users/{id}/events` |
+| `pm gitlab issue view --project-id <id> --issue-iid <iid>` | bounded direct read | `GET /projects/{id}/issues/{issue_iid}` |
+
+Direct reads use the `json_redacted` output policy and a 1 MiB default response cap. Token, secret,
+password, credential, private, auth, content, and generic `value` fields are replaced with redaction
+markers before output.
+
+## Safety policy
+
+<Callout type="warn">
+  `pm gitlab` does not expose a `glab api` clone, generic HTTP writes, generic shell execution,
+  generic SQL writes, unsafe binary downloads, or arbitrary GraphQL mutations.
+</Callout>
+
+Every non-enabled GitLab OpenAPI operation is present in the operation ledger as blocked by default.
+Sensitive, admin, and destructive operations carry risk labels and typed-confirmation requirements for
+future reverse ETL design. No GitLab write action is executable in this slice.
+
+## Help and docs parity
+
+Connector help is rendered from the same metadata used by command dispatch:
+
+```bash
+pm help gitlab
+pm gitlab
+pm gitlab --help
+pm connectors inspect gitlab
+```
+
+The output lists implemented commands separately from planned or blocked commands, including the
+source `glab` path and safety notes. Invalid command paths still return usage errors; bare connector
+names render contextual help and exit successfully.
+
+## GraphQL status
+
+GitLab GraphQL remains a reviewed but not-enabled surface for this parity milestone. Future GraphQL
+support must use fixed documents with typed variables, bounded pagination, redaction, and no generic
+mutation escape hatch.
