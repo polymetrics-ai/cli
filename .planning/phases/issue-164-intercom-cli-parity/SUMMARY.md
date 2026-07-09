@@ -6,8 +6,9 @@ Status: in progress.
 
 - Loaded required repo rules, GSD references, issue contracts, parent orchestration workflow, review routing workflows, connector migration docs, and Go/CLI/security/testing skills.
 - Confirmed parent issue #164 and sub-issues #165-#171 are open.
-- Confirmed no parent PR exists for `feat/164-intercom-cli-parity` yet.
+- Confirmed no parent PR existed for `feat/164-intercom-cli-parity` at planning start.
 - Created parent orchestration plan, TDD ledger, verification checklist, and orchestration state before production edits.
+- Committed and pushed the plan checkpoint, then opened draft parent PR #220: https://github.com/polymetrics-ai/cli/pull/220.
 
 ## Current Decision
 

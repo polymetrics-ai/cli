@@ -2,7 +2,7 @@
 
 Parent issue: #164
 Parent branch: `feat/164-intercom-cli-parity`
-Parent PR: not yet open at planning start
+Parent PR: https://github.com/polymetrics-ai/cli/pull/220 (draft; opened after the plan seed commit)
 Default branch: `main`
 
 ## GSD Command Path
@@ -38,7 +38,7 @@ Coordinate Intercom connector CLI parity across sub-issues #165-#171 while prese
 ## Initial State
 
 - Branch `feat/164-intercom-cli-parity` exists locally and starts at `origin/main`.
-- No parent PR exists for `feat/164-intercom-cli-parity` → `main` yet.
+- No parent PR existed at planning start; draft parent PR #220 now tracks `feat/164-intercom-cli-parity` → `main`.
 - Current Intercom bundle has 5 streams, 10 `api_surface.json` entries, and no write actions.
 - Official baseline: 149 operations across 105 paths; method split GET 67, PUT 16, POST 47, DELETE 19.
 - No credentials are needed or allowed for this phase.

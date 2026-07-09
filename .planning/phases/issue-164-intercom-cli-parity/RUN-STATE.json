@@ -20,7 +20,7 @@
   ],
   "verificationPassed": false,
   "blockers": [
-    "parent PR missing before sub-issue review coverage can be complete"
+    "parent PR #220 is draft; automated review coverage pending until implementation slices are ready"
   ],
-  "updated_at": "2026-07-09T19:35:34Z"
+  "updated_at": "2026-07-09T19:45:00Z"
 }

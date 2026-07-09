@@ -16,7 +16,7 @@ Result: passed on 2026-07-09; 69 GSD commands registered. `programming-loop` is 
 gh pr list --head feat/164-intercom-cli-parity --base main --json number,title,state,isDraft,url,headRefName,baseRefName,mergeable,reviewDecision,statusCheckRollup
 ```
 
-Result: `[]`; parent PR not open yet.
+Result at planning start: `[]`; parent PR was not open. Draft parent PR #220 was opened after the plan seed commit: https://github.com/polymetrics-ai/cli/pull/220.
 
 ## Parent Final Gates
 

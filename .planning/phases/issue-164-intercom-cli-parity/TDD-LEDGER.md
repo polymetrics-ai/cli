@@ -11,7 +11,12 @@
 
 ## Green / Execution Evidence
 
-Pending. Each sub-issue must add its own red/green/refactor entries before production edits.
+- Plan checkpoint commit:
+  - Commit: `3afecf62 chore(intercom): plan CLI parity orchestration`
+  - Push: `git push -u origin feat/164-intercom-cli-parity`
+  - Draft parent PR opened: https://github.com/polymetrics-ai/cli/pull/220
+
+Each sub-issue must add its own red/green/refactor entries before production edits.
 
 ## Refactor Evidence
 

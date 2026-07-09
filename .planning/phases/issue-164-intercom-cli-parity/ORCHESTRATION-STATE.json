@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/164-intercom-cli-parity",
   "parent_pr": {
-    "url": "",
+    "url": "https://github.com/polymetrics-ai/cli/pull/220",
     "base": "main",
     "head": "feat/164-intercom-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -123,14 +123,14 @@
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
       "verification": "planned",
       "automated_review": {
-        "primary_route": "blocked",
+        "primary_route": "coderabbit_auto",
         "status": "pending",
-        "head_sha": "",
-        "reviewed_range": "",
-        "coverage_route": "blocked",
+        "head_sha": "3afecf62",
+        "reviewed_range": "parent PR #220 planning seed",
+        "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "Parent PR must be opened before stacked review coverage can be complete.",
-        "disposition_url": ""
+        "disposition_summary": "Parent PR #220 is draft; automated review coverage is pending until review route conditions apply.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/220"
       }
     }
   ],
@@ -144,5 +144,5 @@
     "production deployment",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T19:35:34Z"
+  "updated_at": "2026-07-09T19:45:00Z"
 }
