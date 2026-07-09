@@ -1,0 +1,118 @@
+{
+  "parent_issue": {
+    "number": 172,
+    "url": "https://github.com/polymetrics-ai/cli/issues/172",
+    "title": "Freshdesk: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/172-freshdesk-cli-parity",
+  "parent_pr": {
+    "url": "",
+    "base": "main",
+    "head": "feat/172-freshdesk-cli-parity",
+    "draft": true,
+    "state": "missing"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 173,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/freshdesk",
+        ".planning/phases/issue-173-freshdesk-cli-surface-metadata"
+      ],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 176,
+      "status": "planned",
+      "dependencies": [173],
+      "write_scope": ["internal/connectors/defs/freshdesk"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 175,
+      "status": "planned",
+      "dependencies": [173, 176],
+      "write_scope": ["internal/connectors/defs/freshdesk"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 177,
+      "status": "planned",
+      "dependencies": [176],
+      "write_scope": ["internal/connectors/defs/freshdesk", "cmd", "internal"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 178,
+      "status": "planned",
+      "dependencies": [176],
+      "write_scope": ["internal/connectors/defs/freshdesk", "internal/connectors/engine"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 179,
+      "status": "planned",
+      "dependencies": [176],
+      "write_scope": ["internal/connectors/defs/freshdesk", "internal/connectors/engine", "cmd", "internal"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 174,
+      "status": "planned",
+      "dependencies": [173],
+      "write_scope": ["docs", "website", "cmd", "internal"],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:35:31Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [173],
+      "reason": "No mutating worker spawned: current Pi harness exposes no subagent tool and #173 is the only dependency-free lane; orchestrator is executing it inline before re-evaluating worker readiness."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 173,
+      "url": "https://github.com/polymetrics-ai/cli/issues/173",
+      "branch": "feat/172-freshdesk-cli-parity",
+      "pr_url": "",
+      "worker": "parent-orchestrator-inline",
+      "status": "worker_in_progress",
+      "write_scope": ["internal/connectors/defs/freshdesk", ".planning/phases/issue-173-freshdesk-cli-surface-metadata"],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-172-freshdesk-cli-parity",
+      "verification": "red baseline captured; implementation pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "parent PR not yet opened",
+        "disposition_url": ""
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "production deployment",
+    "credentialed connector checks",
+    "reverse ETL execution",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-09T19:35:31Z"
+}

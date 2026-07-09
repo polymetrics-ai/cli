@@ -1,0 +1,28 @@
+{
+  "phase": "issue-173-freshdesk-cli-surface-metadata",
+  "issue": 173,
+  "parent_issue": 172,
+  "status": "planned",
+  "gsd": {
+    "mode": "manual_fallback",
+    "reason": "scripts/gsd prompt programming-loop is not registered in this adapter; following .pi/prompts/pm-gsd-loop.md and gsd-universal-runtime-loop.md manually.",
+    "planning_command": "scripts/gsd prompt plan-phase 1 --skip-research"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Parent orchestrator owns #173 inline because Pi subagent tool is unavailable in this harness and #173 is the first dependency-free lane."
+    }
+  ],
+  "tdd": {
+    "redEvidence": [
+      "freshdesk api_surface endpoints=10, want 170; exit=1",
+      "cli_surface.json presence check exit=1"
+    ],
+    "greenEvidence": [],
+    "refactorEvidence": []
+  },
+  "verificationPassed": false,
+  "updated_at": "2026-07-09T19:35:31Z"
+}
