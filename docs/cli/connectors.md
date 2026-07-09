@@ -58,6 +58,23 @@ GITHUB CERTIFICATION
   not executed blindly, and binary download surfaces remain safely blocked until
   a bounded binary executor and destination policy exist.
 
+FRESHCHAT COMMAND SURFACE
+  pm freshchat
+  pm freshchat --help
+    Print the Freshchat connector command surface without resolving credentials.
+    The help output includes implemented ETL stream commands such as user list,
+    agent list, conversation fields, report status, and metrics instant, plus
+    reverse ETL command metadata for approved plan/preview/execute workflows.
+
+  pm freshchat user list --credential <name> --limit 50 --json
+    Runs the stream-backed users command through a saved Freshchat credential.
+    Use --config for scoped detail streams until direct-read path flags are
+    implemented.
+
+  Freshchat writes remain reverse ETL only: plan, preview, approval token, then
+  execute. Multipart file/image upload commands are listed as excluded and do
+  not expose a raw upload escape hatch.
+
 GITHUB ETL STREAMS
   issues
     Reads repository issues through /repos/{owner}/{repo}/issues and filters out

@@ -1,10 +1,10 @@
 # Verification — Issue #182 Freshchat help renderer
 
-## Planned focused gates
+## Focused gates run
 
 ```bash
 gofmt -w cmd internal
-go test ./internal/cli -run 'TestFreshchatCommandSurfaceHelp'
+go test ./internal/cli -run TestFreshchatCommandSurfaceHelp
 go run ./cmd/connectorgen validate internal/connectors/defs
 go build ./cmd/pm
 ./pm help connectors
@@ -12,6 +12,16 @@ go build ./cmd/pm
 ./pm freshchat --help
 ./pm docs validate --connectors-dir docs/connectors
 ```
+
+Results:
+
+- `go test ./internal/cli -run TestFreshchatCommandSurfaceHelp`: pass.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
+- `go build ./cmd/pm`: pass.
+- `./pm help connectors`: pass.
+- `./pm freshchat`: pass.
+- `./pm freshchat --help`: pass.
+- `./pm docs validate --connectors-dir docs/connectors`: pass.
 
 ## Planned full gates before handoff
 

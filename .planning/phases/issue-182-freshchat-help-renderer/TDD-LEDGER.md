@@ -31,10 +31,33 @@ FAIL	polymetrics.ai/internal/cli	1.053s
 
 This matches the expected failure: connector namespace help is not routed through command-surface metadata yet.
 
-## Green target
+## Green result
+
+```bash
+gofmt -w cmd internal
+go test ./internal/cli -run TestFreshchatCommandSurfaceHelp
+go run ./cmd/connectorgen validate internal/connectors/defs
+go build ./cmd/pm
+./pm help connectors
+./pm freshchat
+./pm freshchat --help
+./pm docs validate --connectors-dir docs/connectors
+```
+
+Results:
+
+- `go test ./internal/cli -run TestFreshchatCommandSurfaceHelp`: pass.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
+- `go build ./cmd/pm`: pass.
+- `./pm help connectors`: pass.
+- `./pm freshchat`: pass; output includes `COMMAND SURFACE`, `pm freshchat <command> [flags]`, `user list`, and `conversation update`.
+- `./pm freshchat --help`: pass with the same credential-free command-surface help.
+- `./pm docs validate --connectors-dir docs/connectors`: pass.
+
+Green changes:
 
 - Connector namespace help routes to connector manual/command surface without credential resolution.
-- Freshchat generated manual includes the `Command Surface` section.
+- Freshchat generated manual includes the `COMMAND SURFACE` section.
 - CLI docs/website docs mention Freshchat command-surface usage and safety constraints.
 
 ## Planned verification

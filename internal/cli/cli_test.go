@@ -331,7 +331,7 @@ func TestFreshchatCommandSurfaceHelp(t *testing.T) {
 			for _, want := range []string{
 				"NAME",
 				"pm freshchat <command> [flags]",
-				"Command Surface",
+				"COMMAND SURFACE",
 				"user list",
 				"conversation update",
 				"reverse ETL writes require plan, preview, approval, execute",
