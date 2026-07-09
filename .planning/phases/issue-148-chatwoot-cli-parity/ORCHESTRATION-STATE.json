@@ -22,7 +22,7 @@
   "ready_queue": [
     {
       "number": 149,
-      "status": "worker_in_progress",
+      "status": "sub_pr_open",
       "dependencies": [],
       "write_scope": [
         "internal/connectors/defs/chatwoot/metadata.json",
@@ -31,7 +31,7 @@
         "internal/connectors/defs/chatwoot/docs.md",
         ".planning/phases/issue-149-chatwoot-cli-surface-metadata"
       ],
-      "decision": "local_critical_path"
+      "decision": "not_spawned_review_blocked"
     },
     {
       "number": 150,
@@ -118,6 +118,12 @@
       "decision": "not_spawned_runtime_capability_missing",
       "issue_numbers": [150, 151, 152, 153, 154, 155],
       "reason": "Mutating worker fanout requires Pi subagent support and isolated cwd/worktree per worker; no subagent tool is available in this API harness."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "not_spawned_review_blocked",
+      "issue_numbers": [149],
+      "reason": "Sub-PR #227 is open with remote checks pending. CodeRabbit skipped because the base branch is non-default; parent PR #223 fallback coverage is pending after integration."
     }
   ],
   "subissues": [
@@ -125,24 +131,24 @@
       "number": 149,
       "url": "https://github.com/polymetrics-ai/cli/issues/149",
       "branch": "feat/149-chatwoot-cli-surface-metadata",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/227",
       "worker": "coordinator-local-critical-path",
-      "status": "worker_in_progress",
+      "status": "sub_pr_open",
       "write_scope": [
         "internal/connectors/defs/chatwoot",
         ".planning/phases/issue-149-chatwoot-cli-surface-metadata"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "targeted local gates passed; sub-PR pending",
+      "verification": "targeted local gates passed; PR #227 remote checks pending",
       "automated_review": {
-        "primary_route": "blocked",
-        "status": "pending",
-        "head_sha": "pending",
-        "reviewed_range": "pending",
-        "coverage_route": "blocked",
+        "primary_route": "coderabbit_auto",
+        "status": "skipped",
+        "head_sha": "d437045a4b0c064a3478bcb396efdc6b80727d0c",
+        "reviewed_range": "not reviewed; CodeRabbit skipped non-default-base PR #227",
+        "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "Sub-PR pending. Parent PR #223 exists for fallback coverage if non-default-base review is skipped.",
-        "disposition_url": "pending"
+        "disposition_summary": "CodeRabbit skip is informational, not approval. Parent PR #223 fallback coverage is pending after integration.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/227"
       }
     }
   ],

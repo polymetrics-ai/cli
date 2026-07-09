@@ -1,6 +1,6 @@
 # Summary: Chatwoot CLI Surface Metadata
 
-Status: implemented locally; sub-PR pending.
+Status: sub-PR open (#227); remote checks/review coverage pending.
 
 ## Delivered
 
@@ -21,6 +21,6 @@ Status: implemented locally; sub-PR pending.
 
 ## Next
 
-1. Commit and push #149 branch.
-2. Open sub-PR against `feat/148-chatwoot-cli-parity` with `Refs #149` and `Refs #148`.
-3. Route automated review per stacked PR rules.
+1. Wait for PR #227 checks to finish.
+2. CodeRabbit skipped PR #227 because base is non-default; record parent PR #223 fallback coverage as pending.
+3. Do not merge #227 into parent until checks are green and review coverage route is satisfied or explicitly recorded as pending/provisional per stacked workflow.

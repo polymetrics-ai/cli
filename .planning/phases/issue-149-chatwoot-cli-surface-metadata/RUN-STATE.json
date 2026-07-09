@@ -1,9 +1,11 @@
 {
   "phase": "issue-149-chatwoot-cli-surface-metadata",
-  "status": "implemented_local",
+  "status": "sub_pr_open",
   "parent_issue": 148,
   "sub_issue": 149,
   "parent_branch": "feat/148-chatwoot-cli-parity",
+  "sub_pr": 227,
+  "sub_pr_url": "https://github.com/polymetrics-ai/cli/pull/227",
   "mode": "local_critical_path",
   "gsd": {
     "programming_loop_command": "unavailable",
@@ -30,6 +32,11 @@
       "cycle": "verify",
       "decision": "local_critical_path",
       "reason": "Targeted #149 validation and conformance checks passed locally."
+    },
+    {
+      "cycle": "review-route",
+      "decision": "not_spawned_review_blocked",
+      "reason": "Sub-PR #227 is open with checks pending. CodeRabbit skipped automatic review because the base branch is non-default; parent PR #223 fallback coverage is required after integration or an allowed fallback must be recorded."
     }
   ],
   "redEvidence": "official_total=144, surface_total=71, missing_count=73, exit=1",
@@ -41,7 +48,15 @@
     "go run ./cmd/connectorgen validate internal/connectors/defs pass",
     "go test ./internal/connectors/conformance -run 'TestConformance/chatwoot' -count=1 pass"
   ],
+  "automatedReview": {
+    "primary_route": "coderabbit_auto",
+    "status": "skipped",
+    "coverage_route": "parent_pr_fallback",
+    "fallback_route": "none",
+    "review_url": "https://github.com/polymetrics-ai/cli/pull/227",
+    "disposition_summary": "CodeRabbit skip is informational, not approval. Parent PR #223 fallback coverage pending after integration."
+  },
   "verificationPassed": false,
-  "verificationStatus": "targeted #149 gates passed; full parent make verify not run",
+  "verificationStatus": "targeted #149 gates passed; remote PR checks pending; full parent make verify not run",
   "updated_at": "2026-07-10T00:00:00Z"
 }

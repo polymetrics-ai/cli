@@ -10,6 +10,7 @@ Status: in progress.
 - Recorded manual GSD fallback because `scripts/gsd prompt programming-loop ...` is not available in the repo-local adapter registry.
 - Created parent planning, TDD, verification, run-state, and orchestration-state artifacts.
 - Recorded runtime fanout blocker: current Pi API tool surface lacks `subagent`, so issue #149 is local critical path.
+- Opened sub-PR #227 for issue #149; CodeRabbit skipped automatic review because the base branch is non-default.
 
 ## Next
 
