@@ -144,9 +144,19 @@
   ],
   "automated_review": {
     "primary_route": "parent_pr_automatic_review_after_push",
-    "status": "awaiting_automatic_review_after_ready_for_review",
+    "status": "coderabbit_rate_limited",
     "coverage_route": "parent_pr",
-    "fallback_route": "none"
+    "coderabbit": {
+      "status": "rate_limited",
+      "message": "Review limit reached; next review available in 55 minutes as of 2026-07-09T14:26:52Z CodeRabbit comment.",
+      "reviewed_range": "CodeRabbit selected changed files through ec56ff2c before reporting rate limit; no completed review submitted."
+    },
+    "fallback_route": "copilot_requested",
+    "copilot": {
+      "status": "requested_pending",
+      "requested_reviewer": "Copilot",
+      "requested_at": "2026-07-09T14:28:22Z"
+    }
   },
   "human_gates": [
     "parent PR merge to main",
@@ -158,5 +168,5 @@
     "credentialed connector checks",
     "reverse ETL execution"
   ],
-  "updated_at": "2026-07-09T16:20:00Z"
+  "updated_at": "2026-07-09T16:35:00Z"
 }

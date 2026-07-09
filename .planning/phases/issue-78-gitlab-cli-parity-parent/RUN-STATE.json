@@ -1,7 +1,7 @@
 {
   "phase": "issue-78-gitlab-cli-parity-parent",
   "issue": 78,
-  "status": "ready_for_automatic_review_website_typecheck_blocked",
+  "status": "review_blocked_coderabbit_rate_limited_copilot_pending",
   "parent_branch": "feat/78-gitlab-cli-parity",
   "parent_pr": 127,
   "default_branch": "main",
@@ -55,8 +55,13 @@
       "cycle": "website-checks",
       "decision": "verification_blocked",
       "reason": "website typecheck/build could not run because node_modules is absent and pnpm install --frozen-lockfile is blocked by ERR_PNPM_LOCKFILE_CONFIG_MISMATCH."
+    },
+    {
+      "cycle": "automated-review",
+      "decision": "coderabbit_rate_limited_copilot_requested",
+      "reason": "CodeRabbit reported review limit reached with next review available in 55 minutes; per fallback policy, requested GitHub Copilot review as backup and did not post a manual CodeRabbit command."
     }
   ],
   "human_gate": "parent PR merge to main",
-  "updated_at": "2026-07-09T16:20:00Z"
+  "updated_at": "2026-07-09T16:35:00Z"
 }

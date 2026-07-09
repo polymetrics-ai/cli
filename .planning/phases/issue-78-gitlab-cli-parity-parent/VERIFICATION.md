@@ -88,6 +88,8 @@ Result: blocked locally. `pnpm run typecheck` fails with `tsc: command not found
 
 ## Review Route
 
-- Parent PR route: PR #127 was marked ready for review after local verification; wait for automatic CodeRabbit review on the non-draft PR targeting `main`.
+- Parent PR route: PR #127 was marked ready for review after local verification.
+- CodeRabbit: automatic review attempted, then reported `Review limit reached` with next review available in 55 minutes. No manual CodeRabbit review command was posted.
+- Fallback: GitHub Copilot review was requested as backup reviewer `Copilot` because CodeRabbit rate limiting blocked automated review coverage.
 - Stacked sub-PRs: use parent-PR fallback if CodeRabbit skips non-default base PRs.
 - Do not post manual CodeRabbit review commands unless automatic review is skipped, disabled, paused, rate-limited past retry window, or otherwise blocked per `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`.
