@@ -1132,8 +1132,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+        "reason": "profile/password/avatar mutation candidate; blocked until a named sensitive reverse-ETL action declares exact schema, risk text, preview, approval, and binary/file policy for multipart avatar payloads.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json",
+        "notes": "Multipart avatar/profile updates require the later bounded binary/file policy before any file-bearing action is exposed."
       }
     },
     {

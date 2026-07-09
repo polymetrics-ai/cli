@@ -66,7 +66,7 @@
     },
     {
       "number": 152,
-      "status": "planned",
+      "status": "implemented_local_verified",
       "dependencies": [
         149
       ],
@@ -74,7 +74,7 @@
         "internal/connectors/defs/chatwoot/api_surface.json",
         ".planning/phases/issue-152-chatwoot-operation-ledger"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "sub_pr_pending"
     },
     {
       "number": 153,
@@ -176,6 +176,22 @@
         150
       ],
       "reason": "PR #240 remote checks passed, was squash-merged into parent commit 80db5020b297f1323f94c0c965f4a80ab6b08eb3, and parent PR #223 manual CodeRabbit review replied Review finished after the non-default-base sub-PR skip."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        152
+      ],
+      "reason": "Issue #152 is dependency-unblocked after #149 integration. Mutating worker fanout remains unavailable in this Pi API harness, so it is continuing locally with GSD/TDD artifacts before production edits."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "sub_pr_pending",
+      "issue_numbers": [
+        152
+      ],
+      "reason": "Issue #152 implementation and local verification completed on feat/152-chatwoot-operation-ledger; stacked sub-PR remains to be opened for remote checks and review routing."
     }
   ],
   "subissues": [
@@ -229,6 +245,31 @@
         "fallback_route": "none",
         "disposition_summary": "CodeRabbit skipped #240 because the base was non-default and skipped #223 automatic review because it is draft. After #240 was squash-merged to parent, manual @coderabbitai review was requested on #223 and CodeRabbit replied Review finished; no actionable inline findings were present.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/223#issuecomment-4929884484"
+      }
+    },
+    {
+      "number": 152,
+      "url": "https://github.com/polymetrics-ai/cli/issues/152",
+      "branch": "feat/152-chatwoot-operation-ledger",
+      "pr_url": null,
+      "worker": "coordinator-local-critical-path",
+      "status": "implemented_local_verified",
+      "write_scope": [
+        "internal/connectors/defs/chatwoot/api_surface.json",
+        "cmd/connectorgen/chatwoot_api_surface_test.go",
+        ".planning/phases/issue-152-chatwoot-operation-ledger"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
+      "verification": "targeted operation-ledger checks, go vet, go test ./..., go build ./cmd/pm, and make verify passed locally",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "not_started_pr_pending",
+        "head_sha": null,
+        "reviewed_range": "not reviewed; sub-PR pending",
+        "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
+        "fallback_route": "none",
+        "disposition_summary": "Pending PR creation and automated review routing.",
+        "disposition_url": null
       }
     }
   ],
