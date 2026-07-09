@@ -16,7 +16,12 @@
   - Push: `git push -u origin feat/164-intercom-cli-parity`
   - Draft parent PR opened: https://github.com/polymetrics-ai/cli/pull/220
 
-Each sub-issue must add its own red/green/refactor entries before production edits.
+- Issue #165 implementation commit:
+  - Commit: `38e8ecbb feat(intercom): refresh CLI surface metadata`
+  - Push: `git push -u origin feat/165-intercom-cli-surface-metadata`
+  - Stacked PR opened: https://github.com/polymetrics-ai/cli/pull/234
+
+Each remaining sub-issue must add its own red/green/refactor entries before production edits.
 
 ## Refactor Evidence
 

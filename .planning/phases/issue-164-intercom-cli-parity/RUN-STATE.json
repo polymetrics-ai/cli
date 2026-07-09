@@ -16,11 +16,17 @@
       "cycle": "parent-plan",
       "decision": "local_critical_path",
       "reason": "Parent PR is missing and no subagent tool is available in this Pi session; coordinator owns planning seed and issue #165 first slice inline."
+    },
+    {
+      "cycle": "issue-165-sub-pr",
+      "decision": "local_critical_path",
+      "reason": "Issue #165 implemented inline on branch feat/165-intercom-cli-surface-metadata and opened as PR #234 against the parent branch."
     }
   ],
   "verificationPassed": false,
   "blockers": [
-    "parent PR #220 is draft; automated review coverage pending until implementation slices are ready"
+    "sub-PR #234 CI and automated review coverage pending",
+    "parent PR #220 remains draft until sub-issues integrate"
   ],
-  "updated_at": "2026-07-09T19:45:00Z"
+  "updated_at": "2026-07-09T20:28:24Z"
 }

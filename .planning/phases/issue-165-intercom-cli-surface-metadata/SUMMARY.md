@@ -29,5 +29,5 @@ Status: local verification green; `go test ./...` default timeout recorded with 
 ## Next
 
 - Run broader parent gates before handoff or after the next coherent slice.
-- Open/update the stacked #165 PR against parent branch #220 when ready.
+- Stacked #165 PR opened against the parent branch: https://github.com/polymetrics-ai/cli/pull/234.
 - Leave #168-#171 to refine operation classifications and implement streams/direct reads/binary/write policies.

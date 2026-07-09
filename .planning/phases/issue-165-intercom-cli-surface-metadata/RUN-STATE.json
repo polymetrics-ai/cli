@@ -2,7 +2,7 @@
   "phase": "issue-165-intercom-cli-surface-metadata",
   "issue": 165,
   "parent_issue": 164,
-  "status": "verified",
+  "status": "sub_pr_open",
   "gsd": {
     "adapter": "scripts/gsd",
     "doctor_passed": true,
@@ -27,6 +27,11 @@
       "cycle": "verify",
       "decision": "local_critical_path",
       "reason": "Ran focused gates, full Go tests with project timeout, build, and make verify locally."
+    },
+    {
+      "cycle": "pr-open",
+      "decision": "local_critical_path",
+      "reason": "Opened stacked PR #234 against feat/164-intercom-cli-parity for issue #165."
     }
   ],
   "tdd": {
@@ -77,5 +82,6 @@
     "Default go test ./... timed out in internal/connectors/certify due package timeout; focused retry and go test ./... -timeout=20m passed.",
     "make verify passed with the repository Makefile's go test -timeout 20m ./... gate."
   ],
-  "updated_at": "2026-07-09T20:55:00Z"
+  "sub_pr": "https://github.com/polymetrics-ai/cli/pull/234",
+  "updated_at": "2026-07-09T20:28:24Z"
 }
