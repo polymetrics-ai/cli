@@ -29,7 +29,7 @@
     "golang-graphql",
     "golang-lint"
   ],
-  "status": "pr_open_review_blocked_rate_limited",
+  "status": "pr_open_review_blocked_auto_skipped",
   "verificationPassed": true,
   "verificationBlocker": "none",
   "orchestrationDecisions": [
@@ -60,8 +60,8 @@
     },
     {
       "cycle": "automated_review",
-      "decision": "blocked_rate_limited",
-      "reason": "CodeRabbit auto skipped/rate-limited on stacked PR; posted one allowed manual @coderabbitai review after skip, did not retry after limit; Copilot reviewer API request did not create an active review request"
+      "decision": "blocked_auto_skipped_no_review_artifact",
+      "reason": "CodeRabbit auto skipped stacked PR; posted one allowed manual @coderabbitai review after skip, but no GitHub review or inline comments were created; Copilot reviewer API request did not create an active review request"
     }
   ],
   "human_gates": [
