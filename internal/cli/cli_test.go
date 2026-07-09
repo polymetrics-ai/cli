@@ -315,6 +315,38 @@ func TestRuntimeDoctorJSONDoesNotLeakPostgresPassword(t *testing.T) {
 	}
 }
 
+func TestFreshchatCommandSurfaceHelp(t *testing.T) {
+	tests := [][]string{
+		{"freshchat"},
+		{"freshchat", "--help"},
+	}
+	for _, args := range tests {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr=%s stdout=%s", args, code, stderr.String(), stdout.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{
+				"NAME",
+				"pm freshchat <command> [flags]",
+				"Command Surface",
+				"user list",
+				"conversation update",
+				"reverse ETL writes require plan, preview, approval, execute",
+			} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("Freshchat help output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+				}
+			}
+			if strings.Contains(out, "api_key") && strings.Contains(out, "sample-token") {
+				t.Fatalf("Freshchat help appears to contain secret-shaped sample data:\n%s", out)
+			}
+		})
+	}
+}
+
 func TestGitHubCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
 	var gotPath, gotState string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -8,10 +8,28 @@ Add CLI tests proving connector namespace help works without credentials:
 - `pm freshchat --help` exits 0 and prints Freshchat command-surface help.
 - Output includes `pm freshchat <command> [flags]`, `user list`, `conversation update`, and reverse-ETL approval guidance.
 
-Expected current failure:
+Observed red failure:
 
-- `pm freshchat --help` returns `help topic "freshchat" not found`.
-- `pm freshchat` returns a missing connector command path usage error.
+```bash
+gofmt -w internal/cli/cli_test.go
+go test ./internal/cli -run TestFreshchatCommandSurfaceHelp
+```
+
+Result:
+
+```text
+--- FAIL: TestFreshchatCommandSurfaceHelp (0.52s)
+    --- FAIL: TestFreshchatCommandSurfaceHelp/freshchat (0.52s)
+        cli_test.go:328: Run([freshchat]) code = 2 stderr=error: missing connector command path
+             stdout=
+    --- FAIL: TestFreshchatCommandSurfaceHelp/freshchat_--help (0.00s)
+        cli_test.go:328: Run([freshchat --help]) code = 1 stderr=error: help topic "freshchat" not found
+             stdout=
+FAIL
+FAIL	polymetrics.ai/internal/cli	1.053s
+```
+
+This matches the expected failure: connector namespace help is not routed through command-surface metadata yet.
 
 ## Green target
 
