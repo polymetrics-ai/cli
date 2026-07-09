@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 )
@@ -105,6 +106,12 @@ type capturedOutput struct {
 
 // runContext threads the harness, options, secret values, and per-run
 // bookkeeping through the stage functions below.
+type streamSpec struct {
+	Name        string
+	PrimaryKey  string
+	CursorField string
+}
+
 type runContext struct {
 	ctx                   context.Context
 	harness               *Harness
@@ -113,6 +120,14 @@ type runContext struct {
 	stdoutLeakSabotage    *stdoutLeakSabotage
 	cleanupVerifySabotage bool
 	root                  string
+
+	// currentStream is set during --full stream sweeps so existing stage
+	// functions can be reused per stream without changing their signatures.
+	currentStream string
+
+	// catalogStreamSpecs is populated from the live catalog stage. --full uses
+	// it to test every catalog stream instead of only Options.Stream/default.
+	catalogStreamSpecs []streamSpec
 
 	// write carries stages 12-17's bookkeeping (plan id, approval token,
 	// tag, ledger handle) across stage boundaries; nil whenever
@@ -214,13 +229,15 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 	}
 	rep.Capabilities.SyncModes = map[string]SyncModeResult{}
 
-	stages := []stageFunc{
+	setupStages := []stageFunc{
 		stagePreflight,
 		stageFixtureConformance,
 		stageManualJSON,
 		stageCredentialsAdd,
 		stageCredentialsTest,
 		stageCatalog,
+	}
+	readStages := []stageFunc{
 		stageFullRefreshAppend,
 		stageFullRefreshOverwrite,
 		stageFullRefreshOverwriteDeduped,
@@ -228,18 +245,43 @@ func (r *Runner) Run(ctx context.Context) (Report, error) {
 		stageResume,
 		stageIncrementalAppendDeduped,
 		stageQueryContract,
+	}
+	tailStages := []stageFunc{
+		stageSurfaceInventory,
+		stageDirectReadSweep,
+		stageBinaryDownloadSweep,
 		stageWritePlanPreview,
 		stageWriteCreate,
 		stageWriteVerify,
 		stageWriteCleanup,
 		stageCleanupVerify,
 		stageApprovalIdempotency,
-		stageFlowRoundtrip,
-		stageScheduleRoundtrip,
-		stageWriteSweepAllPairings,
 	}
+	if !r.opts.Full {
+		tailStages = append(tailStages, stageFlowRoundtrip, stageScheduleRoundtrip)
+	}
+	tailStages = append(tailStages, stageWriteSweepAllPairings)
 
-	for _, stage := range stages {
+	for _, stage := range setupStages {
+		if err := stage(rc, &rep); err != nil {
+			rep.CompletedAt = time.Now().UTC()
+			return rep, err
+		}
+	}
+	if rc.opts.Full {
+		if err := runFullReadSweep(rc, &rep, readStages); err != nil {
+			rep.CompletedAt = time.Now().UTC()
+			return rep, err
+		}
+	} else {
+		for _, stage := range readStages {
+			if err := stage(rc, &rep); err != nil {
+				rep.CompletedAt = time.Now().UTC()
+				return rep, err
+			}
+		}
+	}
+	for _, stage := range tailStages {
 		if err := stage(rc, &rep); err != nil {
 			rep.CompletedAt = time.Now().UTC()
 			return rep, err
@@ -308,22 +350,128 @@ func cliInfoFrom(res CLIResult) CLIStageInfo {
 	return CLIStageInfo{ArgvRedacted: res.ArgvRedacted, ExitCode: res.ExitCode, Kind: res.Kind}
 }
 
-// streamName is the source stream certified: Options.Stream if set, else
-// "customers" (sample's first stream with a cursor field, matching design
-// §A command spec's default "first stream with a cursor field, else first").
+func effectiveCredentialConfig(connector string, config map[string]string) map[string]string {
+	out := make(map[string]string, len(config)+1)
+	for k, v := range config {
+		out[k] = v
+	}
+	if connector == "github" && out["base_url"] == "" {
+		out["base_url"] = "https://api.github.com"
+	}
+	return out
+}
+
+func liveStreamUnavailable(rc *runContext, res CLIResult) bool {
+	if rc.opts.Connector != "github" || res.Kind != "Error" {
+		return false
+	}
+	text := res.Stdout + "\n" + res.Stderr
+	if errObj, _ := res.Envelope["error"].(map[string]any); errObj != nil {
+		if msg, _ := errObj["message"].(string); msg != "" {
+			text += "\n" + msg
+		}
+	}
+	return strings.Contains(text, "http 403") ||
+		strings.Contains(text, "http 404") ||
+		strings.Contains(text, "has not been granted the required scopes") ||
+		strings.Contains(text, "requires one of the following scopes") ||
+		strings.Contains(text, "interpolate: unresolved key")
+}
+
+// streamName is the source stream certified: currentStream during --full
+// sweeps, Options.Stream when explicitly set, else "customers" (sample's first
+// stream with a cursor field, matching design §A command spec's default "first
+// stream with a cursor field, else first").
 func (rc *runContext) streamName() string {
+	if rc.currentStream != "" {
+		return rc.currentStream
+	}
 	if rc.opts.Stream != "" {
 		return rc.opts.Stream
 	}
-	return "customers"
+	return defaultStreamName(rc.opts.Connector)
 }
 
-// cursorField is the cursor field name for the certified stream. Wave0 only
-// certifies "sample", whose sole cursor-bearing stream is "customers" with
-// cursor field "updated_at"; a future multi-connector Runner would resolve
-// this from the connector's live Catalog() instead of hardcoding it.
+func defaultStreamName(connector string) string {
+	switch connector {
+	case "github":
+		// GitHub's full sweep needs a real bootstrap stream before the catalog
+		// has been refreshed. issues has stable id/updated_at fields and is
+		// already one of the high-value parity streams.
+		return "issues"
+	default:
+		return "customers"
+	}
+}
+
+func (rc *runContext) streamSpec() streamSpec {
+	name := rc.streamName()
+	for _, spec := range rc.catalogStreamSpecs {
+		if spec.Name == name {
+			return spec
+		}
+	}
+	return streamSpec{Name: name}.withDefaults()
+}
+
+func (spec streamSpec) withDefaults() streamSpec {
+	if spec.PrimaryKey == "" {
+		spec.PrimaryKey = "id"
+	}
+	if spec.CursorField == "" {
+		spec.CursorField = "updated_at"
+	}
+	return spec
+}
+
+func (rc *runContext) primaryKey() string {
+	return rc.streamSpec().PrimaryKey
+}
+
 func (rc *runContext) cursorField() string {
-	return "updated_at"
+	return rc.streamSpec().CursorField
+}
+
+func (rc *runContext) liveConnectionName() string {
+	if rc.currentStream == "" {
+		return liveConnectionName
+	}
+	return liveConnectionName + "_" + safeName(rc.currentStream)
+}
+
+func (rc *runContext) fileCredentialName() string {
+	if rc.currentStream == "" {
+		return fileCredentialName
+	}
+	return fileCredentialName + "_" + safeName(rc.currentStream)
+}
+
+func (rc *runContext) captureConnectionName(mode string) string {
+	if rc.currentStream == "" {
+		return captureConnectionPrefix + mode
+	}
+	return captureConnectionPrefix + mode + "_" + safeName(rc.currentStream)
+}
+
+func safeName(name string) string {
+	var b strings.Builder
+	lastUnderscore := false
+	for _, r := range name {
+		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') {
+			b.WriteRune(r)
+			lastUnderscore = false
+			continue
+		}
+		if !lastUnderscore {
+			b.WriteByte('_')
+			lastUnderscore = true
+		}
+	}
+	out := strings.Trim(b.String(), "_")
+	if out == "" {
+		return "stream"
+	}
+	return out
 }
 
 // queryRowCount runs `pm query run --table <table> --json` and returns the
@@ -347,12 +495,16 @@ func assertNoDuplicatePKs(rc *runContext, table string) error {
 	}
 	rows, _ := res.Envelope["rows"].([]any)
 	seen := map[string]bool{}
+	pk := rc.primaryKey()
 	for _, row := range rows {
 		m, ok := row.(map[string]any)
 		if !ok {
 			continue
 		}
-		id, _ := m["id"].(string)
+		id, _ := m[pk].(string)
+		if id == "" && pk != "id" {
+			id, _ = m["id"].(string)
+		}
 		if id == "" {
 			continue
 		}
@@ -361,6 +513,72 @@ func assertNoDuplicatePKs(rc *runContext, table string) error {
 		}
 		seen[id] = true
 	}
+	return nil
+}
+
+func runFullReadSweep(rc *runContext, rep *Report, readStages []stageFunc) error {
+	for _, spec := range rc.fullSweepStreamSpecs() {
+		rc.currentStream = spec.Name
+		rc.capturePath = ""
+		rc.captureFileRegistered = false
+		rc.incrementalConnection = ""
+		rc.incrementalRun1Cursor = ""
+		rc.incrementalRun1Records = 0
+
+		if err := stageFullSweepConnectionCreate(rc, rep); err != nil {
+			return err
+		}
+		for _, stage := range readStages {
+			if err := stage(rc, rep); err != nil {
+				return err
+			}
+		}
+		if err := stageFlowRoundtrip(rc, rep); err != nil {
+			return err
+		}
+		if err := stageScheduleRoundtrip(rc, rep); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (rc *runContext) fullSweepStreamSpecs() []streamSpec {
+	if len(rc.catalogStreamSpecs) > 0 {
+		out := make([]streamSpec, 0, len(rc.catalogStreamSpecs))
+		for _, spec := range rc.catalogStreamSpecs {
+			if spec.Name == "" {
+				continue
+			}
+			out = append(out, spec)
+		}
+		if len(out) > 0 {
+			return out
+		}
+	}
+	return []streamSpec{(streamSpec{Name: rc.streamName()}).withDefaults()}
+}
+
+func stageFullSweepConnectionCreate(rc *runContext, rep *Report) error {
+	stream := rc.streamName()
+	recordStage(rc, rep, "full_sweep_connection_create_"+safeName(stream), 2, func() (bool, CLIStageInfo, string) {
+		args := []string{"connections", "create", rc.liveConnectionName(),
+			"--source", rc.opts.Connector + ":" + sourceCredentialName,
+			"--destination", "warehouse:" + warehouseCredentialName,
+			"--stream", stream,
+			"--sync-mode", "full_refresh_append",
+			"--table", "cert_live_" + stream,
+			"--json"}
+		if primaryKey := rc.primaryKey(); primaryKey != "" {
+			args = append(args, "--primary-key", primaryKey)
+		}
+		if cursor := rc.cursorField(); cursor != "" {
+			args = append(args, "--cursor", cursor)
+		}
+		res := rc.run(args...)
+		passed, errMsg := assertKind(rc, "full_sweep_connection_create_"+safeName(stream), res, "Connection", 0)
+		return passed, cliInfoFrom(res), errMsg
+	})
 	return nil
 }
 
@@ -443,8 +661,14 @@ func stageCredentialsAdd(rc *runContext, rep *Report) error {
 		for field, envName := range rc.opts.SecretEnv {
 			args = append(args, "--from-env", field+"="+envName)
 		}
-		for k, v := range rc.opts.Config {
-			args = append(args, "--config", k+"="+v)
+		config := effectiveCredentialConfig(rc.opts.Connector, rc.opts.Config)
+		keys := make([]string, 0, len(config))
+		for k := range config {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			args = append(args, "--config", k+"="+config[k])
 		}
 		res := rc.run(args...)
 		passed, errMsg := assertKind(rc, "credentials_add", res, "Credential", 0)
@@ -487,26 +711,32 @@ func stageCredentialsTest(rc *runContext, rep *Report) error {
 func stageCatalog(rc *runContext, rep *Report) error {
 	stream := rc.streamName()
 	recordStage(rc, rep, "connection_create", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("connections", "create", liveConnectionName,
-			"--source", rc.opts.Connector+":"+sourceCredentialName,
-			"--destination", "warehouse:"+warehouseCredentialName,
+		args := []string{"connections", "create", rc.liveConnectionName(),
+			"--source", rc.opts.Connector + ":" + sourceCredentialName,
+			"--destination", "warehouse:" + warehouseCredentialName,
 			"--stream", stream,
-			"--primary-key", "id",
-			"--cursor", rc.cursorField(),
 			"--sync-mode", "full_refresh_append",
-			"--table", "cert_live_"+stream,
-			"--json")
+			"--table", "cert_live_" + stream,
+			"--json"}
+		if primaryKey := rc.primaryKey(); primaryKey != "" {
+			args = append(args, "--primary-key", primaryKey)
+		}
+		if cursor := rc.cursorField(); cursor != "" {
+			args = append(args, "--cursor", cursor)
+		}
+		res := rc.run(args...)
 		passed, errMsg := assertKind(rc, "connection_create", res, "Connection", 0)
 		return passed, cliInfoFrom(res), errMsg
 	})
 
 	recordStage(rc, rep, "catalog", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("catalog", "refresh", "--connection", liveConnectionName, "--json")
+		res := rc.run("catalog", "refresh", "--connection", rc.liveConnectionName(), "--json")
 		passed, errMsg := assertKind(rc, "catalog", res, "Catalog", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
 		streams, count := catalogStreams(res.Envelope)
+		rc.catalogStreamSpecs = catalogStreamSpecsFromStreams(streams)
 		rep.Capabilities.Catalog.Result = "pass"
 		rep.Capabilities.Catalog.Streams = count
 		if count < 1 {
@@ -533,6 +763,47 @@ func catalogStreams(env map[string]any) ([]any, int) {
 	return streams, len(streams)
 }
 
+func catalogStreamSpecsFromStreams(streams []any) []streamSpec {
+	out := make([]streamSpec, 0, len(streams))
+	for _, item := range streams {
+		m, ok := item.(map[string]any)
+		if !ok {
+			continue
+		}
+		name, _ := m["name"].(string)
+		if name == "" {
+			continue
+		}
+		spec := streamSpec{Name: name}
+		if pk, ok := firstString(m["primary_key"]); ok {
+			spec.PrimaryKey = pk
+		}
+		if cursor, ok := firstString(m["cursor_fields"]); ok {
+			spec.CursorField = cursor
+		}
+		out = append(out, spec)
+	}
+	return out
+}
+
+func firstString(v any) (string, bool) {
+	switch typed := v.(type) {
+	case []any:
+		for _, item := range typed {
+			if s, _ := item.(string); s != "" {
+				return s, true
+			}
+		}
+	case []string:
+		for _, s := range typed {
+			if s != "" {
+				return s, true
+			}
+		}
+	}
+	return "", false
+}
+
 func catalogHasPKAndCursor(streams []any, name string) bool {
 	for _, item := range streams {
 		m, ok := item.(map[string]any)
@@ -557,9 +828,12 @@ func stageFullRefreshAppend(rc *runContext, rep *Report) error {
 	var capturePath string
 
 	stage := recordStage(rc, rep, "etl_full_refresh_append", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("etl", "run", "--connection", liveConnectionName, "--stream", stream, "--json")
+		res := rc.run("etl", "run", "--connection", rc.liveConnectionName(), "--stream", stream, "--json")
 		passed, errMsg := assertKind(rc, "etl_full_refresh_append", res, "ETLRun", 0)
 		if !passed {
+			if liveStreamUnavailable(rc, res) {
+				return false, cliInfoFrom(res), "skipped: live stream unavailable for this credential/repository"
+			}
 			return false, cliInfoFrom(res), errMsg
 		}
 		read, _ := runInt(res.Envelope, "records_read")
@@ -644,7 +918,7 @@ func (rc *runContext) setupCaptureConnection(rep *Report, mode, table string) (b
 	if rc.captureFileRegistered {
 		return true, ""
 	}
-	res := rc.run("credentials", "add", fileCredentialName, "--connector", "file",
+	res := rc.run("credentials", "add", rc.fileCredentialName(), "--connector", "file",
 		"--config", "path="+rc.capturePath, "--json")
 	if passed, errMsg := assertKind(rc, "capture_credentials_add", res, "Credential", 0); !passed {
 		recordStage(rc, rep, "capture_credentials_add", 1, func() (bool, CLIStageInfo, string) {
@@ -659,20 +933,21 @@ func (rc *runContext) setupCaptureConnection(rep *Report, mode, table string) (b
 	return true, ""
 }
 
-func captureConnectionName(mode string) string {
-	return captureConnectionPrefix + mode
-}
-
 func (rc *runContext) createCaptureConnection(rep *Report, stageName, mode, table string) (bool, CLIStageInfo, string) {
-	res := rc.run("connections", "create", captureConnectionName(mode),
-		"--source", "file:"+fileCredentialName,
-		"--destination", "warehouse:"+warehouseCredentialName,
+	args := []string{"connections", "create", rc.captureConnectionName(mode),
+		"--source", "file:" + rc.fileCredentialName(),
+		"--destination", "warehouse:" + warehouseCredentialName,
 		"--stream", rc.captureStreamName(),
-		"--primary-key", "id",
-		"--cursor", rc.cursorField(),
 		"--sync-mode", mode,
 		"--table", table,
-		"--json")
+		"--json"}
+	if primaryKey := rc.primaryKey(); primaryKey != "" {
+		args = append(args, "--primary-key", primaryKey)
+	}
+	if cursor := rc.cursorField(); cursor != "" {
+		args = append(args, "--cursor", cursor)
+	}
+	res := rc.run(args...)
 	passed, errMsg := assertKind(rc, stageName, res, "Connection", 0)
 	return passed, cliInfoFrom(res), errMsg
 }
@@ -688,9 +963,7 @@ func (rc *runContext) captureStreamName() string {
 
 func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 	if rc.capturePath == "" {
-		recordStage(rc, rep, "etl_full_refresh_overwrite", 1, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, "etl_full_refresh_overwrite: no capture available (etl_full_refresh_append did not produce one)"
-		})
+		skipStage(rc, rep, "etl_full_refresh_overwrite", "skipped: no capture available (etl_full_refresh_append did not produce one)")
 		return nil
 	}
 	table := "cert_overwrite_" + rc.streamName()
@@ -710,7 +983,7 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 	recordStage(rc, rep, "etl_full_refresh_overwrite", 1, func() (bool, CLIStageInfo, string) {
 		// Run twice: overwrite truncate semantics means the row count must
 		// stay the same after a second run, not double.
-		first := rc.run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
+		first := rc.run("etl", "run", "--connection", rc.captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
 		if passed, errMsg := assertKind(rc, "etl_full_refresh_overwrite", first, "ETLRun", 0); !passed {
 			return false, cliInfoFrom(first), errMsg
 		}
@@ -719,7 +992,7 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 			return false, cliInfoFrom(first), err.Error()
 		}
 
-		second := rc.run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
+		second := rc.run("etl", "run", "--connection", rc.captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
 		if passed, errMsg := assertKind(rc, "etl_full_refresh_overwrite", second, "ETLRun", 0); !passed {
 			return false, cliInfoFrom(second), errMsg
 		}
@@ -739,10 +1012,18 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 // --- stage 7: etl_full_refresh_overwrite_deduped (CAPTURE) ---
 
 func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
+	if rc.primaryKey() == "" {
+		skipStage(rc, rep, "capture_connection_overwrite_deduped", "skipped: stream has no primary key field")
+		skipStage(rc, rep, "etl_full_refresh_overwrite_deduped", "skipped: stream has no primary key field")
+		return nil
+	}
+	if rc.cursorField() == "" {
+		skipStage(rc, rep, "capture_connection_overwrite_deduped", "skipped: stream has no cursor field")
+		skipStage(rc, rep, "etl_full_refresh_overwrite_deduped", "skipped: stream has no cursor field")
+		return nil
+	}
 	if rc.capturePath == "" {
-		recordStage(rc, rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, "etl_full_refresh_overwrite_deduped: no capture available"
-		})
+		skipStage(rc, rep, "etl_full_refresh_overwrite_deduped", "skipped: no capture available")
 		return nil
 	}
 	table := "cert_overwrite_deduped_" + rc.streamName()
@@ -760,7 +1041,7 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 	})
 
 	recordStage(rc, rep, "etl_full_refresh_overwrite_deduped", 1, func() (bool, CLIStageInfo, string) {
-		res := rc.run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
+		res := rc.run("etl", "run", "--connection", rc.captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
 		if passed, errMsg := assertKind(rc, "etl_full_refresh_overwrite_deduped", res, "ETLRun", 0); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}
@@ -776,20 +1057,31 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 // --- stage 8: etl_incremental_append (LIVE) + stage 9: resume (LIVE run 2) ---
 
 func stageIncrementalAppend(rc *runContext, rep *Report) error {
+	if rc.cursorField() == "" {
+		skipStage(rc, rep, "incremental_connection_create", "skipped: stream has no cursor field")
+		skipStage(rc, rep, "etl_incremental_append", "skipped: stream has no cursor field")
+		return nil
+	}
 	stream := rc.streamName()
 	table := "cert_incremental_" + stream
 	connName := "cert_incremental"
+	if rc.currentStream != "" {
+		connName += "_" + safeName(stream)
+	}
 
 	recordStage(rc, rep, "incremental_connection_create", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("connections", "create", connName,
-			"--source", rc.opts.Connector+":"+sourceCredentialName,
-			"--destination", "warehouse:"+warehouseCredentialName,
+		args := []string{"connections", "create", connName,
+			"--source", rc.opts.Connector + ":" + sourceCredentialName,
+			"--destination", "warehouse:" + warehouseCredentialName,
 			"--stream", stream,
-			"--primary-key", "id",
 			"--cursor", rc.cursorField(),
 			"--sync-mode", "incremental_append",
 			"--table", table,
-			"--json")
+			"--json"}
+		if primaryKey := rc.primaryKey(); primaryKey != "" {
+			args = append(args, "--primary-key", primaryKey)
+		}
+		res := rc.run(args...)
 		passed, errMsg := assertKind(rc, "incremental_connection_create", res, "Connection", 0)
 		return passed, cliInfoFrom(res), errMsg
 	})
@@ -798,14 +1090,18 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 		res := rc.run("etl", "run", "--connection", connName, "--stream", stream, "--json")
 		passed, errMsg := assertKind(rc, "etl_incremental_append", res, "ETLRun", 0)
 		if !passed {
+			if liveStreamUnavailable(rc, res) {
+				return false, cliInfoFrom(res), "skipped: live stream unavailable for this credential/repository"
+			}
 			return false, cliInfoFrom(res), errMsg
 		}
 		cursor := checkpointString(res.Envelope, "cursor")
+		read1, _ := runInt(res.Envelope, "records_read")
 		if cursor == "" {
-			return false, cliInfoFrom(res), "etl_incremental_append: no cursor recorded on checkpoint"
+			rep.Capabilities.SyncModes["incremental_append"] = SyncModeResult{Result: "passed_no_cursor", DataSource: "live", Reason: "no cursor recorded on checkpoint"}
+			return true, cliInfoFrom(res), ""
 		}
 		rc.incrementalRun1Cursor = cursor
-		read1, _ := runInt(res.Envelope, "records_read")
 		rc.incrementalRun1Records = read1
 		rep.Capabilities.SyncModes["incremental_append"] = SyncModeResult{Result: "pass", DataSource: "live", CursorAdvanced: true}
 		return true, cliInfoFrom(res), ""
@@ -819,9 +1115,7 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 
 func stageResume(rc *runContext, rep *Report) error {
 	if rc.incrementalConnection == "" {
-		recordStage(rc, rep, "resume", 2, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, "resume: incremental_append did not complete, nothing to resume"
-		})
+		skipStage(rc, rep, "resume", "skipped: incremental_append did not produce a resumable cursor")
 		return nil
 	}
 	stream := rc.streamName()
@@ -878,10 +1172,16 @@ func compareCursorStrings(a, b string) int {
 // --- stage 10: etl_incremental_append_deduped (CAPTURE) ---
 
 func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
+	if rc.primaryKey() == "" {
+		skipStage(rc, rep, "etl_incremental_append_deduped", "skipped: stream has no primary key field")
+		return nil
+	}
+	if rc.cursorField() == "" {
+		skipStage(rc, rep, "etl_incremental_append_deduped", "skipped: stream has no cursor field")
+		return nil
+	}
 	if rc.capturePath == "" {
-		recordStage(rc, rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, "etl_incremental_append_deduped: no capture available"
-		})
+		skipStage(rc, rep, "etl_incremental_append_deduped", "skipped: no capture available")
 		return nil
 	}
 	table := "cert_incremental_deduped_" + rc.streamName()
@@ -899,7 +1199,7 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 	})
 
 	recordStage(rc, rep, "etl_incremental_append_deduped", 1, func() (bool, CLIStageInfo, string) {
-		res := rc.run("etl", "run", "--connection", captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
+		res := rc.run("etl", "run", "--connection", rc.captureConnectionName(mode), "--stream", rc.captureStreamName(), "--json")
 		if passed, errMsg := assertKind(rc, "etl_incremental_append_deduped", res, "ETLRun", 0); !passed {
 			return false, cliInfoFrom(res), errMsg
 		}

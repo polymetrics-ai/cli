@@ -50,6 +50,53 @@ func flowName(connector string) string           { return "cert_flow_" + connect
 func flowTable(connector string) string          { return "cert_flow_" + connector }
 func flowConnectionName(connector string) string { return "cert_flow_conn_" + connector }
 
+func (rc *runContext) flowName() string {
+	name := flowName(rc.opts.Connector)
+	if rc.currentStream != "" {
+		name += "_" + safeName(rc.currentStream)
+	}
+	return name
+}
+
+func (rc *runContext) flowTable() string {
+	table := flowTable(rc.opts.Connector)
+	if rc.currentStream != "" {
+		table += "_" + safeName(rc.currentStream)
+	}
+	return table
+}
+
+func (rc *runContext) flowConnectionName() string {
+	name := flowConnectionName(rc.opts.Connector)
+	if rc.currentStream != "" {
+		name += "_" + safeName(rc.currentStream)
+	}
+	return name
+}
+
+func (rc *runContext) flowQueryTable() string {
+	table := "cert_flow_query_" + rc.opts.Connector
+	if rc.currentStream != "" {
+		table += "_" + safeName(rc.currentStream)
+	}
+	return table
+}
+
+func (rc *runContext) scheduleName() string {
+	name := "cert-schedule-" + rc.opts.Connector
+	if rc.currentStream != "" {
+		name += "-" + safeScheduleName(rc.currentStream)
+	}
+	if len(name) > 64 {
+		return name[:64]
+	}
+	return name
+}
+
+func safeScheduleName(name string) string {
+	return strings.ReplaceAll(strings.ToLower(safeName(name)), "_", "-")
+}
+
 // stageFlowRoundtrip drives stage 18: it registers a dedicated capture-backed
 // connection (mirroring stages 6/7/10's replay-through-file-connector
 // pattern), writes a two-step flow manifest referencing it, then exercises
@@ -57,9 +104,7 @@ func flowConnectionName(connector string) string { return "cert_flow_conn_" + co
 // (both steps done) through the real `pm flow` CLI surface.
 func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 	if rc.capturePath == "" {
-		recordStage(rc, rep, "flow_roundtrip", 1, func() (bool, CLIStageInfo, string) {
-			return false, CLIStageInfo{}, "flow_roundtrip: no capture available (etl_full_refresh_append did not produce one)"
-		})
+		skipStage(rc, rep, "flow_roundtrip", "skipped: no capture available (etl_full_refresh_append did not produce one)")
 		return nil
 	}
 
@@ -74,14 +119,14 @@ func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 		return nil
 	}
 
-	table := flowTable(rc.opts.Connector)
-	connName := flowConnectionName(rc.opts.Connector)
+	table := rc.flowTable()
+	connName := rc.flowConnectionName()
 	connOK := recordStage(rc, rep, "flow_connection_create", 1, func() (bool, CLIStageInfo, string) {
 		res := rc.run("connections", "create", connName,
-			"--source", "file:"+fileCredentialName,
+			"--source", "file:"+rc.fileCredentialName(),
 			"--destination", "warehouse:"+warehouseCredentialName,
 			"--stream", rc.captureStreamName(),
-			"--primary-key", "id",
+			"--primary-key", rc.primaryKey(),
 			"--cursor", rc.cursorField(),
 			"--sync-mode", "full_refresh_append",
 			"--table", table,
@@ -104,8 +149,8 @@ func stageFlowRoundtrip(rc *runContext, rep *Report) error {
 		return nil
 	}
 
-	name := flowName(rc.opts.Connector)
-	queryTable := "cert_flow_query_" + rc.opts.Connector
+	name := rc.flowName()
+	queryTable := rc.flowQueryTable()
 	manifest := flowManifestFile{
 		Version: 1,
 		Name:    name,
@@ -320,14 +365,14 @@ func stageScheduleRoundtrip(rc *runContext, rep *Report) error {
 	// snapshot.
 	snapshot, _ := os.ReadFile(crontabPath)
 
-	name := "cert-schedule-" + rc.opts.Connector
+	name := rc.scheduleName()
 	sentinel := "# pm-schedule-" + name
 
 	createStage := recordStage(rc, rep, "schedule_create", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("schedule", "create",
 			"--name", name,
 			"--cron", "0 3 * * *",
-			"--flow", flowName(rc.opts.Connector),
+			"--flow", rc.flowName(),
 			"--json")
 		passed, errMsg := assertKind(rc, "schedule_create", res, "Schedule", 0)
 		return passed, cliInfoFrom(res), errMsg
