@@ -632,7 +632,7 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError
 		if errors.As(err, &blocked) {
-			if blocked.Reason == "unknown command" {
+			if blocked.Reason == commandrunner.BlockedReasonUnknownCommand {
 				return usageErrorf("unknown connector command %q for %s", blocked.Command, connectorName)
 			}
 			return connectorCommandBlockedError(err)

@@ -194,6 +194,10 @@ func redactJSONValue(value any) any {
 
 func isSensitiveJSONField(key string) bool {
 	lower := strings.ToLower(key)
+	switch lower {
+	case "token_type", "token_count", "tokens_remaining", "access_level":
+		return false
+	}
 	for _, marker := range []string{
 		"token", "secret", "password", "credential", "private", "authorization",
 		"access_key", "client_secret", "refresh_token",

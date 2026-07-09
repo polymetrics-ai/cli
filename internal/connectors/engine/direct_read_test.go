@@ -189,6 +189,8 @@ func TestDirectReadJSONRedactedPolicyRemovesSensitiveFields(t *testing.T) {
 			"name": "demo",
 			"author": {"username": "alice"},
 			"content_type": "application/json",
+			"token_type": "Bearer",
+			"access_level": 30,
 			"content": "sensitive payload",
 			"token": "secret-token",
 			"owner": {
@@ -219,17 +221,17 @@ func TestDirectReadJSONRedactedPolicyRemovesSensitiveFields(t *testing.T) {
 	if body["id"] != json.Number("123") || body["name"] != "demo" {
 		t.Fatalf("safe fields = %+v, want id/name preserved", body)
 	}
-	for _, key := range []string{"token", "private_token", "value"} {
-		encoded, _ := json.Marshal(body)
-		if strings.Contains(string(encoded), key+`":"secret`) || strings.Contains(string(encoded), "still-sensitive") {
-			t.Fatalf("sensitive key/value leaked in redacted body: %s", encoded)
+	encoded, _ := json.Marshal(body)
+	for _, secret := range []string{"secret-token", "nested-secret", "still-sensitive", "sensitive payload"} {
+		if strings.Contains(string(encoded), secret) {
+			t.Fatalf("sensitive value %q leaked in redacted body: %s", secret, encoded)
 		}
 	}
 	if body["token_redacted"] != true || body["content_redacted"] != true {
 		t.Fatalf("token/content redaction marker missing: %+v", body)
 	}
-	if body["content_type"] != "application/json" {
-		t.Fatalf("safe content_type metadata was redacted: %+v", body)
+	if body["content_type"] != "application/json" || body["token_type"] != "Bearer" || body["access_level"] != json.Number("30") {
+		t.Fatalf("safe metadata was redacted: %+v", body)
 	}
 	author, _ := body["author"].(map[string]any)
 	if author["username"] != "alice" {

@@ -1,7 +1,7 @@
 {
   "phase": "issue-78-gitlab-cli-parity-parent",
   "issue": 78,
-  "status": "copilot_review_addressed_coderabbit_rate_limited",
+  "status": "coderabbit_and_copilot_feedback_addressed_locally",
   "parent_branch": "feat/78-gitlab-cli-parity",
   "parent_pr": 127,
   "default_branch": "main",
@@ -65,8 +65,13 @@
       "cycle": "copilot-review-fixes",
       "decision": "addressed",
       "reason": "Addressed all 3 Copilot comments: narrowed content redaction to exact key, preserved content_type metadata, and cleaned GitLab global flag summaries before maps_to rendering. Final gates reran with go test -timeout 20m ./..., go build ./cmd/pm, make verify, and connectorgen validate."
+    },
+    {
+      "cycle": "coderabbit-review-fixes",
+      "decision": "addressed",
+      "reason": "Addressed all CodeRabbit actionable comments and nits: clarified writes/raw-api help topics, strengthened sensitive-value leak assertions, documented recursive redaction, added known-safe redaction allowlist, and replaced unknown-command string coupling with a shared commandrunner constant."
     }
   ],
   "human_gate": "parent PR merge to main",
-  "updated_at": "2026-07-09T20:45:00Z"
+  "updated_at": "2026-07-09T21:25:00Z"
 }

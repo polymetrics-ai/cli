@@ -146,9 +146,9 @@ COMMAND SURFACE
     stack create - Create or manage stacked diffs [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Stacked-diff workflow requires local git operations and is outside connector API dispatch.
   Help topics:
     authentication - Use saved Polymetrics credentials or environment/stdin-based credential loading; never pass token values in prompts.
-    writes - GitLab writes are planned only and must use reverse ETL plan, preview, approval, execute before dispatch.
+    writes - GitLab write-like commands are either planned reverse ETL operations or blocked-by-default safety surfaces; planned writes must use reverse ETL plan, preview, approval, execute before dispatch.
     binary-downloads - Artifacts, archives, secure files, and release assets remain disabled until bounded size and output destination policies exist.
-    raw-api - Generic raw API commands are intentionally disallowed; use typed streams, direct reads, or write actions instead.
+    raw-api - Generic raw API commands are intentionally disallowed; use typed streams, direct reads, or future typed write actions instead.
 
 EXAMPLES
   # Inspect as a manual

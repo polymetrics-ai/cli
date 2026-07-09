@@ -940,7 +940,7 @@
     },
     {
       "name": "writes",
-      "summary": "GitLab writes are planned only and must use reverse ETL plan, preview, approval, execute before dispatch."
+      "summary": "GitLab write-like commands are either planned reverse ETL operations or blocked-by-default safety surfaces; planned writes must use reverse ETL plan, preview, approval, execute before dispatch."
     },
     {
       "name": "binary-downloads",
@@ -948,7 +948,7 @@
     },
     {
       "name": "raw-api",
-      "summary": "Generic raw API commands are intentionally disallowed; use typed streams, direct reads, or write actions instead."
+      "summary": "Generic raw API commands are intentionally disallowed; use typed streams, direct reads, or future typed write actions instead."
     }
   ]
 }

@@ -35,9 +35,9 @@ mappings, bounded output, and explicit safety policy.
 | `pm gitlab user events --id <id>` | bounded direct read | `GET /users/{id}/events` |
 | `pm gitlab issue view --project-id <id> --issue-iid <iid>` | bounded direct read | `GET /projects/{id}/issues/{issue_iid}` |
 
-Direct reads use the `json_redacted` output policy and a 1 MiB default response cap. Token, secret,
-password, credential, private, auth, content, and generic `value` fields are replaced with redaction
-markers before output.
+Direct reads use the `json_redacted` output policy and a 1 MiB default response cap. Sensitive
+fields are recursively redacted before output, including token, secret, password, credential,
+private, auth, content, and generic `value` fields.
 
 ## Safety policy
 

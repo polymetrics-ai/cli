@@ -144,12 +144,21 @@
   ],
   "automated_review": {
     "primary_route": "parent_pr_automatic_review_after_push",
-    "status": "coderabbit_rate_limited",
+    "status": "coderabbit_review_addressed_locally",
     "coverage_route": "parent_pr",
     "coderabbit": {
-      "status": "rate_limited",
-      "message": "Review limit reached; next review available in 55 minutes as of 2026-07-09T14:26:52Z CodeRabbit comment.",
-      "reviewed_range": "CodeRabbit selected changed files through ec56ff2c before reporting rate limit; no completed review submitted."
+      "status": "commented_addressed_locally",
+      "message": "Initial automatic review was rate-limited; later automatic review completed after the window cleared.",
+      "reviewed_range": "CodeRabbit reviewed files changed from ae01c3f962fe089fc26e274fba1f9bbad540f7dd through 575449211fe35c4b8e0427ad61f5da2a76b344be.",
+      "submitted_at": "2026-07-09T15:32:13Z",
+      "comments": [
+        "Clarify GitLab writes/raw-api help topics.",
+        "Check actual sensitive fixture values in json_redacted leak test.",
+        "Document recursive json_redacted redaction in website docs.",
+        "Nit: add known-safe json_redacted allowlist for metadata fields.",
+        "Nit: use shared commandrunner unknown-command reason constant."
+      ],
+      "disposition": "all actionable and nit comments addressed locally; final gates rerun"
     },
     "fallback_route": "copilot_reviewed",
     "copilot": {
@@ -175,5 +184,5 @@
     "credentialed connector checks",
     "reverse ETL execution"
   ],
-  "updated_at": "2026-07-09T20:45:00Z"
+  "updated_at": "2026-07-09T21:25:00Z"
 }
