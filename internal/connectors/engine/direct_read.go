@@ -196,14 +196,14 @@ func isSensitiveJSONField(key string) bool {
 	lower := strings.ToLower(key)
 	for _, marker := range []string{
 		"token", "secret", "password", "credential", "private", "authorization",
-		"access_key", "client_secret", "refresh_token", "content",
+		"access_key", "client_secret", "refresh_token",
 	} {
 		if strings.Contains(lower, marker) {
 			return true
 		}
 	}
 	switch lower {
-	case "auth", "authentication", "value":
+	case "auth", "authentication", "content", "value":
 		return true
 	default:
 		return false

@@ -91,5 +91,7 @@ Result: blocked locally. `pnpm run typecheck` fails with `tsc: command not found
 - Parent PR route: PR #127 was marked ready for review after local verification.
 - CodeRabbit: automatic review attempted, then reported `Review limit reached` with next review available in 55 minutes. No manual CodeRabbit review command was posted.
 - Fallback: GitHub Copilot review was requested as backup reviewer `Copilot` because CodeRabbit rate limiting blocked automated review coverage.
+- Copilot review submitted 3 actionable comments; all were addressed by narrowing `content` redaction to exact-key matching and cleaning GitLab global flag summaries before `maps_to` rendering.
+- Review-fix verification: `go test ./internal/connectors/engine -run TestDirectReadJSONRedactedPolicyRemovesSensitiveFields -count=1`, `go run ./cmd/connectorgen validate internal/connectors/defs --json`, `go test -timeout 20m ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs` passed.
 - Stacked sub-PRs: use parent-PR fallback if CodeRabbit skips non-default base PRs.
 - Do not post manual CodeRabbit review commands unless automatic review is skipped, disabled, paused, rate-limited past retry window, or otherwise blocked per `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`.

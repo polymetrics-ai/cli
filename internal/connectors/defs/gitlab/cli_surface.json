@@ -96,13 +96,13 @@
     {
       "name": "connection",
       "type": "string",
-      "summary": "Use a saved GitLab connector credential and base URL scope.",
+      "summary": "Use a saved GitLab connector credential and base URL scope",
       "maps_to": "connection"
     },
     {
       "name": "limit",
       "type": "integer",
-      "summary": "Limit records emitted by stream-backed commands.",
+      "summary": "Limit records emitted by stream-backed commands",
       "maps_to": "limit"
     }
   ],

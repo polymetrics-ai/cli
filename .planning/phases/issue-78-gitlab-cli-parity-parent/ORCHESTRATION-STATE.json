@@ -151,11 +151,18 @@
       "message": "Review limit reached; next review available in 55 minutes as of 2026-07-09T14:26:52Z CodeRabbit comment.",
       "reviewed_range": "CodeRabbit selected changed files through ec56ff2c before reporting rate limit; no completed review submitted."
     },
-    "fallback_route": "copilot_requested",
+    "fallback_route": "copilot_reviewed",
     "copilot": {
-      "status": "requested_pending",
+      "status": "commented_addressed_locally",
       "requested_reviewer": "Copilot",
-      "requested_at": "2026-07-09T14:28:22Z"
+      "requested_at": "2026-07-09T14:28:22Z",
+      "submitted_at": "2026-07-09T14:34:09Z",
+      "comments": [
+        "Narrow json_redacted content redaction so content_type/content_format metadata is preserved while exact content is redacted.",
+        "Drop trailing period from GitLab --connection global flag summary before maps_to rendering.",
+        "Drop trailing period from GitLab --limit global flag summary before maps_to rendering."
+      ],
+      "disposition": "all actionable comments addressed; focused tests and final gates rerun"
     }
   },
   "human_gates": [
@@ -168,5 +175,5 @@
     "credentialed connector checks",
     "reverse ETL execution"
   ],
-  "updated_at": "2026-07-09T16:35:00Z"
+  "updated_at": "2026-07-09T20:45:00Z"
 }

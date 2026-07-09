@@ -63,8 +63,8 @@ COMMAND SURFACE
   Source CLI: glab (https://gitlab.com/gitlab-org/cli/-/tree/main/docs/source)
   Global flags:
     --json (boolean): Write machine-readable JSON output.
-    --connection (string): Use a saved GitLab connector credential and base URL scope.: maps_to=connection
-    --limit (integer): Limit records emitted by stream-backed commands.: maps_to=limit
+    --connection (string): Use a saved GitLab connector credential and base URL scope: maps_to=connection
+    --limit (integer): Limit records emitted by stream-backed commands: maps_to=limit
   Core Commands
     project list - List visible GitLab projects [intent=etl availability=implemented stream=projects]; flags: --search, --owned
     project view - View one GitLab project [intent=direct_read availability=implemented]; notes: Bounded direct read of one project; response is recursively redacted before output.; flags: --id
