@@ -22,20 +22,22 @@
   "ready_queue": [
     {
       "number": 213,
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "dependencies": [],
       "write_scope": [
         ".planning/phases/issue-213-helpscout-cli-surface-metadata",
         "internal/connectors/defs/help-scout/metadata.json",
         "internal/connectors/defs/help-scout/api_surface.json",
         "internal/connectors/defs/help-scout/cli_surface.json",
-        "internal/connectors/defs/help-scout/docs.md"
+        "internal/connectors/defs/help-scout/docs.md",
+        "docs/connectors/help-scout",
+        "website/data/connectors.generated.json"
       ],
       "decision": "local_critical_path"
     },
     {
       "number": 214,
-      "status": "planned",
+      "status": "worker_ready",
       "dependencies": [213],
       "write_scope": [
         "docs/cli",
@@ -43,7 +45,7 @@
         "website",
         "internal/connectors/defs/help-scout/docs.md"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 215,
@@ -58,14 +60,14 @@
     },
     {
       "number": 216,
-      "status": "planned",
+      "status": "worker_ready",
       "dependencies": [213],
       "write_scope": [
         "internal/connectors/defs/help-scout/api_surface.json",
         "internal/connectors/defs/help-scout/operations.json",
         ".planning/phases/issue-216-helpscout-operation-ledger"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 217,
@@ -108,13 +110,19 @@
       "timestamp": "2026-07-09T19:57:02Z",
       "decision": "local_critical_path",
       "issue_numbers": [213],
-      "reason": "Pi subagent tool is not available in this harness. Draft parent PR #230 is open, so the orchestrator will take the #213 critical path locally."
+      "reason": "Pi subagent tool is not available in this harness. Draft parent PR #230 is open, so the orchestrator took the #213 critical path locally."
     },
     {
       "timestamp": "2026-07-09T19:57:02Z",
       "decision": "not_spawned_runtime_capability_missing",
-      "issue_numbers": [214, 215, 216, 217, 218, 219],
-      "reason": "No Pi subagent tool is exposed in the current harness; later lanes remain dependency-blocked until #213 and parent PR setup complete."
+      "issue_numbers": [214, 216],
+      "reason": "After #213 local implementation, #214 and #216 are worker-ready but no Pi subagent tool is exposed in the current harness."
+    },
+    {
+      "timestamp": "2026-07-09T19:57:02Z",
+      "decision": "not_spawned_dependency_blocked",
+      "issue_numbers": [215, 217, 218, 219],
+      "reason": "Remaining lanes depend on operation-ledger and/or policy/engine follow-ups."
     }
   ],
   "subissues": [
@@ -122,24 +130,28 @@
       "number": 213,
       "url": "https://github.com/polymetrics-ai/cli/issues/213",
       "branch": "feat/213-helpscout-cli-surface-metadata",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/236",
       "worker": "local-orchestrator-critical-path",
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "write_scope": [
         ".planning/phases/issue-213-helpscout-cli-surface-metadata",
-        "internal/connectors/defs/help-scout"
+        "internal/connectors/defs/help-scout",
+        "docs/connectors/help-scout",
+        "docs/connectors/catalog",
+        "website/data/connectors.generated.json",
+        "website/lib/connectors.catalog.data.generated.json"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-212-helpscout-cli-parity",
-      "verification": "pending",
+      "verification": "make verify passed; website typecheck blocked by missing node_modules; see issue-213 VERIFICATION.md",
       "automated_review": {
-        "primary_route": "blocked",
-        "status": "pending",
-        "head_sha": "pending",
-        "reviewed_range": "pending",
-        "coverage_route": "blocked",
-        "fallback_route": "none",
-        "disposition_summary": "pending sub-PR",
-        "disposition_url": "pending"
+        "primary_route": "CodeRabbit",
+        "status": "rate_limited",
+        "head_sha": "5a426982336578d1147a3d85d33ba23fdb0643ad",
+        "reviewed_range": "59050585b1134f2f8e9a6512dd7c117394c6da5a..5a426982336578d1147a3d85d33ba23fdb0643ad pending review",
+        "coverage_route": "manual_retry_after_rate_limit_or_parent_pr_fallback",
+        "fallback_route": "parent PR #230 CodeRabbit/Copilot/human fallback if sub-PR remains skipped",
+        "disposition_summary": "automatic review skipped on non-default base; manual review attempt rate-limited with ~19 minute retry window",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/236#issuecomment-4929491124"
       }
     },
     {
@@ -148,8 +160,113 @@
       "branch": "feat/214-helpscout-help-renderer",
       "pr_url": "pending",
       "worker": "unassigned",
-      "status": "planned",
+      "status": "worker_ready",
       "write_scope": ["docs/cli", "docs/connectors/help-scout", "website"],
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "not spawned: runtime capability missing",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 215,
+      "url": "https://github.com/polymetrics-ai/cli/issues/215",
+      "branch": "feat/215-helpscout-stream-runner",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/help-scout/streams.json", "internal/connectors/defs/help-scout/schemas", "internal/connectors/defs/help-scout/fixtures"],
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "dependency-blocked",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 216,
+      "url": "https://github.com/polymetrics-ai/cli/issues/216",
+      "branch": "feat/216-helpscout-operation-ledger",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "worker_ready",
+      "write_scope": ["internal/connectors/defs/help-scout/api_surface.json", "internal/connectors/defs/help-scout/operations.json"],
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "not spawned: runtime capability missing",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 217,
+      "url": "https://github.com/polymetrics-ai/cli/issues/217",
+      "branch": "feat/217-helpscout-direct-read",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/help-scout/cli_surface.json", "internal/connectors/commandrunner", "internal/cli"],
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "dependency-blocked",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 218,
+      "url": "https://github.com/polymetrics-ai/cli/issues/218",
+      "branch": "feat/218-helpscout-query-binary-engine",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": ["internal/connectors/engine", "internal/connectors/defs/help-scout"],
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "dependency-blocked",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 219,
+      "url": "https://github.com/polymetrics-ai/cli/issues/219",
+      "branch": "feat/219-helpscout-sensitive-admin-policy",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/help-scout", "internal/connectors/engine"],
       "worker_directory": "pending",
       "verification": "pending",
       "automated_review": {

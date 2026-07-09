@@ -45,7 +45,7 @@ make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-Status: pending implementation.
+Status: pending full parent integration. #213 focused validation and full local `make verify` passed; see `.planning/phases/issue-213-helpscout-cli-surface-metadata/VERIFICATION.md`.
 
 ## CLI Help / Docs / Website Parity
 

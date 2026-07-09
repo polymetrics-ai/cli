@@ -1,0 +1,284 @@
+{
+  "tagline": "Inspect and plan Help Scout Inbox API operations safely.",
+  "usage": "pm help-scout <resource> <action> [flags]",
+  "source_cli": {
+    "name": "Help Scout Inbox API",
+    "docs": "https://developer.helpscout.com/mailbox-api/",
+    "reference": "https://developer.helpscout.com/mailbox-api/"
+  },
+  "groups": [
+    {
+      "id": "core-records",
+      "title": "Core record streams",
+      "commands": ["conversation", "customer", "mailbox", "user"]
+    },
+    {
+      "id": "direct-reads",
+      "title": "Bounded direct reads planned for later lanes",
+      "commands": ["conversation view", "conversation thread list", "customer view", "mailbox saved-reply list", "tag list", "team list", "workflow list", "report"]
+    },
+    {
+      "id": "writes",
+      "title": "Approval-gated reverse ETL candidates",
+      "commands": ["conversation reply create", "conversation note create", "customer create", "customer update", "webhook create", "workflow run"]
+    },
+    {
+      "id": "blocked",
+      "title": "Blocked by default until a policy lane implements safeguards",
+      "commands": ["attachment download", "customer delete", "user create", "user delete", "team member update"]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved Help Scout connector credential.",
+      "maps_to": "connection"
+    }
+  ],
+  "commands": [
+    {
+      "path": "conversation list",
+      "summary": "List Help Scout conversations as an ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversations",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/list/",
+      "flags": [
+        {
+          "name": "modified-since",
+          "type": "string",
+          "summary": "Lower bound for modified conversations; maps to the connector start_date config.",
+          "maps_to": "config.start_date"
+        }
+      ],
+      "examples": ["pm help-scout conversation list --connection help-scout-prod --json"],
+      "api_surface": [{ "method": "GET", "path": "/v2/conversations" }]
+    },
+    {
+      "path": "customer list",
+      "summary": "List Help Scout customers as an ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list/",
+      "flags": [
+        {
+          "name": "modified-since",
+          "type": "string",
+          "summary": "Lower bound for modified customers; maps to the connector start_date config.",
+          "maps_to": "config.start_date"
+        }
+      ],
+      "examples": ["pm help-scout customer list --connection help-scout-prod --json"],
+      "api_surface": [{ "method": "GET", "path": "/v2/customers" }]
+    },
+    {
+      "path": "mailbox list",
+      "summary": "List Help Scout mailboxes as an ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mailboxes",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/mailboxes/list/",
+      "examples": ["pm help-scout mailbox list --connection help-scout-prod --json"],
+      "api_surface": [{ "method": "GET", "path": "/v2/mailboxes" }]
+    },
+    {
+      "path": "user list",
+      "summary": "List Help Scout users as an ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/list/",
+      "examples": ["pm help-scout user list --connection help-scout-prod --json"],
+      "api_surface": [{ "method": "GET", "path": "/v2/users" }]
+    },
+    {
+      "path": "conversation view",
+      "summary": "View one conversation.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get/",
+      "notes": "Planned for #217 as a bounded direct read; not executable in this metadata slice."
+    },
+    {
+      "path": "conversation thread list",
+      "summary": "List threads for one conversation.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list/",
+      "notes": "Planned for #217 as a bounded direct read."
+    },
+    {
+      "path": "attachment download",
+      "summary": "Download or inspect a conversation attachment.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
+      "notes": "Binary payload; blocked until #218 adds a bounded binary/output policy."
+    },
+    {
+      "path": "customer view",
+      "summary": "View one customer.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/get/",
+      "notes": "Planned for #217 as a bounded direct read."
+    },
+    {
+      "path": "mailbox saved-reply list",
+      "summary": "List saved replies for a mailbox.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/mailboxes/saved-replies/list/",
+      "notes": "Planned for direct-read or stream classification after operation-ledger review."
+    },
+    {
+      "path": "tag list",
+      "summary": "List Help Scout tags.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/list/",
+      "notes": "Candidate stream or direct read; #216 owns final operation classification."
+    },
+    {
+      "path": "team list",
+      "summary": "List Help Scout teams.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list/",
+      "notes": "Candidate stream or direct read; #216 owns final operation classification."
+    },
+    {
+      "path": "workflow list",
+      "summary": "List Help Scout workflows.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/list/",
+      "notes": "Candidate stream or direct read; #216 owns final operation classification."
+    },
+    {
+      "path": "report company",
+      "summary": "Read company-level report metrics.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/overall/",
+      "notes": "Report endpoints require provider-specific query/body support and bounded output policy in #218."
+    },
+    {
+      "path": "conversation reply create",
+      "summary": "Create a reply thread on a conversation.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/reply/",
+      "risk": "Sends a visible customer-support reply through Help Scout.",
+      "approval": "Must be implemented only as a typed reverse-ETL action with plan, preview, approval, and execute.",
+      "notes": "No runtime write action is declared in this slice."
+    },
+    {
+      "path": "conversation note create",
+      "summary": "Create an internal note on a conversation.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/note/",
+      "risk": "Adds internal support context to a Help Scout conversation.",
+      "approval": "Must be implemented only as a typed reverse-ETL action with plan, preview, approval, and execute.",
+      "notes": "No runtime write action is declared in this slice."
+    },
+    {
+      "path": "customer create",
+      "summary": "Create a Help Scout customer.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/create/",
+      "risk": "Creates customer profile data in Help Scout.",
+      "approval": "Must be implemented only as a typed reverse-ETL action with plan, preview, approval, and execute.",
+      "notes": "No runtime write action is declared in this slice."
+    },
+    {
+      "path": "customer update",
+      "summary": "Update a Help Scout customer.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/update/",
+      "risk": "Mutates customer profile data in Help Scout.",
+      "approval": "Must be implemented only as a typed reverse-ETL action with plan, preview, approval, and execute.",
+      "notes": "No runtime write action is declared in this slice."
+    },
+    {
+      "path": "customer delete",
+      "summary": "Delete a Help Scout customer.",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete/",
+      "risk": "Deletes customer data from Help Scout.",
+      "approval": "Would require destructive typed confirmation and human approval if ever implemented.",
+      "notes": "Blocked by default; #219 owns destructive/admin policy decisions."
+    },
+    {
+      "path": "webhook create",
+      "summary": "Create a Help Scout webhook.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/create/",
+      "risk": "Creates an outbound webhook configuration that can send Help Scout event data to another URL.",
+      "approval": "Must require typed schema, URL validation, preview, approval, and execute.",
+      "notes": "No runtime write action is declared in this slice."
+    },
+    {
+      "path": "workflow run",
+      "summary": "Run a Help Scout manual workflow.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/run/",
+      "risk": "Triggers provider-side workflow automation.",
+      "approval": "Must require plan, preview, approval, and execute.",
+      "notes": "No runtime write action is declared in this slice."
+    },
+    {
+      "path": "team member update",
+      "summary": "Update Help Scout team membership.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/members/update/",
+      "risk": "Administrative membership change.",
+      "approval": "Requires typed schema, preflight, preview, approval, and execute.",
+      "notes": "No runtime write action is declared in this slice."
+    },
+    {
+      "path": "user create",
+      "summary": "Create a Help Scout user.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/create/",
+      "risk": "Administrative user provisioning.",
+      "approval": "Requires typed schema, preflight, preview, approval, and execute.",
+      "notes": "No runtime write action is declared in this slice."
+    },
+    {
+      "path": "user delete",
+      "summary": "Delete a Help Scout user.",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/delete/",
+      "risk": "Destructive user removal.",
+      "approval": "Would require destructive typed confirmation and human approval if ever implemented.",
+      "notes": "Blocked by default; #219 owns destructive/admin policy decisions."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "help-scout-auth",
+      "summary": "Configure Help Scout OAuth2 client credentials from environment variables or stdin; never put secrets in prompt text."
+    },
+    {
+      "name": "help-scout-writes",
+      "summary": "Help Scout write candidates are metadata-only until typed reverse-ETL schemas and approval policies are implemented."
+    }
+  ]
+}

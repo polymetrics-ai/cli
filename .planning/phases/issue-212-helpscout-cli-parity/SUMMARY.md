@@ -11,11 +11,18 @@ Status: planning checkpoint in progress.
 - Confirmed existing canonical connector slug is `help-scout`; this plan avoids creating a duplicate `helpscout` connector.
 - Crawled the official Help Scout Inbox API docs navigation for planning: 146 endpoint pages, 145 unique method/path pairs, one duplicate endpoint path for thread original source JSON/RFC822 variants.
 
+## #213 Progress
+
+- Created local branch `feat/213-helpscout-cli-surface-metadata` from the parent branch.
+- Refreshed Help Scout API surface metadata and added CLI surface metadata.
+- Full `make verify` passed; standalone website typecheck is blocked by missing `node_modules`/`tsc`.
+- Opened stacked sub-PR #236: https://github.com/polymetrics-ai/cli/pull/236.
+
 ## Next
 
-1. Push the parent PR URL artifact update.
-2. Create #213 branch from the parent branch and run the metadata/validation slice.
-3. Open a stacked #213 PR against `feat/212-helpscout-cli-parity` after local green gates.
+1. Wait for CodeRabbit rate-limit retry window on sub-PR #236, then retry review only if there are unreviewed commits.
+2. If stacked PR #236 remains skipped/rate-limited, request/record parent PR #230 CodeRabbit/Copilot/human fallback coverage for the #213 commit range.
+3. Continue with #214/#216 only after review routing is recorded or explicitly blocked.
 
 ## Blockers
 
