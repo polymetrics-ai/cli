@@ -4,9 +4,9 @@ Reads Freshdesk tickets, contacts, companies, agents, and groups through the Fre
 
 Readable streams: `tickets`, `contacts`, `companies`, `agents`, `groups`.
 
-This connector is read-only; no write actions are declared.
+This connector is currently read-only; no write actions are declared. The full Freshdesk API reference is inventoried in `api_surface.json` for follow-up stream, direct-read, binary/export, and reverse-ETL lanes. Unimplemented operations are blocked by default and are not exposed as raw HTTP commands.
 
-Service API documentation: https://developers.freshdesk.com/api/#change_log.
+Service API documentation: https://developers.freshdesk.com/api/.
 
 ## Auth setup
 
@@ -52,12 +52,13 @@ lower bound is available.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Freshdesk API read of support tickets,
-contacts, companies, agents, and groups.
+This connector currently declares no executable write actions. The operation ledger records Freshdesk create, update, admin, export/import, and delete candidates as blocked until named reverse-ETL actions provide schemas, redaction, plan previews, approval tokens, and typed confirmation for destructive/admin operations.
+
+Read behavior: external Freshdesk API read of support tickets, contacts, companies, and team routing records.
 
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 5 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  out_of_scope=5.
+- API coverage inventory includes 170 Freshdesk documentation rows from the public REST API reference (117 GET, 10 POST, 10 PUT, 33 DELETE).
+- Implemented coverage remains limited to 5 stream-backed endpoint groups: `tickets`, `contacts`, `companies`, `agents`, and `groups`.
+- All other inventoried operations are blocked by default in metadata for later #175-#179 lanes; they are not exposed as raw HTTP reads or writes.

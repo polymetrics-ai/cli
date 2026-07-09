@@ -21,9 +21,16 @@ Parent issue: #172
 
 ## Green Evidence
 
-Pending implementation.
+#173 metadata slice:
+
+- Freshdesk JSON/count validation passed: 170 endpoints (`GET:117`, `POST:10`, `PUT:10`, `DELETE:33`), 5 covered streams, 165 blocked operation rows.
+- `go run ./cmd/connectorgen validate internal/connectors/defs --json`: passed, 547 connectors checked, 0 findings, 0 warnings.
+- `go test ./internal/connectors/engine -run CLISurface`: passed.
+- `go test ./cmd/connectorgen -run CLISurface`: passed.
+- `go test ./cmd/connectorgen ./internal/connectors/engine`: passed.
+- `go test ./internal/connectors/conformance -run 'TestConformance/freshdesk'`: passed.
 
 ## Refactor Notes
 
-- No production code edits yet.
+- Production Go code unchanged in #173 metadata slice.
 - `scripts/gsd prompt programming-loop ...` is unavailable in the current adapter; manual universal-loop fallback is recorded in `PLAN.md` and `RUN-STATE.json`.

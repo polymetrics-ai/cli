@@ -38,10 +38,17 @@
       "freshdesk api_surface endpoints=10, want 170; exit=1",
       "test -f internal/connectors/defs/freshdesk/cli_surface.json; exit=1"
     ],
-    "greenEvidence": [],
-    "refactorEvidence": []
+    "greenEvidence": [
+      "#173 freshdesk api_surface endpoints=170; methods GET=117 POST=10 PUT=10 DELETE=33; covered=5 blocked=165",
+      "go run ./cmd/connectorgen validate internal/connectors/defs --json: 547 connectors checked, 0 findings, 0 warnings",
+      "go test ./internal/connectors/engine -run CLISurface: pass",
+      "go test ./cmd/connectorgen -run CLISurface: pass",
+      "go test ./cmd/connectorgen ./internal/connectors/engine: pass",
+      "go test ./internal/connectors/conformance -run 'TestConformance/freshdesk': pass"
+    ],
+    "refactorEvidence": ["#173 data-only metadata update; no Go production code changed"]
   },
   "verificationPassed": false,
-  "verificationNotes": "Planning/red-baseline only; draft parent PR #222 opened; full verification pending implementation.",
-  "updated_at": "2026-07-09T19:40:00Z"
+  "verificationNotes": "Draft parent PR #222 opened; focused #173 gates passed; full parent verification pending.",
+  "updated_at": "2026-07-09T20:05:00Z"
 }

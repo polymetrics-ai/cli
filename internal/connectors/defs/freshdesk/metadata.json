@@ -1,9 +1,9 @@
 {
   "name": "freshdesk",
   "display_name": "Freshdesk",
-  "description": "Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2.",
+  "description": "Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2; additional Freshdesk operations are inventoried for gated CLI parity follow-up lanes.",
   "integration_type": "api",
-  "docs_url": "https://developers.freshdesk.com/api/#change_log",
+  "docs_url": "https://developers.freshdesk.com/api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
@@ -17,6 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Freshdesk API read of support tickets, contacts, companies, agents, and groups"
+    "read": "external Freshdesk API read of support tickets, contacts, companies, and team routing records",
+    "write": "Freshdesk create, update, admin, import/export, and delete operations are inventoried but blocked until named reverse-ETL actions provide schemas and approval gates",
+    "approval": "future Freshdesk writes require reverse ETL plan, preview, approval, execute; destructive/admin operations also require typed confirmation"
   }
 }

@@ -2,7 +2,7 @@
   "phase": "issue-173-freshdesk-cli-surface-metadata",
   "issue": 173,
   "parent_issue": 172,
-  "status": "planned",
+  "status": "green_focused_verification",
   "gsd": {
     "mode": "manual_fallback",
     "reason": "scripts/gsd prompt programming-loop is not registered in this adapter; following .pi/prompts/pm-gsd-loop.md and gsd-universal-runtime-loop.md manually.",
@@ -20,9 +20,17 @@
       "freshdesk api_surface endpoints=10, want 170; exit=1",
       "cli_surface.json presence check exit=1"
     ],
-    "greenEvidence": [],
-    "refactorEvidence": []
+    "greenEvidence": [
+      "freshdesk api_surface endpoints=170; methods GET=117 POST=10 PUT=10 DELETE=33; covered=5 blocked=165",
+      "go run ./cmd/connectorgen validate internal/connectors/defs --json: 547 connectors checked, 0 findings, 0 warnings",
+      "go test ./internal/connectors/engine -run CLISurface: pass",
+      "go test ./cmd/connectorgen -run CLISurface: pass",
+      "go test ./cmd/connectorgen ./internal/connectors/engine: pass",
+      "go test ./internal/connectors/conformance -run 'TestConformance/freshdesk': pass"
+    ],
+    "refactorEvidence": ["data-only metadata update; no Go production code changed"]
   },
   "verificationPassed": false,
-  "updated_at": "2026-07-09T19:35:31Z"
+  "verificationNotes": "Focused #173 gates passed; full parent make verify pending.",
+  "updated_at": "2026-07-09T20:05:00Z"
 }

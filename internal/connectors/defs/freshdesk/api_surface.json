@@ -1,14 +1,327 @@
 {
   "api": "Freshdesk REST API v2",
-  "docs": "https://developers.freshdesk.com/api/#change_log",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Freshdesk surface (conversations, time entries, solutions/articles, canned responses, business hours, webhooks, etc.) is out of scope outside this connector's current declared surface; this connector is read-only, matching legacy",
+  "docs": "https://developers.freshdesk.com/api/",
+  "reviewed_at": "2026-07-09",
+  "operation_ledger_version": 1,
+  "scope": "Issue #173 CLI-surface inventory from the public Freshdesk API reference and parent #172 baseline (170 operations: 117 GET, 10 POST, 10 PUT, 33 DELETE). Existing streams remain covered; all other documented operations are blocked-by-default metadata for follow-up stream, direct-read, binary, and reverse-ETL lanes. No raw generic HTTP write surface is exposed.",
   "endpoints": [
+    {
+      "method": "GET",
+      "path": "/tickets/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_a_ticket",
+        "notes": "View a Ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/associated_tickets",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_a_ticket",
+        "notes": "View a Ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/prime_association",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_a_ticket",
+        "notes": "View a Ticket"
+      }
+    },
     {
       "method": "GET",
       "path": "/tickets",
       "covered_by": {
         "stream": "tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/tickets?query={query}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#filter_tickets",
+        "notes": "Filter Tickets"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/watchers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#ticket_merge",
+        "notes": "Ticket Merge API"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_ticket_fields",
+        "notes": "List All Ticket Fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_ticket_notes",
+        "notes": "List All Conversations of a Ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/time_entries",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_ticket_timeentries",
+        "notes": "List All Time Entries of a Ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/satisfaction_ratings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_satisfaction_ratings",
+        "notes": "List All Satisfaction Ratings of a Ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/summary",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_satisfaction_ratings",
+        "notes": "List All Satisfaction Ratings of a Ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/archived/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_satisfaction_ratings",
+        "notes": "List All Satisfaction Ratings of a Ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/archived/{id}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_satisfaction_ratings",
+        "notes": "List All Satisfaction Ratings of a Ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}/accesses",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_satisfaction_ratings",
+        "notes": "List All Satisfaction Ratings of a Ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_ticket_fields",
+        "notes": "List All Ticket Fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_field",
+        "notes": "View a Ticket Field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields/{id}/sections",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_section_fields",
+        "notes": "List All Sections for a Ticket Field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ticket_fields/{id}/sections/{section_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_specific_section",
+        "notes": "List a specific Section details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket-forms",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_ticket_forms",
+        "notes": "List All Ticket Forms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket-forms/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_form",
+        "notes": "View a Ticket Form"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket-forms/{form_id}/fields/{field_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_form_field",
+        "notes": "View A Ticket Form's Field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/channels/outbound-messages/{message_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#retrieve_outbound_message",
+        "notes": "Retrieve Message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_account",
+        "notes": "View Account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_job",
+        "notes": "View a Job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_contact",
+        "notes": "View a Contact"
       }
     },
     {
@@ -20,9 +333,106 @@
     },
     {
       "method": "GET",
-      "path": "/companies",
-      "covered_by": {
-        "stream": "companies"
+      "path": "/contacts/autocomplete?term={keyword}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#search_contacts",
+        "notes": "Search Contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/contacts?query={query}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#filter_contacts",
+        "notes": "Filter ContactsBETA"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/export/{id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a bounded binary/read output policy exists for this Freshdesk operation.",
+        "source_url": "https://developers.freshdesk.com/api/#export_contact",
+        "notes": "Contact Export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/imports",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#import_contact",
+        "notes": "Contact Import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/imports/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#import_contact",
+        "notes": "Contact Import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_contact_fields",
+        "notes": "List all contact fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_fields/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_contact_field",
+        "notes": "View a contact field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_agent",
+        "notes": "View an Agent"
       }
     },
     {
@@ -34,6 +444,123 @@
     },
     {
       "method": "GET",
+      "path": "/agents/me",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#me",
+        "notes": "Currently Authenticated Agent"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/autocomplete?term={keyword}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#search_agents",
+        "notes": "Search Agents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents?page=1&per_page=10&only=availability",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_agents_availability",
+        "notes": "List All Agents Availability"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/agents/{id}/availability",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_agent_availability",
+        "notes": "View Agent Availability"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/skills/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_skill",
+        "notes": "View a Skill"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/skills",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_skills",
+        "notes": "List all Skills"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_role",
+        "notes": "View a Role"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_roles",
+        "notes": "List All Roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_group",
+        "notes": "View a Group"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/groups",
       "covered_by": {
         "stream": "groups"
@@ -41,42 +568,1621 @@
     },
     {
       "method": "GET",
-      "path": "/tickets/{id}/conversations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/admin/groups/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_admin_group",
+        "notes": "View a Group"
       }
     },
     {
       "method": "GET",
-      "path": "/tickets/{id}/time_entries",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/admin/groups",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_admin_groups",
+        "notes": "List All Groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admin/groups/{id}/agents",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_agents_in_a_group",
+        "notes": "List All Agents in a Group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_company",
+        "notes": "View a Company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/autocomplete?name={keyword}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#search_companies",
+        "notes": "Search Companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/companies?query={query}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#filter_companies",
+        "notes": "Filter CompaniesBETA"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/export/{id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a bounded binary/read output policy exists for this Freshdesk operation.",
+        "source_url": "https://developers.freshdesk.com/api/#export_company",
+        "notes": "Company Export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/imports",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#import_company",
+        "notes": "Company Import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/imports/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#import_company",
+        "notes": "Company Import"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company_fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_company_fields",
+        "notes": "List all company fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company_fields/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_company_field",
+        "notes": "View a company field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#retrieve_existing_custom_objects",
+        "notes": "Retrieve Existing Custom Objects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/{schema-id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#retrieve_specific_custom_object",
+        "notes": "Retrieve A Specific Custom Object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/{schema-id}/records/{record-id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#retrieve_a_custom_object_record",
+        "notes": "Retrieve A Record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/{schema_id}/records",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#retrieve_all_the_records_of_a_custom_object",
+        "notes": "Retrieve All Records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/schema_id/records/count",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#retrieve_the_count_of_records_custom_objects",
+        "notes": "Retrieve The Count Of Records"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_objects/schemas/schema_id/records?{field-name}{operator}{value}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#filter_records_of_custom_objects",
+        "notes": "Filter Records Of A Custom Object"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_responses/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_canned_response",
+        "notes": "View a Canned Response"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_response_folders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_canned_response_folders",
+        "notes": "List All Folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_response_folders/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_canned_response_folders",
+        "notes": "List All Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/canned_response_folders/{id}/responses",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/categories/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/categories",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/categories/{id}/forums",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/forums/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/forums/{id}/topics",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/forums/{id}/follow?user_id={id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/topics/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/topics/{id}/comments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/topics/{id}/follow?user_id={id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/topics/followed_by?user_id={id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/discussions/topics/participated_by?user_id={id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/categories/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/categories/{id}/{language_code}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
       }
     },
     {
       "method": "GET",
       "path": "/solutions/categories",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
       }
     },
     {
       "method": "GET",
-      "path": "/canned-response-folders",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/solutions/categories/{language_code}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{id}/{language_code}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/categories/{category_id}/folders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/categories/{category_id}/folders/{language_code}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{folder_id}/subfolders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{folder_id}/subfolders/{language_code}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/articles/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/articles/{id}/{language_code}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{id}/articles",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/solutions/folders/{id}/articles/{language_code}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/solutions?term={keyword}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer-satisfaction/surveys",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#csat_surveys",
+        "notes": "Surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer-satisfaction/surveys/{survey_id}/responses",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_survey_responses",
+        "notes": "View all Survey Responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/surveys",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_survey",
+        "notes": "List all Surveys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/surveys/satisfaction_ratings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_all_satisfaction_ratings",
+        "notes": "View all Satisfaction Ratings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_all_satisfaction_ratings",
+        "notes": "View all Satisfaction Ratings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_all_satisfaction_ratings",
+        "notes": "View all Satisfaction Ratings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_entries",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_time_entries",
+        "notes": "List All Time Entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_configs/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_email_config",
+        "notes": "View an Email Config"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email_configs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_email_configs",
+        "notes": "List All Email Configs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/mailboxes/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_email_mailbox",
+        "notes": "View an Email Mailbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/mailboxes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_email_mailboxes",
+        "notes": "List All Email Mailboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/email/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_mailbox_settings",
+        "notes": "View Mailbox Settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/email/bcc",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_automatic_bcc_emails",
+        "notes": "View Automatic Bcc emails"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_product",
+        "notes": "View a Product"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_products",
+        "notes": "List All Products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_hours/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_business_hour",
+        "notes": "View a Business Hour"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/business_hours",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_business_hours",
+        "notes": "List All Business Hours"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sla_policies",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_sla_policies",
+        "notes": "List All SLA Policies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{automation_type_id}/rules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#list_all_automation_rules",
+        "notes": "List All Automation Rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/automations/{automation_type_id}/rules/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#view_an_automation_rule",
+        "notes": "View an Automation Rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/settings/helpdesk",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#settings_helpdesk",
+        "notes": "View Helpdesk Settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration/threads/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_a_thread",
+        "notes": "Get a thread"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration/messages/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "blocked pending Freshdesk stream/direct-read lane classification and implementation; no raw API escape hatch is exposed.",
+        "source_url": "https://developers.freshdesk.com/api/#get_message_for_thread",
+        "notes": "Get message for thread"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/collaboration/messages/{id}/generate-quote",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a bounded binary/read output policy exists for this Freshdesk operation.",
+        "source_url": "https://developers.freshdesk.com/api/#get_quoted_text",
+        "notes": "Get quoted text for message"
       }
     },
     {
       "method": "POST",
       "path": "/tickets",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented in this bundle; legacy is read-only"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#create_ticket",
+        "notes": "Create a Ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/outbound_email",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#create_outbound_email",
+        "notes": "Create an Outbound Email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/bulk_update",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#bulk_update_tickets",
+        "notes": "Update Multiple Tickets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{id}/forward",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#forward_tickets",
+        "notes": "Forward a ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/bulk_delete",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#bulk_delete_tickets",
+        "notes": "Delete Multiple Tickets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#create_contact",
+        "notes": "Create a Contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/merge",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#merge_contact",
+        "notes": "Merge Contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/export",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#export_contact",
+        "notes": "Contact Export"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/imports",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#import_contact",
+        "notes": "Contact Import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#create_company",
+        "notes": "Create a Company"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#update_ticket",
+        "notes": "Update a Ticket"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/merge",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#ticket_merge",
+        "notes": "Ticket Merge API"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}/restore",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#restore_a_ticket",
+        "notes": "Restore a Ticket"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#update_contact",
+        "notes": "Update a Contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}/restore",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#restore_contact",
+        "notes": "Restore a Contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{id}/make_agent",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#make_agent",
+        "notes": "Make Agent"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/agents/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#update_agent",
+        "notes": "Update an Agent"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/groups/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#update_group",
+        "notes": "Update a Group"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#update_company",
+        "notes": "Update a Company"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/time_entries/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until a named reverse-ETL action with schema, plan, preview, approval, and execute gates is implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#update_time_entry",
+        "notes": "Update a Time Entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_a_ticket",
+        "notes": "Delete a Ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/attachments/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_an_attachment",
+        "notes": "Delete an attachment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}/summary",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_satisfaction_ratings",
+        "notes": "List All Satisfaction Ratings of a Ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/archived/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_satisfaction_ratings",
+        "notes": "List All Satisfaction Ratings of a Ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}/accesses",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#view_ticket_satisfaction_ratings",
+        "notes": "List All Satisfaction Ratings of a Ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/ticket_fields/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_ticket_field",
+        "notes": "Delete a Ticket Field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/ticket_fields/{id}/sections/{section_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_section",
+        "notes": "Delete a section"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ticket-forms/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_ticket_form",
+        "notes": "Delete a Ticket Form"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ticket-forms/{form_id}/fields/{field_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_ticket_form_field",
+        "notes": "Delete a Ticket Form's Field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_conversation",
+        "notes": "Delete a conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_contact",
+        "notes": "Soft Delete a Contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}/hard_delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#hard_delete_contact",
+        "notes": "Permanently Delete a Contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_field/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_contact_field",
+        "notes": "Delete a contact field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/agents/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_agent",
+        "notes": "Delete an Agent"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/skills/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_skill",
+        "notes": "Delete a Skill"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_group",
+        "notes": "Delete a Group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/admin/groups/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_admin_group",
+        "notes": "Delete a Group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/companies/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_company",
+        "notes": "Delete a Company"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/company_field/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_company_field",
+        "notes": "Delete a company field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_objects/schemas/{schema_id}/records/{record-id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_a_custom_object_record",
+        "notes": "Delete A Record"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/categories/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/forums/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/forums/{forum_id}/follow?user_id={user_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/topics/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/topics/{topic_id}/follow?user_id={user_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/discussions/comments/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/solutions/categories/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/solutions/folders/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/solutions/articles/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#get_details_of_canned_responses_in_folders",
+        "notes": "Get details of Canned Responses in a Folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#view_all_satisfaction_ratings",
+        "notes": "View all Satisfaction Ratings"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/groups/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#view_all_satisfaction_ratings",
+        "notes": "View all Satisfaction Ratings"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/time_entries/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_time_entry",
+        "notes": "Delete a Time Entry"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/email/mailboxes/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until destructive reverse-ETL action schemas, preview, approval token, and typed confirmation are implemented.",
+        "source_url": "https://developers.freshdesk.com/api/#delete_email_mailbox",
+        "notes": "Delete an Email Mailbox"
       }
     }
   ]

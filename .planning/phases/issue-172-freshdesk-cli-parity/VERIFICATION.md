@@ -33,6 +33,23 @@ test -f internal/connectors/defs/freshdesk/cli_surface.json
 - Freshdesk endpoint-count red check: expected fail; current count is 10, official baseline target is 170.
 - Freshdesk `cli_surface.json` red check: expected fail; file is absent.
 
+## Focused #173 Green Slice
+
+```bash
+python3 <json/count validation>
+go run ./cmd/connectorgen validate internal/connectors/defs --json
+go test ./internal/connectors/engine -run CLISurface
+go test ./cmd/connectorgen -run CLISurface
+go test ./cmd/connectorgen ./internal/connectors/engine
+go test ./internal/connectors/conformance -run 'TestConformance/freshdesk'
+```
+
+Results:
+
+- Freshdesk JSON/count validation passed: 170 endpoints (`GET:117`, `POST:10`, `PUT:10`, `DELETE:33`), 5 covered streams, 165 blocked operation rows.
+- Full defs validation passed: 547 connectors checked, 0 findings, 0 warnings.
+- Focused CLISurface, engine/connectorgen, and Freshdesk conformance tests passed.
+
 ## Required Before Handoff
 
 ```bash

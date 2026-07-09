@@ -1,0 +1,194 @@
+{
+  "tagline": "Work with Freshdesk support records from the command line.",
+  "usage": "pm freshdesk <command> <subcommand> [flags]",
+  "groups": [
+    {
+      "id": "support",
+      "title": "Support Records",
+      "commands": [
+        "ticket",
+        "contact",
+        "company"
+      ]
+    },
+    {
+      "id": "team",
+      "title": "Team And Routing",
+      "commands": [
+        "agent",
+        "group"
+      ]
+    },
+    {
+      "id": "admin",
+      "title": "Admin And Configuration",
+      "commands": [
+        "ticket-field",
+        "ticket-form",
+        "automation",
+        "sla"
+      ]
+    },
+    {
+      "id": "exports",
+      "title": "Exports And Imports",
+      "commands": [
+        "account",
+        "contact-export",
+        "company-export"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved Freshdesk connector credential.",
+      "maps_to": "connection"
+    }
+  ],
+  "commands": [
+    {
+      "path": "ticket list",
+      "summary": "List tickets",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tickets",
+      "flags": [
+        {
+          "name": "updated-since",
+          "type": "string",
+          "summary": "Use the configured start_date/incremental lower bound for ticket updates.",
+          "maps_to": "config.start_date"
+        }
+      ],
+      "examples": [
+        "pm freshdesk ticket list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets"
+        }
+      ]
+    },
+    {
+      "path": "contact list",
+      "summary": "List contacts",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "examples": [
+        "pm freshdesk contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "company list",
+      "summary": "List companies",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "examples": [
+        "pm freshdesk company list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies"
+        }
+      ]
+    },
+    {
+      "path": "agent list",
+      "summary": "List agents",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agents",
+      "examples": [
+        "pm freshdesk agent list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/agents"
+        }
+      ]
+    },
+    {
+      "path": "group list",
+      "summary": "List groups",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "examples": [
+        "pm freshdesk group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ]
+    },
+    {
+      "path": "ticket view",
+      "summary": "View one ticket",
+      "intent": "direct_read",
+      "availability": "planned",
+      "notes": "Planned for #177 as a bounded direct-read command; no raw HTTP escape hatch is exposed."
+    },
+    {
+      "path": "ticket create",
+      "summary": "Create a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "risk": "Creates a Freshdesk ticket visible to support users.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Planned for #179 as a named reverse-ETL action with schema and approval gates."
+    },
+    {
+      "path": "ticket delete",
+      "summary": "Delete a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "risk": "Deletes a Freshdesk ticket and requires destructive confirmation.",
+      "approval": "Reverse ETL writes require plan, preview, approval, typed destructive confirmation, execute.",
+      "notes": "Planned for #179; not executable in this metadata lane."
+    },
+    {
+      "path": "account export",
+      "summary": "Export account data",
+      "intent": "direct_read",
+      "availability": "planned",
+      "notes": "Planned for #178 with bounded binary/export policy; not executable from raw paths."
+    },
+    {
+      "path": "admin ticket-field list",
+      "summary": "List admin ticket fields",
+      "intent": "direct_read",
+      "availability": "planned",
+      "notes": "Planned for #177/#179 with admin risk text and bounded output."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "freshdesk",
+      "summary": "Freshdesk connector commands, implemented streams, and planned safe command intents."
+    },
+    {
+      "name": "freshdesk-writes",
+      "summary": "Freshdesk write intents remain blocked until reverse ETL schemas and approval gates are implemented."
+    }
+  ]
+}

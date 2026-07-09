@@ -26,20 +26,34 @@ Result:
 
 ## Green Tests
 
-Pending implementation.
-
-Planned commands:
-
 ```bash
-python3 <json/count validation>
+python3 - <<'PY'
+import json, pathlib
+from collections import Counter
+for name in ['metadata','api_surface','cli_surface']:
+    p=pathlib.Path(f'internal/connectors/defs/freshdesk/{name}.json')
+    json.loads(p.read_text())
+api=json.loads(pathlib.Path('internal/connectors/defs/freshdesk/api_surface.json').read_text())
+print('api endpoints', len(api['endpoints']), Counter(ep['method'] for ep in api['endpoints']))
+print('covered', sum('covered_by' in ep for ep in api['endpoints']), 'blocked', sum('operation' in ep for ep in api['endpoints']))
+PY
+go run ./cmd/connectorgen validate internal/connectors/defs --json
 go test ./internal/connectors/engine -run CLISurface
 go test ./cmd/connectorgen -run CLISurface
 go test ./cmd/connectorgen ./internal/connectors/engine
 go test ./internal/connectors/conformance -run 'TestConformance/freshdesk'
-go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Results:
+
+- Freshdesk JSON parse/count passed: 170 endpoints (`GET:117`, `POST:10`, `PUT:10`, `DELETE:33`), 5 covered streams, 165 blocked-by-default operation rows.
+- `go run ./cmd/connectorgen validate internal/connectors/defs --json`: passed, 547 connectors checked, 0 findings, 0 warnings.
+- `go test ./internal/connectors/engine -run CLISurface`: passed.
+- `go test ./cmd/connectorgen -run CLISurface`: passed.
+- `go test ./cmd/connectorgen ./internal/connectors/engine`: passed.
+- `go test ./internal/connectors/conformance -run 'TestConformance/freshdesk'`: passed.
 
 ## Refactor Notes
 
-- Data-only lane unless validation reveals missing embed/schema support.
-- Preserve existing implemented stream references; do not overclaim writes/direct reads.
+- Data-only lane; no production Go code changed.
+- Existing implemented stream references remain covered; unimplemented reads/writes are blocked metadata and not exposed as raw HTTP reads/writes.
