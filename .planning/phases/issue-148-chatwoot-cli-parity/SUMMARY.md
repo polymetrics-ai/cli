@@ -6,17 +6,17 @@ Status: in progress.
 
 - Read required repo, GSD, parent-orchestration, review-routing, CLI parity, connector migration, and Go skill references.
 - Confirmed issue #148 and sub-issues #149-#155 are open.
-- Confirmed parent PR for `feat/148-chatwoot-cli-parity` -> `main` is missing.
+- Confirmed parent PR for `feat/148-chatwoot-cli-parity` -> `main` was missing, then opened draft parent PR #223 after the plan seed commit.
 - Recorded manual GSD fallback because `scripts/gsd prompt programming-loop ...` is not available in the repo-local adapter registry.
 - Created parent planning, TDD, verification, run-state, and orchestration-state artifacts.
 - Recorded runtime fanout blocker: current Pi API tool surface lacks `subagent`, so issue #149 is local critical path.
 
 ## Next
 
-1. Validate JSON planning artifacts and `git diff --check`.
-2. Commit and push the parent planning seed.
-3. Open draft parent PR with `Refs #148`.
-4. Execute issue #149 local critical path: red official-surface count validation, refresh Chatwoot `api_surface.json`, add `cli_surface.json`, update docs/metadata, run targeted gates.
+1. Commit and push issue #149 implementation branch.
+2. Open a stacked sub-PR against `feat/148-chatwoot-cli-parity` with `Refs #149` and `Refs #148`.
+3. Record automated review routing status; for a non-default-base PR, parent PR fallback coverage may be needed if CodeRabbit skips the sub-PR.
+4. Continue dependency queue after #149 is reviewed/integrated.
 
 ## Safety
 

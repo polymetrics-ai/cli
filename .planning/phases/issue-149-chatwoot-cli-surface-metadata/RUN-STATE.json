@@ -1,6 +1,6 @@
 {
   "phase": "issue-149-chatwoot-cli-surface-metadata",
-  "status": "planned",
+  "status": "implemented_local",
   "parent_issue": 148,
   "sub_issue": 149,
   "parent_branch": "feat/148-chatwoot-cli-parity",
@@ -15,9 +15,33 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "Current Pi API tool surface lacks subagent. Coordinator owns #149 in the parent checkout after planning artifacts are committed."
+    },
+    {
+      "cycle": "red-validation",
+      "decision": "local_critical_path",
+      "reason": "Ran official surface-count validation locally before production edits; failure captured as expected red evidence."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Updated Chatwoot metadata files in the local #149 branch."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Targeted #149 validation and conformance checks passed locally."
     }
   ],
+  "redEvidence": "official_total=144, surface_total=71, missing_count=73, exit=1",
+  "greenEvidence": [
+    "official surface-count script pass",
+    "jq empty chatwoot api_surface/cli_surface/metadata pass",
+    "go test ./cmd/connectorgen -run CLISurface -count=1 pass",
+    "go test ./internal/connectors/engine -run CLISurface -count=1 pass",
+    "go run ./cmd/connectorgen validate internal/connectors/defs pass",
+    "go test ./internal/connectors/conformance -run 'TestConformance/chatwoot' -count=1 pass"
+  ],
   "verificationPassed": false,
-  "verificationStatus": "red validation pending",
+  "verificationStatus": "targeted #149 gates passed; full parent make verify not run",
   "updated_at": "2026-07-10T00:00:00Z"
 }

@@ -1,86 +1,1644 @@
 {
-  "api": "Chatwoot Application API v1 (Platform + Application APIs; account-scoped /api/v1/accounts/{account_id}/...)",
+  "api": "Chatwoot official Swagger (develop) \u2014 Application, Public, Platform, Profile, Reports, Survey APIs",
   "docs": "https://developers.chatwoot.com/api-reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "Greenfield build: the core support-desk read surface (conversations, contacts, inboxes, agents, teams, labels, conversation-scoped messages) plus the documented mutation set the task specifies (contact create/update, conversation create, message send, conversation status toggle, label create). The remainder of Chatwoot's Application/Platform API (canned responses, automation rules, custom attribute definitions, custom filters, webhooks, integrations, help-center portals, agent bots, teams membership management, reporting/analytics v2 endpoints, account_users platform API) is out of scope for this build.",
+  "reviewed_at": "2026-07-10",
+  "operation_ledger_version": 1,
+  "scope": "Full official Swagger inventory from develop/swagger/swagger.json. Executable coverage remains limited to existing account-scoped Application API streams and typed write actions. Every other official operation is blocked-by-default metadata for later direct-read, binary/file, sensitive/admin reverse-ETL, destructive, duplicate, or disallowed slices; no raw generic HTTP write/read escape hatch is exposed.",
   "endpoints": [
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations", "covered_by": { "stream": "conversations" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}", "excluded": { "category": "duplicate_of", "reason": "single-conversation detail is a strict subset of the conversations list stream's payload shape; not separately implemented as a stream" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations", "covered_by": { "write": "create_conversation" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}", "excluded": { "category": "out_of_scope", "reason": "priority/sla_policy_id attribute update; not in the specified write scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status", "covered_by": { "write": "toggle_conversation_status" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority", "excluded": { "category": "out_of_scope", "reason": "priority toggle; not in the specified write scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status", "excluded": { "category": "out_of_scope", "reason": "ephemeral typing-indicator signal, not a syncable data mutation" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments", "excluded": { "category": "out_of_scope", "reason": "agent/team assignment mutation; not in the specified write scope" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels", "excluded": { "category": "duplicate_of", "reason": "conversation labels are already available on each conversations-stream record's labels array" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels", "excluded": { "category": "out_of_scope", "reason": "conversation-label assignment; not in the specified write scope (create_label creates account-wide labels only)" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events", "excluded": { "category": "out_of_scope", "reason": "reporting/analytics surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/meta", "excluded": { "category": "non_data_endpoint", "reason": "conversation count summary, not a syncable object stream" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/filter", "excluded": { "category": "duplicate_of", "reason": "advanced filtered search over the same conversation object already covered by the conversations stream" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/{id}", "excluded": { "category": "duplicate_of", "reason": "single-contact detail is a strict subset of the contacts list stream's payload shape; not separately implemented as a stream" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/contacts", "covered_by": { "write": "create_contact" } },
-    { "method": "PUT", "path": "/api/v1/accounts/{account_id}/contacts/{id}", "covered_by": { "write": "update_contact" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/contacts/{id}", "excluded": { "category": "destructive_admin", "reason": "irreversible contact deletion; not in the specified write scope" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/search", "excluded": { "category": "duplicate_of", "reason": "search over the same contact object already covered by the contacts stream" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/contacts/filter", "excluded": { "category": "duplicate_of", "reason": "advanced filtered search over the same contact object already covered by the contacts stream" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations", "excluded": { "category": "duplicate_of", "reason": "per-contact conversation listing; the conversations stream already syncs every conversation account-wide" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels", "excluded": { "category": "out_of_scope", "reason": "per-contact label listing; not in the specified read scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels", "excluded": { "category": "out_of_scope", "reason": "contact-label assignment; not in the specified write scope (create_label creates account-wide labels only)" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes", "excluded": { "category": "out_of_scope", "reason": "source_id provisioning for a contact/inbox pair; not in the specified write scope" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes", "excluded": { "category": "out_of_scope", "reason": "inbox-eligibility lookup, not a syncable object stream" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/actions/contact_merge", "excluded": { "category": "destructive_admin", "reason": "irreversible merge of two contact records; not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/inboxes", "covered_by": { "stream": "inboxes" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/inboxes/{id}", "excluded": { "category": "duplicate_of", "reason": "single-inbox detail is a strict subset of the inboxes stream's payload shape" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/inboxes", "excluded": { "category": "requires_elevated_scope", "reason": "inbox/channel provisioning (web widget, email, SMS, WhatsApp, etc. channel config with per-channel secrets); not in the specified write scope" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/inboxes/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "inbox/channel configuration update; not in the specified write scope" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot", "excluded": { "category": "out_of_scope", "reason": "not in the specified read scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/agents", "covered_by": { "stream": "agents" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/agents", "excluded": { "category": "requires_elevated_scope", "reason": "provisions a new user/agent account; not in the specified write scope" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/agents/{id}", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/agents/{id}", "excluded": { "category": "destructive_admin", "reason": "removes an agent from the account; not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/teams", "covered_by": { "stream": "teams" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/teams/{team_id}", "excluded": { "category": "duplicate_of", "reason": "single-team detail is a strict subset of the teams stream's payload shape" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/teams", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/teams/{team_id}", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/teams/{team_id}", "excluded": { "category": "destructive_admin", "reason": "not in the specified write scope" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members", "excluded": { "category": "out_of_scope", "reason": "not in the specified read scope" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/labels", "covered_by": { "stream": "labels" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/labels/{id}", "excluded": { "category": "duplicate_of", "reason": "single-label detail is a strict subset of the labels stream's payload shape" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/labels", "covered_by": { "write": "create_label" } },
-    { "method": "PATCH", "path": "/api/v1/accounts/{account_id}/labels/{id}", "excluded": { "category": "out_of_scope", "reason": "not in the specified write scope" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/labels/{id}", "excluded": { "category": "destructive_admin", "reason": "not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages", "covered_by": { "stream": "messages" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages", "covered_by": { "write": "send_message" } },
-    { "method": "DELETE", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}", "excluded": { "category": "destructive_admin", "reason": "irreversible message deletion; not in the specified write scope" } },
-
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/agent_bots", "excluded": { "category": "out_of_scope", "reason": "agent-bot management API, not the support-desk core surface" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/agent_bots", "excluded": { "category": "out_of_scope", "reason": "agent-bot management API, not the support-desk core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/canned_responses", "excluded": { "category": "out_of_scope", "reason": "agent-productivity feature, not the specified core surface" } },
-    { "method": "POST", "path": "/api/v1/accounts/{account_id}/canned_responses", "excluded": { "category": "out_of_scope", "reason": "agent-productivity feature, not the specified core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions", "excluded": { "category": "out_of_scope", "reason": "schema-configuration endpoint, not conversation/contact/agent data" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/custom_filters", "excluded": { "category": "out_of_scope", "reason": "saved-search configuration, not conversation/contact data" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/webhooks", "excluded": { "category": "out_of_scope", "reason": "outbound webhook configuration, not the specified core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/integrations/apps", "excluded": { "category": "out_of_scope", "reason": "installed-integration listing, not the specified core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/automation_rules", "excluded": { "category": "out_of_scope", "reason": "automation-rule configuration, not the specified core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/portals", "excluded": { "category": "out_of_scope", "reason": "help-center (knowledge base) surface, not the support-desk core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/audit_logs", "excluded": { "category": "out_of_scope", "reason": "account audit-trail surface, not the specified core surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}/reporting_events", "excluded": { "category": "out_of_scope", "reason": "reporting/analytics surface" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/reports", "excluded": { "category": "out_of_scope", "reason": "v2 reporting/analytics surface, distinct from the core object surface" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/reports/summary", "excluded": { "category": "out_of_scope", "reason": "v2 reporting/analytics surface" } },
-    { "method": "GET", "path": "/api/v2/accounts/{account_id}/summary_reports/agent", "excluded": { "category": "out_of_scope", "reason": "v2 reporting/analytics surface" } },
-    { "method": "GET", "path": "/api/v1/accounts/{account_id}", "excluded": { "category": "non_data_endpoint", "reason": "account settings snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/platform/api/v1/accounts/{account_id}/account_users", "excluded": { "category": "requires_elevated_scope", "reason": "Platform API super-admin surface for provisioning account/user memberships, distinct auth (platformAppApiKey) from the Application API this bundle targets" } }
+    {
+      "method": "GET",
+      "path": "/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "legacy/alternate messages path mirrors the account-scoped Application API messages endpoint; use the messages stream.",
+        "duplicate_of": "GET /api/v1/accounts/{account_id}/conversations/{conversation_id}/messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/actions/contact_merge",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "contact merge can irreversibly combine records; blocked until typed destructive reverse-ETL semantics and confirmation are implemented.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agent_bots",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/agent_bots",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/agents",
+      "covered_by": {
+        "stream": "agents"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/agents",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/agents/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/agents/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/audit_logs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/automation_rules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/automation_rules",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/canned_responses",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/canned_responses",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts/filter",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations",
+      "covered_by": {
+        "stream": "conversations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations",
+      "covered_by": {
+        "write": "create_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/filter",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/meta",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages",
+      "covered_by": {
+        "write": "send_message"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status",
+      "covered_by": {
+        "write": "toggle_conversation_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_typing_status",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "ephemeral presence/read-state signal; not a durable ETL record or appropriate reverse-ETL mutation.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_filters",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/custom_filters",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/inbox_members",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/inbox_members",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/inbox_members",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inbox_members/{inbox_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes",
+      "covered_by": {
+        "stream": "inboxes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/inboxes",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/integrations/apps",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/integrations/hooks",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/labels",
+      "covered_by": {
+        "stream": "labels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/labels",
+      "covered_by": {
+        "write": "create_label"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/labels/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/labels/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/labels/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/portals",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/portals",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/portals/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/portals/{id}/articles",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/portals/{id}/categories",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/reporting_events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/teams",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounts/{account_id}/webhooks",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounts/{account_id}/webhooks",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/profile",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/profile",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/conversations/",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/first_response_time_distribution",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/inbox_label_matrix",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/outgoing_messages_count",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/summary",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/agent",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/channel",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/inbox",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/team",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/platform/api/v1/accounts",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/accounts/{account_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/platform/api/v1/accounts/{account_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/platform/api/v1/accounts/{account_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/accounts/{account_id}/account_users",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/platform/api/v1/accounts/{account_id}/account_users",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/platform/api/v1/accounts/{account_id}/account_users",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/agent_bots",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/platform/api/v1/agent_bots",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/agent_bots/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/platform/api/v1/agent_bots/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/platform/api/v1/agent_bots/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/platform/api/v1/users",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/users/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/platform/api/v1/users/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/platform/api/v1/users/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/users/{id}/login",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Public inbox API is customer-facing and uses inbox/contact identifiers rather than the account API base path."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Public inbox API is customer-facing and uses inbox/contact identifiers rather than the account API base path."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Public inbox API is customer-facing and uses inbox/contact identifiers rather than the account API base path."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Public inbox API is customer-facing and uses inbox/contact identifiers rather than the account API base path."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
+        "notes": "Public inbox API is customer-facing and uses inbox/contact identifiers rather than the account API base path."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages/{message_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_status",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_typing",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "ephemeral presence/read-state signal; not a durable ETL record or appropriate reverse-ETL mutation.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/update_last_seen",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "ephemeral presence/read-state signal; not a durable ETL record or appropriate reverse-ETL mutation.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/survey/responses/{conversation_uuid}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "public CSAT survey page rendering is not an account-scoped connector data or mutation surface.",
+        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      }
+    }
   ]
 }

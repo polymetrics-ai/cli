@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/148-chatwoot-cli-parity",
   "parent_pr": {
-    "url": "pending",
+    "url": "https://github.com/polymetrics-ai/cli/pull/223",
     "base": "main",
     "head": "feat/148-chatwoot-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -22,7 +22,7 @@
   "ready_queue": [
     {
       "number": 149,
-      "status": "worker_ready",
+      "status": "worker_in_progress",
       "dependencies": [],
       "write_scope": [
         "internal/connectors/defs/chatwoot/metadata.json",
@@ -111,7 +111,7 @@
       "timestamp": "2026-07-10T00:00:00Z",
       "decision": "local_critical_path",
       "issue_numbers": [148, 149],
-      "reason": "Parent PR is missing and the current Pi API session has no subagent tool. Coordinator will create parent seed artifacts, then execute issue #149 locally instead of claiming spawned workers."
+      "reason": "Parent PR was missing and the current Pi API session has no subagent tool. Coordinator opened draft parent PR #223, then implemented issue #149 locally instead of claiming spawned workers."
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
@@ -127,13 +127,13 @@
       "branch": "feat/149-chatwoot-cli-surface-metadata",
       "pr_url": "pending",
       "worker": "coordinator-local-critical-path",
-      "status": "worker_ready",
+      "status": "worker_in_progress",
       "write_scope": [
         "internal/connectors/defs/chatwoot",
         ".planning/phases/issue-149-chatwoot-cli-surface-metadata"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "pending",
+      "verification": "targeted local gates passed; sub-PR pending",
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
@@ -141,7 +141,7 @@
         "reviewed_range": "pending",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "Parent PR missing; review coverage pending after seed/sub-PR creation.",
+        "disposition_summary": "Sub-PR pending. Parent PR #223 exists for fallback coverage if non-default-base review is skipped.",
         "disposition_url": "pending"
       }
     }
