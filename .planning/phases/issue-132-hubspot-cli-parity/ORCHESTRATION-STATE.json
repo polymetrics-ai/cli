@@ -7,22 +7,22 @@
   },
   "parent_branch": "feat/132-hubspot-cli-parity",
   "parent_pr": {
-    "url": "pending",
+    "url": "https://github.com/polymetrics-ai/cli/pull/221",
     "base": "main",
     "head": "feat/132-hubspot-cli-parity",
     "draft": true,
-    "state": "pending_parent_seed_push"
+    "state": "open"
   },
   "default_branch": "main",
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi-api-harness",
-    "status": "running"
+    "status": "waiting_for_workers"
   },
   "ready_queue": [
     {
       "number": 134,
-      "status": "worker_ready_after_parent_pr",
+      "status": "worker_ready",
       "dependencies": ["parent_pr_open"],
       "write_scope": [".planning/phases/issue-134-hubspot-cli-surface-metadata/**", "internal/connectors/defs/hubspot/cli_surface.json", "internal/connectors/defs/hubspot/metadata.json", "internal/connectors/defs/hubspot/spec.json", "internal/connectors/defs/hubspot/streams.json", "internal/connectors/defs/hubspot/docs.md", "cmd/connectorgen/**", "internal/connectors/engine/**"],
       "decision": "local_critical_path"

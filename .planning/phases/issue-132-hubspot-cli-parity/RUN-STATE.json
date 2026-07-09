@@ -27,9 +27,9 @@
     "golang-graphql",
     "golang-lint"
   ],
-  "status": "planned",
+  "status": "parent_pr_open",
   "verificationPassed": false,
-  "verificationBlocker": "full verification not yet run; parent planning seed only",
+  "verificationBlocker": "full verification not yet run; parent PR seed only",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
