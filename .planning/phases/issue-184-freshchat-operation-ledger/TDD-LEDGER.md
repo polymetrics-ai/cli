@@ -61,11 +61,15 @@ go test ./cmd/connectorgen -run 'TestValidate_APISurfaceOperationLedger|TestVali
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-Full parent/subissue gates before handoff when practical:
+Full parent/subissue gates before handoff:
 
 ```bash
+gofmt -w cmd internal
 go vet ./...
 go test ./...
 go build ./cmd/pm
 make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Result: pass. `make verify` included docs validation, smoke, lint, and connectorgen validation; final standalone connectorgen validation reported `547 connector(s) checked, 0 findings`.

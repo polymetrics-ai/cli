@@ -1,6 +1,6 @@
 # Summary — Issue #184 Freshchat operation ledger
 
-Status: implemented locally; focused gates pass.
+Status: implemented locally; full verification passed.
 
 ## Completed
 
@@ -11,9 +11,10 @@ Status: implemented locally; focused gates pass.
 - Added red/green Freshchat operation-ledger metrics coverage.
 - Converted `api_surface.json` to `operation_ledger_version: 1` with blocked operation rows for request-body read and multipart/binary upload endpoints.
 - Ran focused connectorgen tests and full connector definition validation.
+- Ran full handoff gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs` pass.
 
 ## Next
 
-1. Run full handoff gates.
-2. Commit/push implementation checkpoint.
-3. Open a stacked PR against `feat/180-freshchat-cli-parity` with `Refs #184` and `Refs #180`.
+1. Commit/push verification checkpoint.
+2. Open a stacked PR against `feat/180-freshchat-cli-parity` with `Refs #184` and `Refs #180`.
+3. Route automated review coverage without treating a stacked/draft skip as success.

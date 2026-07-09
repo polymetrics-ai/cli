@@ -2,15 +2,15 @@
   "phase": "issue-184-freshchat-operation-ledger",
   "issue": 184,
   "parent_issue": 180,
-  "status": "implemented_focused_green",
+  "status": "verified_local",
   "gsd": {
     "plan_phase_command": "scripts/gsd prompt plan-phase issue-184-freshchat-operation-ledger --skip-research",
     "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-184-freshchat-operation-ledger --dry-run",
     "programming_loop_result": "unavailable_unknown_command",
     "manual_fallback": true
   },
-  "verificationPassed": false,
-  "verificationBlocker": "focused gates pass; full handoff gates not run yet",
+  "verificationPassed": true,
+  "verificationBlocker": "none",
   "orchestrationDecisions": [
     {
       "timestamp": "2026-07-09T21:45:17Z",
@@ -25,7 +25,14 @@
       "decision": "focused_green",
       "reason": "Added Freshchat operation-ledger metrics test, converted api_surface.json to operation_ledger_version 1, and focused gates pass.",
       "issue_numbers": [184]
+    },
+    {
+      "timestamp": "2026-07-09T22:12:00Z",
+      "cycle": "verification",
+      "decision": "handoff_ready",
+      "reason": "Full go gates, make verify, and connectorgen validation pass locally.",
+      "issue_numbers": [184]
     }
   ],
-  "updated_at": "2026-07-09T22:00:00Z"
+  "updated_at": "2026-07-09T22:12:00Z"
 }
