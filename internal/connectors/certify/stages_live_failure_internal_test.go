@@ -19,6 +19,8 @@ func TestLiveStreamUnavailableClassifiesGitHubUnavailableErrors(t *testing.T) {
 	rc := &runContext{opts: Options{Connector: "github"}}
 	cases := []CLIResult{
 		{Kind: "Error", Stdout: `{"error":{"message":"github stream=code_scanning_alerts page=0: http 403 for https://api.github.com/repos/o/r/code-scanning/alerts: [redacted]"},"kind":"Error"}`},
+		{Kind: "Error", Stderr: `GitHub stream=dependabot_alerts page=0: HTTP 404 for https://api.github.com/repos/o/r/dependabot/alerts`},
+		{Kind: "Error", Stderr: `github stream=secret_scanning_alerts page=0: request failed with Status 403`},
 		{Kind: "Error", Stdout: `{"error":{"message":"graphql errors: Your token has not been granted the required scopes to execute this query"},"kind":"Error"}`},
 		{Kind: "Error", Stdout: `{"error":{"message":"resolve graphql variable \"number\": interpolate: unresolved key \"number\" in query"},"kind":"Error"}`},
 	}

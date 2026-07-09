@@ -21,7 +21,13 @@ func stageWriteSweepAllPairings(rc *runContext, rep *Report) error {
 		return nil
 	}
 
-	inventory := writeActionInventoryFor(rc.opts.Connector)
+	inventory, err := writeActionInventoryFor(rc.opts.Connector)
+	if err != nil {
+		recordStage(rc, rep, "write_sweep_all_pairings", 2, func() (bool, CLIStageInfo, string) {
+			return false, CLIStageInfo{}, fmt.Sprintf("write action inventory: %v", err)
+		})
+		return nil
+	}
 	if len(inventory) == 0 {
 		skipStage(rc, rep, "write_sweep_all_pairings",
 			fmt.Sprintf("skipped: connector %q has no declared write action inventory", rc.opts.Connector))

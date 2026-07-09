@@ -3,7 +3,10 @@ package certify
 import "testing"
 
 func TestGithubWriteActionInventoryAccountsForAllDeclaredActions(t *testing.T) {
-	items := writeActionInventoryFor("github")
+	items, err := writeActionInventoryFor("github")
+	if err != nil {
+		t.Fatalf("writeActionInventoryFor(github): %v", err)
+	}
 	if len(items) != 231 {
 		t.Fatalf("len(items) = %d, want 231", len(items))
 	}
@@ -37,5 +40,12 @@ func TestGithubWriteActionInventoryAccountsForAllDeclaredActions(t *testing.T) {
 		if item.Reason == "" {
 			t.Fatalf("%s reason empty, want blocked/unpaired reason", action)
 		}
+	}
+}
+
+func TestWriteActionInventoryForPropagatesMissingWritesFile(t *testing.T) {
+	_, err := writeActionInventoryFor("does-not-exist")
+	if err == nil {
+		t.Fatal("writeActionInventoryFor(missing) error = nil, want read failure")
 	}
 }

@@ -691,6 +691,7 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		DestinationConfig:     cloneStringMap(req.DestinationConfig),
 		Action:                req.Action,
 		Mappings:              cloneStringMap(req.Mappings),
+		ConfirmationChallenge: a.confirmationChallengeForAction(req.DestinationConnector, req.Action),
 		RecordCount:           len(records),
 		Sample:                cloneRecords(mapped[:sampleCount]),
 		PlanHash:              planHash,
@@ -755,6 +756,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		ConnectorCommand:       writeCommand.Command,
 		ConnectorCommandPath:   append([]string(nil), req.Path...),
 		ConnectorCommandRecord: cloneRecord(writeCommand.Record),
+		ConfirmationChallenge:  writeCommand.ConfirmationChallenge,
 		RecordCount:            1,
 		Sample:                 []connectors.Record{cloneRecord(writeCommand.RedactedRecord)},
 		PlanHash:               planHash,
@@ -802,6 +804,37 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
 	return plan, preview, nil
+}
+
+func (a *App) confirmationChallengeForAction(connectorName, actionName string) string {
+	connector, ok := a.registry.Get(connectorName)
+	if !ok {
+		return ""
+	}
+	for _, action := range connectors.ManifestOf(connector).WriteActions {
+		if action.Name == actionName {
+			return strings.TrimSpace(action.Confirm)
+		}
+	}
+	return ""
+}
+
+func (a *App) confirmationChallengeForPlan(plan ReversePlan) string {
+	if challenge := a.confirmationChallengeForAction(plan.DestinationConnector, plan.Action); challenge != "" {
+		return challenge
+	}
+	return strings.TrimSpace(plan.ConfirmationChallenge)
+}
+
+func (a *App) validatePlanConfirmation(plan ReversePlan, got string) error {
+	want := a.confirmationChallengeForPlan(plan)
+	if want == "" {
+		return nil
+	}
+	if strings.TrimSpace(got) != want {
+		return fmt.Errorf("reverse plan %q requires typed confirmation: pass --confirm %s", plan.ID, want)
+	}
+	return nil
 }
 
 func (a *App) GetReversePlan(id string) (ReversePlan, error) {
@@ -857,6 +890,9 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 	}
 	if hashString(req.ApprovalToken) != plan.ApprovalTokenHash {
 		return ReverseRun{}, errors.New("approval token is invalid")
+	}
+	if err := a.validatePlanConfirmation(plan, req.Confirmation); err != nil {
+		return ReverseRun{}, err
 	}
 	if plan.Mode == reversePlanModeConnectorCommand {
 		return a.runConnectorCommandPlan(ctx, planIndex, plan)

@@ -144,6 +144,8 @@ func TestScheduleCLI_Remove(t *testing.T) {
 		t.Fatal("create failed, cannot test remove")
 	}
 
+	t.Setenv("PM_CRONTAB_FILE", t.TempDir()+"/crontab")
+
 	_, stderr, code := scheduleRun(t, root, "schedule", "remove", "nightly-leads")
 	if code != 0 {
 		t.Fatalf("remove: exit %d, stderr=%q", code, stderr)

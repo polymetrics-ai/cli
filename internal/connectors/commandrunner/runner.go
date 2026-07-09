@@ -33,17 +33,18 @@ type Result struct {
 }
 
 type WriteCommand struct {
-	Connector        string                   `json:"connector"`
-	Command          string                   `json:"command"`
-	Write            string                   `json:"write"`
-	MutationClass    string                   `json:"mutation_class"`
-	TargetResource   string                   `json:"target_resource"`
-	ApprovalRequired bool                     `json:"approval_required"`
-	Risk             string                   `json:"risk,omitempty"`
-	Approval         string                   `json:"approval,omitempty"`
-	Record           connectors.Record        `json:"record,omitempty"`
-	RedactedRecord   connectors.Record        `json:"redacted_record,omitempty"`
-	Preview          *connectors.WritePreview `json:"preview,omitempty"`
+	Connector             string                   `json:"connector"`
+	Command               string                   `json:"command"`
+	Write                 string                   `json:"write"`
+	MutationClass         string                   `json:"mutation_class"`
+	TargetResource        string                   `json:"target_resource"`
+	ApprovalRequired      bool                     `json:"approval_required"`
+	Risk                  string                   `json:"risk,omitempty"`
+	Approval              string                   `json:"approval,omitempty"`
+	ConfirmationChallenge string                   `json:"confirmation_challenge,omitempty"`
+	Record                connectors.Record        `json:"record,omitempty"`
+	RedactedRecord        connectors.Record        `json:"redacted_record,omitempty"`
+	Preview               *connectors.WritePreview `json:"preview,omitempty"`
 }
 
 var ErrNotWriteCommand = errors.New("connector command is not a reverse ETL write command")
@@ -114,16 +115,17 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 		}
 	}
 	out := WriteCommand{
-		Connector:        connector.Name(),
-		Command:          command,
-		Write:            cmd.Write,
-		MutationClass:    mutationClassOf(action),
-		TargetResource:   targetResourceOf(cmd),
-		ApprovalRequired: true,
-		Risk:             firstNonEmpty(cmd.Risk, action.Risk),
-		Approval:         firstNonEmpty(cmd.Approval, "reverse ETL writes require plan, preview, approval, execute"),
-		Record:           cloneRecord(record),
-		RedactedRecord:   redactRecord(record),
+		Connector:             connector.Name(),
+		Command:               command,
+		Write:                 cmd.Write,
+		MutationClass:         mutationClassOf(action),
+		TargetResource:        targetResourceOf(cmd),
+		ApprovalRequired:      true,
+		Risk:                  firstNonEmpty(cmd.Risk, action.Risk),
+		Approval:              firstNonEmpty(cmd.Approval, "reverse ETL writes require plan, preview, approval, execute"),
+		ConfirmationChallenge: strings.TrimSpace(action.Confirm),
+		Record:                cloneRecord(record),
+		RedactedRecord:        redactRecord(record),
 	}
 	if req.Preview {
 		dryRunner, ok := connector.(connectors.DryRunWriter)

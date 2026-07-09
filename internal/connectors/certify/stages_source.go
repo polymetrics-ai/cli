@@ -371,8 +371,11 @@ func liveStreamUnavailable(rc *runContext, res CLIResult) bool {
 			text += "\n" + msg
 		}
 	}
+	text = strings.ToLower(text)
 	return strings.Contains(text, "http 403") ||
 		strings.Contains(text, "http 404") ||
+		strings.Contains(text, "status 403") ||
+		strings.Contains(text, "status 404") ||
 		strings.Contains(text, "has not been granted the required scopes") ||
 		strings.Contains(text, "requires one of the following scopes") ||
 		strings.Contains(text, "interpolate: unresolved key")
