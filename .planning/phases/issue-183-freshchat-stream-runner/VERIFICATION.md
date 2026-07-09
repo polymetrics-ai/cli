@@ -15,7 +15,7 @@ Results:
 - `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
 - `go test ./internal/connectors/conformance ./internal/connectors/engine ./cmd/connectorgen`: pass.
 
-## Planned full gates
+## Full gates run
 
 ```bash
 gofmt -w cmd internal
@@ -25,5 +25,14 @@ go build ./cmd/pm
 make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Results:
+
+- `gofmt -w cmd internal`: pass.
+- `go vet ./...`: pass.
+- `go test ./...`: pass.
+- `go build ./cmd/pm`: pass.
+- `make verify`: pass, including docs validation, smoke, lint, and connectorgen validation.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
 
 No credentialed Freshchat checks, no secret inspection, and no reverse ETL execution are in scope.

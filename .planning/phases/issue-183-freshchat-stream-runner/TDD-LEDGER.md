@@ -44,4 +44,15 @@ Results:
 
 ## Verification ledger
 
-Focused green gates pass. Full handoff gates pending.
+Full handoff gates:
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+```
+
+Result: pass. `make verify` included docs validation, smoke, lint, and connectorgen validation; final standalone connectorgen validation reported `547 connector(s) checked, 0 findings`.
