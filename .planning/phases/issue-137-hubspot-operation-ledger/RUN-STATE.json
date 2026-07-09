@@ -1,0 +1,52 @@
+{
+  "phase": "issue-137-hubspot-operation-ledger",
+  "parent_issue": 132,
+  "issue": 137,
+  "parent_branch": "feat/132-hubspot-cli-parity",
+  "active_branch": "feat/137-hubspot-operation-ledger",
+  "stack_base": "feat/134-hubspot-cli-surface-metadata",
+  "runtime": "pi-api-harness",
+  "gsd": {
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json": "passed_69_commands",
+    "programming_loop_prompt": "blocked_unknown_command",
+    "fallback": "manual_universal_programming_loop_with_scripts_gsd_plan_phase_prompt"
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-graphql",
+    "golang-lint"
+  ],
+  "status": "planned",
+  "verificationPassed": false,
+  "verificationBlocker": "red tests and implementation not yet run",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "no subagent/isolation tool available; continue sequentially on stacked branch after #134 metadata scaffold"
+    }
+  ],
+  "human_gates": [
+    "new dependencies",
+    "live HubSpot credentials or live API checks",
+    "auth scope changes",
+    "destructive/admin external actions",
+    "reverse ETL execution",
+    "binary transfer runtime enablement without explicit destination policy",
+    "generic raw write tools"
+  ],
+  "updated_at": "2026-07-09T20:51:14Z"
+}

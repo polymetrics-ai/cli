@@ -29,10 +29,10 @@
     },
     {
       "number": 137,
-      "status": "planned",
+      "status": "worker_in_progress",
       "dependencies": [134],
       "write_scope": ["internal/connectors/defs/hubspot/api_surface.json", "cmd/connectorgen/**"],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_after_134"
     },
     {
       "number": 140,
@@ -153,10 +153,10 @@
       "url": "https://github.com/polymetrics-ai/cli/issues/137",
       "branch": "feat/137-hubspot-operation-ledger",
       "pr_url": "pending",
-      "worker": "unassigned",
-      "status": "planned",
+      "worker": "local_critical_path",
+      "status": "worker_in_progress",
       "write_scope": "official operation ledger",
-      "worker_directory": "pending",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-132-hubspot-cli-parity",
       "verification": "pending",
       "automated_review": {
         "primary_route": "blocked",
