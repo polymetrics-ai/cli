@@ -22,6 +22,8 @@
 
 ## Review / remote
 
-- [ ] Push branch `feat/151-chatwoot-stream-runner`.
-- [ ] Open stacked PR to `feat/148-chatwoot-cli-parity` with `Refs #151`.
-- [ ] If CodeRabbit skips non-default base, request/record parent PR #223 fallback review after integration.
+- [x] Push branch `feat/151-chatwoot-stream-runner`.
+- [x] Open stacked PR #246 to `feat/148-chatwoot-cli-parity` with `Refs #151`.
+- [x] PR #246 remote checks passed.
+- [x] CodeRabbit skipped non-default base; parent PR #223 fallback review was requested after integration and replied `Review finished` with no inline findings returned by GitHub API.
+- [x] Parent PR #223 checks passed after #151 integration.

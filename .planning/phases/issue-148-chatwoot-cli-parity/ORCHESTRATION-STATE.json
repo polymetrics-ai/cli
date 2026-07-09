@@ -51,7 +51,7 @@
     },
     {
       "number": 151,
-      "status": "implemented_full_verified",
+      "status": "merged_to_parent",
       "dependencies": [
         149,
         152
@@ -69,7 +69,7 @@
         "website/lib/connectors.catalog.data.generated.json",
         ".planning/phases/issue-151-chatwoot-stream-runner"
       ],
-      "decision": "sub_pr_pending"
+      "decision": "integrated_parent_review_complete"
     },
     {
       "number": 152,
@@ -210,11 +210,19 @@
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
-      "decision": "sub_pr_pending",
+      "decision": "integrated_parent_review_complete",
       "issue_numbers": [
         151
       ],
-      "reason": "Issue #151 implementation and full local verification completed on feat/151-chatwoot-stream-runner; stacked sub-PR remains to be opened for remote checks and review routing."
+      "reason": "PR #246 remote checks passed, was squash-merged into parent commit 8a030090f2c505163a8df9b0bffe01b7fbf35c39, and parent PR #223 manual CodeRabbit review replied Review finished after the non-default-base sub-PR skip."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "parent_checks_passed_after_issue_151",
+      "issue_numbers": [
+        151
+      ],
+      "reason": "Parent PR #223 checks after #151 integration completed successfully: verify, govulncheck, Website checks/image, CodeQL, Dependency Review, branch-name, pr-title, require-linked-issue, and gsd-workflow-evidence."
     }
   ],
   "subissues": [
@@ -299,9 +307,9 @@
       "number": 151,
       "url": "https://github.com/polymetrics-ai/cli/issues/151",
       "branch": "feat/151-chatwoot-stream-runner",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/246",
       "worker": "coordinator-local-critical-path",
-      "status": "implemented_full_verified",
+      "status": "merged_to_parent",
       "write_scope": [
         "internal/connectors/engine",
         "internal/connectors/conformance/chatwoot_stream_test.go",
@@ -316,16 +324,16 @@
         ".planning/phases/issue-151-chatwoot-stream-runner"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "targeted checks and full local gates passed; stacked PR pending",
+      "verification": "local full gates passed; PR #246 remote checks passed; squash-merged into parent as 8a030090f2c505163a8df9b0bffe01b7fbf35c39; parent PR #223 checks passed after integration",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "not_started_pr_pending",
-        "head_sha": "pending",
-        "reviewed_range": "pending",
-        "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
+        "status": "parent_manual_review_finished",
+        "head_sha": "f553fde9",
+        "reviewed_range": "parent PR #223 manual CodeRabbit review requested after merge commit 8a030090f2c505163a8df9b0bffe01b7fbf35c39; CodeRabbit replied Review finished with no inline comments returned by GitHub API",
+        "coverage_route": "parent_pr_manual_review_after_sub_pr_skip",
         "fallback_route": "none",
-        "disposition_summary": "pending",
-        "disposition_url": "pending"
+        "disposition_summary": "CodeRabbit skipped #246 because the base was non-default and skipped #223 automatic review because it is draft. After #246 was squash-merged to parent, manual @coderabbitai review was requested on #223 and CodeRabbit replied Review finished; no actionable inline findings were present.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/223#issuecomment-4930518437"
       }
     }
   ],

@@ -3,7 +3,7 @@
   "parentIssue": 148,
   "branch": "feat/151-chatwoot-stream-runner",
   "baseBranch": "feat/148-chatwoot-cli-parity",
-  "status": "implemented_full_verified",
+  "status": "merged_to_parent",
   "gsd": {
     "adapter": "scripts/gsd",
     "programmingLoop": "manual_fallback",
@@ -11,7 +11,7 @@
   },
   "verificationPassed": true,
   "targetedVerificationPassed": true,
-  "reviewStatus": "not_started",
+  "reviewStatus": "sub_pr_skipped_parent_manual_review_finished",
   "events": [
     {
       "timestamp": "2026-07-10T00:00:00Z",
@@ -37,6 +37,11 @@
       "timestamp": "2026-07-10T00:00:00Z",
       "event": "full_verification",
       "detail": "gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify passed."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "merged_to_parent",
+      "detail": "PR #246 remote checks passed and was squash-merged into parent commit 8a030090f2c505163a8df9b0bffe01b7fbf35c39. CodeRabbit skipped #246 due non-default base; parent PR #223 manual CodeRabbit review replied Review finished with no inline findings."
     }
   ]
 }

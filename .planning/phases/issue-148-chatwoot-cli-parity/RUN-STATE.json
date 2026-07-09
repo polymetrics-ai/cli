@@ -94,10 +94,15 @@
     {
       "cycle": "issue-151-full-verification",
       "decision": "sub_pr_pending",
-      "reason": "Issue #151 passed gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify; stacked PR, remote checks, and review routing remain pending."
+      "reason": "Issue #151 passed gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify."
+    },
+    {
+      "cycle": "issue-151-integration",
+      "decision": "integrated_parent_review_complete",
+      "reason": "PR #246 remote checks passed, was squash-merged into parent commit 8a030090f2c505163a8df9b0bffe01b7fbf35c39, parent PR #223 manual CodeRabbit review replied Review finished with no inline findings returned by GitHub API, and parent PR checks passed after integration."
     }
   ],
   "verificationPassed": false,
-  "verificationStatus": "#149, #150, and #152 integrated into parent; parent branch final verification pending after remaining sub-issues",
+  "verificationStatus": "#149, #150, #151, and #152 integrated into parent; parent branch final verification pending after remaining sub-issues",
   "updated_at": "2026-07-10T00:00:00Z"
 }
