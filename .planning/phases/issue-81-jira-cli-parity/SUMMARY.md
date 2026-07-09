@@ -16,7 +16,7 @@ Status: draft parent PR #129 opened; #104 and #105 verified locally with full ga
 - Added #105 red tests and generic connector command-surface help rendering for `pm jira --help`, `pm jira help`, bare `pm jira`, `pm help jira`, and JSON help.
 - Regenerated Jira connector manual/skill plus website connector data for Jira `cliSurface`; website connector-data tests and `pnpm build` passed.
 - Ran full #105 local gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `cd website && pnpm build`.
-- Routed automated review for #105: CodeRabbit reported a 51 minute review-limit window; Copilot backup review produced three comments, all fixed and re-verified with full gates.
+- Routed automated review for #105: CodeRabbit reported a 51 minute review-limit window and later skipped the draft review-fix head; Copilot backup review produced four comments across two passes, all fixed and re-verified with full gates.
 
 ## Current Blockers
 

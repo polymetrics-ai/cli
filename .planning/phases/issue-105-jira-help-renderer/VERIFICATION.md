@@ -103,6 +103,8 @@ go test ./internal/cli -run 'TestJiraConnectorCommandSurfaceHelp|TestBareJiraCon
 go test ./internal/connectors -run TestEveryRegisteredConnectorHasGuideManualAndSkill -count=1
 go run ./cmd/pm docs validate --connectors-dir docs/connectors
 go run ./cmd/pm --json help jira
+go run ./cmd/pm jira
+go run ./cmd/pm version
 rg -n "site scope" docs/connectors/jira/MANUAL.md docs/connectors/jira/SKILL.md
 gofmt -w cmd internal
 go vet ./...

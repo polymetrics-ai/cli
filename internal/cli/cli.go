@@ -47,7 +47,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 		}
 		return 0
 	}
-	if len(rest) == 0 && (isManualCommand(cmd) || isConnectorCommandSurface(cmd)) {
+	if len(rest) == 0 && isManualCommand(cmd) {
 		if err := writeCommandOrConnectorManual(cmd, stdout, jsonOut); err != nil {
 			return writeError(stdout, stderr, err, jsonOut)
 		}
@@ -159,15 +159,6 @@ func writeCommandOrConnectorManual(topic string, stdout io.Writer, jsonOut bool)
 		return writeManual(topic, stdout, jsonOut)
 	}
 	return writeConnectorCommandManual(topic, stdout, jsonOut)
-}
-
-func isConnectorCommandSurface(name string) bool {
-	connector, ok := appRegistry().Get(name)
-	if !ok {
-		return false
-	}
-	provider, ok := connector.(connectors.CommandSurfaceProvider)
-	return ok && provider.CommandSurface() != nil
 }
 
 func writeConnectorCommandManual(name string, stdout io.Writer, jsonOut bool) error {
