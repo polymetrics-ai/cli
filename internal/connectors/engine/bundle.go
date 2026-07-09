@@ -1167,7 +1167,7 @@ func operationExecutionBlock(op OperationSpec) (string, int) {
 
 func expectedOperationBlock(kind string) string {
 	switch kind {
-	case "rest_read", "rest_write":
+	case "rest_read", "rest_query", "rest_write":
 		return "rest"
 	case "graphql_query", "graphql_mutation":
 		return "graphql"
@@ -1195,6 +1195,14 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	case "rest_read":
 		if method := strings.ToUpper(strings.TrimSpace(op.REST.Method)); method != "GET" {
 			return fmt.Errorf("operation %d (%q) rest_read method must be GET, got %s", i, op.ID, method)
+		}
+	case "rest_query":
+		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+		if method == "" || method == "GET" || method == "HEAD" {
+			return fmt.Errorf("operation %d (%q) rest_query method must be a body-capable read method, got %s", i, op.ID, method)
+		}
+		if strings.TrimSpace(op.Approval) != "none" {
+			return fmt.Errorf("operation %d (%q) rest_query approval must be none, got %q", i, op.ID, op.Approval)
 		}
 	case "rest_write":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))

@@ -1,6 +1,6 @@
 # Summary: Jira CLI Parity Parent
 
-Status: draft parent PR #129 opened; #104, #105, and #106 verified locally with full gates.
+Status: draft parent PR #129 opened; #104-#110 verified locally with full gates.
 
 ## Completed
 
@@ -20,14 +20,18 @@ Status: draft parent PR #129 opened; #104, #105, and #106 verified locally with 
 - Added #106 Jira stream-runner flags and tests for `pm jira issue list --jql`, `pm jira project list --query`, and `pm jira user list --query` against local `httptest` Jira endpoints.
 - Ran full #106 local gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `cd website && pnpm build`.
 - Routed CodeRabbit review for #106; fixed both findings (Jira issue-create risk text and handler-goroutine test assertions) and re-ran full gates.
+- Completed #107-#110 full-surface pass from the official Jira Cloud OpenAPI: 620 operations inventoried, 333 write actions modeled, 268 generated direct reads added, 3 existing streams retained, and 16 binary/file-upload/rest-query executor gaps explicitly blocked with operation-ledger evidence.
+- Added generic `json_redacted` direct-read output policy and `rest_query` operation kind for REST-only body-variable read-query applicability (#109).
+- Added bundle-registry load caching after expanded metadata exposed repeated CLI registry parse cost in `internal/connectors/certify`; full `go test ./...` passed after the optimization.
+- Ran full #107-#110 local gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `cd website && pnpm build`.
 
 ## Current Blockers
 
 - `scripts/gsd prompt programming-loop ...` is unavailable (`unknown GSD command: programming-loop`); manual GSD fallback is active and recorded.
-- No Pi `subagent` tool is exposed in this harness; mutating workers are not spawned. #104 and #105 ran locally as `local_critical_path`.
+- No Pi `subagent` tool is exposed in this harness; mutating workers are not spawned. #104-#110 ran locally as `local_critical_path`.
 
 ## Next
 
-1. Commit/push #106 review-fix slice and update parent PR.
-2. Route final automated review coverage for the #106 review-fix commit.
-3. Start the next dependency-ready lane: #107 operation ledger.
+1. Commit/push the #107-#110 full-surface slice and update parent PR #129.
+2. Route automated review coverage for the new full-surface commits, using CodeRabbit primary and Copilot fallback only if CodeRabbit is rate-limited/skipped.
+3. Keep parent PR #129 draft/human-gated for merge to `main`.

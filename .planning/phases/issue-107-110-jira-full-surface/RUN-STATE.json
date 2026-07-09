@@ -1,0 +1,57 @@
+{
+  "phase": "issue-107-110-jira-full-surface",
+  "parentIssue": 81,
+  "issues": [107, 108, 109, 110],
+  "branch": "feat/81-jira-cli-parity",
+  "status": "verified",
+  "workerMode": "local_critical_path",
+  "gsd": {
+    "planCommand": "scripts/gsd prompt plan-phase issue-107-110-jira-full-surface --json",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase issue-107-110-jira-full-surface --dry-run",
+    "programmingLoopStatus": "unavailable_unknown_command",
+    "manualFallback": true
+  },
+  "targetSurface": {
+    "source": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+    "operationsTotal": 620,
+    "methodSplit": { "GET": 276, "POST": 135, "PUT": 119, "DELETE": 90 }
+  },
+  "implementedSurface": {
+    "operations": { "total": 620, "rest_read": 271, "rest_query": 7, "rest_write": 333, "binary_download": 5, "file_upload": 4 },
+    "apiSurface": { "total": 620, "stream": 3, "direct_read": 268, "write": 333, "blocked": 16 },
+    "writes": { "total": 333, "destructiveConfirmations": 256 },
+    "cliCommands": { "total": 303, "implemented": 271 }
+  },
+  "redTests": [
+    { "command": "go test ./internal/connectors/engine -run 'TestBundleLoadEmbeddedJiraFullSurface|TestBundleLoadDiskJiraAPISurfaceFullCoverage|TestDirectReadRedactsGenericJSONSensitiveFields' -count=1", "status": "failed_as_expected", "evidence": "operations.json absent, api_surface not in operation-ledger mode, json_redacted output policy unsupported" }
+  ],
+  "greenTests": [
+    { "command": "go test ./internal/connectors/engine -run 'TestBundleLoadEmbeddedJiraFullSurface|TestBundleLoadDiskJiraAPISurfaceFullCoverage|TestDirectReadRedactsGenericJSONSensitiveFields' -count=1", "status": "passed" },
+    { "command": "go test ./internal/connectors/engine -count=1", "status": "passed" },
+    { "command": "go test ./internal/connectors/commandrunner -count=1", "status": "passed" },
+    { "command": "go test ./internal/cli -run 'TestJiraCommandSurfaceRunsGeneratedDirectRead|TestJiraCommandSurfaceRunsStreamBackedCommands|TestJiraConnectorCommandSurfaceHelp' -count=1", "status": "passed" },
+    { "command": "go test ./cmd/connectorgen -count=1", "status": "passed" },
+    { "command": "go run ./cmd/connectorgen validate internal/connectors/defs --json", "status": "passed", "evidence": "connectors_checked=547 findings=0 warnings=0" },
+    { "command": "go run ./cmd/pm docs validate --connectors-dir docs/connectors", "status": "passed" },
+    { "command": "cd website && pnpm test:unit -- connector-data", "status": "passed" }
+  ],
+  "fullVerification": [
+    { "command": "gofmt -w cmd internal", "status": "passed" },
+    { "command": "go vet ./...", "status": "passed" },
+    { "command": "go test ./...", "status": "passed", "note": "Initial run timed out in internal/connectors/certify after expanded Jira metadata; cached embedded bundle loading fixed repeated CLI registry parse cost, then full go test passed." },
+    { "command": "go build ./cmd/pm", "status": "passed" },
+    { "command": "make verify", "status": "passed" },
+    { "command": "go run ./cmd/connectorgen validate internal/connectors/defs", "status": "passed", "evidence": "connectorgen validate: 547 connector(s) checked, 0 findings" },
+    { "command": "cd website && pnpm build", "status": "passed" }
+  ],
+  "humanGates": [
+    "new dependencies",
+    "auth scope changes",
+    "secrets or credentialed connector checks",
+    "destructive external actions",
+    "generic write tools",
+    "reverse ETL execution",
+    "parent PR merge to main"
+  ],
+  "updatedAt": "2026-07-09T19:25:00Z"
+}

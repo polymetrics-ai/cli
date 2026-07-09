@@ -7,7 +7,7 @@ description: Jira connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using HTTP Basic auth (email + API token). Read-only.
+Reads Jira issues, projects, users, and bounded Jira Cloud REST resources; reverse-ETL write actions are typed and require plan, preview, approval, and execute.
 
 ## Icon
 
@@ -18,7 +18,7 @@ Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using 
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=true query=false
 - Integration type: api
 
 ## Authentication
@@ -48,10 +48,1462 @@ Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using 
 
 - ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
+## Reverse ETL Actions
+
+- set_banner:
+  - endpoint: PUT /rest/api/3/announcementBanner
+  - optional fields: isDismissible, isEnabled, message, visibility
+  - risk: high risk Jira REST PUT /rest/api/3/announcementBanner: Update announcement banner configuration; reverse ETL requires plan, preview, approval, and execute.
+- update_multiple_custom_field_values:
+  - endpoint: POST /rest/api/3/app/field/value
+  - optional fields: updates
+  - risk: medium risk Jira REST POST /rest/api/3/app/field/value: Update custom fields; reverse ETL requires plan, preview, approval, and execute.
+- update_custom_field_configuration:
+  - endpoint: PUT /rest/api/3/app/field/{{ record.fieldIdOrKey }}/context/configuration
+  - required fields: fieldIdOrKey
+  - optional fields: configurations
+  - risk: high risk Jira REST PUT /rest/api/3/app/field/{fieldIdOrKey}/context/configuration: Update custom field configurations; reverse ETL requires plan, preview, approval, and execute.
+- update_custom_field_value:
+  - endpoint: PUT /rest/api/3/app/field/{{ record.fieldIdOrKey }}/value
+  - required fields: fieldIdOrKey
+  - optional fields: updates
+  - risk: medium risk Jira REST PUT /rest/api/3/app/field/{fieldIdOrKey}/value: Update custom field value; reverse ETL requires plan, preview, approval, and execute.
+- set_application_property:
+  - endpoint: PUT /rest/api/3/application-properties/{{ record.id }}
+  - required fields: id
+  - optional fields: value
+  - risk: high risk Jira REST PUT /rest/api/3/application-properties/{id}: Set application property; reverse ETL requires plan, preview, approval, and execute.
+- remove_attachment:
+  - endpoint: DELETE /rest/api/3/attachment/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/attachment/{id}: Delete attachment; reverse ETL requires plan, preview, approval, and execute.
+- submit_bulk_delete:
+  - endpoint: POST /rest/api/3/bulk/issues/delete
+  - optional fields: selectedIssueIdsOrKeys, sendBulkNotification
+  - risk: medium risk Jira REST POST /rest/api/3/bulk/issues/delete: Bulk delete issues; reverse ETL requires plan, preview, approval, and execute.
+- submit_bulk_edit:
+  - endpoint: POST /rest/api/3/bulk/issues/fields
+  - optional fields: editedFieldsInput, selectedActions, selectedIssueIdsOrKeys, sendBulkNotification
+  - risk: medium risk Jira REST POST /rest/api/3/bulk/issues/fields: Bulk edit issues; reverse ETL requires plan, preview, approval, and execute.
+- submit_bulk_move:
+  - endpoint: POST /rest/api/3/bulk/issues/move
+  - optional fields: sendBulkNotification, targetToSourcesMapping
+  - risk: medium risk Jira REST POST /rest/api/3/bulk/issues/move: Bulk move issues; reverse ETL requires plan, preview, approval, and execute.
+- submit_bulk_transition:
+  - endpoint: POST /rest/api/3/bulk/issues/transition
+  - optional fields: bulkTransitionInputs, sendBulkNotification
+  - risk: high risk Jira REST POST /rest/api/3/bulk/issues/transition: Bulk transition issue statuses; reverse ETL requires plan, preview, approval, and execute.
+- submit_bulk_unwatch:
+  - endpoint: POST /rest/api/3/bulk/issues/unwatch
+  - optional fields: selectedIssueIdsOrKeys
+  - risk: medium risk Jira REST POST /rest/api/3/bulk/issues/unwatch: Bulk unwatch issues; reverse ETL requires plan, preview, approval, and execute.
+- submit_bulk_watch:
+  - endpoint: POST /rest/api/3/bulk/issues/watch
+  - optional fields: selectedIssueIdsOrKeys
+  - risk: medium risk Jira REST POST /rest/api/3/bulk/issues/watch: Bulk watch issues; reverse ETL requires plan, preview, approval, and execute.
+- set_comment_property:
+  - endpoint: PUT /rest/api/3/comment/{{ record.commentId }}/properties/{{ record.propertyKey }}
+  - required fields: commentId, propertyKey
+  - optional fields: value
+  - risk: medium risk Jira REST PUT /rest/api/3/comment/{commentId}/properties/{propertyKey}: Set comment property; reverse ETL requires plan, preview, approval, and execute.
+- delete_comment_property:
+  - endpoint: DELETE /rest/api/3/comment/{{ record.commentId }}/properties/{{ record.propertyKey }}
+  - required fields: commentId, propertyKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/comment/{commentId}/properties/{propertyKey}: Delete comment property; reverse ETL requires plan, preview, approval, and execute.
+- create_component:
+  - endpoint: POST /rest/api/3/component
+  - optional fields: ari, assignee, assigneeType, description, id, isAssigneeTypeValid, lead, leadAccountId, leadUserName, metadata, name, project, projectId, realAssignee, realAssigneeType, self
+  - risk: high risk Jira REST POST /rest/api/3/component: Create component; reverse ETL requires plan, preview, approval, and execute.
+- update_component:
+  - endpoint: PUT /rest/api/3/component/{{ record.id }}
+  - required fields: id
+  - optional fields: ari, assignee, assigneeType, description, isAssigneeTypeValid, lead, leadAccountId, leadUserName, metadata, name, project, projectId, realAssignee, realAssigneeType, self
+  - risk: high risk Jira REST PUT /rest/api/3/component/{id}: Update component; reverse ETL requires plan, preview, approval, and execute.
+- delete_component:
+  - endpoint: DELETE /rest/api/3/component/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/component/{id}: Delete component; reverse ETL requires plan, preview, approval, and execute.
+- create_field_association_scheme:
+  - endpoint: POST /rest/api/3/config/fieldschemes
+  - optional fields: description, name
+  - risk: high risk Jira REST POST /rest/api/3/config/fieldschemes: Create field scheme; reverse ETL requires plan, preview, approval, and execute.
+- update_fields_associated_with_schemes:
+  - endpoint: PUT /rest/api/3/config/fieldschemes/fields
+  - optional fields: value
+  - risk: high risk Jira REST PUT /rest/api/3/config/fieldschemes/fields: Update fields associated with field schemes; reverse ETL requires plan, preview, approval, and execute.
+- remove_fields_associated_with_schemes:
+  - endpoint: DELETE /rest/api/3/config/fieldschemes/fields
+  - optional fields: value
+  - risk: critical risk Jira REST DELETE /rest/api/3/config/fieldschemes/fields: Remove fields associated with field schemes; reverse ETL requires plan, preview, approval, and execute.
+- update_field_association_scheme_item_parameters:
+  - endpoint: PUT /rest/api/3/config/fieldschemes/fields/parameters
+  - optional fields: value
+  - risk: high risk Jira REST PUT /rest/api/3/config/fieldschemes/fields/parameters: Update field parameters; reverse ETL requires plan, preview, approval, and execute.
+- remove_field_association_scheme_item_parameters:
+  - endpoint: DELETE /rest/api/3/config/fieldschemes/fields/parameters
+  - optional fields: value
+  - risk: critical risk Jira REST DELETE /rest/api/3/config/fieldschemes/fields/parameters: Remove field parameters; reverse ETL requires plan, preview, approval, and execute.
+- associate_projects_to_field_association_schemes:
+  - endpoint: PUT /rest/api/3/config/fieldschemes/projects
+  - optional fields: value
+  - risk: high risk Jira REST PUT /rest/api/3/config/fieldschemes/projects: Associate projects to field schemes; reverse ETL requires plan, preview, approval, and execute.
+- update_field_association_scheme:
+  - endpoint: PUT /rest/api/3/config/fieldschemes/{{ record.id }}
+  - required fields: id
+  - optional fields: description, name
+  - risk: high risk Jira REST PUT /rest/api/3/config/fieldschemes/{id}: Update field scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_field_association_scheme:
+  - endpoint: DELETE /rest/api/3/config/fieldschemes/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/config/fieldschemes/{id}: Delete a field scheme; reverse ETL requires plan, preview, approval, and execute.
+- clone_field_association_scheme:
+  - endpoint: POST /rest/api/3/config/fieldschemes/{{ record.id }}/clone
+  - required fields: id
+  - optional fields: description, name
+  - risk: high risk Jira REST POST /rest/api/3/config/fieldschemes/{id}/clone: Clone field scheme; reverse ETL requires plan, preview, approval, and execute.
+- select_time_tracking_implementation:
+  - endpoint: PUT /rest/api/3/configuration/timetracking
+  - optional fields: key, name, url
+  - risk: high risk Jira REST PUT /rest/api/3/configuration/timetracking: Select time tracking provider; reverse ETL requires plan, preview, approval, and execute.
+- set_shared_time_tracking_configuration:
+  - endpoint: PUT /rest/api/3/configuration/timetracking/options
+  - optional fields: defaultUnit, timeFormat, workingDaysPerWeek, workingHoursPerDay
+  - risk: high risk Jira REST PUT /rest/api/3/configuration/timetracking/options: Set time tracking settings; reverse ETL requires plan, preview, approval, and execute.
+- create_dashboard:
+  - endpoint: POST /rest/api/3/dashboard
+  - optional fields: description, editPermissions, name, sharePermissions
+  - risk: medium risk Jira REST POST /rest/api/3/dashboard: Create dashboard; reverse ETL requires plan, preview, approval, and execute.
+- bulk_edit_dashboards:
+  - endpoint: PUT /rest/api/3/dashboard/bulk/edit
+  - optional fields: action, changeOwnerDetails, entityIds, extendAdminPermissions, permissionDetails
+  - risk: medium risk Jira REST PUT /rest/api/3/dashboard/bulk/edit: Bulk edit dashboards; reverse ETL requires plan, preview, approval, and execute.
+- add_gadget:
+  - endpoint: POST /rest/api/3/dashboard/{{ record.dashboardId }}/gadget
+  - required fields: dashboardId
+  - optional fields: color, ignoreUriAndModuleKeyValidation, moduleKey, position, title, uri
+  - risk: medium risk Jira REST POST /rest/api/3/dashboard/{dashboardId}/gadget: Add gadget to dashboard; reverse ETL requires plan, preview, approval, and execute.
+- update_gadget:
+  - endpoint: PUT /rest/api/3/dashboard/{{ record.dashboardId }}/gadget/{{ record.gadgetId }}
+  - required fields: dashboardId, gadgetId
+  - optional fields: color, position, title
+  - risk: medium risk Jira REST PUT /rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}: Update gadget on dashboard; reverse ETL requires plan, preview, approval, and execute.
+- remove_gadget:
+  - endpoint: DELETE /rest/api/3/dashboard/{{ record.dashboardId }}/gadget/{{ record.gadgetId }}
+  - required fields: dashboardId, gadgetId
+  - risk: critical risk Jira REST DELETE /rest/api/3/dashboard/{dashboardId}/gadget/{gadgetId}: Remove gadget from dashboard; reverse ETL requires plan, preview, approval, and execute.
+- set_dashboard_item_property:
+  - endpoint: PUT /rest/api/3/dashboard/{{ record.dashboardId }}/items/{{ record.itemId }}/properties/{{ record.propertyKey }}
+  - required fields: dashboardId, itemId, propertyKey
+  - optional fields: value
+  - risk: medium risk Jira REST PUT /rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}: Set dashboard item property; reverse ETL requires plan, preview, approval, and execute.
+- delete_dashboard_item_property:
+  - endpoint: DELETE /rest/api/3/dashboard/{{ record.dashboardId }}/items/{{ record.itemId }}/properties/{{ record.propertyKey }}
+  - required fields: dashboardId, itemId, propertyKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}: Delete dashboard item property; reverse ETL requires plan, preview, approval, and execute.
+- update_dashboard:
+  - endpoint: PUT /rest/api/3/dashboard/{{ record.id }}
+  - required fields: id
+  - optional fields: description, editPermissions, name, sharePermissions
+  - risk: medium risk Jira REST PUT /rest/api/3/dashboard/{id}: Update dashboard; reverse ETL requires plan, preview, approval, and execute.
+- delete_dashboard:
+  - endpoint: DELETE /rest/api/3/dashboard/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/dashboard/{id}: Delete dashboard; reverse ETL requires plan, preview, approval, and execute.
+- copy_dashboard:
+  - endpoint: POST /rest/api/3/dashboard/{{ record.id }}/copy
+  - required fields: id
+  - optional fields: description, editPermissions, name, sharePermissions
+  - risk: medium risk Jira REST POST /rest/api/3/dashboard/{id}/copy: Copy dashboard; reverse ETL requires plan, preview, approval, and execute.
+- analyse_expression:
+  - endpoint: POST /rest/api/3/expression/analyse
+  - optional fields: contextVariables, expressions
+  - risk: medium risk Jira REST POST /rest/api/3/expression/analyse: Analyse Jira expression; reverse ETL requires plan, preview, approval, and execute.
+- evaluate_jira_expression:
+  - endpoint: POST /rest/api/3/expression/eval
+  - optional fields: context, expression
+  - risk: medium risk Jira REST POST /rest/api/3/expression/eval: Currently being removed. Evaluate Jira expression; reverse ETL requires plan, preview, approval, and execute.
+- evaluate_jsisjira_expression:
+  - endpoint: POST /rest/api/3/expression/evaluate
+  - optional fields: context, expression
+  - risk: medium risk Jira REST POST /rest/api/3/expression/evaluate: Evaluate Jira expression using enhanced search API; reverse ETL requires plan, preview, approval, and execute.
+- create_custom_field:
+  - endpoint: POST /rest/api/3/field
+  - optional fields: description, name, searcherKey, type
+  - risk: medium risk Jira REST POST /rest/api/3/field: Create custom field; reverse ETL requires plan, preview, approval, and execute.
+- create_associations:
+  - endpoint: PUT /rest/api/3/field/association
+  - optional fields: associationContexts, fields
+  - risk: medium risk Jira REST PUT /rest/api/3/field/association: Create associations; reverse ETL requires plan, preview, approval, and execute.
+- remove_associations:
+  - endpoint: DELETE /rest/api/3/field/association
+  - optional fields: associationContexts, fields
+  - risk: critical risk Jira REST DELETE /rest/api/3/field/association: Remove associations; reverse ETL requires plan, preview, approval, and execute.
+- update_custom_field:
+  - endpoint: PUT /rest/api/3/field/{{ record.fieldId }}
+  - required fields: fieldId
+  - optional fields: description, name, searcherKey
+  - risk: medium risk Jira REST PUT /rest/api/3/field/{fieldId}: Update custom field; reverse ETL requires plan, preview, approval, and execute.
+- create_custom_field_context:
+  - endpoint: POST /rest/api/3/field/{{ record.fieldId }}/context
+  - required fields: fieldId
+  - optional fields: description, id, issueTypeIds, name, projectIds
+  - risk: medium risk Jira REST POST /rest/api/3/field/{fieldId}/context: Create custom field context; reverse ETL requires plan, preview, approval, and execute.
+- set_default_values:
+  - endpoint: PUT /rest/api/3/field/{{ record.fieldId }}/context/defaultValue
+  - required fields: fieldId
+  - optional fields: defaultValues
+  - risk: medium risk Jira REST PUT /rest/api/3/field/{fieldId}/context/defaultValue: Set custom field contexts default values; reverse ETL requires plan, preview, approval, and execute.
+- update_custom_field_context:
+  - endpoint: PUT /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}
+  - required fields: fieldId, contextId
+  - optional fields: description, name
+  - risk: medium risk Jira REST PUT /rest/api/3/field/{fieldId}/context/{contextId}: Update custom field context; reverse ETL requires plan, preview, approval, and execute.
+- delete_custom_field_context:
+  - endpoint: DELETE /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}
+  - required fields: fieldId, contextId
+  - risk: critical risk Jira REST DELETE /rest/api/3/field/{fieldId}/context/{contextId}: Delete custom field context; reverse ETL requires plan, preview, approval, and execute.
+- add_issue_types_to_context:
+  - endpoint: PUT /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}/issuetype
+  - required fields: fieldId, contextId
+  - optional fields: issueTypeIds
+  - risk: high risk Jira REST PUT /rest/api/3/field/{fieldId}/context/{contextId}/issuetype: Add issue types to context; reverse ETL requires plan, preview, approval, and execute.
+- remove_issue_types_from_context:
+  - endpoint: POST /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}/issuetype/remove
+  - required fields: fieldId, contextId
+  - optional fields: issueTypeIds
+  - risk: high risk Jira REST POST /rest/api/3/field/{fieldId}/context/{contextId}/issuetype/remove: Remove issue types from context; reverse ETL requires plan, preview, approval, and execute.
+- create_custom_field_option:
+  - endpoint: POST /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}/option
+  - required fields: fieldId, contextId
+  - optional fields: options
+  - risk: medium risk Jira REST POST /rest/api/3/field/{fieldId}/context/{contextId}/option: Create custom field options (context); reverse ETL requires plan, preview, approval, and execute.
+- update_custom_field_option:
+  - endpoint: PUT /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}/option
+  - required fields: fieldId, contextId
+  - optional fields: options
+  - risk: medium risk Jira REST PUT /rest/api/3/field/{fieldId}/context/{contextId}/option: Update custom field options (context); reverse ETL requires plan, preview, approval, and execute.
+- reorder_custom_field_options:
+  - endpoint: PUT /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}/option/move
+  - required fields: fieldId, contextId
+  - optional fields: after, customFieldOptionIds, position
+  - risk: medium risk Jira REST PUT /rest/api/3/field/{fieldId}/context/{contextId}/option/move: Reorder custom field options (context); reverse ETL requires plan, preview, approval, and execute.
+- delete_custom_field_option:
+  - endpoint: DELETE /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}/option/{{ record.optionId }}
+  - required fields: fieldId, contextId, optionId
+  - risk: critical risk Jira REST DELETE /rest/api/3/field/{fieldId}/context/{contextId}/option/{optionId}: Delete custom field options (context); reverse ETL requires plan, preview, approval, and execute.
+- replace_custom_field_option:
+  - endpoint: DELETE /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}/option/{{ record.optionId }}/issue
+  - required fields: fieldId, optionId, contextId
+  - risk: critical risk Jira REST DELETE /rest/api/3/field/{fieldId}/context/{contextId}/option/{optionId}/issue: Replace custom field options; reverse ETL requires plan, preview, approval, and execute.
+- assign_projects_to_custom_field_context:
+  - endpoint: PUT /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}/project
+  - required fields: fieldId, contextId
+  - optional fields: projectIds
+  - risk: high risk Jira REST PUT /rest/api/3/field/{fieldId}/context/{contextId}/project: Assign custom field context to projects; reverse ETL requires plan, preview, approval, and execute.
+- remove_custom_field_context_from_projects:
+  - endpoint: POST /rest/api/3/field/{{ record.fieldId }}/context/{{ record.contextId }}/project/remove
+  - required fields: fieldId, contextId
+  - optional fields: projectIds
+  - risk: high risk Jira REST POST /rest/api/3/field/{fieldId}/context/{contextId}/project/remove: Remove custom field context from projects; reverse ETL requires plan, preview, approval, and execute.
+- create_issue_field_option:
+  - endpoint: POST /rest/api/3/field/{{ record.fieldKey }}/option
+  - required fields: fieldKey
+  - optional fields: config, properties, value
+  - risk: medium risk Jira REST POST /rest/api/3/field/{fieldKey}/option: Create issue field option; reverse ETL requires plan, preview, approval, and execute.
+- update_issue_field_option:
+  - endpoint: PUT /rest/api/3/field/{{ record.fieldKey }}/option/{{ record.optionId }}
+  - required fields: fieldKey, optionId
+  - optional fields: config, id, properties, value
+  - risk: medium risk Jira REST PUT /rest/api/3/field/{fieldKey}/option/{optionId}: Update issue field option; reverse ETL requires plan, preview, approval, and execute.
+- delete_issue_field_option:
+  - endpoint: DELETE /rest/api/3/field/{{ record.fieldKey }}/option/{{ record.optionId }}
+  - required fields: fieldKey, optionId
+  - risk: critical risk Jira REST DELETE /rest/api/3/field/{fieldKey}/option/{optionId}: Delete issue field option; reverse ETL requires plan, preview, approval, and execute.
+- replace_issue_field_option:
+  - endpoint: DELETE /rest/api/3/field/{{ record.fieldKey }}/option/{{ record.optionId }}/issue
+  - required fields: fieldKey, optionId
+  - risk: critical risk Jira REST DELETE /rest/api/3/field/{fieldKey}/option/{optionId}/issue: Replace issue field option; reverse ETL requires plan, preview, approval, and execute.
+- delete_custom_field:
+  - endpoint: DELETE /rest/api/3/field/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/field/{id}: Delete custom field; reverse ETL requires plan, preview, approval, and execute.
+- restore_custom_field:
+  - endpoint: POST /rest/api/3/field/{{ record.id }}/restore
+  - required fields: id
+  - risk: medium risk Jira REST POST /rest/api/3/field/{id}/restore: Restore custom field from trash; reverse ETL requires plan, preview, approval, and execute.
+- trash_custom_field:
+  - endpoint: POST /rest/api/3/field/{{ record.id }}/trash
+  - required fields: id
+  - risk: medium risk Jira REST POST /rest/api/3/field/{id}/trash: Move custom field to trash; reverse ETL requires plan, preview, approval, and execute.
+- create_field_configuration:
+  - endpoint: POST /rest/api/3/fieldconfiguration
+  - optional fields: description, name
+  - risk: high risk Jira REST POST /rest/api/3/fieldconfiguration: Create field configuration; reverse ETL requires plan, preview, approval, and execute.
+- update_field_configuration:
+  - endpoint: PUT /rest/api/3/fieldconfiguration/{{ record.id }}
+  - required fields: id
+  - optional fields: description, name
+  - risk: high risk Jira REST PUT /rest/api/3/fieldconfiguration/{id}: Update field configuration; reverse ETL requires plan, preview, approval, and execute.
+- delete_field_configuration:
+  - endpoint: DELETE /rest/api/3/fieldconfiguration/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/fieldconfiguration/{id}: Delete field configuration; reverse ETL requires plan, preview, approval, and execute.
+- update_field_configuration_items:
+  - endpoint: PUT /rest/api/3/fieldconfiguration/{{ record.id }}/fields
+  - required fields: id
+  - optional fields: fieldConfigurationItems
+  - risk: high risk Jira REST PUT /rest/api/3/fieldconfiguration/{id}/fields: Update field configuration items; reverse ETL requires plan, preview, approval, and execute.
+- create_field_configuration_scheme:
+  - endpoint: POST /rest/api/3/fieldconfigurationscheme
+  - optional fields: description, name
+  - risk: high risk Jira REST POST /rest/api/3/fieldconfigurationscheme: Create field configuration scheme; reverse ETL requires plan, preview, approval, and execute.
+- assign_field_configuration_scheme_to_project:
+  - endpoint: PUT /rest/api/3/fieldconfigurationscheme/project
+  - optional fields: fieldConfigurationSchemeId, projectId
+  - risk: high risk Jira REST PUT /rest/api/3/fieldconfigurationscheme/project: Assign field configuration scheme to project; reverse ETL requires plan, preview, approval, and execute.
+- update_field_configuration_scheme:
+  - endpoint: PUT /rest/api/3/fieldconfigurationscheme/{{ record.id }}
+  - required fields: id
+  - optional fields: description, name
+  - risk: high risk Jira REST PUT /rest/api/3/fieldconfigurationscheme/{id}: Update field configuration scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_field_configuration_scheme:
+  - endpoint: DELETE /rest/api/3/fieldconfigurationscheme/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/fieldconfigurationscheme/{id}: Delete field configuration scheme; reverse ETL requires plan, preview, approval, and execute.
+- set_field_configuration_scheme_mapping:
+  - endpoint: PUT /rest/api/3/fieldconfigurationscheme/{{ record.id }}/mapping
+  - required fields: id
+  - optional fields: mappings
+  - risk: high risk Jira REST PUT /rest/api/3/fieldconfigurationscheme/{id}/mapping: Assign issue types to field configurations; reverse ETL requires plan, preview, approval, and execute.
+- remove_issue_types_from_global_field_configuration_scheme:
+  - endpoint: POST /rest/api/3/fieldconfigurationscheme/{{ record.id }}/mapping/delete
+  - required fields: id
+  - optional fields: issueTypeIds
+  - risk: high risk Jira REST POST /rest/api/3/fieldconfigurationscheme/{id}/mapping/delete: Remove issue types from field configuration scheme; reverse ETL requires plan, preview, approval, and execute.
+- create_filter:
+  - endpoint: POST /rest/api/3/filter
+  - optional fields: approximateLastUsed, description, editPermissions, favourite, favouritedCount, id, jql, name, owner, searchUrl, self, sharePermissions, sharedUsers, subscriptions, viewUrl
+  - risk: medium risk Jira REST POST /rest/api/3/filter: Create filter; reverse ETL requires plan, preview, approval, and execute.
+- set_default_share_scope:
+  - endpoint: PUT /rest/api/3/filter/defaultShareScope
+  - optional fields: scope
+  - risk: medium risk Jira REST PUT /rest/api/3/filter/defaultShareScope: Set default share scope; reverse ETL requires plan, preview, approval, and execute.
+- update_filter:
+  - endpoint: PUT /rest/api/3/filter/{{ record.id }}
+  - required fields: id
+  - optional fields: approximateLastUsed, description, editPermissions, favourite, favouritedCount, jql, name, owner, searchUrl, self, sharePermissions, sharedUsers, subscriptions, viewUrl
+  - risk: medium risk Jira REST PUT /rest/api/3/filter/{id}: Update filter; reverse ETL requires plan, preview, approval, and execute.
+- delete_filter:
+  - endpoint: DELETE /rest/api/3/filter/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/filter/{id}: Delete filter; reverse ETL requires plan, preview, approval, and execute.
+- set_columns:
+  - endpoint: PUT /rest/api/3/filter/{{ record.id }}/columns
+  - required fields: id
+  - optional fields: columns
+  - risk: medium risk Jira REST PUT /rest/api/3/filter/{id}/columns: Set columns; reverse ETL requires plan, preview, approval, and execute.
+- reset_columns:
+  - endpoint: DELETE /rest/api/3/filter/{{ record.id }}/columns
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/filter/{id}/columns: Reset columns; reverse ETL requires plan, preview, approval, and execute.
+- set_favourite_for_filter:
+  - endpoint: PUT /rest/api/3/filter/{{ record.id }}/favourite
+  - required fields: id
+  - risk: medium risk Jira REST PUT /rest/api/3/filter/{id}/favourite: Add filter as favorite; reverse ETL requires plan, preview, approval, and execute.
+- delete_favourite_for_filter:
+  - endpoint: DELETE /rest/api/3/filter/{{ record.id }}/favourite
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/filter/{id}/favourite: Remove filter as favorite; reverse ETL requires plan, preview, approval, and execute.
+- change_filter_owner:
+  - endpoint: PUT /rest/api/3/filter/{{ record.id }}/owner
+  - required fields: id
+  - optional fields: accountId
+  - risk: medium risk Jira REST PUT /rest/api/3/filter/{id}/owner: Change filter owner; reverse ETL requires plan, preview, approval, and execute.
+- add_share_permission:
+  - endpoint: POST /rest/api/3/filter/{{ record.id }}/permission
+  - required fields: id
+  - optional fields: accountId, groupId, groupname, projectId, projectRoleId, rights, type
+  - risk: high risk Jira REST POST /rest/api/3/filter/{id}/permission: Add share permission; reverse ETL requires plan, preview, approval, and execute.
+- delete_share_permission:
+  - endpoint: DELETE /rest/api/3/filter/{{ record.id }}/permission/{{ record.permissionId }}
+  - required fields: id, permissionId
+  - risk: critical risk Jira REST DELETE /rest/api/3/filter/{id}/permission/{permissionId}: Delete share permission; reverse ETL requires plan, preview, approval, and execute.
+- bulk_pin_unpin_projects_async:
+  - endpoint: POST /rest/api/3/forge/panel/action/bulk/async
+  - optional fields: moduleId, projectList
+  - risk: high risk Jira REST POST /rest/api/3/forge/panel/action/bulk/async: Bulk pin or unpin issue panel to projects; reverse ETL requires plan, preview, approval, and execute.
+- create_group:
+  - endpoint: POST /rest/api/3/group
+  - optional fields: name
+  - risk: high risk Jira REST POST /rest/api/3/group: Create group; reverse ETL requires plan, preview, approval, and execute.
+- remove_group:
+  - endpoint: DELETE /rest/api/3/group
+  - risk: critical risk Jira REST DELETE /rest/api/3/group: Remove group; reverse ETL requires plan, preview, approval, and execute.
+- add_user_to_group:
+  - endpoint: POST /rest/api/3/group/user
+  - optional fields: accountId, name
+  - risk: high risk Jira REST POST /rest/api/3/group/user: Add user to group; reverse ETL requires plan, preview, approval, and execute.
+- remove_user_from_group:
+  - endpoint: DELETE /rest/api/3/group/user?accountId={{ record.accountId }}
+  - required fields: accountId
+  - risk: critical risk Jira REST DELETE /rest/api/3/group/user: Remove user from group; reverse ETL requires plan, preview, approval, and execute.
+- create_issue:
+  - endpoint: POST /rest/api/3/issue
+  - optional fields: fields, historyMetadata, properties, transition, update
+  - risk: medium risk Jira REST POST /rest/api/3/issue: Create issue; reverse ETL requires plan, preview, approval, and execute.
+- archive_issues_async:
+  - endpoint: POST /rest/api/3/issue/archive
+  - optional fields: jql
+  - risk: medium risk Jira REST POST /rest/api/3/issue/archive: Archive issue(s) by JQL; reverse ETL requires plan, preview, approval, and execute.
+- archive_issues:
+  - endpoint: PUT /rest/api/3/issue/archive
+  - optional fields: issueIdsOrKeys
+  - risk: medium risk Jira REST PUT /rest/api/3/issue/archive: Archive issue(s) by issue ID/key; reverse ETL requires plan, preview, approval, and execute.
+- create_issues:
+  - endpoint: POST /rest/api/3/issue/bulk
+  - optional fields: issueUpdates
+  - risk: medium risk Jira REST POST /rest/api/3/issue/bulk: Bulk create issue; reverse ETL requires plan, preview, approval, and execute.
+- bulk_set_issues_properties_list:
+  - endpoint: POST /rest/api/3/issue/properties
+  - optional fields: entitiesIds, properties
+  - risk: medium risk Jira REST POST /rest/api/3/issue/properties: Bulk set issues properties by list; reverse ETL requires plan, preview, approval, and execute.
+- bulk_set_issue_properties_by_issue:
+  - endpoint: POST /rest/api/3/issue/properties/multi
+  - optional fields: issues
+  - risk: medium risk Jira REST POST /rest/api/3/issue/properties/multi: Bulk set issue properties by issue; reverse ETL requires plan, preview, approval, and execute.
+- bulk_set_issue_property:
+  - endpoint: PUT /rest/api/3/issue/properties/{{ record.propertyKey }}
+  - required fields: propertyKey
+  - optional fields: expression, filter, value
+  - risk: medium risk Jira REST PUT /rest/api/3/issue/properties/{propertyKey}: Bulk set issue property; reverse ETL requires plan, preview, approval, and execute.
+- bulk_delete_issue_property:
+  - endpoint: DELETE /rest/api/3/issue/properties/{{ record.propertyKey }}
+  - required fields: propertyKey
+  - optional fields: currentValue, entityIds
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/properties/{propertyKey}: Bulk delete issue property; reverse ETL requires plan, preview, approval, and execute.
+- unarchive_issues:
+  - endpoint: PUT /rest/api/3/issue/unarchive
+  - optional fields: issueIdsOrKeys
+  - risk: medium risk Jira REST PUT /rest/api/3/issue/unarchive: Unarchive issue(s) by issue keys/ID; reverse ETL requires plan, preview, approval, and execute.
+- get_is_watching_issue_bulk:
+  - endpoint: POST /rest/api/3/issue/watching
+  - optional fields: issueIds
+  - risk: medium risk Jira REST POST /rest/api/3/issue/watching: Get is watching issue bulk; reverse ETL requires plan, preview, approval, and execute.
+- edit_issue:
+  - endpoint: PUT /rest/api/3/issue/{{ record.issueIdOrKey }}
+  - required fields: issueIdOrKey
+  - optional fields: fields, historyMetadata, properties, transition, update
+  - risk: medium risk Jira REST PUT /rest/api/3/issue/{issueIdOrKey}: Edit issue; reverse ETL requires plan, preview, approval, and execute.
+- delete_issue:
+  - endpoint: DELETE /rest/api/3/issue/{{ record.issueIdOrKey }}
+  - required fields: issueIdOrKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/{issueIdOrKey}: Delete issue; reverse ETL requires plan, preview, approval, and execute.
+- assign_issue:
+  - endpoint: PUT /rest/api/3/issue/{{ record.issueIdOrKey }}/assignee
+  - required fields: issueIdOrKey
+  - optional fields: accountId, accountType, active, appType, applicationRoles, avatarUrls, displayName, emailAddress, expand, groups, guest, key, locale, name, self, timeZone
+  - risk: medium risk Jira REST PUT /rest/api/3/issue/{issueIdOrKey}/assignee: Assign issue; reverse ETL requires plan, preview, approval, and execute.
+- add_comment:
+  - endpoint: POST /rest/api/3/issue/{{ record.issueIdOrKey }}/comment
+  - required fields: issueIdOrKey
+  - optional fields: author, body, created, id, jsdAuthorCanSeeRequest, jsdPublic, properties, renderedBody, self, updateAuthor, updated, visibility
+  - risk: medium risk Jira REST POST /rest/api/3/issue/{issueIdOrKey}/comment: Add comment; reverse ETL requires plan, preview, approval, and execute.
+- update_comment:
+  - endpoint: PUT /rest/api/3/issue/{{ record.issueIdOrKey }}/comment/{{ record.id }}
+  - required fields: issueIdOrKey, id
+  - optional fields: author, body, created, jsdAuthorCanSeeRequest, jsdPublic, properties, renderedBody, self, updateAuthor, updated, visibility
+  - risk: medium risk Jira REST PUT /rest/api/3/issue/{issueIdOrKey}/comment/{id}: Update comment; reverse ETL requires plan, preview, approval, and execute.
+- delete_comment:
+  - endpoint: DELETE /rest/api/3/issue/{{ record.issueIdOrKey }}/comment/{{ record.id }}
+  - required fields: issueIdOrKey, id
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/{issueIdOrKey}/comment/{id}: Delete comment; reverse ETL requires plan, preview, approval, and execute.
+- notify:
+  - endpoint: POST /rest/api/3/issue/{{ record.issueIdOrKey }}/notify
+  - required fields: issueIdOrKey
+  - optional fields: htmlBody, restrict, subject, textBody, to
+  - risk: high risk Jira REST POST /rest/api/3/issue/{issueIdOrKey}/notify: Send notification for issue; reverse ETL requires plan, preview, approval, and execute.
+- set_issue_property:
+  - endpoint: PUT /rest/api/3/issue/{{ record.issueIdOrKey }}/properties/{{ record.propertyKey }}
+  - required fields: issueIdOrKey, propertyKey
+  - optional fields: value
+  - risk: medium risk Jira REST PUT /rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}: Set issue property; reverse ETL requires plan, preview, approval, and execute.
+- delete_issue_property:
+  - endpoint: DELETE /rest/api/3/issue/{{ record.issueIdOrKey }}/properties/{{ record.propertyKey }}
+  - required fields: issueIdOrKey, propertyKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}: Delete issue property; reverse ETL requires plan, preview, approval, and execute.
+- create_or_update_remote_issue_link:
+  - endpoint: POST /rest/api/3/issue/{{ record.issueIdOrKey }}/remotelink
+  - required fields: issueIdOrKey
+  - optional fields: application, globalId, object, relationship
+  - risk: medium risk Jira REST POST /rest/api/3/issue/{issueIdOrKey}/remotelink: Create or update remote issue link; reverse ETL requires plan, preview, approval, and execute.
+- delete_remote_issue_link_by_global_id:
+  - endpoint: DELETE /rest/api/3/issue/{{ record.issueIdOrKey }}/remotelink?globalId={{ record.globalId }}
+  - required fields: issueIdOrKey, globalId
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/{issueIdOrKey}/remotelink: Delete remote issue link by global ID; reverse ETL requires plan, preview, approval, and execute.
+- update_remote_issue_link:
+  - endpoint: PUT /rest/api/3/issue/{{ record.issueIdOrKey }}/remotelink/{{ record.linkId }}
+  - required fields: issueIdOrKey, linkId
+  - optional fields: application, globalId, object, relationship
+  - risk: medium risk Jira REST PUT /rest/api/3/issue/{issueIdOrKey}/remotelink/{linkId}: Update remote issue link by ID; reverse ETL requires plan, preview, approval, and execute.
+- delete_remote_issue_link_by_id:
+  - endpoint: DELETE /rest/api/3/issue/{{ record.issueIdOrKey }}/remotelink/{{ record.linkId }}
+  - required fields: issueIdOrKey, linkId
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/{issueIdOrKey}/remotelink/{linkId}: Delete remote issue link by ID; reverse ETL requires plan, preview, approval, and execute.
+- do_transition:
+  - endpoint: POST /rest/api/3/issue/{{ record.issueIdOrKey }}/transitions
+  - required fields: issueIdOrKey
+  - optional fields: fields, historyMetadata, properties, transition, update
+  - risk: medium risk Jira REST POST /rest/api/3/issue/{issueIdOrKey}/transitions: Transition issue; reverse ETL requires plan, preview, approval, and execute.
+- add_vote:
+  - endpoint: POST /rest/api/3/issue/{{ record.issueIdOrKey }}/votes
+  - required fields: issueIdOrKey
+  - risk: medium risk Jira REST POST /rest/api/3/issue/{issueIdOrKey}/votes: Add vote; reverse ETL requires plan, preview, approval, and execute.
+- remove_vote:
+  - endpoint: DELETE /rest/api/3/issue/{{ record.issueIdOrKey }}/votes
+  - required fields: issueIdOrKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/{issueIdOrKey}/votes: Delete vote; reverse ETL requires plan, preview, approval, and execute.
+- add_watcher:
+  - endpoint: POST /rest/api/3/issue/{{ record.issueIdOrKey }}/watchers
+  - required fields: issueIdOrKey
+  - optional fields: value
+  - risk: medium risk Jira REST POST /rest/api/3/issue/{issueIdOrKey}/watchers: Add watcher; reverse ETL requires plan, preview, approval, and execute.
+- remove_watcher:
+  - endpoint: DELETE /rest/api/3/issue/{{ record.issueIdOrKey }}/watchers
+  - required fields: issueIdOrKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/{issueIdOrKey}/watchers: Delete watcher; reverse ETL requires plan, preview, approval, and execute.
+- add_worklog:
+  - endpoint: POST /rest/api/3/issue/{{ record.issueIdOrKey }}/worklog
+  - required fields: issueIdOrKey
+  - optional fields: author, comment, created, id, issueId, properties, self, started, timeSpent, timeSpentSeconds, updateAuthor, updated, visibility
+  - risk: medium risk Jira REST POST /rest/api/3/issue/{issueIdOrKey}/worklog: Add worklog; reverse ETL requires plan, preview, approval, and execute.
+- bulk_delete_worklogs:
+  - endpoint: DELETE /rest/api/3/issue/{{ record.issueIdOrKey }}/worklog
+  - required fields: issueIdOrKey
+  - optional fields: ids
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/{issueIdOrKey}/worklog: Bulk delete worklogs; reverse ETL requires plan, preview, approval, and execute.
+- bulk_move_worklogs:
+  - endpoint: POST /rest/api/3/issue/{{ record.issueIdOrKey }}/worklog/move
+  - required fields: issueIdOrKey
+  - optional fields: ids
+  - risk: medium risk Jira REST POST /rest/api/3/issue/{issueIdOrKey}/worklog/move: Bulk move worklogs; reverse ETL requires plan, preview, approval, and execute.
+- update_worklog:
+  - endpoint: PUT /rest/api/3/issue/{{ record.issueIdOrKey }}/worklog/{{ record.id }}
+  - required fields: issueIdOrKey, id
+  - optional fields: author, comment, created, issueId, properties, self, started, timeSpent, timeSpentSeconds, updateAuthor, updated, visibility
+  - risk: medium risk Jira REST PUT /rest/api/3/issue/{issueIdOrKey}/worklog/{id}: Update worklog; reverse ETL requires plan, preview, approval, and execute.
+- delete_worklog:
+  - endpoint: DELETE /rest/api/3/issue/{{ record.issueIdOrKey }}/worklog/{{ record.id }}
+  - required fields: issueIdOrKey, id
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/{issueIdOrKey}/worklog/{id}: Delete worklog; reverse ETL requires plan, preview, approval, and execute.
+- set_worklog_property:
+  - endpoint: PUT /rest/api/3/issue/{{ record.issueIdOrKey }}/worklog/{{ record.worklogId }}/properties/{{ record.propertyKey }}
+  - required fields: issueIdOrKey, worklogId, propertyKey
+  - optional fields: value
+  - risk: medium risk Jira REST PUT /rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}: Set worklog property; reverse ETL requires plan, preview, approval, and execute.
+- delete_worklog_property:
+  - endpoint: DELETE /rest/api/3/issue/{{ record.issueIdOrKey }}/worklog/{{ record.worklogId }}/properties/{{ record.propertyKey }}
+  - required fields: issueIdOrKey, worklogId, propertyKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}: Delete worklog property; reverse ETL requires plan, preview, approval, and execute.
+- link_issues:
+  - endpoint: POST /rest/api/3/issueLink
+  - optional fields: comment, inwardIssue, outwardIssue, type
+  - risk: medium risk Jira REST POST /rest/api/3/issueLink: Create issue link; reverse ETL requires plan, preview, approval, and execute.
+- delete_issue_link:
+  - endpoint: DELETE /rest/api/3/issueLink/{{ record.linkId }}
+  - required fields: linkId
+  - risk: critical risk Jira REST DELETE /rest/api/3/issueLink/{linkId}: Delete issue link; reverse ETL requires plan, preview, approval, and execute.
+- create_issue_link_type:
+  - endpoint: POST /rest/api/3/issueLinkType
+  - optional fields: id, inward, name, outward, self
+  - risk: medium risk Jira REST POST /rest/api/3/issueLinkType: Create issue link type; reverse ETL requires plan, preview, approval, and execute.
+- update_issue_link_type:
+  - endpoint: PUT /rest/api/3/issueLinkType/{{ record.issueLinkTypeId }}
+  - required fields: issueLinkTypeId
+  - optional fields: id, inward, name, outward, self
+  - risk: medium risk Jira REST PUT /rest/api/3/issueLinkType/{issueLinkTypeId}: Update issue link type; reverse ETL requires plan, preview, approval, and execute.
+- delete_issue_link_type:
+  - endpoint: DELETE /rest/api/3/issueLinkType/{{ record.issueLinkTypeId }}
+  - required fields: issueLinkTypeId
+  - risk: critical risk Jira REST DELETE /rest/api/3/issueLinkType/{issueLinkTypeId}: Delete issue link type; reverse ETL requires plan, preview, approval, and execute.
+- export_archived_issues:
+  - endpoint: PUT /rest/api/3/issues/archive/export
+  - optional fields: archivedBy, archivedDateRange, issueTypes, projects, reporters
+  - risk: medium risk Jira REST PUT /rest/api/3/issues/archive/export: Export archived issue(s); reverse ETL requires plan, preview, approval, and execute.
+- create_issue_security_scheme:
+  - endpoint: POST /rest/api/3/issuesecurityschemes
+  - optional fields: description, levels, name
+  - risk: high risk Jira REST POST /rest/api/3/issuesecurityschemes: Create issue security scheme; reverse ETL requires plan, preview, approval, and execute.
+- set_default_levels:
+  - endpoint: PUT /rest/api/3/issuesecurityschemes/level/default
+  - optional fields: defaultValues
+  - risk: high risk Jira REST PUT /rest/api/3/issuesecurityschemes/level/default: Set default issue security levels; reverse ETL requires plan, preview, approval, and execute.
+- associate_schemes_to_projects:
+  - endpoint: PUT /rest/api/3/issuesecurityschemes/project
+  - optional fields: oldToNewSecurityLevelMappings, projectId, schemeId
+  - risk: high risk Jira REST PUT /rest/api/3/issuesecurityschemes/project: Associate security scheme to project; reverse ETL requires plan, preview, approval, and execute.
+- update_issue_security_scheme:
+  - endpoint: PUT /rest/api/3/issuesecurityschemes/{{ record.id }}
+  - required fields: id
+  - optional fields: description, name
+  - risk: high risk Jira REST PUT /rest/api/3/issuesecurityschemes/{id}: Update issue security scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_security_scheme:
+  - endpoint: DELETE /rest/api/3/issuesecurityschemes/{{ record.schemeId }}
+  - required fields: schemeId
+  - risk: critical risk Jira REST DELETE /rest/api/3/issuesecurityschemes/{schemeId}: Delete issue security scheme; reverse ETL requires plan, preview, approval, and execute.
+- add_security_level:
+  - endpoint: PUT /rest/api/3/issuesecurityschemes/{{ record.schemeId }}/level
+  - required fields: schemeId
+  - optional fields: levels
+  - risk: high risk Jira REST PUT /rest/api/3/issuesecurityschemes/{schemeId}/level: Add issue security levels; reverse ETL requires plan, preview, approval, and execute.
+- update_security_level:
+  - endpoint: PUT /rest/api/3/issuesecurityschemes/{{ record.schemeId }}/level/{{ record.levelId }}
+  - required fields: schemeId, levelId
+  - optional fields: description, name
+  - risk: high risk Jira REST PUT /rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}: Update issue security level; reverse ETL requires plan, preview, approval, and execute.
+- remove_level:
+  - endpoint: DELETE /rest/api/3/issuesecurityschemes/{{ record.schemeId }}/level/{{ record.levelId }}
+  - required fields: schemeId, levelId
+  - risk: critical risk Jira REST DELETE /rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}: Remove issue security level; reverse ETL requires plan, preview, approval, and execute.
+- add_security_level_members:
+  - endpoint: PUT /rest/api/3/issuesecurityschemes/{{ record.schemeId }}/level/{{ record.levelId }}/member
+  - required fields: schemeId, levelId
+  - optional fields: members
+  - risk: high risk Jira REST PUT /rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}/member: Add issue security level members; reverse ETL requires plan, preview, approval, and execute.
+- remove_member_from_security_level:
+  - endpoint: DELETE /rest/api/3/issuesecurityschemes/{{ record.schemeId }}/level/{{ record.levelId }}/member/{{ record.memberId }}
+  - required fields: schemeId, levelId, memberId
+  - risk: critical risk Jira REST DELETE /rest/api/3/issuesecurityschemes/{schemeId}/level/{levelId}/member/{memberId}: Remove member from issue security level; reverse ETL requires plan, preview, approval, and execute.
+- create_issue_type:
+  - endpoint: POST /rest/api/3/issuetype
+  - optional fields: description, hierarchyLevel, name, type
+  - risk: high risk Jira REST POST /rest/api/3/issuetype: Create issue type; reverse ETL requires plan, preview, approval, and execute.
+- update_issue_type:
+  - endpoint: PUT /rest/api/3/issuetype/{{ record.id }}
+  - required fields: id
+  - optional fields: avatarId, description, name
+  - risk: high risk Jira REST PUT /rest/api/3/issuetype/{id}: Update issue type; reverse ETL requires plan, preview, approval, and execute.
+- delete_issue_type:
+  - endpoint: DELETE /rest/api/3/issuetype/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/issuetype/{id}: Delete issue type; reverse ETL requires plan, preview, approval, and execute.
+- set_issue_type_property:
+  - endpoint: PUT /rest/api/3/issuetype/{{ record.issueTypeId }}/properties/{{ record.propertyKey }}
+  - required fields: issueTypeId, propertyKey
+  - optional fields: value
+  - risk: high risk Jira REST PUT /rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}: Set issue type property; reverse ETL requires plan, preview, approval, and execute.
+- delete_issue_type_property:
+  - endpoint: DELETE /rest/api/3/issuetype/{{ record.issueTypeId }}/properties/{{ record.propertyKey }}
+  - required fields: issueTypeId, propertyKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}: Delete issue type property; reverse ETL requires plan, preview, approval, and execute.
+- create_issue_type_scheme:
+  - endpoint: POST /rest/api/3/issuetypescheme
+  - optional fields: defaultIssueTypeId, description, issueTypeIds, name
+  - risk: high risk Jira REST POST /rest/api/3/issuetypescheme: Create issue type scheme; reverse ETL requires plan, preview, approval, and execute.
+- assign_issue_type_scheme_to_project:
+  - endpoint: PUT /rest/api/3/issuetypescheme/project
+  - optional fields: issueTypeSchemeId, projectId
+  - risk: high risk Jira REST PUT /rest/api/3/issuetypescheme/project: Assign issue type scheme to project; reverse ETL requires plan, preview, approval, and execute.
+- update_issue_type_scheme:
+  - endpoint: PUT /rest/api/3/issuetypescheme/{{ record.issueTypeSchemeId }}
+  - required fields: issueTypeSchemeId
+  - optional fields: defaultIssueTypeId, description, name
+  - risk: high risk Jira REST PUT /rest/api/3/issuetypescheme/{issueTypeSchemeId}: Update issue type scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_issue_type_scheme:
+  - endpoint: DELETE /rest/api/3/issuetypescheme/{{ record.issueTypeSchemeId }}
+  - required fields: issueTypeSchemeId
+  - risk: critical risk Jira REST DELETE /rest/api/3/issuetypescheme/{issueTypeSchemeId}: Delete issue type scheme; reverse ETL requires plan, preview, approval, and execute.
+- add_issue_types_to_issue_type_scheme:
+  - endpoint: PUT /rest/api/3/issuetypescheme/{{ record.issueTypeSchemeId }}/issuetype
+  - required fields: issueTypeSchemeId
+  - optional fields: issueTypeIds
+  - risk: high risk Jira REST PUT /rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype: Add issue types to issue type scheme; reverse ETL requires plan, preview, approval, and execute.
+- reorder_issue_types_in_issue_type_scheme:
+  - endpoint: PUT /rest/api/3/issuetypescheme/{{ record.issueTypeSchemeId }}/issuetype/move
+  - required fields: issueTypeSchemeId
+  - optional fields: after, issueTypeIds, position
+  - risk: high risk Jira REST PUT /rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype/move: Change order of issue types; reverse ETL requires plan, preview, approval, and execute.
+- remove_issue_type_from_issue_type_scheme:
+  - endpoint: DELETE /rest/api/3/issuetypescheme/{{ record.issueTypeSchemeId }}/issuetype/{{ record.issueTypeId }}
+  - required fields: issueTypeSchemeId, issueTypeId
+  - risk: critical risk Jira REST DELETE /rest/api/3/issuetypescheme/{issueTypeSchemeId}/issuetype/{issueTypeId}: Remove issue type from issue type scheme; reverse ETL requires plan, preview, approval, and execute.
+- create_issue_type_screen_scheme:
+  - endpoint: POST /rest/api/3/issuetypescreenscheme
+  - optional fields: description, issueTypeMappings, name
+  - risk: high risk Jira REST POST /rest/api/3/issuetypescreenscheme: Create issue type screen scheme; reverse ETL requires plan, preview, approval, and execute.
+- assign_issue_type_screen_scheme_to_project:
+  - endpoint: PUT /rest/api/3/issuetypescreenscheme/project
+  - optional fields: issueTypeScreenSchemeId, projectId
+  - risk: high risk Jira REST PUT /rest/api/3/issuetypescreenscheme/project: Assign issue type screen scheme to project; reverse ETL requires plan, preview, approval, and execute.
+- update_issue_type_screen_scheme:
+  - endpoint: PUT /rest/api/3/issuetypescreenscheme/{{ record.issueTypeScreenSchemeId }}
+  - required fields: issueTypeScreenSchemeId
+  - optional fields: description, name
+  - risk: high risk Jira REST PUT /rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}: Update issue type screen scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_issue_type_screen_scheme:
+  - endpoint: DELETE /rest/api/3/issuetypescreenscheme/{{ record.issueTypeScreenSchemeId }}
+  - required fields: issueTypeScreenSchemeId
+  - risk: critical risk Jira REST DELETE /rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}: Delete issue type screen scheme; reverse ETL requires plan, preview, approval, and execute.
+- append_mappings_for_issue_type_screen_scheme:
+  - endpoint: PUT /rest/api/3/issuetypescreenscheme/{{ record.issueTypeScreenSchemeId }}/mapping
+  - required fields: issueTypeScreenSchemeId
+  - optional fields: issueTypeMappings
+  - risk: high risk Jira REST PUT /rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping: Append mappings to issue type screen scheme; reverse ETL requires plan, preview, approval, and execute.
+- update_default_screen_scheme:
+  - endpoint: PUT /rest/api/3/issuetypescreenscheme/{{ record.issueTypeScreenSchemeId }}/mapping/default
+  - required fields: issueTypeScreenSchemeId
+  - optional fields: screenSchemeId
+  - risk: high risk Jira REST PUT /rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/default: Update issue type screen scheme default screen scheme; reverse ETL requires plan, preview, approval, and execute.
+- remove_mappings_from_issue_type_screen_scheme:
+  - endpoint: POST /rest/api/3/issuetypescreenscheme/{{ record.issueTypeScreenSchemeId }}/mapping/remove
+  - required fields: issueTypeScreenSchemeId
+  - optional fields: issueTypeIds
+  - risk: high risk Jira REST POST /rest/api/3/issuetypescreenscheme/{issueTypeScreenSchemeId}/mapping/remove: Remove mappings from issue type screen scheme; reverse ETL requires plan, preview, approval, and execute.
+- get_auto_complete_post:
+  - endpoint: POST /rest/api/3/jql/autocompletedata
+  - optional fields: includeCollapsedFields, projectIds
+  - risk: medium risk Jira REST POST /rest/api/3/jql/autocompletedata: Get field reference data (POST); reverse ETL requires plan, preview, approval, and execute.
+- update_precomputations:
+  - endpoint: POST /rest/api/3/jql/function/computation
+  - optional fields: values
+  - risk: medium risk Jira REST POST /rest/api/3/jql/function/computation: Update precomputations (apps); reverse ETL requires plan, preview, approval, and execute.
+- get_precomputations_by_id:
+  - endpoint: POST /rest/api/3/jql/function/computation/search
+  - optional fields: precomputationIDs
+  - risk: medium risk Jira REST POST /rest/api/3/jql/function/computation/search: Get precomputations by ID (apps); reverse ETL requires plan, preview, approval, and execute.
+- match_issues:
+  - endpoint: POST /rest/api/3/jql/match
+  - optional fields: issueIds, jqls
+  - risk: medium risk Jira REST POST /rest/api/3/jql/match: Check issues against JQL; reverse ETL requires plan, preview, approval, and execute.
+- parse_jql_queries:
+  - endpoint: POST /rest/api/3/jql/parse?validation={{ record.validation }}
+  - required fields: validation
+  - optional fields: queries
+  - risk: medium risk Jira REST POST /rest/api/3/jql/parse: Parse JQL query; reverse ETL requires plan, preview, approval, and execute.
+- migrate_queries:
+  - endpoint: POST /rest/api/3/jql/pdcleaner
+  - optional fields: queryStrings
+  - risk: high risk Jira REST POST /rest/api/3/jql/pdcleaner: Convert user identifiers to account IDs in JQL queries; reverse ETL requires plan, preview, approval, and execute.
+- sanitise_jql_queries:
+  - endpoint: POST /rest/api/3/jql/sanitize
+  - optional fields: queries
+  - risk: medium risk Jira REST POST /rest/api/3/jql/sanitize: Sanitize JQL queries; reverse ETL requires plan, preview, approval, and execute.
+- set_preference:
+  - endpoint: PUT /rest/api/3/mypreferences?key={{ record.key }}
+  - required fields: key
+  - optional fields: value
+  - risk: medium risk Jira REST PUT /rest/api/3/mypreferences: Set preference; reverse ETL requires plan, preview, approval, and execute.
+- remove_preference:
+  - endpoint: DELETE /rest/api/3/mypreferences?key={{ record.key }}
+  - required fields: key
+  - risk: critical risk Jira REST DELETE /rest/api/3/mypreferences: Delete preference; reverse ETL requires plan, preview, approval, and execute.
+- set_locale:
+  - endpoint: PUT /rest/api/3/mypreferences/locale
+  - optional fields: locale
+  - risk: medium risk Jira REST PUT /rest/api/3/mypreferences/locale: Set locale; reverse ETL requires plan, preview, approval, and execute.
+- create_notification_scheme:
+  - endpoint: POST /rest/api/3/notificationscheme
+  - optional fields: description, name, notificationSchemeEvents
+  - risk: high risk Jira REST POST /rest/api/3/notificationscheme: Create notification scheme; reverse ETL requires plan, preview, approval, and execute.
+- update_notification_scheme:
+  - endpoint: PUT /rest/api/3/notificationscheme/{{ record.id }}
+  - required fields: id
+  - optional fields: description, name
+  - risk: high risk Jira REST PUT /rest/api/3/notificationscheme/{id}: Update notification scheme; reverse ETL requires plan, preview, approval, and execute.
+- add_notifications:
+  - endpoint: PUT /rest/api/3/notificationscheme/{{ record.id }}/notification
+  - required fields: id
+  - optional fields: notificationSchemeEvents
+  - risk: high risk Jira REST PUT /rest/api/3/notificationscheme/{id}/notification: Add notifications to notification scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_notification_scheme:
+  - endpoint: DELETE /rest/api/3/notificationscheme/{{ record.notificationSchemeId }}
+  - required fields: notificationSchemeId
+  - risk: critical risk Jira REST DELETE /rest/api/3/notificationscheme/{notificationSchemeId}: Delete notification scheme; reverse ETL requires plan, preview, approval, and execute.
+- remove_notification_from_notification_scheme:
+  - endpoint: DELETE /rest/api/3/notificationscheme/{{ record.notificationSchemeId }}/notification/{{ record.notificationId }}
+  - required fields: notificationSchemeId, notificationId
+  - risk: critical risk Jira REST DELETE /rest/api/3/notificationscheme/{notificationSchemeId}/notification/{notificationId}: Remove notification from notification scheme; reverse ETL requires plan, preview, approval, and execute.
+- get_bulk_permissions:
+  - endpoint: POST /rest/api/3/permissions/check
+  - optional fields: accountId, globalPermissions, projectPermissions
+  - risk: high risk Jira REST POST /rest/api/3/permissions/check: Get bulk permissions; reverse ETL requires plan, preview, approval, and execute.
+- get_permitted_projects:
+  - endpoint: POST /rest/api/3/permissions/project
+  - optional fields: permissions
+  - risk: high risk Jira REST POST /rest/api/3/permissions/project: Get permitted projects; reverse ETL requires plan, preview, approval, and execute.
+- create_permission_scheme:
+  - endpoint: POST /rest/api/3/permissionscheme
+  - optional fields: description, expand, id, name, permissions, scope, self
+  - risk: high risk Jira REST POST /rest/api/3/permissionscheme: Create permission scheme; reverse ETL requires plan, preview, approval, and execute.
+- update_permission_scheme:
+  - endpoint: PUT /rest/api/3/permissionscheme/{{ record.schemeId }}
+  - required fields: schemeId
+  - optional fields: description, expand, id, name, permissions, scope, self
+  - risk: high risk Jira REST PUT /rest/api/3/permissionscheme/{schemeId}: Update permission scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_permission_scheme:
+  - endpoint: DELETE /rest/api/3/permissionscheme/{{ record.schemeId }}
+  - required fields: schemeId
+  - risk: critical risk Jira REST DELETE /rest/api/3/permissionscheme/{schemeId}: Delete permission scheme; reverse ETL requires plan, preview, approval, and execute.
+- create_permission_grant:
+  - endpoint: POST /rest/api/3/permissionscheme/{{ record.schemeId }}/permission
+  - required fields: schemeId
+  - optional fields: holder, id, permission, self
+  - risk: high risk Jira REST POST /rest/api/3/permissionscheme/{schemeId}/permission: Create permission grant; reverse ETL requires plan, preview, approval, and execute.
+- delete_permission_scheme_entity:
+  - endpoint: DELETE /rest/api/3/permissionscheme/{{ record.schemeId }}/permission/{{ record.permissionId }}
+  - required fields: schemeId, permissionId
+  - risk: critical risk Jira REST DELETE /rest/api/3/permissionscheme/{schemeId}/permission/{permissionId}: Delete permission scheme grant; reverse ETL requires plan, preview, approval, and execute.
+- create_plan:
+  - endpoint: POST /rest/api/3/plans/plan
+  - optional fields: crossProjectReleases, customFields, exclusionRules, issueSources, leadAccountId, name, permissions, scheduling
+  - risk: high risk Jira REST POST /rest/api/3/plans/plan: Create plan; reverse ETL requires plan, preview, approval, and execute.
+- update_plan:
+  - endpoint: PUT /rest/api/3/plans/plan/{{ record.planId }}
+  - required fields: planId
+  - optional fields: value
+  - risk: high risk Jira REST PUT /rest/api/3/plans/plan/{planId}: Update plan; reverse ETL requires plan, preview, approval, and execute.
+- archive_plan:
+  - endpoint: PUT /rest/api/3/plans/plan/{{ record.planId }}/archive
+  - required fields: planId
+  - risk: high risk Jira REST PUT /rest/api/3/plans/plan/{planId}/archive: Archive plan; reverse ETL requires plan, preview, approval, and execute.
+- duplicate_plan:
+  - endpoint: POST /rest/api/3/plans/plan/{{ record.planId }}/duplicate
+  - required fields: planId
+  - optional fields: name
+  - risk: high risk Jira REST POST /rest/api/3/plans/plan/{planId}/duplicate: Duplicate plan; reverse ETL requires plan, preview, approval, and execute.
+- add_atlassian_team:
+  - endpoint: POST /rest/api/3/plans/plan/{{ record.planId }}/team/atlassian
+  - required fields: planId
+  - optional fields: capacity, id, issueSourceId, planningStyle, sprintLength
+  - risk: high risk Jira REST POST /rest/api/3/plans/plan/{planId}/team/atlassian: Add Atlassian team to plan; reverse ETL requires plan, preview, approval, and execute.
+- update_atlassian_team:
+  - endpoint: PUT /rest/api/3/plans/plan/{{ record.planId }}/team/atlassian/{{ record.atlassianTeamId }}
+  - required fields: planId, atlassianTeamId
+  - optional fields: value
+  - risk: high risk Jira REST PUT /rest/api/3/plans/plan/{planId}/team/atlassian/{atlassianTeamId}: Update Atlassian team in plan; reverse ETL requires plan, preview, approval, and execute.
+- remove_atlassian_team:
+  - endpoint: DELETE /rest/api/3/plans/plan/{{ record.planId }}/team/atlassian/{{ record.atlassianTeamId }}
+  - required fields: planId, atlassianTeamId
+  - risk: critical risk Jira REST DELETE /rest/api/3/plans/plan/{planId}/team/atlassian/{atlassianTeamId}: Remove Atlassian team from plan; reverse ETL requires plan, preview, approval, and execute.
+- create_plan_only_team:
+  - endpoint: POST /rest/api/3/plans/plan/{{ record.planId }}/team/planonly
+  - required fields: planId
+  - optional fields: capacity, issueSourceId, memberAccountIds, name, planningStyle, sprintLength
+  - risk: high risk Jira REST POST /rest/api/3/plans/plan/{planId}/team/planonly: Create plan-only team; reverse ETL requires plan, preview, approval, and execute.
+- update_plan_only_team:
+  - endpoint: PUT /rest/api/3/plans/plan/{{ record.planId }}/team/planonly/{{ record.planOnlyTeamId }}
+  - required fields: planId, planOnlyTeamId
+  - optional fields: value
+  - risk: high risk Jira REST PUT /rest/api/3/plans/plan/{planId}/team/planonly/{planOnlyTeamId}: Update plan-only team; reverse ETL requires plan, preview, approval, and execute.
+- delete_plan_only_team:
+  - endpoint: DELETE /rest/api/3/plans/plan/{{ record.planId }}/team/planonly/{{ record.planOnlyTeamId }}
+  - required fields: planId, planOnlyTeamId
+  - risk: critical risk Jira REST DELETE /rest/api/3/plans/plan/{planId}/team/planonly/{planOnlyTeamId}: Delete plan-only team; reverse ETL requires plan, preview, approval, and execute.
+- trash_plan:
+  - endpoint: PUT /rest/api/3/plans/plan/{{ record.planId }}/trash
+  - required fields: planId
+  - risk: high risk Jira REST PUT /rest/api/3/plans/plan/{planId}/trash: Trash plan; reverse ETL requires plan, preview, approval, and execute.
+- create_priority:
+  - endpoint: POST /rest/api/3/priority
+  - optional fields: avatarId, description, iconUrl, name, statusColor
+  - risk: high risk Jira REST POST /rest/api/3/priority: Create priority; reverse ETL requires plan, preview, approval, and execute.
+- set_default_priority:
+  - endpoint: PUT /rest/api/3/priority/default
+  - optional fields: id
+  - risk: high risk Jira REST PUT /rest/api/3/priority/default: Set default priority; reverse ETL requires plan, preview, approval, and execute.
+- move_priorities:
+  - endpoint: PUT /rest/api/3/priority/move
+  - optional fields: after, ids, position
+  - risk: high risk Jira REST PUT /rest/api/3/priority/move: Move priorities; reverse ETL requires plan, preview, approval, and execute.
+- update_priority:
+  - endpoint: PUT /rest/api/3/priority/{{ record.id }}
+  - required fields: id
+  - optional fields: avatarId, description, iconUrl, name, statusColor
+  - risk: high risk Jira REST PUT /rest/api/3/priority/{id}: Update priority; reverse ETL requires plan, preview, approval, and execute.
+- delete_priority:
+  - endpoint: DELETE /rest/api/3/priority/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/priority/{id}: Delete priority; reverse ETL requires plan, preview, approval, and execute.
+- create_priority_scheme:
+  - endpoint: POST /rest/api/3/priorityscheme
+  - optional fields: defaultPriorityId, description, mappings, name, priorityIds, projectIds
+  - risk: high risk Jira REST POST /rest/api/3/priorityscheme: Create priority scheme; reverse ETL requires plan, preview, approval, and execute.
+- suggested_priorities_for_mappings:
+  - endpoint: POST /rest/api/3/priorityscheme/mappings
+  - optional fields: maxResults, priorities, projects, schemeId, startAt
+  - risk: high risk Jira REST POST /rest/api/3/priorityscheme/mappings: Suggested priorities for mappings; reverse ETL requires plan, preview, approval, and execute.
+- update_priority_scheme:
+  - endpoint: PUT /rest/api/3/priorityscheme/{{ record.schemeId }}
+  - required fields: schemeId
+  - optional fields: defaultPriorityId, description, mappings, name, priorities, projects
+  - risk: high risk Jira REST PUT /rest/api/3/priorityscheme/{schemeId}: Update priority scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_priority_scheme:
+  - endpoint: DELETE /rest/api/3/priorityscheme/{{ record.schemeId }}
+  - required fields: schemeId
+  - risk: critical risk Jira REST DELETE /rest/api/3/priorityscheme/{schemeId}: Delete priority scheme; reverse ETL requires plan, preview, approval, and execute.
+- create_project:
+  - endpoint: POST /rest/api/3/project
+  - optional fields: assigneeType, avatarId, categoryId, description, fieldConfigurationScheme, fieldScheme, issueSecurityScheme, issueTypeScheme, issueTypeScreenScheme, key, lead, leadAccountId, name, notificationScheme, permissionScheme, projectTemplateKey, projectTypeKey, url, workflowScheme
+  - risk: high risk Jira REST POST /rest/api/3/project: Create project; reverse ETL requires plan, preview, approval, and execute.
+- create_project_with_custom_template:
+  - endpoint: POST /rest/api/3/project-template
+  - optional fields: details, template
+  - risk: high risk Jira REST POST /rest/api/3/project-template: Create custom project; reverse ETL requires plan, preview, approval, and execute.
+- edit_template:
+  - endpoint: PUT /rest/api/3/project-template/edit-template
+  - optional fields: templateDescription, templateGenerationOptions, templateKey, templateName
+  - risk: high risk Jira REST PUT /rest/api/3/project-template/edit-template: Edit a custom project template; reverse ETL requires plan, preview, approval, and execute.
+- remove_template:
+  - endpoint: DELETE /rest/api/3/project-template/remove-template?templateKey={{ record.templateKey }}
+  - required fields: templateKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/project-template/remove-template: Deletes a custom project template; reverse ETL requires plan, preview, approval, and execute.
+- save_template:
+  - endpoint: POST /rest/api/3/project-template/save-template
+  - optional fields: templateDescription, templateFromProjectRequest, templateName
+  - risk: high risk Jira REST POST /rest/api/3/project-template/save-template: Save a custom project template; reverse ETL requires plan, preview, approval, and execute.
+- update_project:
+  - endpoint: PUT /rest/api/3/project/{{ record.projectIdOrKey }}
+  - required fields: projectIdOrKey
+  - optional fields: assigneeType, avatarId, categoryId, description, issueSecurityScheme, key, lead, leadAccountId, name, notificationScheme, permissionScheme, releasedProjectKeys, url
+  - risk: high risk Jira REST PUT /rest/api/3/project/{projectIdOrKey}: Update project; reverse ETL requires plan, preview, approval, and execute.
+- delete_project:
+  - endpoint: DELETE /rest/api/3/project/{{ record.projectIdOrKey }}
+  - required fields: projectIdOrKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/project/{projectIdOrKey}: Delete project; reverse ETL requires plan, preview, approval, and execute.
+- archive_project:
+  - endpoint: POST /rest/api/3/project/{{ record.projectIdOrKey }}/archive
+  - required fields: projectIdOrKey
+  - risk: high risk Jira REST POST /rest/api/3/project/{projectIdOrKey}/archive: Archive project; reverse ETL requires plan, preview, approval, and execute.
+- update_project_avatar:
+  - endpoint: PUT /rest/api/3/project/{{ record.projectIdOrKey }}/avatar
+  - required fields: projectIdOrKey
+  - optional fields: fileName, id, isDeletable, isSelected, isSystemAvatar, owner, urls
+  - risk: high risk Jira REST PUT /rest/api/3/project/{projectIdOrKey}/avatar: Set project avatar; reverse ETL requires plan, preview, approval, and execute.
+- delete_project_avatar:
+  - endpoint: DELETE /rest/api/3/project/{{ record.projectIdOrKey }}/avatar/{{ record.id }}
+  - required fields: projectIdOrKey, id
+  - risk: critical risk Jira REST DELETE /rest/api/3/project/{projectIdOrKey}/avatar/{id}: Delete project avatar; reverse ETL requires plan, preview, approval, and execute.
+- update_default_project_classification:
+  - endpoint: PUT /rest/api/3/project/{{ record.projectIdOrKey }}/classification-level/default
+  - required fields: projectIdOrKey
+  - optional fields: id
+  - risk: high risk Jira REST PUT /rest/api/3/project/{projectIdOrKey}/classification-level/default: Update the default data classification level of a project; reverse ETL requires plan, preview, approval, and execute.
+- remove_default_project_classification:
+  - endpoint: DELETE /rest/api/3/project/{{ record.projectIdOrKey }}/classification-level/default
+  - required fields: projectIdOrKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/project/{projectIdOrKey}/classification-level/default: Remove the default data classification level from a project; reverse ETL requires plan, preview, approval, and execute.
+- delete_project_asynchronously:
+  - endpoint: POST /rest/api/3/project/{{ record.projectIdOrKey }}/delete
+  - required fields: projectIdOrKey
+  - risk: high risk Jira REST POST /rest/api/3/project/{projectIdOrKey}/delete: Delete project asynchronously; reverse ETL requires plan, preview, approval, and execute.
+- toggle_feature_for_project:
+  - endpoint: PUT /rest/api/3/project/{{ record.projectIdOrKey }}/features/{{ record.featureKey }}
+  - required fields: projectIdOrKey, featureKey
+  - optional fields: state
+  - risk: high risk Jira REST PUT /rest/api/3/project/{projectIdOrKey}/features/{featureKey}: Set project feature state; reverse ETL requires plan, preview, approval, and execute.
+- set_project_property:
+  - endpoint: PUT /rest/api/3/project/{{ record.projectIdOrKey }}/properties/{{ record.propertyKey }}
+  - required fields: projectIdOrKey, propertyKey
+  - optional fields: value
+  - risk: high risk Jira REST PUT /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}: Set project property; reverse ETL requires plan, preview, approval, and execute.
+- delete_project_property:
+  - endpoint: DELETE /rest/api/3/project/{{ record.projectIdOrKey }}/properties/{{ record.propertyKey }}
+  - required fields: projectIdOrKey, propertyKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}: Delete project property; reverse ETL requires plan, preview, approval, and execute.
+- restore:
+  - endpoint: POST /rest/api/3/project/{{ record.projectIdOrKey }}/restore
+  - required fields: projectIdOrKey
+  - risk: high risk Jira REST POST /rest/api/3/project/{projectIdOrKey}/restore: Restore deleted or archived project; reverse ETL requires plan, preview, approval, and execute.
+- add_actor_users:
+  - endpoint: POST /rest/api/3/project/{{ record.projectIdOrKey }}/role/{{ record.id }}
+  - required fields: projectIdOrKey, id
+  - optional fields: group, groupId, user
+  - risk: high risk Jira REST POST /rest/api/3/project/{projectIdOrKey}/role/{id}: Add actors to project role; reverse ETL requires plan, preview, approval, and execute.
+- set_actors:
+  - endpoint: PUT /rest/api/3/project/{{ record.projectIdOrKey }}/role/{{ record.id }}
+  - required fields: projectIdOrKey, id
+  - optional fields: categorisedActors
+  - risk: high risk Jira REST PUT /rest/api/3/project/{projectIdOrKey}/role/{id}: Set actors for project role; reverse ETL requires plan, preview, approval, and execute.
+- delete_actor:
+  - endpoint: DELETE /rest/api/3/project/{{ record.projectIdOrKey }}/role/{{ record.id }}
+  - required fields: projectIdOrKey, id
+  - risk: critical risk Jira REST DELETE /rest/api/3/project/{projectIdOrKey}/role/{id}: Delete actors from project role; reverse ETL requires plan, preview, approval, and execute.
+- update_project_email:
+  - endpoint: PUT /rest/api/3/project/{{ record.projectId }}/email
+  - required fields: projectId
+  - optional fields: emailAddress, emailAddressStatus
+  - risk: high risk Jira REST PUT /rest/api/3/project/{projectId}/email: Set project's sender email; reverse ETL requires plan, preview, approval, and execute.
+- assign_permission_scheme:
+  - endpoint: PUT /rest/api/3/project/{{ record.projectKeyOrId }}/permissionscheme
+  - required fields: projectKeyOrId
+  - optional fields: id
+  - risk: high risk Jira REST PUT /rest/api/3/project/{projectKeyOrId}/permissionscheme: Assign permission scheme; reverse ETL requires plan, preview, approval, and execute.
+- create_project_category:
+  - endpoint: POST /rest/api/3/projectCategory
+  - optional fields: description, id, name, self
+  - risk: high risk Jira REST POST /rest/api/3/projectCategory: Create project category; reverse ETL requires plan, preview, approval, and execute.
+- update_project_category:
+  - endpoint: PUT /rest/api/3/projectCategory/{{ record.id }}
+  - required fields: id
+  - optional fields: description, name, self
+  - risk: high risk Jira REST PUT /rest/api/3/projectCategory/{id}: Update project category; reverse ETL requires plan, preview, approval, and execute.
+- remove_project_category:
+  - endpoint: DELETE /rest/api/3/projectCategory/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/projectCategory/{id}: Delete project category; reverse ETL requires plan, preview, approval, and execute.
+- redact:
+  - endpoint: POST /rest/api/3/redact
+  - optional fields: redactions
+  - risk: medium risk Jira REST POST /rest/api/3/redact: Redact; reverse ETL requires plan, preview, approval, and execute.
+- create_resolution:
+  - endpoint: POST /rest/api/3/resolution
+  - optional fields: description, name
+  - risk: high risk Jira REST POST /rest/api/3/resolution: Create resolution; reverse ETL requires plan, preview, approval, and execute.
+- set_default_resolution:
+  - endpoint: PUT /rest/api/3/resolution/default
+  - optional fields: id
+  - risk: high risk Jira REST PUT /rest/api/3/resolution/default: Set default resolution; reverse ETL requires plan, preview, approval, and execute.
+- move_resolutions:
+  - endpoint: PUT /rest/api/3/resolution/move
+  - optional fields: after, ids, position
+  - risk: high risk Jira REST PUT /rest/api/3/resolution/move: Move resolutions; reverse ETL requires plan, preview, approval, and execute.
+- update_resolution:
+  - endpoint: PUT /rest/api/3/resolution/{{ record.id }}
+  - required fields: id
+  - optional fields: description, name
+  - risk: high risk Jira REST PUT /rest/api/3/resolution/{id}: Update resolution; reverse ETL requires plan, preview, approval, and execute.
+- delete_resolution:
+  - endpoint: DELETE /rest/api/3/resolution/{{ record.id }}?replaceWith={{ record.replaceWith }}
+  - required fields: id, replaceWith
+  - risk: critical risk Jira REST DELETE /rest/api/3/resolution/{id}: Delete resolution; reverse ETL requires plan, preview, approval, and execute.
+- create_project_role:
+  - endpoint: POST /rest/api/3/role
+  - optional fields: description, name
+  - risk: high risk Jira REST POST /rest/api/3/role: Create project role; reverse ETL requires plan, preview, approval, and execute.
+- partial_update_project_role:
+  - endpoint: POST /rest/api/3/role/{{ record.id }}
+  - required fields: id
+  - optional fields: description, name
+  - risk: high risk Jira REST POST /rest/api/3/role/{id}: Partial update project role; reverse ETL requires plan, preview, approval, and execute.
+- fully_update_project_role:
+  - endpoint: PUT /rest/api/3/role/{{ record.id }}
+  - required fields: id
+  - optional fields: description, name
+  - risk: high risk Jira REST PUT /rest/api/3/role/{id}: Fully update project role; reverse ETL requires plan, preview, approval, and execute.
+- delete_project_role:
+  - endpoint: DELETE /rest/api/3/role/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/role/{id}: Delete project role; reverse ETL requires plan, preview, approval, and execute.
+- add_project_role_actors_to_role:
+  - endpoint: POST /rest/api/3/role/{{ record.id }}/actors
+  - required fields: id
+  - optional fields: group, groupId, user
+  - risk: high risk Jira REST POST /rest/api/3/role/{id}/actors: Add default actors to project role; reverse ETL requires plan, preview, approval, and execute.
+- delete_project_role_actors_from_role:
+  - endpoint: DELETE /rest/api/3/role/{{ record.id }}/actors
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/role/{id}/actors: Delete default actors from project role; reverse ETL requires plan, preview, approval, and execute.
+- create_screen:
+  - endpoint: POST /rest/api/3/screens
+  - optional fields: description, name
+  - risk: high risk Jira REST POST /rest/api/3/screens: Create screen; reverse ETL requires plan, preview, approval, and execute.
+- add_field_to_default_screen:
+  - endpoint: POST /rest/api/3/screens/addToDefault/{{ record.fieldId }}
+  - required fields: fieldId
+  - risk: high risk Jira REST POST /rest/api/3/screens/addToDefault/{fieldId}: Add field to default screen; reverse ETL requires plan, preview, approval, and execute.
+- update_screen:
+  - endpoint: PUT /rest/api/3/screens/{{ record.screenId }}
+  - required fields: screenId
+  - optional fields: description, name
+  - risk: high risk Jira REST PUT /rest/api/3/screens/{screenId}: Update screen; reverse ETL requires plan, preview, approval, and execute.
+- delete_screen:
+  - endpoint: DELETE /rest/api/3/screens/{{ record.screenId }}
+  - required fields: screenId
+  - risk: critical risk Jira REST DELETE /rest/api/3/screens/{screenId}: Delete screen; reverse ETL requires plan, preview, approval, and execute.
+- add_screen_tab:
+  - endpoint: POST /rest/api/3/screens/{{ record.screenId }}/tabs
+  - required fields: screenId
+  - optional fields: id, name
+  - risk: high risk Jira REST POST /rest/api/3/screens/{screenId}/tabs: Create screen tab; reverse ETL requires plan, preview, approval, and execute.
+- rename_screen_tab:
+  - endpoint: PUT /rest/api/3/screens/{{ record.screenId }}/tabs/{{ record.tabId }}
+  - required fields: screenId, tabId
+  - optional fields: id, name
+  - risk: high risk Jira REST PUT /rest/api/3/screens/{screenId}/tabs/{tabId}: Update screen tab; reverse ETL requires plan, preview, approval, and execute.
+- delete_screen_tab:
+  - endpoint: DELETE /rest/api/3/screens/{{ record.screenId }}/tabs/{{ record.tabId }}
+  - required fields: screenId, tabId
+  - risk: critical risk Jira REST DELETE /rest/api/3/screens/{screenId}/tabs/{tabId}: Delete screen tab; reverse ETL requires plan, preview, approval, and execute.
+- add_screen_tab_field:
+  - endpoint: POST /rest/api/3/screens/{{ record.screenId }}/tabs/{{ record.tabId }}/fields
+  - required fields: screenId, tabId
+  - optional fields: fieldId
+  - risk: high risk Jira REST POST /rest/api/3/screens/{screenId}/tabs/{tabId}/fields: Add screen tab field; reverse ETL requires plan, preview, approval, and execute.
+- remove_screen_tab_field:
+  - endpoint: DELETE /rest/api/3/screens/{{ record.screenId }}/tabs/{{ record.tabId }}/fields/{{ record.id }}
+  - required fields: screenId, tabId, id
+  - risk: critical risk Jira REST DELETE /rest/api/3/screens/{screenId}/tabs/{tabId}/fields/{id}: Remove screen tab field; reverse ETL requires plan, preview, approval, and execute.
+- move_screen_tab_field:
+  - endpoint: POST /rest/api/3/screens/{{ record.screenId }}/tabs/{{ record.tabId }}/fields/{{ record.id }}/move
+  - required fields: screenId, tabId, id
+  - optional fields: after, position
+  - risk: high risk Jira REST POST /rest/api/3/screens/{screenId}/tabs/{tabId}/fields/{id}/move: Move screen tab field; reverse ETL requires plan, preview, approval, and execute.
+- move_screen_tab:
+  - endpoint: POST /rest/api/3/screens/{{ record.screenId }}/tabs/{{ record.tabId }}/move/{{ record.pos }}
+  - required fields: screenId, tabId, pos
+  - risk: high risk Jira REST POST /rest/api/3/screens/{screenId}/tabs/{tabId}/move/{pos}: Move screen tab; reverse ETL requires plan, preview, approval, and execute.
+- create_screen_scheme:
+  - endpoint: POST /rest/api/3/screenscheme
+  - optional fields: description, name, screens
+  - risk: high risk Jira REST POST /rest/api/3/screenscheme: Create screen scheme; reverse ETL requires plan, preview, approval, and execute.
+- update_screen_scheme:
+  - endpoint: PUT /rest/api/3/screenscheme/{{ record.screenSchemeId }}
+  - required fields: screenSchemeId
+  - optional fields: description, name, screens
+  - risk: high risk Jira REST PUT /rest/api/3/screenscheme/{screenSchemeId}: Update screen scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_screen_scheme:
+  - endpoint: DELETE /rest/api/3/screenscheme/{{ record.screenSchemeId }}
+  - required fields: screenSchemeId
+  - risk: critical risk Jira REST DELETE /rest/api/3/screenscheme/{screenSchemeId}: Delete screen scheme; reverse ETL requires plan, preview, approval, and execute.
+- search_for_issues_using_jql_post:
+  - endpoint: POST /rest/api/3/search
+  - optional fields: expand, fields, fieldsByKeys, jql, maxResults, properties, startAt, validateQuery
+  - risk: medium risk Jira REST POST /rest/api/3/search: Currently being removed. Search for issues using JQL (POST); reverse ETL requires plan, preview, approval, and execute.
+- count_issues:
+  - endpoint: POST /rest/api/3/search/approximate-count
+  - optional fields: jql
+  - risk: medium risk Jira REST POST /rest/api/3/search/approximate-count: Count issues using JQL; reverse ETL requires plan, preview, approval, and execute.
+- search_and_reconsile_issues_using_jql_post:
+  - endpoint: POST /rest/api/3/search/jql
+  - optional fields: expand, fields, fieldsByKeys, jql, maxResults, nextPageToken, properties, reconcileIssues
+  - risk: medium risk Jira REST POST /rest/api/3/search/jql: Search for issues using JQL enhanced search (POST); reverse ETL requires plan, preview, approval, and execute.
+- set_issue_navigator_default_columns:
+  - endpoint: PUT /rest/api/3/settings/columns
+  - optional fields: columns
+  - risk: high risk Jira REST PUT /rest/api/3/settings/columns: Set issue navigator default columns; reverse ETL requires plan, preview, approval, and execute.
+- create_statuses:
+  - endpoint: POST /rest/api/3/statuses
+  - optional fields: scope, statuses
+  - risk: high risk Jira REST POST /rest/api/3/statuses: Bulk create statuses; reverse ETL requires plan, preview, approval, and execute.
+- update_statuses:
+  - endpoint: PUT /rest/api/3/statuses
+  - optional fields: statuses
+  - risk: high risk Jira REST PUT /rest/api/3/statuses: Bulk update statuses; reverse ETL requires plan, preview, approval, and execute.
+- delete_statuses_by_id:
+  - endpoint: DELETE /rest/api/3/statuses?id={{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/statuses: Bulk delete Statuses; reverse ETL requires plan, preview, approval, and execute.
+- cancel_task:
+  - endpoint: POST /rest/api/3/task/{{ record.taskId }}/cancel
+  - required fields: taskId
+  - risk: medium risk Jira REST POST /rest/api/3/task/{taskId}/cancel: Cancel task; reverse ETL requires plan, preview, approval, and execute.
+- create_ui_modification:
+  - endpoint: POST /rest/api/3/uiModifications
+  - optional fields: contexts, data, description, name
+  - risk: medium risk Jira REST POST /rest/api/3/uiModifications: Create UI modification; reverse ETL requires plan, preview, approval, and execute.
+- update_ui_modification:
+  - endpoint: PUT /rest/api/3/uiModifications/{{ record.uiModificationId }}
+  - required fields: uiModificationId
+  - optional fields: contexts, data, description, name
+  - risk: medium risk Jira REST PUT /rest/api/3/uiModifications/{uiModificationId}: Update UI modification; reverse ETL requires plan, preview, approval, and execute.
+- delete_ui_modification:
+  - endpoint: DELETE /rest/api/3/uiModifications/{{ record.uiModificationId }}
+  - required fields: uiModificationId
+  - risk: critical risk Jira REST DELETE /rest/api/3/uiModifications/{uiModificationId}: Delete UI modification; reverse ETL requires plan, preview, approval, and execute.
+- delete_avatar:
+  - endpoint: DELETE /rest/api/3/universal_avatar/type/{{ record.type }}/owner/{{ record.owningObjectId }}/avatar/{{ record.id }}
+  - required fields: type, owningObjectId, id
+  - risk: critical risk Jira REST DELETE /rest/api/3/universal_avatar/type/{type}/owner/{owningObjectId}/avatar/{id}: Delete avatar; reverse ETL requires plan, preview, approval, and execute.
+- create_user:
+  - endpoint: POST /rest/api/3/user
+  - optional fields: applicationKeys, displayName, emailAddress, key, name, password, products, self
+  - risk: high risk Jira REST POST /rest/api/3/user: Create user; reverse ETL requires plan, preview, approval, and execute.
+- remove_user:
+  - endpoint: DELETE /rest/api/3/user?accountId={{ record.accountId }}
+  - required fields: accountId
+  - risk: critical risk Jira REST DELETE /rest/api/3/user: Delete user; reverse ETL requires plan, preview, approval, and execute.
+- set_user_columns:
+  - endpoint: PUT /rest/api/3/user/columns
+  - optional fields: columns
+  - risk: high risk Jira REST PUT /rest/api/3/user/columns: Set user default columns; reverse ETL requires plan, preview, approval, and execute.
+- reset_user_columns:
+  - endpoint: DELETE /rest/api/3/user/columns
+  - risk: critical risk Jira REST DELETE /rest/api/3/user/columns: Reset user default columns; reverse ETL requires plan, preview, approval, and execute.
+- set_user_property:
+  - endpoint: PUT /rest/api/3/user/properties/{{ record.propertyKey }}
+  - required fields: propertyKey
+  - optional fields: value
+  - risk: high risk Jira REST PUT /rest/api/3/user/properties/{propertyKey}: Set user property; reverse ETL requires plan, preview, approval, and execute.
+- delete_user_property:
+  - endpoint: DELETE /rest/api/3/user/properties/{{ record.propertyKey }}
+  - required fields: propertyKey
+  - risk: critical risk Jira REST DELETE /rest/api/3/user/properties/{propertyKey}: Delete user property; reverse ETL requires plan, preview, approval, and execute.
+- create_version:
+  - endpoint: POST /rest/api/3/version
+  - optional fields: approvers, archived, description, driver, expand, id, issuesStatusForFixVersion, moveUnfixedIssuesTo, name, operations, overdue, project, projectId, releaseDate, released, self, startDate, userReleaseDate, userStartDate
+  - risk: high risk Jira REST POST /rest/api/3/version: Create version; reverse ETL requires plan, preview, approval, and execute.
+- update_version:
+  - endpoint: PUT /rest/api/3/version/{{ record.id }}
+  - required fields: id
+  - optional fields: approvers, archived, description, driver, expand, issuesStatusForFixVersion, moveUnfixedIssuesTo, name, operations, overdue, project, projectId, releaseDate, released, self, startDate, userReleaseDate, userStartDate
+  - risk: high risk Jira REST PUT /rest/api/3/version/{id}: Update version; reverse ETL requires plan, preview, approval, and execute.
+- delete_version:
+  - endpoint: DELETE /rest/api/3/version/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/version/{id}: Delete version; reverse ETL requires plan, preview, approval, and execute.
+- merge_versions:
+  - endpoint: PUT /rest/api/3/version/{{ record.id }}/mergeto/{{ record.moveIssuesTo }}
+  - required fields: id, moveIssuesTo
+  - risk: high risk Jira REST PUT /rest/api/3/version/{id}/mergeto/{moveIssuesTo}: Merge versions; reverse ETL requires plan, preview, approval, and execute.
+- move_version:
+  - endpoint: POST /rest/api/3/version/{{ record.id }}/move
+  - required fields: id
+  - optional fields: after, position
+  - risk: high risk Jira REST POST /rest/api/3/version/{id}/move: Move version; reverse ETL requires plan, preview, approval, and execute.
+- create_related_work:
+  - endpoint: POST /rest/api/3/version/{{ record.id }}/relatedwork
+  - required fields: id
+  - optional fields: category, issueId, relatedWorkId, title, url
+  - risk: high risk Jira REST POST /rest/api/3/version/{id}/relatedwork: Create related work; reverse ETL requires plan, preview, approval, and execute.
+- update_related_work:
+  - endpoint: PUT /rest/api/3/version/{{ record.id }}/relatedwork
+  - required fields: id
+  - optional fields: category, issueId, relatedWorkId, title, url
+  - risk: high risk Jira REST PUT /rest/api/3/version/{id}/relatedwork: Update related work; reverse ETL requires plan, preview, approval, and execute.
+- delete_and_replace_version:
+  - endpoint: POST /rest/api/3/version/{{ record.id }}/removeAndSwap
+  - required fields: id
+  - optional fields: customFieldReplacementList, moveAffectedIssuesTo, moveFixIssuesTo
+  - risk: high risk Jira REST POST /rest/api/3/version/{id}/removeAndSwap: Delete and replace version; reverse ETL requires plan, preview, approval, and execute.
+- delete_related_work:
+  - endpoint: DELETE /rest/api/3/version/{{ record.versionId }}/relatedwork/{{ record.relatedWorkId }}
+  - required fields: versionId, relatedWorkId
+  - risk: critical risk Jira REST DELETE /rest/api/3/version/{versionId}/relatedwork/{relatedWorkId}: Delete related work; reverse ETL requires plan, preview, approval, and execute.
+- register_dynamic_webhooks:
+  - endpoint: POST /rest/api/3/webhook
+  - optional fields: url, webhooks
+  - risk: high risk Jira REST POST /rest/api/3/webhook: Register dynamic webhooks; reverse ETL requires plan, preview, approval, and execute.
+- delete_webhook_by_id:
+  - endpoint: DELETE /rest/api/3/webhook
+  - optional fields: webhookIds
+  - risk: critical risk Jira REST DELETE /rest/api/3/webhook: Delete webhooks by ID; reverse ETL requires plan, preview, approval, and execute.
+- refresh_webhooks:
+  - endpoint: PUT /rest/api/3/webhook/refresh
+  - optional fields: webhookIds
+  - risk: high risk Jira REST PUT /rest/api/3/webhook/refresh: Extend webhook life; reverse ETL requires plan, preview, approval, and execute.
+- read_workflow_from_history:
+  - endpoint: POST /rest/api/3/workflow/history
+  - optional fields: version, workflowId
+  - risk: high risk Jira REST POST /rest/api/3/workflow/history: Read workflow version from history; reverse ETL requires plan, preview, approval, and execute.
+- list_workflow_history:
+  - endpoint: POST /rest/api/3/workflow/history/list
+  - optional fields: workflowId
+  - risk: high risk Jira REST POST /rest/api/3/workflow/history/list: List workflow history entries; reverse ETL requires plan, preview, approval, and execute.
+- update_workflow_transition_rule_configurations:
+  - endpoint: PUT /rest/api/3/workflow/rule/config
+  - optional fields: workflows
+  - risk: high risk Jira REST PUT /rest/api/3/workflow/rule/config: Update workflow transition rule configurations; reverse ETL requires plan, preview, approval, and execute.
+- delete_workflow_transition_rule_configurations:
+  - endpoint: PUT /rest/api/3/workflow/rule/config/delete
+  - optional fields: workflows
+  - risk: high risk Jira REST PUT /rest/api/3/workflow/rule/config/delete: Delete workflow transition rule configurations; reverse ETL requires plan, preview, approval, and execute.
+- create_workflow_transition_property:
+  - endpoint: POST /rest/api/3/workflow/transitions/{{ record.transitionId }}/properties?key={{ record.key }}&workflowName={{ record.workflowName }}
+  - required fields: transitionId, key, workflowName
+  - optional fields: id, value
+  - risk: high risk Jira REST POST /rest/api/3/workflow/transitions/{transitionId}/properties: Create workflow transition property; reverse ETL requires plan, preview, approval, and execute.
+- update_workflow_transition_property:
+  - endpoint: PUT /rest/api/3/workflow/transitions/{{ record.transitionId }}/properties?key={{ record.key }}&workflowName={{ record.workflowName }}
+  - required fields: transitionId, key, workflowName
+  - optional fields: id, value
+  - risk: high risk Jira REST PUT /rest/api/3/workflow/transitions/{transitionId}/properties: Update workflow transition property; reverse ETL requires plan, preview, approval, and execute.
+- delete_workflow_transition_property:
+  - endpoint: DELETE /rest/api/3/workflow/transitions/{{ record.transitionId }}/properties?key={{ record.key }}&workflowName={{ record.workflowName }}
+  - required fields: transitionId, key, workflowName
+  - risk: critical risk Jira REST DELETE /rest/api/3/workflow/transitions/{transitionId}/properties: Delete workflow transition property; reverse ETL requires plan, preview, approval, and execute.
+- delete_inactive_workflow:
+  - endpoint: DELETE /rest/api/3/workflow/{{ record.entityId }}
+  - required fields: entityId
+  - risk: critical risk Jira REST DELETE /rest/api/3/workflow/{entityId}: Delete inactive workflow; reverse ETL requires plan, preview, approval, and execute.
+- read_workflows:
+  - endpoint: POST /rest/api/3/workflows
+  - optional fields: projectAndIssueTypes, workflowIds, workflowNames
+  - risk: high risk Jira REST POST /rest/api/3/workflows: Bulk get workflows; reverse ETL requires plan, preview, approval, and execute.
+- create_workflows:
+  - endpoint: POST /rest/api/3/workflows/create
+  - optional fields: scope, statuses, workflows
+  - risk: high risk Jira REST POST /rest/api/3/workflows/create: Bulk create workflows; reverse ETL requires plan, preview, approval, and execute.
+- validate_create_workflows:
+  - endpoint: POST /rest/api/3/workflows/create/validation
+  - optional fields: payload, validationOptions
+  - risk: high risk Jira REST POST /rest/api/3/workflows/create/validation: Validate create workflows; reverse ETL requires plan, preview, approval, and execute.
+- read_workflow_previews:
+  - endpoint: POST /rest/api/3/workflows/preview
+  - optional fields: issueTypeIds, projectId, workflowIds, workflowNames
+  - risk: high risk Jira REST POST /rest/api/3/workflows/preview: Preview workflow; reverse ETL requires plan, preview, approval, and execute.
+- update_workflows:
+  - endpoint: POST /rest/api/3/workflows/update
+  - optional fields: statuses, workflows
+  - risk: high risk Jira REST POST /rest/api/3/workflows/update: Bulk update workflows; reverse ETL requires plan, preview, approval, and execute.
+- validate_update_workflows:
+  - endpoint: POST /rest/api/3/workflows/update/validation
+  - optional fields: payload, validationOptions
+  - risk: high risk Jira REST POST /rest/api/3/workflows/update/validation: Validate update workflows; reverse ETL requires plan, preview, approval, and execute.
+- create_workflow_scheme:
+  - endpoint: POST /rest/api/3/workflowscheme
+  - optional fields: defaultWorkflow, description, draft, id, issueTypeMappings, issueTypes, lastModified, lastModifiedUser, name, originalDefaultWorkflow, originalIssueTypeMappings, self, updateDraftIfNeeded
+  - risk: high risk Jira REST POST /rest/api/3/workflowscheme: Create workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- assign_scheme_to_project:
+  - endpoint: PUT /rest/api/3/workflowscheme/project
+  - optional fields: projectId, workflowSchemeId
+  - risk: high risk Jira REST PUT /rest/api/3/workflowscheme/project: Assign workflow scheme to project; reverse ETL requires plan, preview, approval, and execute.
+- switch_workflow_scheme_for_project:
+  - endpoint: POST /rest/api/3/workflowscheme/project/switch
+  - optional fields: mappingsByIssueTypeOverride, projectId, targetSchemeId
+  - risk: high risk Jira REST POST /rest/api/3/workflowscheme/project/switch: Switch workflow scheme for project; reverse ETL requires plan, preview, approval, and execute.
+- read_workflow_schemes:
+  - endpoint: POST /rest/api/3/workflowscheme/read
+  - optional fields: projectIds, workflowSchemeIds
+  - risk: high risk Jira REST POST /rest/api/3/workflowscheme/read: Bulk get workflow schemes; reverse ETL requires plan, preview, approval, and execute.
+- update_schemes:
+  - endpoint: POST /rest/api/3/workflowscheme/update
+  - optional fields: defaultWorkflowId, description, id, name, statusMappingsByIssueTypeOverride, statusMappingsByWorkflows, version, workflowsForIssueTypes
+  - risk: high risk Jira REST POST /rest/api/3/workflowscheme/update: Update workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- get_required_workflow_scheme_mappings:
+  - endpoint: POST /rest/api/3/workflowscheme/update/mappings
+  - optional fields: defaultWorkflowId, id, workflowsForIssueTypes
+  - risk: high risk Jira REST POST /rest/api/3/workflowscheme/update/mappings: Get required status mappings for workflow scheme update; reverse ETL requires plan, preview, approval, and execute.
+- update_workflow_scheme:
+  - endpoint: PUT /rest/api/3/workflowscheme/{{ record.id }}
+  - required fields: id
+  - optional fields: defaultWorkflow, description, draft, issueTypeMappings, issueTypes, lastModified, lastModifiedUser, name, originalDefaultWorkflow, originalIssueTypeMappings, self, updateDraftIfNeeded
+  - risk: high risk Jira REST PUT /rest/api/3/workflowscheme/{id}: Classic update workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_workflow_scheme:
+  - endpoint: DELETE /rest/api/3/workflowscheme/{{ record.id }}
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/workflowscheme/{id}: Delete workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- create_workflow_scheme_draft_from_parent:
+  - endpoint: POST /rest/api/3/workflowscheme/{{ record.id }}/createdraft
+  - required fields: id
+  - risk: high risk Jira REST POST /rest/api/3/workflowscheme/{id}/createdraft: Create draft workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- update_default_workflow:
+  - endpoint: PUT /rest/api/3/workflowscheme/{{ record.id }}/default
+  - required fields: id
+  - optional fields: updateDraftIfNeeded, workflow
+  - risk: high risk Jira REST PUT /rest/api/3/workflowscheme/{id}/default: Update default workflow; reverse ETL requires plan, preview, approval, and execute.
+- delete_default_workflow:
+  - endpoint: DELETE /rest/api/3/workflowscheme/{{ record.id }}/default
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/workflowscheme/{id}/default: Delete default workflow; reverse ETL requires plan, preview, approval, and execute.
+- update_workflow_scheme_draft:
+  - endpoint: PUT /rest/api/3/workflowscheme/{{ record.id }}/draft
+  - required fields: id
+  - optional fields: defaultWorkflow, description, draft, issueTypeMappings, issueTypes, lastModified, lastModifiedUser, name, originalDefaultWorkflow, originalIssueTypeMappings, self, updateDraftIfNeeded
+  - risk: high risk Jira REST PUT /rest/api/3/workflowscheme/{id}/draft: Update draft workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_workflow_scheme_draft:
+  - endpoint: DELETE /rest/api/3/workflowscheme/{{ record.id }}/draft
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/workflowscheme/{id}/draft: Delete draft workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- update_draft_default_workflow:
+  - endpoint: PUT /rest/api/3/workflowscheme/{{ record.id }}/draft/default
+  - required fields: id
+  - optional fields: updateDraftIfNeeded, workflow
+  - risk: high risk Jira REST PUT /rest/api/3/workflowscheme/{id}/draft/default: Update draft default workflow; reverse ETL requires plan, preview, approval, and execute.
+- delete_draft_default_workflow:
+  - endpoint: DELETE /rest/api/3/workflowscheme/{{ record.id }}/draft/default
+  - required fields: id
+  - risk: critical risk Jira REST DELETE /rest/api/3/workflowscheme/{id}/draft/default: Delete draft default workflow; reverse ETL requires plan, preview, approval, and execute.
+- set_workflow_scheme_draft_issue_type:
+  - endpoint: PUT /rest/api/3/workflowscheme/{{ record.id }}/draft/issuetype/{{ record.issueType }}
+  - required fields: id, issueType
+  - optional fields: updateDraftIfNeeded, workflow
+  - risk: high risk Jira REST PUT /rest/api/3/workflowscheme/{id}/draft/issuetype/{issueType}: Set workflow for issue type in draft workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_workflow_scheme_draft_issue_type:
+  - endpoint: DELETE /rest/api/3/workflowscheme/{{ record.id }}/draft/issuetype/{{ record.issueType }}
+  - required fields: id, issueType
+  - risk: critical risk Jira REST DELETE /rest/api/3/workflowscheme/{id}/draft/issuetype/{issueType}: Delete workflow for issue type in draft workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- publish_draft_workflow_scheme:
+  - endpoint: POST /rest/api/3/workflowscheme/{{ record.id }}/draft/publish
+  - required fields: id
+  - optional fields: statusMappings
+  - risk: high risk Jira REST POST /rest/api/3/workflowscheme/{id}/draft/publish: Publish draft workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- update_draft_workflow_mapping:
+  - endpoint: PUT /rest/api/3/workflowscheme/{{ record.id }}/draft/workflow?workflowName={{ record.workflowName }}
+  - required fields: id, workflowName
+  - optional fields: defaultMapping, issueTypes, updateDraftIfNeeded, workflow
+  - risk: high risk Jira REST PUT /rest/api/3/workflowscheme/{id}/draft/workflow: Set issue types for workflow in workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_draft_workflow_mapping:
+  - endpoint: DELETE /rest/api/3/workflowscheme/{{ record.id }}/draft/workflow?workflowName={{ record.workflowName }}
+  - required fields: id, workflowName
+  - risk: critical risk Jira REST DELETE /rest/api/3/workflowscheme/{id}/draft/workflow: Delete issue types for workflow in draft workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- set_workflow_scheme_issue_type:
+  - endpoint: PUT /rest/api/3/workflowscheme/{{ record.id }}/issuetype/{{ record.issueType }}
+  - required fields: id, issueType
+  - optional fields: updateDraftIfNeeded, workflow
+  - risk: high risk Jira REST PUT /rest/api/3/workflowscheme/{id}/issuetype/{issueType}: Set workflow for issue type in workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_workflow_scheme_issue_type:
+  - endpoint: DELETE /rest/api/3/workflowscheme/{{ record.id }}/issuetype/{{ record.issueType }}
+  - required fields: id, issueType
+  - risk: critical risk Jira REST DELETE /rest/api/3/workflowscheme/{id}/issuetype/{issueType}: Delete workflow for issue type in workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- update_workflow_mapping:
+  - endpoint: PUT /rest/api/3/workflowscheme/{{ record.id }}/workflow?workflowName={{ record.workflowName }}
+  - required fields: id, workflowName
+  - optional fields: defaultMapping, issueTypes, updateDraftIfNeeded, workflow
+  - risk: high risk Jira REST PUT /rest/api/3/workflowscheme/{id}/workflow: Set issue types for workflow in workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- delete_workflow_mapping:
+  - endpoint: DELETE /rest/api/3/workflowscheme/{{ record.id }}/workflow?workflowName={{ record.workflowName }}
+  - required fields: id, workflowName
+  - risk: critical risk Jira REST DELETE /rest/api/3/workflowscheme/{id}/workflow: Delete issue types for workflow in workflow scheme; reverse ETL requires plan, preview, approval, and execute.
+- addon_properties_resource_put_addon_property_put:
+  - endpoint: PUT /rest/atlassian-connect/1/addons/{{ record.addonKey }}/properties/{{ record.propertyKey }}
+  - required fields: addonKey, propertyKey
+  - optional fields: value
+  - risk: medium risk Jira REST PUT /rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}: Set app property; reverse ETL requires plan, preview, approval, and execute.
+- addon_properties_resource_delete_addon_property_delete:
+  - endpoint: DELETE /rest/atlassian-connect/1/addons/{{ record.addonKey }}/properties/{{ record.propertyKey }}
+  - required fields: addonKey, propertyKey
+  - risk: critical risk Jira REST DELETE /rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}: Delete app property; reverse ETL requires plan, preview, approval, and execute.
+- dynamic_modules_resource_register_modules_post:
+  - endpoint: POST /rest/atlassian-connect/1/app/module/dynamic
+  - optional fields: modules
+  - risk: medium risk Jira REST POST /rest/atlassian-connect/1/app/module/dynamic: Register modules; reverse ETL requires plan, preview, approval, and execute.
+- dynamic_modules_resource_remove_modules_delete:
+  - endpoint: DELETE /rest/atlassian-connect/1/app/module/dynamic
+  - risk: critical risk Jira REST DELETE /rest/atlassian-connect/1/app/module/dynamic: Remove modules; reverse ETL requires plan, preview, approval, and execute.
+- app_issue_field_value_update_resource_update_issue_fields_put:
+  - endpoint: PUT /rest/atlassian-connect/1/migration/field
+  - optional fields: updateValueList
+  - risk: medium risk Jira REST PUT /rest/atlassian-connect/1/migration/field: Bulk update custom field value; reverse ETL requires plan, preview, approval, and execute.
+- migration_resource_update_entity_properties_value_put:
+  - endpoint: PUT /rest/atlassian-connect/1/migration/properties/{{ record.entityType }}
+  - required fields: entityType
+  - optional fields: items
+  - risk: medium risk Jira REST PUT /rest/atlassian-connect/1/migration/properties/{entityType}: Bulk update entity properties; reverse ETL requires plan, preview, approval, and execute.
+- migration_resource_workflow_rule_search_post:
+  - endpoint: POST /rest/atlassian-connect/1/migration/workflow/rule/search
+  - optional fields: expand, ruleIds, workflowEntityId
+  - risk: high risk Jira REST POST /rest/atlassian-connect/1/migration/workflow/rule/search: Get workflow transition rule configurations; reverse ETL requires plan, preview, approval, and execute.
+- connect_to_forge_migration_task_submission_resource_submit_task_post:
+  - endpoint: POST /rest/atlassian-connect/1/migration/{{ record.connectKey }}/{{ record.jiraIssueFieldsKey }}/task
+  - required fields: connectKey, jiraIssueFieldsKey
+  - risk: medium risk Jira REST POST /rest/atlassian-connect/1/migration/{connectKey}/{jiraIssueFieldsKey}/task: Submit Connect issue field migration task; reverse ETL requires plan, preview, approval, and execute.
+- put_forge_app_property:
+  - endpoint: PUT /rest/forge/1/app/properties/{{ record.propertyKey }}
+  - required fields: propertyKey
+  - optional fields: value
+  - risk: medium risk Jira REST PUT /rest/forge/1/app/properties/{propertyKey}: Set app property (Forge); reverse ETL requires plan, preview, approval, and execute.
+- delete_forge_app_property:
+  - endpoint: DELETE /rest/forge/1/app/properties/{{ record.propertyKey }}
+  - required fields: propertyKey
+  - risk: critical risk Jira REST DELETE /rest/forge/1/app/properties/{propertyKey}: Delete app property (Forge); reverse ETL requires plan, preview, approval, and execute.
+- get_worklogs_by_issue_id_and_worklog_id:
+  - endpoint: POST /rest/internal/api/latest/worklog/bulk
+  - optional fields: requests
+  - risk: medium risk Jira REST POST /rest/internal/api/latest/worklog/bulk: Get worklogs by issue id and worklog id; reverse ETL requires plan, preview, approval, and execute.
+
 ## Security
 
 - read risk: external Jira Cloud API read of issue, project, and user data
-- approval: none; read-only, no reverse-ETL writes
+- approval: reads require no approval; reverse-ETL writes require plan, preview, approval, execute, and typed confirmation for admin/destructive/sensitive operations
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface
@@ -103,6 +1555,275 @@ Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using 
   - auth login - Configure Jira credentials [intent=auth availability=unsupported_local unsupported local workflow]; notes: Use `pm credentials add jira ...` with environment variables, stdin, or secret manager input; do not pass secrets in prompt text or examples.
   - config set - Set local Jira CLI configuration [intent=config availability=unsupported_local unsupported local workflow]; notes: Connector metadata does not write local CLI config. Use Polymetrics connection and credential commands.
   - api - Call an arbitrary Jira REST endpoint [intent=raw_api availability=unsafe_or_disallowed]; notes: Generic raw Jira API calls are intentionally not exposed. Use typed streams, direct reads, or reverse ETL actions only.
+- Typed REST Read Commands
+  - rest addon-properties-resource-get-addon-properties-get - Get app properties [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --addon-key
+  - rest addon-properties-resource-get-addon-property-get - Get app property [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --addon-key, --property-key
+  - rest bulk-get-groups - Bulk get groups [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --group-id, --group-name, --access-type, --application-key
+  - rest bulk-get-users - Bulk get users [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --username, --key, --account-id
+  - rest bulk-get-users-migration - Get account IDs for users [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --username, --key
+  - rest connect-to-forge-migration-fetch-task-resource-fetch-migration-task-get - Get Connect issue field migration task [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --connect-key, --jira-issue-fields-key
+  - rest dynamic-modules-resource-get-modules-get - Get modules [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest expand-attachment-for-humans - Get all metadata for an expanded attachment [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest expand-attachment-for-machines - Get contents metadata for an expanded attachment [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest find-assignable-users - Find users assignable to issues [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --query, --session-id, --username, --account-id, --project, --issue-key, --issue-id, --start-at, --max-results, --action-descriptor-id, --recommend, --account-type, --app-type
+  - rest find-bulk-assignable-users - Find users assignable to projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --query, --username, --account-id, --project-keys, --start-at, --max-results
+  - rest find-components-for-projects - Find components for projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-ids-or-keys, --start-at, --max-results, --order-by, --query
+  - rest find-groups - Find groups [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --account-id, --query, --exclude, --exclude-id, --max-results, --case-insensitive, --user-name
+  - rest find-user-keys-by-query - Find user keys by query [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --query, --start-at, --max-result
+  - rest find-users - Find users [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --query, --username, --account-id, --start-at, --max-results, --property
+  - rest find-users-and-groups - Find users and groups [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --query, --max-results, --show-avatar, --field-id, --project-id, --issue-type-id, --avatar-size, --case-insensitive, --exclude-connect-addons, --include-ai-agents
+  - rest find-users-by-query - Find users by query [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --query, --start-at, --max-results
+  - rest find-users-for-picker - Find users for picker [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --query, --max-results, --show-avatar, --exclude, --exclude-account-ids, --avatar-size, --exclude-connect-users
+  - rest find-users-with-all-permissions - Find users with permissions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --query, --username, --account-id, --permissions, --issue-key, --project-key, --start-at, --max-results
+  - rest find-users-with-browse-permission - Find users with browse permission [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --query, --username, --account-id, --issue-key, --project-key, --start-at, --max-results
+  - rest get-accessible-project-type-by-key - Get accessible project type by key [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-type-key
+  - rest get-advanced-settings - Get advanced settings [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-all-accessible-project-types - Get licensed project types [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-all-application-roles - Get all application roles [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-all-available-dashboard-gadgets - Get available gadgets [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-all-dashboards - Get all dashboards [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --filter, --start-at, --max-results
+  - rest get-all-field-configuration-schemes - Get all field configuration schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id
+  - rest get-all-field-configurations - Get all field configurations [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --is-default, --query
+  - rest get-all-gadgets - Get gadgets [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --dashboard-id, --module-key, --uri, --gadget-id
+  - rest get-all-issue-field-options - Get all issue field options [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-key, --start-at, --max-results
+  - rest get-all-issue-type-schemes - Get all issue type schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --order-by, --expand, --query-string
+  - rest get-all-labels - Get all labels [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results
+  - rest get-all-permission-schemes - Get all permission schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --expand
+  - rest get-all-permissions - Get all permissions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-all-project-avatars - Get all project avatars [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key
+  - rest get-all-project-categories - Get all project categories [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-all-project-roles - Get all project roles [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-all-project-types - Get all project types [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-all-projects - Get all projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --expand, --recent, --properties
+  - rest get-all-screen-tab-fields - Get all screen tab fields [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --screen-id, --tab-id, --project-key
+  - rest get-all-screen-tabs - Get all screen tabs [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --screen-id, --project-key
+  - rest get-all-statuses - Get all statuses for project [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key
+  - rest get-all-system-avatars - Get system avatars by type [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --type
+  - rest get-all-user-data-classification-levels - Get all classification levels [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --status, --order-by
+  - rest get-all-users-default - Get all users default [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --expand
+  - rest get-all-workflow-schemes - Get all workflow schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results
+  - rest get-alternative-issue-types - Get alternative issue types [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-application-property - Get application property [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --key, --permission-level, --key-filter
+  - rest get-application-role - Get application role [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --key
+  - rest get-approximate-application-license-count - Get approximate application license count [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --application-key
+  - rest get-approximate-license-count - Get approximate license count [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-assigned-permission-scheme - Get assigned permission scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-key-or-id, --expand
+  - rest get-atlassian-team - Get Atlassian team in plan [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --plan-id, --atlassian-team-id
+  - rest get-attachment - Get attachment metadata [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-attachment-meta - Get Jira attachment settings [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-audit-records - Get audit records [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --offset, --limit, --filter, --from, --to
+  - rest get-auto-complete - Get field reference data (GET) [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-available-priorities-by-priority-scheme - Get available priorities by priority scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --query, --scheme-id, --exclude
+  - rest get-available-screen-fields - Get available screen fields [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --screen-id
+  - rest get-available-time-tracking-implementations - Get all time tracking providers [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-available-transitions - Get available transitions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-ids-or-keys, --ending-before, --starting-after
+  - rest get-avatars - Get avatars [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --type, --entity-id
+  - rest get-banner - Get announcement banner configuration [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-bulk-editable-fields - Get bulk editable fields [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-ids-or-keys, --search-text, --ending-before, --starting-after
+  - rest get-bulk-operation-progress - Get bulk issue operation progress [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --task-id
+  - rest get-bulk-screen-tabs - Get bulk screen tabs [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --screen-id, --tab-id, --start-at, --max-result
+  - rest get-change-logs - Get changelogs [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --start-at, --max-results
+  - rest get-columns - Get columns [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-comment - Get comment [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --id, --expand
+  - rest get-comment-property - Get comment property [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --comment-id, --property-key
+  - rest get-comment-property-keys - Get comment property keys [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --comment-id
+  - rest get-comments - Get comments [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --start-at, --max-results, --order-by, --expand
+  - rest get-component - Get component [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-component-related-issues - Get component issues count [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-configuration - Get global settings [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-context-default-values - Get default values for a custom field grouped by context and issue type [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-id, --context-id, --issue-type-id, --start-at, --max-results
+  - rest get-contexts-for-field - Get custom field contexts [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-id, --is-any-issue-type, --is-global-context, --context-id, --start-at, --max-results
+  - rest get-contexts-for-field-deprecated - Get contexts for a field [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-id, --start-at, --max-results
+  - rest get-create-issue-meta - Get create issue metadata [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-ids, --project-keys, --issuetype-ids, --issuetype-names, --expand
+  - rest get-create-issue-meta-issue-type-id - Get create field metadata for a project and issue type id [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key, --issue-type-id, --start-at, --max-results
+  - rest get-create-issue-meta-issue-types - Get create metadata issue types for a project [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key, --start-at, --max-results
+  - rest get-current-user - Get current user [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --expand
+  - rest get-custom-field-configuration - Get custom field configurations [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-id-or-key, --id, --field-context-id, --issue-id, --project-key-or-id, --issue-type-id, --start-at, --max-results
+  - rest get-custom-field-option - Get custom field option [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-dashboard - Get dashboard [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-dashboard-item-property - Get dashboard item property [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --dashboard-id, --item-id, --property-key
+  - rest get-dashboard-item-property-keys - Get dashboard item property keys [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --dashboard-id, --item-id
+  - rest get-dashboards-paginated - Search for dashboards [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --dashboard-name, --account-id, --owner, --groupname, --group-id, --project-id, --order-by, --start-at, --max-results, --status, --expand
+  - rest get-default-editor - Get the user's default workflow editor [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-default-project-classification - Get the default data classification level of a project [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key
+  - rest get-default-share-scope - Get default share scope [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-default-values - Get custom field contexts default values [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-id, --context-id, --start-at, --max-results
+  - rest get-default-workflow - Get default workflow [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --return-draft-if-exists
+  - rest get-draft-default-workflow - Get draft default workflow [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-draft-workflow - Get issue types for workflows in draft workflow scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --workflow-name
+  - rest get-dynamic-webhooks-for-app - Get dynamic webhooks for app [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results
+  - rest get-edit-issue-meta - Get edit issue metadata [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --override-screen-security, --override-editable-flag
+  - rest get-events - Get events [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-failed-webhooks - Get failed webhooks [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --max-results, --after
+  - rest get-favourite-filters - Get favorite filters [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --expand
+  - rest get-features-for-project - Get project features [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key
+  - rest get-field-association-scheme-by-id - Get field scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-field-association-scheme-item-parameters - Get field parameters [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --field-id
+  - rest get-field-association-schemes - Get field schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id, --query, --start-at, --max-results
+  - rest get-field-auto-complete-for-query-string - Get field auto complete suggestions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-name, --field-value, --predicate-name, --predicate-value
+  - rest get-field-configuration-items - Get field configuration items [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --start-at, --max-results
+  - rest get-field-configuration-scheme-mappings - Get field configuration issue type items [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --field-configuration-scheme-id
+  - rest get-field-configuration-scheme-project-mapping - Get field configuration schemes for projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --project-id
+  - rest get-field-project-associations - Get field project associations [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-id, --start-at, --max-results
+  - rest get-fields - Get fields [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-fields-paginated - Get fields paginated [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --type, --id, --query, --order-by, --expand, --project-ids
+  - rest get-filter - Get filter [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --expand, --override-share-permissions
+  - rest get-filters-paginated - Search for filters [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --filter-name, --account-id, --owner, --groupname, --group-id, --project-id, --id, --order-by, --start-at, --max-results, --expand, --override-share-permissions, --is-substring-match
+  - rest get-forge-app-property - Get app property (Forge) [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --property-key
+  - rest get-forge-app-property-keys - Get app property keys (Forge) [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-group - Get group [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --groupname, --group-id, --expand
+  - rest get-hierarchy - Get project issue type hierarchy [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id
+  - rest get-ids-of-worklogs-deleted-since - Get IDs of deleted worklogs [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --since
+  - rest get-ids-of-worklogs-modified-since - Get IDs of updated worklogs [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --since, --expand
+  - rest get-issue - Get issue [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --fields, --fields-by-keys, --expand, --properties, --update-history, --fail-fast
+  - rest get-issue-all-types - Get all issue types for user [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-issue-field-option - Get issue field option [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-key, --option-id
+  - rest get-issue-limit-report - Get issue limit report [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --is-returning-keys
+  - rest get-issue-link - Get issue link [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --link-id
+  - rest get-issue-link-type - Get issue link type [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-link-type-id
+  - rest get-issue-link-types - Get issue link types [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-issue-navigator-default-columns - Get issue navigator default columns [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-issue-picker-resource - Get issue picker suggestions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --query, --current-jql, --current-issue-key, --current-project-id, --show-sub-tasks, --show-sub-task-parent
+  - rest get-issue-property - Get issue property [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --property-key
+  - rest get-issue-property-keys - Get issue property keys [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key
+  - rest get-issue-security-level - Get issue security level [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-issue-security-level-members - Get issue security level members by issue security scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-security-scheme-id, --start-at, --max-results, --issue-security-level-id, --expand
+  - rest get-issue-security-scheme - Get issue security scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-issue-security-schemes - Get issue security schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-issue-type - Get issue type [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-issue-type-mappings-for-contexts - Get issue types for custom field context [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-id, --context-id, --start-at, --max-results
+  - rest get-issue-type-property - Get issue type property [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-type-id, --property-key
+  - rest get-issue-type-property-keys - Get issue type property keys [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-type-id
+  - rest get-issue-type-scheme-for-projects - Get issue type schemes for projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --project-id
+  - rest get-issue-type-schemes-mapping - Get issue type scheme items [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --issue-type-scheme-id
+  - rest get-issue-type-screen-scheme-mappings - Get issue type screen scheme items [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --issue-type-screen-scheme-id
+  - rest get-issue-type-screen-scheme-project-associations - Get issue type screen schemes for projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --project-id
+  - rest get-issue-type-screen-schemes - Get issue type screen schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --query-string, --order-by, --expand
+  - rest get-issue-types-for-project - Get issue types for project [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id, --level
+  - rest get-issue-watchers - Get issue watchers [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key
+  - rest get-issue-worklog - Get issue worklogs [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --start-at, --max-results, --started-after, --started-before, --expand
+  - rest get-license - Get license [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-locale - Get locale [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-my-filters - Get my filters [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --expand, --include-favourites
+  - rest get-my-permissions - Get my permissions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-key, --project-id, --issue-key, --issue-id, --permissions, --project-uuid, --project-configuration-uuid, --comment-id
+  - rest get-notification-scheme - Get notification scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --expand
+  - rest get-notification-scheme-for-project - Get project notification scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-key-or-id, --expand
+  - rest get-notification-scheme-to-project-mappings - Get projects using notification schemes paginated [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --notification-scheme-id, --project-id
+  - rest get-notification-schemes - Get notification schemes paginated [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --project-id, --only-default, --expand
+  - rest get-options-for-context - Get custom field options (context) [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-id, --context-id, --option-id, --only-options, --start-at, --max-results
+  - rest get-permission-scheme - Get permission scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --scheme-id, --expand
+  - rest get-permission-scheme-grant - Get permission scheme grant [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --scheme-id, --permission-id, --expand
+  - rest get-permission-scheme-grants - Get permission scheme grants [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --scheme-id, --expand
+  - rest get-plan - Get plan [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --plan-id, --use-group-id
+  - rest get-plan-only-team - Get plan-only team [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --plan-id, --plan-only-team-id
+  - rest get-plans - Get plans paginated [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --include-trashed, --include-archived, --cursor, --max-results
+  - rest get-policies - Get data policy for projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --ids
+  - rest get-policy - Get data policy for the workspace [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-precomputations - Get precomputations (apps) [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --function-key, --start-at, --max-results, --order-by
+  - rest get-preference - Get preference [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --key
+  - rest get-priorities - Get priorities [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-priorities-by-priority-scheme - Get priorities by priority scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --scheme-id, --start-at, --max-results
+  - rest get-priority - Get priority [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-priority-schemes - Get priority schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --priority-id, --scheme-id, --scheme-name, --only-default, --order-by, --expand
+  - rest get-project - Get project [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key, --expand, --properties
+  - rest get-project-category-by-id - Get project category by ID [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-project-classification-config - Get the classification configuration for a project [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key
+  - rest get-project-components - Get project components [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key, --component-source
+  - rest get-project-components-paginated - Get project components paginated [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key, --start-at, --max-results, --order-by, --component-source, --query
+  - rest get-project-context-mapping - Get project mappings for custom field context [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-id, --context-id, --start-at, --max-results
+  - rest get-project-email - Get project's sender email [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id
+  - rest get-project-fields - Get fields for projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --project-id, --work-type-id, --field-id
+  - rest get-project-issue-security-scheme - Get project issue security scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-key-or-id
+  - rest get-project-issue-type-usages-for-status - Get issue type usages by status and project [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --status-id, --project-id, --next-page-token, --max-results
+  - rest get-project-property - Get project property [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key, --property-key
+  - rest get-project-property-keys - Get project property keys [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key
+  - rest get-project-role - Get project role for project [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key, --id, --exclude-inactive-users
+  - rest get-project-role-actors-for-role - Get default actors for project role [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-project-role-by-id - Get project role by ID [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-project-role-details - Get project role details [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key, --current-member, --exclude-connect-addons, --exclude-other-service-roles
+  - rest get-project-roles - Get project roles for project [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key
+  - rest get-project-type-by-key - Get project type by key [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-type-key
+  - rest get-project-usages-for-status - Get project usages by status [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --status-id, --next-page-token, --max-results
+  - rest get-project-usages-for-workflow - Get projects using a given workflow [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --workflow-id, --next-page-token, --max-results
+  - rest get-project-usages-for-workflow-scheme - Get projects which are using a given workflow scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --workflow-scheme-id, --next-page-token, --max-results
+  - rest get-project-versions - Get project versions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key, --expand
+  - rest get-project-versions-paginated - Get project versions paginated [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id-or-key, --start-at, --max-results, --order-by, --query, --status, --expand
+  - rest get-projects-by-priority-scheme - Get projects by priority scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --scheme-id, --start-at, --max-results, --project-id, --query
+  - rest get-projects-for-issue-type-screen-scheme - Get issue type screen scheme projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-type-screen-scheme-id, --start-at, --max-results, --query
+  - rest get-projects-with-field-schemes - Get projects with field schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --project-id
+  - rest get-recent - Get recent projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --expand, --properties
+  - rest get-redaction-status - Get redaction status [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --job-id
+  - rest get-related-work - Get related work [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-remote-issue-link-by-id - Get remote issue link by ID [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --link-id
+  - rest get-remote-issue-links - Get remote issue links [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --global-id
+  - rest get-resolution - Get resolution [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-resolutions - Get resolutions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-screen-schemes - Get screen schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --expand, --query-string, --order-by
+  - rest get-screens - Get screens [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --query-string, --scope, --order-by
+  - rest get-screens-for-field - Get screens for a field [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-id, --start-at, --max-results, --expand
+  - rest get-security-level-members - Get issue security level members [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --scheme-id, --level-id, --expand
+  - rest get-security-levels - Get issue security levels [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --scheme-id, --only-default
+  - rest get-security-levels-for-project - Get project issue security levels [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-key-or-id
+  - rest get-selectable-issue-field-options - Get selectable issue field options [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-key, --start-at, --max-results, --project-id
+  - rest get-selected-time-tracking-implementation - Get selected time tracking provider [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-server-info - Get Jira instance info [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-share-permission - Get share permission [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --permission-id
+  - rest get-share-permissions - Get share permissions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-shared-time-tracking-configuration - Get time tracking settings [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-status - Get status [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id-or-name
+  - rest get-status-categories - Get all status categories [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-status-category - Get status category [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id-or-key
+  - rest get-statuses - Get all statuses [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.
+  - rest get-statuses-by-id - Bulk get statuses [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-statuses-by-name - Bulk get statuses by name [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --name, --project-id
+  - rest get-task - Get task [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --task-id
+  - rest get-teams - Get teams in plan paginated [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --plan-id, --cursor, --max-results
+  - rest get-transitions - Get transitions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --expand, --transition-id, --skip-remote-only-condition, --include-unavailable-transitions, --sort-by-ops-bar-and-status
+  - rest get-trashed-fields-paginated - Get fields in trash paginated [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --query, --expand, --order-by
+  - rest get-ui-modifications - Get UI modifications [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --expand
+  - rest get-user - Get user [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --account-id, --username, --key, --expand
+  - rest get-user-default-columns - Get user default columns [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --account-id, --username
+  - rest get-user-email - Get user email [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --account-id
+  - rest get-user-email-bulk - Get user email bulk [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --account-id
+  - rest get-user-groups - Get user groups [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --account-id, --username, --key
+  - rest get-user-property - Get user property [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --property-key, --account-id, --user-key, --username
+  - rest get-user-property-keys - Get user property keys [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --account-id, --user-key, --username
+  - rest get-users-from-group - Get users from group [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --groupname, --group-id, --include-inactive-users, --start-at, --max-results
+  - rest get-valid-project-key - Get valid project key [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --key
+  - rest get-valid-project-name - Get valid project name [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --name
+  - rest get-version - Get version [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --expand
+  - rest get-version-related-issues - Get version's related issues count [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-version-unresolved-issues - Get version's unresolved issues count [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-visible-issue-field-options - Get visible issue field options [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --field-key, --start-at, --max-results, --project-id
+  - rest get-votes - Get votes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key
+  - rest get-workflow - Get issue types for workflows in workflow scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --workflow-name, --return-draft-if-exists
+  - rest get-workflow-project-issue-type-usages - Get issue types in a project that are using a given workflow [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --workflow-id, --project-id, --next-page-token, --max-results
+  - rest get-workflow-scheme - Get workflow scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --return-draft-if-exists
+  - rest get-workflow-scheme-draft - Get draft workflow scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id
+  - rest get-workflow-scheme-draft-issue-type - Get workflow for issue type in draft workflow scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --issue-type
+  - rest get-workflow-scheme-issue-type - Get workflow for issue type in workflow scheme [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --issue-type, --return-draft-if-exists
+  - rest get-workflow-scheme-project-associations - Get workflow scheme project associations [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id
+  - rest get-workflow-scheme-usages-for-workflow - Get workflow schemes which are using a given workflow [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --workflow-id, --next-page-token, --max-results
+  - rest get-workflow-transition-properties - Get workflow transition properties [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --transition-id, --include-reserved-keys, --key, --workflow-name, --workflow-mode
+  - rest get-workflow-transition-rule-configurations - Get workflow transition rule configurations [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --types, --keys, --workflow-names, --with-tags, --draft, --expand
+  - rest get-workflow-usages-for-status - Get workflow usages by status [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --status-id, --next-page-token, --max-results
+  - rest get-workflows-paginated - Get workflows paginated [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --workflow-name, --expand, --query-string, --order-by, --is-active
+  - rest get-worklog - Get worklog [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --id, --expand
+  - rest get-worklog-property - Get worklog property [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --worklog-id, --property-key
+  - rest get-worklog-property-keys - Get worklog property keys [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --issue-id-or-key, --worklog-id
+  - rest live-template - Gets a custom project template [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id, --template-key
+  - rest search - Search statuses paginated [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --project-id, --start-at, --max-results, --search-string, --status-category, --include-global-statuses
+  - rest search-and-reconsile-issues-using-jql - Search for issues using JQL enhanced search (GET) [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --jql, --next-page-token, --max-results, --fields, --expand, --properties, --fields-by-keys, --fail-fast, --reconcile-issues
+  - rest search-field-association-scheme-fields - Search field scheme fields [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --start-at, --max-results, --field-id
+  - rest search-field-association-scheme-projects - Search field scheme projects [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --id, --start-at, --max-results, --project-id
+  - rest search-priorities - Search priorities [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --project-id, --priority-name, --only-default, --expand
+  - rest search-projects-using-security-schemes - Get projects using issue security schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --issue-security-scheme-id, --project-id
+  - rest search-resolutions - Search resolutions [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --only-default
+  - rest search-security-schemes - Search issue security schemes [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --id, --project-id
+  - rest search-workflows - Search workflows [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --start-at, --max-results, --expand, --query-string, --order-by, --scope, --is-active, --project-id
+  - rest service-registry-resource-services-get - Retrieve the attributes of service registries [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --service-ids
+  - rest validate-project-key - Validate project key [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --key
+  - rest workflow-capabilities - Get available workflow capabilities [intent=direct_read availability=implemented]; notes: Generated fixed-endpoint Jira Cloud REST direct read from the official OpenAPI operation ledger.; flags: --workflow-id, --project-id, --issue-type-id
 - Help topics:
   - auth - Use Polymetrics credentials for Jira site URL, email, and API token; never place secrets in command examples.
   - writes - Jira writes are metadata-only in this slice and remain blocked until reverse ETL policy and operation ledger slices are complete.
@@ -127,3 +1848,4 @@ pm connectors inspect jira --json
 - Run pm connectors inspect jira before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

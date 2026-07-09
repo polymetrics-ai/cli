@@ -940,6 +940,113 @@ func TestBundleLoadEmbeddedJiraCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedJiraFullSurface(t *testing.T) {
+	b, err := Load(defs.FS, "jira")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, jira): %v", err)
+	}
+	if len(b.Operations) != 620 {
+		t.Fatalf("Jira Operations = %d, want official OpenAPI count 620", len(b.Operations))
+	}
+	if len(b.Writes) != 333 {
+		t.Fatalf("Jira Writes = %d, want 333 reverse-ETL write actions", len(b.Writes))
+	}
+
+	kinds := map[string]int{}
+	for _, op := range b.Operations {
+		kinds[op.Kind]++
+		switch op.Kind {
+		case "rest_read", "rest_query", "rest_write":
+			if op.REST == nil {
+				t.Fatalf("operation %s kind %s missing rest metadata", op.ID, op.Kind)
+			}
+		case "binary_download":
+			if op.Binary == nil || op.Binary.MaxBytes <= 0 {
+				t.Fatalf("binary operation %s missing positive max_bytes policy", op.ID)
+			}
+		case "file_upload":
+			if op.File == nil || op.File.Direction != "upload" || op.File.MaxBytes <= 0 {
+				t.Fatalf("file upload operation %s missing bounded upload policy", op.ID)
+			}
+		default:
+			t.Fatalf("Jira operation %s has unexpected kind %q; Jira Cloud OpenAPI is REST-only", op.ID, op.Kind)
+		}
+		if op.Kind == "rest_write" {
+			if op.MutationClass == "" || op.MutationClass == "none" {
+				t.Fatalf("write operation %s missing mutation_class", op.ID)
+			}
+			if !strings.Contains(op.Approval, "plan") || !strings.Contains(op.Approval, "preview") || !strings.Contains(op.Approval, "approval") || !strings.Contains(op.Approval, "execute") {
+				t.Fatalf("write operation %s approval = %q, want plan/preview/approval/execute", op.ID, op.Approval)
+			}
+		}
+	}
+	if kinds["rest_query"] == 0 {
+		t.Fatalf("Jira operations have no rest_query entries for safe body-variable reads: %+v", kinds)
+	}
+}
+
+func TestBundleLoadDiskJiraAPISurfaceFullCoverage(t *testing.T) {
+	b, err := Load(os.DirFS("../defs"), "jira")
+	if err != nil {
+		t.Fatalf("Load(os.DirFS, jira): %v", err)
+	}
+	if b.Surface == nil {
+		t.Fatalf("Jira Surface is nil; disk api_surface.json must exist for conformance")
+	}
+	if b.Surface.OperationLedgerVersion != 1 {
+		t.Fatalf("Jira Surface operation_ledger_version = %d, want 1", b.Surface.OperationLedgerVersion)
+	}
+	if len(b.Surface.Endpoints) != 620 {
+		t.Fatalf("Jira Surface endpoints = %d, want official OpenAPI count 620", len(b.Surface.Endpoints))
+	}
+
+	seen := map[string]bool{}
+	covered := map[string]int{}
+	methods := map[string]int{}
+	for i, ep := range b.Surface.Endpoints {
+		methods[strings.ToUpper(ep.Method)]++
+		key := strings.ToUpper(ep.Method) + " " + ep.Path
+		if seen[key] {
+			t.Fatalf("duplicate Jira api_surface endpoint %q", key)
+		}
+		seen[key] = true
+		if ep.Excluded != nil {
+			t.Fatalf("endpoint %d (%s) uses legacy excluded in operation-ledger mode", i, key)
+		}
+		if ep.CoveredBy != nil {
+			switch {
+			case ep.CoveredBy.Stream != "":
+				covered["stream"]++
+			case ep.CoveredBy.Write != "":
+				covered["write"]++
+			case ep.CoveredBy.DirectRead != "" || len(ep.CoveredBy.DirectReads) > 0:
+				covered["direct_read"]++
+			default:
+				t.Fatalf("endpoint %d (%s) has empty covered_by", i, key)
+			}
+			continue
+		}
+		if ep.Operation == nil || !ep.Operation.BlockedByDefault || ep.Operation.Status != "blocked" {
+			t.Fatalf("endpoint %d (%s) missing blocked operation classifier: %+v", i, key, ep.Operation)
+		}
+	}
+	if covered["stream"] != 3 {
+		t.Fatalf("covered streams = %d, want 3", covered["stream"])
+	}
+	if covered["direct_read"] == 0 {
+		t.Fatalf("covered direct reads = 0, want bounded direct-read coverage")
+	}
+	if covered["write"] != 333 {
+		t.Fatalf("covered writes = %d, want 333", covered["write"])
+	}
+	want := map[string]int{"GET": 276, "POST": 135, "PUT": 119, "DELETE": 90}
+	for method, count := range want {
+		if methods[method] != count {
+			t.Fatalf("Jira api_surface method count %s = %d, want %d (all counts: %+v)", method, methods[method], count, methods)
+		}
+	}
+}
+
 func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

@@ -234,7 +234,7 @@
 | `ip2whois` | [`icons/ip2whois.svg`](../icons/ip2whois.svg) | IP2WHOIS | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.ip2whois.com/developers-api) | bundle definition |
 | `iterable` | [`icons/iterable.svg`](../icons/iterable.svg) | Iterable | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://api.iterable.com/api/docs) | bundle definition |
 | `jamf-pro` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Jamf Pro | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.jamf.com/jamf-pro/reference/classic-api) | bundle definition |
-| `jira` | [`icons/jira.svg`](../icons/jira.svg) | Jira | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/) | bundle definition |
+| `jira` | [`icons/jira.svg`](../icons/jira.svg) | Jira | `api` | ga | check, catalog, read, write | 3 | 333 | [Documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/) | bundle definition |
 | `jobnimbus` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | JobNimbus | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://documenter.getpostman.com/view/3919598/S11PpG4x) | bundle definition |
 | `jotform` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Jotform | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://api.jotform.com/docs/) | bundle definition |
 | `judge-me-reviews` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Judge.me Reviews | `api` | ga | check, catalog, read, write | 23 | 13 | [Documentation](https://judge.me/api) | bundle definition |

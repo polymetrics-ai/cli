@@ -34,82 +34,138 @@
     {
       "number": 105,
       "status": "verified",
-      "dependencies": [104],
-      "write_scope": ["connector help renderer/docs surfaces", "internal/connectors/defs/jira"],
+      "dependencies": [
+        104
+      ],
+      "write_scope": [
+        "connector help renderer/docs surfaces",
+        "internal/connectors/defs/jira"
+      ],
       "decision": "local_critical_path"
     },
     {
       "number": 106,
       "status": "verified",
-      "dependencies": [104, 105],
-      "write_scope": ["connector command runner", "internal/connectors/defs/jira"],
+      "dependencies": [
+        104,
+        105
+      ],
+      "write_scope": [
+        "connector command runner",
+        "internal/connectors/defs/jira"
+      ],
       "decision": "local_critical_path"
     },
     {
       "number": 107,
-      "status": "worker_ready",
-      "dependencies": [104],
-      "write_scope": ["internal/connectors/defs/jira/api_surface.json", "internal/connectors/defs/jira/operations.json"],
-      "decision": "ready_after_104"
+      "status": "verified",
+      "dependencies": [
+        104,
+        105,
+        106
+      ],
+      "write_scope": [
+        "internal/connectors/defs/jira/api_surface.json",
+        "internal/connectors/defs/jira/operations.json"
+      ],
+      "decision": "local_critical_path_verified"
     },
     {
       "number": 108,
-      "status": "planned",
-      "dependencies": [107],
-      "write_scope": ["direct-read executor", "internal/connectors/defs/jira"],
-      "decision": "not_spawned_dependency_blocked"
+      "status": "verified",
+      "dependencies": [
+        107
+      ],
+      "write_scope": [
+        "direct-read executor",
+        "internal/connectors/defs/jira"
+      ],
+      "decision": "local_critical_path_verified"
     },
     {
       "number": 109,
-      "status": "planned",
-      "dependencies": [107],
-      "write_scope": ["GraphQL/body-variable engine if required", "internal/connectors/defs/jira"],
-      "decision": "not_spawned_dependency_blocked"
+      "status": "verified",
+      "dependencies": [
+        107
+      ],
+      "write_scope": [
+        "GraphQL/body-variable engine if required",
+        "internal/connectors/defs/jira"
+      ],
+      "decision": "local_critical_path_verified"
     },
     {
       "number": 110,
-      "status": "planned",
-      "dependencies": [107],
-      "write_scope": ["sensitive/admin policy metadata", "internal/connectors/defs/jira"],
-      "decision": "not_spawned_dependency_blocked"
+      "status": "verified",
+      "dependencies": [
+        107
+      ],
+      "write_scope": [
+        "sensitive/admin policy metadata",
+        "internal/connectors/defs/jira"
+      ],
+      "decision": "local_critical_path_verified"
     }
   ],
   "spawn_decisions": [
     {
       "timestamp": "2026-07-09T12:49:58Z",
       "decision": "not_spawned_runtime_capability_missing",
-      "issue_numbers": [104],
+      "issue_numbers": [
+        104
+      ],
       "reason": "The current tool surface has no Pi subagent tool and no isolated mutating worker launcher; coordinator starts #104 locally as the critical path."
     },
     {
       "timestamp": "2026-07-09T13:10:00Z",
       "decision": "local_critical_path",
-      "issue_numbers": [104],
+      "issue_numbers": [
+        104
+      ],
       "reason": "Issue #104 targeted red/green implementation is complete locally; full verification and automated review coverage remain pending."
     },
     {
       "timestamp": "2026-07-09T14:03:27Z",
       "decision": "verify_complete",
-      "issue_numbers": [104],
+      "issue_numbers": [
+        104
+      ],
       "reason": "Issue #104 full local gates passed; #105 and #107 are now ready by dependency status, but not spawned because this harness lacks subagent tooling."
     },
     {
       "timestamp": "2026-07-09T15:25:33Z",
       "decision": "verify_complete",
-      "issue_numbers": [105],
+      "issue_numbers": [
+        105
+      ],
       "reason": "Issue #105 full local gates passed; #106 is now ready by dependency status, but not spawned because this harness lacks subagent tooling."
     },
     {
       "timestamp": "2026-07-09T16:50:00Z",
       "decision": "local_critical_path",
-      "issue_numbers": [106],
+      "issue_numbers": [
+        106
+      ],
       "reason": "No Pi subagent tool is available; #106 stream runner starts locally with manual GSD/TDD fallback."
     },
     {
       "timestamp": "2026-07-09T17:21:34Z",
       "decision": "verify_complete",
-      "issue_numbers": [106],
+      "issue_numbers": [
+        106
+      ],
       "reason": "Issue #106 full local gates passed; automated review coverage pending after implementation push."
+    },
+    {
+      "timestamp": "2026-07-09T19:25:00Z",
+      "decision": "verify_complete",
+      "issue_numbers": [
+        107,
+        108,
+        109,
+        110
+      ],
+      "reason": "Full Jira OpenAPI surface implemented locally because no Pi subagent tool is available: 620 operations, 333 writes, 268 direct reads, rest_query/body-variable metadata, sensitive/admin policy, docs/website data, and full local gates passed."
     }
   ],
   "subissues": [
@@ -120,7 +176,11 @@
       "pr_url": "",
       "worker": "local coordinator (provider-cli-surface-agent role)",
       "status": "verified",
-      "write_scope": ["internal/connectors/defs/jira", "internal/connectors/engine/bundle_test.go", ".planning/phases/issue-104-jira-cli-surface"],
+      "write_scope": [
+        "internal/connectors/defs/jira",
+        "internal/connectors/engine/bundle_test.go",
+        ".planning/phases/issue-104-jira-cli-surface"
+      ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-81-jira-cli-parity",
       "verification": "passed: Jira CLI-surface red/green test, engine/connectorgen CLI-surface tests, Jira conformance, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, connectorgen validate 547 connectors with 0 findings",
       "automated_review": {
@@ -141,10 +201,23 @@
       "pr_url": "",
       "worker": "help-renderer-agent",
       "status": "verified",
-      "write_scope": ["help/docs/rendering", "internal/connectors/defs/jira"],
+      "write_scope": [
+        "help/docs/rendering",
+        "internal/connectors/defs/jira"
+      ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-81-jira-cli-parity",
       "verification": "passed: runtime Jira help including JSON help-topic fallback, connector docs, website data/tests/build, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, connectorgen validate 547 connectors with 0 findings",
-      "automated_review": { "primary_route": "coderabbit_manual_fallback", "status": "completed_after_retry_window", "head_sha": "1fbff1ba50c748387a5f74bd0e7cfb3388bce6cc", "reviewed_range": "ae01c3f962fe089fc26e274fba1f9bbad540f7dd..1fbff1ba50c748387a5f74bd0e7cfb3388bce6cc", "coverage_route": "parent_pr", "fallback_route": "copilot_backup", "fallback_status": "commented_review_fixed", "disposition_summary": "CodeRabbit reported a 51 minute review limit after #105, Copilot backup produced 4 comments across two passes, and CodeRabbit later completed manual review after the retry window with one trivial nitpick. All comments were fixed and re-verified; Copilot review is backup input and not approval.", "disposition_url": "https://github.com/polymetrics-ai/cli/pull/129#pullrequestreview-4664908438" }
+      "automated_review": {
+        "primary_route": "coderabbit_manual_fallback",
+        "status": "completed_after_retry_window",
+        "head_sha": "1fbff1ba50c748387a5f74bd0e7cfb3388bce6cc",
+        "reviewed_range": "ae01c3f962fe089fc26e274fba1f9bbad540f7dd..1fbff1ba50c748387a5f74bd0e7cfb3388bce6cc",
+        "coverage_route": "parent_pr",
+        "fallback_route": "copilot_backup",
+        "fallback_status": "commented_review_fixed",
+        "disposition_summary": "CodeRabbit reported a 51 minute review limit after #105, Copilot backup produced 4 comments across two passes, and CodeRabbit later completed manual review after the retry window with one trivial nitpick. All comments were fixed and re-verified; Copilot review is backup input and not approval.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/129#pullrequestreview-4664908438"
+      }
     },
     {
       "number": 106,
@@ -153,58 +226,122 @@
       "pr_url": "",
       "worker": "issue-first-implementation-agent",
       "status": "verified",
-      "write_scope": ["command runner", "internal/connectors/defs/jira"],
+      "write_scope": [
+        "command runner",
+        "internal/connectors/defs/jira"
+      ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-81-jira-cli-parity",
       "verification": "passed: Jira stream-backed issue/project/user command tests, docs/website data, commandrunner, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, connectorgen validate 547 connectors with 0 findings",
-      "automated_review": { "primary_route": "coderabbit_manual_fallback", "status": "commented_review_fixed", "head_sha": "bd3b5ebcee58fd14d3109af6eb23d7b58bfe0e5b", "reviewed_range": "1fbff1ba50c748387a5f74bd0e7cfb3388bce6cc..bd3b5ebcee58fd14d3109af6eb23d7b58bfe0e5b", "coverage_route": "parent_pr", "fallback_route": "none", "disposition_summary": "CodeRabbit completed review for #106 and reported 2 findings; issue-create risk metadata and httptest handler assertions were fixed and full gates passed again. Review coverage for the review-fix commit is pending after push.", "disposition_url": "https://github.com/polymetrics-ai/cli/pull/129#pullrequestreview-4665313903" }
+      "automated_review": {
+        "primary_route": "coderabbit_manual_fallback",
+        "status": "commented_review_fixed",
+        "head_sha": "bd3b5ebcee58fd14d3109af6eb23d7b58bfe0e5b",
+        "reviewed_range": "1fbff1ba50c748387a5f74bd0e7cfb3388bce6cc..bd3b5ebcee58fd14d3109af6eb23d7b58bfe0e5b",
+        "coverage_route": "parent_pr",
+        "fallback_route": "none",
+        "disposition_summary": "CodeRabbit completed review for #106 and reported 2 findings; issue-create risk metadata and httptest handler assertions were fixed and full gates passed again. Review coverage for the review-fix commit is pending after push.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/129#pullrequestreview-4665313903"
+      }
     },
     {
       "number": 107,
       "url": "https://github.com/polymetrics-ai/cli/issues/107",
-      "branch": "feat/jira-operation-ledger",
+      "branch": "feat/81-jira-cli-parity",
       "pr_url": "",
-      "worker": "operation-ledger-architect",
-      "status": "worker_ready",
-      "write_scope": ["internal/connectors/defs/jira/api_surface.json", "internal/connectors/defs/jira/operations.json"],
-      "worker_directory": "",
-      "verification": "ready after #104 verification; not started",
-      "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "", "reviewed_range": "", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "blocked on #104", "disposition_url": "" }
+      "worker": "local coordinator (full-surface critical path)",
+      "status": "verified",
+      "write_scope": [
+        "internal/connectors/defs/jira/api_surface.json",
+        "internal/connectors/defs/jira/operations.json",
+        "internal/connectors/engine/bundle_test.go"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-81-jira-cli-parity",
+      "verification": "passed: official Jira OpenAPI full-surface ledger with 620 operations (GET 276, POST 135, PUT 119, DELETE 90), 333 reverse-ETL writes, 268 generated direct reads, 3 existing streams, 16 blocked binary/file-upload/rest-query executor gaps, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, connectorgen validate 547 connectors with 0 findings, website build",
+      "automated_review": {
+        "primary_route": "pending_after_push",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "parent_pr",
+        "fallback_route": "none",
+        "disposition_summary": "Local implementation and verification complete; automated review coverage pending after the full-surface commit is pushed.",
+        "disposition_url": ""
+      }
     },
     {
       "number": 108,
       "url": "https://github.com/polymetrics-ai/cli/issues/108",
-      "branch": "feat/jira-direct-read",
+      "branch": "feat/81-jira-cli-parity",
       "pr_url": "",
-      "worker": "direct-read-executor-agent",
-      "status": "planned",
-      "write_scope": ["direct-read executor", "internal/connectors/defs/jira"],
-      "worker_directory": "",
-      "verification": "blocked on #107",
-      "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "", "reviewed_range": "", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "blocked on #107", "disposition_url": "" }
+      "worker": "local coordinator (full-surface critical path)",
+      "status": "verified",
+      "write_scope": [
+        "direct-read executor/output policy",
+        "internal/connectors/defs/jira/cli_surface.json",
+        "internal/cli/cli_test.go"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-81-jira-cli-parity",
+      "verification": "passed: official Jira OpenAPI full-surface ledger with 620 operations (GET 276, POST 135, PUT 119, DELETE 90), 333 reverse-ETL writes, 268 generated direct reads, 3 existing streams, 16 blocked binary/file-upload/rest-query executor gaps, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, connectorgen validate 547 connectors with 0 findings, website build",
+      "automated_review": {
+        "primary_route": "pending_after_push",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "parent_pr",
+        "fallback_route": "none",
+        "disposition_summary": "Local implementation and verification complete; automated review coverage pending after the full-surface commit is pushed.",
+        "disposition_url": ""
+      }
     },
     {
       "number": 109,
       "url": "https://github.com/polymetrics-ai/cli/issues/109",
-      "branch": "feat/jira-graphql-engine",
+      "branch": "feat/81-jira-cli-parity",
       "pr_url": "",
-      "worker": "graphql-engine-agent",
-      "status": "planned",
-      "write_scope": ["GraphQL/body-variable engine if required", "internal/connectors/defs/jira"],
-      "worker_directory": "",
-      "verification": "blocked on #107",
-      "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "", "reviewed_range": "", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "blocked on #107", "disposition_url": "" }
+      "worker": "local coordinator (full-surface critical path)",
+      "status": "verified",
+      "write_scope": [
+        "operations schema rest_query",
+        "REST body-variable operation metadata",
+        "internal/connectors/engine/bundle.go"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-81-jira-cli-parity",
+      "verification": "passed: official Jira OpenAPI full-surface ledger with 620 operations (GET 276, POST 135, PUT 119, DELETE 90), 333 reverse-ETL writes, 268 generated direct reads, 3 existing streams, 16 blocked binary/file-upload/rest-query executor gaps, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, connectorgen validate 547 connectors with 0 findings, website build",
+      "automated_review": {
+        "primary_route": "pending_after_push",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "parent_pr",
+        "fallback_route": "none",
+        "disposition_summary": "Local implementation and verification complete; automated review coverage pending after the full-surface commit is pushed.",
+        "disposition_url": ""
+      }
     },
     {
       "number": 110,
       "url": "https://github.com/polymetrics-ai/cli/issues/110",
-      "branch": "feat/jira-sensitive-admin",
+      "branch": "feat/81-jira-cli-parity",
       "pr_url": "",
-      "worker": "sensitive-admin-policy-agent",
-      "status": "planned",
-      "write_scope": ["sensitive/admin policy metadata", "internal/connectors/defs/jira"],
-      "worker_directory": "",
-      "verification": "blocked on #107",
-      "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "", "reviewed_range": "", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "blocked on #107", "disposition_url": "" }
+      "worker": "local coordinator (full-surface critical path)",
+      "status": "verified",
+      "write_scope": [
+        "internal/connectors/defs/jira/writes.json",
+        "sensitive/admin/destructive policy metadata",
+        "docs/website generated data"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-81-jira-cli-parity",
+      "verification": "passed: official Jira OpenAPI full-surface ledger with 620 operations (GET 276, POST 135, PUT 119, DELETE 90), 333 reverse-ETL writes, 268 generated direct reads, 3 existing streams, 16 blocked binary/file-upload/rest-query executor gaps, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, connectorgen validate 547 connectors with 0 findings, website build",
+      "automated_review": {
+        "primary_route": "pending_after_push",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "parent_pr",
+        "fallback_route": "none",
+        "disposition_summary": "Local implementation and verification complete; automated review coverage pending after the full-surface commit is pushed.",
+        "disposition_url": ""
+      }
     }
   ],
   "human_gates": [
@@ -218,5 +355,5 @@
     "generic shell/http/sql write tools",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updated_at": "2026-07-09T17:46:04Z"
+  "updated_at": "2026-07-09T19:25:00Z"
 }

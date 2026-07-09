@@ -181,6 +181,54 @@ func TestDirectReadRejectsOversizedResponse(t *testing.T) {
 	}
 }
 
+func TestDirectReadRedactsGenericJSONSensitiveFields(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"id":"10000",
+			"self":"https://example.atlassian.net/rest/api/3/issue/10000",
+			"content":"sensitive body",
+			"downloadUrl":"https://example.atlassian.net/secure/attachment/1/file.txt",
+			"nested":{"apiToken":"must not leak","name":"visible"}
+		}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/rest/api/3/issue/{issueIdOrKey}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/rest/api/3/issue/{issueIdOrKey}",
+		PathParams:   map[string]string{"issueIdOrKey": "POLY-1"},
+		MaxBytes:     1024,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	if _, ok := body["content"]; ok {
+		t.Fatalf("content was not redacted: %+v", body)
+	}
+	if _, ok := body["downloadUrl"]; ok {
+		t.Fatalf("downloadUrl was not redacted: %+v", body)
+	}
+	nested, ok := body["nested"].(map[string]any)
+	if !ok {
+		t.Fatalf("nested body = %T, want map", body["nested"])
+	}
+	if _, ok := nested["apiToken"]; ok {
+		t.Fatalf("apiToken was not redacted: %+v", nested)
+	}
+	if nested["name"] != "visible" || nested["apiToken_redacted"] != true {
+		t.Fatalf("nested redaction = %+v, want visible name and apiToken_redacted", nested)
+	}
+	if body["content_redacted"] != true || body["downloadUrl_redacted"] != true {
+		t.Fatalf("redaction markers = %+v, want content/downloadUrl redacted", body)
+	}
+}
+
 func TestDirectReadRedactsGitHubFileContent(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

@@ -590,6 +590,74 @@ func TestJiraCommandSurfaceRunsStreamBackedCommands(t *testing.T) {
 	}
 }
 
+func TestJiraCommandSurfaceRunsGeneratedDirectRead(t *testing.T) {
+	var gotPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		user, pass, ok := r.BasicAuth()
+		if !ok || user != "agent@example.invalid" || pass != "test-token" {
+			t.Errorf("basic auth = (%q, %q, %v), want Jira test credential", user, pass, ok)
+		}
+		if r.Method != http.MethodGet {
+			t.Errorf("method = %s, want GET", r.Method)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"message":"hello","content":"must redact","nested":{"apiToken":"must redact","name":"visible"}}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	t.Setenv("JIRA_TEST_TOKEN", "test-token")
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "jira-local",
+		"--connector", "jira",
+		"--config", "email=agent@example.invalid",
+		"--config", "base_url=" + srv.URL,
+		"--from-env", "api_token=JIRA_TEST_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"jira", "rest", "get-banner",
+		"--credential", "jira-local",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/rest/api/3/announcementBanner" {
+		t.Fatalf("request path = %q, want announcement banner endpoint", gotPath)
+	}
+
+	var env struct {
+		Kind     string         `json:"kind"`
+		Command  string         `json:"command"`
+		Method   string         `json:"method"`
+		Path     string         `json:"path"`
+		Status   int            `json:"status"`
+		Response map[string]any `json:"response"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandDirectRead" || env.Command != "rest get-banner" || env.Method != http.MethodGet || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want generated Jira direct-read result", env)
+	}
+	if _, ok := env.Response["content"]; ok {
+		t.Fatalf("response leaked content: %+v", env.Response)
+	}
+	nested, ok := env.Response["nested"].(map[string]any)
+	if !ok {
+		t.Fatalf("nested response = %T, want map", env.Response["nested"])
+	}
+	if _, ok := nested["apiToken"]; ok {
+		t.Fatalf("response leaked apiToken: %+v", nested)
+	}
+	if env.Response["content_redacted"] != true || nested["apiToken_redacted"] != true || nested["name"] != "visible" {
+		t.Fatalf("response redaction = %+v nested=%+v", env.Response, nested)
+	}
+}
+
 func TestGitHubCommandSurfaceClampsOversizedLimit(t *testing.T) {
 	const wantLimit = 10000
 	var body strings.Builder
