@@ -15,12 +15,13 @@ reading saved credentials or secret values.
 | Declared command entries | 34 |
 | Implemented ETL command entries | 18 |
 | Implemented/partial reverse ETL entries | 13 |
-| Planned direct-read entries | 1 |
+| Implemented typed direct-read entries | 1 |
 | Excluded multipart upload entries | 2 |
 | Operation ledger endpoints | 34 |
 | Stream-covered endpoints | 18 |
 | Write-covered endpoints | 13 |
-| Blocked operation endpoints | 3 |
+| Direct-read-covered endpoints | 1 |
+| Blocked operation endpoints | 2 |
 
 ## Help and discovery
 
@@ -40,7 +41,7 @@ and file command groups. It also preserves safety labels such as `availability=p
 |---|---|
 | `etl` | Runs an implemented Freshchat stream through a saved credential, bounded by `--limit`. |
 | `reverse_etl` | Creates an approval-gated reverse plan; execution still requires preview and approval. |
-| `direct_read` | Tracked for request-body reads such as `user fetch`, but blocked until bounded body support exists. |
+| `direct_read` | `user fetch` runs the bounded Freshchat `POST /users/fetch` ids-array body policy; no generic POST body command is exposed. |
 | `direct_write` | Multipart file/image upload metadata is excluded; no raw upload command is exposed. |
 
 <Callout type="warn">
@@ -52,6 +53,7 @@ and file command groups. It also preserves safety labels such as `availability=p
 
 ```bash
 pm freshchat user list --credential freshchat-prod --limit 50 --json
+pm freshchat user fetch --credential freshchat-prod --id user_123 --id user_456 --json
 pm freshchat conversation fields --credential freshchat-prod --json
 pm freshchat report status --credential freshchat-prod --config report_id=report_123 --json
 ```
@@ -63,7 +65,6 @@ identifier with `--config` until the direct-read slice adds typed path flags.
 
 | Gap | Follow-up |
 |---|---|
-| Request-body reads (`POST /users/fetch`) | Direct-read/body support in #185/#186. |
 | Multipart file and image uploads | Bounded file-transfer policy in #186. |
 | Sensitive/destructive admin policy refinement | #187. |
 | Website/generated help parity completion | Parent #180 tracks the remaining waves. |

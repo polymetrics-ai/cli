@@ -262,7 +262,7 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 	if err := validateDirectReadCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
-	pathParams, query, err := directReadOverrides(cmd, req.Flags)
+	pathParams, query, body, err := directReadOverrides(cmd, req.Flags)
 	if err != nil {
 		return Result{}, err
 	}
@@ -275,12 +275,22 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 	}
 	endpoint := cmd.APISurface[0]
 	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+	if method == http.MethodPost && len(body) == 0 {
+		return Result{}, &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "POST direct_read commands require at least one body-mapped flag",
+		}
+	}
 	direct, err := connector.(connectors.DirectReader).DirectRead(ctx, connectors.DirectReadRequest{
 		Method:       method,
 		Path:         endpoint.Path,
 		Config:       req.Config,
 		PathParams:   pathParams,
 		Query:        query,
+		Body:         body,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
 	})
@@ -315,13 +325,13 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 	}
 	endpoint := cmd.APISurface[0]
 	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
-	if method != http.MethodGet {
+	if !isSupportedDirectReadMethod(method, cmd.OutputPolicy) {
 		return &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      cmd.Path,
 			Intent:       cmd.Intent,
 			Availability: cmd.Availability,
-			Reason:       fmt.Sprintf("direct_read commands require GET api_surface endpoints, got %s", method),
+			Reason:       fmt.Sprintf("direct_read commands do not support %s with output_policy %q", method, cmd.OutputPolicy),
 		}
 	}
 	if isAbsoluteHTTPURL(endpoint.Path) {
@@ -347,8 +357,19 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {
 	switch policy {
-	case "github_contents_file_metadata", "github_contents_directory":
+	case "github_contents_file_metadata", "github_contents_directory", "freshchat_users_fetch":
 		return true
+	default:
+		return false
+	}
+}
+
+func isSupportedDirectReadMethod(method, policy string) bool {
+	switch policy {
+	case "github_contents_file_metadata", "github_contents_directory":
+		return method == http.MethodGet
+	case "freshchat_users_fetch":
+		return method == http.MethodPost
 	default:
 		return false
 	}
@@ -470,50 +491,61 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 	}
 }
 
-func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, error) {
+func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 		allowed[flag.Name] = flag
 	}
 
 	pathParams := map[string]string{}
 	query := map[string]string{}
+	body := map[string]any{}
 	for name, values := range flags {
 		if len(values) == 0 {
 			continue
 		}
 		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 		flag, ok := allowed[name]
 		if !ok {
-			return nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+			return nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
 		value := values[len(values)-1]
 		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 		if err := validateFlagValue(flag, value); err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 		switch {
 		case strings.HasPrefix(flag.MapsTo, "path."):
 			target := strings.TrimPrefix(flag.MapsTo, "path.")
 			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
-				return nil, nil, err
+				return nil, nil, nil, err
 			}
 			pathParams[target] = value
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
 			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
-				return nil, nil, err
+				return nil, nil, nil, err
 			}
 			query[target] = value
+		case strings.HasPrefix(flag.MapsTo, "body."):
+			target := strings.TrimPrefix(flag.MapsTo, "body.")
+			if err := safety.ValidateIdentifier(target, "body field"); err != nil {
+				return nil, nil, nil, err
+			}
+			coerced, err := coerceFlagValue(flag, values)
+			if err != nil {
+				return nil, nil, nil, err
+			}
+			body[target] = coerced
 		default:
-			return nil, nil, &BlockedCommandError{
+			return nil, nil, nil, &BlockedCommandError{
 				Command:      cmd.Path,
 				Intent:       cmd.Intent,
 				Availability: cmd.Availability,
@@ -521,7 +553,7 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 			}
 		}
 	}
-	return pathParams, query, nil
+	return pathParams, query, body, nil
 }
 
 func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (connectors.Record, error) {

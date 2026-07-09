@@ -3,7 +3,7 @@
   "docs": "https://developers.freshchat.com/api/",
   "reviewed_at": "2026-07-09",
   "operation_ledger_version": 1,
-  "scope": "Freshchat v2 API reference operation ledger. JSON GET list/detail endpoints are covered as streams. Plain JSON resource mutations are exposed as write actions. Request-body reads and multipart/binary uploads are tracked as blocked operations until typed direct-read or file-transfer policies are implemented.",
+  "scope": "Freshchat v2 API reference operation ledger. JSON GET list/detail endpoints are covered as streams. Plain JSON resource mutations are exposed as write actions. The request-body users/fetch read is covered by a typed direct-read policy. Multipart/binary uploads remain blocked until typed file-transfer policies are implemented.",
   "endpoints": [
     { "method": "GET", "path": "/accounts/configuration", "covered_by": { "stream": "account_configuration" } },
 
@@ -17,18 +17,7 @@
 
     { "method": "GET", "path": "/users", "covered_by": { "stream": "users" } },
     { "method": "POST", "path": "/users", "covered_by": { "write": "create_user" } },
-    {
-      "method": "POST",
-      "path": "/users/fetch",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read-like subset fetch requires request-body search criteria; bounded direct-read body support is not implemented yet",
-        "source_url": "https://developers.freshchat.com/api/"
-      }
-    },
+    { "method": "POST", "path": "/users/fetch", "covered_by": { "direct_read": "user fetch" } },
     { "method": "GET", "path": "/users/{user_id}", "covered_by": { "stream": "user_details" } },
     { "method": "PUT", "path": "/users/{user_id}", "covered_by": { "write": "update_user" } },
     { "method": "GET", "path": "/users/{user_id}/conversations", "covered_by": { "stream": "user_conversations" } },

@@ -175,7 +175,7 @@ COMMAND SURFACE
     business-hours status - Check whether a Freshchat group is within business hours [intent=etl availability=implemented stream=business_hours_status]; notes: Requires business_hours_group_id in connector config; use --config business_hours_group_id=<group_id> with the generic connector command runner.
   User Commands
     user list - List Freshchat users [intent=etl availability=implemented stream=users]
-    user fetch - Fetch a request-body-selected subset of Freshchat users [intent=direct_read availability=planned]; notes: POST /users/fetch is read-like but requires request-body criteria; bounded direct-read body support is tracked by issues #185 and #186.
+    user fetch - Fetch Freshchat users by id list [intent=direct_read availability=implemented]; notes: Typed direct-read body support is limited to the Freshchat users/fetch ids array; this is not a raw HTTP POST escape hatch.; flags: --id
     user view - Read one Freshchat user [intent=etl availability=implemented stream=user_details]; notes: Requires user_id in connector config; use --config user_id=<user_id> until direct-read path flags are implemented.
     user conversations - List conversations for one Freshchat user [intent=etl availability=implemented stream=user_conversations]; notes: Requires user_id in connector config; use --config user_id=<user_id> until direct-read path flags are implemented.
     user create - Create a Freshchat user [intent=reverse_etl availability=implemented write=create_user]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Creates a Freshchat user/contact visible to agents.; flags: --email, --first-name, --last-name, --phone, --reference-id

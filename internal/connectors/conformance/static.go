@@ -296,11 +296,11 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	for _, w := range b.Writes {
 		writes[w.Name] = true
 	}
-	directReads := map[string]bool{}
+	directReads := map[string]engine.CLICommand{}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
 			if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
-				directReads[cmd.Path] = true
+				directReads[cmd.Path] = cmd
 			}
 		}
 	}
@@ -344,11 +344,12 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				coveredWrites[ep.CoveredBy.Write] = true
 			}
 			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
-				if !directReads[directRead] {
+				cmd, ok := directReads[directRead]
+				if !ok {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead)
 				}
-				if !strings.EqualFold(ep.Method, "GET") {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path)
+				if cmd.Operation == "" && !surfaceDirectReadMethodAllowed(strings.ToUpper(ep.Method), cmd.OutputPolicy) {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read %q does not allow method %s with output_policy %q", i, ep.Method, ep.Path, directRead, strings.ToUpper(ep.Method), cmd.OutputPolicy)
 				}
 			}
 			if strings.EqualFold(ep.Method, "GET") {
@@ -450,6 +451,17 @@ func coveredDirectReadTargets(covered *engine.SurfaceCoverage) []string {
 		targets = append(targets, covered.DirectRead)
 	}
 	return targets
+}
+
+func surfaceDirectReadMethodAllowed(method, policy string) bool {
+	switch policy {
+	case "github_contents_file_metadata", "github_contents_directory":
+		return method == "GET"
+	case "freshchat_users_fetch":
+		return method == "POST"
+	default:
+		return false
+	}
 }
 
 // checkSecretRedaction scans docs.md and every fixture file's raw bytes for

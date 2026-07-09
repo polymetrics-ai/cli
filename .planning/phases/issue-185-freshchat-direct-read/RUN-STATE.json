@@ -2,15 +2,15 @@
   "phase": "issue-185-freshchat-direct-read",
   "issue": 185,
   "parent_issue": 180,
-  "status": "planned",
+  "status": "implemented_full_green",
   "gsd": {
     "plan_phase_command": "scripts/gsd prompt plan-phase issue-185-freshchat-direct-read --skip-research",
     "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-185-freshchat-direct-read --dry-run",
     "programming_loop_result": "unavailable_unknown_command",
     "manual_fallback": true
   },
-  "verificationPassed": false,
-  "verificationBlocker": "planned only; red tests not added yet",
+  "verificationPassed": true,
+  "verificationBlocker": "",
   "orchestrationDecisions": [
     {
       "timestamp": "2026-07-09T23:36:00Z",
@@ -18,7 +18,21 @@
       "decision": "local_critical_path",
       "reason": "Issue #185 is unblocked by #181/#184 integration; Pi subagent tool is unavailable, so run locally on a stacked branch.",
       "issue_numbers": [185]
+    },
+    {
+      "timestamp": "2026-07-09T23:51:00Z",
+      "cycle": "red-green",
+      "decision": "focused_green",
+      "reason": "Added typed Freshchat users/fetch direct-read policy, body-mapped command runner support, metadata/docs updates, and focused gates pass.",
+      "issue_numbers": [185]
+    },
+    {
+      "timestamp": "2026-07-10T00:20:00Z",
+      "cycle": "verification",
+      "decision": "full_green",
+      "reason": "Full local gates pass after updating conformance direct-read method validation for explicit output policies.",
+      "issue_numbers": [185]
     }
   ],
-  "updated_at": "2026-07-09T23:36:00Z"
+  "updated_at": "2026-07-10T00:20:00Z"
 }

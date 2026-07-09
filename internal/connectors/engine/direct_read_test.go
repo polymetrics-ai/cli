@@ -153,8 +153,8 @@ func TestDirectReadRejectsMutationMethod(t *testing.T) {
 	if err == nil {
 		t.Fatal("DirectRead error = nil, want mutation rejection")
 	}
-	if !strings.Contains(err.Error(), "GET") {
-		t.Fatalf("DirectRead error = %q, want GET", err.Error())
+	if !strings.Contains(err.Error(), "does not allow method POST") {
+		t.Fatalf("DirectRead error = %q, want method-policy rejection", err.Error())
 	}
 }
 

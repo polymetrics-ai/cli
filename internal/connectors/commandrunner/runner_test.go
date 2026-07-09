@@ -745,7 +745,7 @@ func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 		{
 			name:     "mutation method",
 			endpoint: connectors.CommandSurfaceEndpointRef{Method: "POST", Path: "/repos/{owner}/{repo}/contents/{path}"},
-			want:     "GET",
+			want:     "do not support POST",
 		},
 		{
 			name:     "absolute url",
