@@ -14,7 +14,7 @@ scripts/gsd prompt programming-loop init --phase issue-189-front-cli-surface-met
 
 Result: blocked; `scripts/gsd` reported `unknown GSD command: programming-loop`. Manual GSD fallback recorded in `PLAN.md` and `TDD-LEDGER.md`.
 
-## Pending before production connector edits
+## Red validation before production connector edits
 
 ```bash
 python3 - <<'PY'
@@ -30,16 +30,45 @@ if not cli_surface.exists():
 PY
 ```
 
-Expected initial result: fail.
+Result: failed as expected with `front api_surface endpoint count 10 != official baseline 342`.
 
-## Focused green gates
+## Focused green gates completed
 
 ```bash
-jq empty internal/connectors/defs/front/api_surface.json internal/connectors/defs/front/cli_surface.json
+jq empty internal/connectors/defs/front/cli_surface.json
+```
+
+Result: pass.
+
+```bash
 go test ./cmd/connectorgen -run CLISurface
+```
+
+Result: pass.
+
+```bash
 go test ./internal/connectors/engine -run CLISurface
+```
+
+Result: pass.
+
+```bash
+go run ./cmd/connectorgen validate internal/connectors/defs/front
+```
+
+Result: expected command-shape failure; the validator expects a root containing connector directories and treated `fixtures` and `schemas` as connector directories.
+
+```bash
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Result: pass; 547 connectors checked, 0 findings.
+
+```bash
+git diff --check
+```
+
+Result: pass.
 
 ## Broader handoff gates
 

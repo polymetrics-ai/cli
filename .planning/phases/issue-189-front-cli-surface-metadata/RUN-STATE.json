@@ -1,6 +1,6 @@
 {
   "phase": "issue-189-front-cli-surface-metadata",
-  "status": "plan_checkpoint",
+  "status": "implementation_in_progress",
   "parent_issue": 188,
   "sub_issue": 189,
   "parent_pr": 224,
@@ -30,12 +30,22 @@
     "golang-lint"
   ],
   "verificationPassed": false,
-  "verificationStatus": "plan_checkpoint_only_full_gates_not_run",
+  "verificationStatus": "focused_gates_passed_full_gates_not_run",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "No Pi subagent tool is available in this API session; #189 is being executed locally on a stacked branch after parent PR #224 was opened."
+    },
+    {
+      "cycle": "red-validation",
+      "decision": "local_critical_path",
+      "reason": "Captured failing metadata completeness check before connector edits."
+    },
+    {
+      "cycle": "green-metadata",
+      "decision": "local_critical_path",
+      "reason": "Added Front cli_surface.json and validated focused CLISurface/connectorgen gates."
     }
   ],
   "updated_at": "2026-07-09T19:36:00Z"
