@@ -13,7 +13,23 @@ Add `cmd/connectorgen/freshchat_api_surface_test.go` with `TestFreshchatAPISurfa
 - requires blocked operation model counts: `direct_read: 1`, `disallowed: 2`;
 - rejects any legacy `excluded` row.
 
-Expected initial failure: current Freshchat api surface has no `operation_ledger_version` and still uses legacy `excluded` rows.
+Observed initial failure:
+
+```bash
+gofmt -w cmd/connectorgen/freshchat_api_surface_test.go
+go test ./cmd/connectorgen -run TestFreshchatAPISurfaceOperationLedger
+```
+
+Result:
+
+```text
+--- FAIL: TestFreshchatAPISurfaceOperationLedger (0.00s)
+    freshchat_api_surface_test.go:30: operation_ledger_version = 0, want 1
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	0.384s
+```
+
+This matches the expected failure: current Freshchat api surface has no `operation_ledger_version` and still uses legacy `excluded` rows.
 
 ## Green target
 
