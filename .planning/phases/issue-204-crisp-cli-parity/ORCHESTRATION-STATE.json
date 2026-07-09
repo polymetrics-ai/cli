@@ -91,18 +91,18 @@
       "branch": "feat/205-crisp-cli-surface-metadata",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/235",
       "worker": "local-critical-path",
-      "status": "pr_open_draft",
+      "status": "pr_open_ready_review_blocked",
       "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold, generated connector docs/catalog, catalog-count tests/help text, plus issue-205 planning",
       "worker_directory": "current checkout on feat/205-crisp-cli-surface-metadata",
       "verification": "passed: temp-root connectorgen validate, all-defs connectorgen validate, conformance smoke, connectors inspect/docs smokes, make verify",
       "automated_review": {
         "primary_route": "coderabbit_status",
-        "status": "pending",
+        "status": "rate_limited_after_manual_request",
         "head_sha": "latest pushed; see PR #235",
-        "reviewed_range": "pending",
-        "coverage_route": "stacked_pr_then_parent_fallback_if_skipped",
-        "fallback_route": "none",
-        "disposition_summary": "draft stacked PR #235 opened targeting feat/204-crisp-cli-parity; CodeRabbit status pending",
+        "reviewed_range": "unreviewed; CodeRabbit skipped auto review for non-default base and manual request hit review limit",
+        "coverage_route": "retry_after_reported_window_or_parent_pr_fallback",
+        "fallback_route": "copilot_unavailable_or_not_enabled",
+        "disposition_summary": "PR #235 marked ready; CodeRabbit auto review skipped because base is non-default, manual @coderabbitai review hit review limit with next review available in 26 minutes; do not retry immediately", 
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/235"
       }
     }
@@ -116,5 +116,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T02:35:00Z"
+  "updated_at": "2026-07-10T02:55:00Z"
 }

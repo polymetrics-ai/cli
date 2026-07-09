@@ -1,6 +1,6 @@
 # Summary — Issue #204 Crisp CLI parity parent
 
-State: parent PR open (draft); #205 stacked PR open (draft) with full local verification.
+State: parent PR open (draft); #205 stacked PR open/ready with full local verification; automated review blocked by CodeRabbit rate limit.
 
 Completed:
 
@@ -15,7 +15,7 @@ Completed:
 - Passed targeted #205 validation, all-defs validation, Crisp conformance/inspect/docs smokes, and full `make verify`.
 
 Parent PR: https://github.com/polymetrics-ai/cli/pull/228 (draft, base `main`).
-#205 stacked PR: https://github.com/polymetrics-ai/cli/pull/235 (draft, base `feat/204-crisp-cli-parity`).
+#205 stacked PR: https://github.com/polymetrics-ai/cli/pull/235 (ready for review, base `feat/204-crisp-cli-parity`).
 
 Current blocker:
 
@@ -23,9 +23,9 @@ Current blocker:
 
 Next:
 
-1. Wait for PR #235 checks and CodeRabbit status.
-2. Disposition any automated-review findings.
-3. If CodeRabbit skips the stacked PR, route coverage through the parent PR/fallback per the automated review routing loop.
+1. Wait for PR #235 CI verify to finish.
+2. Do not retry CodeRabbit immediately; it reported review limit with next review available in 26 minutes after the manual request.
+3. Retry CodeRabbit after the reported window or route coverage through parent PR/fallback per the automated review routing loop.
 
 Safety:
 

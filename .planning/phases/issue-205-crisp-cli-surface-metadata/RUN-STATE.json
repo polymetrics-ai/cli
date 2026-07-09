@@ -3,13 +3,13 @@
   "issue": 205,
   "parentIssue": 204,
   "connector": "crisp",
-  "status": "pr_open_draft",
+  "status": "pr_open_review_blocked",
   "gsd": {
     "planCommand": "scripts/gsd prompt plan-phase 204 --skip-research",
     "programmingLoopStatus": "manual_fallback_command_unavailable"
   },
   "verificationPassed": true,
-  "verificationNotes": "Targeted #205 validation passed (single-connector temp-root validate, all-defs validate, conformance smoke, connectors inspect smoke, docs validate). Full local make verify passed on the stacked branch. Draft stacked PR: https://github.com/polymetrics-ai/cli/pull/235.",
+  "verificationNotes": "Targeted #205 validation passed (single-connector temp-root validate, all-defs validate, conformance smoke, connectors inspect smoke, docs validate). Full local make verify passed on the stacked branch. Stacked PR: https://github.com/polymetrics-ai/cli/pull/235. CodeRabbit review is blocked by rate limit after non-default-base auto-review skip.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -34,7 +34,12 @@
     {
       "cycle": "stacked-pr-open",
       "decision": "local_critical_path",
-      "reason": "Draft PR #235 opened against parent branch feat/204-crisp-cli-parity; CodeRabbit/status checks pending."
+      "reason": "Draft PR #235 opened against parent branch feat/204-crisp-cli-parity."
+    },
+    {
+      "cycle": "automated-review-routing",
+      "decision": "blocked_rate_limit",
+      "reason": "PR #235 marked ready. CodeRabbit auto review skipped because base branch is not default; manual @coderabbitai review hit a review limit with next review available in 26 minutes. Copilot reviewer request was unavailable/not enabled via gh."
     }
   ],
   "updatedAt": "2026-07-10T00:00:00Z"
