@@ -33,7 +33,7 @@
     "caveman"
   ],
   "verificationPassed": true,
-  "verificationNotes": "#90 focused gates and full local gates passed; parent remains in progress for #91-#96. #90 commit pushed: 0e359d76. CodeRabbit direct_write safety finding accepted/fixed; post-fix go test ./... and make verify passed.",
+  "verificationNotes": "#90 focused gates and full local gates passed; parent remains in progress for #91-#96. #90 commit pushed: 0e359d76. CodeRabbit direct_write safety finding accepted/fixed; post-fix go test ./... and make verify passed. CodeRabbit comments resolved after fix commit 95874b93; CI passed on PR #128.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -74,6 +74,11 @@
       "cycle": "review-fix",
       "decision": "accepted_coderabbit_finding",
       "reason": "Tightened Bitbucket CLI surface test so direct_write commands must be unsafe_or_disallowed; post-fix gates passed."
+    },
+    {
+      "cycle": "review-resolved",
+      "decision": "coderabbit_resolved",
+      "reason": "Inline disposition posted, @coderabbitai resolve completed, follow-up review command completed, and PR CI passed."
     }
   ],
   "human_gates": [

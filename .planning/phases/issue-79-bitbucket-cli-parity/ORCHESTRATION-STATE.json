@@ -142,13 +142,13 @@
       "verification": "focused and full local gates passed: go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate; pushed at 0e359d76",
       "automated_review": {
         "primary_route": "coderabbit_manual",
-        "status": "reviewed_actionable_fix_in_progress",
-        "head_sha": "0e359d7640e32d981951baa5f843d15814712229",
-        "reviewed_range": "ae01c3f962fe089fc26e274fba1f9bbad540f7dd..873d9401ff3cb9ae1c1e869bb442fb96734d755f",
+        "status": "reviewed_resolved",
+        "head_sha": "95874b93a1bd1bbb622972213ef0d5684c3bc466",
+        "reviewed_range": "ae01c3f962fe089fc26e274fba1f9bbad540f7dd..873d9401ff3cb9ae1c1e869bb442fb96734d755f; follow-up manual review completed after fix commit 95874b93",
         "coverage_route": "manual_review_on_draft_parent_pr",
         "fallback_route": "none",
-        "disposition_summary": "CodeRabbit reviewed #90 changes and found one actionable test-safety invariant; finding accepted and fixed locally, awaiting pushed fix/incremental review.",
-        "disposition_url": null
+        "disposition_summary": "CodeRabbit reviewed #90 changes, found one actionable direct_write test-safety invariant, finding was accepted/fixed in 95874b93, inline disposition posted, and @coderabbitai resolve completed.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/128#discussion_r3551944987"
       }
     },
     {
