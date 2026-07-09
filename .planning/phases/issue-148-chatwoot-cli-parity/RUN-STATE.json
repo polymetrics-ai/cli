@@ -80,9 +80,14 @@
       "cycle": "issue-152-local-verification",
       "decision": "sub_pr_pending",
       "reason": "Issue #152 implementation passed targeted operation-ledger checks, go vet ./..., go test ./..., go build ./cmd/pm, and make verify locally."
+    },
+    {
+      "cycle": "issue-152-integration",
+      "decision": "integrated_parent_review_complete",
+      "reason": "PR #244 remote checks passed, was squash-merged into parent commit e9a709fe50dd3832e57ce0a5f8e3b728422e27cb, and parent PR #223 manual CodeRabbit review replied Review finished with no inline findings returned by GitHub API."
     }
   ],
   "verificationPassed": false,
-  "verificationStatus": "#149 and #150 integrated into parent; #152 local verification passed on sub-branch; parent branch final verification pending after remaining sub-issues",
+  "verificationStatus": "#149, #150, and #152 integrated into parent; parent branch final verification pending after remaining sub-issues",
   "updated_at": "2026-07-10T00:00:00Z"
 }

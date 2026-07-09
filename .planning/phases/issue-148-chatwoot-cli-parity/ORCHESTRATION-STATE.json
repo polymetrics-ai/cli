@@ -51,7 +51,7 @@
     },
     {
       "number": 151,
-      "status": "planned",
+      "status": "ready",
       "dependencies": [
         149,
         152
@@ -62,11 +62,11 @@
         "internal/connectors/defs/chatwoot/fixtures",
         ".planning/phases/issue-151-chatwoot-stream-runner"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 152,
-      "status": "implemented_local_verified",
+      "status": "merged_to_parent",
       "dependencies": [
         149
       ],
@@ -74,11 +74,11 @@
         "internal/connectors/defs/chatwoot/api_surface.json",
         ".planning/phases/issue-152-chatwoot-operation-ledger"
       ],
-      "decision": "sub_pr_pending"
+      "decision": "integrated_parent_review_complete"
     },
     {
       "number": 153,
-      "status": "planned",
+      "status": "ready",
       "dependencies": [
         149,
         152
@@ -89,11 +89,11 @@
         "internal/cli",
         ".planning/phases/issue-153-chatwoot-direct-read"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 154,
-      "status": "planned",
+      "status": "ready",
       "dependencies": [
         149,
         152
@@ -104,11 +104,11 @@
         "internal/connectors/commandrunner",
         ".planning/phases/issue-154-chatwoot-advanced-query-binary"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 155,
-      "status": "planned",
+      "status": "ready",
       "dependencies": [
         149,
         152
@@ -119,7 +119,7 @@
         "internal/connectors/defs/chatwoot/cli_surface.json",
         ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     }
   ],
   "spawn_decisions": [
@@ -192,6 +192,14 @@
         152
       ],
       "reason": "Issue #152 implementation and local verification completed on feat/152-chatwoot-operation-ledger; stacked sub-PR remains to be opened for remote checks and review routing."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "integrated_parent_review_complete",
+      "issue_numbers": [
+        152
+      ],
+      "reason": "PR #244 remote checks passed, was squash-merged into parent commit e9a709fe50dd3832e57ce0a5f8e3b728422e27cb, and parent PR #223 manual CodeRabbit review replied Review finished after the non-default-base sub-PR skip."
     }
   ],
   "subissues": [
@@ -251,25 +259,25 @@
       "number": 152,
       "url": "https://github.com/polymetrics-ai/cli/issues/152",
       "branch": "feat/152-chatwoot-operation-ledger",
-      "pr_url": null,
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/244",
       "worker": "coordinator-local-critical-path",
-      "status": "implemented_local_verified",
+      "status": "merged_to_parent",
       "write_scope": [
         "internal/connectors/defs/chatwoot/api_surface.json",
         "cmd/connectorgen/chatwoot_api_surface_test.go",
         ".planning/phases/issue-152-chatwoot-operation-ledger"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "targeted operation-ledger checks, go vet, go test ./..., go build ./cmd/pm, and make verify passed locally",
+      "verification": "local full gates passed; PR #244 remote checks passed; squash-merged into parent as e9a709fe50dd3832e57ce0a5f8e3b728422e27cb",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "not_started_pr_pending",
-        "head_sha": null,
-        "reviewed_range": "not reviewed; sub-PR pending",
-        "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
+        "status": "parent_manual_review_finished",
+        "head_sha": "133219eea8975ada6618adbbde277b5a3e66496f",
+        "reviewed_range": "parent PR #223 manual CodeRabbit review requested after merge commit e9a709fe50dd3832e57ce0a5f8e3b728422e27cb; CodeRabbit replied Review finished with no inline comments returned by GitHub API",
+        "coverage_route": "parent_pr_manual_review_after_sub_pr_skip",
         "fallback_route": "none",
-        "disposition_summary": "Pending PR creation and automated review routing.",
-        "disposition_url": null
+        "disposition_summary": "CodeRabbit skipped #244 because the base was non-default and skipped #223 automatic review because it is draft. After #244 was squash-merged to parent, manual @coderabbitai review was requested on #223 and CodeRabbit replied Review finished; no actionable inline findings were present.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/223#issuecomment-4930143230"
       }
     }
   ],

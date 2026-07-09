@@ -18,13 +18,15 @@ Status: in progress.
 - Implemented #150 help/docs/website parity and passed targeted tests, website typecheck/build, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` locally.
 - Opened PR #240 for #150; remote checks passed, CodeRabbit skipped the non-default-base sub-PR, and the branch was squash-merged into the parent as `80db5020b297f1323f94c0c965f4a80ab6b08eb3`.
 - Requested parent PR #223 manual CodeRabbit review after #150 integration; CodeRabbit replied `Review finished` and GitHub returned no inline CodeRabbit findings.
+- Opened PR #244 for #152; remote checks passed, CodeRabbit skipped the non-default-base sub-PR, and the branch was squash-merged into the parent as `e9a709fe50dd3832e57ce0a5f8e3b728422e27cb`.
+- Requested parent PR #223 manual CodeRabbit review after #152 integration; CodeRabbit replied `Review finished` and GitHub returned no inline CodeRabbit findings.
 
 ## Next
 
 1. Continue the next dependency-unblocked lane (#152 operation ledger, then #151/#153/#154/#155 as dependencies permit).
 2. Keep parent PR #223 draft until all sub-issues are integrated and the human gate is ready.
 3. Route automated review for each subsequent sub-PR and use parent PR coverage/fallback whenever non-default-base sub-PRs are skipped.
-4. Implemented #152 operation-ledger lane locally with GSD/TDD artifacts because worker fanout remains unavailable; targeted checks and full handoff gates passed, sub-PR pending.
+4. Start the next ready lane (#151 stream runner or #153 direct reads; #154/#155 remain available with care around overlapping files).
 
 ## Safety
 
