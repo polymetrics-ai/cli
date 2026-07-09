@@ -2,7 +2,7 @@
   "phase": "issue-165-intercom-cli-surface-metadata",
   "issue": 165,
   "parent_issue": 164,
-  "status": "sub_pr_review_pending_parent_fallback",
+  "status": "provisionally_integrated_parent_review_pending",
   "sub_pr": "https://github.com/polymetrics-ai/cli/pull/234",
   "gsd": {
     "adapter": "scripts/gsd",
@@ -38,6 +38,11 @@
       "cycle": "automated-review-route",
       "decision": "not_spawned_review_blocked",
       "reason": "CodeRabbit auto-review skipped PR #234 because the base branch is not the default branch; parent PR fallback coverage is required after integration."
+    },
+    {
+      "cycle": "provisional-integration",
+      "decision": "not_spawned_review_blocked",
+      "reason": "PR #234 squash-merged into parent branch at fded1e72 after CI passed; parent PR #220 review fallback is pending because CodeRabbit skipped the draft parent PR."
     }
   ],
   "tdd": {
@@ -86,17 +91,17 @@
   "automated_review": {
     "primary_route": "coderabbit_auto",
     "status": "skipped",
-    "head_sha": "cd776e3550d0436f7e1e133a106bb6fbb07bf125",
-    "reviewed_range": "none; CodeRabbit skipped non-default-base sub-PR",
+    "head_sha": "fded1e72da872760d4f2dab8c084dfbfd3522123",
+    "reviewed_range": "none yet; PR #234 skipped non-default-base review and parent PR #220 skipped while draft",
     "coverage_route": "parent_pr_fallback",
     "fallback_route": "none",
-    "disposition_summary": "CodeRabbit skip is informational only; parent PR #220 must provide review coverage after #234 integration or an approved fallback must be recorded.",
-    "disposition_url": "https://github.com/polymetrics-ai/cli/pull/234#issuecomment-4929238700"
+    "disposition_summary": "Issue #165 is provisionally integrated into the parent branch. CodeRabbit skip is informational only; parent PR #220 must provide review coverage when ready or an approved fallback must be recorded.",
+    "disposition_url": "https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4928867117"
   },
   "verificationPassed": true,
   "verificationNotes": [
     "Default go test ./... timed out in internal/connectors/certify due package timeout; focused retry and go test ./... -timeout=20m passed.",
     "make verify passed with the repository Makefile's go test -timeout 20m ./... gate."
   ],
-  "updated_at": "2026-07-09T20:34:00Z"
+  "updated_at": "2026-07-09T20:46:30Z"
 }

@@ -1,7 +1,7 @@
 {
   "phase": "issue-164-intercom-cli-parity",
   "issue": 164,
-  "status": "in_progress",
+  "status": "parent_review_pending",
   "gsd": {
     "adapter": "scripts/gsd",
     "doctor_passed": true,
@@ -26,13 +26,17 @@
       "cycle": "issue-165-review-route",
       "decision": "not_spawned_review_blocked",
       "reason": "CodeRabbit skipped PR #234 because the base branch is non-default; parent PR fallback coverage is pending after integration."
+    },
+    {
+      "cycle": "issue-165-provisional-integration",
+      "decision": "not_spawned_review_blocked",
+      "reason": "PR #234 was squash-merged into parent branch at fded1e72 after CI passed; parent PR #220 CodeRabbit skipped because the PR is draft, so review coverage remains pending."
     }
   ],
   "verificationPassed": false,
   "blockers": [
-    "sub-PR #234 CI pending",
-    "sub-PR #234 CodeRabbit skipped non-default-base review; parent PR fallback coverage pending",
+    "issue #165 provisionally integrated; parent PR #220 CodeRabbit skipped while draft and fallback coverage remains pending",
     "parent PR #220 remains draft until sub-issues integrate"
   ],
-  "updated_at": "2026-07-09T20:34:00Z"
+  "updated_at": "2026-07-09T20:46:30Z"
 }

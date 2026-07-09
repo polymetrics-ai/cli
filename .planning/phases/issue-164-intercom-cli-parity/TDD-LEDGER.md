@@ -20,6 +20,7 @@
   - Commit: `38e8ecbb feat(intercom): refresh CLI surface metadata`
   - Push: `git push -u origin feat/165-intercom-cli-surface-metadata`
   - Stacked PR opened: https://github.com/polymetrics-ai/cli/pull/234
+  - Sub-PR CI passed and was squash-merged into parent at `fded1e72`; automated review coverage remains pending because CodeRabbit skipped the non-default base and draft parent PR.
 
 Each remaining sub-issue must add its own red/green/refactor entries before production edits.
 

@@ -17,12 +17,12 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi",
-    "status": "running"
+    "status": "parent_review_pending"
   },
   "ready_queue": [
     {
       "number": 165,
-      "status": "sub_pr_open",
+      "status": "provisionally_integrated",
       "dependencies": [],
       "write_scope": [
         "internal/connectors/defs/intercom",
@@ -114,7 +114,7 @@
       "branch": "feat/165-intercom-cli-surface-metadata",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/234",
       "worker": "pi-coordinator-inline",
-      "status": "sub_pr_open",
+      "status": "provisionally_integrated",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "cmd/connectorgen/*intercom*test.go",
@@ -125,12 +125,12 @@
       "automated_review": {
         "primary_route": "coderabbit_auto",
         "status": "skipped",
-        "head_sha": "cd776e3550d0436f7e1e133a106bb6fbb07bf125",
-        "reviewed_range": "none; CodeRabbit skipped non-default-base sub-PR #234",
+        "head_sha": "fded1e72da872760d4f2dab8c084dfbfd3522123",
+        "reviewed_range": "none yet; sub-PR #234 skipped non-default-base review and parent PR #220 skipped while draft",
         "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "CodeRabbit skip on PR #234 is informational only. Parent PR #220 fallback coverage is required after integration or an approved fallback must be recorded.",
-        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/234#issuecomment-4929238700"
+        "disposition_summary": "Issue #165 is provisionally integrated. CodeRabbit skipped PR #234 because the base was non-default and skipped parent PR #220 because it is draft; coverage remains pending until parent PR review or approved fallback.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4928867117"
       }
     }
   ],
@@ -144,5 +144,5 @@
     "production deployment",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T20:34:00Z"
+  "updated_at": "2026-07-09T20:46:30Z"
 }
