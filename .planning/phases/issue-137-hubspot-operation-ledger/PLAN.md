@@ -74,14 +74,21 @@ Out of scope for this slice:
 
 ## Targeted verification
 
+Passed:
+
 ```bash
 gofmt -w cmd internal
 go test ./cmd/connectorgen -run 'HubSpot|APISurfaceOperationLedger' -count=1
 go run ./cmd/connectorgen validate internal/connectors/defs
 python3 -m json.tool internal/connectors/defs/hubspot/api_surface.json >/dev/null
+go run ./cmd/pm help connectors
+go run ./cmd/pm connectors inspect hubspot --json
+go run ./cmd/pm docs validate --connectors-dir docs/connectors
 ```
 
 ## Broad verification before handoff
+
+Passed:
 
 ```bash
 go vet ./...

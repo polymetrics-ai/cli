@@ -29,9 +29,9 @@
     "golang-graphql",
     "golang-lint"
   ],
-  "status": "targeted_green",
-  "verificationPassed": false,
-  "verificationBlocker": "broad gates pending: go vet ./..., go test ./..., go build ./cmd/pm, make verify",
+  "status": "verified",
+  "verificationPassed": true,
+  "verificationBlocker": "none",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -47,6 +47,11 @@
       "cycle": "targeted-green",
       "decision": "local_critical_path",
       "reason": "generated full 3,060-operation HubSpot ledger and expanded blocked candidate model vocabulary; targeted tests and connectorgen/docs validation passed"
+    },
+    {
+      "cycle": "broad-gates",
+      "decision": "local_critical_path",
+      "reason": "kept conformance operation-model vocabulary in lockstep after broad test failure; final gofmt/vet/test/build/make verify/connectorgen validate passed"
     }
   ],
   "human_gates": [

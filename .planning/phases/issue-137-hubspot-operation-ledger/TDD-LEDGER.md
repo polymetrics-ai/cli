@@ -37,10 +37,11 @@ Passed after implementation:
 - `go run ./cmd/pm help connectors`
 - `go run ./cmd/pm connectors inspect hubspot --json`
 - `go run ./cmd/pm docs validate --connectors-dir docs/connectors`
+- Full gate command passed: `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify && go run ./cmd/connectorgen validate internal/connectors/defs`.
 
 ## Refactor evidence
 
-- Expanded operation-ledger blocked-candidate vocabulary to include `stream_etl`, `query_etl`, `reverse_etl`, and `binary_write`, preserving blocked-by-default semantics.
+- Expanded operation-ledger blocked-candidate vocabulary to include `stream_etl`, `query_etl`, `reverse_etl`, and `binary_write`, preserving blocked-by-default semantics in both connectorgen and static conformance checks.
 - Generated deterministic HubSpot `api_surface.json` from the official public OpenAPI collection: 401 OpenAPI files, 4,396 raw operations, 3,060 unique method/path operations.
 - Classification counts: `stream_etl` 244, `query_etl` 223, `direct_read` 759, `reverse_etl` 850, `binary_read` 30, `binary_write` 31, `sensitive_reverse_etl` 40, `admin_reverse_etl` 291, `destructive_action` 556, `deprecated` 22, `disallowed` 14.
 

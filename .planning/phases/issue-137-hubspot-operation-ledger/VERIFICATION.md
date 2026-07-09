@@ -31,15 +31,20 @@ go run ./cmd/pm docs validate --connectors-dir docs/connectors
 
 ## Broad checks
 
-Pending:
+Passed:
 
 ```bash
+gofmt -w cmd internal
 go vet ./...
 go test ./...
 go build ./cmd/pm
 make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Notes:
+- First broad `go test ./...` exposed `internal/connectors/conformance` using a separate closed operation-model vocabulary. Fixed by keeping conformance vocabulary in lockstep with connectorgen/schema.
+- Final broad gate command passed; `make verify` also ran `go test -timeout 20m ./...`, docs validation, smoke, golangci-lint scoped checks, and `connectorgen validate`.
 
 ## CLI help/docs/website parity
 

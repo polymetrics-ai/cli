@@ -71,7 +71,7 @@ make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-Parent issue remains incomplete until #135-#140 land.
+Parent issue remains incomplete until #135, #136, #138, #139, and #140 land. Issue #137 operation-ledger slice also passed the broad gates with the same command set, including `make verify` and `go run ./cmd/connectorgen validate internal/connectors/defs`.
 
 ## CLI help/docs/website parity checklist
 

@@ -27,9 +27,9 @@
     "golang-graphql",
     "golang-lint"
   ],
-  "status": "subissue_134_verified",
+  "status": "subissues_134_137_verified",
   "verificationPassed": false,
-  "verificationBlocker": "parent roadmap incomplete; sub-issue #134 local gates passed",
+  "verificationBlocker": "parent roadmap incomplete; sub-issues #134 and #137 local gates passed",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -45,6 +45,11 @@
       "cycle": "subissue_134",
       "decision": "local_critical_path_verified",
       "reason": "HubSpot CLI surface metadata scaffold passed gofmt/vet/test/build/make verify/connectorgen validate"
+    },
+    {
+      "cycle": "subissue_137",
+      "decision": "local_critical_path_verified",
+      "reason": "HubSpot official operation ledger passed gofmt/vet/test/build/make verify/connectorgen validate"
     }
   ],
   "human_gates": [
