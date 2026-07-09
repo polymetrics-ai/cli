@@ -13,11 +13,13 @@ Status: implementation slice in progress.
 - Updated Front connector docs to state that CLI surface metadata is representative and follow-up lanes own full implementation.
 - Captured official-source notes in `OFFICIAL-SURFACE-CAPTURE.md`; per-page OpenAPI capture returned 255 operations before ReadMe registry/rate-limit blockers, so #192 remains the full 342-operation ledger owner.
 - Focused green gates passed: `jq empty`, `go test ./cmd/connectorgen -run CLISurface`, `go test ./internal/connectors/engine -run CLISurface`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `git diff --check`.
+- Broader `go vet ./...` and `go build ./cmd/pm` passed.
+- Broader `go test ./...` is blocked by an existing/full-suite timeout in `internal/connectors/certify` (`TestWriteStagesSkipWhenDisabled` timed out after 10m), not by the Front metadata files.
 
 ## Next
 
 1. Commit and push this implementation checkpoint.
-2. Run broader Go gates as time permits before opening the #189 sub-PR.
+2. Open a draft #189 sub-PR against the parent branch with the full-test timeout recorded.
 3. Decide whether to keep #189 as a draft/partial metadata PR or wait for #192 full operation-ledger capture before marking #189 complete.
 
 ## Safety notes

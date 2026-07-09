@@ -30,7 +30,7 @@
     "golang-lint"
   ],
   "verificationPassed": false,
-  "verificationStatus": "focused_gates_passed_full_gates_not_run",
+  "verificationStatus": "focused_gates_passed_go_vet_and_build_passed_go_test_full_suite_timeout",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -46,6 +46,11 @@
       "cycle": "green-metadata",
       "decision": "local_critical_path",
       "reason": "Added Front cli_surface.json and validated focused CLISurface/connectorgen gates."
+    },
+    {
+      "cycle": "broader-verification",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "go vet ./... and go build ./cmd/pm passed; go test ./... timed out in internal/connectors/certify TestWriteStagesSkipWhenDisabled after 10m."
     }
   ],
   "updated_at": "2026-07-09T19:36:00Z"

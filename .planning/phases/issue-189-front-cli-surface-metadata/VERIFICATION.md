@@ -73,15 +73,40 @@ Result: pass.
 ## Broader handoff gates
 
 ```bash
-gofmt -w cmd internal
 go vet ./...
-go test ./...
+```
+
+Result: pass.
+
+```bash
 go build ./cmd/pm
+```
+
+Result: pass.
+
+```bash
+go test ./...
+```
+
+Result: fail/blocker unrelated to this JSON/docs slice: `internal/connectors/certify` timed out after 10m while running `TestWriteStagesSkipWhenDisabled`. The prior 600s run also timed out after partial package output. Focused CLISurface and connectorgen gates passed.
+
+```bash
+gofmt -w cmd internal
+```
+
+Result: not applicable; no Go files changed.
+
+```bash
 make verify
+```
+
+Result: not run after `go test ./...` timeout; would be blocked by the same full-test failure.
+
+```bash
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-`gofmt` is not applicable if this remains JSON/docs-only.
+Result: pass; 547 connectors checked, 0 findings.
 
 ## CLI help/docs/website parity
 
