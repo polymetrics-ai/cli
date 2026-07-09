@@ -7,7 +7,8 @@
   "parent_branch": "feat/212-helpscout-cli-parity",
   "parent_pr": "https://github.com/polymetrics-ai/cli/pull/230",
   "sub_pr": "https://github.com/polymetrics-ai/cli/pull/236",
-  "head_sha": "ece6a1a9806dd107072ba6ff8c492afc4150708a",
+  "opened_head_sha": "ece6a1a9806dd107072ba6ff8c492afc4150708a",
+  "review_candidate_range": "59050585b1134f2f8e9a6512dd7c117394c6da5a..5a426982336578d1147a3d85d33ba23fdb0643ad",
   "gsd": {
     "adapter": "scripts/gsd",
     "plan_prompt": "scripts/gsd prompt plan-phase 213 --skip-research --tdd",
@@ -71,7 +72,9 @@
     { "command": "go test ./...", "result": "pass", "note": "initial 600s run timed out; rerun with 1200s passed" },
     { "command": "go build ./cmd/pm", "result": "pass" },
     { "command": "make verify", "result": "pass" },
-    { "command": "go run ./cmd/connectorgen validate internal/connectors/defs", "result": "pass" }
+    { "command": "go run ./cmd/connectorgen validate internal/connectors/defs", "result": "pass" },
+    { "command": "CodeRabbit automatic review", "result": "skipped", "reason": "auto reviews disabled on non-default base branch" },
+    { "command": "@coderabbitai review", "result": "rate_limited", "reason": "review limit reached; next review available in about 19 minutes" }
   ],
   "updated_at": "2026-07-09T19:57:02Z"
 }

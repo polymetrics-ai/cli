@@ -1,6 +1,6 @@
 # Summary: Help Scout CLI Surface Metadata
 
-Status: sub-PR open: https://github.com/polymetrics-ai/cli/pull/236. Automated review coverage pending.
+Status: sub-PR open: https://github.com/polymetrics-ai/cli/pull/236. Automated review coverage blocked by CodeRabbit skip/rate limit; retry window recorded.
 
 ## Delivered
 

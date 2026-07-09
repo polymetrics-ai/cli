@@ -20,9 +20,9 @@ Status: planning checkpoint in progress.
 
 ## Next
 
-1. Record automated review coverage for sub-PR #236.
-2. If CodeRabbit skips stacked PR #236, request/record parent PR #230 fallback coverage for commit range `ece6a1a9`.
-3. Continue with #214/#216 only after review routing is recorded.
+1. Wait for CodeRabbit rate-limit retry window on sub-PR #236, then retry review only if there are unreviewed commits.
+2. If stacked PR #236 remains skipped/rate-limited, request/record parent PR #230 CodeRabbit/Copilot/human fallback coverage for the #213 commit range.
+3. Continue with #214/#216 only after review routing is recorded or explicitly blocked.
 
 ## Blockers
 

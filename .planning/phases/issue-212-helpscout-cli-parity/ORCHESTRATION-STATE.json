@@ -144,14 +144,14 @@
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-212-helpscout-cli-parity",
       "verification": "make verify passed; website typecheck blocked by missing node_modules; see issue-213 VERIFICATION.md",
       "automated_review": {
-        "primary_route": "blocked",
-        "status": "pending",
-        "head_sha": "ece6a1a9806dd107072ba6ff8c492afc4150708a",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_pr_fallback_if_sub_pr_skipped",
-        "fallback_route": "none",
-        "disposition_summary": "sub-PR #236 open; automated review coverage pending",
-        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/236"
+        "primary_route": "CodeRabbit",
+        "status": "rate_limited",
+        "head_sha": "5a426982336578d1147a3d85d33ba23fdb0643ad",
+        "reviewed_range": "59050585b1134f2f8e9a6512dd7c117394c6da5a..5a426982336578d1147a3d85d33ba23fdb0643ad pending review",
+        "coverage_route": "manual_retry_after_rate_limit_or_parent_pr_fallback",
+        "fallback_route": "parent PR #230 CodeRabbit/Copilot/human fallback if sub-PR remains skipped",
+        "disposition_summary": "automatic review skipped on non-default base; manual review attempt rate-limited with ~19 minute retry window",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/236#issuecomment-4929491124"
       }
     },
     {

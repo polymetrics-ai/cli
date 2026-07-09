@@ -3,7 +3,10 @@
 Date: 2026-07-09
 
 Sub-PR: https://github.com/polymetrics-ai/cli/pull/236
-Head SHA: `ece6a1a9806dd107072ba6ff8c492afc4150708a`
+Opened at head SHA: `ece6a1a9806dd107072ba6ff8c492afc4150708a`
+Current reviewed-range candidate after metadata update: `59050585b1134f2f8e9a6512dd7c117394c6da5a..5a426982336578d1147a3d85d33ba23fdb0643ad`
+
+Automated review status: CodeRabbit automatic review skipped because the PR targets a non-default base. Manual `@coderabbitai review` was attempted and CodeRabbit reported a review limit with next review available in ~19 minutes; no retry before that window.
 
 ## Commands and Results
 
