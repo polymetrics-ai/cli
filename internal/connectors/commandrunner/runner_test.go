@@ -459,7 +459,7 @@ func TestRunReverseETLRejectsMissingWriteAndUnsupportedFlagMapping(t *testing.T)
 	}
 }
 
-func TestRunImplementedOperationCommandIsFeatureGated(t *testing.T) {
+func TestRunImplementedOperationCommandRequiresDirectReadMetadata(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
 			{
@@ -472,19 +472,18 @@ func TestRunImplementedOperationCommandIsFeatureGated(t *testing.T) {
 	}}
 
 	_, err := Run(context.Background(), connector, Request{Path: []string{"project", "list"}}, func(connectors.Record) error {
-		t.Fatal("emit called for feature-gated operation command")
+		t.Fatal("emit called for incomplete operation command")
 		return nil
 	})
 	if err == nil {
-		t.Fatal("Run error = nil, want feature gate")
+		t.Fatal("Run error = nil, want metadata rejection")
 	}
 	var blocked *BlockedCommandError
 	if !errors.As(err, &blocked) {
 		t.Fatalf("Run error type = %T, want BlockedCommandError", err)
 	}
-	if !strings.Contains(err.Error(), "operation github.projects.list") ||
-		!strings.Contains(err.Error(), "executor is not implemented") {
-		t.Fatalf("Run error = %q, want operation feature gate", err.Error())
+	if !strings.Contains(err.Error(), "direct_read commands require exactly one api_surface endpoint") {
+		t.Fatalf("Run error = %q, want missing api_surface endpoint rejection", err.Error())
 	}
 }
 
