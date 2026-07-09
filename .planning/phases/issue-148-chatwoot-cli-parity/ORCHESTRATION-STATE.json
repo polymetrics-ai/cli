@@ -143,7 +143,7 @@
       "automated_review": {
         "primary_route": "coderabbit_auto",
         "status": "skipped",
-        "head_sha": "d437045a4b0c064a3478bcb396efdc6b80727d0c",
+        "head_sha": "c01bb60b1e264202927bfa77303b2cd117a5d3b0",
         "reviewed_range": "not reviewed; CodeRabbit skipped non-default-base PR #227",
         "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
