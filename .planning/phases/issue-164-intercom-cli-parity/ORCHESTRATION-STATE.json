@@ -22,7 +22,7 @@
   "ready_queue": [
     {
       "number": 165,
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "dependencies": [],
       "write_scope": [
         "internal/connectors/defs/intercom",
@@ -112,25 +112,25 @@
       "number": 165,
       "url": "https://github.com/polymetrics-ai/cli/issues/165",
       "branch": "feat/165-intercom-cli-surface-metadata",
-      "pr_url": "",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/234",
       "worker": "pi-coordinator-inline",
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "cmd/connectorgen/*intercom*test.go",
         ".planning/phases/issue-165-intercom-cli-surface-metadata"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
-      "verification": "planned",
+      "verification": "focused and broad local gates passed; see issue-165 VERIFICATION.md",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
-        "head_sha": "3afecf62",
-        "reviewed_range": "parent PR #220 planning seed",
+        "status": "skipped",
+        "head_sha": "cd776e3550d0436f7e1e133a106bb6fbb07bf125",
+        "reviewed_range": "none; CodeRabbit skipped non-default-base sub-PR #234",
         "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "Parent PR #220 is draft; automated review coverage is pending until review route conditions apply.",
-        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/220"
+        "disposition_summary": "CodeRabbit skip on PR #234 is informational only. Parent PR #220 fallback coverage is required after integration or an approved fallback must be recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/234#issuecomment-4929238700"
       }
     }
   ],
@@ -144,5 +144,5 @@
     "production deployment",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T19:45:00Z"
+  "updated_at": "2026-07-09T20:34:00Z"
 }

@@ -1,0 +1,241 @@
+{
+  "tagline": "Work with Intercom workspace data from the command line.",
+  "usage": "pm intercom <resource> <action> [flags]",
+  "source_cli": {
+    "name": "Intercom REST API",
+    "docs": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
+    "reference": "https://developers.intercom.com/docs/references/rest-api/api.intercom.io"
+  },
+  "groups": [
+    {
+      "id": "core",
+      "title": "Core CRM and Conversation Reads",
+      "commands": [
+        "admin",
+        "contact",
+        "company",
+        "conversation",
+        "tag"
+      ]
+    },
+    {
+      "id": "planned",
+      "title": "Planned Safe App Intents",
+      "commands": [
+        "article",
+        "ticket",
+        "export",
+        "call"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved Intercom connector credential.",
+      "maps_to": "connection"
+    }
+  ],
+  "commands": [
+    {
+      "path": "admin list",
+      "summary": "List Intercom admins",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "admins",
+      "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
+      "examples": [
+        "pm intercom admin list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admins"
+        }
+      ]
+    },
+    {
+      "path": "contact list",
+      "summary": "List Intercom contacts",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
+      "examples": [
+        "pm intercom contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "company list",
+      "summary": "List Intercom companies",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
+      "examples": [
+        "pm intercom company list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies"
+        }
+      ]
+    },
+    {
+      "path": "conversation list",
+      "summary": "List Intercom conversations",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversations",
+      "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
+      "examples": [
+        "pm intercom conversation list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations"
+        }
+      ]
+    },
+    {
+      "path": "tag list",
+      "summary": "List Intercom tags",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
+      "examples": [
+        "pm intercom tag list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ]
+    },
+    {
+      "path": "contact view",
+      "summary": "View one contact by ID or external ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "notes": "Planned for #169 as a bounded direct read over GET /contacts/{contact_id} and GET /contacts/find_by_external_id/{external_id}."
+    },
+    {
+      "path": "conversation view",
+      "summary": "View one conversation",
+      "intent": "direct_read",
+      "availability": "planned",
+      "notes": "Planned for #169 as a bounded direct read over GET /conversations/{conversation_id}."
+    },
+    {
+      "path": "article list",
+      "summary": "List public or internal Intercom articles",
+      "intent": "etl",
+      "availability": "planned",
+      "notes": "Candidate stream coverage for #167; not executable in the current five-stream bundle."
+    },
+    {
+      "path": "ticket list",
+      "summary": "Search or list Intercom tickets",
+      "intent": "etl",
+      "availability": "planned",
+      "notes": "Candidate stream/body-query coverage for #167/#170; not executable in this metadata slice."
+    },
+    {
+      "path": "export status",
+      "summary": "Check Intercom export job status",
+      "intent": "direct_read",
+      "availability": "planned",
+      "notes": "Planned for #170 with export job lifecycle and bounded output policy; no download is executed by this metadata."
+    },
+    {
+      "path": "export download",
+      "summary": "Download a completed Intercom export with size bounds",
+      "intent": "direct_read",
+      "availability": "planned",
+      "notes": "Planned for #170 as a bounded binary/file read. The metadata does not expose filesystem writes or raw downloads."
+    },
+    {
+      "path": "contact create",
+      "summary": "Create an Intercom contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "risk": "Creates customer data in the configured Intercom workspace.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Planned for #171 with typed schemas and redaction."
+    },
+    {
+      "path": "contact update",
+      "summary": "Update an Intercom contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "risk": "Mutates customer data in the configured Intercom workspace.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Planned for #171 with typed schemas and redaction."
+    },
+    {
+      "path": "contact delete",
+      "summary": "Delete an Intercom contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "risk": "Deletes customer data from the configured Intercom workspace.",
+      "approval": "Destructive reverse ETL writes require plan, preview, approval, execute, and typed confirmation.",
+      "notes": "Blocked until #171 adds a destructive confirmation policy."
+    },
+    {
+      "path": "conversation reply",
+      "summary": "Reply to an Intercom conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "risk": "Sends a visible reply in an Intercom conversation.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Planned for #171 with explicit message schema and preview text."
+    },
+    {
+      "path": "tag create",
+      "summary": "Create or update an Intercom tag",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "risk": "Creates or mutates tag metadata in the configured Intercom workspace.",
+      "approval": "Reverse ETL writes require plan, preview, approval, and execute.",
+      "notes": "Planned for #171 with typed schemas."
+    },
+    {
+      "path": "tag delete",
+      "summary": "Delete an Intercom tag",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "risk": "Deletes tag metadata from the configured Intercom workspace.",
+      "approval": "Destructive reverse ETL writes require plan, preview, approval, execute, and typed confirmation.",
+      "notes": "Blocked until #171 adds a destructive confirmation policy."
+    },
+    {
+      "path": "call recording",
+      "summary": "Fetch call recording metadata or bounded media",
+      "intent": "direct_read",
+      "availability": "planned",
+      "notes": "Planned for #170 as a bounded binary/file read with no unsafe filesystem write escape hatch."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "intercom-safety",
+      "summary": "Intercom writes remain blocked until typed reverse ETL plan, preview, approval, execute, and confirmation gates are implemented."
+    }
+  ]
+}

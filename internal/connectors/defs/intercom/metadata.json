@@ -1,9 +1,9 @@
 {
   "name": "intercom",
   "display_name": "Intercom",
-  "description": "Reads Intercom contacts, companies, conversations, admins, and tags through the Intercom REST API.",
+  "description": "Reads Intercom contacts, companies, conversations, admins, and tags; tracks the full Intercom REST API 2.14 surface for safe CLI parity follow-up work.",
   "integration_type": "api",
-  "docs_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes",
+  "docs_url": "https://developers.intercom.com/docs/references/rest-api/api.intercom.io",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
@@ -17,7 +17,8 @@
     "read_page_size": 50
   },
   "risk": {
-    "read": "external Intercom API read of contact and conversation data",
-    "approval": "none; read-only source"
+    "read": "external Intercom API reads can include customer, company, conversation, admin, and tag data from the configured workspace",
+    "write": "no write actions are currently executable; planned mutations remain blocked by default until typed reverse-ETL schemas and approval gates are implemented",
+    "approval": "metadata-only planned writes do not execute; future reverse ETL writes require plan, preview, approval, execute, and destructive typed confirmation where applicable"
   }
 }

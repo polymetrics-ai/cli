@@ -2,7 +2,8 @@
   "phase": "issue-165-intercom-cli-surface-metadata",
   "issue": 165,
   "parent_issue": 164,
-  "status": "planned",
+  "status": "sub_pr_review_pending_parent_fallback",
+  "sub_pr": "https://github.com/polymetrics-ai/cli/pull/234",
   "gsd": {
     "adapter": "scripts/gsd",
     "doctor_passed": true,
@@ -17,13 +18,85 @@
       "cycle": "issue-plan",
       "decision": "local_critical_path",
       "reason": "Metadata slice is the parent critical path; no subagent tool is available in this Pi session."
+    },
+    {
+      "cycle": "red-green-metadata",
+      "decision": "local_critical_path",
+      "reason": "Executed data-contract test and Intercom metadata refresh inline on sub-issue branch."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Ran focused gates, full Go tests with project timeout, build, and make verify locally."
+    },
+    {
+      "cycle": "pr-open",
+      "decision": "local_critical_path",
+      "reason": "Opened stacked PR #234 against feat/164-intercom-cli-parity for issue #165."
+    },
+    {
+      "cycle": "automated-review-route",
+      "decision": "not_spawned_review_blocked",
+      "reason": "CodeRabbit auto-review skipped PR #234 because the base branch is not the default branch; parent PR fallback coverage is required after integration."
     }
   ],
   "tdd": {
-    "red": [],
-    "green": [],
-    "refactor": []
+    "red": [
+      {
+        "command": "go test ./cmd/connectorgen -run TestIntercomAPISurfaceOperationLedgerMetrics -count=1",
+        "result": "fail",
+        "evidence": "operation_ledger_version = 0, want 1"
+      }
+    ],
+    "green": [
+      {
+        "command": "go test ./cmd/connectorgen -run TestIntercomAPISurfaceOperationLedgerMetrics -count=1",
+        "result": "pass"
+      },
+      {
+        "command": "go run ./cmd/connectorgen validate internal/connectors/defs",
+        "result": "pass: 547 connector(s) checked, 0 findings"
+      },
+      {
+        "command": "go test ./cmd/connectorgen ./internal/connectors/engine",
+        "result": "pass"
+      },
+      {
+        "command": "go test ./internal/connectors/conformance -run 'TestConformance/intercom' -count=1",
+        "result": "pass"
+      },
+      {
+        "command": "go test ./... -timeout=20m",
+        "result": "pass"
+      },
+      {
+        "command": "go build ./cmd/pm",
+        "result": "pass"
+      },
+      {
+        "command": "make verify",
+        "result": "pass"
+      }
+    ],
+    "refactor": [
+      "api_surface.json switched to operation_ledger_version mode with zero legacy excluded rows",
+      "cli_surface.json added as docs/help metadata only"
+    ]
   },
-  "verificationPassed": false,
-  "updated_at": "2026-07-09T19:35:34Z"
+  "automated_review": {
+    "primary_route": "coderabbit_auto",
+    "status": "skipped",
+    "head_sha": "cd776e3550d0436f7e1e133a106bb6fbb07bf125",
+    "reviewed_range": "none; CodeRabbit skipped non-default-base sub-PR",
+    "coverage_route": "parent_pr_fallback",
+    "fallback_route": "none",
+    "disposition_summary": "CodeRabbit skip is informational only; parent PR #220 must provide review coverage after #234 integration or an approved fallback must be recorded.",
+    "disposition_url": "https://github.com/polymetrics-ai/cli/pull/234#issuecomment-4929238700"
+  },
+  "verificationPassed": true,
+  "verificationNotes": [
+    "Default go test ./... timed out in internal/connectors/certify due package timeout; focused retry and go test ./... -timeout=20m passed.",
+    "make verify passed with the repository Makefile's go test -timeout 20m ./... gate."
+  ],
+  "updated_at": "2026-07-09T20:34:00Z"
 }
