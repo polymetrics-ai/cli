@@ -1,0 +1,39 @@
+{
+  "phase": "issue-80-linear-cli-parity",
+  "parentIssue": 80,
+  "branch": "feat/80-linear-cli-parity",
+  "status": "in_progress",
+  "gsd": {
+    "doctor": "passed",
+    "verifyPi": "passed",
+    "listJson": "ran",
+    "planPrompt": "scripts/gsd prompt plan-phase issue-80-linear-cli-parity --skip-research",
+    "programmingLoopPrompt": "scripts/gsd prompt programming-loop init --phase issue-80-linear-cli-parity --dry-run",
+    "programmingLoopAvailable": false,
+    "manualFallback": "scripts/gsd returned: unknown GSD command: programming-loop"
+  },
+  "verificationPassed": true,
+  "verificationStatus": "make verify passed for current #97 slice; parent #80 remains in_progress because sub-issues #98-#103 are not complete",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "The current Pi harness exposes read/bash/edit/write only and no subagent tool for isolated mutating workers. The parent orchestrator will run the first critical-path sub-issue locally and record separate evidence."
+    },
+    {
+      "cycle": "issue-97-start",
+      "decision": "local_critical_path",
+      "reason": "Issue #97 is the first dependency for Linear command metadata and can be implemented safely in the active parent checkout with issue-scoped phase artifacts."
+    }
+  ],
+  "subissues": {
+    "97": "verified_green_slice",
+    "98": "dependency_blocked",
+    "99": "dependency_blocked",
+    "100": "planned",
+    "101": "dependency_blocked",
+    "102": "planned",
+    "103": "dependency_blocked"
+  },
+  "updatedAt": "2026-07-09T00:00:00Z"
+}

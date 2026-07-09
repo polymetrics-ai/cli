@@ -1,0 +1,115 @@
+{
+  "parent_issue": {
+    "number": 80,
+    "url": "https://github.com/polymetrics-ai/cli/issues/80",
+    "title": "Linear CLI feature parity parent roadmap",
+    "state": "open"
+  },
+  "parent_branch": "feat/80-linear-cli-parity",
+  "parent_pr": {
+    "url": "",
+    "base": "main",
+    "head": "feat/80-linear-cli-parity",
+    "draft": true,
+    "state": "missing"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-harness",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 97,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": ["internal/connectors/defs/linear/cli_surface.json", "internal/connectors/engine/bundle_test.go", ".planning/phases/issue-97-linear-cli-surface/**"],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 98,
+      "status": "planned",
+      "dependencies": [97],
+      "write_scope": ["help/docs surfaces TBD"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 99,
+      "status": "planned",
+      "dependencies": [97],
+      "write_scope": ["internal/connectors/commandrunner/**", "connector CLI dispatch TBD"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 100,
+      "status": "planned",
+      "dependencies": [],
+      "write_scope": ["internal/connectors/defs/linear/api_surface.json", "internal/connectors/defs/linear/docs.md"],
+      "decision": "not_spawned_runtime_capability_missing"
+    },
+    {
+      "number": 101,
+      "status": "planned",
+      "dependencies": [100],
+      "write_scope": ["direct-read metadata/executor TBD"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 102,
+      "status": "planned",
+      "dependencies": [100],
+      "write_scope": ["GraphQL engine and Linear streams TBD"],
+      "decision": "not_spawned_runtime_capability_missing"
+    },
+    {
+      "number": 103,
+      "status": "planned",
+      "dependencies": [100],
+      "write_scope": ["Linear sensitive/admin policy metadata TBD"],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T00:00:00Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [97, 100, 102],
+      "reason": "No Pi subagent tool is exposed in this harness; mutating workers cannot be spawned into isolated contexts. The orchestrator starts #97 locally as critical path."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 97,
+      "url": "https://github.com/polymetrics-ai/cli/issues/97",
+      "branch": "feat/80-linear-cli-parity",
+      "pr_url": "",
+      "worker": "local-orchestrator",
+      "status": "worker_in_progress",
+      "write_scope": "Linear cli_surface metadata and focused bundle tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-80-linear-cli-parity",
+      "verification": "make verify passed for local #97 slice; PR/review pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending PR",
+        "disposition_url": ""
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "production deploys",
+    "quality gate reductions",
+    "generic write tools",
+    "reverse ETL execution outside plan/preview/approval/execute"
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}

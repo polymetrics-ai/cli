@@ -522,6 +522,37 @@ func TestGitHubProjectsDiscussionsCommandsMapToGraphQLStreams(t *testing.T) {
 	}
 }
 
+func TestLinearCLISurfaceMapsImplementedStreams(t *testing.T) {
+	b, err := Load(defs.FS, "linear")
+	if err != nil {
+		t.Fatalf("Load linear: %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("linear cli surface missing")
+	}
+
+	want := map[string]string{
+		"issue list":   "issues",
+		"team list":    "teams",
+		"project list": "projects",
+		"user list":    "users",
+	}
+	for _, cmd := range b.CLISurface.Commands {
+		stream, ok := want[cmd.Path]
+		if !ok {
+			continue
+		}
+		if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream != stream || cmd.Operation != "" {
+			t.Fatalf("command %q = intent=%q availability=%q stream=%q operation=%q, want implemented etl stream %q with no operation",
+				cmd.Path, cmd.Intent, cmd.Availability, cmd.Stream, cmd.Operation, stream)
+		}
+		delete(want, cmd.Path)
+	}
+	if len(want) > 0 {
+		t.Fatalf("missing Linear CLI commands: %v", want)
+	}
+}
+
 func TestBundleLoadParsesCLISurface(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
