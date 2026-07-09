@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zendesk Connection Specification",
+  "type": "object",
+  "required": [
+    "base_url"
+  ],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Zendesk account root URL, for example https://example.zendesk.com. Do not include /api/v2."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "OAuth2 access token. Preferred over API-token Basic auth when both credential shapes are configured."
+    },
+    "api_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zendesk API token paired with email for Basic auth."
+    },
+    "email": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Zendesk agent email paired with api_token for Basic auth."
+    }
+  }
+}
