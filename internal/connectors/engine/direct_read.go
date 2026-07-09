@@ -22,6 +22,7 @@ const (
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
+	directReadPolicyGraphQLJSON                = "graphql_json"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -62,6 +63,10 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
+	if strings.TrimSpace(req.Operation) != "" {
+		return directReadGraphQLOperation(ctx, b, req, rt, query, maxBytes)
+	}
+
 	resp, err := rt.Requester.DoLimited(ctx, method, resolvedPath, query, nil, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
@@ -112,9 +117,93 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
+	case directReadPolicyGraphQLJSON:
+		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
+}
+
+func directReadGraphQLOperation(ctx context.Context, b Bundle, req connectors.DirectReadRequest, rt *Runtime, query url.Values, maxBytes int) (connectors.DirectReadResult, error) {
+	if req.OutputPolicy != directReadPolicyGraphQLJSON {
+		return connectors.DirectReadResult{}, fmt.Errorf("graphql direct read operation requires output policy %q, got %q", directReadPolicyGraphQLJSON, req.OutputPolicy)
+	}
+	op, ok := findOperationSpec(b.Operations, req.Operation)
+	if !ok {
+		return connectors.DirectReadResult{}, fmt.Errorf("direct read operation %q is not declared", req.Operation)
+	}
+	if op.Kind != "graphql_query" || op.GraphQL == nil {
+		return connectors.DirectReadResult{}, fmt.Errorf("direct read operation %q must be a graphql_query", req.Operation)
+	}
+	if strings.TrimSpace(op.GraphQL.VariablesPath) != "" {
+		return connectors.DirectReadResult{}, fmt.Errorf("direct read operation %q uses unsupported variables_path", req.Operation)
+	}
+	if !strings.HasPrefix(strings.TrimSpace(op.GraphQL.Document), "query") {
+		return connectors.DirectReadResult{}, fmt.Errorf("direct read operation %q must use a query document", req.Operation)
+	}
+
+	payload := map[string]any{
+		"query":         op.GraphQL.Document,
+		"operationName": op.GraphQL.OperationName,
+	}
+	if len(query) > 0 {
+		variables := make(map[string]any, len(query))
+		for name, values := range query {
+			if len(values) == 0 {
+				continue
+			}
+			variables[name] = values[len(values)-1]
+		}
+		if len(variables) > 0 {
+			payload["variables"] = variables
+		}
+	}
+
+	resp, err := rt.Requester.DoLimited(ctx, http.MethodPost, "", nil, payload, maxBytes)
+	if err != nil {
+		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
+		msg := safety.RedactErrorText(err.Error())
+		if hint != "" {
+			msg = msg + ": " + hint
+		}
+		if class != "" {
+			msg = class + ": " + msg
+		}
+		return connectors.DirectReadResult{}, fmt.Errorf("direct read graphql operation %s: %s", req.Operation, msg)
+	}
+	if len(resp.Body) > maxBytes {
+		return connectors.DirectReadResult{}, fmt.Errorf("direct read response too large: %d bytes exceeds limit %d", len(resp.Body), maxBytes)
+	}
+	if err := graphQLErrors(resp.Body); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+
+	var body any
+	dec := json.NewDecoder(io.LimitReader(bytes.NewReader(resp.Body), int64(maxBytes)+1))
+	dec.UseNumber()
+	if err := dec.Decode(&body); err != nil {
+		return connectors.DirectReadResult{}, fmt.Errorf("direct read response is not JSON: %w", err)
+	}
+	body, err = applyDirectReadOutputPolicy(req.OutputPolicy, body)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	return connectors.DirectReadResult{
+		Connector: b.Name,
+		Method:    http.MethodPost,
+		Path:      req.Path,
+		Status:    resp.Status,
+		Body:      body,
+	}, nil
+}
+
+func findOperationSpec(ops []OperationSpec, id string) (OperationSpec, bool) {
+	for _, op := range ops {
+		if op.ID == id {
+			return op, true
+		}
+	}
+	return OperationSpec{}, false
 }
 
 func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
@@ -142,6 +231,15 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 			out = append(out, item)
 		}
 		return out, nil
+	case directReadPolicyGraphQLJSON:
+		obj, ok := body.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("direct read output policy %q requires a GraphQL response object", policy)
+		}
+		if data, ok := obj["data"]; ok {
+			return data, nil
+		}
+		return obj, nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
 	}

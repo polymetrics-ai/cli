@@ -92,6 +92,7 @@ type ReadRequest struct {
 type DirectReadRequest struct {
 	Method       string
 	Path         string
+	Operation    string
 	Config       RuntimeConfig
 	PathParams   map[string]string
 	Query        map[string]string

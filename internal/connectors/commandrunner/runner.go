@@ -228,7 +228,7 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
-	if cmd.Operation != "" {
+	if cmd.Operation != "" && cmd.Intent != "direct_read" {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      command,
@@ -278,6 +278,7 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 	direct, err := connector.(connectors.DirectReader).DirectRead(ctx, connectors.DirectReadRequest{
 		Method:       method,
 		Path:         endpoint.Path,
+		Operation:    cmd.Operation,
 		Config:       req.Config,
 		PathParams:   pathParams,
 		Query:        query,
@@ -347,7 +348,7 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {
 	switch policy {
-	case "github_contents_file_metadata", "github_contents_directory":
+	case "github_contents_file_metadata", "github_contents_directory", "graphql_json":
 		return true
 	default:
 		return false

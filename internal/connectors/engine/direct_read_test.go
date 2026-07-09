@@ -115,6 +115,90 @@ func TestDirectReadRejectsMutationMethod(t *testing.T) {
 	}
 }
 
+func TestDirectReadGraphQLOperationUsesFixedDocumentAndVariables(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", r.Method)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		if body["query"] != "query ViewThing($id: ID!) { thing(id: $id) { id name } }" {
+			t.Fatalf("query = %v, want fixed document", body["query"])
+		}
+		if body["operationName"] != "ViewThing" {
+			t.Fatalf("operationName = %v, want ViewThing", body["operationName"])
+		}
+		vars, ok := body["variables"].(map[string]any)
+		if !ok || vars["id"] != "123" {
+			t.Fatalf("variables = %+v, want id=123", body["variables"])
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"data":{"thing":{"id":"123","name":"Roadmap"}}}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), graphQLDirectReadBundle(srv.URL), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/graphql (query: thing.view)",
+		Operation:    "acme.thing.view",
+		Query:        map[string]string{"id": "123"},
+		OutputPolicy: "graphql_json",
+		MaxBytes:     1024,
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead GraphQL: %v", err)
+	}
+	if result.Method != http.MethodPost || result.Path != "/graphql (query: thing.view)" {
+		t.Fatalf("result method/path = %s %s, want POST semantic path", result.Method, result.Path)
+	}
+	data, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	thing, ok := data["thing"].(map[string]any)
+	if !ok || thing["name"] != "Roadmap" {
+		t.Fatalf("body = %+v, want thing Roadmap", result.Body)
+	}
+}
+
+func TestDirectReadGraphQLErrorsFailClosed(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"errors":[{"message":"rate limit"}]}`))
+	}))
+	defer srv.Close()
+
+	_, err := DirectRead(context.Background(), graphQLDirectReadBundle(srv.URL), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/graphql (query: thing.view)",
+		Operation:    "acme.thing.view",
+		OutputPolicy: "graphql_json",
+	}, nil)
+	if err == nil {
+		t.Fatal("DirectRead GraphQL error = nil, want failure")
+	}
+	if !strings.Contains(strings.ToLower(err.Error()), "graphql") || !strings.Contains(err.Error(), "rate limit") {
+		t.Fatalf("DirectRead GraphQL error = %q, want GraphQL rate limit", err.Error())
+	}
+}
+
+func TestDirectReadGraphQLRejectsMutationOperation(t *testing.T) {
+	_, err := DirectRead(context.Background(), graphQLDirectReadBundle("https://api.example.test"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/graphql (query: thing.view)",
+		Operation:    "acme.thing.delete",
+		OutputPolicy: "graphql_json",
+	}, nil)
+	if err == nil {
+		t.Fatal("DirectRead GraphQL error = nil, want mutation rejection")
+	}
+	if !strings.Contains(err.Error(), "graphql_query") {
+		t.Fatalf("DirectRead GraphQL error = %q, want graphql_query", err.Error())
+	}
+}
+
 func TestDirectReadMissingPathVariableFailsBeforeNetwork(t *testing.T) {
 	var hits int
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
@@ -279,6 +363,52 @@ func directReadBundle(baseURL, method, endpointPath string) Bundle {
 					CoveredBy: &SurfaceCoverage{
 						DirectRead: "repo read-file",
 					},
+				},
+			},
+		},
+	}
+}
+
+func graphQLDirectReadBundle(baseURL string) Bundle {
+	return Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: baseURL},
+		Surface: &APISurface{
+			OperationLedgerVersion: 1,
+			Endpoints: []SurfaceEndpoint{
+				{
+					Method: http.MethodGet,
+					Path:   "/graphql (query: thing.view)",
+					CoveredBy: &SurfaceCoverage{
+						DirectRead: "thing view",
+					},
+				},
+			},
+		},
+		Operations: []OperationSpec{
+			{
+				ID:           "acme.thing.view",
+				Kind:         "graphql_query",
+				Summary:      "View one thing.",
+				Risk:         "low",
+				Approval:     "none",
+				OutputPolicy: "json",
+				GraphQL: &GraphQLOperationSpec{
+					OperationName: "ViewThing",
+					Document:      "query ViewThing($id: ID!) { thing(id: $id) { id name } }",
+				},
+			},
+			{
+				ID:            "acme.thing.delete",
+				Kind:          "graphql_mutation",
+				Summary:       "Delete one thing.",
+				Risk:          "critical",
+				Approval:      "plan, preview, approval, execute",
+				OutputPolicy:  "json",
+				MutationClass: "delete",
+				GraphQL: &GraphQLOperationSpec{
+					OperationName: "DeleteThing",
+					Document:      "mutation DeleteThing($id: ID!) { deleteThing(id: $id) { id } }",
 				},
 			},
 		},

@@ -688,6 +688,49 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunDirectReadGraphQLOperation(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "thing view",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "acme.thing.view",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/graphql (query: thing.view)"},
+				},
+				OutputPolicy: "graphql_json",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "id", Type: "string", MapsTo: "query.id"},
+				},
+			},
+		},
+	}}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:  []string{"thing", "view"},
+		Flags: map[string][]string{"id": {"123"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("DirectRead = nil, want result")
+	}
+	if connector.directReadReq.Operation != "acme.thing.view" {
+		t.Fatalf("operation = %q, want acme.thing.view", connector.directReadReq.Operation)
+	}
+	if connector.directReadReq.Query["id"] != "123" {
+		t.Fatalf("query id = %q, want 123", connector.directReadReq.Query["id"])
+	}
+	if connector.directReadReq.OutputPolicy != "graphql_json" {
+		t.Fatalf("output policy = %q, want graphql_json", connector.directReadReq.OutputPolicy)
+	}
+}
+
 func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 	tests := []struct {
 		name     string
