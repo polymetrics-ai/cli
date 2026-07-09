@@ -165,11 +165,13 @@
       "status": "commented_addressed_locally",
       "requested_reviewer": "Copilot",
       "requested_at": "2026-07-09T14:28:22Z",
-      "submitted_at": "2026-07-09T14:34:09Z",
+      "submitted_at": "2026-07-09T14:34:09Z; 2026-07-09T15:29:19Z no-new-comments; 2026-07-09T15:57:18Z follow-up",
       "comments": [
         "Narrow json_redacted content redaction so content_type/content_format metadata is preserved while exact content is redacted.",
         "Drop trailing period from GitLab --connection global flag summary before maps_to rendering.",
-        "Drop trailing period from GitLab --limit global flag summary before maps_to rendering."
+        "Drop trailing period from GitLab --limit global flag summary before maps_to rendering.",
+        "Avoid per-field slice allocation in isSensitiveJSONField.",
+        "Cache connector registry for connector help/manual rendering."
       ],
       "disposition": "all actionable comments addressed; focused tests and final gates rerun"
     }
@@ -184,5 +186,5 @@
     "credentialed connector checks",
     "reverse ETL execution"
   ],
-  "updated_at": "2026-07-09T21:25:00Z"
+  "updated_at": "2026-07-09T22:05:00Z"
 }

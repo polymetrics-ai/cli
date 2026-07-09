@@ -27,6 +27,11 @@ const (
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
 
+var sensitiveJSONFieldMarkers = [...]string{
+	"token", "secret", "password", "credential", "private", "authorization",
+	"access_key", "client_secret", "refresh_token",
+}
+
 func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
 		return connectors.DirectReadResult{}, err
@@ -198,10 +203,7 @@ func isSensitiveJSONField(key string) bool {
 	case "token_type", "token_count", "tokens_remaining", "access_level":
 		return false
 	}
-	for _, marker := range []string{
-		"token", "secret", "password", "credential", "private", "authorization",
-		"access_key", "client_secret", "refresh_token",
-	} {
+	for _, marker := range sensitiveJSONFieldMarkers {
 		if strings.Contains(lower, marker) {
 			return true
 		}

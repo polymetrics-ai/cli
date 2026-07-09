@@ -70,8 +70,13 @@
       "cycle": "coderabbit-review-fixes",
       "decision": "addressed",
       "reason": "Addressed all CodeRabbit actionable comments and nits: clarified writes/raw-api help topics, strengthened sensitive-value leak assertions, documented recursive redaction, added known-safe redaction allowlist, and replaced unknown-command string coupling with a shared commandrunner constant."
+    },
+    {
+      "cycle": "copilot-follow-up-fixes",
+      "decision": "addressed",
+      "reason": "Addressed Copilot follow-up comments by moving sensitive JSON marker list to a package-level array and caching the connector registry used by help/manual rendering."
     }
   ],
   "human_gate": "parent PR merge to main",
-  "updated_at": "2026-07-09T21:25:00Z"
+  "updated_at": "2026-07-09T22:05:00Z"
 }

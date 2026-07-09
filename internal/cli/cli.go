@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"polymetrics.ai/internal/agentmode"
 	"polymetrics.ai/internal/app"
@@ -1299,6 +1300,14 @@ func validateCredentialConfig(a *app.App, connector string, config map[string]st
 	return nil
 }
 
+var (
+	appRegistryOnce   sync.Once
+	cachedAppRegistry *connectors.Registry
+)
+
 func appRegistry() *connectors.Registry {
-	return bundleregistry.New()
+	appRegistryOnce.Do(func() {
+		cachedAppRegistry = bundleregistry.New()
+	})
+	return cachedAppRegistry
 }
