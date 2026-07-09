@@ -32,9 +32,22 @@ Results:
 gofmt -w cmd internal
 go vet ./...
 go test ./...
+go test ./internal/connectors/certify -run TestWritePlanPreviewJSONHasNoApprovalToken -count=1 -timeout 20m
+go test ./... -timeout 20m
 go build ./cmd/pm
 make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Results:
+
+- `gofmt -w cmd internal`: passed, no diff after the committed metadata slice.
+- `go vet ./...`: passed.
+- `go test ./...`: failed because `internal/connectors/certify` exceeds Go's default 10-minute package timeout while running `TestWritePlanPreviewJSONHasNoApprovalToken`; this is unrelated to Freshdesk metadata and is covered by the repo's `make verify` timeout.
+- `go test ./internal/connectors/certify -run TestWritePlanPreviewJSONHasNoApprovalToken -count=1 -timeout 20m`: passed.
+- `go test ./... -timeout 20m`: passed.
+- `go build ./cmd/pm`: passed.
+- `make verify`: passed, including `go test -timeout 20m ./...`, docs validation, smoke, lint, and connectorgen validation.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: passed, 547 connectors checked, 0 findings.
 
 Do not run credentialed Freshdesk checks unless explicitly requested.

@@ -11,9 +11,10 @@ Status: focused green verification passed for the metadata slice.
 - Added `cli_surface.json` with implemented stream-backed intents for current streams and planned/blocked intents for direct-read, export, and reverse-ETL follow-up work.
 - Updated Freshdesk metadata/docs to avoid overclaiming writes while documenting blocked-by-default follow-up lanes.
 - Focused validation passed: JSON/count checks, `connectorgen validate`, CLISurface tests, engine/connectorgen tests, and Freshdesk conformance.
+- Broader verification passed through `go test ./... -timeout 20m`, `go build ./cmd/pm`, `make verify`, and final `connectorgen validate`; exact `go test ./...` remains a default-timeout blocker in `internal/connectors/certify`.
 
 ## Next
 
-- Run broader parent verification before handoff/PR update.
-- Commit and push the #173 green metadata slice.
+- Commit and push verification artifact updates.
 - Re-evaluate the parent queue for #176 operation-ledger refinement and downstream implementation lanes.
+- Keep parent PR #222 draft until more lanes are integrated and review coverage is ready.

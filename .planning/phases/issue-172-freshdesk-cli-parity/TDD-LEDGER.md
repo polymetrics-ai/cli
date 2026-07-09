@@ -29,6 +29,7 @@ Parent issue: #172
 - `go test ./cmd/connectorgen -run CLISurface`: passed.
 - `go test ./cmd/connectorgen ./internal/connectors/engine`: passed.
 - `go test ./internal/connectors/conformance -run 'TestConformance/freshdesk'`: passed.
+- Broader gate: `go test ./...` with default timeout failed in `internal/connectors/certify` after 10 minutes; `go test ./internal/connectors/certify -run TestWritePlanPreviewJSONHasNoApprovalToken -count=1 -timeout 20m`, `go test ./... -timeout 20m`, `go build ./cmd/pm`, `make verify`, and final `connectorgen validate` passed.
 
 ## Refactor Notes
 

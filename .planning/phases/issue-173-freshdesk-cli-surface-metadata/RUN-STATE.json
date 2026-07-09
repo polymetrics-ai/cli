@@ -2,7 +2,7 @@
   "phase": "issue-173-freshdesk-cli-surface-metadata",
   "issue": 173,
   "parent_issue": 172,
-  "status": "green_focused_verification",
+  "status": "verified_with_default_go_test_timeout_note",
   "gsd": {
     "mode": "manual_fallback",
     "reason": "scripts/gsd prompt programming-loop is not registered in this adapter; following .pi/prompts/pm-gsd-loop.md and gsd-universal-runtime-loop.md manually.",
@@ -30,7 +30,7 @@
     ],
     "refactorEvidence": ["data-only metadata update; no Go production code changed"]
   },
-  "verificationPassed": false,
-  "verificationNotes": "Focused #173 gates passed; full parent make verify pending.",
-  "updated_at": "2026-07-09T20:05:00Z"
+  "verificationPassed": true,
+  "verificationNotes": "Focused #173 gates passed. go test ./... with Go's default 10-minute package timeout fails in internal/connectors/certify; go test ./... -timeout 20m and make verify passed.",
+  "updated_at": "2026-07-09T20:32:07Z"
 }

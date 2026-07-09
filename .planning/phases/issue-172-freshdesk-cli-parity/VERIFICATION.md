@@ -50,15 +50,28 @@ Results:
 - Full defs validation passed: 547 connectors checked, 0 findings, 0 warnings.
 - Focused CLISurface, engine/connectorgen, and Freshdesk conformance tests passed.
 
-## Required Before Handoff
+## Parent Verification After #173
 
 ```bash
 gofmt -w cmd internal
 go vet ./...
 go test ./...
+go test ./internal/connectors/certify -run TestWritePlanPreviewJSONHasNoApprovalToken -count=1 -timeout 20m
+go test ./... -timeout 20m
 go build ./cmd/pm
 make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Results:
+
+- `gofmt -w cmd internal`: passed, no diff after the committed metadata slice.
+- `go vet ./...`: passed.
+- `go test ./...`: failed on the known/default timeout path: `internal/connectors/certify` exceeded Go's default 10-minute package timeout in `TestWritePlanPreviewJSONHasNoApprovalToken` while full-package execution was still running.
+- `go test ./internal/connectors/certify -run TestWritePlanPreviewJSONHasNoApprovalToken -count=1 -timeout 20m`: passed.
+- `go test ./... -timeout 20m`: passed.
+- `go build ./cmd/pm`: passed.
+- `make verify`: passed, including `go test -timeout 20m ./...`, docs validation, smoke, lint, and connectorgen validation.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: passed, 547 connectors checked, 0 findings.
 
 Runtime-backed checks remain optional and require explicit credential/service approval.

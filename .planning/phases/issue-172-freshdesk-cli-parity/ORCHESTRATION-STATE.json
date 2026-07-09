@@ -88,16 +88,16 @@
       "branch": "feat/172-freshdesk-cli-parity",
       "pr_url": "",
       "worker": "parent-orchestrator-inline",
-      "status": "worker_in_progress",
+      "status": "provisionally_integrated",
       "write_scope": ["internal/connectors/defs/freshdesk", ".planning/phases/issue-173-freshdesk-cli-surface-metadata"],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-172-freshdesk-cli-parity",
-      "verification": "red baseline captured; implementation pending",
+      "verification": "Focused #173 gates passed; go test ./... default timeout failed in internal/connectors/certify; go test ./... -timeout 20m and make verify passed.",
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
-        "head_sha": "",
-        "reviewed_range": "",
-        "coverage_route": "blocked",
+        "head_sha": "f502876e",
+        "reviewed_range": "parent PR #222 after #173 integration; review pending while draft",
+        "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
         "disposition_summary": "draft parent PR #222 opened; automated review coverage pending implementation and ready-for-review transition",
         "disposition_url": ""
@@ -114,5 +114,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T19:40:00Z"
+  "updated_at": "2026-07-09T20:32:07Z"
 }

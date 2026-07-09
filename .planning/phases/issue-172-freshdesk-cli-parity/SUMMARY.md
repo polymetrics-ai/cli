@@ -11,6 +11,7 @@ Status: planning initialized; draft parent PR #222 is open; first implementation
 - Captured red baseline: Freshdesk `api_surface.json` has 10 entries, not 170, and `cli_surface.json` is absent.
 - Opened draft parent PR #222 from `feat/172-freshdesk-cli-parity` to `main`.
 - Completed focused #173 metadata slice: Freshdesk API surface now has 170 operation-ledger rows matching the parent baseline, `cli_surface.json` exists, metadata/docs avoid write overclaims, and focused validation passed.
+- Broader verification passed through `go test ./... -timeout 20m`, `go build ./cmd/pm`, `make verify`, and final `connectorgen validate`; exact `go test ./...` remains a default-timeout blocker in `internal/connectors/certify`.
 
 ## Current Decision
 
@@ -18,6 +19,6 @@ Execute #173 inline as the local critical path because this Pi harness has no `s
 
 ## Next
 
-1. Run broader parent verification and commit/push the #173 green slice.
+1. Commit/push verification artifact updates.
 2. Re-evaluate the remaining sub-issue queue after #173 lands.
-3. Route #176 operation-ledger refinement next unless verification/review blocks progress.
+3. Route #176 operation-ledger refinement next unless review or human gates block progress.
