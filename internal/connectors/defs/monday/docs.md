@@ -5,6 +5,11 @@ Read-only.
 
 Readable streams: `boards`, `items`, `users`, `teams`, `tags`.
 
+CLI command surface metadata is available for the implemented stream-backed commands:
+`pm monday board list`, `pm monday item list`, `pm monday user list`, `pm monday team list`, and
+`pm monday tag list`. Planned direct-read and mutation commands are documented as blocked/planned
+metadata only; they do not execute raw GraphQL or writes.
+
 This connector is read-only; no write actions are declared.
 
 Service API documentation: https://developer.monday.com/api-reference/docs.

@@ -18,9 +18,9 @@
       "commands": ["workspace", "folder", "update", "column", "group"]
     },
     {
-      "id": "planned-write",
-      "title": "Planned Reverse ETL Commands",
-      "commands": ["board", "item", "column", "webhook"]
+      "id": "automation",
+      "title": "Automation Commands",
+      "commands": ["webhook"]
     }
   ],
   "global_flags": [

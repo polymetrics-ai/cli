@@ -106,3 +106,30 @@ func TestGitHubGuideIncludesCLISurfaceHelp(t *testing.T) {
 		}
 	}
 }
+
+func TestMondayGuideIncludesCLISurfaceHelp(t *testing.T) {
+	registry := New()
+	connector, ok := registry.Get("monday")
+	if !ok {
+		t.Fatalf("monday connector not found")
+	}
+
+	manual := connectors.RenderConnectorManual(connector)
+	for _, want := range []string{
+		"COMMAND SURFACE",
+		"Usage: pm monday <command> <subcommand> [flags]",
+		"Core Commands",
+		"board list - List board metadata",
+		"intent=etl availability=implemented stream=boards",
+		"webhook create - Create a webhook",
+		"approval: reverse ETL writes require plan, preview, approval, execute plus typed confirmation for external callback targets",
+		"--connection (string): Use a saved monday connector credential.",
+	} {
+		if !strings.Contains(manual, want) {
+			t.Fatalf("Monday manual missing %q:\n%s", want, manual)
+		}
+	}
+	if got := strings.Count(manual, "board list - List board metadata"); got != 1 {
+		t.Fatalf("Monday manual rendered board list %d times, want exactly once:\n%s", got, manual)
+	}
+}
