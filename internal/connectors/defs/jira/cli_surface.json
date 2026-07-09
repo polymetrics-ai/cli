@@ -61,8 +61,28 @@
       "stream": "issues",
       "source_cli_path": "jira issue list",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/",
-      "notes": "Executes the existing Jira issues stream. Advanced JQL, field selection, and single-issue rendering are deferred to later direct-read or stream-runner slices.",
-      "examples": ["pm jira issue list --json"],
+      "flags": [
+        {
+          "name": "jql",
+          "type": "string",
+          "summary": "Filter issues with Jira Query Language.",
+          "maps_to": "query.jql"
+        },
+        {
+          "name": "fields",
+          "type": "string",
+          "summary": "Comma-separated Jira issue fields to request.",
+          "maps_to": "query.fields"
+        },
+        {
+          "name": "expand",
+          "type": "string",
+          "summary": "Comma-separated Jira issue expansions to request.",
+          "maps_to": "query.expand"
+        }
+      ],
+      "notes": "Executes the existing Jira issues stream. Single-issue rendering is deferred to a later direct-read slice.",
+      "examples": ["pm jira issue list --jql 'project = POLY' --json"],
       "api_surface": [
         {
           "method": "GET",
@@ -191,7 +211,34 @@
       "stream": "projects",
       "source_cli_path": "jira project list",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-projects/#api-rest-api-3-project-search-get",
-      "examples": ["pm jira project list --json"],
+      "flags": [
+        {
+          "name": "query",
+          "type": "string",
+          "summary": "Filter projects by query string.",
+          "maps_to": "query.query"
+        },
+        {
+          "name": "type-key",
+          "type": "string",
+          "summary": "Filter projects by project type key.",
+          "maps_to": "query.typeKey"
+        },
+        {
+          "name": "category-id",
+          "type": "integer",
+          "summary": "Filter projects by category ID.",
+          "maps_to": "query.categoryId"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "values": ["live", "archived", "deleted"],
+          "summary": "Filter projects by Jira lifecycle status.",
+          "maps_to": "query.status"
+        }
+      ],
+      "examples": ["pm jira project list --query POLY --json"],
       "api_surface": [
         {
           "method": "GET",
@@ -247,7 +294,27 @@
       "stream": "users",
       "source_cli_path": "jira user list",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-users/#api-rest-api-3-users-search-get",
-      "examples": ["pm jira user list --json"],
+      "flags": [
+        {
+          "name": "query",
+          "type": "string",
+          "summary": "Filter users by display name, email, or account text.",
+          "maps_to": "query.query"
+        },
+        {
+          "name": "account-id",
+          "type": "string",
+          "summary": "Filter users by Jira account ID.",
+          "maps_to": "query.accountId"
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Legacy username filter for Jira sites that still accept it.",
+          "maps_to": "query.username"
+        }
+      ],
+      "examples": ["pm jira user list --query ada --json"],
       "api_surface": [
         {
           "method": "GET",

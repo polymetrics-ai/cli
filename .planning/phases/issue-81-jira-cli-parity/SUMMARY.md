@@ -1,6 +1,6 @@
 # Summary: Jira CLI Parity Parent
 
-Status: draft parent PR #129 opened; #104 and #105 verified locally with full gates.
+Status: draft parent PR #129 opened; #104, #105, and #106 verified locally with full gates.
 
 ## Completed
 
@@ -17,6 +17,8 @@ Status: draft parent PR #129 opened; #104 and #105 verified locally with full ga
 - Regenerated Jira connector manual/skill plus website connector data for Jira `cliSurface`; website connector-data tests and `pnpm build` passed.
 - Ran full #105 local gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `cd website && pnpm build`.
 - Routed automated review for #105: CodeRabbit reported a 51 minute review-limit window, Copilot backup review produced four comments across two passes, and CodeRabbit later completed manual review after the retry window with one trivial nitpick. All comments were fixed and re-verified with full gates.
+- Added #106 Jira stream-runner flags and tests for `pm jira issue list --jql`, `pm jira project list --query`, and `pm jira user list --query` against local `httptest` Jira endpoints.
+- Ran full #106 local gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `cd website && pnpm build`.
 
 ## Current Blockers
 
@@ -25,6 +27,6 @@ Status: draft parent PR #129 opened; #104 and #105 verified locally with full ga
 
 ## Next
 
-1. Commit/push #105 review-fix slice and update parent PR.
-2. Confirm final PR checks complete on the review-fix head.
-3. Start the next dependency-ready lane: #106 stream runner or #107 operation ledger.
+1. Commit/push #106 verified slice and update parent PR.
+2. Route automated review for the #106 implementation commit per draft-parent PR policy.
+3. Start the next dependency-ready lane: #107 operation ledger.

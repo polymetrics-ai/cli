@@ -458,6 +458,118 @@ func TestGitHubCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
 	}
 }
 
+func TestJiraCommandSurfaceRunsStreamBackedCommands(t *testing.T) {
+	requests := map[string]string{}
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		user, pass, ok := r.BasicAuth()
+		if !ok || user != "agent@example.invalid" || pass != "test-token" {
+			t.Fatalf("jira request missing expected basic auth")
+		}
+		requests[r.URL.Path] = r.URL.RawQuery
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/rest/api/3/search":
+			if got := r.URL.Query().Get("jql"); got != "project = POLY" {
+				t.Fatalf("jql query = %q, want project = POLY", got)
+			}
+			_, _ = w.Write([]byte(`{"issues":[{"id":"10001","key":"POLY-1","fields":{"summary":"Ship Jira runner","created":"2026-07-01T00:00:00Z","updated":"2026-07-02T00:00:00Z","status":{"name":"Done"},"issuetype":{"name":"Task"},"priority":{"name":"High"},"assignee":{"displayName":"Ada"},"reporter":{"displayName":"Grace"},"project":{"key":"POLY"}}}],"startAt":0,"maxResults":50,"total":1}`))
+		case "/rest/api/3/project/search":
+			if got := r.URL.Query().Get("query"); got != "Poly" {
+				t.Fatalf("project query = %q, want Poly", got)
+			}
+			_, _ = w.Write([]byte(`{"values":[{"id":"10000","key":"POLY","name":"Polymetrics","projectTypeKey":"software"}],"startAt":0,"maxResults":50,"total":1}`))
+		case "/rest/api/3/users/search":
+			if got := r.URL.Query().Get("query"); got != "ada" {
+				t.Fatalf("user query = %q, want ada", got)
+			}
+			_, _ = w.Write([]byte(`[{"accountId":"abc-123","accountType":"atlassian","displayName":"Ada Lovelace","emailAddress":"ada@example.invalid","active":true}]`))
+		default:
+			t.Fatalf("unexpected Jira path %s", r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	t.Setenv("JIRA_TEST_TOKEN", "test-token")
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "jira-local",
+		"--connector", "jira",
+		"--config", "email=agent@example.invalid",
+		"--config", "base_url=" + srv.URL,
+		"--from-env", "api_token=JIRA_TEST_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	tests := []struct {
+		name       string
+		args       []string
+		wantPath   string
+		wantKind   string
+		wantStream string
+		wantCount  int
+		wantRecord map[string]string
+	}{
+		{
+			name:       "issue list",
+			args:       []string{"jira", "issue", "list", "--credential", "jira-local", "--jql", "project = POLY", "--limit", "1", "--root", root, "--json"},
+			wantPath:   "/rest/api/3/search",
+			wantKind:   "ConnectorCommandRead",
+			wantStream: "issues",
+			wantCount:  1,
+			wantRecord: map[string]string{"key": "POLY-1", "summary": "Ship Jira runner", "status": "Done", "project": "POLY"},
+		},
+		{
+			name:       "project list",
+			args:       []string{"jira", "project", "list", "--credential", "jira-local", "--query", "Poly", "--limit", "1", "--root", root, "--json"},
+			wantPath:   "/rest/api/3/project/search",
+			wantKind:   "ConnectorCommandRead",
+			wantStream: "projects",
+			wantCount:  1,
+			wantRecord: map[string]string{"key": "POLY", "name": "Polymetrics"},
+		},
+		{
+			name:       "user list",
+			args:       []string{"jira", "user", "list", "--credential", "jira-local", "--query", "ada", "--limit", "1", "--root", root, "--json"},
+			wantPath:   "/rest/api/3/users/search",
+			wantKind:   "ConnectorCommandRead",
+			wantStream: "users",
+			wantCount:  1,
+			wantRecord: map[string]string{"accountId": "abc-123", "displayName": "Ada Lovelace"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			stdout, _ := runCLI(t, tt.args)
+			if _, ok := requests[tt.wantPath]; !ok {
+				t.Fatalf("%s was not requested; requests=%v", tt.wantPath, requests)
+			}
+
+			var env struct {
+				Kind    string           `json:"kind"`
+				Stream  string           `json:"stream"`
+				Count   int              `json:"count"`
+				Records []map[string]any `json:"records"`
+			}
+			if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+				t.Fatalf("decode json: %v\n%s", err, stdout)
+			}
+			if env.Kind != tt.wantKind || env.Stream != tt.wantStream || env.Count != tt.wantCount {
+				t.Fatalf("envelope = %+v, want kind=%s stream=%s count=%d", env, tt.wantKind, tt.wantStream, tt.wantCount)
+			}
+			if len(env.Records) != 1 {
+				t.Fatalf("records length = %d, want 1", len(env.Records))
+			}
+			for key, want := range tt.wantRecord {
+				if got := fmt.Sprint(env.Records[0][key]); got != want {
+					t.Fatalf("record[%s] = %q, want %q; record=%+v", key, got, want, env.Records[0])
+				}
+			}
+		})
+	}
+}
+
 func TestGitHubCommandSurfaceClampsOversizedLimit(t *testing.T) {
 	const wantLimit = 10000
 	var body strings.Builder

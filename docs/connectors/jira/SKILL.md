@@ -63,7 +63,7 @@ Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using 
   - --json (boolean): Write machine-readable JSON output.
   - --connection (string): Use a saved Jira connector credential and site scope. (maps_to=connection)
 - Issue Commands
-  - issue list - List Jira issues [intent=etl availability=implemented stream=issues]; notes: Executes the existing Jira issues stream. Advanced JQL, field selection, and single-issue rendering are deferred to later direct-read or stream-runner slices.
+  - issue list - List Jira issues [intent=etl availability=implemented stream=issues]; notes: Executes the existing Jira issues stream. Single-issue rendering is deferred to a later direct-read slice.; flags: --jql, --fields, --expand
   - issue search - Search issues with Jira query parameters [intent=etl availability=partial stream=issues]; notes: The connector has an issue-search stream, but gh-style/Jira-style ad-hoc JQL flags are not yet exposed as command flags.
   - issue view - View one Jira issue [intent=direct_read availability=planned]; notes: Requires a bounded direct-read executor for caller-supplied issue IDs.
   - issue create - Create an issue [intent=reverse_etl availability=planned]; approval: Future reverse ETL writes must use plan, preview, approval, and execute.; risk: Creates visible Jira project data.; notes: No Jira write action is declared in this metadata slice.
@@ -77,14 +77,14 @@ Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using 
   - attachment metadata - Read issue attachment metadata [intent=direct_read availability=planned]; notes: Structured attachment metadata is a candidate for a bounded direct-read or fan-out stream after the operation ledger slice.
   - attachment download - Download attachment content [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Attachment content returns binary payloads and needs an explicit bounded file-output policy before enabling.
 - Project Commands
-  - project list - List Jira projects [intent=etl availability=implemented stream=projects]
+  - project list - List Jira projects [intent=etl availability=implemented stream=projects]; flags: --query, --type-key, --category-id, --status
   - project view - View one Jira project [intent=direct_read availability=planned]; notes: Requires a bounded direct-read executor for caller-supplied project keys or IDs.
   - project create - Create a Jira project [intent=direct_write availability=unsafe_or_disallowed]; notes: Project creation is an administrative action and is blocked by default.
   - project delete - Delete a Jira project [intent=direct_write availability=unsafe_or_disallowed]; notes: Project deletion is destructive admin and is not exposed.
   - component list - List project components [intent=direct_read availability=planned]; notes: Project subresources need project-ID fan-out or bounded direct reads.
   - version list - List project versions [intent=direct_read availability=planned]; notes: Project version reads need project-ID fan-out or bounded direct reads.
 - User And Team Commands
-  - user list - List Jira users visible to the site [intent=etl availability=implemented stream=users]
+  - user list - List Jira users visible to the site [intent=etl availability=implemented stream=users]; flags: --query, --account-id, --username
   - user view - View one Jira user [intent=direct_read availability=planned]; notes: Requires a bounded direct-read executor for caller-supplied account IDs.
   - myself view - View the authenticated Jira user [intent=direct_read availability=planned]; notes: The endpoint is currently used as the connector health check and is not yet exposed as a command.
   - group list - List Jira groups [intent=direct_read availability=planned]; notes: Group APIs require elevated permissions on many sites and need operation-ledger risk classification.

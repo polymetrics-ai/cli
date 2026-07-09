@@ -33,4 +33,31 @@ cd website && pnpm build
 
 ## Results
 
-Pending.
+Targeted checks passed:
+
+```bash
+python3 -m json.tool internal/connectors/defs/jira/cli_surface.json >/dev/null
+go test ./internal/cli -run TestJiraCommandSurfaceRunsStreamBackedCommands -count=1
+go run ./cmd/pm docs validate --connectors-dir docs/connectors
+cd website && pnpm gen:website-data && pnpm test:unit -- connector-data
+go test ./internal/connectors/commandrunner -count=1
+go run ./cmd/connectorgen validate internal/connectors/defs --json
+```
+
+Full gates passed:
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+cd website && pnpm build
+```
+
+Final connector validation:
+
+```text
+connectorgen validate: 547 connector(s) checked, 0 findings
+```

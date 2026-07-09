@@ -2,7 +2,7 @@
   "phase": "issue-81-jira-cli-parity",
   "parentIssue": 81,
   "branch": "feat/81-jira-cli-parity",
-  "status": "issue_105_verified",
+  "status": "issue_106_verified",
   "gsd": {
     "doctor": "passed",
     "verifyPi": "passed",
@@ -13,7 +13,7 @@
     "manualFallback": true
   },
   "verificationPassed": false,
-  "verificationSummary": "Parent PR #129 is open. Issues #104 and #105 are locally verified with full gates; remaining sub-issues #106-#110 are not implemented, so parent verification is not complete.",
+  "verificationSummary": "Parent PR #129 is open. Issues #104, #105, and #106 are locally verified with full gates; remaining sub-issues #107-#110 are not implemented, so parent verification is not complete.",
   "orchestrationDecisions": [
     {
       "timestamp": "2026-07-09T12:49:58Z",
@@ -68,6 +68,12 @@
       "cycle": "issue-105-review-fix-3",
       "decision": "coderabbit_manual_fallback",
       "reason": "CodeRabbit completed after the retry window and reported 1 trivial nitpick that was fixed with a test assertion; full gates passed again."
+    },
+    {
+      "timestamp": "2026-07-09T17:21:34Z",
+      "cycle": "issue-106-verify",
+      "decision": "local_critical_path",
+      "reason": "Issue #106 stream runner full gates passed; automated review pending after implementation push."
     }
   ],
   "verification": [
@@ -95,6 +101,19 @@
         "cd website && pnpm build"
       ],
       "status": "passed_review_fixed"
+    },
+    {
+      "scope": "issue-106",
+      "commands": [
+        "gofmt -w cmd internal",
+        "go vet ./...",
+        "go test ./...",
+        "go build ./cmd/pm",
+        "make verify",
+        "go run ./cmd/connectorgen validate internal/connectors/defs",
+        "cd website && pnpm build"
+      ],
+      "status": "passed"
     }
   ],
   "humanGates": [
@@ -108,5 +127,5 @@
     "generic shell/http/sql write tools",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-09T16:40:00Z"
+  "updatedAt": "2026-07-09T17:21:34Z"
 }
