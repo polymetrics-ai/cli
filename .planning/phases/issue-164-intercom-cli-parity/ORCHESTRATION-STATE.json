@@ -124,13 +124,13 @@
       "verification": "focused and broad local gates passed; see issue-165 VERIFICATION.md",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
-        "head_sha": "38e8ecbb",
-        "reviewed_range": "sub-PR #234 head; parent PR fallback pending if CodeRabbit skips non-default base",
+        "status": "skipped",
+        "head_sha": "cd776e3550d0436f7e1e133a106bb6fbb07bf125",
+        "reviewed_range": "none; CodeRabbit skipped non-default-base sub-PR #234",
         "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "Sub-PR #234 is open; CI and automated review coverage are pending. Parent PR #220 fallback required if CodeRabbit skips the non-default base.",
-        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/234"
+        "disposition_summary": "CodeRabbit skip on PR #234 is informational only. Parent PR #220 fallback coverage is required after integration or an approved fallback must be recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/234#issuecomment-4929238700"
       }
     }
   ],
@@ -144,5 +144,5 @@
     "production deployment",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T20:28:24Z"
+  "updated_at": "2026-07-09T20:34:00Z"
 }

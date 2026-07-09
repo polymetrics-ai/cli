@@ -2,7 +2,8 @@
   "phase": "issue-165-intercom-cli-surface-metadata",
   "issue": 165,
   "parent_issue": 164,
-  "status": "sub_pr_open",
+  "status": "sub_pr_review_pending_parent_fallback",
+  "sub_pr": "https://github.com/polymetrics-ai/cli/pull/234",
   "gsd": {
     "adapter": "scripts/gsd",
     "doctor_passed": true,
@@ -32,6 +33,11 @@
       "cycle": "pr-open",
       "decision": "local_critical_path",
       "reason": "Opened stacked PR #234 against feat/164-intercom-cli-parity for issue #165."
+    },
+    {
+      "cycle": "automated-review-route",
+      "decision": "not_spawned_review_blocked",
+      "reason": "CodeRabbit auto-review skipped PR #234 because the base branch is not the default branch; parent PR fallback coverage is required after integration."
     }
   ],
   "tdd": {
@@ -77,11 +83,20 @@
       "cli_surface.json added as docs/help metadata only"
     ]
   },
+  "automated_review": {
+    "primary_route": "coderabbit_auto",
+    "status": "skipped",
+    "head_sha": "cd776e3550d0436f7e1e133a106bb6fbb07bf125",
+    "reviewed_range": "none; CodeRabbit skipped non-default-base sub-PR",
+    "coverage_route": "parent_pr_fallback",
+    "fallback_route": "none",
+    "disposition_summary": "CodeRabbit skip is informational only; parent PR #220 must provide review coverage after #234 integration or an approved fallback must be recorded.",
+    "disposition_url": "https://github.com/polymetrics-ai/cli/pull/234#issuecomment-4929238700"
+  },
   "verificationPassed": true,
   "verificationNotes": [
     "Default go test ./... timed out in internal/connectors/certify due package timeout; focused retry and go test ./... -timeout=20m passed.",
     "make verify passed with the repository Makefile's go test -timeout 20m ./... gate."
   ],
-  "sub_pr": "https://github.com/polymetrics-ai/cli/pull/234",
-  "updated_at": "2026-07-09T20:28:24Z"
+  "updated_at": "2026-07-09T20:34:00Z"
 }

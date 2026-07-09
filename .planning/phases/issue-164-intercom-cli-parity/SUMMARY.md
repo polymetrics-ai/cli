@@ -10,10 +10,11 @@ Status: issue #165 sub-PR open; parent PR remains draft.
 - Created parent orchestration plan, TDD ledger, verification checklist, and orchestration state before production edits.
 - Committed and pushed the plan checkpoint, then opened draft parent PR #220: https://github.com/polymetrics-ai/cli/pull/220.
 - Implemented #165 locally, passed focused and broad local gates, and opened stacked PR #234: https://github.com/polymetrics-ai/cli/pull/234.
+- Recorded CodeRabbit skipped-review status on PR #234 as pending parent PR fallback coverage, not as review completion.
 
 ## Current Decision
 
-#165 ran as `local_critical_path` in the coordinator checkout because the Pi tool surface in this session has no subagent tool. Do not claim worker spawning. PR #234 now needs CI and automated review coverage; if CodeRabbit skips the non-default base, parent PR #220 must provide fallback coverage after integration.
+#165 ran as `local_critical_path` in the coordinator checkout because the Pi tool surface in this session has no subagent tool. Do not claim worker spawning. PR #234 now needs CI; CodeRabbit already skipped the non-default-base review, so parent PR #220 must provide fallback coverage after integration unless another approved fallback is recorded.
 
 ## Next
 

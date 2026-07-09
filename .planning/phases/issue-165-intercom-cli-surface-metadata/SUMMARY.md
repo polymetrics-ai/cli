@@ -1,6 +1,6 @@
 # Summary: Intercom CLI Surface Metadata
 
-Status: local verification green; `go test ./...` default timeout recorded with successful `-timeout=20m` rerun.
+Status: local verification green; stacked PR #234 open; CodeRabbit skipped non-default-base review, so parent PR fallback coverage is pending.
 
 ## Completed
 
@@ -30,4 +30,5 @@ Status: local verification green; `go test ./...` default timeout recorded with 
 
 - Run broader parent gates before handoff or after the next coherent slice.
 - Stacked #165 PR opened against the parent branch: https://github.com/polymetrics-ai/cli/pull/234.
+- CodeRabbit auto-review skipped PR #234 because reviews are disabled on non-default base branches; this is not review completion and requires parent PR #220 fallback coverage after integration.
 - Leave #168-#171 to refine operation classifications and implement streams/direct reads/binary/write policies.
