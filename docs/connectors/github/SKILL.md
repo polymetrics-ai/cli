@@ -7,7 +7,7 @@ description: GitHub connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (Pass B full-surface expansion: 33 streams, 67 write actions).
+Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (full-surface certified: 37 streams, 231 write actions accounted).
 
 ## Icon
 
@@ -20,6 +20,17 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 
 - check=true catalog=true read=true write=true query=false
 - Integration type: api
+
+## Certification
+
+- Full certification: passed for the current GitHub connector surface.
+- Accounted API endpoints: 509 total, 440 covered, 69 explicitly blocked.
+- Catalog streams: 37.
+- Direct-read command families checked: 2.
+- Write actions accounted: 231.
+- Live write lifecycle: `create_label` passed with read-back verification and cleanup.
+- Remaining write actions are safe untested pairings or blocked by policy; destructive/admin/binary surfaces are not executed blindly.
+- Binary download surfaces remain safely blocked until a bounded binary executor and destination policy exist.
 
 ## Authentication
 

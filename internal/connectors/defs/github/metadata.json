@@ -1,7 +1,7 @@
 {
   "name": "github",
   "display_name": "GitHub",
-  "description": "Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (Pass B full-surface expansion: 33 streams, 67 write actions).",
+  "description": "Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (full-surface certified: 37 streams, 231 write actions accounted).",
   "integration_type": "api",
   "docs_url": "https://docs.github.com/en/rest",
   "release_stage": "ga",

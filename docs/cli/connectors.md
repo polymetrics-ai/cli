@@ -49,6 +49,15 @@ GITHUB AUTHENTICATION
   unsupported
     Password auth and SSH keys do not authenticate GitHub REST API requests.
 
+GITHUB CERTIFICATION
+  Full certification passed for the current GitHub connector surface. The
+  certificate accounted for 509 API endpoints: 440 covered and 69 explicitly
+  blocked. It covered 37 catalog streams, 2 implemented direct-read command
+  families, and 231 write actions. The safe create_label write lifecycle passed
+  with read-back verification and cleanup; destructive/admin/binary surfaces are
+  not executed blindly, and binary download surfaces remain safely blocked until
+  a bounded binary executor and destination policy exist.
+
 GITHUB ETL STREAMS
   issues
     Reads repository issues through /repos/{owner}/{repo}/issues and filters out
