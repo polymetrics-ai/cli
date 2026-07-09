@@ -49,8 +49,17 @@
         196
       ],
       "reason": "Pushed parent planning seed and opened draft parent PR #229 to satisfy stacked sub-issue precondition."
+    },
+    {
+      "timestamp": "2026-07-09T21:05:00Z",
+      "cycle": "issue-197-sub-pr-open",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        197
+      ],
+      "reason": "Sub-PR #237 opened after local verification; parent waits on checks/review before integration."
     }
   ],
   "verificationPassed": false,
-  "verificationBlocker": "full parent gate not run; planning preflight passed"
+  "verificationBlocker": "parent integration blocked on #237 checks and automated review coverage"
 }

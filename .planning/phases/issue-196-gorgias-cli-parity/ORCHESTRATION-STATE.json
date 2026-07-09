@@ -17,12 +17,12 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi",
-    "status": "running"
+    "status": "waiting_for_review"
   },
   "ready_queue": [
     {
       "number": 197,
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "dependencies": [],
       "write_scope": [
         "internal/connectors/defs/gorgias/metadata.json",
@@ -30,11 +30,11 @@
         "internal/connectors/defs/gorgias/cli_surface.json",
         ".planning/phases/issue-197-gorgias-cli-surface-metadata"
       ],
-      "decision": "local_critical_path"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 200,
-      "status": "planned",
+      "status": "worker_ready",
       "dependencies": [
         197
       ],
@@ -139,6 +139,14 @@
         196
       ],
       "reason": "Opened draft parent PR #229 after parent planning seed push; sub-issue execution can now start with #197."
+    },
+    {
+      "timestamp": "2026-07-09T21:05:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        197
+      ],
+      "reason": "Local #197 implementation opened sub-PR #237 against parent branch; automated review/check coverage pending."
     }
   ],
   "subissues": [
@@ -146,24 +154,24 @@
       "number": 197,
       "url": "https://github.com/polymetrics-ai/cli/issues/197",
       "branch": "feat/197-gorgias-cli-surface-metadata",
-      "pr_url": "",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/237",
       "worker": "local_critical_path_pi_orchestrator",
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "write_scope": [
         "internal/connectors/defs/gorgias",
         ".planning/phases/issue-197-gorgias-cli-surface-metadata"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
-      "verification": "pending",
+      "verification": "local focused and full gates passed; see PR #237 body and .planning/phases/issue-197-gorgias-cli-surface-metadata/VERIFICATION.md",
       "automated_review": {
-        "primary_route": "blocked",
+        "primary_route": "coderabbit_auto",
         "status": "pending",
-        "head_sha": "ae01c3f9",
-        "reviewed_range": "pending",
-        "coverage_route": "blocked",
+        "head_sha": "4d9471cb61405f6351a70bad4e75cf0a97ac05ad",
+        "reviewed_range": "pending for sub-PR #237; parent PR #229 fallback needed if non-default base is skipped",
+        "coverage_route": "sub_pr",
         "fallback_route": "none",
-        "disposition_summary": "No sub-PR yet",
-        "disposition_url": ""
+        "disposition_summary": "Awaiting automatic review/checks; no manual review command posted",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/237"
       }
     },
     {
@@ -331,5 +339,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T20:02:00Z"
+  "updated_at": "2026-07-09T21:05:00Z"
 }
