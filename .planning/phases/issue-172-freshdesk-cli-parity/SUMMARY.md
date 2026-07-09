@@ -19,6 +19,6 @@ Execute #173 inline as the local critical path because this Pi harness has no `s
 
 ## Next
 
-1. Commit/push verification artifact updates.
-2. Re-evaluate the remaining sub-issue queue after #173 lands.
-3. Route #176 operation-ledger refinement next unless review or human gates block progress.
+1. Route #176 operation-ledger refinement next; it is worker-ready but not spawned because this Pi harness lacks a `subagent` tool.
+2. Run #176 inline in this checkout or relaunch Pi with subagent support and an isolated worker directory.
+3. Keep parent PR #222 draft until more lanes are integrated and review coverage is ready.

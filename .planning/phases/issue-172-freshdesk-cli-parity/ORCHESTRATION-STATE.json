@@ -32,10 +32,10 @@
     },
     {
       "number": 176,
-      "status": "planned",
+      "status": "worker_ready",
       "dependencies": [173],
       "write_scope": ["internal/connectors/defs/freshdesk"],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_runtime_capability_missing"
     },
     {
       "number": 175,
@@ -79,6 +79,12 @@
       "decision": "local_critical_path",
       "issue_numbers": [173],
       "reason": "No mutating worker spawned: current Pi harness exposes no subagent tool and #173 is the only dependency-free lane; orchestrator is executing it inline before re-evaluating worker readiness."
+    },
+    {
+      "timestamp": "2026-07-09T20:32:07Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [176],
+      "reason": "After #173 integration, #176 is ready but this Pi harness still has no subagent tool for an isolated worker; run #176 inline next or relaunch Pi with subagent support."
     }
   ],
   "subissues": [
