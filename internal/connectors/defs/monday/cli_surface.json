@@ -10,17 +10,33 @@
     {
       "id": "core",
       "title": "Core Commands",
-      "commands": ["board", "item", "user", "team", "tag"]
+      "commands": [
+        "board",
+        "item",
+        "user",
+        "team",
+        "tag",
+        "account",
+        "me"
+      ]
     },
     {
       "id": "planned-read",
       "title": "Planned Read Commands",
-      "commands": ["workspace", "folder", "update", "column", "group"]
+      "commands": [
+        "workspace",
+        "folder",
+        "update",
+        "column",
+        "group"
+      ]
     },
     {
       "id": "automation",
       "title": "Automation Commands",
-      "commands": ["webhook"]
+      "commands": [
+        "webhook"
+      ]
     }
   ],
   "global_flags": [
@@ -50,8 +66,15 @@
       "availability": "implemented",
       "stream": "boards",
       "source_cli_path": "monday boards query",
-      "examples": ["pm monday board list --limit 50 --json"],
-      "api_surface": [{ "method": "GET", "path": "/v2 (query: boards)" }]
+      "examples": [
+        "pm monday board list --limit 50 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (query: boards)"
+        }
+      ]
     },
     {
       "path": "item list",
@@ -60,8 +83,15 @@
       "availability": "implemented",
       "stream": "items",
       "source_cli_path": "monday items query",
-      "examples": ["pm monday item list --limit 50 --json"],
-      "api_surface": [{ "method": "GET", "path": "/v2 (query: boards { items_page } / next_items_page)" }]
+      "examples": [
+        "pm monday item list --limit 50 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (query: boards { items_page } / next_items_page)"
+        }
+      ]
     },
     {
       "path": "user list",
@@ -70,8 +100,15 @@
       "availability": "implemented",
       "stream": "users",
       "source_cli_path": "monday users query",
-      "examples": ["pm monday user list --limit 50 --json"],
-      "api_surface": [{ "method": "GET", "path": "/v2 (query: users)" }]
+      "examples": [
+        "pm monday user list --limit 50 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (query: users)"
+        }
+      ]
     },
     {
       "path": "team list",
@@ -80,8 +117,15 @@
       "availability": "implemented",
       "stream": "teams",
       "source_cli_path": "monday teams query",
-      "examples": ["pm monday team list --limit 50 --json"],
-      "api_surface": [{ "method": "GET", "path": "/v2 (query: teams)" }]
+      "examples": [
+        "pm monday team list --limit 50 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (query: teams)"
+        }
+      ]
     },
     {
       "path": "tag list",
@@ -90,8 +134,55 @@
       "availability": "implemented",
       "stream": "tags",
       "source_cli_path": "monday tags query",
-      "examples": ["pm monday tag list --limit 50 --json"],
-      "api_surface": [{ "method": "GET", "path": "/v2 (query: tags)" }]
+      "examples": [
+        "pm monday tag list --limit 50 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (query: tags)"
+        }
+      ]
+    },
+    {
+      "path": "me view",
+      "summary": "View the authenticated monday.com user",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "monday.me.get_me",
+      "source_cli_path": "monday me query",
+      "source_url": "https://developer.monday.com/api-reference/reference/me",
+      "examples": [
+        "pm monday me view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (query: me.get_me)"
+        }
+      ],
+      "output_policy": "graphql_json",
+      "notes": "Executes a fixed bundled GraphQL query; no arbitrary GraphQL document is accepted."
+    },
+    {
+      "path": "account view",
+      "summary": "View monday.com account metadata",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "monday.account.get_account",
+      "source_cli_path": "monday account query",
+      "source_url": "https://developer.monday.com/api-reference/reference/account",
+      "examples": [
+        "pm monday account view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2 (query: account.get_account)"
+        }
+      ],
+      "output_policy": "graphql_json",
+      "notes": "Executes a fixed bundled GraphQL query; no arbitrary GraphQL document is accepted."
     },
     {
       "path": "board view",

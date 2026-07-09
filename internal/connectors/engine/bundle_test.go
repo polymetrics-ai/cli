@@ -945,10 +945,7 @@ func TestBundleLoadEmbeddedMondayCLISurface(t *testing.T) {
 	}
 	gotStreams := map[string]string{}
 	for _, cmd := range b.CLISurface.Commands {
-		if cmd.Availability == "implemented" {
-			if cmd.Intent != "etl" {
-				t.Fatalf("implemented Monday command %q intent = %q, want etl only in CLI surface slice", cmd.Path, cmd.Intent)
-			}
+		if cmd.Availability == "implemented" && cmd.Intent == "etl" {
 			gotStreams[cmd.Path] = cmd.Stream
 		}
 		if cmd.Intent == "raw_api" || cmd.Intent == "direct_write" {

@@ -21,14 +21,8 @@
     {
       "method": "GET",
       "path": "/v2 (query: account.get_account)",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "metadata-only query operation; executable support is deferred until direct-read/GraphQL policy is implemented",
-        "source_url": "https://developer.monday.com/api-reference/reference/account",
-        "notes": "planned bounded direct-read candidate"
+      "covered_by": {
+        "direct_read": "account view"
       }
     },
     {
@@ -3389,14 +3383,8 @@
     {
       "method": "GET",
       "path": "/v2 (query: me.get_me)",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "metadata-only query operation; executable support is deferred until direct-read/GraphQL policy is implemented",
-        "source_url": "https://developer.monday.com/api-reference/reference/me",
-        "notes": "planned bounded direct-read candidate"
+      "covered_by": {
+        "direct_read": "me view"
       }
     },
     {

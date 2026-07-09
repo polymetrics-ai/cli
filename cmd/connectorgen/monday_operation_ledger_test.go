@@ -37,10 +37,12 @@ func TestMondayOperationLedgerInventoryAndSafety(t *testing.T) {
 			t.Fatalf("endpoint %d uses legacy excluded in operation ledger mode: %+v", i, ep)
 		}
 		if ep.CoveredBy != nil {
-			if ep.CoveredBy.Write != "" || ep.CoveredBy.DirectRead != "" || len(ep.CoveredBy.DirectReads) != 0 {
-				t.Fatalf("endpoint %d exposes executable non-stream coverage: %+v", i, ep.CoveredBy)
+			if ep.CoveredBy.Write != "" {
+				t.Fatalf("endpoint %d exposes executable write coverage: %+v", i, ep.CoveredBy)
 			}
-			coveredStreams[ep.CoveredBy.Stream] = true
+			if ep.CoveredBy.Stream != "" {
+				coveredStreams[ep.CoveredBy.Stream] = true
+			}
 			continue
 		}
 		operationRows++
@@ -54,8 +56,8 @@ func TestMondayOperationLedgerInventoryAndSafety(t *testing.T) {
 	if methodCounts["GET"] != 87 || methodCounts["POST"] != 280 {
 		t.Fatalf("method counts = %+v, want GET=87 POST=280", methodCounts)
 	}
-	if operationRows != 362 {
-		t.Fatalf("blocked operation rows = %d, want 362", operationRows)
+	if operationRows != 360 {
+		t.Fatalf("blocked operation rows = %d, want 360", operationRows)
 	}
 	for _, stream := range []string{"boards", "items", "users", "teams", "tags"} {
 		if !coveredStreams[stream] {

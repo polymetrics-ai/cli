@@ -24,7 +24,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAccountGetAccount",
-        "document": "query MondayAccountGetAccount { __typename }"
+        "document": "query MondayAccountGetAccount { account { id name slug } }"
       }
     },
     {
@@ -6206,7 +6206,7 @@
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayMeGetMe",
-        "document": "query MondayMeGetMe { __typename }"
+        "document": "query MondayMeGetMe { me { id name } }"
       }
     },
     {

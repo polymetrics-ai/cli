@@ -28,11 +28,8 @@ func TestMondayCLISurfaceValidationAndSafety(t *testing.T) {
 		if cmd.Intent == "raw_api" || cmd.Intent == "direct_write" {
 			t.Fatalf("command %q exposes forbidden intent %q", cmd.Path, cmd.Intent)
 		}
-		if cmd.Availability != "implemented" {
+		if cmd.Availability != "implemented" || cmd.Intent != "etl" {
 			continue
-		}
-		if cmd.Intent != "etl" {
-			t.Fatalf("implemented command %q intent = %q, want etl", cmd.Path, cmd.Intent)
 		}
 		implemented[cmd.Path] = cmd.Stream
 	}

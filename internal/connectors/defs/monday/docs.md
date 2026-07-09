@@ -7,9 +7,11 @@ Readable streams: `boards`, `items`, `users`, `teams`, `tags`.
 
 CLI command surface metadata is available for the implemented stream-backed commands:
 `pm monday board list`, `pm monday item list`, `pm monday user list`, `pm monday team list`, and
-`pm monday tag list`. The operation ledger inventories 367 canonical GraphQL reference operations
-(87 queries, 280 mutations) as metadata; planned direct-read and mutation commands are documented as
-blocked/planned metadata only and do not execute raw GraphQL or writes.
+`pm monday tag list`. Fixed direct-read metadata is also available for `pm monday me view` and
+`pm monday account view`; these execute bundled GraphQL query documents only. The operation ledger
+inventories 367 canonical GraphQL reference operations (87 queries, 280 mutations) as metadata;
+other planned direct-read and mutation commands remain blocked/planned metadata only and do not
+execute raw GraphQL or writes.
 
 This connector is read-only; no write actions are declared.
 
