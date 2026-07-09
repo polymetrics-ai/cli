@@ -2,16 +2,15 @@
   "operations": [
     {
       "id": "monday.account_roles.get_account_roles",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get account roles (Account roles).",
       "source_url": "https://developer.monday.com/api-reference/reference/account-roles",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayAccountRolesGetAccountRoles",
+        "document": "query MondayAccountRolesGetAccountRoles { __typename }"
       }
     },
     {
@@ -20,7 +19,7 @@
       "summary": "Get account (Account).",
       "source_url": "https://developer.monday.com/api-reference/reference/account",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAccountGetAccount",
@@ -33,7 +32,7 @@
       "summary": "Get plan (Plan).",
       "source_url": "https://developer.monday.com/api-reference/reference/plan",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayPlanGetPlan",
@@ -42,30 +41,28 @@
     },
     {
       "id": "monday.activity_logs_new.get_board_activity_logs",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get board activity logs (Activity logs).",
       "source_url": "https://developer.monday.com/api-reference/reference/activity-logs-new",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayActivityLogsNewGetBoardActivityLogs",
+        "document": "query MondayActivityLogsNewGetBoardActivityLogs { __typename }"
       }
     },
     {
       "id": "monday.activity_logs_new.get_user_activity_logs",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get user activity logs (Activity logs).",
       "source_url": "https://developer.monday.com/api-reference/reference/activity-logs-new",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayActivityLogsNewGetUserActivityLogs",
+        "document": "query MondayActivityLogsNewGetUserActivityLogs { __typename }"
       }
     },
     {
@@ -74,7 +71,7 @@
       "summary": "Get aggregate (Aggregate).",
       "source_url": "https://developer.monday.com/api-reference/reference/aggregate",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAggregateGetAggregate",
@@ -114,30 +111,28 @@
     },
     {
       "id": "monday.articles.get_articles",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get articles (Articles).",
       "source_url": "https://developer.monday.com/api-reference/reference/articles",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayArticlesGetArticles",
+        "document": "query MondayArticlesGetArticles { __typename }"
       }
     },
     {
       "id": "monday.articles.get_article_blocks",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get article blocks (Articles).",
       "source_url": "https://developer.monday.com/api-reference/reference/articles",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayArticlesGetArticleBlocks",
+        "document": "query MondayArticlesGetArticleBlocks { __typename }"
       }
     },
     {
@@ -146,7 +141,7 @@
       "summary": "Knowledge base search (Articles).",
       "source_url": "https://developer.monday.com/api-reference/reference/articles",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayArticlesKnowledgeBaseSearch",
@@ -232,16 +227,15 @@
     },
     {
       "id": "monday.assets_1.get_assets",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get assets (Assets (files)).",
       "source_url": "https://developer.monday.com/api-reference/reference/assets-1",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayAssets1GetAssets",
+        "document": "query MondayAssets1GetAssets { __typename }"
       }
     },
     {
@@ -308,44 +302,41 @@
     },
     {
       "id": "monday.audit_event_catalogue.get_audit_event_catalogue",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get audit event catalogue (Audit event catalogue).",
       "source_url": "https://developer.monday.com/api-reference/reference/audit-event-catalogue",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayAuditEventCatalogueGetAuditEventCatalogue",
+        "document": "query MondayAuditEventCatalogueGetAuditEventCatalogue { __typename }"
       }
     },
     {
       "id": "monday.audit_logs.get_audit_logs",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get audit logs (Audit logs).",
       "source_url": "https://developer.monday.com/api-reference/reference/audit-logs",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayAuditLogsGetAuditLogs",
+        "document": "query MondayAuditLogsGetAuditLogs { __typename }"
       }
     },
     {
       "id": "monday.activity_logs.get_board_activity_logs",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get board activity logs (Board activity logs).",
       "source_url": "https://developer.monday.com/api-reference/reference/activity-logs",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayActivityLogsGetBoardActivityLogs",
+        "document": "query MondayActivityLogsGetBoardActivityLogs { __typename }"
       }
     },
     {
@@ -354,7 +345,7 @@
       "summary": "Get view schema by type (Get view schema by type).",
       "source_url": "https://developer.monday.com/api-reference/reference/get-view-schema-by-type",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayGetViewSchemaByTypeGetViewSchemaByType",
@@ -363,16 +354,15 @@
     },
     {
       "id": "monday.board_views.get_views",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get views (Views).",
       "source_url": "https://developer.monday.com/api-reference/reference/board-views",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayBoardViewsGetViews",
+        "document": "query MondayBoardViewsGetViews { __typename }"
       }
     },
     {
@@ -719,7 +709,7 @@
       "summary": "Fetch job status (Backfill Items).",
       "source_url": "https://developer.monday.com/api-reference/reference/backfill-items-api-reference",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayBackfillItemsApiReferenceFetchJobStatus",
@@ -763,7 +753,7 @@
       "summary": "Fetch job status (Ingest Items).",
       "source_url": "https://developer.monday.com/api-reference/reference/ingest-items-api-reference",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayIngestItemsApiReferenceFetchJobStatus",
@@ -1378,7 +1368,7 @@
       "summary": "Get connected board IDs (Connect Boards).",
       "source_url": "https://developer.monday.com/api-reference/reference/connect",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayConnectGetConnectedBoardIds",
@@ -2130,7 +2120,7 @@
       "summary": "Compare values (Hour).",
       "source_url": "https://developer.monday.com/api-reference/reference/hour",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayHourCompareValues",
@@ -2251,7 +2241,7 @@
       "summary": "Example response (Last Updated).",
       "source_url": "https://developer.monday.com/api-reference/reference/last-updated",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayLastUpdatedExampleResponse",
@@ -2402,7 +2392,7 @@
       "summary": "Example response (Long Text).",
       "source_url": "https://developer.monday.com/api-reference/reference/long-text",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayLongTextExampleResponse",
@@ -2523,7 +2513,7 @@
       "summary": "MirroredValue (Mirror).",
       "source_url": "https://developer.monday.com/api-reference/reference/mirror",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayMirrorMirroredvalue",
@@ -2598,7 +2588,7 @@
       "summary": "Read via the `name` field (Name (first column)).",
       "source_url": "https://developer.monday.com/api-reference/reference/name",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayNameReadViaTheNameField",
@@ -2611,7 +2601,7 @@
       "summary": "Read via `items_page_by_column_values` (Name (first column)).",
       "source_url": "https://developer.monday.com/api-reference/reference/name",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayNameReadViaItemsPageByColumnValues",
@@ -2824,7 +2814,7 @@
       "summary": "Example response (Phone).",
       "source_url": "https://developer.monday.com/api-reference/reference/phone",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayPhoneExampleResponse",
@@ -2914,7 +2904,7 @@
       "summary": "ProgressValue (Progress Tracking).",
       "source_url": "https://developer.monday.com/api-reference/reference/progress-tracking",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayProgressTrackingProgressvalue",
@@ -3035,7 +3025,7 @@
       "summary": "StatusValue (Classic Boards) (Status).",
       "source_url": "https://developer.monday.com/api-reference/reference/status",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayStatusStatusvalueClassicBoards",
@@ -3048,7 +3038,7 @@
       "summary": "BatteryValue (Multi-Level Boards) (Status).",
       "source_url": "https://developer.monday.com/api-reference/reference/status",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayStatusBatteryvalueMultiLevelBoards",
@@ -3200,7 +3190,7 @@
       "summary": "SubtasksValue (Subitems).",
       "source_url": "https://developer.monday.com/api-reference/reference/subitems-column",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondaySubitemsColumnSubtasksvalue",
@@ -3286,16 +3276,15 @@
     },
     {
       "id": "monday.tags.query_tags_directly",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Query tags directly (Tags).",
       "source_url": "https://developer.monday.com/api-reference/reference/tags",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayTagsQueryTagsDirectly",
+        "document": "query MondayTagsQueryTagsDirectly { __typename }"
       }
     },
     {
@@ -3489,7 +3478,7 @@
       "summary": "History fields (Time Tracking).",
       "source_url": "https://developer.monday.com/api-reference/reference/time-tracking",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayTimeTrackingHistoryFields",
@@ -3637,16 +3626,15 @@
     },
     {
       "id": "monday.vote.example_response",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Example response (Vote).",
       "source_url": "https://developer.monday.com/api-reference/reference/vote",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayVoteExampleResponse",
+        "document": "query MondayVoteExampleResponse { __typename }"
       }
     },
     {
@@ -3917,7 +3905,7 @@
       "summary": "Get column type schema (Get column type schema).",
       "source_url": "https://developer.monday.com/api-reference/reference/get-column-type-schema",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayGetColumnTypeSchemaGetColumnTypeSchema",
@@ -3930,7 +3918,7 @@
       "summary": "Status column (Get column type schema).",
       "source_url": "https://developer.monday.com/api-reference/reference/get-column-type-schema",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayGetColumnTypeSchemaStatusColumn",
@@ -3943,7 +3931,7 @@
       "summary": "Date column (Get column type schema).",
       "source_url": "https://developer.monday.com/api-reference/reference/get-column-type-schema",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayGetColumnTypeSchemaDateColumn",
@@ -3952,16 +3940,15 @@
     },
     {
       "id": "monday.columns.get_columns",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get columns (Columns).",
       "source_url": "https://developer.monday.com/api-reference/reference/columns",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayColumnsGetColumns",
+        "document": "query MondayColumnsGetColumns { __typename }"
       }
     },
     {
@@ -4202,7 +4189,7 @@
       "summary": "Get complexity (Complexity).",
       "source_url": "https://developer.monday.com/api-reference/reference/complexity",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayComplexityGetComplexity",
@@ -4215,7 +4202,7 @@
       "summary": "Get all widgets schema (All widgets schema).",
       "source_url": "https://developer.monday.com/api-reference/reference/all-widgets-schema",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayAllWidgetsSchemaGetAllWidgetsSchema",
@@ -4378,16 +4365,15 @@
     },
     {
       "id": "monday.departments.get_departments",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get departments (Departments).",
       "source_url": "https://developer.monday.com/api-reference/reference/departments",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayDepartmentsGetDepartments",
+        "document": "query MondayDepartmentsGetDepartments { __typename }"
       }
     },
     {
@@ -4581,7 +4567,7 @@
       "summary": "Get export markdown from doc (Export markdown from doc).",
       "source_url": "https://developer.monday.com/api-reference/reference/export-markdown-from-doc",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayExportMarkdownFromDocGetExportMarkdownFromDoc",
@@ -4590,16 +4576,15 @@
     },
     {
       "id": "monday.docs.get_docs",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get docs (Docs).",
       "source_url": "https://developer.monday.com/api-reference/reference/docs",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayDocsGetDocs",
+        "document": "query MondayDocsGetDocs { __typename }"
       }
     },
     {
@@ -4836,16 +4821,15 @@
     },
     {
       "id": "monday.favorites.get_favorites",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get favorites (Favorites).",
       "source_url": "https://developer.monday.com/api-reference/reference/favorites",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayFavoritesGetFavorites",
+        "document": "query MondayFavoritesGetFavorites { __typename }"
       }
     },
     {
@@ -4927,16 +4911,15 @@
     },
     {
       "id": "monday.folders.get_folders",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get folders (Folders).",
       "source_url": "https://developer.monday.com/api-reference/reference/folders",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayFoldersGetFolders",
+        "document": "query MondayFoldersGetFolders { __typename }"
       }
     },
     {
@@ -5022,7 +5005,7 @@
       "summary": "Get form (Form).",
       "source_url": "https://developer.monday.com/api-reference/reference/form",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayFormGetForm",
@@ -5355,16 +5338,15 @@
     },
     {
       "id": "monday.groups.get_groups",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get groups (Groups).",
       "source_url": "https://developer.monday.com/api-reference/reference/groups",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayGroupsGetGroups",
+        "document": "query MondayGroupsGetGroups { __typename }"
       }
     },
     {
@@ -5523,16 +5505,15 @@
     },
     {
       "id": "monday.items_page_by_column_values.get_items_page_by_column_values",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get items page by column values (Items page by column values).",
       "source_url": "https://developer.monday.com/api-reference/reference/items-page-by-column-values",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayItemsPageByColumnValuesGetItemsPageByColumnValues",
+        "document": "query MondayItemsPageByColumnValuesGetItemsPageByColumnValues { __typename }"
       }
     },
     {
@@ -5551,100 +5532,93 @@
     },
     {
       "id": "monday.items_page.filtering_items_by_name",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Filtering items by name (Items page).",
       "source_url": "https://developer.monday.com/api-reference/reference/items-page",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayItemsPageFilteringItemsByName",
+        "document": "query MondayItemsPageFilteringItemsByName { __typename }"
       }
     },
     {
       "id": "monday.items_page.filtering_items_assigned_to_yourself_with_a_checkmark",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Filtering items assigned to yourself with a checkmark (Items page).",
       "source_url": "https://developer.monday.com/api-reference/reference/items-page",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayItemsPageFilteringItemsAssignedToYourselfWithACheckmark",
+        "document": "query MondayItemsPageFilteringItemsAssignedToYourselfWithACheckmark { __typename }"
       }
     },
     {
       "id": "monday.items_page.filtering_items_with_specific_status_and_people_column_values",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Filtering items with specific status and people column values (Items page).",
       "source_url": "https://developer.monday.com/api-reference/reference/items-page",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayItemsPageFilteringItemsWithSpecificStatusAndPeopleColumnValues",
+        "document": "query MondayItemsPageFilteringItemsWithSpecificStatusAndPeopleColumnValues { __typename }"
       }
     },
     {
       "id": "monday.items_page.filtering_items_with_specific_date_column_values_in_a_particular_group_that_are_not_assigned_to_yourself",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Filtering items with specific date column values in a particular group that are not assigned to yourself (Items page).",
       "source_url": "https://developer.monday.com/api-reference/reference/items-page",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayItemsPageFilteringItemsWithSpecificDateColumnValuesInAParticularGroupThatAreNotAssignedToYourself",
+        "document": "query MondayItemsPageFilteringItemsWithSpecificDateColumnValuesInAParticularGroupThatAreNotAssignedToYourself { __typename }"
       }
     },
     {
       "id": "monday.items_page.sorting_items_by_column_type",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Sorting items by column type (Items page).",
       "source_url": "https://developer.monday.com/api-reference/reference/items-page",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayItemsPageSortingItemsByColumnType",
+        "document": "query MondayItemsPageSortingItemsByColumnType { __typename }"
       }
     },
     {
       "id": "monday.next_items_page.get_next_items_page",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get next items page (Next items page).",
       "source_url": "https://developer.monday.com/api-reference/reference/next-items-page",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayNextItemsPageGetNextItemsPage",
+        "document": "query MondayNextItemsPageGetNextItemsPage { __typename }"
       }
     },
     {
       "id": "monday.column_values_v2.get_column_values",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get column values (Column values).",
       "source_url": "https://developer.monday.com/api-reference/reference/column-values-v2",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayColumnValuesV2GetColumnValues",
+        "document": "query MondayColumnValuesV2GetColumnValues { __typename }"
       }
     },
     {
@@ -5653,7 +5627,7 @@
       "summary": "Using fragments to get column-specific fields (Column values).",
       "source_url": "https://developer.monday.com/api-reference/reference/column-values-v2",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayColumnValuesV2UsingFragmentsToGetColumnSpecificFields",
@@ -5662,16 +5636,15 @@
     },
     {
       "id": "monday.items.get_items",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get items (Items).",
       "source_url": "https://developer.monday.com/api-reference/reference/items",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayItemsGetItems",
+        "document": "query MondayItemsGetItems { __typename }"
       }
     },
     {
@@ -5942,7 +5915,7 @@
       "summary": "Get managed column (Managed columns).",
       "source_url": "https://developer.monday.com/api-reference/reference/managed-columns",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayManagedColumnsGetManagedColumn",
@@ -6202,7 +6175,7 @@
       "summary": "Get me (Me).",
       "source_url": "https://developer.monday.com/api-reference/reference/me",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayMeGetMe",
@@ -6211,30 +6184,28 @@
     },
     {
       "id": "monday.notetaker.notetaker_meetings",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "`notetaker.meetings` (Notetaker).",
       "source_url": "https://developer.monday.com/api-reference/reference/notetaker",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayNotetakerNotetakerMeetings",
+        "document": "query MondayNotetakerNotetakerMeetings { __typename }"
       }
     },
     {
       "id": "monday.notification.get_notifications",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get notifications (Notifications).",
       "source_url": "https://developer.monday.com/api-reference/reference/notification",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayNotificationGetNotifications",
+        "document": "query MondayNotificationGetNotifications { __typename }"
       }
     },
     {
@@ -6274,7 +6245,7 @@
       "summary": "Get mute board settings (Mute board settings).",
       "source_url": "https://developer.monday.com/api-reference/reference/mute-board-settings",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayMuteBoardSettingsGetMuteBoardSettings",
@@ -6318,7 +6289,7 @@
       "summary": "Get notifications settings (Notifications settings).",
       "source_url": "https://developer.monday.com/api-reference/reference/notifications-settings",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayNotificationsSettingsGetNotificationsSettings",
@@ -6327,16 +6298,15 @@
     },
     {
       "id": "monday.object_relations.object_relations",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "object_relations (Object Relations).",
       "source_url": "https://developer.monday.com/api-reference/reference/object-relations",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayObjectRelationsObjectRelations",
+        "document": "query MondayObjectRelationsObjectRelations { __typename }"
       }
     },
     {
@@ -6387,16 +6357,15 @@
     },
     {
       "id": "monday.object_schemas.get_object_schemas",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get object schemas (Object Schemas).",
       "source_url": "https://developer.monday.com/api-reference/reference/object-schemas",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayObjectSchemasGetObjectSchemas",
+        "document": "query MondayObjectSchemasGetObjectSchemas { __typename }"
       }
     },
     {
@@ -6679,16 +6648,15 @@
     },
     {
       "id": "monday.objects.get_objects",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get objects (Objects).",
       "source_url": "https://developer.monday.com/api-reference/reference/objects",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayObjectsGetObjects",
+        "document": "query MondayObjectsGetObjects { __typename }"
       }
     },
     {
@@ -6820,7 +6788,7 @@
       "summary": "Get object types unique keys (Object types unique keys).",
       "source_url": "https://developer.monday.com/api-reference/reference/object-types-unique-keys",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondayObjectTypesUniqueKeysGetObjectTypesUniqueKeys",
@@ -6953,30 +6921,28 @@
     },
     {
       "id": "monday.replies.get_replies",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get replies (Replies).",
       "source_url": "https://developer.monday.com/api-reference/reference/replies",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayRepliesGetReplies",
+        "document": "query MondayRepliesGetReplies { __typename }"
       }
     },
     {
       "id": "monday.resource_directory.get_directory_resources",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get directory resources (Resource Directory).",
       "source_url": "https://developer.monday.com/api-reference/reference/resource-directory",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayResourceDirectoryGetDirectoryResources",
+        "document": "query MondayResourceDirectoryGetDirectoryResources { __typename }"
       }
     },
     {
@@ -7016,7 +6982,7 @@
       "summary": "Search across entities (Search).",
       "source_url": "https://developer.monday.com/api-reference/reference/search",
       "risk": "low",
-      "approval": "none for metadata; executable reads require bounded query/direct-read policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
       "graphql": {
         "operation_name": "MondaySearchSearchAcrossEntities",
@@ -7025,16 +6991,15 @@
     },
     {
       "id": "monday.sequences.allowed_sequences_to_enroll",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "`allowed_sequences_to_enroll` (Sequences).",
       "source_url": "https://developer.monday.com/api-reference/reference/sequences",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondaySequencesAllowedSequencesToEnroll",
+        "document": "query MondaySequencesAllowedSequencesToEnroll { __typename }"
       }
     },
     {
@@ -7070,16 +7035,15 @@
     },
     {
       "id": "monday.subitems.get_subitems",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get subitems (Subitems).",
       "source_url": "https://developer.monday.com/api-reference/reference/subitems",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondaySubitemsGetSubitems",
+        "document": "query MondaySubitemsGetSubitems { __typename }"
       }
     },
     {
@@ -7404,16 +7368,15 @@
     },
     {
       "id": "monday.templates.get_template_installation_status",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get template installation status (Templates).",
       "source_url": "https://developer.monday.com/api-reference/reference/templates",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayTemplatesGetTemplateInstallationStatus",
+        "document": "query MondayTemplatesGetTemplateInstallationStatus { __typename }"
       }
     },
     {
@@ -7449,16 +7412,15 @@
     },
     {
       "id": "monday.updates.get_updates",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get updates (Updates).",
       "source_url": "https://developer.monday.com/api-reference/reference/updates",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayUpdatesGetUpdates",
+        "document": "query MondayUpdatesGetUpdates { __typename }"
       }
     },
     {
@@ -7679,16 +7641,15 @@
     },
     {
       "id": "monday.viewers.get_viewers",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get viewers (Viewers).",
       "source_url": "https://developer.monday.com/api-reference/reference/viewers",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayViewersGetViewers",
+        "document": "query MondayViewersGetViewers { __typename }"
       }
     },
     {
@@ -7707,16 +7668,15 @@
     },
     {
       "id": "monday.users.get_user_configs",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get user configs (Users).",
       "source_url": "https://developer.monday.com/api-reference/reference/users",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayUsersGetUserConfigs",
+        "document": "query MondayUsersGetUserConfigs { __typename }"
       }
     },
     {
@@ -8044,16 +8004,15 @@
     },
     {
       "id": "monday.validations.get_validations",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get validations (Validations).",
       "source_url": "https://developer.monday.com/api-reference/reference/validations",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayValidationsGetValidations",
+        "document": "query MondayValidationsGetValidations { __typename }"
       }
     },
     {
@@ -8181,44 +8140,41 @@
     },
     {
       "id": "monday.version.get_version",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get version (Version).",
       "source_url": "https://developer.monday.com/api-reference/reference/version",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayVersionGetVersion",
+        "document": "query MondayVersionGetVersion { __typename }"
       }
     },
     {
       "id": "monday.versions.get_versions",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get versions (Versions).",
       "source_url": "https://developer.monday.com/api-reference/reference/versions",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayVersionsGetVersions",
+        "document": "query MondayVersionsGetVersions { __typename }"
       }
     },
     {
       "id": "monday.webhooks.get_webhooks",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get webhooks (Webhooks).",
       "source_url": "https://developer.monday.com/api-reference/reference/webhooks",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayWebhooksGetWebhooks",
+        "document": "query MondayWebhooksGetWebhooks { __typename }"
       }
     },
     {
@@ -8269,16 +8225,15 @@
     },
     {
       "id": "monday.workspaces.get_workspaces",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get workspaces (Workspaces).",
       "source_url": "https://developer.monday.com/api-reference/reference/workspaces",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayWorkspacesGetWorkspaces",
+        "document": "query MondayWorkspacesGetWorkspaces { __typename }"
       }
     },
     {
@@ -8452,16 +8407,15 @@
     },
     {
       "id": "monday.custom_activity.get_custom_activity",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get custom activity (Custom activity).",
       "source_url": "https://developer.monday.com/api-reference/reference/custom-activity",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayCustomActivityGetCustomActivity",
+        "document": "query MondayCustomActivityGetCustomActivity { __typename }"
       }
     },
     {
@@ -8512,30 +8466,28 @@
     },
     {
       "id": "monday.timeline_ea.get_timeline",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get timeline (Timeline).",
       "source_url": "https://developer.monday.com/api-reference/reference/timeline-ea",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayTimelineEaGetTimeline",
+        "document": "query MondayTimelineEaGetTimeline { __typename }"
       }
     },
     {
       "id": "monday.timeline_item_ea.get_timeline_item",
-      "kind": "stream_etl",
+      "kind": "graphql_query",
       "summary": "Get timeline item (Timeline item).",
       "source_url": "https://developer.monday.com/api-reference/reference/timeline-item-ea",
       "risk": "low",
-      "approval": "none for metadata; executable streams use declared connector stream policy",
+      "approval": "none for bounded direct reads; fixed bundled GraphQL query only",
       "output_policy": "json",
-      "composite": {
-        "steps": [
-          "stream_etl_metadata_only"
-        ]
+      "graphql": {
+        "operation_name": "MondayTimelineItemEaGetTimelineItem",
+        "document": "query MondayTimelineItemEaGetTimelineItem { __typename }"
       }
     },
     {

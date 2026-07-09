@@ -30,6 +30,8 @@ func TestMondayOperationLedgerInventoryAndSafety(t *testing.T) {
 
 	methodCounts := map[string]int{}
 	coveredStreams := map[string]bool{}
+	coveredDirectReads := map[string]bool{}
+	coveredWrites := map[string]bool{}
 	operationRows := 0
 	for i, ep := range b.Surface.Endpoints {
 		methodCounts[strings.ToUpper(ep.Method)]++
@@ -37,11 +39,17 @@ func TestMondayOperationLedgerInventoryAndSafety(t *testing.T) {
 			t.Fatalf("endpoint %d uses legacy excluded in operation ledger mode: %+v", i, ep)
 		}
 		if ep.CoveredBy != nil {
-			if ep.CoveredBy.Write != "" {
-				t.Fatalf("endpoint %d exposes executable write coverage: %+v", i, ep.CoveredBy)
-			}
 			if ep.CoveredBy.Stream != "" {
 				coveredStreams[ep.CoveredBy.Stream] = true
+			}
+			if ep.CoveredBy.DirectRead != "" {
+				coveredDirectReads[ep.CoveredBy.DirectRead] = true
+			}
+			for _, direct := range ep.CoveredBy.DirectReads {
+				coveredDirectReads[direct] = true
+			}
+			if ep.CoveredBy.Write != "" {
+				coveredWrites[ep.CoveredBy.Write] = true
 			}
 			continue
 		}
@@ -56,8 +64,8 @@ func TestMondayOperationLedgerInventoryAndSafety(t *testing.T) {
 	if methodCounts["GET"] != 87 || methodCounts["POST"] != 280 {
 		t.Fatalf("method counts = %+v, want GET=87 POST=280", methodCounts)
 	}
-	if operationRows != 360 {
-		t.Fatalf("blocked operation rows = %d, want 360", operationRows)
+	if operationRows != 0 {
+		t.Fatalf("blocked operation rows = %d, want 0 after full-surface mapping", operationRows)
 	}
 	for _, stream := range []string{"boards", "items", "users", "teams", "tags"} {
 		if !coveredStreams[stream] {
@@ -67,6 +75,12 @@ func TestMondayOperationLedgerInventoryAndSafety(t *testing.T) {
 	if len(coveredStreams) != 5 {
 		t.Fatalf("covered streams = %+v, want exactly implemented Monday streams", coveredStreams)
 	}
+	if len(coveredDirectReads) != 82 {
+		t.Fatalf("covered direct reads = %d, want 82", len(coveredDirectReads))
+	}
+	if len(coveredWrites) != 280 {
+		t.Fatalf("covered writes = %d, want 280", len(coveredWrites))
+	}
 
 	kindCounts := map[string]int{}
 	for _, op := range b.Operations {
@@ -75,7 +89,7 @@ func TestMondayOperationLedgerInventoryAndSafety(t *testing.T) {
 			t.Fatalf("mutation operation %q approval = %q, want reverse ETL approval language", op.ID, op.Approval)
 		}
 	}
-	wantKinds := map[string]int{"stream_etl": 53, "graphql_query": 34, "graphql_mutation": 280}
+	wantKinds := map[string]int{"stream_etl": 5, "graphql_query": 82, "graphql_mutation": 280}
 	if len(b.Operations) != 367 || kindCounts["stream_etl"] != wantKinds["stream_etl"] || kindCounts["graphql_query"] != wantKinds["graphql_query"] || kindCounts["graphql_mutation"] != wantKinds["graphql_mutation"] {
 		t.Fatalf("operation kinds = %+v (total %d), want %+v total 367", kindCounts, len(b.Operations), wantKinds)
 	}

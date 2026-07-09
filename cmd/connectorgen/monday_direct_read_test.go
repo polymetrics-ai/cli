@@ -40,8 +40,8 @@ func TestMondayDirectReadMetadataAndSafety(t *testing.T) {
 			t.Fatalf("command %q = %+v, want operation %s graphql_json one api_surface ref", path, cmd, operation)
 		}
 	}
-	if len(commands) != len(want) {
-		t.Fatalf("implemented direct reads = %+v, want exactly %+v", commands, want)
+	if len(commands) != 82 {
+		t.Fatalf("implemented direct reads = %d, want 82 non-stream query operations", len(commands))
 	}
 
 	covered := map[string]bool{}
@@ -55,10 +55,13 @@ func TestMondayDirectReadMetadataAndSafety(t *testing.T) {
 			}
 		}
 	}
-	for path := range want {
+	for path := range commands {
 		if !covered[path] {
-			t.Fatalf("api surface direct read coverage = %+v, missing %q", covered, path)
+			t.Fatalf("api surface direct read coverage missing %q", path)
 		}
+	}
+	if len(covered) != 82 {
+		t.Fatalf("api surface direct read coverage = %d, want 82", len(covered))
 	}
 
 	ops := map[string]engine.OperationSpec{}

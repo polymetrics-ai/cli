@@ -1,0 +1,20 @@
+{
+  "phase": "issue-82-monday-all-ops-update",
+  "issue": 82,
+  "branch": "feat/82-monday-cli-parity",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-82-monday-all-ops-update --skip-research",
+    "programming_loop": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "targeted all-ops tests passed; full parent verification pending",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "User updated PI_CONNECTOR_PROMPT.md to require all official operations to be modeled; no Pi subagent tool available."
+    }
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}

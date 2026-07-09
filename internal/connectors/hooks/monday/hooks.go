@@ -91,6 +91,18 @@ func (h Hooks) Check(ctx context.Context, cfg connectors.RuntimeConfig, rt *engi
 	return true, nil
 }
 
+// ExecuteWrite owns every modeled monday mutation action and blocks live
+// dispatch until each action has a hardened, per-operation request body and
+// approval-token handoff. This keeps the full official surface modeled in
+// writes.json/api_surface.json without introducing a raw GraphQL mutation escape
+// hatch or accidentally executing placeholder/example mutation documents.
+func (h Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, error) {
+	if err := ctx.Err(); err != nil {
+		return true, err
+	}
+	return true, fmt.Errorf("%w: monday mutation %q is modeled as reverse ETL metadata; live dispatch is blocked until its typed executor is hardened", connectors.ErrUnsupportedOperation, action.Name)
+}
+
 // readPaged drives page-number pagination for boards/users/teams/tags (ported
 // from monday.go's readPaged): a short page (fewer records than page size)
 // signals the end.

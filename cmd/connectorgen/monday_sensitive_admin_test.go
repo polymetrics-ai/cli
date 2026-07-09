@@ -46,8 +46,8 @@ func TestMondaySensitiveAdminPolicy(t *testing.T) {
 
 	for _, ep := range b.Surface.Endpoints {
 		if strings.EqualFold(ep.Method, "POST") {
-			if ep.Operation == nil || !ep.Operation.BlockedByDefault || ep.Operation.Status != "blocked" {
-				t.Fatalf("mutation endpoint %s is not blocked operation metadata: %+v", ep.Path, ep)
+			if ep.CoveredBy == nil || ep.CoveredBy.Write == "" {
+				t.Fatalf("mutation endpoint %s is not covered by a named write action: %+v", ep.Path, ep)
 			}
 		}
 	}
@@ -56,8 +56,8 @@ func TestMondaySensitiveAdminPolicy(t *testing.T) {
 		if cmd.Intent == "raw_api" || cmd.Intent == "direct_write" {
 			t.Fatalf("command %q exposes forbidden intent %q", cmd.Path, cmd.Intent)
 		}
-		if cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" {
-			t.Fatalf("reverse ETL command %q is executable; Monday writes must stay blocked", cmd.Path)
+		if cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && !strings.Contains(cmd.Approval, "plan, preview, approval, execute") {
+			t.Fatalf("reverse ETL command %q approval = %q, want approval workflow", cmd.Path, cmd.Approval)
 		}
 	}
 
@@ -65,7 +65,7 @@ func TestMondaySensitiveAdminPolicy(t *testing.T) {
 		"Sensitive/admin mutation policy",
 		"env_or_stdin",
 		"typed confirmation",
-		"No Monday mutation is executable",
+		"Live mutation dispatch is owned by the Monday WriteHook and remains blocked",
 	} {
 		if !strings.Contains(b.Docs, want) {
 			t.Fatalf("docs.md missing %q", want)
