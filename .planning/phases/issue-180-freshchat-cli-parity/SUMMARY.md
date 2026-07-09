@@ -1,6 +1,6 @@
 # Summary — Issue #180 Freshchat CLI parity parent
 
-Status: parent orchestration active; #181 merged with CodeRabbit coverage pending; #184 started.
+Status: parent orchestration active; #181 merged with CodeRabbit coverage pending; #184 PR open.
 
 ## Completed in this checkpoint
 
@@ -19,6 +19,6 @@ Status: parent orchestration active; #181 merged with CodeRabbit coverage pendin
 
 ## Next
 
-1. Complete #184 operation-ledger TDD slice on `feat/184-freshchat-operation-ledger`.
-2. Keep #181 marked review-pending until parent PR #226 is ready for CodeRabbit or an approved fallback is recorded.
+1. Wait for CI on #184 PR https://github.com/polymetrics-ai/cli/pull/243, then integrate if green.
+2. Keep #181/#184 marked review-pending until parent PR #226 is ready for CodeRabbit or an approved fallback is recorded.
 3. Do not mark parent PR human-ready until every integrated sub-issue has automated review coverage or a recorded fallback.

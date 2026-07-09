@@ -62,7 +62,14 @@
       "decision": "started_local_critical_path",
       "reason": "Issue #184 operation ledger is unblocked by #181 integration; no Pi subagent tool is available, so start locally on feat/184-freshchat-operation-ledger.",
       "issue_numbers": [184]
+    },
+    {
+      "timestamp": "2026-07-09T21:55:09Z",
+      "cycle": "subissue-pr-open",
+      "decision": "parent_pr_fallback_pending",
+      "reason": "Issue #184 verified locally and opened as stacked PR #243; CodeRabbit skipped the non-default base, so parent PR coverage or approved fallback remains required.",
+      "issue_numbers": [184]
     }
   ],
-  "updated_at": "2026-07-09T21:50:00Z"
+  "updated_at": "2026-07-09T21:55:09Z"
 }

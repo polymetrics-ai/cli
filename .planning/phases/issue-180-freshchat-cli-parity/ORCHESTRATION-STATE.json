@@ -43,10 +43,10 @@
     },
     {
       "number": 184,
-      "status": "in_progress_local_critical_path",
+      "status": "pr_open_local_verified_review_fallback_pending",
       "dependencies": [181],
       "write_scope": ["internal/connectors/defs/freshchat/api_surface.json", "internal/connectors/defs/freshchat/operations.json", "cmd/connectorgen/*freshchat*test.go", ".planning/phases/issue-184-freshchat-operation-ledger/**"],
-      "decision": "started_local_critical_path"
+      "decision": "stacked_pr_open"
     },
     {
       "number": 185,
@@ -100,6 +100,27 @@
         "disposition_summary": "CodeRabbit skipped stacked PR #241 because non-default base branch reviews are disabled, then skipped parent PR #226 because it is draft. Do not count #181 as review-complete until parent PR #226 receives coverage for ef7cfda1 or an approved fallback is recorded.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/226"
       }
+    },
+    {
+      "number": 184,
+      "url": "https://github.com/polymetrics-ai/cli/issues/184",
+      "branch": "feat/184-freshchat-operation-ledger",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/243",
+      "worker": "local_critical_path",
+      "status": "pr_open_local_verified_review_fallback_pending",
+      "write_scope": "Freshchat api_surface operation ledger and narrow connectorgen tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-180-freshchat-cli-parity",
+      "verification": "passed_local_ci_pending",
+      "automated_review": {
+        "primary_route": "coderabbit_automatic",
+        "status": "skipped_non_default_base",
+        "head_sha": "see_pr_head",
+        "reviewed_range": "pending_parent_pr_after_integration",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_subissue_integration",
+        "disposition_summary": "CodeRabbit skipped PR #243 because non-default base branch reviews are disabled; do not count as review-complete until parent PR #226 receives coverage for the integrated commit range or an approved fallback is recorded.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/243"
+      }
     }
   ],
   "human_gates": [
@@ -111,5 +132,5 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T21:50:00Z"
+  "updated_at": "2026-07-09T21:55:09Z"
 }
