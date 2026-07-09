@@ -688,6 +688,54 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunFreshchatUsersFetchDirectReadCommand(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "user fetch",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "POST", Path: "/users/fetch"},
+				},
+				OutputPolicy: "freshchat_users_fetch",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "id", Type: "string_array", MapsTo: "body.ids"},
+				},
+			},
+		},
+	}}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path: []string{"user", "fetch"},
+		Flags: map[string][]string{
+			"id": {"user_1,user_2", "user_3"},
+		},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("DirectRead = nil, want result")
+	}
+	if connector.directReadReq.Method != "POST" {
+		t.Fatalf("direct read method = %q, want POST", connector.directReadReq.Method)
+	}
+	ids, ok := connector.directReadReq.Body["ids"].([]string)
+	if !ok {
+		t.Fatalf("direct read body ids type = %T, want []string", connector.directReadReq.Body["ids"])
+	}
+	if got := strings.Join(ids, ","); got != "user_1,user_2,user_3" {
+		t.Fatalf("direct read body ids = %q, want user_1,user_2,user_3", got)
+	}
+	if connector.directReadReq.OutputPolicy != "freshchat_users_fetch" {
+		t.Fatalf("direct read output policy = %q, want freshchat_users_fetch", connector.directReadReq.OutputPolicy)
+	}
+}
+
 func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 	tests := []struct {
 		name     string
