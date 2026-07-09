@@ -32,7 +32,7 @@ gh pr list --head feat/212-helpscout-cli-parity --json number,title,url,state,is
 Result:
 
 - Branch exists locally at `feat/212-helpscout-cli-parity`.
-- Parent PR is missing and must be opened after the planning checkpoint commit.
+- Draft parent PR opened: https://github.com/polymetrics-ai/cli/pull/230.
 
 ## Required Local Verification Before Handoff
 

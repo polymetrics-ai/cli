@@ -1,7 +1,7 @@
 {
   "phase": "issue-212-helpscout-cli-parity",
   "issue": 212,
-  "status": "planning_checkpoint",
+  "status": "parent_pr_open",
   "gsd": {
     "adapter": "scripts/gsd",
     "doctor": "passed",
@@ -29,7 +29,7 @@
     "golang-lint"
   ],
   "verificationPassed": false,
-  "verificationStatus": "setup checks passed; implementation gates pending",
+  "verificationStatus": "setup checks passed; draft parent PR #230 open; implementation gates pending",
   "orchestrationDecisions": [
     {
       "cycle": "parent-planning",

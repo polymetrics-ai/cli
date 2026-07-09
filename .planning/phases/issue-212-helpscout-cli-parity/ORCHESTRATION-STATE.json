@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/212-helpscout-cli-parity",
   "parent_pr": {
-    "url": "pending",
+    "url": "https://github.com/polymetrics-ai/cli/pull/230",
     "base": "main",
     "head": "feat/212-helpscout-cli-parity",
     "draft": true,
-    "state": "pending"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -108,7 +108,7 @@
       "timestamp": "2026-07-09T19:57:02Z",
       "decision": "local_critical_path",
       "issue_numbers": [213],
-      "reason": "Pi subagent tool is not available in this harness, and the parent PR is not open yet. The orchestrator will take the #213 critical path locally after the parent planning checkpoint and draft parent PR are created."
+      "reason": "Pi subagent tool is not available in this harness. Draft parent PR #230 is open, so the orchestrator will take the #213 critical path locally."
     },
     {
       "timestamp": "2026-07-09T19:57:02Z",

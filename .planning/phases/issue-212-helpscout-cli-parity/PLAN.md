@@ -3,7 +3,7 @@
 Parent issue: #212
 Parent branch: `feat/212-helpscout-cli-parity`
 Default branch: `main`
-Parent PR: pending draft creation after parent planning checkpoint
+Parent PR: https://github.com/polymetrics-ai/cli/pull/230 (draft)
 Connector slug: `help-scout`
 
 > Note: the kickoff prompt names `internal/connectors/defs/helpscout/`, but this checkout already has the canonical bundle at `internal/connectors/defs/help-scout/` and public docs/catalog entries use `help-scout`. This plan uses the existing canonical slug to avoid a duplicate connector.
