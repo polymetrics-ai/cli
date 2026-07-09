@@ -58,8 +58,18 @@
         197
       ],
       "reason": "Sub-PR #237 opened after local verification; parent waits on checks/review before integration."
+    },
+    {
+      "timestamp": "2026-07-09T21:25:00Z",
+      "cycle": "issue-197-provisional-integration",
+      "decision": "not_spawned_review_blocked",
+      "issue_numbers": [
+        197,
+        200
+      ],
+      "reason": "Sub-PR #237 green and squash-merged into parent branch; #197 awaits parent PR fallback review coverage. #200 ready but paused behind review-blocked parent state."
     }
   ],
   "verificationPassed": false,
-  "verificationBlocker": "parent integration blocked on #237 checks and automated review coverage"
+  "verificationBlocker": "parent review coverage pending for provisionally integrated #197"
 }

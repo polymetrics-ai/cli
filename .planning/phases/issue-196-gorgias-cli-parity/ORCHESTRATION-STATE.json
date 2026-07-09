@@ -17,12 +17,12 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi",
-    "status": "waiting_for_review"
+    "status": "parent_review_pending"
   },
   "ready_queue": [
     {
       "number": 197,
-      "status": "sub_pr_open",
+      "status": "provisionally_integrated",
       "dependencies": [],
       "write_scope": [
         "internal/connectors/defs/gorgias/metadata.json",
@@ -30,7 +30,7 @@
         "internal/connectors/defs/gorgias/cli_surface.json",
         ".planning/phases/issue-197-gorgias-cli-surface-metadata"
       ],
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "not_spawned_review_blocked"
     },
     {
       "number": 200,
@@ -42,7 +42,7 @@
         "internal/connectors/defs/gorgias/api_surface.json",
         ".planning/phases/issue-200-gorgias-operation-ledger"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_review_blocked"
     },
     {
       "number": 199,
@@ -147,6 +147,14 @@
         197
       ],
       "reason": "Local #197 implementation opened sub-PR #237 against parent branch; automated review/check coverage pending."
+    },
+    {
+      "timestamp": "2026-07-09T21:25:00Z",
+      "decision": "not_spawned_review_blocked",
+      "issue_numbers": [
+        200
+      ],
+      "reason": "#197 is provisionally integrated into parent branch after green checks. CodeRabbit skipped sub-PR #237 because base is non-default; parent PR #229 fallback coverage is pending while parent remains draft."
     }
   ],
   "subissues": [
@@ -156,21 +164,21 @@
       "branch": "feat/197-gorgias-cli-surface-metadata",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/237",
       "worker": "local_critical_path_pi_orchestrator",
-      "status": "sub_pr_open",
+      "status": "provisionally_integrated",
       "write_scope": [
         "internal/connectors/defs/gorgias",
         ".planning/phases/issue-197-gorgias-cli-surface-metadata"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
-      "verification": "local focused and full gates passed; see PR #237 body and .planning/phases/issue-197-gorgias-cli-surface-metadata/VERIFICATION.md",
+      "verification": "local and PR checks passed; sub-PR #237 squash-merged into parent branch commit 38e2eef4",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
+        "status": "skipped",
         "head_sha": "4d9471cb61405f6351a70bad4e75cf0a97ac05ad",
-        "reviewed_range": "pending for sub-PR #237; parent PR #229 fallback needed if non-default base is skipped",
-        "coverage_route": "sub_pr",
+        "reviewed_range": "CodeRabbit skipped sub-PR #237; parent PR #229 fallback review pending for integrated commit 38e2eef4",
+        "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "Awaiting automatic review/checks; no manual review command posted",
+        "disposition_summary": "No actionable CodeRabbit findings; skipped status is not approval. Parent PR fallback coverage pending.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/237"
       }
     },
@@ -339,5 +347,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T21:05:00Z"
+  "updated_at": "2026-07-09T21:25:00Z"
 }
