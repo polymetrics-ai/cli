@@ -16,7 +16,8 @@
     { "timestamp": "2026-07-09T16:50:00Z", "cycle": "plan", "decision": "local_critical_path", "reason": "Issues #104 and #105 are verified; current Pi harness exposes no subagent tool, so #106 starts locally." },
     { "timestamp": "2026-07-09T16:58:00Z", "cycle": "red", "decision": "local_critical_path", "reason": "Jira stream command tests failed because cli_surface.json did not declare stream-runner query flags." },
     { "timestamp": "2026-07-09T17:05:00Z", "cycle": "green", "decision": "local_critical_path", "reason": "Jira stream command flags map to query.* and targeted CLI/docs/website/connectorgen checks passed." },
-    { "timestamp": "2026-07-09T17:21:34Z", "cycle": "verify", "decision": "local_critical_path", "reason": "Full local gates passed for #106." }
+    { "timestamp": "2026-07-09T17:21:34Z", "cycle": "verify", "decision": "local_critical_path", "reason": "Full local gates passed for #106." },
+    { "timestamp": "2026-07-09T17:46:04Z", "cycle": "review-fix", "decision": "coderabbit_manual_fallback", "reason": "CodeRabbit completed review on #106 and reported two findings; both were fixed and full gates passed again." }
   ],
   "redTests": [
     { "command": "go test ./internal/cli -run TestJiraCommandSurfaceRunsStreamBackedCommands -count=1", "status": "failed_as_expected", "evidence": "Jira stream commands rejected --jql/--query flags because cli_surface.json did not yet declare stream-runner query mappings." }
@@ -39,6 +40,14 @@
     { "command": "go run ./cmd/connectorgen validate internal/connectors/defs", "status": "passed", "evidence": "connectorgen validate: 547 connector(s) checked, 0 findings" },
     { "command": "cd website && pnpm build", "status": "passed" }
   ],
+  "automatedReview": {
+    "primaryRoute": "coderabbit_manual_fallback",
+    "primaryStatus": "commented_review_fixed",
+    "reviewedHeadSha": "bd3b5ebcee58fd14d3109af6eb23d7b58bfe0e5b",
+    "coderabbitReviewId": 4665313903,
+    "coderabbitComments": [3553569605, 3553569626],
+    "dispositionSummary": "Fixed issue-create risk metadata and moved httptest request assertions out of the handler goroutine; re-ran full local gates."
+  },
   "implementedFlags": {
     "issue list": ["jql", "fields", "expand"],
     "project list": ["query", "type-key", "category-id", "status"],
@@ -53,5 +62,5 @@
     "reverse ETL execution",
     "parent PR merge to main"
   ],
-  "updatedAt": "2026-07-09T17:21:34Z"
+  "updatedAt": "2026-07-09T17:46:04Z"
 }

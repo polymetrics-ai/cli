@@ -116,7 +116,7 @@
       "availability": "planned",
       "source_cli_path": "jira issue create",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post",
-      "risk": "Creates visible Jira project data.",
+      "risk": "Creates visible Jira issue data.",
       "approval": "Future reverse ETL writes must use plan, preview, approval, and execute.",
       "notes": "No Jira write action is declared in this metadata slice."
     },

@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
+	"sync"
 	"testing"
 
 	"polymetrics.ai/internal/cli"
@@ -459,32 +461,31 @@ func TestGitHubCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
 }
 
 func TestJiraCommandSurfaceRunsStreamBackedCommands(t *testing.T) {
-	requests := map[string]string{}
+	type capturedRequest struct {
+		authOK   bool
+		rawQuery string
+	}
+	var requestsMu sync.Mutex
+	requests := map[string]capturedRequest{}
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user, pass, ok := r.BasicAuth()
-		if !ok || user != "agent@example.invalid" || pass != "test-token" {
-			t.Fatalf("jira request missing expected basic auth")
+		requestsMu.Lock()
+		requests[r.URL.Path] = capturedRequest{
+			authOK:   ok && user == "agent@example.invalid" && pass == "test-token",
+			rawQuery: r.URL.RawQuery,
 		}
-		requests[r.URL.Path] = r.URL.RawQuery
+		requestsMu.Unlock()
+
 		w.Header().Set("Content-Type", "application/json")
 		switch r.URL.Path {
 		case "/rest/api/3/search":
-			if got := r.URL.Query().Get("jql"); got != "project = POLY" {
-				t.Fatalf("jql query = %q, want project = POLY", got)
-			}
 			_, _ = w.Write([]byte(`{"issues":[{"id":"10001","key":"POLY-1","fields":{"summary":"Ship Jira runner","created":"2026-07-01T00:00:00Z","updated":"2026-07-02T00:00:00Z","status":{"name":"Done"},"issuetype":{"name":"Task"},"priority":{"name":"High"},"assignee":{"displayName":"Ada"},"reporter":{"displayName":"Grace"},"project":{"key":"POLY"}}}],"startAt":0,"maxResults":50,"total":1}`))
 		case "/rest/api/3/project/search":
-			if got := r.URL.Query().Get("query"); got != "Poly" {
-				t.Fatalf("project query = %q, want Poly", got)
-			}
 			_, _ = w.Write([]byte(`{"values":[{"id":"10000","key":"POLY","name":"Polymetrics","projectTypeKey":"software"}],"startAt":0,"maxResults":50,"total":1}`))
 		case "/rest/api/3/users/search":
-			if got := r.URL.Query().Get("query"); got != "ada" {
-				t.Fatalf("user query = %q, want ada", got)
-			}
 			_, _ = w.Write([]byte(`[{"accountId":"abc-123","accountType":"atlassian","displayName":"Ada Lovelace","emailAddress":"ada@example.invalid","active":true}]`))
 		default:
-			t.Fatalf("unexpected Jira path %s", r.URL.Path)
+			http.NotFound(w, r)
 		}
 	}))
 	t.Cleanup(srv.Close)
@@ -509,6 +510,7 @@ func TestJiraCommandSurfaceRunsStreamBackedCommands(t *testing.T) {
 		wantKind   string
 		wantStream string
 		wantCount  int
+		wantQuery  map[string]string
 		wantRecord map[string]string
 	}{
 		{
@@ -518,6 +520,7 @@ func TestJiraCommandSurfaceRunsStreamBackedCommands(t *testing.T) {
 			wantKind:   "ConnectorCommandRead",
 			wantStream: "issues",
 			wantCount:  1,
+			wantQuery:  map[string]string{"jql": "project = POLY"},
 			wantRecord: map[string]string{"key": "POLY-1", "summary": "Ship Jira runner", "status": "Done", "project": "POLY"},
 		},
 		{
@@ -527,6 +530,7 @@ func TestJiraCommandSurfaceRunsStreamBackedCommands(t *testing.T) {
 			wantKind:   "ConnectorCommandRead",
 			wantStream: "projects",
 			wantCount:  1,
+			wantQuery:  map[string]string{"query": "Poly"},
 			wantRecord: map[string]string{"key": "POLY", "name": "Polymetrics"},
 		},
 		{
@@ -536,14 +540,30 @@ func TestJiraCommandSurfaceRunsStreamBackedCommands(t *testing.T) {
 			wantKind:   "ConnectorCommandRead",
 			wantStream: "users",
 			wantCount:  1,
+			wantQuery:  map[string]string{"query": "ada"},
 			wantRecord: map[string]string{"accountId": "abc-123", "displayName": "Ada Lovelace"},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			stdout, _ := runCLI(t, tt.args)
-			if _, ok := requests[tt.wantPath]; !ok {
+			requestsMu.Lock()
+			request, ok := requests[tt.wantPath]
+			requestsMu.Unlock()
+			if !ok {
 				t.Fatalf("%s was not requested; requests=%v", tt.wantPath, requests)
+			}
+			if !request.authOK {
+				t.Fatalf("%s did not receive expected basic auth", tt.wantPath)
+			}
+			query, err := url.ParseQuery(request.rawQuery)
+			if err != nil {
+				t.Fatalf("parse raw query %q: %v", request.rawQuery, err)
+			}
+			for key, want := range tt.wantQuery {
+				if got := query.Get(key); got != want {
+					t.Fatalf("query[%s] = %q, want %q; raw=%s", key, got, want, request.rawQuery)
+				}
 			}
 
 			var env struct {

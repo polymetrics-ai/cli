@@ -61,3 +61,18 @@ Final connector validation:
 ```text
 connectorgen validate: 547 connector(s) checked, 0 findings
 ```
+
+Review-fix checks after CodeRabbit findings also passed:
+
+```bash
+go test ./internal/cli -run TestJiraCommandSurfaceRunsStreamBackedCommands -count=1
+go run ./cmd/pm docs validate --connectors-dir docs/connectors
+cd website && pnpm gen:website-data && pnpm test:unit -- connector-data
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+cd website && pnpm build
+```

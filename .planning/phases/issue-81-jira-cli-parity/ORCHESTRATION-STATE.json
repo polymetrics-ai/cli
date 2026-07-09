@@ -156,7 +156,7 @@
       "write_scope": ["command runner", "internal/connectors/defs/jira"],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-81-jira-cli-parity",
       "verification": "passed: Jira stream-backed issue/project/user command tests, docs/website data, commandrunner, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, connectorgen validate 547 connectors with 0 findings",
-      "automated_review": { "primary_route": "parent_pr", "status": "pending", "head_sha": "", "reviewed_range": "", "coverage_route": "pending_after_push", "fallback_route": "none", "disposition_summary": "Pending after #106 implementation commit is pushed to draft parent PR #129.", "disposition_url": "" }
+      "automated_review": { "primary_route": "coderabbit_manual_fallback", "status": "commented_review_fixed", "head_sha": "bd3b5ebcee58fd14d3109af6eb23d7b58bfe0e5b", "reviewed_range": "1fbff1ba50c748387a5f74bd0e7cfb3388bce6cc..bd3b5ebcee58fd14d3109af6eb23d7b58bfe0e5b", "coverage_route": "parent_pr", "fallback_route": "none", "disposition_summary": "CodeRabbit completed review for #106 and reported 2 findings; issue-create risk metadata and httptest handler assertions were fixed and full gates passed again. Review coverage for the review-fix commit is pending after push.", "disposition_url": "https://github.com/polymetrics-ai/cli/pull/129#pullrequestreview-4665313903" }
     },
     {
       "number": 107,
@@ -218,5 +218,5 @@
     "generic shell/http/sql write tools",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updated_at": "2026-07-09T17:21:34Z"
+  "updated_at": "2026-07-09T17:46:04Z"
 }

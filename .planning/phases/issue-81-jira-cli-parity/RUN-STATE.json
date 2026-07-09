@@ -74,6 +74,12 @@
       "cycle": "issue-106-verify",
       "decision": "local_critical_path",
       "reason": "Issue #106 stream runner full gates passed; automated review pending after implementation push."
+    },
+    {
+      "timestamp": "2026-07-09T17:46:04Z",
+      "cycle": "issue-106-review-fix",
+      "decision": "coderabbit_manual_fallback",
+      "reason": "CodeRabbit reported 2 #106 findings; both were fixed and full gates passed again."
     }
   ],
   "verification": [
@@ -113,7 +119,7 @@
         "go run ./cmd/connectorgen validate internal/connectors/defs",
         "cd website && pnpm build"
       ],
-      "status": "passed"
+      "status": "passed_review_fixed"
     }
   ],
   "humanGates": [
@@ -127,5 +133,5 @@
     "generic shell/http/sql write tools",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-09T17:21:34Z"
+  "updatedAt": "2026-07-09T17:46:04Z"
 }

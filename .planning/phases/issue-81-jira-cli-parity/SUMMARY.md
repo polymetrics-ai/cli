@@ -19,6 +19,7 @@ Status: draft parent PR #129 opened; #104, #105, and #106 verified locally with 
 - Routed automated review for #105: CodeRabbit reported a 51 minute review-limit window, Copilot backup review produced four comments across two passes, and CodeRabbit later completed manual review after the retry window with one trivial nitpick. All comments were fixed and re-verified with full gates.
 - Added #106 Jira stream-runner flags and tests for `pm jira issue list --jql`, `pm jira project list --query`, and `pm jira user list --query` against local `httptest` Jira endpoints.
 - Ran full #106 local gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`, and `cd website && pnpm build`.
+- Routed CodeRabbit review for #106; fixed both findings (Jira issue-create risk text and handler-goroutine test assertions) and re-ran full gates.
 
 ## Current Blockers
 
@@ -27,6 +28,6 @@ Status: draft parent PR #129 opened; #104, #105, and #106 verified locally with 
 
 ## Next
 
-1. Commit/push #106 verified slice and update parent PR.
-2. Route automated review for the #106 implementation commit per draft-parent PR policy.
+1. Commit/push #106 review-fix slice and update parent PR.
+2. Route final automated review coverage for the #106 review-fix commit.
 3. Start the next dependency-ready lane: #107 operation ledger.
