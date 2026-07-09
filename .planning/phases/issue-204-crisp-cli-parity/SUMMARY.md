@@ -1,6 +1,6 @@
 # Summary — Issue #204 Crisp CLI parity parent
 
-State: parent PR open (draft); #205 stacked branch targeted green.
+State: parent PR open (draft); #205 stacked PR open (draft) with full local verification.
 
 Completed:
 
@@ -15,6 +15,7 @@ Completed:
 - Passed targeted #205 validation, all-defs validation, Crisp conformance/inspect/docs smokes, and full `make verify`.
 
 Parent PR: https://github.com/polymetrics-ai/cli/pull/228 (draft, base `main`).
+#205 stacked PR: https://github.com/polymetrics-ai/cli/pull/235 (draft, base `feat/204-crisp-cli-parity`).
 
 Current blocker:
 
@@ -22,9 +23,9 @@ Current blocker:
 
 Next:
 
-1. Inspect/commit #205 scaffold changes on `feat/205-crisp-cli-surface-metadata`.
-2. Push branch and open stacked PR targeting `feat/204-crisp-cli-parity`.
-3. Run automated review routing for the subissue PR.
+1. Wait for PR #235 checks and CodeRabbit status.
+2. Disposition any automated-review findings.
+3. If CodeRabbit skips the stacked PR, route coverage through the parent PR/fallback per the automated review routing loop.
 
 Safety:
 

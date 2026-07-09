@@ -89,21 +89,21 @@
       "number": 205,
       "url": "https://github.com/polymetrics-ai/cli/issues/205",
       "branch": "feat/205-crisp-cli-surface-metadata",
-      "pr_url": "",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/235",
       "worker": "local-critical-path",
-      "status": "full_local_green",
+      "status": "pr_open_draft",
       "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold, generated connector docs/catalog, catalog-count tests/help text, plus issue-205 planning",
       "worker_directory": "current checkout on feat/205-crisp-cli-surface-metadata",
       "verification": "passed: temp-root connectorgen validate, all-defs connectorgen validate, conformance smoke, connectors inspect/docs smokes, make verify",
       "automated_review": {
-        "primary_route": "blocked",
+        "primary_route": "coderabbit_status",
         "status": "pending",
-        "head_sha": "",
-        "reviewed_range": "",
-        "coverage_route": "blocked",
+        "head_sha": "f1f1c189",
+        "reviewed_range": "pending",
+        "coverage_route": "stacked_pr_then_parent_fallback_if_skipped",
         "fallback_route": "none",
-        "disposition_summary": "parent PR opened as draft; subissue review pending",
-        "disposition_url": ""
+        "disposition_summary": "draft stacked PR #235 opened targeting feat/204-crisp-cli-parity; CodeRabbit status pending",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/235"
       }
     }
   ],
@@ -116,5 +116,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T02:20:00Z"
+  "updated_at": "2026-07-10T02:35:00Z"
 }

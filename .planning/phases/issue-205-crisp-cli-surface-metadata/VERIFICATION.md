@@ -95,4 +95,4 @@ Website docs remain deferred to #206 because #205 exposes no provider-specific r
 
 ## Current result
 
-Targeted #205 validation and full local `make verify` passed on the stacked branch. Full parent verification will need to be re-run after later implementation slices.
+Targeted #205 validation and full local `make verify` passed on the stacked branch. Draft stacked PR #235 is open against `feat/204-crisp-cli-parity`; checks and CodeRabbit status are pending. Full parent verification will need to be re-run after later implementation slices.
