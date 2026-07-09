@@ -1,0 +1,21 @@
+{
+  "phase": "issue-111-monday-cli-surface",
+  "issue": 111,
+  "parent_issue": 82,
+  "branch": "feat/82-monday-cli-parity",
+  "gsd": {
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-111-monday-cli-surface --skip-research",
+    "programming_loop": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "targeted #111 tests passed; full parent verification pending",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "No subagent tool is available; implement #111 in this parent checkout with issue-scoped evidence."
+    }
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}

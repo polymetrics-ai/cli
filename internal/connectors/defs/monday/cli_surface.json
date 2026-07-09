@@ -1,0 +1,203 @@
+{
+  "tagline": "Work with monday.com boards, items, users, teams, and tags from the command line.",
+  "usage": "pm monday <command> <subcommand> [flags]",
+  "source_cli": {
+    "name": "monday.com API reference",
+    "docs": "https://developer.monday.com/api-reference/reference/about-the-api-reference",
+    "reference": "https://developer.monday.com/api-reference/reference"
+  },
+  "groups": [
+    {
+      "id": "core",
+      "title": "Core Commands",
+      "commands": ["board", "item", "user", "team", "tag"]
+    },
+    {
+      "id": "planned-read",
+      "title": "Planned Read Commands",
+      "commands": ["workspace", "folder", "update", "column", "group"]
+    },
+    {
+      "id": "planned-write",
+      "title": "Planned Reverse ETL Commands",
+      "commands": ["board", "item", "column", "webhook"]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved monday connector credential.",
+      "maps_to": "connection"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Maximum stream records to emit for implemented ETL commands.",
+      "maps_to": "limit"
+    }
+  ],
+  "commands": [
+    {
+      "path": "board list",
+      "summary": "List board metadata",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "boards",
+      "source_cli_path": "monday boards query",
+      "examples": ["pm monday board list --limit 50 --json"],
+      "api_surface": [{ "method": "GET", "path": "/v2 (query: boards)" }]
+    },
+    {
+      "path": "item list",
+      "summary": "List items from boards",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "items",
+      "source_cli_path": "monday items query",
+      "examples": ["pm monday item list --limit 50 --json"],
+      "api_surface": [{ "method": "GET", "path": "/v2 (query: boards { items_page } / next_items_page)" }]
+    },
+    {
+      "path": "user list",
+      "summary": "List users",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_cli_path": "monday users query",
+      "examples": ["pm monday user list --limit 50 --json"],
+      "api_surface": [{ "method": "GET", "path": "/v2 (query: users)" }]
+    },
+    {
+      "path": "team list",
+      "summary": "List teams",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_cli_path": "monday teams query",
+      "examples": ["pm monday team list --limit 50 --json"],
+      "api_surface": [{ "method": "GET", "path": "/v2 (query: teams)" }]
+    },
+    {
+      "path": "tag list",
+      "summary": "List tags",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_cli_path": "monday tags query",
+      "examples": ["pm monday tag list --limit 50 --json"],
+      "api_surface": [{ "method": "GET", "path": "/v2 (query: tags)" }]
+    },
+    {
+      "path": "board view",
+      "summary": "View one board by id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "monday boards query",
+      "notes": "Planned as a bounded fixed GraphQL direct read after operation-ledger and direct-call policy are in place."
+    },
+    {
+      "path": "item view",
+      "summary": "View one item by id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "monday items query",
+      "notes": "Planned as a bounded fixed GraphQL direct read after operation-ledger and direct-call policy are in place."
+    },
+    {
+      "path": "workspace list",
+      "summary": "List workspaces",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "monday workspaces query",
+      "notes": "Classified in the operation ledger; not implemented in the current read bundle."
+    },
+    {
+      "path": "folder list",
+      "summary": "List folders",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "monday folders query",
+      "notes": "Classified in the operation ledger; not implemented in the current read bundle."
+    },
+    {
+      "path": "update list",
+      "summary": "List updates",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "monday updates query",
+      "notes": "Classified in the operation ledger; not implemented in the current read bundle."
+    },
+    {
+      "path": "column list",
+      "summary": "List board columns",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "monday columns query",
+      "notes": "Classified in the operation ledger; not implemented in the current read bundle."
+    },
+    {
+      "path": "group list",
+      "summary": "List board groups",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "monday groups query",
+      "notes": "Classified in the operation ledger; not implemented in the current read bundle."
+    },
+    {
+      "path": "board create",
+      "summary": "Create a board",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "monday create_board mutation",
+      "risk": "Creates a monday.com board in the authenticated account or workspace.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute; admin/sensitive variants require typed confirmation.",
+      "notes": "Mutation metadata is blocked by default until writes and typed policy are implemented."
+    },
+    {
+      "path": "item create",
+      "summary": "Create an item",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "monday create_item mutation",
+      "risk": "Creates a visible item on a monday.com board.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Mutation metadata is blocked by default until writes and typed policy are implemented."
+    },
+    {
+      "path": "item update",
+      "summary": "Change item column values",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "monday change_column_value mutation",
+      "risk": "Mutates item data on a monday.com board.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "Mutation metadata is blocked by default until writes and typed policy are implemented."
+    },
+    {
+      "path": "webhook create",
+      "summary": "Create a webhook",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "monday create_webhook mutation",
+      "risk": "Creates an outbound webhook and may expose monday.com event data to an external URL.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute plus typed confirmation for external callback targets.",
+      "notes": "Blocked by default; requires explicit webhook/output policy before execution."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "auth",
+      "summary": "Use saved monday credentials; never pass tokens in command text."
+    },
+    {
+      "name": "writes",
+      "summary": "Monday mutations are metadata-only in this slice and remain blocked until reverse ETL plan/preview/approval/execute support is implemented."
+    }
+  ]
+}

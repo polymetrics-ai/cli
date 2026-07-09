@@ -1,0 +1,59 @@
+{
+  "parent_issue": {
+    "number": 82,
+    "url": "https://github.com/polymetrics-ai/cli/issues/82",
+    "title": "Monday CLI feature parity parent roadmap",
+    "state": "open"
+  },
+  "parent_branch": "feat/82-monday-cli-parity",
+  "parent_pr": {
+    "url": "pending",
+    "base": "main",
+    "head": "feat/82-monday-cli-parity",
+    "draft": true,
+    "state": "missing_until_parent_seed_push"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-harness-without-subagent-tool",
+    "status": "running"
+  },
+  "ready_queue": [
+    { "number": 111, "status": "worker_ready", "dependencies": [], "write_scope": "internal/connectors/defs/monday cli surface tests/docs", "decision": "local_critical_path" },
+    { "number": 112, "status": "planned", "dependencies": [111], "write_scope": "Monday docs/help parity", "decision": "not_spawned_dependency_blocked" },
+    { "number": 113, "status": "planned", "dependencies": [111], "write_scope": "Monday commandrunner tests/metadata", "decision": "not_spawned_dependency_blocked" },
+    { "number": 114, "status": "planned", "dependencies": [111], "write_scope": "internal/connectors/defs/monday/api_surface.json operations ledger", "decision": "not_spawned_dependency_blocked" },
+    { "number": 115, "status": "planned", "dependencies": [114], "write_scope": "Monday direct-read metadata/tests; runner only if safe", "decision": "not_spawned_dependency_blocked" },
+    { "number": 116, "status": "planned", "dependencies": [114], "write_scope": "GraphQL fixed-document metadata/tests; engine only if necessary", "decision": "not_spawned_dependency_blocked" },
+    { "number": 117, "status": "planned", "dependencies": [114], "write_scope": "Monday sensitive/admin policy metadata/tests", "decision": "not_spawned_dependency_blocked" }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [111],
+      "reason": "No isolated Pi subagent tool is available; execute first dependency lane locally with separate issue evidence."
+    }
+  ],
+  "subissues": [
+    { "number": 111, "url": "https://github.com/polymetrics-ai/cli/issues/111", "branch": "feat/82-monday-cli-parity", "pr_url": "pending", "worker": "local-orchestrator", "status": "worker_ready", "write_scope": "internal/connectors/defs/monday cli_surface + tests", "worker_directory": ".", "verification": "pending", "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending" } },
+    { "number": 112, "url": "https://github.com/polymetrics-ai/cli/issues/112", "branch": "feat/82-monday-cli-parity", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": "docs/help", "worker_directory": ".", "verification": "pending", "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending" } },
+    { "number": 113, "url": "https://github.com/polymetrics-ai/cli/issues/113", "branch": "feat/82-monday-cli-parity", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": "stream runner", "worker_directory": ".", "verification": "pending", "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending" } },
+    { "number": 114, "url": "https://github.com/polymetrics-ai/cli/issues/114", "branch": "feat/82-monday-cli-parity", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": "operation ledger", "worker_directory": ".", "verification": "pending", "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending" } },
+    { "number": 115, "url": "https://github.com/polymetrics-ai/cli/issues/115", "branch": "feat/82-monday-cli-parity", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": "direct reads", "worker_directory": ".", "verification": "pending", "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending" } },
+    { "number": 116, "url": "https://github.com/polymetrics-ai/cli/issues/116", "branch": "feat/82-monday-cli-parity", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": "graphql", "worker_directory": ".", "verification": "pending", "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending" } },
+    { "number": 117, "url": "https://github.com/polymetrics-ai/cli/issues/117", "branch": "feat/82-monday-cli-parity", "pr_url": "pending", "worker": "pending", "status": "planned", "write_scope": "sensitive/admin policy", "worker_directory": ".", "verification": "pending", "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "pending", "reviewed_range": "pending", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "pending", "disposition_url": "pending" } }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "secrets",
+    "destructive external actions",
+    "credentialed connector checks",
+    "reverse ETL execution",
+    "generic write tools"
+  ],
+  "updated_at": "2026-07-09T00:00:00Z"
+}
