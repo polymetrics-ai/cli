@@ -91,12 +91,12 @@
       "verification": "passed",
       "automated_review": {
         "primary_route": "coderabbit_automatic",
-        "status": "pending",
-        "head_sha": "pending_after_state_push",
-        "reviewed_range": "pending",
-        "coverage_route": "stacked_pr_or_parent_pr_fallback",
-        "fallback_route": "none",
-        "disposition_summary": "pending CodeRabbit coverage; no actionable automated findings yet",
+        "status": "skipped_non_default_base",
+        "head_sha": "see_pr_head",
+        "reviewed_range": "pending_parent_pr_after_integration",
+        "coverage_route": "parent_pr_fallback_pending",
+        "fallback_route": "parent_pr_coderabbit_after_subissue_integration",
+        "disposition_summary": "CodeRabbit skipped PR #241 because non-default base branch reviews are disabled; do not count as review-complete until parent PR #226 receives coverage for the integrated commit range or an approved fallback is recorded.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/241"
       }
     }

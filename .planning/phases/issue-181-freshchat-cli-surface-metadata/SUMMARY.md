@@ -1,6 +1,6 @@
 # Summary — Issue #181 Freshchat CLI surface metadata
 
-Status: PR open; full verification passed; automated review coverage pending.
+Status: PR open; full verification passed; CodeRabbit skipped stacked PR, parent fallback pending.
 
 ## Completed
 
@@ -19,6 +19,6 @@ Status: PR open; full verification passed; automated review coverage pending.
 
 ## Next
 
-1. Wait for CI and automated review coverage on PR #241.
-2. If CodeRabbit skips the stacked PR, route coverage through the parent PR or approved fallback before integration.
-3. After #181 review is resolved, proceed to dependent issues (#182/#184 first).
+1. Wait for CI on PR #241.
+2. Route automated review coverage through parent PR #226 after #181 is integrated, or record an approved fallback; the CodeRabbit stacked-PR skip is not review completion.
+3. After #181 review coverage is resolved, proceed to dependent issues (#182/#184 first).

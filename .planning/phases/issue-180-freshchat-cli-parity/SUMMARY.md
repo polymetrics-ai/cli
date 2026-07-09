@@ -1,6 +1,6 @@
 # Summary — Issue #180 Freshchat CLI parity parent
 
-Status: parent orchestration active; #181 stacked PR open.
+Status: parent orchestration active; #181 stacked PR open with parent review fallback pending.
 
 ## Completed in this checkpoint
 
@@ -19,6 +19,6 @@ Status: parent orchestration active; #181 stacked PR open.
 
 ## Next
 
-1. Wait for CI and automated review coverage on #181 PR https://github.com/polymetrics-ai/cli/pull/241.
-2. If CodeRabbit skips the stacked PR, route coverage through parent PR #226 or approved fallback.
-3. After #181 is integrated, begin dependent help/docs (#182) and operation-ledger (#184) slices.
+1. Wait for CI on #181 PR https://github.com/polymetrics-ai/cli/pull/241.
+2. Route CodeRabbit coverage through parent PR #226 after integrating #181, or record an approved fallback; CodeRabbit skipped #241 because non-default base auto reviews are disabled.
+3. After #181 review coverage is resolved, begin dependent help/docs (#182) and operation-ledger (#184) slices.

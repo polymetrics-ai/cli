@@ -1,7 +1,7 @@
 {
   "phase": "issue-180-freshchat-cli-parity",
   "parent_issue": 180,
-  "status": "subissue_181_pr_open",
+  "status": "subissue_181_pr_open_review_fallback_pending",
   "gsd": {
     "doctor": "pass",
     "verify_pi": "pass",
@@ -41,7 +41,14 @@
       "decision": "await_review_coverage",
       "reason": "Issue #181 verified locally and opened as stacked PR https://github.com/polymetrics-ai/cli/pull/241 against the parent branch.",
       "issue_numbers": [181]
+    },
+    {
+      "timestamp": "2026-07-09T21:33:00Z",
+      "cycle": "automated-review-routing",
+      "decision": "parent_pr_fallback_pending",
+      "reason": "CodeRabbit skipped stacked PR #241 because non-default base auto reviews are disabled; parent PR #226 must receive coverage for the integrated range or an approved fallback must be recorded before #181 is review-complete.",
+      "issue_numbers": [181]
     }
   ],
-  "updated_at": "2026-07-09T21:28:00Z"
+  "updated_at": "2026-07-09T21:33:00Z"
 }
