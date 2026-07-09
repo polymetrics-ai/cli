@@ -12,10 +12,19 @@
 
 Add `TestBundleLoadEmbeddedGitLabCLISurface` before creating `internal/connectors/defs/gitlab/cli_surface.json`.
 
-Expected initial failure:
+Initial failure captured:
+
+```bash
+go test ./internal/connectors/engine -run TestBundleLoadEmbeddedGitLabCLISurface -count=1
+```
+
+Result: failed as expected.
 
 ```text
-GitLab CLISurface is nil; defs.FS must embed cli_surface.json
+--- FAIL: TestBundleLoadEmbeddedGitLabCLISurface (0.00s)
+    bundle_test.go:933: GitLab CLISurface is nil; defs.FS must embed cli_surface.json
+FAIL
+FAIL	polymetrics.ai/internal/connectors/engine	0.549s
 ```
 
 ### Green Target
@@ -26,10 +35,62 @@ Create schema-valid `internal/connectors/defs/gitlab/cli_surface.json` where:
 - Future direct-read, reverse-ETL, local workflow, raw API, binary, and admin/destructive commands are planned/unsupported/unsafe with explicit notes, not executable.
 - Examples and notes contain no secret-shaped literals.
 
-### Verification To Record
+### Green Evidence
 
 ```bash
 go test ./internal/connectors/engine -run TestBundleLoadEmbeddedGitLabCLISurface -count=1
-go test ./cmd/connectorgen ./internal/connectors/engine -run 'CLISurface|GitLab' -count=1
-go run ./cmd/connectorgen validate internal/connectors/defs --json
 ```
+
+Result: passed.
+
+```bash
+go test ./cmd/connectorgen ./internal/connectors/engine -run 'CLISurface|GitLab' -count=1
+```
+
+Result: passed.
+
+```bash
+go run ./cmd/connectorgen validate internal/connectors/defs --json > /tmp/gitlab-validate.json && jq '{connectors_checked, findings: (.findings|length)}' /tmp/gitlab-validate.json
+```
+
+Result: `connectors_checked=547`, `findings=0`.
+
+```bash
+go test ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner -count=1
+go test ./internal/connectors/conformance -run 'TestConformance/gitlab' -count=1
+```
+
+Result: passed.
+
+### Full Verification Evidence
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+go run ./cmd/connectorgen validate internal/connectors/defs
+make verify
+```
+
+Result: passed; `make verify` ended with `connectorgen validate: 547 connector(s) checked, 0 findings`.
+
+### Website Evidence
+
+```bash
+cd website && pnpm run gen:website-data
+```
+
+Result: passed and regenerated `website/data/connectors.generated.json` and `website/lib/connectors.catalog.data.generated.json` with GitLab CLI-surface metadata.
+
+```bash
+cd website && pnpm run typecheck
+```
+
+Result: blocked because `node_modules` is absent and `tsc` is not installed in the checkout.
+
+```bash
+cd website && pnpm install --frozen-lockfile
+```
+
+Result: blocked by `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`; did not modify tracked files. No `--no-frozen-lockfile` install was run because dependency/lockfile changes are outside this lane.

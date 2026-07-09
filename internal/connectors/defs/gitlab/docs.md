@@ -4,6 +4,11 @@ Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
 
 Readable streams: `projects`, `groups`, `users`, `issues`.
 
+The connector declares a metadata-only command surface in `cli_surface.json`. Implemented commands map
+only to the four existing stream-backed reads; planned direct-read, binary, local workflow, and
+reverse-ETL commands remain blocked or deferred until their dedicated lanes add bounded executors,
+operation-ledger coverage, and approval policy.
+
 This connector is read-only; no write actions are declared.
 
 Service API documentation: https://docs.gitlab.com/ee/api/rest/.
@@ -60,5 +65,8 @@ issues.
 
 - Batch defaults: read_page_size=50.
 - API coverage includes 4 stream-backed endpoint group(s).
+- `cli_surface.json` is intentionally metadata-only in this slice; runtime help rendering, direct
+  reads, binary downloads, GraphQL/body-variable support, and sensitive/admin reverse-ETL policy are
+  tracked by #84-#89.
 - Other documented endpoints are not exposed by this connector where they are classified as
   out_of_scope=7.

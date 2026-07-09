@@ -29,14 +29,24 @@
     "golang-spf13-cobra"
   ],
   "verificationPassed": false,
-  "verificationNote": "Only GSD preflight has run; parent final gates are pending.",
+  "verificationNote": "#83 Go/connector gates and make verify passed; website typecheck/build are blocked by local dependency installation state after generated data changed.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
       "decision": "local_critical_path",
-      "reason": "No Pi subagent tool is exposed in this harness; orchestrator is creating parent artifacts and executing first ready lane #83 inline while recording worker-spawn limits."
+      "reason": "No Pi subagent tool is exposed in this harness; orchestrator created parent artifacts and selected first ready lane #83 inline while recording worker-spawn limits."
+    },
+    {
+      "cycle": "issue-83-red-green",
+      "decision": "local_critical_path",
+      "reason": "Added red embedded GitLab CLI-surface test, created cli_surface metadata, refreshed website data, and ran full Go/connector gates inline."
+    },
+    {
+      "cycle": "issue-83-website-checks",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "website typecheck/build could not run because node_modules is absent and pnpm install --frozen-lockfile is blocked by ERR_PNPM_LOCKFILE_CONFIG_MISMATCH."
     }
   ],
   "human_gate": "parent PR merge to main",
-  "updated_at": "2026-07-09T12:38:00Z"
+  "updated_at": "2026-07-09T13:21:00Z"
 }

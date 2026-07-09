@@ -122,22 +122,22 @@
       "branch": "feat/78-gitlab-cli-parity",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/127",
       "worker": "inline-pi-orchestrator",
-      "status": "worker_in_progress",
+      "status": "sub_pr_green",
       "write_scope": [
         "internal/connectors/defs/gitlab/cli_surface.json",
         "internal/connectors/engine/*_test.go",
         ".planning/phases/issue-83-gitlab-cli-surface"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-78-gitlab-cli-parity",
-      "verification": "pending red/green #83 tests",
+      "verification": "Go/connector gates and make verify passed; website generated data refreshed; website typecheck/build blocked by local pnpm lockfile config mismatch",
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
         "head_sha": "pending",
         "reviewed_range": "pending",
-        "coverage_route": "blocked",
+        "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "pending PR and verification",
+        "disposition_summary": "pending parent PR review after push",
         "disposition_url": "pending"
       }
     }
@@ -152,5 +152,5 @@
     "credentialed connector checks",
     "reverse ETL execution"
   ],
-  "updated_at": "2026-07-09T12:38:00Z"
+  "updated_at": "2026-07-09T13:21:00Z"
 }

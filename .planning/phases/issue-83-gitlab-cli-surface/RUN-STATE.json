@@ -2,12 +2,12 @@
   "phase": "issue-83-gitlab-cli-surface",
   "issue": 83,
   "parent_issue": 78,
-  "status": "planned",
+  "status": "green_with_website_typecheck_blocker",
   "branch": "feat/78-gitlab-cli-parity",
   "gsd": {
     "execute_prompt": "scripts/gsd prompt execute-phase issue-83-gitlab-cli-surface --tdd",
     "programming_loop_available": false,
-    "manual_fallback": "scripts/gsd prompt programming-loop ... is unavailable; following manual universal programming loop"
+    "manual_fallback": "scripts/gsd prompt programming-loop ... is unavailable; followed manual universal programming loop"
   },
   "required_skills_loaded": [
     "gsd-core",
@@ -23,13 +23,47 @@
     "golang-spf13-cobra"
   ],
   "verificationPassed": false,
-  "verificationNote": "Planning complete; red test pending.",
+  "verificationNote": "Go/connector gates and make verify passed; website typecheck/build could not run because node_modules is absent and pnpm install --frozen-lockfile is blocked by ERR_PNPM_LOCKFILE_CONFIG_MISMATCH.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
       "decision": "local_critical_path",
-      "reason": "The parent orchestrator selected #83 as the first lane and is executing it inline due no exposed Pi subagent tool."
+      "reason": "The parent orchestrator selected #83 as the first lane and executed it inline due no exposed Pi subagent tool."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Added and ran the red GitLab CLI-surface embedded bundle test before creating cli_surface.json."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Created GitLab cli_surface.json and metadata-only docs update without spawning a worker."
+    },
+    {
+      "cycle": "verify",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "make verify and connector gates passed; website typecheck/build are blocked by local dependency installation state."
     }
   ],
-  "updated_at": "2026-07-09T12:34:52Z"
+  "redEvidence": "go test ./internal/connectors/engine -run TestBundleLoadEmbeddedGitLabCLISurface -count=1 failed with GitLab CLISurface nil before cli_surface.json existed",
+  "greenEvidence": [
+    "go test ./internal/connectors/engine -run TestBundleLoadEmbeddedGitLabCLISurface -count=1",
+    "go test ./cmd/connectorgen ./internal/connectors/engine -run 'CLISurface|GitLab' -count=1",
+    "go test ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner -count=1",
+    "go test ./internal/connectors/conformance -run 'TestConformance/gitlab' -count=1",
+    "go run ./cmd/connectorgen validate internal/connectors/defs --json",
+    "gofmt -w cmd internal",
+    "go vet ./...",
+    "go test ./...",
+    "go build ./cmd/pm",
+    "go run ./cmd/connectorgen validate internal/connectors/defs",
+    "make verify",
+    "cd website && pnpm run gen:website-data"
+  ],
+  "blockedEvidence": [
+    "cd website && pnpm run typecheck: blocked because tsc is not installed without node_modules",
+    "cd website && pnpm install --frozen-lockfile: blocked by ERR_PNPM_LOCKFILE_CONFIG_MISMATCH"
+  ],
+  "updated_at": "2026-07-09T13:21:00Z"
 }

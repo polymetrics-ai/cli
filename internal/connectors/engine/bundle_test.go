@@ -924,6 +924,50 @@ func TestBundleLoadEmbeddedGitHubCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedGitLabCLISurface(t *testing.T) {
+	b, err := Load(defs.FS, "gitlab")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, gitlab): %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("GitLab CLISurface is nil; defs.FS must embed cli_surface.json")
+	}
+	if b.CLISurface.Usage != "pm gitlab <command> <subcommand> [flags]" {
+		t.Fatalf("GitLab CLISurface usage = %q", b.CLISurface.Usage)
+	}
+	if b.CLISurface.SourceCLI == nil || b.CLISurface.SourceCLI.Name != "glab" {
+		t.Fatalf("GitLab source CLI = %+v, want glab", b.CLISurface.SourceCLI)
+	}
+
+	want := map[string]struct {
+		stream string
+		method string
+		path   string
+	}{
+		"project list": {stream: "projects", method: "GET", path: "/projects"},
+		"group list":   {stream: "groups", method: "GET", path: "/groups"},
+		"user list":    {stream: "users", method: "GET", path: "/users"},
+		"issue list":   {stream: "issues", method: "GET", path: "/issues"},
+	}
+	for _, cmd := range b.CLISurface.Commands {
+		expected, ok := want[cmd.Path]
+		if !ok {
+			continue
+		}
+		if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream != expected.stream || cmd.Write != "" || cmd.Operation != "" {
+			t.Fatalf("command %q = intent=%q availability=%q stream=%q write=%q operation=%q, want implemented etl stream %q only",
+				cmd.Path, cmd.Intent, cmd.Availability, cmd.Stream, cmd.Write, cmd.Operation, expected.stream)
+		}
+		if len(cmd.APISurface) != 1 || cmd.APISurface[0].Method != expected.method || cmd.APISurface[0].Path != expected.path {
+			t.Fatalf("command %q api_surface = %+v, want %s %s", cmd.Path, cmd.APISurface, expected.method, expected.path)
+		}
+		delete(want, cmd.Path)
+	}
+	if len(want) > 0 {
+		t.Fatalf("missing GitLab CLI stream commands: %v", want)
+	}
+}
+
 func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

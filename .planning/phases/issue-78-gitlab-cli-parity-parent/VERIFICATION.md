@@ -13,13 +13,33 @@ Result: adapter health and prompt generation succeeded. `scripts/gsd prompt prog
 
 ## Parent Setup Checks
 
-Pending after planning artifact creation:
-
 ```bash
 jq empty .planning/phases/issue-78-gitlab-cli-parity-parent/RUN-STATE.json \
   .planning/phases/issue-78-gitlab-cli-parity-parent/ORCHESTRATION-STATE.json
 git diff --check
 ```
+
+Result: passed before parent PR seed commit.
+
+## #83 Integrated Local Checks
+
+```bash
+go test ./internal/connectors/engine -run TestBundleLoadEmbeddedGitLabCLISurface -count=1
+go test ./cmd/connectorgen ./internal/connectors/engine -run 'CLISurface|GitLab' -count=1
+go test ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner -count=1
+go test ./internal/connectors/conformance -run 'TestConformance/gitlab' -count=1
+go run ./cmd/connectorgen validate internal/connectors/defs --json
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+go run ./cmd/connectorgen validate internal/connectors/defs
+make verify
+cd website && pnpm run gen:website-data
+```
+
+Result: passed. Website typecheck/build remain blocked locally because `node_modules` is absent and
+`pnpm install --frozen-lockfile` fails with `ERR_PNPM_LOCKFILE_CONFIG_MISMATCH`.
 
 ## Required Final Parent Gates
 

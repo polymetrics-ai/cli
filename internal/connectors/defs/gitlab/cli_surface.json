@@ -1,0 +1,876 @@
+{
+  "tagline": "Work with GitLab projects from the command line.",
+  "usage": "pm gitlab <command> <subcommand> [flags]",
+  "source_cli": {
+    "name": "glab",
+    "docs": "https://gitlab.com/gitlab-org/cli",
+    "reference": "https://gitlab.com/gitlab-org/cli/-/tree/main/docs/source",
+    "source": "https://gitlab.com/gitlab-org/cli"
+  },
+  "groups": [
+    {
+      "id": "core",
+      "title": "Core Commands",
+      "commands": [
+        "project",
+        "group",
+        "user",
+        "issue",
+        "mr",
+        "repo"
+      ]
+    },
+    {
+      "id": "ci",
+      "title": "CI/CD Commands",
+      "commands": [
+        "pipeline",
+        "job",
+        "schedule",
+        "runner"
+      ]
+    },
+    {
+      "id": "collaboration",
+      "title": "Collaboration Commands",
+      "commands": [
+        "label",
+        "milestone",
+        "release",
+        "snippet",
+        "todo",
+        "work-item"
+      ]
+    },
+    {
+      "id": "security",
+      "title": "Security And Administration Commands",
+      "commands": [
+        "variable",
+        "deploy-key",
+        "ssh-key",
+        "gpg-key",
+        "token",
+        "securefile",
+        "container-registry",
+        "packages"
+      ]
+    },
+    {
+      "id": "local",
+      "title": "Local Workflow Commands",
+      "commands": [
+        "auth",
+        "config",
+        "alias",
+        "completion",
+        "repo clone",
+        "repo remote",
+        "repo prune"
+      ]
+    },
+    {
+      "id": "additional",
+      "title": "Additional Commands",
+      "commands": [
+        "api",
+        "search",
+        "changelog",
+        "attestation",
+        "cluster",
+        "duo",
+        "mcp",
+        "opentofu",
+        "orbit",
+        "stack",
+        "skills"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved GitLab connector credential and base URL scope.",
+      "maps_to": "connection"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Limit records emitted by stream-backed commands.",
+      "maps_to": "limit"
+    }
+  ],
+  "commands": [
+    {
+      "path": "project list",
+      "summary": "List visible GitLab projects",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_cli_path": "glab repo list",
+      "flags": [
+        {
+          "name": "search",
+          "type": "string",
+          "summary": "Filter projects by search text when the stream runner allows query overrides.",
+          "maps_to": "query.search"
+        },
+        {
+          "name": "owned",
+          "type": "boolean",
+          "summary": "Filter to projects owned by the authenticated account when supported by GitLab.",
+          "maps_to": "query.owned"
+        }
+      ],
+      "examples": [
+        "pm gitlab project list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects"
+        }
+      ]
+    },
+    {
+      "path": "group list",
+      "summary": "List visible GitLab groups",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_cli_path": "glab api groups",
+      "flags": [
+        {
+          "name": "search",
+          "type": "string",
+          "summary": "Filter groups by search text when the stream runner allows query overrides.",
+          "maps_to": "query.search"
+        }
+      ],
+      "examples": [
+        "pm gitlab group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ]
+    },
+    {
+      "path": "user list",
+      "summary": "List GitLab users visible to the token",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_cli_path": "glab api users",
+      "flags": [
+        {
+          "name": "search",
+          "type": "string",
+          "summary": "Filter users by search text when the stream runner allows query overrides.",
+          "maps_to": "query.search"
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Filter by username when supported by GitLab.",
+          "maps_to": "query.username"
+        }
+      ],
+      "examples": [
+        "pm gitlab user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    },
+    {
+      "path": "issue list",
+      "summary": "List GitLab issues visible to the token",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issues",
+      "source_cli_path": "glab issue list",
+      "flags": [
+        {
+          "name": "state",
+          "type": "enum",
+          "values": [
+            "opened",
+            "closed",
+            "all"
+          ],
+          "summary": "Filter issues by state when supported by GitLab.",
+          "maps_to": "query.state"
+        },
+        {
+          "name": "assignee-username",
+          "type": "string",
+          "summary": "Filter issues by assignee username when supported by GitLab.",
+          "maps_to": "query.assignee_username"
+        },
+        {
+          "name": "label",
+          "type": "string_array",
+          "summary": "Filter issues by label names when supported by GitLab.",
+          "maps_to": "query.labels"
+        }
+      ],
+      "examples": [
+        "pm gitlab issue list --state opened --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/issues"
+        }
+      ]
+    },
+    {
+      "path": "project view",
+      "summary": "View one GitLab project",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab repo view",
+      "notes": "Direct project lookup needs the operation ledger and bounded direct-read executor before dispatch."
+    },
+    {
+      "path": "group view",
+      "summary": "View one GitLab group",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab api groups/:id",
+      "notes": "Direct group lookup is deferred until the operation ledger accounts for ID/path parameters."
+    },
+    {
+      "path": "user events",
+      "summary": "View events for a GitLab user",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab user events",
+      "notes": "Event reads are bounded direct-read candidates, not current durable streams."
+    },
+    {
+      "path": "issue view",
+      "summary": "View issue details",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab issue view",
+      "notes": "The connector currently exposes issue records as an ETL stream; single issue lookup is deferred to the direct-read lane."
+    },
+    {
+      "path": "issue create",
+      "summary": "Create an issue",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab issue create",
+      "risk": "Would create a visible issue in a GitLab project.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "issue update",
+      "summary": "Update an issue",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab issue update",
+      "risk": "Would mutate issue title, description, labels, assignees, or state.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "issue close",
+      "summary": "Close an issue",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab issue close",
+      "risk": "Would change issue state in a GitLab project.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "issue reopen",
+      "summary": "Reopen an issue",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab issue reopen",
+      "risk": "Would change issue state in a GitLab project.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "issue delete",
+      "summary": "Delete an issue",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab issue delete",
+      "risk": "Deletes project data and may be irreversible.",
+      "approval": "Blocked by default; destructive writes need an explicit policy and typed confirmation before dispatch.",
+      "notes": "Destructive issue deletion is not exposed by this metadata slice."
+    },
+    {
+      "path": "issue note",
+      "summary": "Add a note to an issue",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab issue note",
+      "risk": "Would create a visible note on an issue.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "mr list",
+      "summary": "List merge requests",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "glab mr list",
+      "notes": "Merge request stream coverage belongs to a future stream expansion or operation-ledger lane."
+    },
+    {
+      "path": "mr view",
+      "summary": "View merge request details",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab mr view",
+      "notes": "Single merge-request lookup requires bounded direct-read support."
+    },
+    {
+      "path": "mr create",
+      "summary": "Create a merge request",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab mr create",
+      "risk": "Would create a visible merge request in a project.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "mr update",
+      "summary": "Update a merge request",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab mr update",
+      "risk": "Would mutate merge request metadata or state.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "mr merge",
+      "summary": "Merge a merge request",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab mr merge",
+      "risk": "Merges code into the target branch and can trigger CI/CD or deployments.",
+      "approval": "Blocked by default; destructive or deployment-adjacent writes need explicit policy and typed confirmation.",
+      "notes": "Not exposed until sensitive/admin policy and typed confirmation are implemented."
+    },
+    {
+      "path": "mr approve",
+      "summary": "Approve a merge request",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab mr approve",
+      "risk": "Would record a review approval on a merge request.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "pipeline list",
+      "summary": "List CI/CD pipelines",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "glab ci list",
+      "notes": "Pipelines are ETL candidates but are not current streams."
+    },
+    {
+      "path": "pipeline view",
+      "summary": "View one CI/CD pipeline",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab ci view",
+      "notes": "Pipeline detail reads require direct-read operation metadata."
+    },
+    {
+      "path": "pipeline run",
+      "summary": "Run a CI/CD pipeline",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab ci run",
+      "risk": "Starts CI/CD execution and may deploy or mutate environments.",
+      "approval": "Blocked by default; execution requires plan, preview, approval, and typed confirmation policy.",
+      "notes": "No pipeline-trigger write action is exposed by this metadata slice."
+    },
+    {
+      "path": "pipeline cancel",
+      "summary": "Cancel a CI/CD pipeline",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab ci cancel",
+      "risk": "Would stop CI/CD execution for a project pipeline.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "job view",
+      "summary": "View a CI/CD job",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab job view",
+      "notes": "Job reads are bounded direct-read candidates."
+    },
+    {
+      "path": "job artifact download",
+      "summary": "Download CI/CD job artifacts",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab job artifact",
+      "notes": "Binary downloads require explicit size limits and output destination policy before enabling."
+    },
+    {
+      "path": "schedule list",
+      "summary": "List pipeline schedules",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "glab schedule list",
+      "notes": "Schedule stream coverage is deferred."
+    },
+    {
+      "path": "schedule run",
+      "summary": "Run a pipeline schedule",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab schedule run",
+      "risk": "Starts scheduled CI/CD execution and may deploy or mutate environments.",
+      "approval": "Blocked by default; execution requires plan, preview, approval, and typed confirmation policy.",
+      "notes": "Not exposed by this metadata slice."
+    },
+    {
+      "path": "runner list",
+      "summary": "List GitLab runners",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "glab runner list",
+      "notes": "Runner inventory often requires elevated scope and is deferred to the operation ledger."
+    },
+    {
+      "path": "runner register",
+      "summary": "Register a GitLab runner",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab runner register",
+      "risk": "Changes CI execution infrastructure and may introduce privileged compute.",
+      "approval": "Blocked by default; admin infrastructure writes need explicit policy and typed confirmation.",
+      "notes": "Not exposed by this metadata slice."
+    },
+    {
+      "path": "repo clone",
+      "summary": "Clone a GitLab repository locally",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "glab repo clone",
+      "notes": "Requires a constrained local git executor and destination path policy; not a connector API dispatch."
+    },
+    {
+      "path": "repo archive",
+      "summary": "Download a repository archive",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab repo archive",
+      "notes": "Binary archive downloads require explicit size and output-path policy before enabling."
+    },
+    {
+      "path": "repo create",
+      "summary": "Create a GitLab project",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab repo create",
+      "risk": "Would create a project and allocate namespace resources.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "repo update",
+      "summary": "Update GitLab project settings",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab repo update",
+      "risk": "Would mutate project settings.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "repo delete",
+      "summary": "Delete a GitLab project",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab repo delete",
+      "risk": "Deletes a project and its repository data.",
+      "approval": "Blocked by default; destructive admin writes need explicit policy and typed confirmation.",
+      "notes": "Repository deletion is intentionally not exposed."
+    },
+    {
+      "path": "repo transfer",
+      "summary": "Transfer a GitLab project to another namespace",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab repo transfer",
+      "risk": "Changes project ownership and namespace access boundaries.",
+      "approval": "Blocked by default; admin writes need explicit policy and typed confirmation.",
+      "notes": "Not exposed by this metadata slice."
+    },
+    {
+      "path": "label list",
+      "summary": "List labels",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "glab label list",
+      "notes": "Label stream coverage is deferred."
+    },
+    {
+      "path": "label create",
+      "summary": "Create a label",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab label create",
+      "risk": "Would create a label in a project or group.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "label delete",
+      "summary": "Delete a label",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab label delete",
+      "risk": "Deletes a label and may affect issue or merge request workflows.",
+      "approval": "Blocked by default; destructive writes need explicit policy and typed confirmation.",
+      "notes": "Not exposed by this metadata slice."
+    },
+    {
+      "path": "milestone list",
+      "summary": "List milestones",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "glab milestone list",
+      "notes": "Milestone stream coverage is deferred."
+    },
+    {
+      "path": "release list",
+      "summary": "List releases",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "glab release list",
+      "notes": "Release stream coverage is deferred."
+    },
+    {
+      "path": "release create",
+      "summary": "Create a release",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab release create",
+      "risk": "Would publish a release in a GitLab project.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "release download",
+      "summary": "Download release assets",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab release download",
+      "notes": "Binary asset downloads require explicit size limits and output destination policy before enabling."
+    },
+    {
+      "path": "snippet list",
+      "summary": "List snippets",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "glab snippet list",
+      "notes": "Snippet streams are deferred to the operation ledger."
+    },
+    {
+      "path": "snippet create",
+      "summary": "Create a snippet",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab snippet create",
+      "risk": "Would create project or personal snippet content.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "todo list",
+      "summary": "List to-do items",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab todo list",
+      "notes": "To-do items are user-scoped direct-read candidates."
+    },
+    {
+      "path": "todo done",
+      "summary": "Mark a to-do item done",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_cli_path": "glab todo done",
+      "risk": "Would mutate a user-scoped to-do item.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "notes": "No GitLab write action is declared yet."
+    },
+    {
+      "path": "variable list",
+      "summary": "List CI/CD variables",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab variable list",
+      "risk": "Variable metadata may be sensitive even when values are masked or hidden.",
+      "notes": "Requires sensitive-field redaction policy before enabling."
+    },
+    {
+      "path": "variable set",
+      "summary": "Create or update a CI/CD variable",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab variable set",
+      "risk": "Writes secret or deployment-affecting configuration.",
+      "approval": "Blocked by default; sensitive writes require stdin/env input, preview redaction, approval, and typed confirmation.",
+      "notes": "Never request or store variable values in prompts or metadata."
+    },
+    {
+      "path": "variable delete",
+      "summary": "Delete a CI/CD variable",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab variable delete",
+      "risk": "Deletes secret or deployment-affecting configuration.",
+      "approval": "Blocked by default; destructive sensitive writes require explicit policy and typed confirmation.",
+      "notes": "Not exposed by this metadata slice."
+    },
+    {
+      "path": "deploy-key list",
+      "summary": "List deploy keys",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab deploy-key list",
+      "risk": "Deploy key metadata can reveal access configuration.",
+      "notes": "Requires operation-ledger classification and redaction policy before enabling."
+    },
+    {
+      "path": "deploy-key add",
+      "summary": "Add a deploy key",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab deploy-key add",
+      "risk": "Grants repository access to a key.",
+      "approval": "Blocked by default; access-control writes require explicit policy and typed confirmation.",
+      "notes": "Not exposed by this metadata slice."
+    },
+    {
+      "path": "ssh-key list",
+      "summary": "List account SSH keys",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab ssh-key list",
+      "risk": "Account key metadata can be sensitive.",
+      "notes": "Requires redaction and account-scope policy before enabling."
+    },
+    {
+      "path": "ssh-key add",
+      "summary": "Add an account SSH key",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab ssh-key add",
+      "risk": "Grants account access to a key.",
+      "approval": "Blocked by default; access-control writes require explicit policy and typed confirmation.",
+      "notes": "Not exposed by this metadata slice."
+    },
+    {
+      "path": "gpg-key list",
+      "summary": "List account GPG keys",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab gpg-key list",
+      "notes": "Account-scoped key metadata requires direct-read policy before enabling."
+    },
+    {
+      "path": "token list",
+      "summary": "List personal, project, or group tokens",
+      "intent": "direct_read",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab token list",
+      "risk": "Token metadata is sensitive and may require elevated scope.",
+      "notes": "Blocked until sensitive/admin policy defines risk tiers and redaction."
+    },
+    {
+      "path": "token rotate",
+      "summary": "Rotate a token",
+      "intent": "reverse_etl",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab token rotate",
+      "risk": "Mutates credentials and can break automation or reveal newly issued secret material.",
+      "approval": "Blocked by default; credential lifecycle writes require human-approved policy.",
+      "notes": "Not exposed by this metadata slice."
+    },
+    {
+      "path": "securefile list",
+      "summary": "List secure files",
+      "intent": "direct_read",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab securefile list",
+      "risk": "Secure files may contain signing keys or other sensitive binary content.",
+      "notes": "Blocked until sensitive binary-output policy exists."
+    },
+    {
+      "path": "securefile download",
+      "summary": "Download secure files",
+      "intent": "direct_read",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab securefile download",
+      "risk": "Downloads sensitive binary material to local storage.",
+      "notes": "Blocked until bounded executor, destination policy, and approval policy exist."
+    },
+    {
+      "path": "container-registry list",
+      "summary": "List container registry repositories or tags",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "glab container-registry list",
+      "notes": "Registry inventory is an ETL candidate, deferred to operation ledger classification."
+    },
+    {
+      "path": "packages list",
+      "summary": "List package registry packages",
+      "intent": "etl",
+      "availability": "planned",
+      "source_cli_path": "glab packages list",
+      "notes": "Package registry inventory is an ETL candidate, deferred to operation ledger classification."
+    },
+    {
+      "path": "search code",
+      "summary": "Search code or project resources",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab search code",
+      "notes": "Search is a bounded direct-read candidate and must not become a raw API escape hatch."
+    },
+    {
+      "path": "api",
+      "summary": "Make an arbitrary GitLab API request",
+      "intent": "raw_api",
+      "availability": "unsafe_or_disallowed",
+      "source_cli_path": "glab api",
+      "risk": "Arbitrary API dispatch can bypass connector safety, approval, redaction, and operation-ledger classification.",
+      "approval": "Not exposed. Add typed operations instead of raw API access.",
+      "notes": "Generic raw HTTP reads/writes are intentionally disallowed."
+    },
+    {
+      "path": "auth login",
+      "summary": "Authenticate glab locally",
+      "intent": "auth",
+      "availability": "excluded",
+      "source_cli_path": "glab auth login",
+      "notes": "Polymetrics credentials are managed through pm credential flows and never through prompt text."
+    },
+    {
+      "path": "config set",
+      "summary": "Set local glab configuration",
+      "intent": "config",
+      "availability": "unsupported_local",
+      "source_cli_path": "glab config set",
+      "notes": "Local glab configuration is outside the GitLab connector."
+    },
+    {
+      "path": "alias set",
+      "summary": "Configure a local glab alias",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "glab alias set",
+      "notes": "Local alias configuration is outside connector execution."
+    },
+    {
+      "path": "completion",
+      "summary": "Generate shell completion scripts",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "glab completion",
+      "notes": "Shell completion generation is handled by the pm CLI, not by the GitLab connector surface."
+    },
+    {
+      "path": "changelog generate",
+      "summary": "Generate changelogs from project history",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab changelog generate",
+      "notes": "Changelog generation combines reads and local formatting; it needs an explicit bounded workflow before exposure."
+    },
+    {
+      "path": "cluster list",
+      "summary": "List GitLab Agents for Kubernetes clusters",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab cluster list",
+      "risk": "Cluster metadata can be sensitive and may require elevated scope.",
+      "notes": "Deferred to operation-ledger and sensitive/admin policy lanes."
+    },
+    {
+      "path": "duo prompt",
+      "summary": "Interact with GitLab Duo",
+      "intent": "docs_only",
+      "availability": "excluded",
+      "source_cli_path": "glab duo prompt",
+      "notes": "Interactive AI assistant behavior is outside connector ETL/reverse ETL scope."
+    },
+    {
+      "path": "mcp serve",
+      "summary": "Run the glab MCP server",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "glab mcp serve",
+      "notes": "Local server processes are outside connector command dispatch."
+    },
+    {
+      "path": "opentofu state",
+      "summary": "Work with OpenTofu or Terraform integration state",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_cli_path": "glab opentofu",
+      "risk": "Infrastructure state can contain sensitive data and environment topology.",
+      "notes": "Requires explicit operation classification and redaction policy before enabling."
+    },
+    {
+      "path": "stack create",
+      "summary": "Create or manage stacked diffs",
+      "intent": "local_workflow",
+      "availability": "unsupported_local",
+      "source_cli_path": "glab stack create",
+      "notes": "Stacked-diff workflow requires local git operations and is outside connector API dispatch."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "authentication",
+      "summary": "Use saved Polymetrics credentials or environment/stdin-based credential loading; never pass token values in prompts."
+    },
+    {
+      "name": "writes",
+      "summary": "GitLab writes are planned only and must use reverse ETL plan, preview, approval, execute before dispatch."
+    },
+    {
+      "name": "binary-downloads",
+      "summary": "Artifacts, archives, secure files, and release assets remain disabled until bounded size and output destination policies exist."
+    },
+    {
+      "name": "raw-api",
+      "summary": "Generic raw API commands are intentionally disallowed; use typed streams, direct reads, or write actions instead."
+    }
+  ]
+}
