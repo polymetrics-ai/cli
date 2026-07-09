@@ -1,0 +1,33 @@
+{
+  "phase": "issue-180-freshchat-cli-parity",
+  "parent_issue": 180,
+  "status": "planned",
+  "gsd": {
+    "doctor": "pass",
+    "verify_pi": "pass",
+    "list_json": "pass",
+    "plan_phase_command": "scripts/gsd prompt plan-phase issue-180-freshchat-cli-parity --skip-research",
+    "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-180-freshchat-cli-parity --dry-run",
+    "programming_loop_result": "unavailable_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "parent planning checkpoint only; full parent verification not run",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T19:37:13Z",
+      "cycle": "parent-init",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "Current Pi harness tool list has no subagent tool; mutating workers cannot be spawned or isolated by the runtime.",
+      "issue_numbers": [181, 182, 183, 184, 185, 186, 187]
+    },
+    {
+      "timestamp": "2026-07-09T19:37:13Z",
+      "cycle": "parent-init",
+      "decision": "local_critical_path",
+      "reason": "Coordinator will set up parent PR and execute issue #181 locally/stacked after the parent PR exists.",
+      "issue_numbers": [181]
+    }
+  ],
+  "updated_at": "2026-07-09T19:37:13Z"
+}
