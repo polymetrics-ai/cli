@@ -63,7 +63,7 @@ Checklist:
 
 ```bash
 ./pm help docs
-./pm connectors inspect chatwoot | grep -E 'COMMAND SURFACE|Usage: pm chatwoot|conversation list|message create'
+./pm connectors inspect chatwoot | grep -E 'COMMAND SURFACE|Usage: pm chatwoot|conversation list|message send'
 ./pm docs generate --dir docs/cli --connectors-dir docs/connectors
 ( cd website && pnpm gen:website-data )
 go test ./internal/connectors/bundleregistry -run ChatwootGuide -count=1

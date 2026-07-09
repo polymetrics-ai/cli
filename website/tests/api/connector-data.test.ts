@@ -84,6 +84,47 @@ describe('connector data route', () => {
     });
   });
 
+  it('returns Chatwoot CLI surface metadata for docs rendering', async () => {
+    const { response, json } = await connectorData('chatwoot');
+
+    expect(response.status).toBe(200);
+    expect(json.cliSurface).toMatchObject({
+      usage: 'pm chatwoot <command> <subcommand> [flags]',
+      globalFlags: expect.arrayContaining([
+        expect.objectContaining({ name: 'json', type: 'boolean' }),
+      ]),
+      groups: expect.arrayContaining([
+        expect.objectContaining({
+          title: 'Support Desk Commands',
+          commands: expect.arrayContaining(['conversation', 'contact', 'message']),
+        }),
+        expect.objectContaining({
+          title: 'Blocked Admin And Configuration Commands',
+          commands: expect.arrayContaining(['account', 'automation', 'webhook']),
+        }),
+      ]),
+      commands: expect.arrayContaining([
+        expect.objectContaining({
+          path: 'conversation list',
+          intent: 'etl',
+          availability: 'implemented',
+          stream: 'conversations',
+        }),
+        expect.objectContaining({
+          path: 'message send',
+          intent: 'reverse_etl',
+          availability: 'implemented',
+          write: 'send_message',
+        }),
+        expect.objectContaining({
+          path: 'platform account create',
+          intent: 'reverse_etl',
+          availability: 'unsafe_or_disallowed',
+        }),
+      ]),
+    });
+  });
+
   it('returns a 404 JSON payload for unknown connectors', async () => {
     const { response, json } = await connectorData('missing-connector');
 

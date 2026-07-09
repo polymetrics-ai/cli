@@ -15,13 +15,14 @@ Status: in progress.
 - PR #227 remote checks passed and the branch was squash-merged into the parent as `573b89f5cf8952723213cd55bfa19cb5e3165618`.
 - Requested manual CodeRabbit review on parent PR #223 because #227 skipped review and #223 had new integrated commits while still draft.
 - Started issue #150 locally as the next dependency-unblocked lane and created its GSD/TDD/verification artifacts before production edits.
+- Implemented #150 help/docs/website parity and passed targeted tests, website typecheck/build, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` locally.
 
 ## Next
 
-1. Add #150 red tests for Chatwoot runtime manual and website connector data.
-2. Regenerate checked-in connector docs and website data for Chatwoot command surface parity.
-3. Run targeted and docs/website parity verification.
-4. Open a stacked sub-PR against `feat/148-chatwoot-cli-parity` with `Refs #150` and `Refs #148`.
+1. Commit and push issue #150 implementation.
+2. Open a stacked sub-PR against `feat/148-chatwoot-cli-parity` with `Refs #150` and `Refs #148`.
+3. Route automated review; if CodeRabbit skips the non-default-base sub-PR, rely on parent PR #223 review coverage/fallback for the integrated commit range.
+4. Continue the next dependency-unblocked lane (#152 operation ledger, then #151/#153/#154/#155 as dependencies permit).
 
 ## Safety
 

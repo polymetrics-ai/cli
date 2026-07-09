@@ -3,7 +3,7 @@
   "parentIssue": 148,
   "branch": "feat/150-chatwoot-help-renderer",
   "base": "feat/148-chatwoot-cli-parity",
-  "status": "planned",
+  "status": "implemented_local_verified",
   "decisions": [
     {
       "cycle": "gsd-adapter",
@@ -16,8 +16,8 @@
       "reason": "Issue #150 renders and regenerates docs from cli_surface metadata; runtime command dispatch remains out of scope."
     }
   ],
-  "verificationPassed": false,
-  "verificationStatus": "planned; red tests pending",
-  "reviewStatus": "not_started",
+  "verificationPassed": true,
+  "verificationStatus": "targeted docs/website checks, website typecheck/build, go vet, go test ./..., go build ./cmd/pm, and make verify passed locally",
+  "reviewStatus": "not_started_pr_pending",
   "updated": "2026-07-10"
 }

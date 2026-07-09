@@ -106,3 +106,33 @@ func TestGitHubGuideIncludesCLISurfaceHelp(t *testing.T) {
 		}
 	}
 }
+
+func TestChatwootGuideIncludesCLISurfaceHelp(t *testing.T) {
+	registry := New()
+	connector, ok := registry.Get("chatwoot")
+	if !ok {
+		t.Fatalf("chatwoot connector not found")
+	}
+
+	manual := connectors.RenderConnectorManual(connector)
+	for _, want := range []string{
+		"COMMAND SURFACE",
+		"Usage: pm chatwoot <command> <subcommand> [flags]",
+		"Support Desk Commands",
+		"conversation list - List account conversations",
+		"intent=etl availability=implemented stream=conversations",
+		"message send - Send a conversation message",
+		"intent=reverse_etl availability=implemented write=send_message",
+		"approval: reverse ETL writes require plan, preview, approval, execute",
+		"agent list - List account agents",
+		"account update - Update account settings",
+		"platform account create - Create a platform account",
+		"availability=unsafe_or_disallowed",
+		"--json (boolean): Write machine-readable JSON output.",
+		"--connection (string): Use a saved Chatwoot connector credential and account scope.; maps_to=connection",
+	} {
+		if !strings.Contains(manual, want) {
+			t.Fatalf("Chatwoot manual missing %q:\n%s", want, manual)
+		}
+	}
+}

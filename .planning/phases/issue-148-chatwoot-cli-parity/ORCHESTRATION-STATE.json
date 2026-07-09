@@ -35,7 +35,7 @@
     },
     {
       "number": 150,
-      "status": "in_progress",
+      "status": "implemented_local_verified",
       "dependencies": [
         149
       ],
@@ -47,7 +47,7 @@
         "website",
         ".planning/phases/issue-150-chatwoot-help-renderer"
       ],
-      "decision": "local_critical_path"
+      "decision": "sub_pr_pending"
     },
     {
       "number": 151,
@@ -160,6 +160,14 @@
         150
       ],
       "reason": "Issue #149 is merged to the parent branch. Mutating worker fanout remains unavailable in this Pi API harness, so issue #150 is continuing locally with GSD/TDD artifacts before production edits."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "sub_pr_pending",
+      "issue_numbers": [
+        150
+      ],
+      "reason": "Issue #150 implementation and local verification completed on feat/150-chatwoot-help-renderer; stacked sub-PR remains to be opened for remote checks and review routing."
     }
   ],
   "subissues": [
@@ -193,7 +201,7 @@
       "branch": "feat/150-chatwoot-help-renderer",
       "pr_url": null,
       "worker": "coordinator-local-critical-path",
-      "status": "in_progress",
+      "status": "implemented_local_verified",
       "write_scope": [
         "internal/connectors/bundleregistry/registry_test.go",
         "website/tests/api/connector-data.test.ts",
@@ -203,15 +211,15 @@
         ".planning/phases/issue-150-chatwoot-help-renderer"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "planned; red tests pending",
+      "verification": "targeted docs/website checks, website typecheck/build, go vet, go test ./..., go build ./cmd/pm, and make verify passed locally",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "not_started",
+        "status": "not_started_pr_pending",
         "head_sha": null,
-        "reviewed_range": "not reviewed; no PR yet",
+        "reviewed_range": "not reviewed; sub-PR pending",
         "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
         "fallback_route": "none",
-        "disposition_summary": "Pending implementation and PR.",
+        "disposition_summary": "Pending PR creation and automated review routing.",
         "disposition_url": null
       }
     }
