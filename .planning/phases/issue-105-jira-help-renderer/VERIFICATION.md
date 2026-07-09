@@ -106,6 +106,7 @@ go run ./cmd/pm --json help jira
 go run ./cmd/pm jira
 go run ./cmd/pm version
 rg -n "site scope" docs/connectors/jira/MANUAL.md docs/connectors/jira/SKILL.md
+go test ./internal/cli -run TestJiraConnectorCommandSurfaceHelp -count=1
 gofmt -w cmd internal
 go vet ./...
 go test ./...

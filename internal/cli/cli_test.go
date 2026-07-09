@@ -161,6 +161,7 @@ func TestJiraConnectorCommandSurfaceHelp(t *testing.T) {
 				"Issue Commands",
 				"issue list - List Jira issues [intent=etl availability=implemented stream=issues]",
 				"issue delete - Delete an issue [intent=direct_write availability=unsafe_or_disallowed]",
+				"permission scheme list - List permission schemes [intent=direct_read availability=planned]",
 				"Help topics:",
 			} {
 				if !strings.Contains(out, want) {

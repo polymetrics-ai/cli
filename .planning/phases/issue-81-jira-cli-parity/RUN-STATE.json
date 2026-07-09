@@ -62,6 +62,12 @@
       "cycle": "issue-105-review-fix-2",
       "decision": "copilot_backup",
       "reason": "Copilot backup re-review produced 1 startup-latency comment that was fixed and full gates passed again."
+    },
+    {
+      "timestamp": "2026-07-09T16:40:00Z",
+      "cycle": "issue-105-review-fix-3",
+      "decision": "coderabbit_manual_fallback",
+      "reason": "CodeRabbit completed after the retry window and reported 1 trivial nitpick that was fixed with a test assertion; full gates passed again."
     }
   ],
   "verification": [
@@ -102,5 +108,5 @@
     "generic shell/http/sql write tools",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-09T16:22:06Z"
+  "updatedAt": "2026-07-09T16:40:00Z"
 }

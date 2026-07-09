@@ -110,12 +110,14 @@ Note: two early full-suite attempts hit `internal/connectors/certify` timeout/ti
 
 ## Review Fix Evidence
 
-Copilot backup review was requested after CodeRabbit reported a rate-limit window on the #105 head. Four actionable comments were dispositioned and fixed:
+Copilot backup review was requested after CodeRabbit reported a rate-limit window on the #105 head. Four actionable Copilot comments were dispositioned and fixed:
 
 - Threaded `jsonOut` through `runHelp`, so `pm --json help jira` returns the same `CommandManual` JSON envelope as `pm --json jira --help`.
 - Added CLI test coverage for `pm --json help jira`.
 - Reformatted command-surface flag metadata so generated docs render `Use a saved Jira connector credential and site scope. (maps_to=connection)` instead of `site scope.: maps_to=connection`.
 - Removed the pre-switch `isConnectorCommandSurface` registry load; bare connector commands now fall through to `runMaybeConnectorCommand`, which renders connector help without adding registry startup cost to built-in bare commands.
+
+A later CodeRabbit manual review completed on head `1fbff1ba` and reported one trivial nitpick; it was accepted by adding explicit test coverage for Jira's three-word `permission scheme list` command rendering.
 
 Review-fix verification passed:
 
@@ -129,6 +131,7 @@ go run ./cmd/pm --json help jira
 go run ./cmd/pm jira
 go run ./cmd/pm version
 rg -n "site scope" docs/connectors/jira/MANUAL.md docs/connectors/jira/SKILL.md
+go test ./internal/cli -run TestJiraConnectorCommandSurfaceHelp -count=1
 ```
 
 Full review-fix verification passed:

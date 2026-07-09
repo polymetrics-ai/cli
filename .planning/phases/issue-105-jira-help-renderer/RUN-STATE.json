@@ -18,7 +18,8 @@
     { "timestamp": "2026-07-09T15:05:00Z", "cycle": "green", "decision": "local_critical_path", "reason": "Runtime Jira help, connector docs, and website data route are green under focused tests." },
     { "timestamp": "2026-07-09T15:25:33Z", "cycle": "verify", "decision": "local_critical_path", "reason": "Full local gates passed for #105." },
     { "timestamp": "2026-07-09T15:54:21Z", "cycle": "review-fix", "decision": "copilot_backup", "reason": "CodeRabbit reported a 51 minute rate-limit window after the #105 head; Copilot backup review produced 3 actionable comments that were fixed and re-verified." },
-    { "timestamp": "2026-07-09T16:22:06Z", "cycle": "review-fix", "decision": "copilot_backup", "reason": "Copilot backup re-review of the first fix commit produced 1 startup-latency comment; removed the early registry load and re-ran full gates." }
+    { "timestamp": "2026-07-09T16:22:06Z", "cycle": "review-fix", "decision": "copilot_backup", "reason": "Copilot backup re-review of the first fix commit produced 1 startup-latency comment; removed the early registry load and re-ran full gates." },
+    { "timestamp": "2026-07-09T16:40:00Z", "cycle": "review-fix", "decision": "coderabbit_manual_fallback", "reason": "CodeRabbit manual review completed after the retry window and reported one trivial nitpick; added explicit permission-scheme command rendering test and re-ran full gates." }
   ],
   "redTests": [
     { "command": "go test ./internal/cli -run 'TestJiraConnectorCommandSurfaceHelp|TestBareJiraConnectorCommandShowsHelp' -count=1", "status": "failed_as_expected", "evidence": "pm jira --help/help returned help topic not found; bare pm jira returned missing connector command path" },
@@ -46,14 +47,15 @@
   ],
   "automatedReview": {
     "primaryRoute": "coderabbit_manual_fallback",
-    "primaryStatus": "rate_limited_conflicting_status",
+    "primaryStatus": "completed_after_retry_window",
     "affectedHeadSha": "e927ab5cbc3be86c112f0dfd3f425557dc54bd23",
     "rateLimitWindow": "51 minutes reported at 2026-07-09T15:32:05Z",
     "fallbackRoute": "copilot_backup",
     "fallbackStatus": "commented_review_fixed",
+    "coderabbitReviewId": 4664908438,
     "copilotReviewIds": [4664513494, 4664733824],
     "copilotComments": [3552903423, 3552903472, 3552903512, 3553088984],
-    "dispositionSummary": "Fixed JSON help-topic output, command-surface flag punctuation, and early connector-registry startup cost for bare built-in commands; re-ran full local gates. Copilot review is backup input and does not satisfy required human approval."
+    "dispositionSummary": "Fixed JSON help-topic output, command-surface flag punctuation, early connector-registry startup cost for bare built-in commands, and the CodeRabbit permission-scheme test nitpick; re-ran full local gates. Copilot review is backup input and does not satisfy required human approval."
   },
   "fullVerification": [
     { "command": "gofmt -w cmd internal", "status": "passed" },
@@ -73,5 +75,5 @@
     "reverse ETL execution",
     "parent PR merge to main"
   ],
-  "updatedAt": "2026-07-09T16:22:06Z"
+  "updatedAt": "2026-07-09T16:40:00Z"
 }

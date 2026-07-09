@@ -132,7 +132,7 @@
       "write_scope": ["help/docs/rendering", "internal/connectors/defs/jira"],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-81-jira-cli-parity",
       "verification": "passed: runtime Jira help including JSON help-topic fallback, connector docs, website data/tests/build, gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, connectorgen validate 547 connectors with 0 findings",
-      "automated_review": { "primary_route": "coderabbit_manual_fallback", "status": "rate_limited_then_draft_skipped", "head_sha": "e927ab5cbc3be86c112f0dfd3f425557dc54bd23", "reviewed_range": "", "coverage_route": "copilot_backup", "fallback_route": "copilot_backup", "fallback_status": "commented_review_fixed", "disposition_summary": "CodeRabbit reported a 51 minute review limit after #105 and later skipped the draft review-fix head; Copilot backup review produced 4 comments across two passes, all fixed and re-verified. Copilot review is backup input and not approval.", "disposition_url": "https://github.com/polymetrics-ai/cli/pull/129#pullrequestreview-4664733824" }
+      "automated_review": { "primary_route": "coderabbit_manual_fallback", "status": "completed_after_retry_window", "head_sha": "1fbff1ba50c748387a5f74bd0e7cfb3388bce6cc", "reviewed_range": "ae01c3f962fe089fc26e274fba1f9bbad540f7dd..1fbff1ba50c748387a5f74bd0e7cfb3388bce6cc", "coverage_route": "parent_pr", "fallback_route": "copilot_backup", "fallback_status": "commented_review_fixed", "disposition_summary": "CodeRabbit reported a 51 minute review limit after #105, Copilot backup produced 4 comments across two passes, and CodeRabbit later completed manual review after the retry window with one trivial nitpick. All comments were fixed and re-verified; Copilot review is backup input and not approval.", "disposition_url": "https://github.com/polymetrics-ai/cli/pull/129#pullrequestreview-4664908438" }
     },
     {
       "number": 106,
@@ -206,5 +206,5 @@
     "generic shell/http/sql write tools",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updated_at": "2026-07-09T16:22:06Z"
+  "updated_at": "2026-07-09T16:40:00Z"
 }
