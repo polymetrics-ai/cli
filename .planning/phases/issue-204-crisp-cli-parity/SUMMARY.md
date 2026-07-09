@@ -1,6 +1,6 @@
 # Summary — Issue #204 Crisp CLI parity parent
 
-State: planned.
+State: parent PR open (draft).
 
 Completed:
 
@@ -10,15 +10,17 @@ Completed:
 - Recorded manual programming-loop fallback because `scripts/gsd prompt programming-loop ...` is unavailable in the current command registry.
 - Created parent plan, TDD ledger, verification checklist, and run-state before production edits.
 
+Parent PR: https://github.com/polymetrics-ai/cli/pull/228 (draft, base `main`).
+
 Current blocker:
 
-- Parent PR does not exist yet. Next action is commit/push parent planning seed and open draft parent PR to `main`.
+- No Pi subagent tool is exposed in this harness, so mutating workers cannot be spawned. #205 proceeds as local critical path on a stacked branch.
 
 Next:
 
-1. Commit parent planning checkpoint on `feat/204-crisp-cli-parity`.
-2. Push parent branch and open draft parent PR with `Refs #204`.
-3. Start #205 on a stacked branch or local critical path after parent PR exists.
+1. Create/switch to `feat/205-crisp-cli-surface-metadata` from parent branch.
+2. Capture #205 red validation for missing Crisp bundle.
+3. Add non-executable Crisp metadata/API/CLI surface scaffold and run targeted validation.
 
 Safety:
 

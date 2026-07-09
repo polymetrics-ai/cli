@@ -7,25 +7,25 @@
   },
   "parent_branch": "feat/204-crisp-cli-parity",
   "parent_pr": {
-    "url": "",
+    "url": "https://github.com/polymetrics-ai/cli/pull/228",
     "base": "main",
     "head": "feat/204-crisp-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "open"
   },
   "default_branch": "main",
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi-harness",
-    "status": "blocked"
+    "status": "running"
   },
   "ready_queue": [
     {
       "number": 205,
       "status": "worker_ready",
-      "dependencies": ["parent_pr_open"],
+      "dependencies": [],
       "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold plus issue-205 planning",
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "local_critical_path"
     },
     {
       "number": 208,
@@ -90,7 +90,7 @@
       "url": "https://github.com/polymetrics-ai/cli/issues/205",
       "branch": "feat/205-crisp-cli-surface-metadata",
       "pr_url": "",
-      "worker": "local-critical-path-pending",
+      "worker": "local-critical-path",
       "status": "worker_ready",
       "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold plus issue-205 planning",
       "worker_directory": "current checkout until stacked branch/worktree is created",
@@ -102,7 +102,7 @@
         "reviewed_range": "",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "pending parent PR",
+        "disposition_summary": "parent PR opened as draft; subissue review pending",
         "disposition_url": ""
       }
     }
@@ -116,5 +116,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T00:00:00Z"
+  "updated_at": "2026-07-10T00:10:00Z"
 }

@@ -3,7 +3,7 @@
   "parentIssue": 204,
   "connector": "crisp",
   "branch": "feat/204-crisp-cli-parity",
-  "status": "planned",
+  "status": "parent_pr_open",
   "gsd": {
     "doctorPassed": true,
     "verifyPiPassed": true,
@@ -21,10 +21,15 @@
       "reason": "Parent PR is missing; create parent planning seed before subissue execution. Current Pi tool surface in this harness has no subagent tool, so mutating workers cannot be spawned."
     },
     {
+      "cycle": "parent-pr-open",
+      "decision": "local_critical_path",
+      "reason": "Committed and pushed parent planning seed; opened draft parent PR https://github.com/polymetrics-ai/cli/pull/228."
+    },
+    {
       "cycle": "worker-ready-queue",
-      "decision": "not_spawned_runtime_capability_missing",
-      "reason": "Subissues #205-#211 exist, but this harness exposes read/bash/edit/write only and no Pi subagent tool for isolated mutating workers. #205 will run locally after parent PR setup."
+      "decision": "local_critical_path",
+      "reason": "Subissues #205-#211 exist, but this harness exposes read/bash/edit/write only and no Pi subagent tool for isolated mutating workers. #205 will run locally on a stacked branch."
     }
   ],
-  "updatedAt": "2026-07-10T00:00:00Z"
+  "updatedAt": "2026-07-10T00:10:00Z"
 }
