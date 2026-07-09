@@ -11,13 +11,19 @@
     "manualFallback": true
   },
   "verificationPassed": false,
-  "verificationSummary": "Planning complete; red test pending.",
+  "verificationSummary": "Planning complete; draft parent PR #129 open; red test pending.",
   "orchestrationDecisions": [
     {
       "timestamp": "2026-07-09T12:49:58Z",
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "No Pi subagent tool is available and #104 is the first parent-unblocking metadata lane."
+    },
+    {
+      "timestamp": "2026-07-09T12:58:00Z",
+      "cycle": "parent-pr",
+      "decision": "local_critical_path",
+      "reason": "Draft parent PR #129 is open; proceeding to red test locally."
     }
   ],
   "redTests": [
@@ -35,5 +41,5 @@
     "reverse ETL execution",
     "parent PR merge to main"
   ],
-  "updatedAt": "2026-07-09T12:49:58Z"
+  "updatedAt": "2026-07-09T12:58:00Z"
 }

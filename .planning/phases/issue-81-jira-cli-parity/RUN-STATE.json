@@ -2,7 +2,7 @@
   "phase": "issue-81-jira-cli-parity",
   "parentIssue": 81,
   "branch": "feat/81-jira-cli-parity",
-  "status": "planned",
+  "status": "parent_pr_open",
   "gsd": {
     "doctor": "passed",
     "verifyPi": "passed",
@@ -13,7 +13,7 @@
     "manualFallback": true
   },
   "verificationPassed": false,
-  "verificationSummary": "Preflight and metadata-only Jira inspection passed; full parent verification not yet run.",
+  "verificationSummary": "Preflight and metadata-only Jira inspection passed; draft parent PR #129 opened from seed commit 982fa4c1; full parent verification not yet run.",
   "orchestrationDecisions": [
     {
       "timestamp": "2026-07-09T12:49:58Z",
@@ -26,6 +26,12 @@
       "cycle": "worker-spawn",
       "decision": "not_spawned_runtime_capability_missing",
       "reason": "Current Pi harness exposes no subagent tool; mutating worker isolation cannot be launched from this session. Issue #104 will begin locally as the critical path with separate phase evidence."
+    },
+    {
+      "timestamp": "2026-07-09T12:58:00Z",
+      "cycle": "parent-pr",
+      "decision": "local_critical_path",
+      "reason": "Seed commit 982fa4c1 was pushed and draft parent PR #129 was opened, unblocking local #104 TDD work."
     }
   ],
   "humanGates": [
@@ -39,5 +45,5 @@
     "generic shell/http/sql write tools",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-09T12:49:58Z"
+  "updatedAt": "2026-07-09T12:58:00Z"
 }

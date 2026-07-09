@@ -3,7 +3,7 @@
 Parent issue: #81
 Parent branch: `feat/81-jira-cli-parity`
 Default branch: `main`
-Parent PR: not yet open at planning start; this plan is the deliberate parent seed artifact for the draft parent PR.
+Parent PR: draft PR #129 (`https://github.com/polymetrics-ai/cli/pull/129`). The plan commit served as the deliberate parent seed artifact.
 
 ## GSD / Runtime Evidence
 
@@ -40,8 +40,8 @@ Parent PR: not yet open at planning start; this plan is the deliberate parent se
 ## Parent Workflow
 
 1. Seed parent orchestration artifacts under `.planning/phases/issue-81-jira-cli-parity/`.
-2. Commit and push the parent seed slice to `feat/81-jira-cli-parity`.
-3. Open a draft parent PR from `feat/81-jira-cli-parity` to `main` using `Refs #81` until all sub-issues are integrated.
+2. Commit and push the parent seed slice to `feat/81-jira-cli-parity`. ✅ `982fa4c1`
+3. Open a draft parent PR from `feat/81-jira-cli-parity` to `main` using `Refs #81` until all sub-issues are integrated. ✅ #129
 4. Execute sub-issues with separate evidence under `.planning/phases/issue-<N>-.../`.
 5. Prefer stacked sub-issue branches/PRs when the slice is large. In this harness, begin #104 locally as `local_critical_path`; split before push if the diff grows beyond the CLI-surface lane.
 6. Keep parent PR draft while sub-issues land. The final parent PR uses `Closes #81` only when ready for human approval.

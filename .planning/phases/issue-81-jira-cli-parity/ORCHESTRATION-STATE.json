@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/81-jira-cli-parity",
   "parent_pr": {
-    "url": "",
+    "url": "https://github.com/polymetrics-ai/cli/pull/129",
     "base": "main",
     "head": "feat/81-jira-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -100,7 +100,7 @@
         "reviewed_range": "",
         "coverage_route": "blocked",
         "fallback_route": "none",
-        "disposition_summary": "Parent PR missing at planning start; review coverage pending after PR creation and green slice push.",
+        "disposition_summary": "Draft parent PR #129 is open; review coverage pending after implementation commits.",
         "disposition_url": ""
       }
     },
@@ -188,5 +188,5 @@
     "generic shell/http/sql write tools",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updated_at": "2026-07-09T12:49:58Z"
+  "updated_at": "2026-07-09T12:58:00Z"
 }
