@@ -88,6 +88,6 @@ Result: blocked locally. `pnpm run typecheck` fails with `tsc: command not found
 
 ## Review Route
 
-- Parent PR route: CodeRabbit automatic review on non-draft parent PR targeting `main`, or pending coverage while draft.
+- Parent PR route: PR #127 was marked ready for review after local verification; wait for automatic CodeRabbit review on the non-draft PR targeting `main`.
 - Stacked sub-PRs: use parent-PR fallback if CodeRabbit skips non-default base PRs.
 - Do not post manual CodeRabbit review commands unless automatic review is skipped, disabled, paused, rate-limited past retry window, or otherwise blocked per `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`.
