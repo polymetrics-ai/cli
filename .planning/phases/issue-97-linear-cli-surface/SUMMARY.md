@@ -1,6 +1,6 @@
 # Summary — Issue #97 Linear CLI surface metadata
 
-Status: verified green slice; PR/review not opened in this session.
+Status: verified green slice integrated directly on parent branch; draft parent PR #131 opened.
 
 Delivered:
 

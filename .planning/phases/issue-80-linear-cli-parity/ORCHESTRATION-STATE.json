@@ -7,11 +7,11 @@
   },
   "parent_branch": "feat/80-linear-cli-parity",
   "parent_pr": {
-    "url": "",
+    "url": "https://github.com/polymetrics-ai/cli/pull/131",
     "base": "main",
     "head": "feat/80-linear-cli-parity",
     "draft": true,
-    "state": "missing"
+    "state": "open"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -83,7 +83,7 @@
       "number": 97,
       "url": "https://github.com/polymetrics-ai/cli/issues/97",
       "branch": "feat/80-linear-cli-parity",
-      "pr_url": "",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/131",
       "worker": "local-orchestrator",
       "status": "worker_in_progress",
       "write_scope": "Linear cli_surface metadata and focused bundle tests",
@@ -94,9 +94,9 @@
         "status": "pending",
         "head_sha": "",
         "reviewed_range": "",
-        "coverage_route": "blocked",
+        "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "pending PR",
+        "disposition_summary": "pending automated review; parent PR is draft",
         "disposition_url": ""
       }
     }

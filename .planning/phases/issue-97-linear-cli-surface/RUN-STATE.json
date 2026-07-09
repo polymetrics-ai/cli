@@ -3,7 +3,7 @@
   "parentIssue": 80,
   "issue": 97,
   "branch": "feat/80-linear-cli-parity",
-  "status": "in_progress",
+  "status": "verified_green_slice_parent_pr_open",
   "gsd": {
     "programmingLoopPrompt": "scripts/gsd prompt programming-loop init --phase issue-97-linear-cli-surface --dry-run",
     "programmingLoopAvailable": false,

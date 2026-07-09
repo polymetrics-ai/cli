@@ -52,8 +52,8 @@ Deliver a parent PR for Linear CLI parity with issue-scoped evidence, tests, val
 
 - Active branch: `feat/80-linear-cli-parity` (user-specified parent integration branch).
 - Issue #80 body names `feat/linear-cli-parity`; this plan follows the user-provided branch and records the mismatch.
-- Parent PR from `feat/80-linear-cli-parity` to `main`: not found at planning time.
-- Sub-issue work may proceed locally as critical-path work in this checkout, but stacked PR review coverage remains pending until the parent PR exists.
+- Parent PR from `feat/80-linear-cli-parity` to `main`: draft PR #131 (`https://github.com/polymetrics-ai/cli/pull/131`) created after the first verified #97 slice.
+- Sub-issue work proceeded locally as critical-path work in this checkout because the Pi subagent tool is unavailable; automated review coverage remains pending while the parent PR is draft.
 
 ## Ready queue and dependency order
 

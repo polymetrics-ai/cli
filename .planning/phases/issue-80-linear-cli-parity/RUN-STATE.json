@@ -2,7 +2,7 @@
   "phase": "issue-80-linear-cli-parity",
   "parentIssue": 80,
   "branch": "feat/80-linear-cli-parity",
-  "status": "in_progress",
+  "status": "in_progress_parent_pr_open",
   "gsd": {
     "doctor": "passed",
     "verifyPi": "passed",
@@ -24,6 +24,11 @@
       "cycle": "issue-97-start",
       "decision": "local_critical_path",
       "reason": "Issue #97 is the first dependency for Linear command metadata and can be implemented safely in the active parent checkout with issue-scoped phase artifacts."
+    },
+    {
+      "cycle": "parent-pr",
+      "decision": "local_critical_path",
+      "reason": "Pushed parent branch and opened draft parent PR https://github.com/polymetrics-ai/cli/pull/131 after the first verified green slice."
     }
   ],
   "subissues": {
