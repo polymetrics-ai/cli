@@ -40,10 +40,10 @@
     },
     {
       "number": 106,
-      "status": "worker_ready",
+      "status": "in_progress",
       "dependencies": [104, 105],
       "write_scope": ["connector command runner", "internal/connectors/defs/jira"],
-      "decision": "ready_after_105"
+      "decision": "local_critical_path"
     },
     {
       "number": 107,
@@ -98,6 +98,12 @@
       "decision": "verify_complete",
       "issue_numbers": [105],
       "reason": "Issue #105 full local gates passed; #106 is now ready by dependency status, but not spawned because this harness lacks subagent tooling."
+    },
+    {
+      "timestamp": "2026-07-09T16:50:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [106],
+      "reason": "No Pi subagent tool is available; #106 stream runner starts locally with manual GSD/TDD fallback."
     }
   ],
   "subissues": [
@@ -140,11 +146,11 @@
       "branch": "feat/jira-stream-runner",
       "pr_url": "",
       "worker": "issue-first-implementation-agent",
-      "status": "planned",
+      "status": "in_progress",
       "write_scope": ["command runner", "internal/connectors/defs/jira"],
-      "worker_directory": "",
-      "verification": "ready after #104/#105 verification; not started",
-      "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "", "reviewed_range": "", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "blocked on #104/#105", "disposition_url": "" }
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-81-jira-cli-parity",
+      "verification": "planned locally after #104/#105 verification; red tests pending",
+      "automated_review": { "primary_route": "blocked", "status": "pending", "head_sha": "", "reviewed_range": "", "coverage_route": "blocked", "fallback_route": "none", "disposition_summary": "pending #106 implementation", "disposition_url": "" }
     },
     {
       "number": 107,
@@ -206,5 +212,5 @@
     "generic shell/http/sql write tools",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updated_at": "2026-07-09T16:40:00Z"
+  "updated_at": "2026-07-09T16:50:00Z"
 }

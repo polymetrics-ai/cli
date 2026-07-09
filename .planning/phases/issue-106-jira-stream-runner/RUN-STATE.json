@@ -1,0 +1,34 @@
+{
+  "phase": "issue-106-jira-stream-runner",
+  "parentIssue": 81,
+  "issue": 106,
+  "branch": "feat/81-jira-cli-parity",
+  "status": "planned",
+  "gsd": {
+    "planCommand": "scripts/gsd prompt plan-phase issue-106-jira-stream-runner --skip-research",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase issue-106-jira-stream-runner --dry-run",
+    "programmingLoopStatus": "unavailable_unknown_command",
+    "manualFallback": true
+  },
+  "verificationPassed": false,
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-09T16:50:00Z",
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Issues #104 and #105 are verified; current Pi harness exposes no subagent tool, so #106 starts locally."
+    }
+  ],
+  "redTests": [],
+  "greenTests": [],
+  "humanGates": [
+    "new dependencies",
+    "auth scope changes",
+    "secrets or credentialed connector checks",
+    "destructive external actions",
+    "generic write tools",
+    "reverse ETL execution",
+    "parent PR merge to main"
+  ],
+  "updatedAt": "2026-07-09T16:50:00Z"
+}
