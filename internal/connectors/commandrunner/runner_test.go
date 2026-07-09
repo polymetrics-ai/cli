@@ -379,6 +379,20 @@ func TestBuildWriteCommandPreviewDryRunsAndRedactsSecretLikeFields(t *testing.T)
 	}
 }
 
+func TestRedactRecordRedactsDownloadAndContentLikeFields(t *testing.T) {
+	redacted := redactRecord(connectors.Record{
+		"downloadMediaUrl": "https://media.example.test/call.mp4",
+		"content":          "sensitive body",
+		"title":            "visible",
+	})
+	if redacted["downloadMediaUrl"] != "***" || redacted["content"] != "***" {
+		t.Fatalf("redacted record = %+v, want downloadMediaUrl and content redacted", redacted)
+	}
+	if redacted["title"] != "visible" {
+		t.Fatalf("redacted title = %v, want visible", redacted["title"])
+	}
+}
+
 func TestRunReverseETLCommandRemainsNonExecutableInGenericRunner(t *testing.T) {
 	connector := reverseETLFakeConnector()
 

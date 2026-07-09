@@ -62,3 +62,24 @@ Applies to later CLI-visible lanes (#141-#143, #145-#147). #144 is connector met
 - No reverse ETL execution.
 - No destructive/admin external actions.
 - No new dependencies.
+
+
+## 2026-07-10 integrated lane verification
+
+- [x] `go test ./internal/connectors/engine -run DirectRead -count=1`
+- [x] `go test ./internal/connectors/commandrunner -count=1`
+- [x] `go test ./cmd/connectorgen -run Gong -count=1`
+- [x] `go test ./cmd/connectorgen -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs`
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
+- [x] `go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs`
+
+## 2026-07-10 broader gates
+
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `go test -timeout 20m ./...`
+- [x] `make verify`
+- [x] `./pm help connectors`
+- [x] `./pm connectors inspect gong`
+- [x] `./pm connectors inspect gong --json`

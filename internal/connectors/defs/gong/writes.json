@@ -1,0 +1,1634 @@
+{
+  "actions": [
+    {
+      "name": "add_call",
+      "kind": "create",
+      "method": "POST",
+      "path": "/calls",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "clientUniqueId": {
+            "type": "string",
+            "description": "A call's unique identifier in the PBX or the recording system. Gong uses this identifier to prevent repeated attempts to upload the same recording."
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the call. This title is available in the Gong system for indexing and search."
+          },
+          "purpose": {
+            "type": "string",
+            "description": "The purpose of the call. This optional field is a free text of up to 255 characters."
+          },
+          "scheduledStart": {
+            "type": "string",
+            "description": "The date and time the call was scheduled to begin in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC);"
+          },
+          "scheduledEnd": {
+            "type": "string",
+            "description": "The date and time the call was scheduled to end in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC);"
+          },
+          "actualStart": {
+            "type": "string",
+            "description": "The actual date and time when the call started in the ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC);"
+          },
+          "duration": {
+            "type": "number",
+            "description": "The actual call duration in seconds."
+          },
+          "parties": {
+            "type": "array",
+            "description": "A list of the call's participants. A party must be provided for the primaryUser.",
+            "items": {
+              "type": "object",
+              "description": "A list of the call's participants. A party must be provided for the primaryUser.",
+              "additionalProperties": true
+            }
+          },
+          "direction": {
+            "type": "string",
+            "description": "Whether the call is inbound (someone called the company), outbound (a rep dialed someone outside the company), or a conference call.",
+            "enum": [
+              "Inbound",
+              "Outbound",
+              "Conference",
+              "Unknown"
+            ]
+          },
+          "disposition": {
+            "type": "string",
+            "description": "The disposition of the call. The disposition is free text of up to 255 characters."
+          },
+          "context": {
+            "type": "array",
+            "description": "A list of references to external systems such as CRM, Telephony System, Case Management, etc.",
+            "items": {
+              "type": "object",
+              "description": "Links to external systems such as CRM, Telephony System, Case Management etc. Currently only Salesforce and Generic are supported.",
+              "additionalProperties": true
+            }
+          },
+          "customData": {
+            "type": "string",
+            "description": "Optional metadata associated with the call (represented as text). Gong stores this metadata and it can be used for troubleshooting."
+          },
+          "speakersTimeline": {
+            "type": "object",
+            "description": "The audio recording speech segments (who spoke when). Note that speakersTimeline and mediaChannelId are mutually exclusive, when providing speakersTimeline - mediaChannelId will not be used.",
+            "additionalProperties": true
+          },
+          "meetingUrl": {
+            "type": "string",
+            "description": "The URL of the conference call by which users join the meeting"
+          },
+          "callProviderCode": {
+            "type": "string",
+            "description": "The code identifies the provider conferencing or telephony system. For example: zoom, clearslide, gotomeeting, ringcentral, outreach, insidesales, etc. These values are predefined by Gong, please contact help@gong.io to find the proper valu"
+          },
+          "downloadMediaUrl": {
+            "type": "string",
+            "description": "The URL from which Gong can download the media file. The URL must be unique, the audio or video file must be a maximum of 1.5GB. The content-type must either start with 'audio' or 'video,' or should be 'application/octet-stream' or 'binary/"
+          },
+          "workspaceId": {
+            "type": "string",
+            "description": "Optional workspace identifier. If specified, the call will be placed into this workspace, otherwise, the default algorithm for workspace placement will be applied."
+          },
+          "languageCode": {
+            "type": "string",
+            "description": "The language code the call should be transcribed to. This field is optional as Gong automatically detects the language spoken in the call and transcribes it accordingly. Set this field only if you are sure of the language the call is in. Va"
+          },
+          "flowContext": {
+            "type": "object",
+            "description": "The Id for the task the call should be associated with",
+            "additionalProperties": true
+          },
+          "primaryUser": {
+            "type": "string",
+            "description": "The Gong internal user ID of the team member who hosted the call."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "actualStart",
+          "clientUniqueId",
+          "direction",
+          "parties",
+          "primaryUser"
+        ]
+      },
+      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval"
+    },
+    {
+      "name": "create_permission_profile",
+      "kind": "create",
+      "method": "POST",
+      "path": "/permission-profile?workspaceId={{ record.workspaceId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "workspaceId": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique numeric identifier of the permission profile (up to 20 digits)."
+          },
+          "name": {
+            "type": "string",
+            "description": "Permission profile name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Permission profile description."
+          },
+          "callsAccess": {
+            "type": "object",
+            "description": "Calls access permission.",
+            "additionalProperties": true
+          },
+          "libraryFolderAccess": {
+            "type": "object",
+            "description": "Library folder access permission.",
+            "additionalProperties": true
+          },
+          "dealsAccess": {
+            "type": "object",
+            "description": "Deals access permission.",
+            "additionalProperties": true
+          },
+          "forecastPermissions": {
+            "type": "object",
+            "description": "All forecast permissions.",
+            "additionalProperties": true
+          },
+          "coachingAccess": {
+            "type": "object",
+            "description": "Coaching access permission.",
+            "additionalProperties": true
+          },
+          "insightsAccess": {
+            "type": "object",
+            "description": "Insights access permission.",
+            "additionalProperties": true
+          },
+          "usageAccess": {
+            "type": "object",
+            "description": "Usage access permission.",
+            "additionalProperties": true
+          },
+          "emailsAccess": {
+            "type": "object",
+            "description": "Emails access permission.",
+            "additionalProperties": true
+          },
+          "scoreCalls": {
+            "type": "boolean",
+            "description": "User can score calls."
+          },
+          "overrideScore": {
+            "type": "boolean",
+            "description": "User can override someone else score."
+          },
+          "downloadCallMedia": {
+            "type": "boolean",
+            "description": "User can download call media."
+          },
+          "shareCallsWithCustomers": {
+            "type": "boolean",
+            "description": "User can share calls with customers."
+          },
+          "manuallyScheduleAndUploadCalls": {
+            "type": "boolean",
+            "description": "User can manually schedule and upload calls."
+          },
+          "privateCalls": {
+            "type": "boolean",
+            "description": "User can set their own calls as private."
+          },
+          "deleteCalls": {
+            "type": "boolean",
+            "description": "User can delete calls."
+          },
+          "trimCalls": {
+            "type": "boolean",
+            "description": "User can trim calls."
+          },
+          "listenInCalls": {
+            "type": "boolean",
+            "description": "User can listen in calls."
+          },
+          "deleteEmails": {
+            "type": "boolean",
+            "description": "User can delete emails."
+          },
+          "callsAndSearch": {
+            "type": "boolean",
+            "description": "User can view and search calls."
+          },
+          "library": {
+            "type": "boolean",
+            "description": "User can view library pages."
+          },
+          "deals": {
+            "type": "boolean",
+            "description": "User can view deals pages."
+          },
+          "createEditAndDeleteDealsBoards": {
+            "type": "boolean",
+            "description": "User can create/edit/delete deals boards."
+          },
+          "dealsInlineEditing": {
+            "type": "boolean",
+            "description": "User can perform inline editing of deals."
+          },
+          "account": {
+            "type": "boolean",
+            "description": "User can view account pages."
+          },
+          "coaching": {
+            "type": "boolean",
+            "description": "User can view coaching pages."
+          },
+          "usage": {
+            "type": "boolean",
+            "description": "User can view usage pages."
+          },
+          "teamStats": {
+            "type": "boolean",
+            "description": "User can view team stats page."
+          },
+          "initiatives": {
+            "type": "boolean",
+            "description": "User can view initiatives page."
+          },
+          "market": {
+            "type": "boolean",
+            "description": "User can view market page."
+          },
+          "activity": {
+            "type": "boolean",
+            "description": "User can view activity pages."
+          },
+          "forecast": {
+            "type": "boolean",
+            "description": "User can view forecast pages."
+          },
+          "forecastManage": {
+            "type": "boolean",
+            "description": "User can manage forecast boards and upload targets."
+          },
+          "engageManageCompanyTemplates": {
+            "type": "boolean",
+            "description": "User can manage company email templates."
+          },
+          "engageManageCompanySequences": {
+            "type": "boolean",
+            "description": "User can manage company sequences."
+          },
+          "engageCreateAndManageRulesets": {
+            "type": "boolean",
+            "description": "User can create and manage rulesets."
+          },
+          "engageSnoozeFlowToDosForOthers": {
+            "type": "boolean",
+            "description": "User can snooze flow in to dos for others"
+          },
+          "engageAllowCrmFieldsViewChange": {
+            "type": "boolean",
+            "description": "User can change crm fields view"
+          },
+          "viewEngageAnalyticsActivity": {
+            "type": "boolean",
+            "description": "User can view engage analytics activity page."
+          },
+          "viewEngageAnalyticsPerformance": {
+            "type": "boolean",
+            "description": "User can view engage analytics performance page."
+          },
+          "viewEngageAnalyticsFlows": {
+            "type": "boolean",
+            "description": "User can view engage analytics flows page."
+          },
+          "manageGeneralBusinessSettings": {
+            "type": "boolean",
+            "description": "User can manage general business settings."
+          },
+          "manageScorecards": {
+            "type": "boolean",
+            "description": "User can manage scorecards."
+          },
+          "exportCallsAndCoachingDataToCSV": {
+            "type": "boolean",
+            "description": "User can export calls and coaching metrics data to CSV."
+          },
+          "crmDataInlineEditing": {
+            "type": "boolean",
+            "description": "User can perform inline editing of crm data."
+          },
+          "crmDataImport": {
+            "type": "boolean",
+            "description": "User can perform import of crm data."
+          },
+          "viewRevenueAnalytics": {
+            "type": "boolean",
+            "description": "User can view dashboards page."
+          },
+          "manageRevenueAnalytics": {
+            "type": "boolean",
+            "description": "User can manage revenue analytics."
+          },
+          "engageReassignFlowToDosToOthers": {
+            "type": "boolean",
+            "description": "User can reassign flow to-dos to others"
+          },
+          "engageAssignFlowToDosToOthers": {
+            "type": "boolean",
+            "description": "User can assign flow to-dos to others"
+          },
+          "dealsDataExport": {
+            "type": "boolean",
+            "description": "User can export deals data"
+          },
+          "aiBuilder": {
+            "type": "boolean",
+            "description": "User can access AI Builder"
+          },
+          "orchestrateCreateAndManagePlays": {
+            "type": "boolean",
+            "description": "User can create and manage plays."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "workspaceId"
+        ]
+      },
+      "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "workspaceId"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_permission_profile",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/permission-profile?profileId={{ record.profileId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "profileId": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique numeric identifier of the permission profile (up to 20 digits)."
+          },
+          "name": {
+            "type": "string",
+            "description": "Permission profile name."
+          },
+          "description": {
+            "type": "string",
+            "description": "Permission profile description."
+          },
+          "callsAccess": {
+            "type": "object",
+            "description": "Calls access permission.",
+            "additionalProperties": true
+          },
+          "libraryFolderAccess": {
+            "type": "object",
+            "description": "Library folder access permission.",
+            "additionalProperties": true
+          },
+          "dealsAccess": {
+            "type": "object",
+            "description": "Deals access permission.",
+            "additionalProperties": true
+          },
+          "forecastPermissions": {
+            "type": "object",
+            "description": "All forecast permissions.",
+            "additionalProperties": true
+          },
+          "coachingAccess": {
+            "type": "object",
+            "description": "Coaching access permission.",
+            "additionalProperties": true
+          },
+          "insightsAccess": {
+            "type": "object",
+            "description": "Insights access permission.",
+            "additionalProperties": true
+          },
+          "usageAccess": {
+            "type": "object",
+            "description": "Usage access permission.",
+            "additionalProperties": true
+          },
+          "emailsAccess": {
+            "type": "object",
+            "description": "Emails access permission.",
+            "additionalProperties": true
+          },
+          "scoreCalls": {
+            "type": "boolean",
+            "description": "User can score calls."
+          },
+          "overrideScore": {
+            "type": "boolean",
+            "description": "User can override someone else score."
+          },
+          "downloadCallMedia": {
+            "type": "boolean",
+            "description": "User can download call media."
+          },
+          "shareCallsWithCustomers": {
+            "type": "boolean",
+            "description": "User can share calls with customers."
+          },
+          "manuallyScheduleAndUploadCalls": {
+            "type": "boolean",
+            "description": "User can manually schedule and upload calls."
+          },
+          "privateCalls": {
+            "type": "boolean",
+            "description": "User can set their own calls as private."
+          },
+          "deleteCalls": {
+            "type": "boolean",
+            "description": "User can delete calls."
+          },
+          "trimCalls": {
+            "type": "boolean",
+            "description": "User can trim calls."
+          },
+          "listenInCalls": {
+            "type": "boolean",
+            "description": "User can listen in calls."
+          },
+          "deleteEmails": {
+            "type": "boolean",
+            "description": "User can delete emails."
+          },
+          "callsAndSearch": {
+            "type": "boolean",
+            "description": "User can view and search calls."
+          },
+          "library": {
+            "type": "boolean",
+            "description": "User can view library pages."
+          },
+          "deals": {
+            "type": "boolean",
+            "description": "User can view deals pages."
+          },
+          "createEditAndDeleteDealsBoards": {
+            "type": "boolean",
+            "description": "User can create/edit/delete deals boards."
+          },
+          "dealsInlineEditing": {
+            "type": "boolean",
+            "description": "User can perform inline editing of deals."
+          },
+          "account": {
+            "type": "boolean",
+            "description": "User can view account pages."
+          },
+          "coaching": {
+            "type": "boolean",
+            "description": "User can view coaching pages."
+          },
+          "usage": {
+            "type": "boolean",
+            "description": "User can view usage pages."
+          },
+          "teamStats": {
+            "type": "boolean",
+            "description": "User can view team stats page."
+          },
+          "initiatives": {
+            "type": "boolean",
+            "description": "User can view initiatives page."
+          },
+          "market": {
+            "type": "boolean",
+            "description": "User can view market page."
+          },
+          "activity": {
+            "type": "boolean",
+            "description": "User can view activity pages."
+          },
+          "forecast": {
+            "type": "boolean",
+            "description": "User can view forecast pages."
+          },
+          "forecastManage": {
+            "type": "boolean",
+            "description": "User can manage forecast boards and upload targets."
+          },
+          "engageManageCompanyTemplates": {
+            "type": "boolean",
+            "description": "User can manage company email templates."
+          },
+          "engageManageCompanySequences": {
+            "type": "boolean",
+            "description": "User can manage company sequences."
+          },
+          "engageCreateAndManageRulesets": {
+            "type": "boolean",
+            "description": "User can create and manage rulesets."
+          },
+          "engageSnoozeFlowToDosForOthers": {
+            "type": "boolean",
+            "description": "User can snooze flow in to dos for others"
+          },
+          "engageAllowCrmFieldsViewChange": {
+            "type": "boolean",
+            "description": "User can change crm fields view"
+          },
+          "viewEngageAnalyticsActivity": {
+            "type": "boolean",
+            "description": "User can view engage analytics activity page."
+          },
+          "viewEngageAnalyticsPerformance": {
+            "type": "boolean",
+            "description": "User can view engage analytics performance page."
+          },
+          "viewEngageAnalyticsFlows": {
+            "type": "boolean",
+            "description": "User can view engage analytics flows page."
+          },
+          "manageGeneralBusinessSettings": {
+            "type": "boolean",
+            "description": "User can manage general business settings."
+          },
+          "manageScorecards": {
+            "type": "boolean",
+            "description": "User can manage scorecards."
+          },
+          "exportCallsAndCoachingDataToCSV": {
+            "type": "boolean",
+            "description": "User can export calls and coaching metrics data to CSV."
+          },
+          "crmDataInlineEditing": {
+            "type": "boolean",
+            "description": "User can perform inline editing of crm data."
+          },
+          "crmDataImport": {
+            "type": "boolean",
+            "description": "User can perform import of crm data."
+          },
+          "viewRevenueAnalytics": {
+            "type": "boolean",
+            "description": "User can view dashboards page."
+          },
+          "manageRevenueAnalytics": {
+            "type": "boolean",
+            "description": "User can manage revenue analytics."
+          },
+          "engageReassignFlowToDosToOthers": {
+            "type": "boolean",
+            "description": "User can reassign flow to-dos to others"
+          },
+          "engageAssignFlowToDosToOthers": {
+            "type": "boolean",
+            "description": "User can assign flow to-dos to others"
+          },
+          "dealsDataExport": {
+            "type": "boolean",
+            "description": "User can export deals data"
+          },
+          "aiBuilder": {
+            "type": "boolean",
+            "description": "User can access AI Builder"
+          },
+          "orchestrateCreateAndManagePlays": {
+            "type": "boolean",
+            "description": "User can create and manage plays."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "profileId"
+        ]
+      },
+      "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "profileId"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_meeting",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/meetings/{meetingId}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string",
+            "description": "The meeting start time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC)."
+          },
+          "endTime": {
+            "type": "string",
+            "description": "The meeting end time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC)."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the event."
+          },
+          "invitees": {
+            "type": "array",
+            "description": "A list of email addresses of invitees to the event (not including the organizer).",
+            "items": {
+              "type": "object",
+              "description": "Attendees the requesting party should add to the invitation, this should support adding email addresses such as coordinator@gong.io for Gong to schedule the recording of the meeting.",
+              "additionalProperties": true
+            }
+          },
+          "externalId": {
+            "type": "string",
+            "description": "The ID as it is formed on the external system."
+          },
+          "provider": {
+            "type": "string",
+            "description": "The web conferencing provider to use for this meeting (e.g. 'zoom'). When not specified, the user's default provider is used."
+          },
+          "organizerEmail": {
+            "type": "string",
+            "description": "The email address of the user who created the meeting."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "endTime",
+          "invitees",
+          "meetingId",
+          "organizerEmail",
+          "startTime"
+        ]
+      },
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
+      "path_fields": [
+        "meetingId"
+      ]
+    },
+    {
+      "name": "delete_meeting",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/meetings/{meetingId}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "meetingId": {
+            "type": "string"
+          },
+          "organizerEmail": {
+            "type": "string",
+            "description": "The email address of the user who created the meeting."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "meetingId"
+        ]
+      },
+      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "meetingId"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "content_viewed",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customer-engagement/content/viewed",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "reportingSystem": {
+            "type": "string",
+            "description": "The unique identifier of the reporting system. It is the same value in all events originating from the same system."
+          },
+          "eventTimestamp": {
+            "type": "string",
+            "description": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);"
+          },
+          "eventId": {
+            "type": "string",
+            "description": "The original id of the event as designated in the reporting system."
+          },
+          "contentId": {
+            "type": "string",
+            "description": "The id of the content that was viewed in the reporting system."
+          },
+          "contentUrl": {
+            "type": "string",
+            "description": "The url of the content that was viewed in the reporting system. This is the url that is was accessed by the viewer."
+          },
+          "contentTitle": {
+            "type": "string",
+            "description": "Human readable title of the content."
+          },
+          "viewActionTitle": {
+            "type": "string",
+            "description": "The name of the action like \"Document Viewed\" or \"Presentation Opened\"."
+          },
+          "shareId": {
+            "type": "string",
+            "description": "The id of the share action that corresponds to this view event, in case there can be more than one share per content."
+          },
+          "viewInfoUrl": {
+            "type": "string",
+            "description": "The link to a page that presents additional information about this event."
+          },
+          "viewer": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "crmContext": {
+            "type": "array",
+            "description": "A list of references to external systems such as CRM, Telephony System, Case Management, etc.",
+            "items": {
+              "type": "object",
+              "description": "Links to external systems such as CRM, Telephony System, Case Management etc. Currently only Salesforce and Generic are supported.",
+              "additionalProperties": true
+            }
+          },
+          "contentProperties": {
+            "type": "array",
+            "description": "A list of additional properties for the content",
+            "items": {
+              "type": "object",
+              "description": "A list of additional properties for the event",
+              "additionalProperties": true
+            }
+          },
+          "eventProperties": {
+            "type": "array",
+            "description": "A list of additional properties for the event",
+            "items": {
+              "type": "object",
+              "description": "A list of additional properties for the event",
+              "additionalProperties": true
+            }
+          },
+          "userAgent": {
+            "type": "string",
+            "description": "\"User-Agent\" header value for browser based interaction"
+          },
+          "mobileAppId": {
+            "type": "string",
+            "description": "The application identification string in case of interaction via mobile application (bundle identifier or package name)."
+          },
+          "agentPlatform": {
+            "type": "string",
+            "description": "Platform on which the interaction was made",
+            "enum": [
+              "Windows, Linux, MacOS, iOS, Android"
+            ]
+          },
+          "workspaceId": {
+            "type": "string",
+            "description": "Optional workspace identifier. If specified, the event will be placed into this workspace, otherwise, the default algorithm for workspace placement will be applied."
+          },
+          "trackingId": {
+            "type": "string",
+            "description": "The ID used for tracking the person who did the event. Must be null if a viewer is sent instead."
+          },
+          "nonCompanyParticipants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "moreInfoUrl": {
+            "type": "string"
+          },
+          "actionName": {
+            "type": "string"
+          },
+          "sharingMessageBody": {
+            "type": "string"
+          },
+          "sharer": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "sharingMessageSubject": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contentId",
+          "contentTitle",
+          "contentUrl",
+          "eventTimestamp",
+          "reportingSystem"
+        ]
+      },
+      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval"
+    },
+    {
+      "name": "content_shared",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customer-engagement/content/shared",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "reportingSystem": {
+            "type": "string",
+            "description": "The unique identifier of the reporting system. It is the same value in all events originating from the same system."
+          },
+          "eventTimestamp": {
+            "type": "string",
+            "description": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);"
+          },
+          "eventId": {
+            "type": "string",
+            "description": "The original id of the event as designated in the reporting system."
+          },
+          "contentId": {
+            "type": "string",
+            "description": "The id of the content that was shared in the reporting system."
+          },
+          "contentUrl": {
+            "type": "string",
+            "description": "The url of the content that was shared in the reporting system. This is the url that is was accessed by the viewer."
+          },
+          "contentTitle": {
+            "type": "string",
+            "description": "Human readable title of the content."
+          },
+          "shareId": {
+            "type": "string",
+            "description": "The id of the share action, in case there can be more than one share per content."
+          },
+          "shareInfoUrl": {
+            "type": "string",
+            "description": "The link to a page that presents additional information about this event."
+          },
+          "sharingMessageSubject": {
+            "type": "string",
+            "description": "The subject of share email / message."
+          },
+          "sharingMessageBody": {
+            "type": "string",
+            "description": "The share message body. Can contain HTML and will be cleaned when it is presented."
+          },
+          "sharer": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "recipients": {
+            "type": "array",
+            "description": "array of objects with name + email of recipients. Email is required.",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "crmContext": {
+            "type": "array",
+            "description": "A list of references to external systems such as CRM, Telephony System, Case Management, etc.",
+            "items": {
+              "type": "object",
+              "description": "Links to external systems such as CRM, Telephony System, Case Management etc. Currently only Salesforce and Generic are supported.",
+              "additionalProperties": true
+            }
+          },
+          "contentProperties": {
+            "type": "array",
+            "description": "A list of additional properties for the content",
+            "items": {
+              "type": "object",
+              "description": "A list of additional properties for the event",
+              "additionalProperties": true
+            }
+          },
+          "eventProperties": {
+            "type": "array",
+            "description": "A list of additional properties for the event",
+            "items": {
+              "type": "object",
+              "description": "A list of additional properties for the event",
+              "additionalProperties": true
+            }
+          },
+          "workspaceId": {
+            "type": "string",
+            "description": "Optional workspace identifier. If specified, the event will be placed into this workspace, otherwise, the default algorithm for workspace placement will be applied."
+          },
+          "actionName": {
+            "type": "string",
+            "description": "The name of the action like \"Document Sent\" or \"Presentation Shared\"."
+          },
+          "nonCompanyParticipants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "moreInfoUrl": {
+            "type": "string"
+          },
+          "trackingId": {
+            "type": "string"
+          },
+          "mobileAppId": {
+            "type": "string"
+          },
+          "agentPlatform": {
+            "type": "string"
+          },
+          "userAgent": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "contentId",
+          "contentTitle",
+          "contentUrl",
+          "eventTimestamp",
+          "reportingSystem"
+        ]
+      },
+      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval"
+    },
+    {
+      "name": "custom_action",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/customer-engagement/action",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "reportingSystem": {
+            "type": "string",
+            "description": "The unique identifier of the reporting system. It is the same value in all events originating from the same system."
+          },
+          "eventTimestamp": {
+            "type": "string",
+            "description": "The date and time when the event happened in the ISO-8601 format (e.g., '2021-08-01T02:30:00+05:00' or '2021-08-01T08:00:00Z', where Z stands for UTC);"
+          },
+          "eventId": {
+            "type": "string",
+            "description": "The original id of the event as designated in the reporting system."
+          },
+          "contentId": {
+            "type": "string",
+            "description": "The id of the content that was viewed in the reporting system."
+          },
+          "contentUrl": {
+            "type": "string",
+            "description": "The url of the content that was viewed in the reporting system. This is the url that is was accessed by the viewer."
+          },
+          "contentTitle": {
+            "type": "string",
+            "description": "Human readable title of the content."
+          },
+          "actionName": {
+            "type": "string",
+            "description": "The name of the action like \"Document Viewed\" or \"Presentation Opened\"."
+          },
+          "eventInfoUrl": {
+            "type": "string",
+            "description": "The link to a page that presents additional information about this event."
+          },
+          "actor": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "crmContext": {
+            "type": "array",
+            "description": "A list of references to external systems such as CRM, Telephony System, Case Management, etc.",
+            "items": {
+              "type": "object",
+              "description": "Links to external systems such as CRM, Telephony System, Case Management etc. Currently only Salesforce and Generic are supported.",
+              "additionalProperties": true
+            }
+          },
+          "contentProperties": {
+            "type": "array",
+            "description": "A list of additional properties for the content",
+            "items": {
+              "type": "object",
+              "description": "A list of additional properties for the event",
+              "additionalProperties": true
+            }
+          },
+          "eventProperties": {
+            "type": "array",
+            "description": "A list of additional properties for the event",
+            "items": {
+              "type": "object",
+              "description": "A list of additional properties for the event",
+              "additionalProperties": true
+            }
+          },
+          "userAgent": {
+            "type": "string",
+            "description": "\"User-Agent\" header value for browser based interaction"
+          },
+          "mobileAppId": {
+            "type": "string",
+            "description": "The application identification string in case of interaction via mobile application (bundle identifier or package name)."
+          },
+          "agentPlatform": {
+            "type": "string",
+            "description": "Platform on which the interaction was made",
+            "enum": [
+              "Windows, Linux, MacOS, iOS, Android"
+            ]
+          },
+          "workspaceId": {
+            "type": "string",
+            "description": "Optional workspace identifier. If specified, the event will be placed into this workspace, otherwise, the default algorithm for workspace placement will be applied."
+          },
+          "nonCompanyParticipants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "moreInfoUrl": {
+            "type": "string"
+          },
+          "shareId": {
+            "type": "string"
+          },
+          "trackingId": {
+            "type": "string"
+          },
+          "sharingMessageBody": {
+            "type": "string"
+          },
+          "sharer": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "sharingMessageSubject": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "eventTimestamp",
+          "reportingSystem"
+        ]
+      },
+      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval"
+    },
+    {
+      "name": "register_crm_integration",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/crm/integrations",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "ownerEmail": {
+            "type": "string",
+            "description": "Email address of the person responsible for the integration"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the integration"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "ownerEmail"
+        ]
+      },
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+    },
+    {
+      "name": "delete_crm_integration",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/crm/integrations?integrationId={{ record.integrationId }}&clientRequestId={{ record.clientRequestId }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "integrationId": {
+            "type": "string"
+          },
+          "clientRequestId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "clientRequestId",
+          "integrationId"
+        ]
+      },
+      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "path_fields": [
+        "integrationId",
+        "clientRequestId"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "add_calls_users_access",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/calls/users-access",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "callAccessList": {
+            "type": "array",
+            "description": "A list, in which each item specifies a call and a list of users to be given access to this call.",
+            "items": {
+              "type": "object",
+              "description": "Call users access",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+    },
+    {
+      "name": "delete_calls_users_access",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/calls/users-access",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "callAccessList": {
+            "type": "array",
+            "description": "A list, in which each item specifies a call and a list of users to be removed from the call.",
+            "items": {
+              "type": "object",
+              "description": "Call users access",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_meeting",
+      "kind": "create",
+      "method": "POST",
+      "path": "/meetings",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "description": "The meeting start time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC)."
+          },
+          "endTime": {
+            "type": "string",
+            "description": "The meeting end time in ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC)."
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the event."
+          },
+          "invitees": {
+            "type": "array",
+            "description": "A list of email addresses of invitees to the event (not including the organizer).",
+            "items": {
+              "type": "object",
+              "description": "Attendees the requesting party should add to the invitation, this should support adding email addresses such as coordinator@gong.io for Gong to schedule the recording of the meeting.",
+              "additionalProperties": true
+            }
+          },
+          "externalId": {
+            "type": "string",
+            "description": "The ID as it is formed on the external system."
+          },
+          "provider": {
+            "type": "string",
+            "description": "The web conferencing provider to use for this meeting (e.g. 'zoom'). When not specified, the user's default provider is used."
+          },
+          "organizerEmail": {
+            "type": "string",
+            "description": "The email address of the user creating the meeting, the Gong consent page link will be used according to the settings of this user."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "endTime",
+          "invitees",
+          "organizerEmail",
+          "startTime"
+        ]
+      },
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+    },
+    {
+      "name": "integration_settings",
+      "kind": "create",
+      "method": "POST",
+      "path": "/integration-settings",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "integrationTypeSettings": {
+            "type": "array",
+            "description": "Set a list of dynamic origins for a company",
+            "items": {
+              "type": "object",
+              "description": "Set a list of dynamic origins for a company",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "integrationTypeSettings"
+        ]
+      },
+      "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unassign_flows_by_instance_id",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/flows/prospects/unassign-flows-by-instance-id",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "flowInstanceIds": {
+            "type": "array",
+            "description": "The unique identifiers of the flows that prospects should be removed from.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unassignedByUserEmail": {
+            "type": "string",
+            "description": "(Optional) The email address of the Gong user requesting to remove prospects from the flow instance. This is not the email of the prospect being removed from the flow."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "flowInstanceIds"
+        ]
+      },
+      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unassign_flows_by_crm_id",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/flows/prospects/unassign-flows-by-crm-id",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "crmProspectId": {
+            "type": "string",
+            "description": "The CRM ID of the prospect to unassign."
+          },
+          "flowId": {
+            "type": "string",
+            "description": "The identifier of the flow to unassign the prospect from."
+          },
+          "unassignedByUserEmail": {
+            "type": "string",
+            "description": "(Optional) The email address of the Gong user requesting to remove prospects from the flow instance. This is not the email of the prospect being removed from the flow."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "crmProspectId"
+        ]
+      },
+      "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_flow_prospects_bulk_assignment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/flows/prospects/bulk-assignments",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "flowInstanceOwnerEmail": {
+            "type": "string",
+            "description": "The email of the Gong user who will own the flow instance."
+          },
+          "flowId": {
+            "type": "string",
+            "description": "The Flow ID to assign the prospects to."
+          },
+          "prospects": {
+            "type": "array",
+            "description": "The prospects that should be assigned to the flow.",
+            "items": {
+              "type": "object",
+              "description": "The prospect.",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "flowId",
+          "flowInstanceOwnerEmail",
+          "prospects"
+        ]
+      },
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+    },
+    {
+      "name": "assign_prospects",
+      "kind": "create",
+      "method": "POST",
+      "path": "/flows/prospects/assign",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "crmProspectsIds": {
+            "type": "array",
+            "description": "The CRM IDs of the contact or lead that should be assigned to a flow.",
+            "items": {
+              "type": "string",
+              "description": "The CRM IDs of the contact or lead that should be assigned to a flow."
+            }
+          },
+          "flowId": {
+            "type": "string",
+            "description": "The Engage Flow ID to assign the contacts to."
+          },
+          "flowInstanceOwnerEmail": {
+            "type": "string",
+            "description": "The email of the Gong user who owns the flow to-dos."
+          },
+          "overrides": {
+            "type": "object",
+            "description": "Defines the new data for specific steps and variables in the flow (in Beta Phase).",
+            "additionalProperties": true
+          },
+          "flowInstanceDescription": {
+            "type": "string",
+            "description": "The description for the flow instance (in Beta Phase)."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "crmProspectsIds",
+          "flowId",
+          "flowInstanceOwnerEmail"
+        ]
+      },
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+    },
+    {
+      "name": "assign_prospects_cool_off_override",
+      "kind": "create",
+      "method": "POST",
+      "path": "/flows/prospects/assign/cool-off-override",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "crmProspectsIds": {
+            "type": "array",
+            "description": "The CRM IDs of the contact or lead that should be assigned to a flow.",
+            "items": {
+              "type": "string",
+              "description": "The CRM IDs of the contact or lead that should be assigned to a flow."
+            }
+          },
+          "flowId": {
+            "type": "string",
+            "description": "The Engage Flow ID to assign the contacts to."
+          },
+          "flowInstanceOwnerEmail": {
+            "type": "string",
+            "description": "The email of the Gong user who owns the flow to-dos."
+          },
+          "overrides": {
+            "type": "object",
+            "description": "Defines the new data for specific steps and variables in the flow (in Beta Phase).",
+            "additionalProperties": true
+          },
+          "flowInstanceDescription": {
+            "type": "string",
+            "description": "The description for the flow instance (in Beta Phase)."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "crmProspectsIds",
+          "flowId",
+          "flowInstanceOwnerEmail"
+        ]
+      },
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+    },
+    {
+      "name": "add_digital_interaction",
+      "kind": "create",
+      "method": "POST",
+      "path": "/digital-interaction",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string",
+            "description": "The provider's unique identifier for the event used for deduplication"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "The date and time of the event in ISO 8601 format",
+            "format": "date-time"
+          },
+          "eventType": {
+            "type": "string",
+            "description": "The type of the event, explaining the content and action performed. Values may be partner-aligned, for example, \"link clicked\", \"page viewed\""
+          },
+          "sourceSystemName": {
+            "type": "string",
+            "description": "When integrating via IPaaS, the name of the technology partner the customer set up a Gong integration with via an IPaaS. When integrating directly with Gong: the name of the company setting up the integration with Gong"
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "The identifier for the session, useful for tying related events together"
+          },
+          "device": {
+            "type": "string",
+            "description": "The device used during the event",
+            "enum": [
+              "MOBILE",
+              "PC"
+            ]
+          },
+          "content": {
+            "type": "object",
+            "description": "The content the person looked at",
+            "additionalProperties": true
+          },
+          "person": {
+            "type": "object",
+            "description": "The person who did the event. Must be null if a tracking ID is sent instead.",
+            "additionalProperties": true
+          },
+          "customFields": {
+            "type": "array",
+            "description": "Include additional custom data about the event",
+            "items": {
+              "type": "object",
+              "description": "Include additional custom data about the event",
+              "additionalProperties": true
+            }
+          },
+          "trackingId": {
+            "type": "string",
+            "description": "The ID used for tracking the person who did the event. Must be null if a person is sent instead."
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "content",
+          "eventId",
+          "eventType",
+          "timestamp"
+        ]
+      },
+      "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval"
+    },
+    {
+      "name": "purge_phone_number",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/data-privacy/erase-data-for-phone-number?phoneNumber={{ record.phoneNumber }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "phoneNumber": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "phoneNumber"
+        ]
+      },
+      "risk": "critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+      "path_fields": [
+        "phoneNumber"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "purge_email_address",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/data-privacy/erase-data-for-email-address?emailAddress={{ record.emailAddress }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "emailAddress": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "emailAddress"
+        ]
+      },
+      "risk": "critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+      "path_fields": [
+        "emailAddress"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_task",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/tasks/{taskId}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string",
+            "description": "The id of the Gong user who owns the task"
+          },
+          "status": {
+            "type": "string",
+            "description": "(Optional) Sets a new status for the task",
+            "enum": [
+              "OPEN",
+              "DONE",
+              "DISMISSED"
+            ]
+          },
+          "dueDate": {
+            "type": "string",
+            "description": "(Optional) Sets a new due date and time for the task in ISO-8601 format ISO-8601 format (e.g., '2018-02-18T02:30:00-07:00' or '2018-02-18T08:00:00Z', where Z stands for UTC).",
+            "format": "date-time"
+          },
+          "priority": {
+            "type": "string",
+            "description": "(Optional) Sets a new priority for the task"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "taskId",
+          "userId"
+        ]
+      },
+      "risk": "medium: mutates Gong API state; requires reverse ETL approval",
+      "path_fields": [
+        "taskId"
+      ]
+    }
+  ]
+}

@@ -99,3 +99,7 @@ FAIL
 FAIL	polymetrics.ai/cmd/connectorgen	0.381s
 FAIL
 ```
+
+## 2026-07-10 follow-on integration note
+
+The operation-ledger assertions were updated from the initial inventory-only slice to the integrated CLI parity state: 51 executable covered endpoints and 16 typed blocked operation rows. The exact 67-operation public spec inventory remains the source of truth.

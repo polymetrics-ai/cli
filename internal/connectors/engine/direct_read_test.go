@@ -266,6 +266,72 @@ func TestDirectReadDirectoryPolicyRejectsFileResponse(t *testing.T) {
 	}
 }
 
+func TestDirectReadJSONRedactedPolicyRedactsSensitiveFieldsRecursively(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"id":"call-1",
+			"downloadMediaUrl":"https://media.example.test/download/call-1",
+			"content":"raw sensitive content",
+			"nested":{"apiToken":"secret-token","safe":"ok"},
+			"items":[{"password":"secret","name":"visible"}]
+		}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/calls/{id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/calls/{id}",
+		PathParams:   map[string]string{"id": "call-1"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want object", result.Body)
+	}
+	for _, key := range []string{"downloadMediaUrl", "content"} {
+		if _, ok := body[key]; ok {
+			t.Fatalf("%s was not redacted: %+v", key, body)
+		}
+	}
+	if body["downloadMediaUrl_redacted"] != true || body["content_redacted"] != true {
+		t.Fatalf("top-level redaction markers missing: %+v", body)
+	}
+	nested := body["nested"].(map[string]any)
+	if _, ok := nested["apiToken"]; ok || nested["apiToken_redacted"] != true || nested["safe"] != "ok" {
+		t.Fatalf("nested redaction = %+v, want apiToken redacted and safe preserved", nested)
+	}
+	items := body["items"].([]any)
+	item := items[0].(map[string]any)
+	if _, ok := item["password"]; ok || item["password_redacted"] != true || item["name"] != "visible" {
+		t.Fatalf("array redaction = %+v, want password redacted and name preserved", item)
+	}
+}
+
+func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/v2/calls/call-1" {
+			t.Fatalf("path = %s, want /v2/calls/call-1", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"id":"call-1"}`))
+	}))
+	defer srv.Close()
+
+	_, err := DirectRead(context.Background(), directReadBundle(srv.URL+"/v2", http.MethodGet, "/v2/calls/{id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/calls/{id}",
+		PathParams:   map[string]string{"id": "call-1"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+}
+
 func directReadBundle(baseURL, method, endpointPath string) Bundle {
 	return Bundle{
 		Name: "github",

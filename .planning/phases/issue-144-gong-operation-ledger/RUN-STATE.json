@@ -3,7 +3,7 @@
   "issue": 144,
   "parent_issue": 133,
   "branch": "feat/133-gong-cli-parity",
-  "status": "planned",
+  "status": "green_integrated_follow_on",
   "gsd": {
     "doctor": "pass",
     "verify_pi": "pass",
@@ -24,8 +24,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "Issue #144 unlocks the remaining Gong lanes and no subagent tool is available in this Pi API session.",
-      "issue_numbers": [144]
+      "issue_numbers": [
+        144
+      ]
     }
   ],
-  "updated_at": "2026-07-09T19:33:27Z"
+  "updated_at": "2026-07-10T00:00:00Z",
+  "follow_on": "Ledger tests now assert integrated full-surface coverage after #141/#143/#145/#146/#147 local critical path."
 }

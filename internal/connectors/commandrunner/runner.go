@@ -347,7 +347,7 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {
 	switch policy {
-	case "github_contents_file_metadata", "github_contents_directory":
+	case "github_contents_file_metadata", "github_contents_directory", "json_redacted":
 		return true
 	default:
 		return false
@@ -663,7 +663,7 @@ func redactRecord(in connectors.Record) connectors.Record {
 
 func isSensitiveRecordField(name string) bool {
 	normalized := strings.ToLower(strings.ReplaceAll(name, "-", "_"))
-	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "key", "body", "comment", "content", "payload", "inputs"} {
+	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "key", "body", "comment", "content", "payload", "inputs", "download", "clone", "media_url", "data_file", "media_file", "file_path"} {
 		if strings.Contains(normalized, marker) {
 			return true
 		}

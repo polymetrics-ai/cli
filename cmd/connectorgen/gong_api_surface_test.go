@@ -71,11 +71,11 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 	if len(surface.Endpoints) != 67 {
 		t.Fatalf("endpoints = %d, want 67", len(surface.Endpoints))
 	}
-	if covered != 3 {
-		t.Fatalf("covered endpoints = %d, want 3", covered)
+	if covered != 51 {
+		t.Fatalf("covered endpoints = %d, want 51", covered)
 	}
-	if operations != 64 {
-		t.Fatalf("operation endpoints = %d, want 64", operations)
+	if operations != 16 {
+		t.Fatalf("operation endpoints = %d, want 16", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -88,20 +88,20 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 		"PUT":    8,
 	})
 	assertGongStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"GET": 3,
+		"DELETE": 3,
+		"GET":    28,
+		"PATCH":  1,
+		"POST":   12,
+		"PUT":    7,
 	})
 	assertGongStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
-		"DELETE": 3,
-		"GET":    25,
-		"PATCH":  1,
-		"POST":   27,
-		"PUT":    8,
+		"POST": 15,
+		"PUT":  1,
 	})
 	assertGongStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":     12,
-		"destructive_action":    7,
-		"direct_read":           38,
-		"sensitive_reverse_etl": 7,
+		"admin_reverse_etl":     1,
+		"direct_read":           13,
+		"sensitive_reverse_etl": 2,
 	})
 
 	for _, key := range []string{

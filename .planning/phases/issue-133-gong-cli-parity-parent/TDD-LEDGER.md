@@ -33,3 +33,18 @@ Active local critical path: #144. See `.planning/phases/issue-144-gong-operation
 
 - Parent orchestration docs may change as sub-issues land.
 - Operation-ledger rows remain metadata-only until executor lanes implement typed surfaces.
+
+
+## 2026-07-10 integrated lanes #141/#142/#143/#145/#146/#147
+
+Red:
+- `go test ./internal/connectors/engine -run 'TestDirectReadJSONRedactedPolicy|TestDirectReadAvoidsDoubleVersionPrefix' -count=1` failed because `json_redacted` was unsupported.
+- `go test ./cmd/connectorgen -run 'TestGongFullSurface|TestGongMetadata' -count=1` failed because Gong had no `cli_surface.json`, no `writes.json`, no `operations.json`, and `metadata.capabilities.write=false`.
+
+Green:
+- Added generic recursive JSON redaction and version-prefix-safe direct reads.
+- Added Gong CLI surface, streams, direct reads, write actions, operation metadata, docs, and website catalog updates.
+- Targeted verification passed (see VERIFICATION.md).
+
+Refactor:
+- Kept unsupported multipart/top-level-array payloads as typed blocked operation metadata with bounded schemas/policies instead of adding a generic raw upload/write path.

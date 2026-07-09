@@ -1,0 +1,550 @@
+{
+  "operations": [
+    {
+      "id": "gong.calls_media_upload",
+      "kind": "rest_write",
+      "summary": "Add call media (/v2/calls/{id}/media)",
+      "description": "Typed Gong mutation metadata for a request shape not supported by the declarative write executor in this slice.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, approval, execute; blocked until multipart/array-body executor support is added",
+      "output_policy": "gong_bounded_input_redacted",
+      "mutation_class": "update",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "file",
+        "redact_fields": [
+          "mediaFile"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/calls/{id}/media",
+        "content_type": "multipart/form-data",
+        "max_bytes": 1610612736,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "mediaFile": {
+              "type": "string",
+              "description": "The media file of the recording. You may attach files up to 1.5GB in size."
+            }
+          },
+          "required": [
+            "mediaFile"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.calls_extensive",
+      "kind": "rest_read",
+      "summary": "Retrieve detailed call data by various filters (/v2/calls/extensive)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/calls/extensive",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+            },
+            "filter": {
+              "type": "object",
+              "description": "Filter parameters.",
+              "additionalProperties": true
+            },
+            "contentSelector": {
+              "type": "object",
+              "description": "The content selector identifies which data components, if any, are needed, by the caller",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "filter"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.calls_users_access_get",
+      "kind": "rest_read",
+      "summary": "Retrieve users that have specific individual access to calls (/v2/calls/users-access)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/calls/users-access",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "filter": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "filter"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.users_extensive",
+      "kind": "rest_read",
+      "summary": "List users by filter (/v2/users/extensive)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/extensive",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+            },
+            "filter": {
+              "type": "object",
+              "description": "Filter parameters.",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "filter"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.tasks_list",
+      "kind": "rest_read",
+      "summary": "List user's tasks (/v2/tasks)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/tasks",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Get user's tasks",
+          "properties": {
+            "filter": {
+              "type": "object",
+              "description": "Reminder filter criteria",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "filter"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.stats_interaction",
+      "kind": "rest_read",
+      "summary": "Retrieve interaction stats for applicable users by date (/v2/stats/interaction)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stats/interaction",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+            },
+            "filter": {
+              "type": "object",
+              "description": "Filter parameters.",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "filter"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.stats_activity_scorecards",
+      "kind": "rest_read",
+      "summary": "Retrieve answered scorecards for applicable reviewed users or scorecards for a date range (/v2/stats/activity/scorecards)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stats/activity/scorecards",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+            },
+            "filter": {
+              "type": "object",
+              "description": "Filter parameters.",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "filter"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.stats_activity_day_by_day",
+      "kind": "rest_read",
+      "summary": "Retrieve daily activity for applicable users for a date range (/v2/stats/activity/day-by-day)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stats/activity/day-by-day",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+            },
+            "filter": {
+              "type": "object",
+              "description": "Filter parameters.",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "filter"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.stats_activity_aggregate",
+      "kind": "rest_read",
+      "summary": "Retrieve aggregated activity for defined users by date (/v2/stats/activity/aggregate)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stats/activity/aggregate",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+            },
+            "filter": {
+              "type": "object",
+              "description": "Filter parameters.",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "filter"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.stats_activity_aggregate_by_period",
+      "kind": "rest_read",
+      "summary": "Retrieve aggregated activity for defined users by a date range with grouping in time periods (/v2/stats/activity/aggregate-by-period)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stats/activity/aggregate-by-period",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+            },
+            "filter": {
+              "type": "object",
+              "description": "Filter parameters.",
+              "additionalProperties": true
+            },
+            "aggregationPeriod": {
+              "type": "string",
+              "description": "Calendar time period for aggregating data. Note: First day of the week is Monday.",
+              "enum": [
+                "DAY",
+                "WEEK",
+                "MONTH",
+                "QUARTER",
+                "YEAR"
+              ]
+            }
+          },
+          "required": [
+            "aggregationPeriod",
+            "filter"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.meetings_integration_status",
+      "kind": "rest_read",
+      "summary": "Validate Gong meeting Integration (/v2/meetings/integration/status)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/meetings/integration/status",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "emails": {
+              "type": "array",
+              "description": "String array of emails of users (max 100)",
+              "items": {
+                "type": "string",
+                "description": "String array of emails of users (max 100)"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "gong.flows_steps",
+      "kind": "rest_read",
+      "summary": "Get flow details and steps for one or more Engage flows (/v2/flows/steps)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/flows/steps",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Request parameters for retrieving steps of one or more flows.",
+          "properties": {
+            "flowIds": {
+              "type": "array",
+              "description": "List of Engage Flow IDs to retrieve steps for. Maximum 20 flow IDs per request.",
+              "items": {
+                "type": "string",
+                "description": "List of Engage Flow IDs to retrieve steps for. Maximum 20 flow IDs per request."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "gong.flows_prospects",
+      "kind": "rest_read",
+      "summary": "List prospects assigned flows (/v2/flows/prospects)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/flows/prospects",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Prospects assigned flows request",
+          "properties": {
+            "crmProspectsIds": {
+              "type": "array",
+              "description": "CRM IDs of the prospects to list assigned flows for.",
+              "items": {
+                "type": "string",
+                "description": "CRM IDs of the prospects to list assigned flows for."
+              }
+            },
+            "flowInstanceIds": {
+              "type": "array",
+              "description": "Assigned flow instance IDs.",
+              "items": {
+                "type": "string",
+                "description": "Assigned flow instance IDs."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "gong.crm_upload_entity_schema",
+      "kind": "rest_write",
+      "summary": "Upload Object Schema (/v2/crm/entity-schema)",
+      "description": "Typed Gong mutation metadata for a request shape not supported by the declarative write executor in this slice.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, approval, execute; blocked until multipart/array-body executor support is added",
+      "output_policy": "gong_bounded_input_redacted",
+      "mutation_class": "create",
+      "secret_sensitive": false,
+      "sensitive_policy": {
+        "input_mode": "file",
+        "redact_fields": [
+          "items"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/crm/entity-schema",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "selectedFields",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    {
+      "id": "gong.crm_upload_entities",
+      "kind": "rest_write",
+      "summary": "Upload CRM objects (/v2/crm/entities)",
+      "description": "Typed Gong mutation metadata for a request shape not supported by the declarative write executor in this slice.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, approval, execute; blocked until multipart/array-body executor support is added",
+      "output_policy": "gong_bounded_input_redacted",
+      "mutation_class": "create",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "file",
+        "redact_fields": [
+          "dataFile"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/crm/entities",
+        "content_type": "multipart/form-data",
+        "max_bytes": 209715200,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "dataFile": {
+              "type": "string",
+              "description": "The CRM data file. You may attach files up to 200MB in size"
+            }
+          },
+          "required": [
+            "dataFile"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.calls_transcript",
+      "kind": "rest_read",
+      "summary": "Retrieve transcripts of calls (/v2/calls/transcript)",
+      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/calls/transcript",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+            },
+            "filter": {
+              "type": "object",
+              "description": "Filter parameters.",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "filter"
+          ]
+        }
+      }
+    }
+  ]
+}

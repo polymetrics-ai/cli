@@ -44,3 +44,9 @@ Note: `go run ./cmd/connectorgen validate internal/connectors/defs/gong` current
 - No binary payload transfer.
 - No new dependencies.
 - No generic raw write tools.
+
+## 2026-07-10 follow-on verification
+
+- [x] `go test ./cmd/connectorgen -run Gong -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs`
+- [x] `make verify`

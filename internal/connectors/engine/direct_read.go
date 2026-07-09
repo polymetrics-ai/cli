@@ -22,6 +22,7 @@ const (
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
+	directReadPolicyJSONRedacted               = "json_redacted"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -62,7 +63,8 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
-	resp, err := rt.Requester.DoLimited(ctx, method, resolvedPath, query, nil, maxBytes)
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, nil, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		msg := safety.RedactErrorText(err.Error())
@@ -112,6 +114,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
+	case directReadPolicyJSONRedacted:
+		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
@@ -142,9 +146,84 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 			out = append(out, item)
 		}
 		return out, nil
+	case directReadPolicyJSONRedacted:
+		return redactJSONValue(body), nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
+}
+
+func directReadBaseURL(b Bundle, cfg connectors.RuntimeConfig) string {
+	baseURL, err := Interpolate(b.HTTP.URL, Vars{Config: cfg.Config, Secrets: cfg.Secrets})
+	if err != nil || strings.TrimSpace(baseURL) == "" {
+		if cfg.Config != nil && cfg.Config["base_url"] != "" {
+			return cfg.Config["base_url"]
+		}
+		return b.HTTP.URL
+	}
+	return baseURL
+}
+
+func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
+	parsed, err := url.Parse(baseURL)
+	if err != nil {
+		return resolvedPath
+	}
+	basePath := strings.TrimRight(parsed.EscapedPath(), "/")
+	if basePath == "" || basePath == "." {
+		return resolvedPath
+	}
+	if resolvedPath == basePath {
+		return "/"
+	}
+	prefix := basePath + "/"
+	if strings.HasPrefix(resolvedPath, prefix) {
+		return "/" + strings.TrimPrefix(resolvedPath, prefix)
+	}
+	return resolvedPath
+}
+
+func redactJSONValue(value any) any {
+	switch v := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(v))
+		for key, item := range v {
+			if item != nil && shouldRedactJSONField(key) {
+				out[key+"_redacted"] = true
+				continue
+			}
+			out[key] = redactJSONValue(item)
+		}
+		return out
+	case []any:
+		out := make([]any, len(v))
+		for i, item := range v {
+			out[i] = redactJSONValue(item)
+		}
+		return out
+	default:
+		return value
+	}
+}
+
+func shouldRedactJSONField(name string) bool {
+	normalized := strings.ToLower(strings.NewReplacer("-", "_", " ", "_", ".", "_").Replace(name))
+	switch normalized {
+	case "content", "body", "payload", "raw", "download_url", "download_media_url", "clone_url", "api_key", "apikey", "access_key", "private_key", "authorization", "credential", "credentials":
+		return true
+	}
+	if strings.Contains(normalized, "download") && strings.Contains(normalized, "url") {
+		return true
+	}
+	if strings.Contains(normalized, "clone") && strings.Contains(normalized, "url") {
+		return true
+	}
+	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "apikey", "access_key", "authorization", "credential"} {
+		if strings.Contains(normalized, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 func redactGitHubContentsObject(in map[string]any) map[string]any {

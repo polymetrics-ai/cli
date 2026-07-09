@@ -480,9 +480,12 @@ type OperationSpec struct {
 }
 
 type RESTOperationSpec struct {
-	Method string            `json:"method"`
-	Path   string            `json:"path"`
-	Query  map[string]string `json:"query,omitempty"`
+	Method      string            `json:"method"`
+	Path        string            `json:"path"`
+	ContentType string            `json:"content_type,omitempty"`
+	MaxBytes    int               `json:"max_bytes,omitempty"`
+	Query       map[string]string `json:"query,omitempty"`
+	BodySchema  json.RawMessage   `json:"body_schema,omitempty"`
 }
 
 // SensitivePolicySpec is the reverse-ETL sensitive/admin policy for an operation
@@ -1193,8 +1196,15 @@ func expectedOperationBlock(kind string) string {
 func validateOperationSemantics(i int, op OperationSpec) error {
 	switch op.Kind {
 	case "rest_read":
-		if method := strings.ToUpper(strings.TrimSpace(op.REST.Method)); method != "GET" {
-			return fmt.Errorf("operation %d (%q) rest_read method must be GET, got %s", i, op.ID, method)
+		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+		if method != "GET" && method != "POST" {
+			return fmt.Errorf("operation %d (%q) rest_read method must be GET or POST, got %s", i, op.ID, method)
+		}
+		if method == "POST" && len(op.REST.BodySchema) == 0 {
+			return fmt.Errorf("operation %d (%q) rest_read POST must declare body_schema", i, op.ID)
+		}
+		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
+			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
 		}
 	case "rest_write":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))

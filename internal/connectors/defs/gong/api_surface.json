@@ -1,9 +1,9 @@
 {
   "api": "Gong API v2 (OpenAPI 3.0.1)",
   "docs": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-  "reviewed_at": "2026-07-09",
+  "reviewed_at": "2026-07-10",
   "operation_ledger_version": 1,
-  "scope": "Exact public Gong OpenAPI 3.0.1 surface: 57 paths / 67 operations. This ledger preserves current streams and classifies all other operations as blocked metadata for #145/#146/#147; it does not enable direct reads, binary transfers, or writes.",
+  "scope": "Exact public Gong OpenAPI 3.0.1 surface: 57 paths / 67 operations. GET list/detail endpoints are covered by streams or bounded direct reads; JSON mutations are typed reverse-ETL write actions; POST read-query and multipart/array-body gaps are typed operation metadata blocked by executor shape, not by risk alone.",
   "endpoints": [
     {
       "method": "GET",
@@ -15,14 +15,8 @@
     {
       "method": "POST",
       "path": "/v2/calls",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation sends call, customer-engagement, media, or CRM content; it needs a typed reverse-ETL action, redaction, approval, and bounded payload policy before execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=addCall; tag=Calls; follow_up=#146/#147; binary_or_input_payload_policy=true"
+      "covered_by": {
+        "write": "add_call"
       }
     },
     {
@@ -33,22 +27,16 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Official Gong mutation sends call, customer-engagement, media, or CRM content; it needs a typed reverse-ETL action, redaction, approval, and bounded payload policy before execution.",
+        "reason": "Official Gong mutation has a multipart or top-level array request shape that is typed in operations.json but not executable by the current declarative write engine.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=addCallRecording; tag=Calls; follow_up=#146/#147; binary_or_input_payload_policy=true"
+        "notes": "operationId=addCallRecording; follow_up=#146/#147; operation=gong.calls_media_upload"
       }
     },
     {
       "method": "GET",
       "path": "/v2/calls/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getCall; tag=Calls; follow_up=#145"
+      "covered_by": {
+        "direct_read": "calls get"
       }
     },
     {
@@ -59,165 +47,86 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listCallsExtensive; tag=Calls; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=listCallsExtensive; follow_up=#146; operation=gong.calls_extensive"
       }
     },
     {
       "method": "GET",
       "path": "/v2/permission-profile",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getPermissionProfile; tag=Permissions; follow_up=#145"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v2/permission-profile",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=updatePermissionProfile; tag=Permissions; follow_up=#147"
+      "covered_by": {
+        "direct_read": "permissions profile get"
       }
     },
     {
       "method": "POST",
       "path": "/v2/permission-profile",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=createPermissionProfile; tag=Permissions; follow_up=#147"
+      "covered_by": {
+        "write": "create_permission_profile"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/permission-profile",
+      "covered_by": {
+        "write": "update_permission_profile"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/meetings/{meetingId}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=updateMeeting; tag=Meetings (in Beta Phase); follow_up=#147"
+      "covered_by": {
+        "write": "update_meeting"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/meetings/{meetingId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Official Gong operation removes access, assignments, resources, or personal data; it requires typed destructive confirmation through reverse ETL before any execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=deleteMeeting; tag=Meetings (in Beta Phase); follow_up=#147"
+      "covered_by": {
+        "write": "delete_meeting"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/customer-engagement/content/viewed",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation sends call, customer-engagement, media, or CRM content; it needs a typed reverse-ETL action, redaction, approval, and bounded payload policy before execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=contentViewed; tag=Engagement (Legacy \u2013 See \u201cDigital Interactions\u201d); follow_up=#146/#147"
+      "covered_by": {
+        "write": "content_viewed"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/customer-engagement/content/shared",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation sends call, customer-engagement, media, or CRM content; it needs a typed reverse-ETL action, redaction, approval, and bounded payload policy before execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=contentShared; tag=Engagement (Legacy \u2013 See \u201cDigital Interactions\u201d); follow_up=#146/#147"
+      "covered_by": {
+        "write": "content_shared"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/customer-engagement/action",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation sends call, customer-engagement, media, or CRM content; it needs a typed reverse-ETL action, redaction, approval, and bounded payload policy before execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=customAction; tag=Engagement (Legacy \u2013 See \u201cDigital Interactions\u201d); follow_up=#146/#147"
+      "covered_by": {
+        "write": "custom_action"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crm/integrations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listGenericCrmIntegration; tag=CRM; follow_up=#145"
+      "covered_by": {
+        "stream": "crm_integrations"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/crm/integrations",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=registerGenericCrmIntegration; tag=CRM; follow_up=#147"
+      "covered_by": {
+        "write": "register_crm_integration"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/crm/integrations",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Official Gong operation removes access, assignments, resources, or personal data; it requires typed destructive confirmation through reverse ETL before any execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=deleteGenericCrmIntegration; tag=CRM; follow_up=#147"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v2/calls/users-access",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=addUsersAccessToCalls; tag=Permissions; follow_up=#147"
+      "covered_by": {
+        "write": "delete_crm_integration"
       }
     },
     {
@@ -228,22 +137,23 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getUsersAccessToCalls; tag=Permissions; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=getUsersAccessToCalls; follow_up=#146; operation=gong.calls_users_access_get"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/calls/users-access",
+      "covered_by": {
+        "write": "add_calls_users_access"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/calls/users-access",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Official Gong operation removes access, assignments, resources, or personal data; it requires typed destructive confirmation through reverse ETL before any execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=deleteUsersAccessToCalls; tag=Permissions; follow_up=#147"
+      "covered_by": {
+        "write": "delete_calls_users_access"
       }
     },
     {
@@ -254,9 +164,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listMultipleUsers; tag=Users; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=listMultipleUsers; follow_up=#146; operation=gong.users_extensive"
       }
     },
     {
@@ -267,9 +177,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listTasks; tag=Tasks; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=listTasks; follow_up=#146; operation=gong.tasks_list"
       }
     },
     {
@@ -278,11 +188,11 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listInteractionStats; tag=Stats; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=listInteractionStats; follow_up=#146; operation=gong.stats_interaction"
       }
     },
     {
@@ -293,9 +203,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listAnsweredScorecards; tag=Stats; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=listAnsweredScorecards; follow_up=#146; operation=gong.stats_activity_scorecards"
       }
     },
     {
@@ -306,9 +216,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listMultipleUsersDayByDayActivity; tag=Stats; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=listMultipleUsersDayByDayActivity; follow_up=#146; operation=gong.stats_activity_day_by_day"
       }
     },
     {
@@ -319,9 +229,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listMultipleUsersAggregateActivity; tag=Stats; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=listMultipleUsersAggregateActivity; follow_up=#146; operation=gong.stats_activity_aggregate"
       }
     },
     {
@@ -332,22 +242,16 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listMultipleUsersAggregateByPeriod; tag=Stats; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=listMultipleUsersAggregateByPeriod; follow_up=#146; operation=gong.stats_activity_aggregate_by_period"
       }
     },
     {
       "method": "POST",
       "path": "/v2/meetings",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=addMeeting; tag=Meetings (in Beta Phase); follow_up=#147"
+      "covered_by": {
+        "write": "create_meeting"
       }
     },
     {
@@ -358,22 +262,16 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=integrationStatus; tag=Meetings (in Beta Phase); follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=integrationStatus; follow_up=#146; operation=gong.meetings_integration_status"
       }
     },
     {
       "method": "POST",
       "path": "/v2/integration-settings",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong operation declares integration-settings write scope and changes integration configuration; implement only as a typed reverse-ETL action with approval after #147 policy review.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=integrationSettings; tag=Integration Settings; follow_up=#147; fixed request body schema required by #146"
+      "covered_by": {
+        "write": "integration_settings"
       }
     },
     {
@@ -384,9 +282,9 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getFlowSteps; tag=Engage Flows; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=getFlowSteps; follow_up=#146; operation=gong.flows_steps"
       }
     },
     {
@@ -397,126 +295,72 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getProspectsAssignedFlows; tag=Engage Flows; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=getProspectsAssignedFlows; follow_up=#146; operation=gong.flows_prospects"
       }
     },
     {
       "method": "POST",
       "path": "/v2/flows/prospects/unassign-flows-by-instance-id",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Official Gong operation removes access, assignments, resources, or personal data; it requires typed destructive confirmation through reverse ETL before any execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=unassignFlows; tag=Engage Flows; follow_up=#147"
+      "covered_by": {
+        "write": "unassign_flows_by_instance_id"
       }
     },
     {
       "method": "POST",
       "path": "/v2/flows/prospects/unassign-flows-by-crm-id",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Official Gong operation removes access, assignments, resources, or personal data; it requires typed destructive confirmation through reverse ETL before any execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=unassignProspectFlows; tag=Engage Flows; follow_up=#147"
+      "covered_by": {
+        "write": "unassign_flows_by_crm_id"
       }
     },
     {
       "method": "POST",
       "path": "/v2/flows/prospects/bulk-assignments",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=submitFlowProspectsBulkAssignment; tag=Engage Flows; follow_up=#147"
+      "covered_by": {
+        "write": "submit_flow_prospects_bulk_assignment"
       }
     },
     {
       "method": "POST",
       "path": "/v2/flows/prospects/assign",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=assignProspects; tag=Engage Flows; follow_up=#147"
+      "covered_by": {
+        "write": "assign_prospects"
       }
     },
     {
       "method": "POST",
       "path": "/v2/flows/prospects/assign/cool-off-override",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=assignProspectsCoolOffOverrides; tag=Engage Flows; follow_up=#147"
+      "covered_by": {
+        "write": "assign_prospects_cool_off_override"
       }
     },
     {
       "method": "POST",
       "path": "/v2/digital-interaction",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation sends call, customer-engagement, media, or CRM content; it needs a typed reverse-ETL action, redaction, approval, and bounded payload policy before execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=addDigitalInteraction; tag=Digital Interactions; follow_up=#146/#147"
+      "covered_by": {
+        "write": "add_digital_interaction"
       }
     },
     {
       "method": "POST",
       "path": "/v2/data-privacy/erase-data-for-phone-number",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Official Gong operation removes access, assignments, resources, or personal data; it requires typed destructive confirmation through reverse ETL before any execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=purgePhoneNumber; tag=Data Privacy; follow_up=#147"
+      "covered_by": {
+        "write": "purge_phone_number"
       }
     },
     {
       "method": "POST",
       "path": "/v2/data-privacy/erase-data-for-email-address",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Official Gong operation removes access, assignments, resources, or personal data; it requires typed destructive confirmation through reverse ETL before any execution.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=purgeEmailAddress; tag=Data Privacy; follow_up=#147"
+      "covered_by": {
+        "write": "purge_email_address"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crm/entity-schema",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listCrmSchemaFields; tag=CRM; follow_up=#145"
+      "covered_by": {
+        "direct_read": "crm entity-schema get"
       }
     },
     {
@@ -527,22 +371,16 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
+        "reason": "Official Gong mutation has a multipart or top-level array request shape that is typed in operations.json but not executable by the current declarative write engine.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=uploadCrmSchemaField; tag=CRM; follow_up=#147"
+        "notes": "operationId=uploadCrmSchemaField; follow_up=#146/#147; operation=gong.crm_upload_entity_schema"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crm/entities",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getCrmObjects; tag=CRM; follow_up=#145"
+      "covered_by": {
+        "direct_read": "crm entities get"
       }
     },
     {
@@ -553,9 +391,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Official Gong mutation sends call, customer-engagement, media, or CRM content; it needs a typed reverse-ETL action, redaction, approval, and bounded payload policy before execution.",
+        "reason": "Official Gong mutation has a multipart or top-level array request shape that is typed in operations.json but not executable by the current declarative write engine.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=uploadCrmData; tag=CRM; follow_up=#146/#147; binary_or_input_payload_policy=true"
+        "notes": "operationId=uploadCrmData; follow_up=#146/#147; operation=gong.crm_upload_entities"
       }
     },
     {
@@ -566,35 +404,23 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
+        "reason": "Official Gong POST read-query operation is typed in operations.json but not directly executable until fixed-body read-query execution is added.",
         "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getCallTranscripts; tag=Calls; follow_up=#145; fixed request body schema required by #146"
+        "notes": "operationId=getCallTranscripts; follow_up=#146; operation=gong.calls_transcript"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/tasks/{taskId}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong mutation changes admin, permission, CRM schema, meeting, task, or flow assignment state; implement only as a typed reverse-ETL action with approval.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=updateReminder; tag=Tasks; follow_up=#147"
+      "covered_by": {
+        "write": "update_task"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workspaces",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listWorkspaces; tag=Settings; follow_up=#145"
+      "covered_by": {
+        "stream": "workspaces"
       }
     },
     {
@@ -607,40 +433,22 @@
     {
       "method": "GET",
       "path": "/v2/users/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getUser; tag=Users; follow_up=#145"
+      "covered_by": {
+        "direct_read": "users get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/users/{id}/settings-history",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getUserHistory; tag=Users; follow_up=#145"
+      "covered_by": {
+        "direct_read": "users settings-history"
       }
     },
     {
       "method": "GET",
       "path": "/v2/settings/trackers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listTrackers; tag=Settings; follow_up=#145"
+      "covered_by": {
+        "stream": "trackers"
       }
     },
     {
@@ -653,209 +461,113 @@
     {
       "method": "GET",
       "path": "/v2/settings/briefs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listBriefs; tag=Settings; follow_up=#145"
+      "covered_by": {
+        "stream": "briefs"
       }
     },
     {
       "method": "GET",
       "path": "/v2/permission-profile/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listPermissionProfileUsers; tag=Permissions; follow_up=#145"
+      "covered_by": {
+        "direct_read": "permissions profile-users list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/logs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listLogs; tag=Auditing; follow_up=#145"
+      "covered_by": {
+        "direct_read": "logs list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/library/folders",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getLibraryStructure; tag=Library; follow_up=#145"
+      "covered_by": {
+        "stream": "library_folders"
       }
     },
     {
       "method": "GET",
       "path": "/v2/library/folder-content",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getCallsInSpecificFolder; tag=Library; follow_up=#145"
+      "covered_by": {
+        "direct_read": "library folder-content list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/flows",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listFlows; tag=Engage Flows; follow_up=#145"
+      "covered_by": {
+        "stream": "flows"
       }
     },
     {
       "method": "GET",
       "path": "/v2/flows/prospects/bulk-assignments/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getFlowProspectsBulkAssignment; tag=Engage Flows; follow_up=#145"
+      "covered_by": {
+        "direct_read": "flows bulk-assignment get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/flows/folders",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listFlowsFolders; tag=Engage Flows; follow_up=#145"
+      "covered_by": {
+        "stream": "flow_folders"
       }
     },
     {
       "method": "GET",
       "path": "/v2/entities/get-brief",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=generateBrief; tag=Entities; follow_up=#145"
+      "covered_by": {
+        "direct_read": "entities get-brief"
       }
     },
     {
       "method": "GET",
       "path": "/v2/entities/ask-entity",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=askEntity; tag=Entities; follow_up=#145"
+      "covered_by": {
+        "direct_read": "entities ask"
       }
     },
     {
       "method": "GET",
       "path": "/v2/data-privacy/data-for-phone-number",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=findAllReferencesToPhoneNumber; tag=Data Privacy; follow_up=#145"
+      "covered_by": {
+        "direct_read": "privacy find-phone"
       }
     },
     {
       "method": "GET",
       "path": "/v2/data-privacy/data-for-email-address",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=findAllReferencesToEmailAddress; tag=Data Privacy; follow_up=#145"
+      "covered_by": {
+        "direct_read": "privacy find-email"
       }
     },
     {
       "method": "GET",
       "path": "/v2/crm/request-status",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getRequestStatus; tag=CRM; follow_up=#145"
+      "covered_by": {
+        "direct_read": "crm request-status get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/coaching",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listUsers_1; tag=Coaching; follow_up=#145"
+      "covered_by": {
+        "direct_read": "coaching list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/call-outcomes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listCallOutcomes; tag=Outcomes; follow_up=#145"
+      "covered_by": {
+        "stream": "call_outcomes"
       }
     },
     {
       "method": "GET",
       "path": "/v2/all-permission-profiles",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong read or read-query operation is inventoried but not executable in this ledger slice; implement as a bounded direct read or stream before exposure.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listPermissionProfile; tag=Permissions; follow_up=#145"
+      "covered_by": {
+        "stream": "permission_profiles"
       }
     }
   ]

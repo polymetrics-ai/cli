@@ -100,3 +100,16 @@ go build ./cmd/pm
 make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+
+## 2026-07-10 integrated local critical path update
+
+Because this Pi API session still has no subagent tool and the remaining Gong definition write scopes collide, issues #141, #142, #143, #145, #146, and #147 were executed inline as a single local critical-path integration after #144.
+
+Integrated coverage:
+
+- 12 stream-covered GET endpoints (expanded beyond `users`, `calls`, `scorecards`).
+- 16 implemented bounded GET direct reads using `json_redacted`.
+- 23 typed JSON reverse-ETL write actions in `writes.json`.
+- 16 typed operation metadata rows for POST read-query and multipart/top-level-array executor gaps.
+- No generic raw HTTP write, arbitrary body, shell write, SQL write, or credentialed Gong check was introduced.

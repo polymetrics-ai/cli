@@ -29,49 +29,49 @@
     },
     {
       "number": 141,
-      "status": "worker_ready",
+      "status": "sub_pr_green",
       "dependencies": [],
       "write_scope": "internal/connectors/defs/gong/cli_surface.json; validation/tests",
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "local_critical_path_runtime_capability_missing"
     },
     {
       "number": 142,
-      "status": "planned",
+      "status": "sub_pr_green",
       "dependencies": [
         141
       ],
       "write_scope": "help/docs/website/generated artifacts",
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_runtime_capability_missing"
     },
     {
       "number": 143,
-      "status": "worker_ready",
+      "status": "sub_pr_green",
       "dependencies": [],
       "write_scope": "Gong stream definitions, schemas, fixtures, stream runner tests",
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "local_critical_path_runtime_capability_missing"
     },
     {
       "number": 145,
-      "status": "worker_ready",
+      "status": "sub_pr_green",
       "dependencies": [],
       "write_scope": "Gong direct-read metadata/executor/tests",
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "local_critical_path_runtime_capability_missing"
     },
     {
       "number": 146,
-      "status": "worker_ready",
+      "status": "sub_pr_green",
       "dependencies": [],
       "write_scope": "bounded body/binary policy and fixtures",
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "local_critical_path_runtime_capability_missing"
     },
     {
       "number": 147,
-      "status": "planned",
+      "status": "sub_pr_green",
       "dependencies": [
         146
       ],
       "write_scope": "Gong writes.json, sensitive/admin policy, preview/redaction tests",
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_runtime_capability_missing"
     }
   ],
   "spawn_decisions": [
@@ -101,6 +101,19 @@
         146
       ],
       "reason": "After #144 local slice, several lanes are worker-ready, but this Pi API session still has no subagent tool; remaining Gong defs write scopes also collide, so continue sequentially in a future local critical path or isolated worker session."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path_runtime_capability_missing",
+      "issue_numbers": [
+        141,
+        142,
+        143,
+        145,
+        146,
+        147
+      ],
+      "reason": "No subagent tool exposed in this Pi API session; remaining Gong definition write scopes collided, so the lanes were integrated inline with targeted red/green verification."
     }
   ],
   "subissues": [
@@ -124,6 +137,132 @@
         "disposition_summary": "Draft parent PR opened; automated review coverage pending until parent PR is ready or fallback route is chosen.",
         "disposition_url": "pending"
       }
+    },
+    {
+      "number": 141,
+      "url": "https://github.com/polymetrics-ai/cli/issues/141",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending_local_commit",
+        "reviewed_range": "pending",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Draft parent PR remains review-blocked until ready-for-review or fallback route chosen.",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 142,
+      "url": "https://github.com/polymetrics-ai/cli/issues/142",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending_local_commit",
+        "reviewed_range": "pending",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Draft parent PR remains review-blocked until ready-for-review or fallback route chosen.",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 143,
+      "url": "https://github.com/polymetrics-ai/cli/issues/143",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending_local_commit",
+        "reviewed_range": "pending",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Draft parent PR remains review-blocked until ready-for-review or fallback route chosen.",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 145,
+      "url": "https://github.com/polymetrics-ai/cli/issues/145",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending_local_commit",
+        "reviewed_range": "pending",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Draft parent PR remains review-blocked until ready-for-review or fallback route chosen.",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 146,
+      "url": "https://github.com/polymetrics-ai/cli/issues/146",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending_local_commit",
+        "reviewed_range": "pending",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Draft parent PR remains review-blocked until ready-for-review or fallback route chosen.",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 147,
+      "url": "https://github.com/polymetrics-ai/cli/issues/147",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending_local_commit",
+        "reviewed_range": "pending",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Draft parent PR remains review-blocked until ready-for-review or fallback route chosen.",
+        "disposition_url": "pending"
+      }
     }
   ],
   "human_gates": [
@@ -135,5 +274,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T20:26:15Z"
+  "updated_at": "2026-07-10T00:00:00Z"
 }
