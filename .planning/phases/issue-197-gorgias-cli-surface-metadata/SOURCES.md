@@ -9,4 +9,6 @@
 
 ## Source capture
 
-Pending.
+- `OFFICIAL-SURFACE-CAPTURE.md` records public source method/resource summary.
+- `OFFICIAL-OPERATIONS.json` records 114 unique method/path/operationId rows parsed from linked ReadMe markdown OpenAPI blocks.
+- No credentials were used; no secret values were requested, printed, stored, or summarized.

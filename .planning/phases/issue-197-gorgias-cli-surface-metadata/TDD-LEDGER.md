@@ -38,7 +38,12 @@ This red check is intentionally broader than this slice's safe green path: #197 
 
 ## Green evidence
 
-Pending.
+- `jq empty internal/connectors/defs/gorgias/api_surface.json internal/connectors/defs/gorgias/cli_surface.json .planning/phases/issue-197-gorgias-cli-surface-metadata/OFFICIAL-OPERATIONS.json` — passed.
+- `go test ./cmd/connectorgen -run CLISurface` — passed.
+- `go test ./internal/connectors/engine -run CLISurface` — passed.
+- `go run ./cmd/connectorgen validate internal/connectors/defs` — passed: 547 connector(s) checked, 0 findings.
+- `git diff --check` — passed.
+- `go test ./internal/connectors/conformance -run 'TestConformance/gorgias'` — passed.
 
 ## Refactor notes
 

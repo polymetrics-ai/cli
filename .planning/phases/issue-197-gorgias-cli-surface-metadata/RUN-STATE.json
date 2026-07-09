@@ -1,6 +1,6 @@
 {
   "phase": "issue-197-gorgias-cli-surface-metadata",
-  "status": "in_progress",
+  "status": "implementation_checkpoint",
   "parent_issue": 196,
   "sub_issue": 197,
   "parent_pr": "https://github.com/polymetrics-ai/cli/pull/229",
@@ -34,8 +34,19 @@
       "timestamp": "2026-07-09T20:08:00Z",
       "cycle": "issue-197-plan",
       "decision": "local_critical_path",
-      "issue_numbers": [197],
+      "issue_numbers": [
+        197
+      ],
       "reason": "No subagent tool is available; #197 is the parent critical path and runs in this branch."
+    },
+    {
+      "timestamp": "2026-07-09T20:24:00Z",
+      "cycle": "issue-197-implementation",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        197
+      ],
+      "reason": "Added safe Gorgias cli_surface metadata and official operation capture locally because subagent tooling is unavailable."
     }
   ],
   "redEvidence": [
@@ -45,5 +56,32 @@
     }
   ],
   "verificationPassed": false,
-  "verificationBlocker": "implementation and focused gates pending"
+  "verificationBlocker": "full make verify not run for JSON/docs-only metadata checkpoint",
+  "greenEvidence": [
+    {
+      "command": "jq empty internal/connectors/defs/gorgias/api_surface.json internal/connectors/defs/gorgias/cli_surface.json .planning/phases/issue-197-gorgias-cli-surface-metadata/OFFICIAL-OPERATIONS.json",
+      "result": "passed"
+    },
+    {
+      "command": "go test ./cmd/connectorgen -run CLISurface",
+      "result": "passed"
+    },
+    {
+      "command": "go test ./internal/connectors/engine -run CLISurface",
+      "result": "passed"
+    },
+    {
+      "command": "go run ./cmd/connectorgen validate internal/connectors/defs",
+      "result": "passed: 547 connector(s) checked, 0 findings"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "command": "go test ./internal/connectors/conformance -run 'TestConformance/gorgias'",
+      "result": "passed"
+    }
+  ],
+  "focusedVerificationPassed": true
 }

@@ -1,8 +1,8 @@
 {
   "api": "Gorgias REST API (https://<domain>.gorgias.com/api)",
   "docs": "https://developers.gorgias.com/reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (tickets, customers, messages, satisfaction-surveys); the full Gorgias surface (ticket create/update, tags, teams, views, macros, integrations, rules, etc.) is out of scope outside this connector's current declared surface",
+  "reviewed_at": "2026-07-09",
+  "scope": "issue #197 CLI metadata bridge: the current executable surface remains the 4 legacy-parity read streams only (tickets, customers, messages, satisfaction-surveys). The public Gorgias llms.txt plus linked ReadMe OpenAPI pages expose 114 operations; issue #200 owns full operation-ledger classification before later stream, direct-read, binary, and reverse-ETL lanes claim implementation.",
   "endpoints": [
     {
       "method": "GET",
