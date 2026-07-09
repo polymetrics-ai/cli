@@ -2,7 +2,9 @@
   "phase": "issue-181-freshchat-cli-surface-metadata",
   "issue": 181,
   "parent_issue": 180,
-  "status": "verified_local",
+  "pr_url": "https://github.com/polymetrics-ai/cli/pull/241",
+  "implementation_sha": "acd8d2387ee98c21ceb486221f1f03bdf8542b9f",
+  "status": "pr_open_verified",
   "gsd": {
     "plan_phase_command": "scripts/gsd prompt plan-phase issue-181-freshchat-cli-surface-metadata --skip-research",
     "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-181-freshchat-cli-surface-metadata --dry-run",
@@ -39,7 +41,14 @@
       "decision": "final_handoff_ready",
       "reason": "After safety-validation cleanup for planned/excluded command metadata, full gates and connectorgen validation pass with zero findings.",
       "issue_numbers": [181]
+    },
+    {
+      "timestamp": "2026-07-09T21:28:00Z",
+      "cycle": "pull_request",
+      "decision": "stacked_pr_open",
+      "reason": "Opened PR #241 targeting parent branch feat/180-freshchat-cli-parity; awaiting automated review coverage.",
+      "issue_numbers": [181]
     }
   ],
-  "updated_at": "2026-07-09T21:24:57Z"
+  "updated_at": "2026-07-09T21:28:00Z"
 }

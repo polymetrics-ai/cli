@@ -1,7 +1,7 @@
 {
   "phase": "issue-180-freshchat-cli-parity",
   "parent_issue": 180,
-  "status": "parent_pr_open",
+  "status": "subissue_181_pr_open",
   "gsd": {
     "doctor": "pass",
     "verify_pi": "pass",
@@ -12,7 +12,7 @@
     "manual_fallback": true
   },
   "verificationPassed": false,
-  "verificationBlocker": "parent PR opened as draft; full parent verification not run",
+  "verificationBlocker": "parent PR opened as draft; #181 verified locally but parent integration/full final verification not complete",
   "orchestrationDecisions": [
     {
       "timestamp": "2026-07-09T19:37:13Z",
@@ -34,7 +34,14 @@
       "decision": "local_critical_path",
       "reason": "Draft parent PR https://github.com/polymetrics-ai/cli/pull/226 opened after planning checkpoint push; proceed to stacked issue #181 branch.",
       "issue_numbers": [181]
+    },
+    {
+      "timestamp": "2026-07-09T21:28:00Z",
+      "cycle": "subissue-pr-open",
+      "decision": "await_review_coverage",
+      "reason": "Issue #181 verified locally and opened as stacked PR https://github.com/polymetrics-ai/cli/pull/241 against the parent branch.",
+      "issue_numbers": [181]
     }
   ],
-  "updated_at": "2026-07-09T19:45:00Z"
+  "updated_at": "2026-07-09T21:28:00Z"
 }
