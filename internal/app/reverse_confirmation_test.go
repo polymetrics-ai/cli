@@ -102,27 +102,7 @@ func TestRunReverseETLRejectsGenericDestructiveActionWithoutConfirmation(t *test
 
 func setupGitHubDestructiveCommandPlan(t *testing.T, ctx context.Context, baseURL string) (*app.App, app.ReversePlan) {
 	t.Helper()
-	root := t.TempDir()
-	if err := app.InitProject(root); err != nil {
-		t.Fatalf("InitProject() error = %v", err)
-	}
-	a, err := app.Open(root)
-	if err != nil {
-		t.Fatalf("Open() error = %v", err)
-	}
-	_, err = a.AddCredential(ctx, app.AddCredentialRequest{
-		Name:      "github-local",
-		Connector: "github",
-		Config: map[string]string{
-			"owner":         "acme",
-			"repo":          "widgets",
-			"public_access": "true",
-			"base_url":      baseURL,
-		},
-	})
-	if err != nil {
-		t.Fatalf("AddCredential(github) error = %v", err)
-	}
+	a, _ := setupGitHubApp(t, ctx, baseURL)
 	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
 		Name:       "delete_repo",
 		Connector:  "github",
@@ -136,6 +116,30 @@ func setupGitHubDestructiveCommandPlan(t *testing.T, ctx context.Context, baseUR
 }
 
 func setupGitHubGenericDestructivePlan(t *testing.T, ctx context.Context, baseURL string) (*app.App, app.ReversePlan) {
+	t.Helper()
+	a, root := setupGitHubApp(t, ctx, baseURL)
+	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
+		t.Fatalf("mkdir warehouse: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(warehouseDir, "repo_deletes.jsonl"), []byte("{\"id\":\"row-1\"}\n"), 0o600); err != nil {
+		t.Fatalf("write warehouse row: %v", err)
+	}
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "delete_repo",
+		SourceTable:           "repo_deletes",
+		DestinationConnector:  "github",
+		DestinationCredential: "github-local",
+		Action:                "repo",
+		Mappings:              map[string]string{"id": "id"},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL(repo) error = %v", err)
+	}
+	return a, plan
+}
+
+func setupGitHubApp(t *testing.T, ctx context.Context, baseURL string) (*app.App, string) {
 	t.Helper()
 	root := t.TempDir()
 	if err := app.InitProject(root); err != nil {
@@ -158,23 +162,5 @@ func setupGitHubGenericDestructivePlan(t *testing.T, ctx context.Context, baseUR
 	if err != nil {
 		t.Fatalf("AddCredential(github) error = %v", err)
 	}
-	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
-	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
-		t.Fatalf("mkdir warehouse: %v", err)
-	}
-	if err := os.WriteFile(filepath.Join(warehouseDir, "repo_deletes.jsonl"), []byte("{\"id\":\"row-1\"}\n"), 0o600); err != nil {
-		t.Fatalf("write warehouse row: %v", err)
-	}
-	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
-		Name:                  "delete_repo",
-		SourceTable:           "repo_deletes",
-		DestinationConnector:  "github",
-		DestinationCredential: "github-local",
-		Action:                "repo",
-		Mappings:              map[string]string{"id": "id"},
-	})
-	if err != nil {
-		t.Fatalf("PlanReverseETL(repo) error = %v", err)
-	}
-	return a, plan
+	return a, root
 }

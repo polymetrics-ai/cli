@@ -820,6 +820,10 @@ func (a *App) confirmationChallengeForAction(connectorName, actionName string) s
 }
 
 func (a *App) confirmationChallengeForPlan(plan ReversePlan) string {
+	// Prefer the current connector manifest so a local state edit cannot remove
+	// a destructive-action confirmation gate from an already-created plan. The
+	// stored plan challenge remains a compatibility fallback for older plans or
+	// connectors that are temporarily unavailable.
 	if challenge := a.confirmationChallengeForAction(plan.DestinationConnector, plan.Action); challenge != "" {
 		return challenge
 	}
