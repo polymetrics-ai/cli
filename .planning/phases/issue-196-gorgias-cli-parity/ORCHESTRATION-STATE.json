@@ -155,6 +155,14 @@
         200
       ],
       "reason": "#197 is provisionally integrated into parent branch after green checks. CodeRabbit skipped sub-PR #237 because base is non-default; parent PR #229 fallback coverage is pending while parent remains draft."
+    },
+    {
+      "timestamp": "2026-07-09T21:45:00Z",
+      "decision": "not_spawned_review_blocked",
+      "issue_numbers": [
+        200
+      ],
+      "reason": "Parent PR #229 checks passed after #197 provisional integration, but CodeRabbit skipped because the parent PR is draft; review coverage for #197 remains pending."
     }
   ],
   "subissues": [
@@ -170,15 +178,15 @@
         ".planning/phases/issue-197-gorgias-cli-surface-metadata"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
-      "verification": "local and PR checks passed; sub-PR #237 squash-merged into parent branch commit 38e2eef4",
+      "verification": "local gates, sub-PR checks, and parent PR #229 checks passed after provisional integration",
       "automated_review": {
         "primary_route": "coderabbit_auto",
         "status": "skipped",
         "head_sha": "4d9471cb61405f6351a70bad4e75cf0a97ac05ad",
-        "reviewed_range": "CodeRabbit skipped sub-PR #237; parent PR #229 fallback review pending for integrated commit 38e2eef4",
+        "reviewed_range": "CodeRabbit skipped sub-PR #237 and draft parent PR #229; coverage pending until parent PR fallback review can run or approved fallback is used",
         "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "No actionable CodeRabbit findings; skipped status is not approval. Parent PR fallback coverage pending.",
+        "disposition_summary": "No actionable review findings; skipped statuses recorded as non-approval. Parent review coverage pending.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/237"
       }
     },
@@ -347,5 +355,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T21:25:00Z"
+  "updated_at": "2026-07-09T21:45:00Z"
 }

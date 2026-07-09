@@ -68,8 +68,18 @@
         200
       ],
       "reason": "Sub-PR #237 green and squash-merged into parent branch; #197 awaits parent PR fallback review coverage. #200 ready but paused behind review-blocked parent state."
+    },
+    {
+      "timestamp": "2026-07-09T21:45:00Z",
+      "cycle": "parent-checks-after-issue-197",
+      "decision": "not_spawned_review_blocked",
+      "issue_numbers": [
+        197,
+        200
+      ],
+      "reason": "Parent PR #229 checks passed; CodeRabbit skipped draft parent PR, so #197 review coverage remains pending and #200 is paused behind review routing."
     }
   ],
   "verificationPassed": false,
-  "verificationBlocker": "parent review coverage pending for provisionally integrated #197"
+  "verificationBlocker": "automated review coverage pending because CodeRabbit skipped draft parent PR #229"
 }
