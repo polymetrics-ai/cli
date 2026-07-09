@@ -22,16 +22,62 @@ scripts/gsd prompt programming-loop init --phase issue-204-crisp-cli-parity --dr
 
 Result: blocked; adapter returned `unknown GSD command: programming-loop`. Manual GSD/TDD fallback recorded in `PLAN.md` and `TDD-LEDGER.md`.
 
-## Planned local gates
+## Completed targeted #205 gates
 
-Issue #205 targeted gates:
+Red validation before scaffold:
 
 ```bash
 go run ./cmd/connectorgen validate internal/connectors/defs/crisp
+```
+
+Result: failed as expected because the Crisp bundle path did not exist yet.
+
+Targeted single-connector validation after scaffold (temp root required because connectorgen validates connector directories under a root):
+
+```bash
+tmp=$(mktemp -d); cp -R internal/connectors/defs/crisp "$tmp/crisp"; go run ./cmd/connectorgen validate "$tmp"
+```
+
+Result: `connectorgen validate: 1 connector(s) checked, 0 findings`.
+
+Fleet validation:
+
+```bash
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-Parent integrated gates before handoff:
+Result: `connectorgen validate: 548 connector(s) checked, 0 findings`.
+
+Conformance smoke:
+
+```bash
+go test ./internal/connectors/conformance -run 'TestConformance/crisp'
+```
+
+Result: pass.
+
+Connector help/inspect/docs smoke:
+
+```bash
+go run ./cmd/pm help connectors
+tmp=$(mktemp); go run ./cmd/pm connectors inspect crisp --json > "$tmp" && python3 -c 'import json,sys; obj=json.load(open(sys.argv[1])); print(obj["connector"]["name"])' "$tmp"; rm -f "$tmp"
+./pm docs validate --connectors-dir docs/connectors
+rg -n "crisp|Crisp" docs/cli docs/connectors
+```
+
+Result: pass; inspect output `crisp`, docs validate passed, docs grep finds Crisp catalog/manual entries.
+
+Full local gate on #205 branch:
+
+```bash
+make verify
+```
+
+Result: pass; completed fmt, tidy-check, vet, test, build, docs validate, smoke, lint, and connectorgen validate.
+
+## Planned local gates
+
+Parent integrated gates before final handoff after later slices:
 
 ```bash
 gofmt -w cmd internal
@@ -67,6 +113,6 @@ Current #205 metadata-only scaffold exemption: runtime provider-specific `pm cri
 
 ## Current status
 
-- Full parent verification: pending.
-- Targeted #205 validation: pending.
-- Automated review route: pending parent PR creation.
+- Full parent verification for the current #205 branch: passed via `make verify`.
+- Targeted #205 validation: passed.
+- Automated review route: CodeRabbit reviewed #235 after the non-default-base auto-skip and initial rate-limit window; two findings fixed/pushed in `49319c88`. Incremental review of the fix commit is rate-limited (next review available in 39 minutes); do not retry immediately.

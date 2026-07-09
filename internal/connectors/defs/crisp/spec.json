@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Crisp Connection Specification",
+  "type": "object",
+  "required": [
+    "identifier",
+    "key",
+    "website_id"
+  ],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.crisp.chat",
+      "description": "Crisp API base URL override for tests or proxies."
+    },
+    "identifier": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Crisp REST API identifier used for HTTP Basic authentication. Never logged."
+    },
+    "key": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Crisp REST API key used for HTTP Basic authentication. Never logged."
+    },
+    "website_id": {
+      "type": "string",
+      "description": "Crisp website identifier used by website-scoped operations."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional lower-bound timestamp for future incremental streams."
+    },
+    "page_size": {
+      "type": "integer",
+      "default": 100,
+      "description": "Future read page-size hint where supported by Crisp endpoints."
+    },
+    "max_pages": {
+      "type": "integer",
+      "default": 0,
+      "description": "Future maximum pages hint; 0 means no connector-level page cap."
+    }
+  }
+}

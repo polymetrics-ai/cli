@@ -1,0 +1,2869 @@
+{
+  "api": "Crisp REST API v1",
+  "docs": "https://docs.crisp.chat/references/rest-api/v1/",
+  "reviewed_at": "2026-07-10",
+  "operation_ledger_version": 1,
+  "scope": "All 220 non-HEAD operations parsed from the official Crisp REST API v1 reference. #205 records a non-executable blocked-by-default metadata ledger; later subissues replace rows with covered_by stream, direct_read, write, or binary policy entries.",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/v1/website",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#create-website",
+        "notes": "Official title: Create Website. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-website",
+        "notes": "Official title: Get A Website. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-a-website",
+        "notes": "Official title: Delete A Website. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/expunge",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#abort-website-deletion",
+        "notes": "Official title: Abort Website Deletion. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversations/{page_number}{?per_page}{&search_query}{&search_type}{&search_operator}{&include_empty}{&filter_inbox_id}{&filter_unread}{&filter_resolved}{&filter_not_resolved}{&filter_mention}{&filter_assigned}{&filter_unassigned}{&filter_date_start}{&filter_date_end}{&order_date_created}{&order_date_updated}{&order_date_waiting}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-conversations",
+        "notes": "Official title: List Conversations. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversations/suggest/segments/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-suggested-conversation-segments",
+        "notes": "Official title: List Suggested Conversation Segments. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/conversations/suggest/segment",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-suggested-conversation-segment",
+        "notes": "Official title: Delete Suggested Conversation Segment. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversations/suggest/data/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-suggested-conversation-data-keys",
+        "notes": "Official title: List Suggested Conversation Data Keys. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/conversations/suggest/data",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-suggested-conversation-data-key",
+        "notes": "Official title: Delete Suggested Conversation Data Key. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversations/spams/{page_number}{?filter_type}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-spam-conversations",
+        "notes": "Official title: List Spam Conversations. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversations/spam/{spam_id}/content",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-spam-conversation-content",
+        "notes": "Official title: Resolve Spam Conversation Content. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversations/spam/{spam_id}/decision",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#submit-spam-conversation-decision",
+        "notes": "Official title: Submit Spam Conversation Decision. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#create-a-new-conversation",
+        "notes": "Official title: Create A New Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-conversation",
+        "notes": "Official title: Get A Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/conversation/{session_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#remove-a-conversation",
+        "notes": "Official title: Remove A Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/initiate",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#initiate-a-conversation-with-existing-session",
+        "notes": "Official title: Initiate A Conversation With Existing Session. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/messages{?timestamp_before}{&timestamp_after}{&timestamp_around}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-messages-in-conversation",
+        "notes": "Official title: Get Messages In Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/message",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#send-a-message-in-conversation",
+        "notes": "Official title: Send A Message In Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-message-in-conversation",
+        "notes": "Official title: Get A Message In Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-a-message-in-conversation",
+        "notes": "Official title: Update A Message In Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/message/{fingerprint}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#remove-a-message-in-conversation",
+        "notes": "Official title: Remove A Message In Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/compose",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#compose-a-message-in-conversation",
+        "notes": "Official title: Compose A Message In Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/read",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#mark-messages-as-read-in-conversation",
+        "notes": "Official title: Mark Messages As Read In Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/unread",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#mark-conversation-as-unread",
+        "notes": "Official title: Mark Conversation As Unread. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/delivered",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#mark-messages-as-delivered-in-conversation",
+        "notes": "Official title: Mark Messages As Delivered In Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/open",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-conversation-open-state",
+        "notes": "Official title: Update Conversation Open State. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/routing",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-conversation-routing-assign",
+        "notes": "Official title: Get Conversation Routing Assign. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/routing",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#assign-conversation-routing",
+        "notes": "Official title: Assign Conversation Routing. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/inbox",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-conversation-inbox",
+        "notes": "Official title: Update Conversation Inbox. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/meta",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-conversation-metas",
+        "notes": "Official title: Get Conversation Metas. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/meta",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-conversation-metas",
+        "notes": "Official title: Update Conversation Metas. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/original/{original_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-an-original-message-in-conversation",
+        "notes": "Official title: Get An Original Message In Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/pages/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-conversation-pages",
+        "notes": "Official title: List Conversation Pages. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/events/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-conversation-events",
+        "notes": "Official title: List Conversation Events. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/files/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-conversation-files",
+        "notes": "Official title: List Conversation Files. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/state",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-conversation-state",
+        "notes": "Official title: Get Conversation State. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/state",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#change-conversation-state",
+        "notes": "Official title: Change Conversation State. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/relations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-conversation-relations",
+        "notes": "Official title: Get Conversation Relations. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/participants",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-conversation-participants",
+        "notes": "Official title: Get Conversation Participants. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/participants",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-conversation-participants",
+        "notes": "Official title: Save Conversation Participants. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/block",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-block-status-for-conversation",
+        "notes": "Official title: Get Block Status For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/block",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#block-incoming-messages-for-conversation",
+        "notes": "Official title: Block Incoming Messages For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/verify",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-verify-status-for-conversation",
+        "notes": "Official title: Get Verify Status For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/verify",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-verify-status-for-conversation",
+        "notes": "Official title: Update Verify Status For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/verify/identity",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-identity-verification-for-conversation",
+        "notes": "Official title: Request Identity Verification For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/verify/identity/link",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#redeem-identity-verification-link-for-conversation",
+        "notes": "Official title: Redeem Identity Verification Link For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/transcript",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-email-transcript-for-conversation",
+        "notes": "Official title: Request Email Transcript For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/purge",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-chatbox-binding-purge-for-conversation",
+        "notes": "Official title: Request Chatbox Binding Purge For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/feedback",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-user-feedback-for-conversation",
+        "notes": "Official title: Request User Feedback For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/browsing",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-browsing-sessions-for-conversation",
+        "notes": "Official title: List Browsing Sessions For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/browsing",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#initiate-browsing-session-for-conversation",
+        "notes": "Official title: Initiate Browsing Session For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/browsing/{browsing_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#send-action-to-an-existing-browsing-session",
+        "notes": "Official title: Send Action To An Existing Browsing Session. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/browsing/{browsing_id}/assist",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#assist-an-existing-browsing-session",
+        "notes": "Official title: Assist An Existing Browsing Session. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/call",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#initiate-new-call-session-for-conversation",
+        "notes": "Official title: Initiate New Call Session For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/call",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-ongoing-call-session-for-conversation",
+        "notes": "Official title: Get Ongoing Call Session For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/call/{call_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#abort-ongoing-call-session-for-conversation",
+        "notes": "Official title: Abort Ongoing Call Session For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/call/{call_id}/signaling",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#transmit-signaling-on-ongoing-call-session",
+        "notes": "Official title: Transmit Signaling On Ongoing Call Session. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/tool",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-tool-call-for-conversation",
+        "notes": "Official title: Request Tool Call For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/widget/{plugin_id}/button",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#deliver-widget-button-action-for-conversation",
+        "notes": "Official title: Deliver Widget Button Action For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/widget/{plugin_id}/data",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#deliver-widget-data-action-for-conversation",
+        "notes": "Official title: Deliver Widget Data Action For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/reminder",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#schedule-a-reminder-for-conversation",
+        "notes": "Official title: Schedule A Reminder For Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/conversation/{session_id}/report",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#report-conversation",
+        "notes": "Official title: Report Conversation. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/stats",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-people-statistics",
+        "notes": "Official title: Get People Statistics. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/suggest/segments/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-suggested-people-segments",
+        "notes": "Official title: List Suggested People Segments. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/people/suggest/segment",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-suggested-people-segment",
+        "notes": "Official title: Delete Suggested People Segment. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/suggest/data/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-suggested-people-data-keys",
+        "notes": "Official title: List Suggested People Data Keys. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/people/suggest/data",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-suggested-people-data-key",
+        "notes": "Official title: Delete Suggested People Data Key. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/suggest/events/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-suggested-people-events",
+        "notes": "Official title: List Suggested People Events. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/people/suggest/event",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-suggested-people-event",
+        "notes": "Official title: Delete Suggested People Event. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/profiles/{page_number}{?per_page}{&sort_field}{&sort_order}{&search_operator}{&search_filter}{&search_text}{&filter_date_start}{&filter_date_end}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-people-profiles",
+        "notes": "Official title: List People Profiles. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/people/profile",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-new-people-profile",
+        "notes": "Official title: Add New People Profile. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/profile/{people_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-people-profile",
+        "notes": "Official title: Get People Profile. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/people/profile/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-people-profile",
+        "notes": "Official title: Save People Profile. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/people/profile/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-people-profile",
+        "notes": "Official title: Update People Profile. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/people/profile/{people_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#remove-people-profile",
+        "notes": "Official title: Remove People Profile. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/conversations/{people_id}/list/{page_number}{?filter_unread}{&filter_resolved}{&filter_not_resolved}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-people-conversations",
+        "notes": "Official title: List People Conversations. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/campaigns/{people_id}/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-people-campaigns",
+        "notes": "Official title: List People Campaigns. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/people/events/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-a-people-event",
+        "notes": "Official title: Add A People Event. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/events/{people_id}/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-people-events",
+        "notes": "Official title: List People Events. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/data/{people_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-people-data",
+        "notes": "Official title: Get People Data. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/people/data/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-people-data",
+        "notes": "Official title: Save People Data. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/people/data/{people_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-people-data",
+        "notes": "Official title: Update People Data. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/people/subscription/{people_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-people-subscription-status",
+        "notes": "Official title: Get People Subscription Status. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/people/subscription/{people_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-people-subscription-status",
+        "notes": "Official title: Update People Subscription Status. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/people/export/profiles",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp file/export/import or signed-URL operation inventoried from official docs; blocked until #210 declares bounded binary/file policy and safe output limits.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#export-people-profiles",
+        "notes": "Official title: Export People Profiles. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/people/import/profiles",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp file/export/import or signed-URL operation inventoried from official docs; blocked until #210 declares bounded binary/file policy and safe output limits.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#import-people-profiles",
+        "notes": "Official title: Import People Profiles. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/count",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#count-visitors",
+        "notes": "Official title: Count Visitors. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-visitors",
+        "notes": "Official title: List Visitors. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/map{?center_latitude}{&center_longitude}{&center_radius}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#pinpoint-visitors-on-a-map",
+        "notes": "Official title: Pinpoint Visitors On A Map. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/token/{token_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-session-identifier-from-token",
+        "notes": "Official title: Get Session Identifier From Token. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/blocked",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#count-blocked-visitors",
+        "notes": "Official title: Count Blocked Visitors. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/visitors/blocked/{block_rule}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#count-blocked-visitors-in-rule",
+        "notes": "Official title: Count Blocked Visitors In Rule. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/visitors/blocked/{block_rule}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#clear-blocked-visitors-in-rule",
+        "notes": "Official title: Clear Blocked Visitors In Rule. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/availability/status",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-website-availability-status",
+        "notes": "Official title: Get Website Availability Status. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/availability/operators",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-website-operator-availabilities",
+        "notes": "Official title: List Website Operator Availabilities. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/operators/list",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-website-operators",
+        "notes": "Official title: List Website Operators. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/operators/active",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-last-active-website-operators",
+        "notes": "Official title: List Last Active Website Operators. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/operators/active",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#flush-last-active-website-operators",
+        "notes": "Official title: Flush Last Active Website Operators. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/operators/email",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#send-email-to-website-operators",
+        "notes": "Official title: Send Email To Website Operators. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/operator/{user_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-website-operator",
+        "notes": "Official title: Get A Website Operator. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/operator",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#invite-a-website-operator",
+        "notes": "Official title: Invite A Website Operator. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/operator/{user_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#change-operator-membership",
+        "notes": "Official title: Change Operator Membership. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/operator/{user_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#unlink-operator-from-website",
+        "notes": "Official title: Unlink Operator From Website. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk",
+        "notes": "Official title: Resolve Helpdesk. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#initialize-helpdesk",
+        "notes": "Official title: Initialize Helpdesk. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk",
+        "notes": "Official title: Delete Helpdesk. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locales/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locales",
+        "notes": "Official title: List Helpdesk Locales. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-helpdesk-locale",
+        "notes": "Official title: Add Helpdesk Locale. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale",
+        "notes": "Official title: Resolve Helpdesk Locale. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-locale",
+        "notes": "Official title: Delete Helpdesk Locale. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/articles/{page_number}{?order_visits}{&search_title}{&filter_category_id}{&filter_section_id}{&filter_status_published}{&filter_status_draft}{&filter_visibility_visible}{&filter_visibility_hidden}{&filter_date_start}{&filter_date_end}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locale-articles",
+        "notes": "Official title: List Helpdesk Locale Articles. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-a-new-helpdesk-locale-article",
+        "notes": "Official title: Add A New Helpdesk Locale Article. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-article",
+        "notes": "Official title: Resolve Helpdesk Locale Article. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-helpdesk-locale-article",
+        "notes": "Official title: Save Helpdesk Locale Article. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-helpdesk-locale-article",
+        "notes": "Official title: Update Helpdesk Locale Article. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-locale-article",
+        "notes": "Official title: Delete Helpdesk Locale Article. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/page",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-article-page",
+        "notes": "Official title: Resolve Helpdesk Locale Article Page. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/category",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-article-category",
+        "notes": "Official title: Resolve Helpdesk Locale Article Category. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/category",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-helpdesk-locale-article-category",
+        "notes": "Official title: Update Helpdesk Locale Article Category. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternates",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locale-article-alternates",
+        "notes": "Official title: List Helpdesk Locale Article Alternates. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-article-alternate",
+        "notes": "Official title: Resolve Helpdesk Locale Article Alternate. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-helpdesk-locale-article-alternate",
+        "notes": "Official title: Save Helpdesk Locale Article Alternate. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/alternate/{locale_linked}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-locale-article-alternate",
+        "notes": "Official title: Delete Helpdesk Locale Article Alternate. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/publish",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#publish-helpdesk-locale-article",
+        "notes": "Official title: Publish Helpdesk Locale Article. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/article/{article_id}/unpublish",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#unpublish-helpdesk-locale-article",
+        "notes": "Official title: Unpublish Helpdesk Locale Article. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/categories/{page_number}{?search_name}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locale-categories",
+        "notes": "Official title: List Helpdesk Locale Categories. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-helpdesk-locale-category",
+        "notes": "Official title: Add Helpdesk Locale Category. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-category",
+        "notes": "Official title: Resolve Helpdesk Locale Category. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-helpdesk-locale-category",
+        "notes": "Official title: Save Helpdesk Locale Category. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-helpdesk-locale-category",
+        "notes": "Official title: Update Helpdesk Locale Category. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-locale-category",
+        "notes": "Official title: Delete Helpdesk Locale Category. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/sections/{page_number}{?search_name}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locale-sections",
+        "notes": "Official title: List Helpdesk Locale Sections. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-helpdesk-locale-section",
+        "notes": "Official title: Add Helpdesk Locale Section. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-locale-section",
+        "notes": "Official title: Resolve Helpdesk Locale Section. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-helpdesk-locale-section",
+        "notes": "Official title: Save Helpdesk Locale Section. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-helpdesk-locale-section",
+        "notes": "Official title: Update Helpdesk Locale Section. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/category/{category_id}/section/{section_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-locale-section",
+        "notes": "Official title: Delete Helpdesk Locale Section. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/feedback/ratings{?filter_date_start}{&filter_date_end}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#map-helpdesk-locale-feedback-ratings",
+        "notes": "Official title: Map Helpdesk Locale Feedback Ratings. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/feedback/list/{page_number}{?filter_date_start}{&filter_date_end}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-locale-feedbacks",
+        "notes": "Official title: List Helpdesk Locale Feedbacks. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/import",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp file/export/import or signed-URL operation inventoried from official docs; blocked until #210 declares bounded binary/file policy and safe output limits.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#import-external-helpdesk-to-locale",
+        "notes": "Official title: Import External Helpdesk To Locale. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/locale/{locale}/export",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp file/export/import or signed-URL operation inventoried from official docs; blocked until #210 declares bounded binary/file policy and safe output limits.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#export-helpdesk-locale-articles",
+        "notes": "Official title: Export Helpdesk Locale Articles. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/redirections/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-helpdesk-redirections",
+        "notes": "Official title: List Helpdesk Redirections. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/helpdesk/redirection",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#add-helpdesk-redirection",
+        "notes": "Official title: Add Helpdesk Redirection. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/redirection/{redirection_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-redirection",
+        "notes": "Official title: Resolve Helpdesk Redirection. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/helpdesk/redirection/{redirection_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-helpdesk-redirection",
+        "notes": "Official title: Delete Helpdesk Redirection. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-settings",
+        "notes": "Official title: Resolve Helpdesk Settings. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/settings",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-helpdesk-settings",
+        "notes": "Official title: Save Helpdesk Settings. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/domain",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resolve-helpdesk-domain",
+        "notes": "Official title: Resolve Helpdesk Domain. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/helpdesk/domain",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#request-helpdesk-domain-change",
+        "notes": "Official title: Request Helpdesk Domain Change. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/helpdesk/domain/setup{?custom}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#generate-helpdesk-domain-setup-flow",
+        "notes": "Official title: Generate Helpdesk Domain Setup Flow. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaigns/list/{page_number}{?search_name}{&filter_tag}{&filter_type_one_shot}{&filter_type_automated}{&filter_status_not_configured}{&filter_status_ready}{&filter_status_paused}{&filter_status_sending}{&filter_status_done}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-campaigns",
+        "notes": "Official title: List Campaigns. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaigns/tags",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-campaign-tags",
+        "notes": "Official title: List Campaign Tags. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaigns/templates/{page_number}{?search_name}{&filter_type_static}{&filter_type_custom}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-campaign-templates",
+        "notes": "Official title: List Campaign Templates. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaigns/template",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#create-a-new-campaign-template",
+        "notes": "Official title: Create A New Campaign Template. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaigns/template/{template_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-campaign-template",
+        "notes": "Official title: Get A Campaign Template. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/campaigns/template/{template_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-a-campaign-template",
+        "notes": "Official title: Save A Campaign Template. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/campaigns/template/{template_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-a-campaign-template",
+        "notes": "Official title: Update A Campaign Template. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/campaigns/template/{template_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#remove-a-campaign-template",
+        "notes": "Official title: Remove A Campaign Template. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaign",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#create-a-new-campaign",
+        "notes": "Official title: Create A New Campaign. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-a-campaign",
+        "notes": "Official title: Get A Campaign. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-a-campaign",
+        "notes": "Official title: Save A Campaign. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-a-campaign",
+        "notes": "Official title: Update A Campaign. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#remove-a-campaign",
+        "notes": "Official title: Remove A Campaign. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/dispatch",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#dispatch-a-campaign",
+        "notes": "Official title: Dispatch A Campaign. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/resume",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#resume-a-campaign",
+        "notes": "Official title: Resume A Campaign. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/pause",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#pause-a-campaign",
+        "notes": "Official title: Pause A Campaign. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/test",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#test-a-campaign",
+        "notes": "Official title: Test A Campaign. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/recipients/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-campaign-recipients",
+        "notes": "Official title: List Campaign Recipients. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/campaign/{campaign_id}/statistics/{type}/{page_number}{?per_page}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-campaign-statistics",
+        "notes": "Official title: List Campaign Statistics. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/analytics/generate",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#generate-analytics",
+        "notes": "Official title: Generate Analytics. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/resolve",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-resolve-items",
+        "notes": "Official title: Batch Resolve Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/unresolve",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-unresolve-items",
+        "notes": "Official title: Batch Unresolve Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/read",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-read-items",
+        "notes": "Official title: Batch Read Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/unread",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-unread-items",
+        "notes": "Official title: Batch Unread Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/batch/report",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-report-items",
+        "notes": "Official title: Batch Report Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/block",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-block-items",
+        "notes": "Official title: Batch Block Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/routing",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-routing-items",
+        "notes": "Official title: Batch Routing Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/inbox",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-inbox-items",
+        "notes": "Official title: Batch Inbox Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/segments",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-segments-items",
+        "notes": "Official title: Batch Segments Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/data",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-data-items",
+        "notes": "Official title: Batch Data Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/batch/remove",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-remove-items",
+        "notes": "Official title: Batch Remove Items. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/inboxes/list/{page_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-website-inboxes",
+        "notes": "Official title: List Website Inboxes. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/inboxes/batch/order",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#batch-order-website-inboxes",
+        "notes": "Official title: Batch Order Website Inboxes. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/inbox",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#create-a-new-website-inbox",
+        "notes": "Official title: Create A New Website Inbox. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/inbox/{inbox_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-website-inbox",
+        "notes": "Official title: Get Website Inbox. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/website/{website_id}/inbox/{inbox_id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-website-inbox",
+        "notes": "Official title: Save Website Inbox. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/website/{website_id}/inbox/{inbox_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#delete-website-inbox",
+        "notes": "Official title: Delete Website Inbox. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-website-settings",
+        "notes": "Official title: Get Website Settings. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/settings",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-website-settings",
+        "notes": "Official title: Update Website Settings. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/verify/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-verify-settings",
+        "notes": "Official title: Get Verify Settings. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/website/{website_id}/verify/settings",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-verify-settings",
+        "notes": "Official title: Update Verify Settings. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/verify/key",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-verify-key",
+        "notes": "Official title: Get Verify Key. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/website/{website_id}/verify/key",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Crisp mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, redaction, approval, and preview semantics.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#roll-verify-key",
+        "notes": "Official title: Roll Verify Key. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/website/{website_id}/connect/endpoints",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-website-connect-endpoints",
+        "notes": "Official title: Get Website Connect Endpoints. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-all-active-subscriptions",
+        "notes": "Official title: List All Active Subscriptions. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription/{website_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-subscriptions-for-a-website",
+        "notes": "Official title: List Subscriptions For A Website. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-subscription-details",
+        "notes": "Official title: Get Subscription Details. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{website_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#subscribe-website-to-plugin",
+        "notes": "Official title: Subscribe Website To Plugin. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#unsubscribe-plugin-from-website",
+        "notes": "Official title: Unsubscribe Plugin From Website. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-subscription-settings",
+        "notes": "Official title: Get Subscription Settings. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/settings",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#save-subscription-settings",
+        "notes": "Official title: Save Subscription Settings. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/settings",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#update-subscription-settings",
+        "notes": "Official title: Update Subscription Settings. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/bill/usage",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-plugin-usage-bills",
+        "notes": "Official title: Get Plugin Usage Bills. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/bill/usage",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#report-plugin-usage-to-bill",
+        "notes": "Official title: Report Plugin Usage To Bill. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/attest/provenance",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-plugin-attest-provenance",
+        "notes": "Official title: Get Plugin Attest Provenance. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/channel",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#forward-plugin-payload-to-channel",
+        "notes": "Official title: Forward Plugin Payload To Channel. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{website_id}/{plugin_id}/event",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#dispatch-plugin-event",
+        "notes": "Official title: Dispatch Plugin Event. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugin/connect/account",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-connect-account",
+        "notes": "Official title: Get Connect Account. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugin/connect/websites/all/{page_number}{?filter_configured}{&include_plan}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-all-connect-websites",
+        "notes": "Official title: List All Connect Websites. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugin/connect/websites/since{?date_since}{&filter_configured}{&include_plan}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-connect-websites-since",
+        "notes": "Official title: List Connect Websites Since. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plugin/connect/endpoints",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-connect-endpoints",
+        "notes": "Official title: Get Connect Endpoints. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plans/subscription",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-all-active-plan-subscriptions",
+        "notes": "Official title: List All Active Plan Subscriptions. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plans/subscription/{website_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#get-plan-subscription-for-a-website",
+        "notes": "Official title: Get Plan Subscription For A Website. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/plans/subscription/{website_id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#subscribe-website-to-plan",
+        "notes": "Official title: Subscribe Website To Plan. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/plans/subscription/{website_id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp destructive operation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk text, approval, and destructive confirmation.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#unsubscribe-plan-from-website",
+        "notes": "Official title: Unsubscribe Plan From Website. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/plans/subscription/{website_id}/bill/period",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#change-bill-period-for-website-plan-subscription",
+        "notes": "Official title: Change Bill Period For Website Plan Subscription. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plans/subscription/{website_id}/coupon{?code}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#check-coupon-availability-for-website-plan-subscription",
+        "notes": "Official title: Check Coupon Availability For Website Plan Subscription. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/plans/subscription/{website_id}/coupon",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp administrative mutation inventoried from official docs; blocked until #211 declares typed reverse-ETL schema, risk tier, redaction, and approval policy.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#redeem-coupon-for-website-plan-subscription",
+        "notes": "Official title: Redeem Coupon For Website Plan Subscription. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/bucket/url/generate",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Crisp file/export/import or signed-URL operation inventoried from official docs; blocked until #210 declares bounded binary/file policy and safe output limits.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#generate-bucket-url",
+        "notes": "Official title: Generate Bucket URL. #205 metadata scaffold only; no executable dispatch."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/media/animation/list/{page_number}{?per_page}{?search_query}{&list_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Crisp REST read operation inventoried from official docs; executable ETL/direct-read coverage is assigned in #207/#209 after bounded schemas and output policy are declared.",
+        "source_url": "https://docs.crisp.chat/references/rest-api/v1/#list-animation-medias",
+        "notes": "Official title: List Animation Medias. #205 metadata scaffold only; no executable dispatch."
+      }
+    }
+  ]
+}

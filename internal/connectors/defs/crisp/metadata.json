@@ -1,0 +1,24 @@
+{
+  "name": "crisp",
+  "display_name": "Crisp",
+  "description": "Inventory scaffold for the Crisp REST API v1 connector. The official 220-operation surface is recorded in api_surface.json and cli_surface.json; executable streams, direct reads, binary policy, and reverse-ETL writes land in follow-up #204 subissues before this parent is ready.",
+  "integration_type": "api",
+  "docs_url": "https://docs.crisp.chat/references/rest-api/v1/",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": false,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "Crisp REST API reads may include website visitor, conversation, people, campaign, and helpdesk data; executable reads are not exposed by #205.",
+    "write": "Crisp REST API mutations can create, update, delete, import, export, or administer website resources; all writes remain blocked until typed reverse-ETL actions and approvals are declared.",
+    "approval": "Future reverse ETL writes require plan, preview, approval token, and typed confirmation for destructive/admin operations."
+  }
+}

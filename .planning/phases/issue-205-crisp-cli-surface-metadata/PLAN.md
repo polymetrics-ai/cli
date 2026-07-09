@@ -16,6 +16,8 @@ Create the initial non-executable Crisp connector metadata scaffold:
 - `internal/connectors/defs/crisp/api_surface.json` from the official Crisp REST docs.
 - `internal/connectors/defs/crisp/cli_surface.json` mapping provider-inspired command paths to safe Polymetrics intents with planned availability only.
 - `internal/connectors/defs/crisp/docs.md` with fixed connector headings and honest known limits.
+- Generated connector docs/catalog artifacts needed by `pm docs validate` for the new catalog entry.
+- Catalog count tests/help text that must increase when the new declarative bundle is present.
 
 No executable ETL streams, direct reads, writes, binary downloads, or reverse-ETL actions are implemented in #205.
 
@@ -58,10 +60,10 @@ go run ./cmd/connectorgen validate internal/connectors/defs/crisp
 
 Expected: failure because the Crisp bundle does not exist yet.
 
-Green targeted validation after scaffold:
+Green targeted validation after scaffold (connectorgen validates connector directories under a root; a direct connector path reports 0 checked connectors):
 
 ```bash
-go run ./cmd/connectorgen validate internal/connectors/defs/crisp
+tmp=$(mktemp -d); cp -R internal/connectors/defs/crisp "$tmp/crisp"; go run ./cmd/connectorgen validate "$tmp"
 ```
 
 Fleet validation:
@@ -97,5 +99,8 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 
 - Crisp official operation count in `api_surface.json` is 220 with the expected method split.
 - `cli_surface.json` contains a planned safe intent for each operation or a safe docs-only classification.
-- `connectorgen validate internal/connectors/defs/crisp` passes.
+- Targeted temp-root Crisp validation passes with 1 connector checked and 0 findings.
+- Fleet validation passes.
+- Generated connector docs/catalog validation passes.
+- Full local `make verify` passes on the stacked branch.
 - Parent ledger and #205 TDD/verification artifacts are updated with command results.

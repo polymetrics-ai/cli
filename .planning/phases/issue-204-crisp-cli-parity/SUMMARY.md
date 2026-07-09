@@ -1,6 +1,6 @@
 # Summary — Issue #204 Crisp CLI parity parent
 
-State: parent PR open (draft).
+State: parent PR open (draft); #205 stacked PR open/ready with full local verification; CodeRabbit findings fixed and pushed; incremental review is rate-limited.
 
 Completed:
 
@@ -9,22 +9,28 @@ Completed:
 - Generated planning prompt with `scripts/gsd prompt plan-phase 204 --skip-research`.
 - Recorded manual programming-loop fallback because `scripts/gsd prompt programming-loop ...` is unavailable in the current command registry.
 - Created parent plan, TDD ledger, verification checklist, and run-state before production edits.
+- Created stacked branch `feat/205-crisp-cli-surface-metadata`.
+- Added metadata-only Crisp bundle scaffold with 220 official operation ledger rows and planned CLI metadata only.
+- Updated catalog-count tests/help text and generated connector docs/catalog artifacts for the new bundle.
+- Passed targeted #205 validation, all-defs validation, Crisp conformance/inspect/docs smokes, and full `make verify`.
+- CodeRabbit reviewed #235 after the initial rate-limit window and reported two actionable findings; both were fixed in `49319c88` with `make verify` green.
 
 Parent PR: https://github.com/polymetrics-ai/cli/pull/228 (draft, base `main`).
+#205 stacked PR: https://github.com/polymetrics-ai/cli/pull/235 (ready for review, base `feat/204-crisp-cli-parity`).
 
 Current blocker:
 
-- No Pi subagent tool is exposed in this harness, so mutating workers cannot be spawned. #205 proceeds as local critical path on a stacked branch.
+- No Pi subagent tool is exposed in this harness, so mutating workers cannot be spawned. #205 proceeded as local critical path on a stacked branch.
 
 Next:
 
-1. Create/switch to `feat/205-crisp-cli-surface-metadata` from parent branch.
-2. Capture #205 red validation for missing Crisp bundle.
-3. Add non-executable Crisp metadata/API/CLI surface scaffold and run targeted validation.
+1. Do not retry CodeRabbit immediately; incremental review for `49319c88` hit a review-limit window (next review available in 39 minutes).
+2. After the window, request incremental CodeRabbit review because automatic review is disabled for the non-default base.
+3. Disposition any new findings before #205 is considered merge-ready.
 
 Safety:
 
 - No secrets requested or used.
 - No credentialed connector checks run.
-- No production code changed in this planning seed.
+- #205 production files are metadata-only; no executable streams, direct reads, writes, or binary transfers are exposed.
 - No reverse ETL execution or destructive external action run.

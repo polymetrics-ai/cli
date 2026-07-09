@@ -13,7 +13,7 @@
     "programmingLoopStatus": "manual_fallback_command_unavailable"
   },
   "verificationPassed": false,
-  "verificationNotes": "Full parent verification has not run. Only GSD adapter preflight passed.",
+  "verificationNotes": "Full local make verify passed on #205 stacked branch. Parent verification remains false until all #204 subissues integrate and final parent gates run.",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -29,7 +29,12 @@
       "cycle": "worker-ready-queue",
       "decision": "local_critical_path",
       "reason": "Subissues #205-#211 exist, but this harness exposes read/bash/edit/write only and no Pi subagent tool for isolated mutating workers. #205 will run locally on a stacked branch."
+    },
+    {
+      "cycle": "issue-205-full-local-green",
+      "decision": "local_critical_path",
+      "reason": "#205 metadata scaffold, generated docs/catalog, and catalog-count updates passed make verify on feat/205-crisp-cli-surface-metadata."
     }
   ],
-  "updatedAt": "2026-07-10T00:10:00Z"
+  "updatedAt": "2026-07-10T02:20:00Z"
 }

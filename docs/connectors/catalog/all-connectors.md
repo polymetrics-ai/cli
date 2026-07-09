@@ -105,6 +105,7 @@
 | `convex` | [`icons/convex.svg`](../icons/convex.svg) | Convex | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://docs.convex.dev/http-api/) | bundle definition |
 | `copper` | [`icons/copper.svg`](../icons/copper.svg) | Copper | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developer.copper.com/) | bundle definition |
 | `countercyclical` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Countercyclical | `api` | ga | check, catalog, read, write | 6 | 1 | [Documentation](https://docs.countercyclical.io/developers/endpoints) | bundle definition |
+| `crisp` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Crisp | `api` | alpha | check, catalog | 0 | 0 | [Documentation](https://docs.crisp.chat/references/rest-api/v1/) | bundle definition |
 | `criteo-marketing` | [`icons/criteo.svg`](../icons/criteo.svg) | Criteo Marketing | `api` | ga | check, catalog, read | 9 | 0 | [Documentation](https://developers.criteo.com/marketing-solutions/reference/getting-started) | bundle definition |
 | `customer-io` | [`icons/customer-io.svg`](../icons/customer-io.svg) | Customer.io | `api` | ga | check, catalog, read, write | 16 | 10 | [Documentation](https://customer.io/docs/api/app/) | bundle definition |
 | `customerly` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Customerly | `api` | ga | check, catalog, read, write | 3 | 9 | [Documentation](https://docs.customerly.io) | bundle definition |

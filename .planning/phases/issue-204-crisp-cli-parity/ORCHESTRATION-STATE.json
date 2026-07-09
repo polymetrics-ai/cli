@@ -22,17 +22,17 @@
   "ready_queue": [
     {
       "number": 205,
-      "status": "worker_ready",
+      "status": "full_local_green",
       "dependencies": [],
-      "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold plus issue-205 planning",
+      "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold, generated connector docs/catalog, catalog-count tests/help text, plus issue-205 planning",
       "decision": "local_critical_path"
     },
     {
       "number": 208,
-      "status": "planned",
+      "status": "worker_ready",
       "dependencies": [205],
       "write_scope": "internal/connectors/defs/crisp/api_surface.json operation ledger",
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "ready_after_205_green"
     },
     {
       "number": 207,
@@ -89,21 +89,21 @@
       "number": 205,
       "url": "https://github.com/polymetrics-ai/cli/issues/205",
       "branch": "feat/205-crisp-cli-surface-metadata",
-      "pr_url": "",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/235",
       "worker": "local-critical-path",
-      "status": "worker_ready",
-      "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold plus issue-205 planning",
-      "worker_directory": "current checkout until stacked branch/worktree is created",
-      "verification": "pending",
+      "status": "pr_open_ready_review_blocked",
+      "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold, generated connector docs/catalog, catalog-count tests/help text, plus issue-205 planning",
+      "worker_directory": "current checkout on feat/205-crisp-cli-surface-metadata",
+      "verification": "passed: temp-root connectorgen validate, all-defs connectorgen validate, conformance smoke, connectors inspect/docs smokes, make verify",
       "automated_review": {
-        "primary_route": "blocked",
-        "status": "pending",
-        "head_sha": "",
-        "reviewed_range": "",
-        "coverage_route": "blocked",
-        "fallback_route": "none",
-        "disposition_summary": "parent PR opened as draft; subissue review pending",
-        "disposition_url": ""
+        "primary_route": "coderabbit_status",
+        "status": "review_fix_pushed_rate_limited",
+        "head_sha": "49319c88 review-fix commit pushed; latest planning-only status commit may follow",
+        "reviewed_range": "b035549ce5d7a2698de3fce97a1a1f6157224236..767056d38754bd458183a12632fe58c44547e2fe reviewed; 49319c88 pending incremental review",
+        "coverage_route": "manual_coderabbit_review_after_non_default_base_skip",
+        "fallback_route": "copilot_unavailable_or_not_enabled",
+        "disposition_summary": "CodeRabbit reviewed PR #235 and reported two actionable findings; 49319c88 fixed integer pagination hints and 401 credential hint and passed make verify. Incremental manual review hit CodeRabbit review limit with next review available in 39 minutes; do not retry immediately", 
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/235"
       }
     }
   ],
@@ -116,5 +116,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T00:10:00Z"
+  "updated_at": "2026-07-10T03:55:00Z"
 }
