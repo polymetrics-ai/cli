@@ -38,6 +38,7 @@ type WriteActionSpec struct {
 	Method         string   `json:"method,omitempty"`
 	Path           string   `json:"path,omitempty"`
 	Risk           string   `json:"risk,omitempty"`
+	Confirm        string   `json:"confirm,omitempty"`
 }
 
 type AuthModeSpec struct {

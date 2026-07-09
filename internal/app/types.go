@@ -132,6 +132,7 @@ type ReversePlan struct {
 	ConnectorCommand       string              `json:"connector_command,omitempty"`
 	ConnectorCommandPath   []string            `json:"connector_command_path,omitempty"`
 	ConnectorCommandRecord connectors.Record   `json:"connector_command_record,omitempty"`
+	ConfirmationChallenge  string              `json:"confirmation_challenge,omitempty"`
 	RecordCount            int                 `json:"record_count"`
 	Sample                 []connectors.Record `json:"sample,omitempty"`
 	PlanHash               string              `json:"plan_hash"`
@@ -145,6 +146,7 @@ type ReversePlan struct {
 type RunReverseETLRequest struct {
 	PlanID        string `json:"plan_id"`
 	ApprovalToken string `json:"-"`
+	Confirmation  string `json:"-"`
 }
 
 type ReverseRun struct {

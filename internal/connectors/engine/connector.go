@@ -242,6 +242,7 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			Method:         a.Method,
 			Path:           a.Path,
 			Risk:           a.Risk,
+			Confirm:        a.Confirm,
 		})
 	}
 

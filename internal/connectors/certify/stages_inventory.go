@@ -44,10 +44,10 @@ func declaredWriteActionNames(connector string) ([]string, error) {
 	return out, nil
 }
 
-func writeActionInventoryFor(connector string) []writeActionInventoryItem {
+func writeActionInventoryFor(connector string) ([]writeActionInventoryItem, error) {
 	names, err := declaredWriteActionNames(connector)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	curated := map[string]WritePairing{}
 	for _, pairing := range PairingsFor(connector) {
@@ -76,5 +76,5 @@ func writeActionInventoryFor(connector string) []writeActionInventoryItem {
 			Reason: "not a safe standalone create action with a certified cleanup lifecycle",
 		})
 	}
-	return out
+	return out, nil
 }

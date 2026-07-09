@@ -400,6 +400,77 @@ func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
 	}
 }
 
+func TestGitHubDestructiveCommandRequiresTypedConfirmation(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodDelete {
+			t.Fatalf("request method = %s, want DELETE", r.Method)
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	root := t.TempDir()
+	runCLIForReverseTest(t, []string{"init", "--root", root, "--json"})
+	runCLIForReverseTest(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "owner=acme",
+		"--config", "repo=widgets",
+		"--config", "public_access=true",
+		"--config", "base_url=" + server.URL,
+		"--root", root,
+		"--json",
+	})
+
+	var planStdout, planStderr bytes.Buffer
+	code := cli.Run([]string{
+		"github", "repo", "delete-2",
+		"--credential", "github-local",
+		"--root", root,
+	}, &planStdout, &planStderr)
+	if code != 0 {
+		t.Fatalf("github repo delete plan code=%d stdout=%s stderr=%s", code, planStdout.String(), planStderr.String())
+	}
+	planID := extractReverseField(t, planStdout.String(), `Created connector command plan (\S+)`)
+	token := extractReverseField(t, planStdout.String(), `Approval token: (\S+)`)
+	if calls != 0 {
+		t.Fatalf("plan dispatched destructive request; calls=%d", calls)
+	}
+
+	var deniedStdout, deniedStderr bytes.Buffer
+	code = cli.Run([]string{
+		"github", "repo", "delete-2",
+		"--plan", planID,
+		"--approve", token,
+		"--root", root,
+		"--json",
+	}, &deniedStdout, &deniedStderr)
+	if code == 0 || !strings.Contains(strings.ToLower(deniedStdout.String()+deniedStderr.String()), "confirmation") {
+		t.Fatalf("missing confirmation result code=%d stdout=%s stderr=%s", code, deniedStdout.String(), deniedStderr.String())
+	}
+	if calls != 0 {
+		t.Fatalf("missing confirmation dispatched destructive request; calls=%d", calls)
+	}
+
+	var runStdout, runStderr bytes.Buffer
+	code = cli.Run([]string{
+		"github", "repo", "delete-2",
+		"--plan", planID,
+		"--approve", token,
+		"--confirm", "destructive",
+		"--root", root,
+		"--json",
+	}, &runStdout, &runStderr)
+	if code != 0 {
+		t.Fatalf("confirmed destructive run code=%d stdout=%s stderr=%s", code, runStdout.String(), runStderr.String())
+	}
+	if calls != 1 {
+		t.Fatalf("confirmed destructive request count=%d, want 1", calls)
+	}
+}
+
 func TestReverseETLRejectsPlannedCatalogDestination(t *testing.T) {
 	root := setupReverseCLIProject(t)
 

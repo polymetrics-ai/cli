@@ -534,7 +534,7 @@ USAGE
   pm reverse list [--json]
   pm reverse plan <name> --source-table <table> --destination connector:credential --map source:dest [--json]
   pm reverse preview <plan-id> [--json]
-  pm reverse run <plan-id> --approve <token> [--json]
+  pm reverse run <plan-id> --approve <token> [--confirm <challenge>] [--json]
   pm reverse status <run-id> [--json]
 
 DESCRIPTION
@@ -568,7 +568,8 @@ COMMANDS
 
   run
     Execute a stored plan only when --approve is supplied with the approval
-    token from the human plan output.
+    token from the human plan output. Destructive or sensitive plans can also
+    require the typed --confirm challenge printed by the plan output.
 
   status
     Show a completed or failed reverse ETL run by run ID.
@@ -580,6 +581,7 @@ FLAGS
   --action action              destination write action; inspect shows names
   --limit n                    maximum source rows to include in the plan
   --approve token              approval token required by run
+  --confirm challenge          typed confirmation required by gated plans
   --json                       render machine-readable JSON
   --root path                  project root containing .polymetrics
 

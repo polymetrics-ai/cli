@@ -281,6 +281,35 @@ func TestBuildWriteCommandPlansWithoutExecuting(t *testing.T) {
 	}
 }
 
+func TestBuildWriteCommandCarriesDestructiveConfirmationChallenge(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{
+			Commands: []connectors.CommandSurfaceCommand{
+				{
+					Path:         "repo delete-2",
+					Intent:       "reverse_etl",
+					Availability: "implemented",
+					Write:        "repo",
+					Risk:         "critical",
+				},
+			},
+		},
+		manifest: connectors.Manifest{
+			WriteActions: []connectors.WriteActionSpec{
+				{Name: "repo", Method: "DELETE", Path: "/repos/{owner}/{repo}", Risk: "critical", Confirm: "destructive"},
+			},
+		},
+	}
+
+	result, err := BuildWriteCommand(context.Background(), connector, Request{Path: []string{"repo", "delete-2"}})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	if result.ConfirmationChallenge != "destructive" {
+		t.Fatalf("ConfirmationChallenge = %q, want destructive", result.ConfirmationChallenge)
+	}
+}
+
 func TestBuildWriteCommandAllowsEmptyRecordWhenConnectorValidatorAcceptsIt(t *testing.T) {
 	connector := &fakeConnector{
 		surface: &connectors.CommandSurface{

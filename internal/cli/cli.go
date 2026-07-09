@@ -661,7 +661,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	commandFlags := map[string][]string{}
 	for name, values := range flags.values {
 		switch name {
-		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "plan-name":
+		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name":
 			continue
 		default:
 			commandFlags[name] = values
@@ -761,6 +761,9 @@ func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, cr
 		return writeJSON(stdout, env)
 	}
 	fmt.Fprintf(stdout, "Created connector command plan %s for %s\nApproval token: %s\n", plan.ID, plan.ConnectorCommand, plan.ApprovalToken)
+	if plan.ConfirmationChallenge != "" {
+		fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
+	}
 	if writePreview != nil {
 		for _, warning := range writePreview.Warnings {
 			fmt.Fprintf(stdout, "- %s\n", warning)
@@ -778,7 +781,7 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 		return err
 	}
 	if approvalToken != "" {
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: flags.first("confirm")})
 		if err != nil {
 			return err
 		}
@@ -1022,6 +1025,9 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			return writeJSON(stdout, envelope{"kind": "ReversePlan", "plan": safeReversePlanForOutput(plan), "approval_required": true})
 		}
 		fmt.Fprintf(stdout, "Created reverse plan %s with %d records\nApproval token: %s\n", plan.ID, plan.RecordCount, plan.ApprovalToken)
+		if plan.ConfirmationChallenge != "" {
+			fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
+		}
 		return nil
 	case "preview":
 		if len(args) < 2 {
@@ -1051,7 +1057,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			return errUsage
 		}
 		flags := parseFlags(args[2:])
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve")})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: flags.first("confirm")})
 		if err != nil {
 			return err
 		}
