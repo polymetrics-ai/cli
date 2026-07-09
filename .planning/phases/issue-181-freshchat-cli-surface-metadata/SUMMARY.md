@@ -1,6 +1,6 @@
 # Summary — Issue #181 Freshchat CLI surface metadata
 
-Status: PR open; full verification passed; CodeRabbit skipped stacked PR, parent fallback pending.
+Status: merged to parent; full verification passed; CodeRabbit coverage pending on parent PR/fallback.
 
 ## Completed
 
@@ -15,10 +15,11 @@ Status: PR open; full verification passed; CodeRabbit skipped stacked PR, parent
 - Ran full handoff gates: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs` pass.
 - Kept planned/excluded operations non-executable in `cli_surface.json`; connectorgen safety validation rejects `api_surface` references for endpoints that are not backed by a stream/write action.
 - Ran no-credential CLI smoke: `go build ./cmd/pm`, `./pm help connectors`, `./pm connectors --help`, and `./pm connectors inspect freshchat --json` pass; `./pm freshchat --help` remains a #182 help-topic gap.
-- Pushed `feat/181-freshchat-cli-surface-metadata` and opened stacked PR https://github.com/polymetrics-ai/cli/pull/241 against `feat/180-freshchat-cli-parity`.
+- Pushed `feat/181-freshchat-cli-surface-metadata`, opened stacked PR https://github.com/polymetrics-ai/cli/pull/241, CI passed, and squash-merged it to `feat/180-freshchat-cli-parity` as ef7cfda1.
+- Recorded CodeRabbit skip on #241 (non-default base) and parent PR #226 skip while draft; #181 remains review-pending until parent coverage or approved fallback.
 
 ## Next
 
-1. Wait for CI on PR #241.
-2. Route automated review coverage through parent PR #226 after #181 is integrated, or record an approved fallback; the CodeRabbit stacked-PR skip is not review completion.
-3. After #181 review coverage is resolved, proceed to dependent issues (#182/#184 first).
+1. Keep #181 review-pending until parent PR #226 receives CodeRabbit coverage for ef7cfda1 or an approved fallback is recorded.
+2. Proceed to dependent issues (#182/#184 first) from the updated parent branch.
+3. Do not mark the parent PR human-ready until #181 coverage is resolved.

@@ -4,7 +4,8 @@
   "parent_issue": 180,
   "pr_url": "https://github.com/polymetrics-ai/cli/pull/241",
   "implementation_sha": "acd8d2387ee98c21ceb486221f1f03bdf8542b9f",
-  "status": "pr_open_verified_review_fallback_pending",
+  "merge_commit": "ef7cfda1a2298243b6aea825691e54991e4388b7",
+  "status": "merged_to_parent_review_pending",
   "gsd": {
     "plan_phase_command": "scripts/gsd prompt plan-phase issue-181-freshchat-cli-surface-metadata --skip-research",
     "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-181-freshchat-cli-surface-metadata --dry-run",
@@ -55,7 +56,14 @@
       "decision": "parent_pr_fallback_pending",
       "reason": "CodeRabbit skipped PR #241 because auto reviews are disabled for non-default base branches. Per stacked-PR rules, #181 is not review-complete until parent PR #226 receives CodeRabbit coverage for the integrated commit range or an approved fallback is recorded.",
       "issue_numbers": [181]
+    },
+    {
+      "timestamp": "2026-07-09T21:45:17Z",
+      "cycle": "subissue_merge",
+      "decision": "merged_to_parent_branch",
+      "reason": "PR #241 CI passed and was squash-merged into parent branch as ef7cfda1. Parent PR #226 remains draft, so CodeRabbit coverage for #181 remains pending.",
+      "issue_numbers": [181]
     }
   ],
-  "updated_at": "2026-07-09T21:33:00Z"
+  "updated_at": "2026-07-09T21:45:17Z"
 }
