@@ -1,0 +1,179 @@
+{
+  "parent_issue": {
+    "number": 212,
+    "url": "https://github.com/polymetrics-ai/cli/issues/212",
+    "title": "Help Scout: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/212-helpscout-cli-parity",
+  "parent_pr": {
+    "url": "pending",
+    "base": "main",
+    "head": "feat/212-helpscout-cli-parity",
+    "draft": true,
+    "state": "pending"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-harness",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 213,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": [
+        ".planning/phases/issue-213-helpscout-cli-surface-metadata",
+        "internal/connectors/defs/help-scout/metadata.json",
+        "internal/connectors/defs/help-scout/api_surface.json",
+        "internal/connectors/defs/help-scout/cli_surface.json",
+        "internal/connectors/defs/help-scout/docs.md"
+      ],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 214,
+      "status": "planned",
+      "dependencies": [213],
+      "write_scope": [
+        "docs/cli",
+        "docs/connectors/help-scout",
+        "website",
+        "internal/connectors/defs/help-scout/docs.md"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 215,
+      "status": "planned",
+      "dependencies": [213, 216],
+      "write_scope": [
+        "internal/connectors/defs/help-scout/streams.json",
+        "internal/connectors/defs/help-scout/schemas",
+        "internal/connectors/defs/help-scout/fixtures"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 216,
+      "status": "planned",
+      "dependencies": [213],
+      "write_scope": [
+        "internal/connectors/defs/help-scout/api_surface.json",
+        "internal/connectors/defs/help-scout/operations.json",
+        ".planning/phases/issue-216-helpscout-operation-ledger"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 217,
+      "status": "planned",
+      "dependencies": [213, 216],
+      "write_scope": [
+        "internal/connectors/defs/help-scout/cli_surface.json",
+        "internal/connectors/defs/help-scout/operations.json",
+        "internal/connectors/commandrunner",
+        "internal/cli"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 218,
+      "status": "planned",
+      "dependencies": [213, 216],
+      "write_scope": [
+        "internal/connectors/engine",
+        "internal/connectors/defs/help-scout/operations.json",
+        "internal/connectors/defs/help-scout/api_surface.json"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 219,
+      "status": "planned",
+      "dependencies": [216, 218],
+      "write_scope": [
+        "internal/connectors/defs/help-scout/writes.json",
+        "internal/connectors/defs/help-scout/operations.json",
+        "internal/connectors/defs/help-scout/api_surface.json",
+        "internal/connectors/engine"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:57:02Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [213],
+      "reason": "Pi subagent tool is not available in this harness, and the parent PR is not open yet. The orchestrator will take the #213 critical path locally after the parent planning checkpoint and draft parent PR are created."
+    },
+    {
+      "timestamp": "2026-07-09T19:57:02Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [214, 215, 216, 217, 218, 219],
+      "reason": "No Pi subagent tool is exposed in the current harness; later lanes remain dependency-blocked until #213 and parent PR setup complete."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 213,
+      "url": "https://github.com/polymetrics-ai/cli/issues/213",
+      "branch": "feat/213-helpscout-cli-surface-metadata",
+      "pr_url": "pending",
+      "worker": "local-orchestrator-critical-path",
+      "status": "worker_ready",
+      "write_scope": [
+        ".planning/phases/issue-213-helpscout-cli-surface-metadata",
+        "internal/connectors/defs/help-scout"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-212-helpscout-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending sub-PR",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 214,
+      "url": "https://github.com/polymetrics-ai/cli/issues/214",
+      "branch": "feat/214-helpscout-help-renderer",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": ["docs/cli", "docs/connectors/help-scout", "website"],
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "dependency-blocked",
+        "disposition_url": "pending"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "credentialed connector checks",
+    "destructive external actions",
+    "production deployment",
+    "quality gate reductions",
+    "reverse ETL execution",
+    "generic shell/http/sql write tools"
+  ],
+  "updated_at": "2026-07-09T19:57:02Z"
+}

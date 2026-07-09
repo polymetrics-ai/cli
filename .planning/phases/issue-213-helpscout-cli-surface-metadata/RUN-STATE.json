@@ -1,0 +1,38 @@
+{
+  "phase": "issue-213-helpscout-cli-surface-metadata",
+  "issue": 213,
+  "parent_issue": 212,
+  "status": "planned",
+  "gsd": {
+    "adapter": "scripts/gsd",
+    "plan_prompt": "scripts/gsd prompt plan-phase 213 --skip-research --tdd",
+    "programming_loop": "unavailable",
+    "manual_fallback": true
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-spf13-cobra",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-lint"
+  ],
+  "verificationPassed": false,
+  "verificationStatus": "pending implementation",
+  "orchestrationDecisions": [
+    {
+      "cycle": "issue-planning",
+      "decision": "local_critical_path",
+      "reason": "Parent orchestrator will run #213 locally because no subagent tool is exposed in this harness."
+    }
+  ],
+  "updated_at": "2026-07-09T19:57:02Z"
+}
