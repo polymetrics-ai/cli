@@ -29,7 +29,7 @@
     },
     {
       "number": 137,
-      "status": "sub_pr_open_checks_pending",
+      "status": "sub_pr_green_review_blocked",
       "dependencies": [134],
       "write_scope": ["internal/connectors/defs/hubspot/api_surface.json", "cmd/connectorgen/**", "internal/connectors/conformance/**"],
       "decision": "local_critical_path_after_134"
@@ -154,7 +154,7 @@
       "branch": "feat/137-hubspot-operation-ledger",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/239",
       "worker": "local_critical_path",
-      "status": "sub_pr_open_review_blocked_auto_skipped",
+      "status": "sub_pr_green_review_blocked_auto_skipped",
       "write_scope": "official operation ledger",
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-132-hubspot-cli-parity",
       "verification": "passed: gofmt -w cmd internal; go vet ./...; go test ./...; go build ./cmd/pm; make verify; go run ./cmd/connectorgen validate internal/connectors/defs",

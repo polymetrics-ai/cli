@@ -29,7 +29,7 @@
     "golang-graphql",
     "golang-lint"
   ],
-  "status": "pr_open_review_blocked_auto_skipped",
+  "status": "sub_pr_green_review_blocked_auto_skipped",
   "verificationPassed": true,
   "verificationBlocker": "none",
   "orchestrationDecisions": [
@@ -62,6 +62,11 @@
       "cycle": "automated_review",
       "decision": "blocked_auto_skipped_no_review_artifact",
       "reason": "CodeRabbit auto skipped stacked PR because base is non-default; Copilot reviewer API request returned no active reviewer; coverage must route through parent PR after integration or human fallback"
+    },
+    {
+      "cycle": "remote_checks",
+      "decision": "green",
+      "reason": "PR #239 remote checks succeeded: verify, GSD evidence, issue guard, branch/title, govulncheck, CodeQL, Dependency Review"
     }
   ],
   "human_gates": [
