@@ -1,0 +1,159 @@
+{
+  "parent_issue": {
+    "number": 148,
+    "url": "https://github.com/polymetrics-ai/cli/issues/148",
+    "title": "Chatwoot: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/148-chatwoot-cli-parity",
+  "parent_pr": {
+    "url": "pending",
+    "base": "main",
+    "head": "feat/148-chatwoot-cli-parity",
+    "draft": true,
+    "state": "missing"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-api",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 149,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/chatwoot/metadata.json",
+        "internal/connectors/defs/chatwoot/api_surface.json",
+        "internal/connectors/defs/chatwoot/cli_surface.json",
+        "internal/connectors/defs/chatwoot/docs.md",
+        ".planning/phases/issue-149-chatwoot-cli-surface-metadata"
+      ],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 150,
+      "status": "planned",
+      "dependencies": [149],
+      "write_scope": [
+        "cmd",
+        "internal/cli",
+        "internal/connectors",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-150-chatwoot-help-renderer"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 151,
+      "status": "planned",
+      "dependencies": [149, 152],
+      "write_scope": [
+        "internal/connectors/defs/chatwoot/streams.json",
+        "internal/connectors/defs/chatwoot/schemas",
+        "internal/connectors/defs/chatwoot/fixtures",
+        ".planning/phases/issue-151-chatwoot-stream-runner"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 152,
+      "status": "planned",
+      "dependencies": [149],
+      "write_scope": [
+        "internal/connectors/defs/chatwoot/api_surface.json",
+        ".planning/phases/issue-152-chatwoot-operation-ledger"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 153,
+      "status": "planned",
+      "dependencies": [149, 152],
+      "write_scope": [
+        "internal/connectors/defs/chatwoot/cli_surface.json",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        ".planning/phases/issue-153-chatwoot-direct-read"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 154,
+      "status": "planned",
+      "dependencies": [149, 152],
+      "write_scope": [
+        "internal/connectors/defs/chatwoot",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        ".planning/phases/issue-154-chatwoot-advanced-query-binary"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 155,
+      "status": "planned",
+      "dependencies": [149, 152],
+      "write_scope": [
+        "internal/connectors/defs/chatwoot/writes.json",
+        "internal/connectors/defs/chatwoot/api_surface.json",
+        "internal/connectors/defs/chatwoot/cli_surface.json",
+        ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [148, 149],
+      "reason": "Parent PR is missing and the current Pi API session has no subagent tool. Coordinator will create parent seed artifacts, then execute issue #149 locally instead of claiming spawned workers."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [150, 151, 152, 153, 154, 155],
+      "reason": "Mutating worker fanout requires Pi subagent support and isolated cwd/worktree per worker; no subagent tool is available in this API harness."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 149,
+      "url": "https://github.com/polymetrics-ai/cli/issues/149",
+      "branch": "feat/149-chatwoot-cli-surface-metadata",
+      "pr_url": "pending",
+      "worker": "coordinator-local-critical-path",
+      "status": "worker_ready",
+      "write_scope": [
+        "internal/connectors/defs/chatwoot",
+        ".planning/phases/issue-149-chatwoot-cli-surface-metadata"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Parent PR missing; review coverage pending after seed/sub-PR creation.",
+        "disposition_url": "pending"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "credentialed connector checks",
+    "reverse ETL execution",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-10T00:00:00Z"
+}

@@ -1,0 +1,42 @@
+{
+  "phase": "issue-148-chatwoot-cli-parity",
+  "status": "in_progress",
+  "parent_issue": 148,
+  "parent_pr": null,
+  "parent_branch": "feat/148-chatwoot-cli-parity",
+  "default_branch": "main",
+  "gsd": {
+    "doctor": "pass",
+    "verify_pi": "pass",
+    "list_json": "pass",
+    "programming_loop_command": "unavailable",
+    "manual_fallback": true,
+    "fallback_reason": "scripts/gsd prompt programming-loop is not registered in the repo-local adapter"
+  },
+  "required_skills_loaded": [
+    "gsd-core",
+    "caveman",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-lint"
+  ],
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Parent PR is missing and current Pi API tool surface lacks subagent; coordinator will create parent seed planning artifacts and handle issue #149 locally."
+    }
+  ],
+  "verificationPassed": false,
+  "verificationStatus": "preflight complete; full verification pending",
+  "updated_at": "2026-07-10T00:00:00Z"
+}

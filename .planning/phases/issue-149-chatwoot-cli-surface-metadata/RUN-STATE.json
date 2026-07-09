@@ -1,0 +1,23 @@
+{
+  "phase": "issue-149-chatwoot-cli-surface-metadata",
+  "status": "planned",
+  "parent_issue": 148,
+  "sub_issue": 149,
+  "parent_branch": "feat/148-chatwoot-cli-parity",
+  "mode": "local_critical_path",
+  "gsd": {
+    "programming_loop_command": "unavailable",
+    "manual_fallback": true,
+    "fallback_trace": ".planning/phases/issue-148-chatwoot-cli-parity/traces/gsd-programming-loop-unavailable.txt"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Current Pi API tool surface lacks subagent. Coordinator owns #149 in the parent checkout after planning artifacts are committed."
+    }
+  ],
+  "verificationPassed": false,
+  "verificationStatus": "red validation pending",
+  "updated_at": "2026-07-10T00:00:00Z"
+}
