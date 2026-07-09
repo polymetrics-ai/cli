@@ -13,9 +13,10 @@
     "write_actions": 637,
     "operation_backed_read_commands": 497,
     "runnable_stream_commands": 4,
-    "runnable_direct_read_commands": 4
+    "runnable_direct_read_commands": 4,
+    "metadata_only_leaf_help": true
   },
   "verificationPassed": true,
   "focusedVerificationPassed": true,
-  "updated_at": "2026-07-09T23:55:00Z"
+  "updated_at": "2026-07-10T00:20:00Z"
 }

@@ -60,6 +60,7 @@ Check how GitHub implemented broad operation parity and apply the same approach 
 - Covered endpoint rows: 1,142 of 1,145 rows (1,144 official + `/users` compatibility; 3 deprecated remain blocked).
 - Implemented commands: 1,142 (`etl` 4, `direct_read` 501, `reverse_etl` 637).
 - Runtime-safe executable slice remains bounded: 4 ETL streams and 4 APISurface direct reads run today; operation-backed reads stay feature-gated; writes require reverse ETL plan → preview → approval → execute.
+- Leaf command help is metadata-only and works independently of project state/credentials for stream, direct-read, operation-backed, and reverse-ETL write commands.
 
 ## Verification Plan
 

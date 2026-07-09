@@ -625,10 +625,22 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if !ok || surfaceProvider.CommandSurface() == nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
-	flags := parseFlags(args)
+	helpRequested := connectorLeafHelpRequested(args)
+	flags := parseFlags(withoutConnectorLeafHelp(args))
 	path := flags.values["_"]
 	if len(path) == 0 {
 		return writeManual(connectorName, stdout, jsonOut)
+	}
+	if helpRequested {
+		manual, err := connectors.RenderConnectorCommandManual(connector, path)
+		if err != nil {
+			return usageErrorf("%v", err)
+		}
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": connectorName + " " + strings.Join(path, " "), "manual": manual})
+		}
+		fmt.Fprint(stdout, manual)
+		return nil
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError
@@ -643,6 +655,26 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	return withApp(root, func(a *app.App) error {
 		return runConnectorCommand(ctx, a, connectorName, args, stdout, jsonOut)
 	})
+}
+
+func connectorLeafHelpRequested(args []string) bool {
+	for _, arg := range args {
+		if arg == "--help" || arg == "-h" {
+			return true
+		}
+	}
+	return false
+}
+
+func withoutConnectorLeafHelp(args []string) []string {
+	out := make([]string, 0, len(args))
+	for _, arg := range args {
+		if arg == "--help" || arg == "-h" {
+			continue
+		}
+		out = append(out, arg)
+	}
+	return out
 }
 
 func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {

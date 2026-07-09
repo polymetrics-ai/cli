@@ -110,6 +110,64 @@ func TestGitLabCommandSurfaceHelpJSONIsAgentReadable(t *testing.T) {
 	}
 }
 
+func TestGitLabCommandSurfaceLeafHelpDoesNotRequireProject(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+		want []string
+	}{
+		{
+			name: "stream",
+			args: []string{"gitlab", "project", "list", "--help"},
+			want: []string{"NAME", "pm gitlab project list", "intent=etl", "stream=projects"},
+		},
+		{
+			name: "direct read",
+			args: []string{"gitlab", "project", "view", "--help"},
+			want: []string{"NAME", "pm gitlab project view", "intent=direct_read", "--id"},
+		},
+		{
+			name: "operation backed",
+			args: []string{"gitlab", "repo", "branches", "check", "--help"},
+			want: []string{"NAME", "pm gitlab repo branches check", "operation=gitlab.head_api_v4_projects_id_repository_branches_branch", "feature-gated"},
+		},
+		{
+			name: "reverse etl write",
+			args: []string{"gitlab", "variable", "variables", "delete", "--help"},
+			want: []string{"NAME", "pm gitlab variable variables delete", "intent=reverse_etl", "Reverse ETL writes require plan, preview, approval, execute"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tt.args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stdout = %s stderr = %s", tt.args, code, stdout.String(), stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range tt.want {
+				if !strings.Contains(out, want) {
+					t.Fatalf("leaf help missing %q:\n%s", want, out)
+				}
+			}
+		})
+	}
+}
+
+func TestGitLabCommandSurfaceLeafHelpJSONIsAgentReadable(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"--json", "gitlab", "project", "view", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(gitlab project view --help --json) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"kind": "CommandManual"`, `"command": "gitlab project view"`, `"manual":`} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("GitLab leaf json manual missing %q:\n%s", want, out)
+		}
+	}
+}
+
 func TestGitLabUnknownCommandIsUsageError(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"gitlab", "does", "not-exist"}, &stdout, &stderr)

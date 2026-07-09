@@ -17,6 +17,10 @@
 - `make verify` ✅
 - `go run ./cmd/connectorgen validate internal/connectors/defs` ✅ (also run inside `make verify`, `0 findings`)
 - `go run ./cmd/pm help gitlab`, `go run ./cmd/pm gitlab`, `go run ./cmd/pm gitlab --help` ✅ (render connector manual/help)
+- `go test ./internal/cli -run 'TestGitLabCommandSurfaceLeafHelp' -count=1` ✅
+- `go run ./cmd/pm gitlab project list --help` ✅
+- `go run ./cmd/pm gitlab repo branches check --help` ✅
+- `go run ./cmd/pm --json gitlab project view --help` ✅
 
 ## Known blockers retained
 

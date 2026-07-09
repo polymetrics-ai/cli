@@ -79,7 +79,9 @@ execution.
   bounded direct-read commands, 497 operation-backed read/binary/HEAD commands, and 637 typed
   reverse-ETL write actions. Three deprecated endpoints remain blocked.
 - Operation-backed direct reads and binary/HEAD commands are parity metadata until the operation
-  executor exists; this avoids unsafe binary downloads or raw dispatch.
+  executor exists; this avoids unsafe binary downloads or raw dispatch. Leaf help such as
+  `pm gitlab repo branches check --help` still renders from metadata without opening credentials or
+  project state.
 - `cli_surface.json` intentionally does not expose generic raw API commands, generic shell/SQL writes,
   or arbitrary GraphQL mutations.
 - GitLab GraphQL is not required for the current REST-backed commands. Future GraphQL support must use

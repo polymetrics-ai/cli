@@ -67,12 +67,15 @@ Connector help is rendered from the same metadata used by command dispatch:
 pm help gitlab
 pm gitlab
 pm gitlab --help
+pm gitlab project view --help
+pm gitlab repo branches check --help
 pm connectors inspect gitlab
 ```
 
 The output lists implemented commands separately from planned or blocked commands, including the
-source `glab` path and safety notes. Invalid command paths still return usage errors; bare connector
-names render contextual help and exit successfully.
+source `glab` path and safety notes. Leaf command help renders without opening project state or
+credentials, including operation-gated and reverse-ETL write commands. Invalid command paths still
+return usage errors; bare connector names render contextual help and exit successfully.
 
 ## GraphQL status
 
