@@ -1,0 +1,274 @@
+{
+  "parent_issue": {
+    "number": 196,
+    "url": "https://github.com/polymetrics-ai/cli/issues/196",
+    "title": "Gorgias: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/196-gorgias-cli-parity",
+  "parent_pr": {
+    "url": "",
+    "base": "main",
+    "head": "feat/196-gorgias-cli-parity",
+    "draft": true,
+    "state": "missing"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 197,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/metadata.json",
+        "internal/connectors/defs/gorgias/api_surface.json",
+        "internal/connectors/defs/gorgias/cli_surface.json",
+        ".planning/phases/issue-197-gorgias-cli-surface-metadata"
+      ],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 200,
+      "status": "planned",
+      "dependencies": [197],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/api_surface.json",
+        ".planning/phases/issue-200-gorgias-operation-ledger"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 199,
+      "status": "planned",
+      "dependencies": [197, 200],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/streams.json",
+        "internal/connectors/defs/gorgias/schemas",
+        "internal/connectors/defs/gorgias/fixtures",
+        ".planning/phases/issue-199-gorgias-stream-runner"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 201,
+      "status": "planned",
+      "dependencies": [197, 200, 202],
+      "write_scope": [
+        "internal/connectors/defs/gorgias",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        ".planning/phases/issue-201-gorgias-direct-read"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 202,
+      "status": "planned",
+      "dependencies": [197, 200],
+      "write_scope": [
+        "internal/connectors/engine",
+        "internal/connectors/defs/gorgias",
+        ".planning/phases/issue-202-gorgias-advanced-query-binary"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 203,
+      "status": "planned",
+      "dependencies": [197, 200],
+      "write_scope": [
+        "internal/connectors/defs/gorgias/writes.json",
+        "internal/connectors/engine",
+        "internal/app",
+        ".planning/phases/issue-203-gorgias-sensitive-admin-policy"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 198,
+      "status": "planned",
+      "dependencies": [197, 199, 201, 203],
+      "write_scope": [
+        "internal/cli",
+        "docs/cli",
+        "docs/connectors",
+        "website",
+        ".planning/phases/issue-198-gorgias-help-renderer"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:55:16Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [197],
+      "reason": "No subagent tool is available in this Pi harness, so the orchestrator cannot spawn pm-gsd-worker. Parent PR is missing; seed parent branch, open draft parent PR, then execute #197 locally. Parallel worker blocker: not_spawned_runtime_capability_missing."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 197,
+      "url": "https://github.com/polymetrics-ai/cli/issues/197",
+      "branch": "feat/197-gorgias-cli-surface-metadata",
+      "pr_url": "",
+      "worker": "local_critical_path_pi_orchestrator",
+      "status": "worker_ready",
+      "write_scope": ["internal/connectors/defs/gorgias", ".planning/phases/issue-197-gorgias-cli-surface-metadata"],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "ae01c3f9",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "No sub-PR yet",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 198,
+      "url": "https://github.com/polymetrics-ai/cli/issues/198",
+      "branch": "feat/198-gorgias-help-renderer",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/cli", "docs/cli", "docs/connectors", "website", ".planning/phases/issue-198-gorgias-help-renderer"],
+      "worker_directory": "",
+      "verification": "blocked_on_dependencies",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Blocked on metadata and command implementation dependencies",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 199,
+      "url": "https://github.com/polymetrics-ai/cli/issues/199",
+      "branch": "feat/199-gorgias-stream-runner",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/gorgias/streams.json", "internal/connectors/defs/gorgias/schemas", "internal/connectors/defs/gorgias/fixtures", ".planning/phases/issue-199-gorgias-stream-runner"],
+      "worker_directory": "",
+      "verification": "blocked_on_dependencies",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Blocked on #197/#200",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 200,
+      "url": "https://github.com/polymetrics-ai/cli/issues/200",
+      "branch": "feat/200-gorgias-operation-ledger",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/gorgias/api_surface.json", ".planning/phases/issue-200-gorgias-operation-ledger"],
+      "worker_directory": "",
+      "verification": "blocked_on_dependencies",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Blocked on #197 official surface refresh",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 201,
+      "url": "https://github.com/polymetrics-ai/cli/issues/201",
+      "branch": "feat/201-gorgias-direct-read",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/gorgias", "internal/connectors/commandrunner", "internal/cli", ".planning/phases/issue-201-gorgias-direct-read"],
+      "worker_directory": "",
+      "verification": "blocked_on_dependencies",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Blocked on #197/#200/#202",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 202,
+      "url": "https://github.com/polymetrics-ai/cli/issues/202",
+      "branch": "feat/202-gorgias-advanced-query-binary",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/connectors/engine", "internal/connectors/defs/gorgias", ".planning/phases/issue-202-gorgias-advanced-query-binary"],
+      "worker_directory": "",
+      "verification": "blocked_on_dependencies",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Blocked on #197/#200",
+        "disposition_url": ""
+      }
+    },
+    {
+      "number": 203,
+      "url": "https://github.com/polymetrics-ai/cli/issues/203",
+      "branch": "feat/203-gorgias-sensitive-admin-policy",
+      "pr_url": "",
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/connectors/defs/gorgias/writes.json", "internal/connectors/engine", "internal/app", ".planning/phases/issue-203-gorgias-sensitive-admin-policy"],
+      "worker_directory": "",
+      "verification": "blocked_on_dependencies",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "Blocked on #197/#200",
+        "disposition_url": ""
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "production deployment",
+    "credentialed connector checks",
+    "reverse ETL execution",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-09T19:55:16Z"
+}
