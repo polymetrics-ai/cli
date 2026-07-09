@@ -1,0 +1,8 @@
+{
+  "source": "github.com/open-gsd/gsd-core",
+  "ref": "next",
+  "commit": "20297a8ff941378b8615a5d3e8629e52c10a0f9d",
+  "docs": "https://github.com/open-gsd/gsd-core/blob/next/docs/README.md",
+  "checked_at": "2026-07-08",
+  "runtime_adapter": "pi-project-local"
+}

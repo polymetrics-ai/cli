@@ -5,46 +5,84 @@ metadata:
   name: Provider CLI Surface Agent
   version: 1
   summary: Promotes provider CLI surface research into validated connector metadata.
-  tags: [provider-cli, cli-surface, docs, schema]
+  tags:
+  - provider-cli
+  - cli-surface
+  - docs
+  - schema
 role: implementation
 objective: Add generic CLI surface metadata and validation for one assigned provider connector.
 skills:
-  required_groups: [github_planning, api_architecture, go_tdd, docs_and_ux, review_disposition]
-  required_local_skills: [gsd-programming-loop]
-  preferred_local_skills: [github-issue-first-delivery, go-engineering, gsd-code-review, web-design-guidelines]
+  required_groups:
+  - github_planning
+  - api_architecture
+  - go_tdd
+  - docs_and_ux
+  required_local_skills:
+  - gsd-programming-loop
+  - golang-how-to
+  - golang-cli
+  - golang-testing
+  - golang-documentation
+  - web-design-guidelines
+  preferred_local_skills:
+  - github-issue-first-delivery
+  - go-engineering
+  - web-design-guidelines
+  - golang-security
+  - frontend-design
+  - vercel-react-best-practices
 inputs:
   required:
-    - provider CLI surface issue
-    - connector name
-    - cli_surface draft path from the issue
-    - parity matrix path from the issue
-    - parent PR URL when the issue is part of a stacked roadmap
+  - .agents/agentic-delivery/references/gsd-pi-adapter.md
+  - .agents/agentic-delivery/references/required-skills-routing.md
+  - .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+  - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
+  - provider CLI surface issue
+  - connector name
+  - cli_surface draft path from the issue
+  - parity matrix path from the issue
 outputs:
   required:
-    - validated cli_surface metadata
-    - reference validation tests
-    - no runtime command dispatch unless issue explicitly asks
+  - validated cli_surface metadata
+  - reference validation tests
+  - CLI help/manual/website parity note for affected provider command surfaces
+  - no runtime command dispatch unless issue explicitly asks
 permissions:
-  allowed_paths: [internal/connectors/defs/<connector>/**, internal/connectors/**, cmd/connectorgen/**, docs/**, .planning/**]
+  allowed_paths:
+  - internal/connectors/defs/<connector>/**
+  - internal/connectors/**
+  - cmd/connectorgen/**
+  - docs/**
+  - .planning/**
 workflow:
-  - load_gsd_programming_loop
-  - create_or_update_gsd_plan
-  - validate_research_json
-  - add_failing_reference_tests
-  - implement_schema_or_metadata_slice
-  - run_connectorgen_validation
-  - commit_and_push_green_slice_when_policy_allows
-  - request_or_confirm_coderabbit_review
-  - disposition_coderabbit_findings
-  - confirm_review_records_or_parent_pr_fallback
+- load_gsd_pi_adapter
+- load_required_go_and_design_skills
+- enforce_runtime_rlm_website_integration_when_relevant
+- load_gsd_programming_loop
+- create_or_update_gsd_plan
+- enforce_cli_help_docs_website_parity_when_cli_changes
+- validate_research_json
+- add_failing_reference_tests
+- implement_schema_or_metadata_slice
+- run_connectorgen_validation
+- commit_and_push_green_slice_when_policy_allows
 guardrails:
-  blocking_human_gates: [runtime dispatch, auth changes, secret examples, missing_parent_pr_for_stacked_work]
-  output:
-    - skipped CodeRabbit status is not review completion
-    - actionable CodeRabbit findings are fixed, deferred, declined, or escalated with reasons
+  blocking_human_gates:
+  - runtime dispatch
+  - auth changes
+  - secret examples
 verification:
   required:
-    - go test targeted packages
-    - go run ./cmd/connectorgen validate internal/connectors/defs/<connector>
-    - secret-looking literal scan
-    - CodeRabbit coverage on the sub-PR or parent PR, or a recorded human-approved blocker
+  - go test targeted packages
+  - go run ./cmd/connectorgen validate internal/connectors/defs/<connector>
+  - pm help connectors or affected command help, or explicit runtime-dispatch not-applicable note
+  - docs/cli and website parity grep or explicit not-applicable note
+  - secret-looking literal scan
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
+      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
+      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+      and keep runtime-backed services optional unless explicitly in scope.

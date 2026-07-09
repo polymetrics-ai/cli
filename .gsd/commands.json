@@ -1,0 +1,2066 @@
+{
+  "schema": 1,
+  "source": "open-gsd/gsd-core",
+  "ref": "next",
+  "commands": [
+    {
+      "name": "add-tests",
+      "officialCommand": "gsd-add-tests",
+      "piCommand": "gsd-add-tests",
+      "genericInvocation": "gsd add-tests",
+      "description": "Generate tests for a completed phase.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-add-tests 2                    # Generate tests for phase 2"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "ai-integration-phase",
+      "officialCommand": "gsd-ai-integration-phase",
+      "piCommand": "gsd-ai-integration-phase",
+      "genericInvocation": "gsd ai-integration-phase",
+      "description": "Generate an AI-SPEC.md design contract for phases that involve building AI systems. Presents an interactive decision matrix, surfaces domain-specific failure modes and eval criteria, and produces `AI-SPEC.md` with a framework recommendation",
+      "flags": [],
+      "examples": [
+        "gsd-ai-integration-phase              # Wizard for the current phase",
+        "gsd-ai-integration-phase 3           # Wizard for a specific phase"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "audit-fix",
+      "officialCommand": "gsd-audit-fix",
+      "piCommand": "gsd-audit-fix",
+      "genericInvocation": "gsd audit-fix",
+      "description": "Autonomous audit-to-fix pipeline \u2014 runs an audit, classifies findings, fixes auto-fixable issues with test verification, and commits each fix atomically.",
+      "flags": [
+        {
+          "flag": "--source <audit>",
+          "description": "Which audit to run (default: `audit-uat`)"
+        },
+        {
+          "flag": "--severity high\\|medium\\|all",
+          "description": "Minimum severity to process (default: `medium`)"
+        },
+        {
+          "flag": "--max N",
+          "description": "Maximum findings to fix (default: 5)"
+        },
+        {
+          "flag": "--dry-run",
+          "description": "Classify findings without fixing (shows classification table)"
+        }
+      ],
+      "examples": [
+        "gsd-audit-fix                              # Run audit-uat, fix medium+ issues (max 5)",
+        "gsd-audit-fix --severity high             # Only fix high-severity issues",
+        "gsd-audit-fix --dry-run                   # Preview classification without fixing",
+        "gsd-audit-fix --max 10 --severity all     # Fix up to 10 issues of any severity"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "audit-milestone",
+      "officialCommand": "gsd-audit-milestone",
+      "piCommand": "gsd-audit-milestone",
+      "genericInvocation": "gsd audit-milestone",
+      "description": "Verify milestone met its definition of done.",
+      "flags": [],
+      "examples": [
+        "gsd-audit-milestone"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "audit-uat",
+      "officialCommand": "gsd-audit-uat",
+      "piCommand": "gsd-audit-uat",
+      "genericInvocation": "gsd audit-uat",
+      "description": "Cross-phase audit of all outstanding UAT and verification items.",
+      "flags": [],
+      "examples": [
+        "gsd-audit-uat"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "autonomous",
+      "officialCommand": "gsd-autonomous",
+      "piCommand": "gsd-autonomous",
+      "genericInvocation": "gsd autonomous",
+      "description": "Run all remaining phases autonomously.",
+      "flags": [
+        {
+          "flag": "--from N",
+          "description": "Start from a specific phase number"
+        },
+        {
+          "flag": "--to N",
+          "description": "Stop after completing a specific phase number"
+        },
+        {
+          "flag": "--only N",
+          "description": "Restrict execution to phase N; lifecycle step is skipped"
+        },
+        {
+          "flag": "--interactive",
+          "description": "Lean context with user input"
+        },
+        {
+          "flag": "--converge",
+          "description": "Route each planning step through `/gsd-plan-review-convergence`; requires `workflow.plan_review_convergence=true`"
+        },
+        {
+          "flag": "--cross-ai",
+          "description": "Alias for `--converge`"
+        },
+        {
+          "flag": "--text",
+          "description": "Replace `AskUserQuestion` prompts with plain numbered lists"
+        }
+      ],
+      "examples": [
+        "gsd-autonomous                     # Run all remaining phases",
+        "gsd-autonomous --from 3            # Start from phase 3",
+        "gsd-autonomous --to 5              # Run up to and including phase 5",
+        "gsd-autonomous --from 3 --to 5     # Run phases 3 through 5",
+        "gsd-autonomous --only 4            # Run only phase 4",
+        "gsd-autonomous --only 4 --converge # Run one phase with plan convergence",
+        "gsd-autonomous --converge --all --max-cycles 5",
+        "gsd-autonomous --text              # Run with text-mode prompts"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "capture",
+      "officialCommand": "gsd-capture",
+      "piCommand": "gsd-capture",
+      "genericInvocation": "gsd capture",
+      "description": "Capture ideas, tasks, notes, and seeds to their appropriate destination. Default mode adds a structured todo; flags route to specialized capture workflows.",
+      "flags": [
+        {
+          "flag": "--note [text]",
+          "description": "Zero-friction note \u2014 append, list (`--note list`), or promote (`--note promote N`)"
+        },
+        {
+          "flag": "--backlog <description>",
+          "description": "Add to the backlog parking lot using 999.x numbering"
+        },
+        {
+          "flag": "--seed [idea summary]",
+          "description": "Capture a forward-looking idea with trigger conditions"
+        },
+        {
+          "flag": "--list",
+          "description": "List pending todos and select one to work on"
+        },
+        {
+          "flag": "--list-seeds [status]",
+          "description": "List/audit captured seeds, optionally filtered by status (read-only)"
+        },
+        {
+          "flag": "--global",
+          "description": "Use global scope (for note operations)"
+        }
+      ],
+      "examples": [
+        "gsd-capture \"Consider adding dark mode support\"   # Add todo",
+        "gsd-capture --note \"Caching strategy idea\"        # Quick note",
+        "gsd-capture --note list                           # List all notes",
+        "gsd-capture --note promote 3                      # Promote note 3 to todo",
+        "gsd-capture --backlog \"GraphQL API layer\"         # Add to backlog",
+        "gsd-capture --seed \"Add real-time collaboration when WebSocket infra is in place\"",
+        "gsd-capture --list                                # Browse and act on todos",
+        "gsd-capture --list-seeds                          # Audit all captured seeds"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "cleanup",
+      "officialCommand": "gsd-cleanup",
+      "piCommand": "gsd-cleanup",
+      "genericInvocation": "gsd cleanup",
+      "description": "Archive accumulated phase directories from completed milestones and prune local branches whose upstream has been deleted.",
+      "flags": [],
+      "examples": [
+        "gsd-cleanup"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "code-review",
+      "officialCommand": "gsd-code-review",
+      "piCommand": "gsd-code-review",
+      "genericInvocation": "gsd code-review",
+      "description": "Review source files changed during a phase for bugs, security vulnerabilities, and code quality problems. Use `--fix` to auto-fix findings after review.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "**Yes**"
+        },
+        {
+          "flag": "--depth=quick\\|standard\\|deep",
+          "description": "No"
+        },
+        {
+          "flag": "--files file1,file2,...",
+          "description": "No"
+        },
+        {
+          "flag": "--fix",
+          "description": "No"
+        },
+        {
+          "flag": "--fix --all",
+          "description": "No"
+        },
+        {
+          "flag": "--fix --auto",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-code-review 3                          # Standard review for phase 3",
+        "gsd-code-review 2 --depth=deep             # Deep cross-file review",
+        "gsd-code-review 4 --files src/auth.ts,src/token.ts  # Explicit file list",
+        "gsd-code-review 3 --fix                    # Review then fix Critical + Warning findings",
+        "gsd-code-review 3 --fix --all             # Review then fix all findings including Info",
+        "gsd-code-review 3 --fix --auto            # Review, fix, and re-review until clean (max 3 iterations)"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "complete-milestone",
+      "officialCommand": "gsd-complete-milestone",
+      "piCommand": "gsd-complete-milestone",
+      "genericInvocation": "gsd complete-milestone",
+      "description": "Archive milestone, tag release.",
+      "flags": [],
+      "examples": [
+        "gsd-complete-milestone"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "config",
+      "officialCommand": "gsd-config",
+      "piCommand": "gsd-config",
+      "genericInvocation": "gsd config",
+      "description": "Configure GSD settings interactively \u2014 workflow toggles, advanced knobs, integrations, and model profile \u2014 with a single consolidated command.",
+      "flags": [
+        {
+          "flag": "--advanced",
+          "description": "Power-user knobs: planning tuning, timeouts, branch templates, cross-AI execution, runtime/output"
+        },
+        {
+          "flag": "--integrations",
+          "description": "Third-party API keys, code-review CLI routing, agent-skill injection"
+        },
+        {
+          "flag": "--profile <name>",
+          "description": "Quick profile switch: `quality`, `balanced`, `budget`, or `inherit`"
+        }
+      ],
+      "examples": [
+        "gsd-config                         # Common-case interactive config",
+        "gsd-config --advanced              # Power-user knobs (six-section prompt)",
+        "gsd-config --integrations          # API keys, review CLI routing, agent skills",
+        "gsd-config --profile budget        # Switch to budget profile",
+        "gsd-config --profile quality       # Switch to quality profile"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "context",
+      "officialCommand": "gsd-context",
+      "piCommand": "gsd-context",
+      "genericInvocation": "gsd context",
+      "description": "Codebase intelligence router \u2014 map, graphify, docs, learnings",
+      "flags": [],
+      "examples": [],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "debug",
+      "officialCommand": "gsd-debug",
+      "piCommand": "gsd-debug",
+      "genericInvocation": "gsd debug",
+      "description": "Systematic debugging with persistent state.",
+      "flags": [
+        {
+          "flag": "description",
+          "description": "No"
+        },
+        {
+          "flag": "--diagnose",
+          "description": "Diagnosis-only mode \u2014 investigate without attempting fixes"
+        }
+      ],
+      "examples": [
+        "gsd-debug \"Login button not responding on mobile Safari\"",
+        "gsd-debug --diagnose \"Intermittent 500 errors on /api/users\"",
+        "gsd-debug list",
+        "gsd-debug status auth-token-null",
+        "gsd-debug continue form-submit-500"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "discuss-phase",
+      "officialCommand": "gsd-discuss-phase",
+      "piCommand": "gsd-discuss-phase",
+      "genericInvocation": "gsd discuss-phase",
+      "description": "Gather phase context through adaptive questioning before planning.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "No"
+        },
+        {
+          "flag": "--all",
+          "description": "Skip area selection \u2014 discuss all gray areas interactively (no auto-advance)"
+        },
+        {
+          "flag": "--auto",
+          "description": "Auto-select recommended defaults for all questions"
+        },
+        {
+          "flag": "--batch",
+          "description": "Group questions for batch intake instead of one-by-one"
+        },
+        {
+          "flag": "--analyze",
+          "description": "Add trade-off analysis during discussion"
+        },
+        {
+          "flag": "--power",
+          "description": "File-based bulk question answering from a prepared answers file"
+        },
+        {
+          "flag": "--assumptions",
+          "description": "Surface Claude's implementation assumptions about the phase without an interactive session"
+        }
+      ],
+      "examples": [
+        "gsd-discuss-phase 1                # Interactive discussion for phase 1",
+        "gsd-discuss-phase 1 --all          # Discuss all gray areas without selection step",
+        "gsd-discuss-phase 3 --auto         # Auto-select defaults for phase 3",
+        "gsd-discuss-phase --batch          # Batch mode for current phase",
+        "gsd-discuss-phase 2 --analyze      # Discussion with trade-off analysis",
+        "gsd-discuss-phase 1 --power        # Bulk answers from file",
+        "gsd-discuss-phase 3 --assumptions  # Surface Claude's assumptions before planning"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "docs-update",
+      "officialCommand": "gsd-docs-update",
+      "piCommand": "gsd-docs-update",
+      "genericInvocation": "gsd docs-update",
+      "description": "Generate or update project documentation verified against the codebase.",
+      "flags": [
+        {
+          "flag": "--force",
+          "description": "No"
+        },
+        {
+          "flag": "--verify-only",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-docs-update                    # Generate/update docs interactively",
+        "gsd-docs-update --force            # Regenerate all docs",
+        "gsd-docs-update --verify-only      # Verify existing docs only"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "eval-review",
+      "officialCommand": "gsd-eval-review",
+      "piCommand": "gsd-eval-review",
+      "genericInvocation": "gsd eval-review",
+      "description": "Audit an executed AI phase's evaluation coverage and produce an EVAL-REVIEW.md remediation plan. Checks implementation against the `AI-SPEC.md` evaluation plan produced by `/gsd-ai-integration-phase`. Scores each eval dimension as COVERED/P",
+      "flags": [],
+      "examples": [
+        "gsd-eval-review                       # Audit current phase",
+        "gsd-eval-review 3                     # Audit a specific phase"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "execute-phase",
+      "officialCommand": "gsd-execute-phase",
+      "piCommand": "gsd-execute-phase",
+      "genericInvocation": "gsd execute-phase",
+      "description": "Execute all plans in a phase with wave-based parallelization, or run a specific wave.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "**Yes**"
+        },
+        {
+          "flag": "--wave N",
+          "description": "No"
+        },
+        {
+          "flag": "--validate",
+          "description": "No"
+        },
+        {
+          "flag": "--cross-ai",
+          "description": "No"
+        },
+        {
+          "flag": "--no-cross-ai",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-execute-phase 1                # Execute phase 1",
+        "gsd-execute-phase 1 --wave 2       # Execute only Wave 2",
+        "gsd-execute-phase 1 --validate     # Validate state before execution",
+        "gsd-execute-phase 2 --cross-ai     # Delegate phase 2 to external AI CLI"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "explore",
+      "officialCommand": "gsd-explore",
+      "piCommand": "gsd-explore",
+      "genericInvocation": "gsd explore",
+      "description": "Socratic ideation session \u2014 guide an idea through probing questions, optionally spawn research, then route output to the right GSD artifact (notes, todos, seeds, research questions, requirements, or a new phase).",
+      "flags": [
+        {
+          "flag": "topic",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-explore                        # Open-ended ideation session",
+        "gsd-explore authentication strategy  # Explore a specific topic"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "extract-learnings",
+      "officialCommand": "gsd-extract-learnings",
+      "piCommand": "gsd-extract-learnings",
+      "genericInvocation": "gsd extract-learnings",
+      "description": "Extract reusable patterns, anti-patterns, and architectural decisions from completed phase work.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "**Yes**"
+        },
+        {
+          "flag": "--all",
+          "description": "Extract learnings from all completed phases"
+        },
+        {
+          "flag": "--format",
+          "description": "Output format: `markdown` (default), `json`"
+        }
+      ],
+      "examples": [
+        "gsd-extract-learnings 3                    # Extract learnings from phase 3",
+        "gsd-extract-learnings --all                # Extract from all completed phases"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "fast",
+      "officialCommand": "gsd-fast",
+      "piCommand": "gsd-fast",
+      "genericInvocation": "gsd fast",
+      "description": "Execute a trivial task inline \u2014 no subagents, no planning overhead. For typo fixes, config changes, small refactors, forgotten commits.",
+      "flags": [
+        {
+          "flag": "task description",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-fast \"fix typo in README\"",
+        "gsd-fast \"add .env to gitignore\""
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "forensics",
+      "officialCommand": "gsd-forensics",
+      "piCommand": "gsd-forensics",
+      "genericInvocation": "gsd forensics",
+      "description": "Post-mortem investigation for failed GSD workflows \u2014 diagnoses what went wrong.",
+      "flags": [
+        {
+          "flag": "description",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-forensics                              # Interactive \u2014 prompted for problem",
+        "gsd-forensics \"Phase 3 execution stalled\"  # With problem description"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "graphify",
+      "officialCommand": "gsd-graphify",
+      "piCommand": "gsd-graphify",
+      "genericInvocation": "gsd graphify",
+      "description": "Build, query, and inspect the project knowledge graph stored in `.planning/graphs/`. Opt-in via `graphify.enabled: true` in `config.json` (see [Configuration Reference](CONFIGURATION.md#graphify-settings)); when disabled, the command prints",
+      "flags": [
+        {
+          "flag": "build",
+          "description": "Build or rebuild the knowledge graph (runs `graphify update .` inline and refreshes `.planning/graphs/`)"
+        },
+        {
+          "flag": "query <term>",
+          "description": "Search the graph for a term"
+        },
+        {
+          "flag": "status",
+          "description": "Show graph freshness and statistics"
+        },
+        {
+          "flag": "diff",
+          "description": "Show changes since the last build"
+        }
+      ],
+      "examples": [
+        "gsd-graphify build                 # Build or rebuild the knowledge graph",
+        "gsd-graphify query authentication  # Search the graph for a term",
+        "gsd-graphify status                # Show freshness and statistics",
+        "gsd-graphify diff                  # Show changes since last build"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "health",
+      "officialCommand": "gsd-health",
+      "piCommand": "gsd-health",
+      "genericInvocation": "gsd health",
+      "description": "Validate `.planning/` directory integrity. With `--context`, probes the",
+      "flags": [
+        {
+          "flag": "--repair",
+          "description": "Auto-fix recoverable issues"
+        },
+        {
+          "flag": "--context",
+          "description": "Probe context-window utilization; warns at 60 %, critical at 70 %"
+        }
+      ],
+      "examples": [
+        "gsd-health                         # Check integrity",
+        "gsd-health --repair                # Check and fix",
+        "gsd-health --context               # Context-utilization triage"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "help",
+      "officialCommand": "gsd-help",
+      "piCommand": "gsd-help",
+      "genericInvocation": "gsd help",
+      "description": "Show GSD commands at the tier you ask for. Default fits one screen; `--full` is the complete reference; `<topic>` jumps directly to one section.",
+      "flags": [],
+      "examples": [
+        "gsd-help                           # One-page tour (default)",
+        "gsd-help --brief                   # ~10-line one-liner refresher of top commands",
+        "gsd-help --full                    # Complete reference (every command, every flag)",
+        "gsd-help <topic>                   # One section only (e.g. /gsd-help debug)",
+        "gsd-help --brief <topic>           # Compact scoped lookup \u2014 signature + one-line summary"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "ideate",
+      "officialCommand": "gsd-ideate",
+      "piCommand": "gsd-ideate",
+      "genericInvocation": "gsd ideate",
+      "description": "Exploration and capture router \u2014 explore, sketch, spike, spec, capture",
+      "flags": [],
+      "examples": [],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "import",
+      "officialCommand": "gsd-import",
+      "piCommand": "gsd-import",
+      "genericInvocation": "gsd import",
+      "description": "Ingest an external plan file into the GSD planning system with conflict detection against `PROJECT.md` decisions before writing anything.",
+      "flags": [
+        {
+          "flag": "--from <filepath>",
+          "description": "Yes (or `--from-gsd2`)"
+        },
+        {
+          "flag": "--from-gsd2",
+          "description": "Yes (or `--from`)"
+        },
+        {
+          "flag": "--path <dir>",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-import --from /tmp/team-plan.md    # Import and validate an external plan",
+        "gsd-import --from-gsd2                # Migrate from GSD-2 back to v1 (current dir)",
+        "gsd-import --from-gsd2 --path ~/old-project  # Migrate from a different path"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "ingest-docs",
+      "officialCommand": "gsd-ingest-docs",
+      "piCommand": "gsd-ingest-docs",
+      "genericInvocation": "gsd ingest-docs",
+      "description": "Bootstrap or merge a .planning/ setup from existing ADRs, PRDs, SPECs, and docs in a repo. Runs parallel classification (`gsd-doc-classifier`) plus synthesis with precedence rules and cycle detection (`gsd-doc-synthesizer`). Produces a thre",
+      "flags": [
+        {
+          "flag": "path",
+          "description": "No"
+        },
+        {
+          "flag": "--mode new\\|merge",
+          "description": "No"
+        },
+        {
+          "flag": "--manifest <file>",
+          "description": "No"
+        },
+        {
+          "flag": "--resolve auto",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-ingest-docs                            # Scan repo root, auto-detect mode",
+        "gsd-ingest-docs docs/                      # Only ingest under docs/",
+        "gsd-ingest-docs --manifest ingest.yaml     # Explicit precedence manifest"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "manage",
+      "officialCommand": "gsd-manage",
+      "piCommand": "gsd-manage",
+      "genericInvocation": "gsd manage",
+      "description": "Management router \u2014 config, workspace, workstreams, thread, update, ship, inbox",
+      "flags": [],
+      "examples": [],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "manager",
+      "officialCommand": "gsd-manager",
+      "piCommand": "gsd-manager",
+      "genericInvocation": "gsd manager",
+      "description": "Interactive command center for managing multiple phases from one terminal.",
+      "flags": [],
+      "examples": [
+        "gsd-manager                        # Open command center dashboard",
+        "gsd-manager --analyze-deps         # Scan ROADMAP phases for dependency relationships before parallel execution"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "map-codebase",
+      "officialCommand": "gsd-map-codebase",
+      "piCommand": "gsd-map-codebase",
+      "genericInvocation": "gsd map-codebase",
+      "description": "Analyze existing codebase with parallel mapper agents. Use `--fast` for a quick single-agent scan, or `--query` to search existing intel. First-time brownfield setup should usually start with `/gsd-onboard`, which hands off to this command ",
+      "flags": [
+        {
+          "flag": "area",
+          "description": "No"
+        },
+        {
+          "flag": "--fast",
+          "description": "No"
+        },
+        {
+          "flag": "--query <term>",
+          "description": "No"
+        },
+        {
+          "flag": "--focus tech\\|arch\\|quality\\|concerns\\|tech+arch",
+          "description": "Focus area for `--fast` mode (default: `tech+arch`)"
+        }
+      ],
+      "examples": [
+        "gsd-map-codebase                   # Full codebase analysis (4 parallel agents)",
+        "gsd-map-codebase auth              # Focus on auth area",
+        "gsd-map-codebase --fast            # Quick tech + arch overview (1 agent)",
+        "gsd-map-codebase --fast --focus quality  # Quality and code health only",
+        "gsd-map-codebase --query authentication  # Search intel for a term"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "mempalace-capture",
+      "officialCommand": "gsd-mempalace-capture",
+      "piCommand": "gsd-mempalace-capture",
+      "genericInvocation": "gsd mempalace-capture",
+      "description": "File a phase artifact (`CONTEXT.md`, `PLAN.md`, or `SUMMARY.md`) verbatim into MemPalace and mirror decision facts into its temporal knowledge graph. Uses `mempalace_check_duplicate` before filing, so re-running the same phase is idempotent",
+      "flags": [
+        {
+          "flag": "CONTEXT.md\\|PLAN.md\\|SUMMARY.md",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-mempalace-capture CONTEXT.md   # File CONTEXT.md \u2192 decisions room",
+        "gsd-mempalace-capture PLAN.md      # File PLAN.md \u2192 planning room",
+        "gsd-mempalace-capture SUMMARY.md   # File SUMMARY.md \u2192 milestones room"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "mempalace-recall",
+      "officialCommand": "gsd-mempalace-recall",
+      "piCommand": "gsd-mempalace-recall",
+      "genericInvocation": "gsd mempalace-recall",
+      "description": "Recall prior decisions, patterns, and surprises from MemPalace into `MEMORY-RECALL.md` before planning. Reads `CONTEXT.md` to derive a search query, runs `mempalace wake-up` + `mempalace_search` + `mempalace_kg_query`/timeline, and writes a",
+      "flags": [
+        {
+          "flag": "phase-slug",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-mempalace-recall          # Recall for the current phase",
+        "gsd-mempalace-recall 03-auth  # Recall scoped to a specific phase slug"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "milestone-summary",
+      "officialCommand": "gsd-milestone-summary",
+      "piCommand": "gsd-milestone-summary",
+      "genericInvocation": "gsd milestone-summary",
+      "description": "Generate comprehensive project summary from milestone artifacts for team onboarding and review.",
+      "flags": [
+        {
+          "flag": "version",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-milestone-summary                # Summarize current milestone",
+        "gsd-milestone-summary v1.0           # Summarize specific milestone"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "mvp-phase",
+      "officialCommand": "gsd-mvp-phase",
+      "piCommand": "gsd-mvp-phase",
+      "genericInvocation": "gsd mvp-phase",
+      "description": "Guided MVP planning for a phase \u2014 prompts for a user story, runs SPIDR splitting check, writes `**Mode:** mvp` to ROADMAP.md, then delegates to `/gsd-plan-phase` (which auto-detects MVP mode via the roadmap field).",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "**Yes**"
+        },
+        {
+          "flag": "--force",
+          "description": "Allow converting an `in_progress` or `completed` phase"
+        }
+      ],
+      "examples": [
+        "gsd-mvp-phase 1                    # MVP planning for phase 1",
+        "gsd-mvp-phase 2.1                  # MVP planning for a decimal phase",
+        "gsd-mvp-phase 3 --force            # Convert phase 3 even if in-progress"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "new-milestone",
+      "officialCommand": "gsd-new-milestone",
+      "piCommand": "gsd-new-milestone",
+      "genericInvocation": "gsd new-milestone",
+      "description": "Start next version cycle.",
+      "flags": [
+        {
+          "flag": "name",
+          "description": "No"
+        },
+        {
+          "flag": "--reset-phase-numbers",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-new-milestone                  # Interactive",
+        "gsd-new-milestone \"v2.0 Mobile\"    # Named milestone",
+        "gsd-new-milestone --reset-phase-numbers \"v2.0 Mobile\"  # Restart milestone numbering at 1"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "new-project",
+      "officialCommand": "gsd-new-project",
+      "piCommand": "gsd-new-project",
+      "genericInvocation": "gsd new-project",
+      "description": "Initialize a new project with deep context gathering.",
+      "flags": [
+        {
+          "flag": "--auto @file.md",
+          "description": "Auto-extract from document, skip interactive questions"
+        }
+      ],
+      "examples": [
+        "gsd-new-project                    # Interactive mode",
+        "gsd-new-project --auto @prd.md     # Auto-extract from PRD"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "onboard",
+      "officialCommand": "gsd-onboard",
+      "piCommand": "gsd-onboard",
+      "genericInvocation": "gsd onboard",
+      "description": "Guide an existing codebase through first-time GSD onboarding. The command checks repo state, routes you through codebase mapping, optional docs ingest, project initialization, and creates an onboarding summary once planning exists.",
+      "flags": [
+        {
+          "flag": "--fast",
+          "description": "Prefer the lightweight `/gsd-map-codebase --fast` mapping handoff; a complete map is still required before `/gsd-new-project`"
+        },
+        {
+          "flag": "--text",
+          "description": "Use numbered plain-text gates instead of TUI menus"
+        }
+      ],
+      "examples": [
+        "gsd-onboard           # Guided brownfield onboarding",
+        "gsd-onboard --fast    # Use lightweight codebase mapping first, then complete the map before project setup"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "pause-work",
+      "officialCommand": "gsd-pause-work",
+      "piCommand": "gsd-pause-work",
+      "genericInvocation": "gsd pause-work",
+      "description": "Save context handoff when stopping mid-phase.",
+      "flags": [
+        {
+          "flag": "--report",
+          "description": "Generate a post-session summary in `.planning/reports/` capturing commits, file changes, and phase progress"
+        }
+      ],
+      "examples": [
+        "gsd-pause-work                     # Creates continue-here.md",
+        "gsd-pause-work --report            # Creates continue-here.md + session report"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "phase",
+      "officialCommand": "gsd-phase",
+      "piCommand": "gsd-phase",
+      "genericInvocation": "gsd phase",
+      "description": "CRUD for phases in ROADMAP.md \u2014 add, insert, remove, or edit phases with a single consolidated command.",
+      "flags": [
+        {
+          "flag": "--insert <N>",
+          "description": "Insert urgent work as a decimal phase (e.g., 3.1) after phase N"
+        },
+        {
+          "flag": "--remove <N>",
+          "description": "Remove a future phase and renumber subsequent phases"
+        },
+        {
+          "flag": "--edit <N>",
+          "description": "Edit any field of an existing phase in place"
+        },
+        {
+          "flag": "--force",
+          "description": "Allow editing in-progress or completed phases (used with `--edit`)"
+        }
+      ],
+      "examples": [
+        "gsd-phase \"Add authentication system\"          # Append new phase with description",
+        "gsd-phase --insert 3 \"Fix auth race condition\" # Insert between phase 3 and 4 \u2192 creates 3.1",
+        "gsd-phase --remove 7               # Remove phase 7, renumber 8\u21927, 9\u21928, etc.",
+        "gsd-phase --edit 5                 # Edit any field of phase 5",
+        "gsd-phase --edit 5 --force         # Edit phase 5 even if in-progress or completed"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "plan-phase",
+      "officialCommand": "gsd-plan-phase",
+      "piCommand": "gsd-plan-phase",
+      "genericInvocation": "gsd plan-phase",
+      "description": "Research, plan, and verify a phase.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "No"
+        },
+        {
+          "flag": "--auto",
+          "description": "Skip interactive confirmations"
+        },
+        {
+          "flag": "--research",
+          "description": "Force re-research even if RESEARCH.md exists"
+        },
+        {
+          "flag": "--skip-research",
+          "description": "Skip domain research step"
+        },
+        {
+          "flag": "--research-phase <N>",
+          "description": "Research-only mode: spawn researcher for phase `<N>`, write RESEARCH.md, exit before planner. Supersedes the deleted standalone research command (#3042)."
+        },
+        {
+          "flag": "--view",
+          "description": "Research-only modifier: when used with `--research-phase`, print existing RESEARCH.md to stdout and exit (no spawn)."
+        },
+        {
+          "flag": "--gaps",
+          "description": "Gap closure mode (reads VERIFICATION.md, skips research)"
+        },
+        {
+          "flag": "--skip-verify",
+          "description": "Skip plan checker verification loop"
+        },
+        {
+          "flag": "--prd <file>",
+          "description": "Use a PRD file instead of discuss-phase for context"
+        },
+        {
+          "flag": "--ingest <path-or-glob>",
+          "description": "Use ADR file(s) instead of discuss-phase for context synthesis"
+        },
+        {
+          "flag": "--ingest-format <auto\\|nygard\\|madr\\|narrative>",
+          "description": "Optional ADR parser format override for `--ingest`"
+        },
+        {
+          "flag": "--reviews",
+          "description": "Replan with cross-AI review feedback from REVIEWS.md"
+        },
+        {
+          "flag": "--validate",
+          "description": "Run state validation before planning begins"
+        },
+        {
+          "flag": "--bounce",
+          "description": "Run external plan bounce validation after planning (uses `workflow.plan_bounce_script`)"
+        },
+        {
+          "flag": "--skip-bounce",
+          "description": "Skip plan bounce even if enabled in config"
+        },
+        {
+          "flag": "--mvp",
+          "description": "Vertical MVP mode \u2014 planner organizes tasks as feature slices (UI\u2192API\u2192DB) instead of horizontal layers. On Phase 1 of a new project with no prior phase summaries, also emits `SKELETON.md` (Walking Skeleton). Can be persisted on a phase via `**Mode:** mvp` in ROADMAP.md, which applies `--mvp` automatically without the flag."
+        },
+        {
+          "flag": "--tdd",
+          "description": "TDD mode \u2014 planner applies `type: tdd` to eligible behavior-adding tasks so each begins with a failing test. Composable with `--mvp`: `--mvp --tdd` produces vertical slices where every behavior-adding task starts red-green."
+        },
+        {
+          "flag": "--granularity <coarse\\|standard\\|fine>",
+          "description": "Override the planning granularity for this invocation, ignoring config. Valid values: `coarse`, `standard`, `fine`. Takes precedence over `granularities.planning`, top-level `granularity`, and `planning.granularity` config."
+        }
+      ],
+      "examples": [
+        "gsd-plan-phase 1                              # Research + plan + verify phase 1",
+        "gsd-plan-phase 3 --skip-research              # Plan without research (familiar domain)",
+        "gsd-plan-phase --auto                         # Non-interactive planning",
+        "gsd-plan-phase 2 --validate                   # Validate state before planning",
+        "gsd-plan-phase 1 --bounce                     # Plan + external bounce validation",
+        "gsd-plan-phase 2 --ingest docs/adr/0010.md   # ADR express path for context synthesis",
+        "gsd-plan-phase 2 --ingest 'docs/adr/00*.md' --ingest-format auto",
+        "gsd-plan-phase --research-phase 4             # Research only on phase 4 (auto-uses existing RESEARCH.md, no prompt)"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "plan-review-convergence",
+      "officialCommand": "gsd-plan-review-convergence",
+      "piCommand": "gsd-plan-review-convergence",
+      "genericInvocation": "gsd plan-review-convergence",
+      "description": "Cross-AI plan convergence loop \u2014 replan with review feedback until no HIGH concerns remain and no actionable MEDIUM/LOW findings remain outside `PLAN.md`. Runs `plan-phase \u2192 review \u2192 replan \u2192 re-review` cycles (max 3 cycles by default). Pla",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "**Yes**"
+        },
+        {
+          "flag": "--all",
+          "description": "No"
+        },
+        {
+          "flag": "--max-cycles N",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-plan-review-convergence 3                    # Default reviewers, 3 cycles",
+        "gsd-plan-review-convergence 3 --codex            # Codex-only review",
+        "gsd-plan-review-convergence 3 --all --max-cycles 5"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "pr-branch",
+      "officialCommand": "gsd-pr-branch",
+      "piCommand": "gsd-pr-branch",
+      "genericInvocation": "gsd pr-branch",
+      "description": "Create a clean PR branch by filtering out `.planning/` commits.",
+      "flags": [
+        {
+          "flag": "target branch",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-pr-branch                     # Filter against main",
+        "gsd-pr-branch develop             # Filter against develop"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "profile-user",
+      "officialCommand": "gsd-profile-user",
+      "piCommand": "gsd-profile-user",
+      "genericInvocation": "gsd profile-user",
+      "description": "Generate a developer behavioral profile from Claude Code session analysis across 8 dimensions (communication style, decision patterns, debugging approach, UX preferences, vendor choices, frustration triggers, learning style, explanation dep",
+      "flags": [
+        {
+          "flag": "--questionnaire",
+          "description": "Use interactive questionnaire instead of session analysis"
+        },
+        {
+          "flag": "--refresh",
+          "description": "Re-analyze sessions and regenerate profile"
+        }
+      ],
+      "examples": [
+        "gsd-profile-user                   # Analyze sessions and build profile",
+        "gsd-profile-user --questionnaire   # Interactive questionnaire fallback",
+        "gsd-profile-user --refresh         # Re-generate from fresh analysis"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "progress",
+      "officialCommand": "gsd-progress",
+      "piCommand": "gsd-progress",
+      "genericInvocation": "gsd progress",
+      "description": "Show status, next steps, and automatically advance to the next logical workflow step. Reads project state and determines the appropriate action. Use `/gsd:next` when you want an interactive smart-entry menu before dispatch; use `/gsd-progre",
+      "flags": [
+        {
+          "flag": "--next",
+          "description": "Automatically advance to the next logical workflow step without manual route selection"
+        },
+        {
+          "flag": "--next --auto",
+          "description": "Like `--next`, but chains steps automatically until milestone completion or a blocking decision"
+        },
+        {
+          "flag": "--next --converge",
+          "description": "When the next action is planning, route it through `/gsd-plan-review-convergence`; requires `workflow.plan_review_convergence=true`"
+        },
+        {
+          "flag": "--cross-ai",
+          "description": "Alias for `--converge`"
+        },
+        {
+          "flag": "--do \"task description\"",
+          "description": "Analyze freeform intent and dispatch to the most appropriate GSD command"
+        },
+        {
+          "flag": "--forensic",
+          "description": "Append a 6-check integrity audit after the standard report (STATE consistency, orphaned handoffs, deferred scope drift, memory-flagged pending work, blocking todos, uncommitted code)"
+        }
+      ],
+      "examples": [
+        "gsd-progress                       # \"Where am I? What's next?\" with auto-routing",
+        "gsd-progress --next                # Advance to next step automatically",
+        "gsd-progress --next --auto         # Chain steps automatically until completion",
+        "gsd-progress --next --auto --converge  # Hands-free run with plan-review convergence",
+        "gsd-progress --do \"fix the auth bug\"  # Dispatch freeform intent to best GSD command",
+        "gsd-progress --forensic            # Standard report + integrity audit"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "project",
+      "officialCommand": "gsd-project",
+      "piCommand": "gsd-project",
+      "genericInvocation": "gsd project",
+      "description": "Project lifecycle router \u2014 milestones, audits, summary",
+      "flags": [],
+      "examples": [],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "quality",
+      "officialCommand": "gsd-quality",
+      "piCommand": "gsd-quality",
+      "genericInvocation": "gsd quality",
+      "description": "Quality gates router \u2014 code review, debug, audit, security, eval, ui",
+      "flags": [],
+      "examples": [],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "quick",
+      "officialCommand": "gsd-quick",
+      "piCommand": "gsd-quick",
+      "genericInvocation": "gsd quick",
+      "description": "Execute ad-hoc task with GSD guarantees.",
+      "flags": [
+        {
+          "flag": "--full",
+          "description": "Enable the complete quality pipeline \u2014 discussion + research + plan-checking + verification"
+        },
+        {
+          "flag": "--validate",
+          "description": "Plan-checking (max 2 iterations) + post-execution verification only; no discussion or research"
+        },
+        {
+          "flag": "--discuss",
+          "description": "Lightweight pre-planning discussion"
+        },
+        {
+          "flag": "--research",
+          "description": "Spawn focused researcher before planning"
+        },
+        {
+          "flag": "list",
+          "description": "List all quick tasks with status"
+        },
+        {
+          "flag": "status <slug>",
+          "description": "Show status of a specific quick task"
+        },
+        {
+          "flag": "resume <slug>",
+          "description": "Resume a specific quick task by slug"
+        }
+      ],
+      "examples": [
+        "gsd-quick                          # Basic quick task",
+        "gsd-quick --discuss --research     # Discussion + research + planning",
+        "gsd-quick --validate               # Plan-checking + verification only",
+        "gsd-quick --full                   # Complete quality pipeline",
+        "gsd-quick list                     # List all quick tasks",
+        "gsd-quick status my-task-slug      # Show status of a quick task",
+        "gsd-quick resume my-task-slug      # Resume a quick task"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "resume-work",
+      "officialCommand": "gsd-resume-work",
+      "piCommand": "gsd-resume-work",
+      "genericInvocation": "gsd resume-work",
+      "description": "Restore full context from last session.",
+      "flags": [],
+      "examples": [
+        "gsd-resume-work                    # After context reset or new session"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "review",
+      "officialCommand": "gsd-review",
+      "piCommand": "gsd-review",
+      "genericInvocation": "gsd review",
+      "description": "Cross-AI peer review of phase plans from external AI CLIs.",
+      "flags": [
+        {
+          "flag": "--phase N",
+          "description": "**Yes**"
+        },
+        {
+          "flag": "--gemini",
+          "description": "Include Gemini CLI review"
+        },
+        {
+          "flag": "--claude",
+          "description": "Include Claude CLI review (separate session)"
+        },
+        {
+          "flag": "--codex",
+          "description": "Include Codex CLI review"
+        },
+        {
+          "flag": "--coderabbit",
+          "description": "Include CodeRabbit review"
+        },
+        {
+          "flag": "--opencode",
+          "description": "Include OpenCode review (via GitHub Copilot)"
+        },
+        {
+          "flag": "--qwen",
+          "description": "Include Qwen Code review (Alibaba Qwen models)"
+        },
+        {
+          "flag": "--cursor",
+          "description": "Include Cursor agent review"
+        },
+        {
+          "flag": "--ollama",
+          "description": "Include Ollama server review"
+        },
+        {
+          "flag": "--lm-studio",
+          "description": "Include LM Studio server review"
+        },
+        {
+          "flag": "--llama-cpp",
+          "description": "Include llama.cpp server review"
+        },
+        {
+          "flag": "--all",
+          "description": "Include all available reviewers (CLI + local model servers)"
+        }
+      ],
+      "examples": [
+        "gsd-review --phase 2             # runs gemini+codex from config",
+        "gsd-review --phase 3 --all",
+        "gsd-review --phase 2 --gemini",
+        "gsd-review --phase 2 --cursor    # one-off override"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "review-backlog",
+      "officialCommand": "gsd-review-backlog",
+      "piCommand": "gsd-review-backlog",
+      "genericInvocation": "gsd review-backlog",
+      "description": "Review and promote backlog items to active milestone.",
+      "flags": [],
+      "examples": [
+        "gsd-review-backlog"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "secure-phase",
+      "officialCommand": "gsd-secure-phase",
+      "piCommand": "gsd-secure-phase",
+      "genericInvocation": "gsd secure-phase",
+      "description": "Retroactively verify threat mitigations for a completed phase.",
+      "flags": [
+        {
+          "flag": "phase number",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-secure-phase                   # Audit last completed phase",
+        "gsd-secure-phase 5                 # Audit specific phase"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "settings",
+      "officialCommand": "gsd-settings",
+      "piCommand": "gsd-settings",
+      "genericInvocation": "gsd settings",
+      "description": "Interactive configuration of workflow toggles and model profile. Questions are grouped into six visual sections:",
+      "flags": [],
+      "examples": [
+        "gsd-settings                       # Interactive config"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "ship",
+      "officialCommand": "gsd-ship",
+      "piCommand": "gsd-ship",
+      "genericInvocation": "gsd ship",
+      "description": "Create PR from completed phase work with auto-generated body.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "No"
+        },
+        {
+          "flag": "--draft",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-ship 4                         # Ship phase 4",
+        "gsd-ship 4 --draft                 # Ship as draft PR"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "sketch",
+      "officialCommand": "gsd-sketch",
+      "piCommand": "gsd-sketch",
+      "genericInvocation": "gsd sketch",
+      "description": "Explore design directions through throwaway HTML mockups before committing to implementation. Produces 2\u20133 variants per design question for direct browser comparison.",
+      "flags": [
+        {
+          "flag": "idea",
+          "description": "No"
+        },
+        {
+          "flag": "--quick",
+          "description": "No"
+        },
+        {
+          "flag": "--text",
+          "description": "No"
+        },
+        {
+          "flag": "--wrap-up",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-sketch                             # Interactive mood intake",
+        "gsd-sketch \"dashboard layout\"",
+        "gsd-sketch --quick \"sidebar navigation\"",
+        "gsd-sketch --text \"onboarding flow\"    # Non-Claude runtime",
+        "gsd-sketch --wrap-up                   # Package winning sketch into a skill"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "spec-phase",
+      "officialCommand": "gsd-spec-phase",
+      "piCommand": "gsd-spec-phase",
+      "genericInvocation": "gsd spec-phase",
+      "description": "Clarify WHAT a phase delivers through Socratic questioning with quantitative ambiguity scoring, then probe for omitted edges. Produces `SPEC.md` before discuss-phase.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "Yes"
+        },
+        {
+          "flag": "--auto",
+          "description": "Skip interactive questions; Claude selects recommended defaults and writes SPEC.md"
+        },
+        {
+          "flag": "--text",
+          "description": "Use plain-text numbered lists instead of TUI menus (required for `/rc` remote sessions)"
+        }
+      ],
+      "examples": [
+        "gsd-spec-phase 1                  # Interactive spec + edge probe for phase 1",
+        "gsd-spec-phase 3 --auto           # Auto-select defaults; never auto-dismisses an edge",
+        "gsd-spec-phase 2 --text           # Plain-text menus for remote sessions"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "spike",
+      "officialCommand": "gsd-spike",
+      "piCommand": "gsd-spike",
+      "genericInvocation": "gsd spike",
+      "description": "Run 2\u20135 focused feasibility experiments before committing to an implementation approach. Each experiment uses Given/When/Then framing, produces executable code, and returns a VALIDATED / INVALIDATED / PARTIAL verdict.",
+      "flags": [
+        {
+          "flag": "idea",
+          "description": "No"
+        },
+        {
+          "flag": "--quick",
+          "description": "No"
+        },
+        {
+          "flag": "--wrap-up",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-spike                              # Interactive intake",
+        "gsd-spike \"can we stream LLM tokens through SSE\"",
+        "gsd-spike --quick websocket-vs-polling",
+        "gsd-spike --wrap-up                    # Package findings into a reusable skill"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "stats",
+      "officialCommand": "gsd-stats",
+      "piCommand": "gsd-stats",
+      "genericInvocation": "gsd stats",
+      "description": "Display project statistics.",
+      "flags": [],
+      "examples": [
+        "gsd-stats                          # Project metrics dashboard"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "surface",
+      "officialCommand": "gsd-surface",
+      "piCommand": "gsd-surface",
+      "genericInvocation": "gsd surface",
+      "description": "Toggle which skills are surfaced \u2014 apply a profile, list, or disable a cluster without reinstall.",
+      "flags": [
+        {
+          "flag": "list",
+          "description": "Show enabled and disabled clusters and skills"
+        },
+        {
+          "flag": "status",
+          "description": "Alias for `list` plus token cost summary"
+        },
+        {
+          "flag": "profile <name>",
+          "description": "Write `baseProfile` and re-stage skills"
+        },
+        {
+          "flag": "disable <cluster>",
+          "description": "Add cluster to disabled list and re-stage"
+        },
+        {
+          "flag": "enable <cluster>",
+          "description": "Remove cluster from disabled list and re-stage"
+        },
+        {
+          "flag": "reset",
+          "description": "Delete surface delta; return to install-time profile"
+        },
+        {
+          "flag": "install <spec> [--integrity \u2026] [--scope global\\|project] [--yes] [--shared-file <rel>]\u2026",
+          "description": "Resolve, verify, consent-gate, and install a capability from a registry / git / npm / tarball / local source"
+        },
+        {
+          "flag": "update [<id> \\| --all] [--scope \u2026] [--yes]",
+          "description": "Re-resolve a capability's recorded source and upgrade it (atomic stage-then-swap)"
+        },
+        {
+          "flag": "remove <id> [--purge-data] [--scope \u2026]",
+          "description": "Remove an installed overlay capability's files + marker-isolated shared edits (first-party cannot be removed here)"
+        },
+        {
+          "flag": "list [--json]",
+          "description": "List first-party + installed overlay capabilities as a JSON array"
+        },
+        {
+          "flag": "outdated [--json] [--scope \u2026]",
+          "description": "Light-peek each installed overlay's recorded source and report which have a newer version available (per-source matrix; npm ranges resolve the highest matching version; `pinned` for immutable/explicit git refs or exact npm versions; `manual`/`unknown` for sources that can't be auto-checked)"
+        }
+      ],
+      "examples": [
+        "gsd-surface list                   # Show current surface",
+        "gsd-surface profile standard       # Switch to standard profile",
+        "gsd-surface disable utility        # Disable the utility cluster",
+        "gsd-surface reset                  # Restore install-time profile"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "thread",
+      "officialCommand": "gsd-thread",
+      "piCommand": "gsd-thread",
+      "genericInvocation": "gsd thread",
+      "description": "Manage persistent context threads for cross-session work.",
+      "flags": [
+        {
+          "flag": "list --open",
+          "description": "\u2014"
+        },
+        {
+          "flag": "list --resolved",
+          "description": "\u2014"
+        },
+        {
+          "flag": "status <slug>",
+          "description": "\u2014"
+        },
+        {
+          "flag": "close <slug>",
+          "description": "\u2014"
+        },
+        {
+          "flag": "name",
+          "description": "\u2014"
+        },
+        {
+          "flag": "description",
+          "description": "\u2014"
+        },
+        {
+          "flag": "--convention milestone-prefixed",
+          "description": "Yes"
+        },
+        {
+          "flag": "--apply",
+          "description": "No"
+        },
+        {
+          "flag": "--verify",
+          "description": "Dry-run mode \u2014 show proposed changes without writing"
+        },
+        {
+          "flag": "--dry-run",
+          "description": "Compute the rebuild and emit a structured preview, write nothing"
+        },
+        {
+          "flag": "--verbose",
+          "description": "Tee the audit-log entries to stderr in addition to writing them to STATE.md"
+        },
+        {
+          "flag": "--phase N",
+          "description": "Phase number that was planned"
+        },
+        {
+          "flag": "--plans N",
+          "description": "Number of plans generated"
+        },
+        {
+          "flag": "gsd-validate-commit.sh",
+          "description": "Enforce Conventional Commits format on git commit messages"
+        },
+        {
+          "flag": "gsd-session-state.sh",
+          "description": "Track session state transitions"
+        },
+        {
+          "flag": "gsd-phase-boundary.sh",
+          "description": "Enforce phase boundary checks"
+        }
+      ],
+      "examples": [
+        "gsd-thread                         # List all threads",
+        "gsd-thread list --open             # List only open/in-progress threads",
+        "gsd-thread list --resolved         # List only resolved threads",
+        "gsd-thread status fix-deploy-key   # Show thread status",
+        "gsd-thread close fix-deploy-key    # Mark thread as resolved",
+        "gsd-thread fix-deploy-key-auth     # Resume thread",
+        "gsd-thread \"Investigate TCP timeout in pasta service\"  # Create new"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "ui-phase",
+      "officialCommand": "gsd-ui-phase",
+      "piCommand": "gsd-ui-phase",
+      "genericInvocation": "gsd ui-phase",
+      "description": "Generate UI design contract for frontend phases.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-ui-phase 2                     # Design contract for phase 2"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "ui-review",
+      "officialCommand": "gsd-ui-review",
+      "piCommand": "gsd-ui-review",
+      "genericInvocation": "gsd ui-review",
+      "description": "Retroactive 6-pillar visual audit of implemented frontend.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "No"
+        }
+      ],
+      "examples": [
+        "gsd-ui-review                      # Audit current phase",
+        "gsd-ui-review 3                    # Audit phase 3"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "ultraplan-phase",
+      "officialCommand": "gsd-ultraplan-phase",
+      "piCommand": "gsd-ultraplan-phase",
+      "genericInvocation": "gsd ultraplan-phase",
+      "description": "/gsd-ultraplan-phase 4                  # Offload planning for phase 4",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "**Yes**"
+        }
+      ],
+      "examples": [
+        "gsd-ultraplan-phase 4                  # Offload planning for phase 4"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "undo",
+      "officialCommand": "gsd-undo",
+      "piCommand": "gsd-undo",
+      "genericInvocation": "gsd undo",
+      "description": "Safe git revert \u2014 roll back GSD phase or plan commits using the phase manifest with dependency checks and a confirmation gate.",
+      "flags": [
+        {
+          "flag": "--last N",
+          "description": "(one of three required)"
+        },
+        {
+          "flag": "--phase NN",
+          "description": "(one of three required)"
+        },
+        {
+          "flag": "--plan NN-MM",
+          "description": "(one of three required)"
+        }
+      ],
+      "examples": [
+        "gsd-undo --last 5                  # Pick from the 5 most recent GSD commits",
+        "gsd-undo --phase 03                # Revert all commits for phase 3",
+        "gsd-undo --plan 03-02              # Revert commits for plan 02 of phase 3"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "update",
+      "officialCommand": "gsd-update",
+      "piCommand": "gsd-update",
+      "genericInvocation": "gsd update",
+      "description": "Update GSD with changelog preview, and optionally sync skills or reapply local patches.",
+      "flags": [
+        {
+          "flag": "--sync",
+          "description": "Sync skills from the GSD registry after updating"
+        },
+        {
+          "flag": "--reapply",
+          "description": "Restore local modifications (patches) after updating"
+        }
+      ],
+      "examples": [
+        "gsd-update                         # Check for updates and install",
+        "gsd-update --sync                  # Update and sync skills",
+        "gsd-update --reapply               # Update and reapply local patches",
+        "gsd-update --next                  # Install from the @next RC dist-tag"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "validate-phase",
+      "officialCommand": "gsd-validate-phase",
+      "piCommand": "gsd-validate-phase",
+      "genericInvocation": "gsd validate-phase",
+      "description": "Retroactively audit and fill Nyquist validation gaps.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "No"
+        },
+        {
+          "flag": "N",
+          "description": "**Yes**"
+        },
+        {
+          "flag": "--require-verification",
+          "description": "No"
+        },
+        {
+          "flag": "passed",
+          "description": "`boolean`"
+        },
+        {
+          "flag": "uat_files",
+          "description": "`string[]`"
+        },
+        {
+          "flag": "verification_files",
+          "description": "`string[]`"
+        },
+        {
+          "flag": "checks[]",
+          "description": "`{ file, test, name, result, passing }[]`"
+        },
+        {
+          "flag": "blockers[]",
+          "description": "`string[]`"
+        },
+        {
+          "flag": "no_uat_artifacts",
+          "description": "`boolean`"
+        },
+        {
+          "flag": "policy.require_verification",
+          "description": "`boolean`"
+        }
+      ],
+      "examples": [
+        "gsd-validate-phase 2               # Audit test coverage for phase 2"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "verify-work",
+      "officialCommand": "gsd-verify-work",
+      "piCommand": "gsd-verify-work",
+      "genericInvocation": "gsd verify-work",
+      "description": "User acceptance testing with auto-diagnosis.",
+      "flags": [
+        {
+          "flag": "N",
+          "description": "No"
+        },
+        {
+          "flag": "id",
+          "description": "Stable identifier (`D1`, `D2`\u2026), unique within the SUMMARY"
+        },
+        {
+          "flag": "description",
+          "description": "The deliverable in human-readable form"
+        },
+        {
+          "flag": "requirement",
+          "description": "Optional REQ-ID linking to REQUIREMENTS.md"
+        },
+        {
+          "flag": "verification[].ref",
+          "description": "Test path + descriptor, screenshot ref, or command"
+        },
+        {
+          "flag": "human_judgment",
+          "description": "Required boolean. `true` always routes to a human"
+        },
+        {
+          "flag": "rationale",
+          "description": "Required when `human_judgment: true`"
+        }
+      ],
+      "examples": [
+        "gsd-verify-work 1                  # UAT for phase 1"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "workflow",
+      "officialCommand": "gsd-workflow",
+      "piCommand": "gsd-workflow",
+      "genericInvocation": "gsd workflow",
+      "description": "Phase pipeline router \u2014 discuss, plan, execute, verify, phase, progress, next",
+      "flags": [],
+      "examples": [],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "workspace",
+      "officialCommand": "gsd-workspace",
+      "piCommand": "gsd-workspace",
+      "genericInvocation": "gsd workspace",
+      "description": "Manage GSD workspaces \u2014 create, list, or remove isolated workspace environments with repo copies and independent `.planning/` directories.",
+      "flags": [
+        {
+          "flag": "--new",
+          "description": "Create a new workspace (use with `--name`, `--repos`, etc.)"
+        },
+        {
+          "flag": "--list",
+          "description": "List active GSD workspaces and their status"
+        },
+        {
+          "flag": "--remove <name>",
+          "description": "Remove a workspace and clean up git worktrees"
+        },
+        {
+          "flag": "--name <name>",
+          "description": "Workspace name (used with `--new`)"
+        },
+        {
+          "flag": "--repos repo1,repo2",
+          "description": "Comma-separated repo paths or names (used with `--new`)"
+        },
+        {
+          "flag": "--path /target",
+          "description": "Target directory (default: `~/gsd-workspaces/<name>`)"
+        },
+        {
+          "flag": "--strategy worktree\\|clone",
+          "description": "Copy strategy (default: `worktree`)"
+        },
+        {
+          "flag": "--branch <name>",
+          "description": "Branch to checkout (default: `workspace/<name>`)"
+        },
+        {
+          "flag": "--auto",
+          "description": "Skip interactive questions"
+        }
+      ],
+      "examples": [
+        "gsd-workspace --new --name feature-b --repos hr-ui,ZeymoAPI",
+        "gsd-workspace --new --name feature-b --repos . --strategy worktree  # Same-repo isolation",
+        "gsd-workspace --list",
+        "gsd-workspace --remove feature-b"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    },
+    {
+      "name": "workstreams",
+      "officialCommand": "gsd-workstreams",
+      "piCommand": "gsd-workstreams",
+      "genericInvocation": "gsd workstreams",
+      "description": "Manage parallel workstreams for concurrent work on different milestone areas.",
+      "flags": [
+        {
+          "flag": "list",
+          "description": "List all workstreams with status (default if no subcommand)"
+        },
+        {
+          "flag": "create <name>",
+          "description": "Create a new workstream"
+        },
+        {
+          "flag": "status <name>",
+          "description": "Detailed status for one workstream"
+        },
+        {
+          "flag": "switch <name>",
+          "description": "Set active workstream"
+        },
+        {
+          "flag": "progress",
+          "description": "Progress summary across all workstreams"
+        },
+        {
+          "flag": "complete <name>",
+          "description": "Archive a completed workstream"
+        },
+        {
+          "flag": "resume <name>",
+          "description": "Resume work in a workstream"
+        }
+      ],
+      "examples": [
+        "gsd-workstreams                    # List all workstreams",
+        "gsd-workstreams create backend-api # Create new workstream",
+        "gsd-workstreams switch backend-api # Set active workstream",
+        "gsd-workstreams status backend-api # Detailed status",
+        "gsd-workstreams progress           # Cross-workstream progress overview",
+        "gsd-workstreams complete backend-api  # Archive completed workstream",
+        "gsd-workstreams resume backend-api    # Resume work in workstream"
+      ],
+      "sourceDocs": [
+        "docs/COMMANDS.md"
+      ],
+      "requiresAgentTurn": true
+    }
+  ]
+}

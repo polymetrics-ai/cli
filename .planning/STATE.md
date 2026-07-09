@@ -1,50 +1,65 @@
-# State
+# Project State
 
-Current milestone: connector-architecture-v2
+**Project:** Polymetrics CLI Connector Parity
+**Last activity:** 2026-07-08 — Runtime/RLM/Pi-agent/website integration knowledge added to GSD, agents, and non-phase planning docs; guidance now preserves Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, and website stack details without making runtime checks mandatory.
 
-Current phase: wave2-fanout-http-sm
+## Current State
 
-Status: pending (BLOCKED on S3 engine mini-wave: incremental-lower-bound query vars + ResolveCheck ==/in when-grammar + carried minors)
+- Issue #122 is active on branch `chore/122-upstream-gsd-rebootstrap` with PR #123 open.
+- Active `.planning/` replaces a legacy/custom tree; previous active planning is archived outside the current tree.
+- Official `open-gsd/gsd-core@next` docs are pinned in `.gsd/upstream.lock.json` and adapted for Pi through `scripts/gsd` plus `.pi/` resources.
+- `.gsd/commands.json` exposes 69 official GSD commands generated from official `docs/COMMANDS.md`.
+- `.pi/extensions/gsd/index.ts` exposes `/gsd` plus generated `/gsd-*` aliases after project trust/reload.
+- `.pi/skills/gsd-core/SKILL.md` provides default GSD behavior for Pi.
+- `.agents/**` guidance routes GSD work through the Pi adapter or `scripts/gsd prompt`.
+- `.agents/agentic-delivery/references/required-skills-routing.md` defines required Go/design skill routing for agents and subagents.
+- `.agents/agentic-delivery/references/runtime-rlm-website-integration.md` defines runtime/RLM/Pi-agent/website integration knowledge and canonical source docs.
+- `.agents/agentic-delivery/references/cli-help-docs-website-parity.md` defines the required parity gate for CLI-visible changes.
+- Connector parity includes REST, GraphQL, XML/SOAP, CSV/NDJSON, binary, file/object, SQL/CDC, queues/events/webhooks, native protocols, direct-read, and writes.
+- Phase 1 inventory reconciliation is a hard gate before connector fanout.
+- `.planning/phases/**` was intentionally not regenerated in this refresh per user request.
 
-Completed: wave1-pilot (2026-07-02) — 10/10 pilots migrated at parity, 2 Fable review rounds,
-gap-loop cycle 1 (engine mini-wave + 10-pilot repair), re-review GO completed_with_warnings.
-See .planning/phases/wave1-pilot/SUMMARY.md + docs/migration/pilot-costs.json.
+## Current Quick Inventory Inputs
 
-Completed: wave0-engine-harness (2026-07-02) — declarative engine (85.7% cov), 3 goldens with
-parity (stripe/searxng/postgres), connectorgen, conformance v2, certify source stages, lint gates,
-migration recipe + schemas, inventory (557 connectors S137/M388/L31/XL1 → ~77 Pass A bundle
-agents). Reviewer GO after 1 gap-loop cycle. See .planning/phases/wave0-engine-harness/SUMMARY.md.
+| Signal | Count |
+|---|---:|
+| Connector definition directories | 547 |
+| Connector `api_surface.json` files | 547 |
+| Stream definition files | 7159 |
+| Write definition files | 5699 |
+| Hook directories | 78 |
+| Native connector directories | 37 |
+| Go files under `cmd/` + `internal/` | 491 |
+| YAML agent specs | 14 |
+| GSD commands in `.gsd/commands.json` | 69 |
 
-Model policy (user directive): all GSD loop roles use Codex `gpt-5.5` with `xhigh` reasoning
-effort for this GitHub CLI parity implementation track; Go work applies cc-skills-golang skills.
+These are quick-map inputs only; authoritative counts require Phase 1 inventory reconciliation.
 
-Previous phase: wave1-http-api-longtail-complete-opencode (completed)
+## Active Decisions
 
-Latest verification (2026-06-26):
+- Use official GSD Core docs as source of truth for workflow commands.
+- Treat Pi as a project-local adapter target, not an upstream-supported runtime.
+- Prefer `/gsd <command>` or generated `/gsd-*` aliases in Pi.
+- Prefer `scripts/gsd prompt <command>` for deterministic traces and non-interactive automation.
+- Keep manual-GSD fallback only for adapter-unavailable cases and record it explicitly.
+- Keep `cmd/`, `internal/`, and `.planning/phases/**` unchanged for the current non-phase refresh.
+- For future CLI feature work, require parity across `pm help <topic>`, bare namespace invocations such as `pm connectors`, `pm <command> --help`, `docs/cli/**`, `website/**`, generated help/manual artifacts, and tests.
+- For future Go work, require `golang-how-to` plus task-specific Go skills. For website/docs UI work, require applicable design skills such as `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices`.
+- For future runtime/RLM/Pi-agent work, preserve the dependency-free default and treat Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, and Temporal as optional runtime-backed services unless the issue explicitly says otherwise.
 
-- `make verify` exit 0; `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, docs validation, and smoke all passed.
-- 556 per-system connector dirs registered (556 dirs == 556 registry imports); no quarantine.
-- Connector docs generation/validation is manual-only; per-connector `docs/connectors/**/SKILL.md` generation is no longer required for verify.
-- No new dependencies added.
+## Blockers / Human Gates
 
-Connector count: **556 native Go connectors** (from 1 at session start).
-- Templates: github (custom), stripe (declarative-HTTP).
-- Parallel batch 1: slack, hubspot(+write), notion, jira, sendgrid, postgres (DB; CDC stubbed).
-- Mega-batch: 110 HTTP connectors (airtable, amazon-ads, gitlab, zendesk-*, intercom, klaviyo,
-  mailchimp, square, xero, trello … + alpha long tail), all on connsdk, TDD, fixture mode.
-- Pending batch repair + OpenCode batch: 50 inherited connector dirs repaired/converged, then 100 more
-  API connectors built by 10 parallel OpenCode subagents with red-first package tests.
-- Final long-tail completion: remaining 140 HTTP/API source connectors implemented, including the final
-  18 test-only packages (`tavus` through `zoho-bigin`) repaired locally with read-only fixture-capable code.
+- Do not use live connector credentials for issue #122.
+- Do not add dependencies without human approval.
+- Do not execute reverse ETL during planning.
+- Do not run destructive/admin/elevated external actions.
+- Do not merge PR #123 to `main` without human approval.
 
-Factory: `cmd/registrygen` derives `registryset/registry_gen.go` from connector dirs (collision-free
-parallel authoring); Workflow tool fans out one universal-loop agent per connector.
+## Next Expected Work
 
-Known gaps / follow-ups (non-blocking):
-- Catalog-enablement divergence: registry 556 live vs catalog enabled=2 — needs a deliberate flip
-  pass + conformance-count update.
-- Postgres logical-replication CDC needs pglogrepl (dependency human-gate). go1.24 floor accepted.
-- No CI yet; local gates: `make verify`, `make verify-duckdb`.
-- All current HTTP/API source catalog entries have native connector dirs.
+1. Run GSD/Pi, YAML/JSON, diff, and scope verification.
+2. Commit and push the CLI help/docs/website parity guidance to PR #123.
+3. Let CI and CodeRabbit automatic review run; do not post redundant manual review commands unless documented fallback conditions apply.
 
-Next: gated DB-CDC/cloud/file batches; catalog-enablement + manifest-streams polish; reverse-ETL writes per-API.
+---
+*State refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter.*

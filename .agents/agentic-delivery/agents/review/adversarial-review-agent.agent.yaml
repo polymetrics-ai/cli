@@ -5,34 +5,71 @@ metadata:
   name: Adversarial Review Agent
   version: 1
   summary: Reviews a PR or connector artifact for correctness, safety, and missing tests.
-  tags: [review, security, tests, connectors]
+  tags:
+  - review
+  - security
+  - tests
+  - connectors
 role: reviewer
 objective: Find behavioral bugs, safety gaps, missing tests, and policy violations before merge.
 skills:
-  required_groups: [api_architecture, security_review, go_tdd, review_disposition]
-  preferred_local_skills: [go-engineering, api-design-principles, gsd-code-review]
+  required_groups:
+  - api_architecture
+  - security_review
+  - go_tdd
+  - review_disposition
+  preferred_local_skills:
+  - go-engineering
+  - api-design-principles
+  - gsd-code-review
+  - golang-error-handling
+  - golang-safety
+  - web-design-guidelines
+  required_local_skills:
+  - golang-how-to
+  - golang-security
+  - golang-testing
+  - golang-lint
 inputs:
   required:
-    - PR diff or file list
-    - linked issue
-    - verification output
+  - .agents/agentic-delivery/references/gsd-pi-adapter.md
+  - .agents/agentic-delivery/references/required-skills-routing.md
+  - .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+  - .agents/agentic-delivery/references/cli-help-docs-website-parity.md
+  - PR diff or file list
+  - linked issue
+  - verification output
 outputs:
   required:
-    - ordered findings with file and line references
-    - residual risk
-    - merge/no-merge recommendation
+  - ordered findings with file and line references
+  - residual risk
+  - merge/no-merge recommendation
 permissions:
-  allowed_paths: [read-only]
+  allowed_paths:
+  - read-only
 workflow:
-  - read_issue
-  - inspect_diff
-  - verify_tests_match_acceptance
-  - check_guardrails
-  - check_automated_review_dispositions
-  - report_findings_first
+- enforce_cli_help_docs_website_parity_when_cli_changes
+- load_gsd_pi_adapter
+- load_required_go_and_design_skills
+- enforce_runtime_rlm_website_integration_when_relevant
+- read_issue
+- inspect_diff
+- verify_tests_match_acceptance
+- check_guardrails
+- check_automated_review_dispositions
+- report_findings_first
 guardrails:
-  blocking_human_gates: [do not edit files, do not run destructive commands]
+  blocking_human_gates:
+  - do not edit files
+  - do not run destructive commands
 verification:
   required:
-    - review report with severity ordering
-    - automated review findings are dispositioned or explicitly pending
+  - review report with severity ordering
+  - automated review findings are dispositioned or explicitly pending
+adapters:
+  pi:
+    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
+      runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
+      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
+      and keep runtime-backed services optional unless explicitly in scope.
