@@ -12,13 +12,17 @@ Status: in progress.
 - Recorded runtime fanout blocker: current Pi API tool surface lacks `subagent`, so issue #149 is local critical path.
 - Opened sub-PR #227 for issue #149; CodeRabbit skipped automatic review because the base branch is non-default.
 - Ran full local handoff gates on the #149 branch: `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs` passed. The first uncached `go test ./...` attempt timed out at the default 10m package timeout in `internal/connectors/certify`; `make verify` passed using the project timeout and a follow-up `go test ./...` passed from cache.
+- PR #227 remote checks passed and the branch was squash-merged into the parent as `573b89f5cf8952723213cd55bfa19cb5e3165618`.
+- Requested manual CodeRabbit review on parent PR #223 because #227 skipped review and #223 had new integrated commits while still draft.
+- Started issue #150 locally as the next dependency-unblocked lane and created its GSD/TDD/verification artifacts before production edits.
+- Implemented #150 help/docs/website parity and passed targeted tests, website typecheck/build, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` locally.
 
 ## Next
 
-1. Commit and push issue #149 implementation branch.
-2. Open a stacked sub-PR against `feat/148-chatwoot-cli-parity` with `Refs #149` and `Refs #148`.
-3. Record automated review routing status; for a non-default-base PR, parent PR fallback coverage may be needed if CodeRabbit skips the sub-PR.
-4. Continue dependency queue after #149 is reviewed/integrated.
+1. Commit and push issue #150 implementation.
+2. Open a stacked sub-PR against `feat/148-chatwoot-cli-parity` with `Refs #150` and `Refs #148`.
+3. Route automated review; if CodeRabbit skips the non-default-base sub-PR, rely on parent PR #223 review coverage/fallback for the integrated commit range.
+4. Continue the next dependency-unblocked lane (#152 operation ledger, then #151/#153/#154/#155 as dependencies permit).
 
 ## Safety
 

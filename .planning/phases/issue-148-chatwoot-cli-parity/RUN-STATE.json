@@ -50,9 +50,24 @@
       "cycle": "issue-149-full-local-verification",
       "decision": "not_spawned_review_blocked",
       "reason": "Full local gates passed on the #149 branch, but sub-PR #227 remote verify and parent PR fallback review coverage are still pending."
+    },
+    {
+      "cycle": "issue-149-integration",
+      "decision": "integrated_parent_review_pending",
+      "reason": "PR #227 remote checks passed and the branch was squash-merged into parent commit 573b89f5cf8952723213cd55bfa19cb5e3165618. CodeRabbit skipped the sub-PR and parent PR #223 skipped automatic review because it is draft, so manual @coderabbitai review was requested on #223."
+    },
+    {
+      "cycle": "issue-150",
+      "decision": "local_critical_path",
+      "reason": "Issue #150 is dependency-unblocked after #149 integration; mutating worker fanout remains unavailable, so the coordinator created #150 GSD/TDD artifacts locally before production edits."
+    },
+    {
+      "cycle": "issue-150-local-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #150 implementation passed targeted docs/website checks, website typecheck/build, go vet ./..., go test ./..., go build ./cmd/pm, and make verify locally."
     }
   ],
   "verificationPassed": false,
-  "verificationStatus": "#149 full local gates passed on sub-branch; parent branch final verification pending after integration",
+  "verificationStatus": "#149 integrated into parent; #150 local verification passed on sub-branch; parent branch final verification pending after remaining sub-issues",
   "updated_at": "2026-07-10T00:00:00Z"
 }
