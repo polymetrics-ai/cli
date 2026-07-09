@@ -52,10 +52,10 @@ The parent issue records a 342-operation baseline. The current public ReadMe Ope
 - Channel registry: 11 operations (`POST=6`, `PATCH=3`, `PUT=2`).
 - Combined registry: 255 operations (`GET=123`, `POST=76`, `PATCH=26`, `PUT=3`, `DELETE=27`).
 
-`https://dev.frontapp.com/llms.txt` exposes 346 API Reference links. The 91 links not represented in the OpenAPI operation set are category/guide pages, plugin SDK/browser-context methods, Channel API overview pages, and data-model pages. This phase will:
+`https://dev.frontapp.com/llms.txt` exposes 346 API Reference links. The 92 links not represented as unique OpenAPI operation source URLs are category/guide pages, plugin SDK/browser-context methods, Channel API overview/data-model pages, plus one duplicate `Update Channel` reference page. This phase will:
 
 1. make `api_surface.json` complete for the official REST OpenAPI registries;
-2. record the 91 non-REST/API-reference links in source notes as not part of the REST connector execution surface; and
+2. record the 92 non-REST/API-reference links in source notes as not part of the REST connector execution surface; and
 3. avoid inventing missing 342-row method/path data.
 
 ## Classification policy
@@ -67,7 +67,7 @@ The parent issue records a 342-operation baseline. The current public ReadMe Ope
 - DELETE and irreversible/removal endpoints use `operation.model: destructive_action`.
 - Admin/configuration surfaces (rules, inbox/channel/team/teammate group/admin-style configuration, knowledge base mutation, templates, signatures, shifts, views, custom app/channel sync/calls where applicable) use `admin_reverse_etl` or `destructive_action` depending on method/risk.
 - `/me` stays blocked as `disallowed`/low-risk token identity introspection, not a syncable stream.
-- Duplicate method/path pairs are deduplicated with one canonical row; if a duplicate appears in source capture notes, record it there rather than inventing an executable surface.
+- Duplicate method/path pairs get one canonical row plus a blocked `operation.model: duplicate` row so the official registry operation count remains auditable without inventing an executable surface.
 
 ## TDD loop
 

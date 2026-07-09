@@ -1,0 +1,96 @@
+# Non-REST API Reference Links
+Front `llms.txt` API Reference links not represented as REST OpenAPI method/path operations. These are category/guide pages, plugin SDK browser-context methods, Channel API overview pages, or data-model docs; they are source context for #192 but not executable REST connector endpoints.
+
+Count: 92
+- [Introduction](https://dev.frontapp.com/reference/introduction.md)
+- [Response Body Structure](https://dev.frontapp.com/reference/response-body-structure.md)
+- [API Terminology 101](https://dev.frontapp.com/reference/api-terminology-101.md)
+- [Custom Fields](https://dev.frontapp.com/reference/custom-fields.md)
+- [Analytics](https://dev.frontapp.com/reference/analytics.md)
+- [Channels](https://dev.frontapp.com/reference/channels.md)
+- [Drafts](https://dev.frontapp.com/reference/drafts.md)
+- [Messages](https://dev.frontapp.com/reference/messages.md)
+- [Comments](https://dev.frontapp.com/reference/comments.md)
+- [Attachments](https://dev.frontapp.com/reference/attachments.md)
+- [Rules](https://dev.frontapp.com/reference/rules.md)
+- [Statuses](https://dev.frontapp.com/reference/statuses.md)
+- [Tags](https://dev.frontapp.com/reference/tags.md)
+- [Contact Groups](https://dev.frontapp.com/reference/contact-groups.md)
+- [Contact Lists](https://dev.frontapp.com/reference/contact-lists.md)
+- [Contacts](https://dev.frontapp.com/reference/contacts.md)
+- [Conversations](https://dev.frontapp.com/reference/conversations.md)
+- [Events](https://dev.frontapp.com/reference/events.md)
+- [Inboxes](https://dev.frontapp.com/reference/inboxes.md)
+- [Knowledge Bases](https://dev.frontapp.com/reference/knowledge-bases.md)
+- [Links](https://dev.frontapp.com/reference/links.md)
+- [Message Templates](https://dev.frontapp.com/reference/message-templates.md)
+- [Shifts](https://dev.frontapp.com/reference/shifts.md)
+- [Teammate groups](https://dev.frontapp.com/reference/teammate-groups.md)
+- [Teammates](https://dev.frontapp.com/reference/teammates.md)
+- [Time Off](https://dev.frontapp.com/reference/time-off.md)
+- [Teams / Workspaces](https://dev.frontapp.com/reference/teams.md)
+- [Views](https://dev.frontapp.com/reference/views.md)
+- [Installation](https://dev.frontapp.com/reference/installation.md)
+- [Plugin Terminology 101](https://dev.frontapp.com/reference/plugin-terminology-101.md)
+- [Getting events from Front](https://dev.frontapp.com/reference/event-observables.md)
+- [Front.contextUpdates](https://dev.frontapp.com/reference/context-updates.md) — Observable for changes of context.
+- [Context API](https://dev.frontapp.com/reference/plugin-sdk-api.md)
+- [addLink](https://dev.frontapp.com/reference/addlink.md)
+- [addTopic](https://dev.frontapp.com/reference/addtopic.md) — Add a topic to the selected conversations.
+- [assign](https://dev.frontapp.com/reference/assign.md) — Assign or unassign the selected conversations.
+- [close](https://dev.frontapp.com/reference/close.md) — Closes the composer plugin window.
+- [closeDraft](https://dev.frontapp.com/reference/closedraft.md) — Closes an open plugin window and the associated draft composer
+- [createDraft](https://dev.frontapp.com/reference/createdraft.md) — Open a composer with a new draft message.
+- [dismissNotification](https://dev.frontapp.com/reference/dismissnotification.md) — Close a voice call notification
+- [displayNotification](https://dev.frontapp.com/reference/displaynotification.md) — Display a voice call notification to the Front teammate
+- [downloadAttachment](https://dev.frontapp.com/reference/downloadattachment.md) — Since [Attachments](ref:plugin-sdk-attachment) that are returned as part of the [Message](ref:plugin-sdk-message) or [Comment](ref:comment) contain only metadata about the attachment, this method enables the downloading of the content of that attachment.
+- [downloadComposerAttachment](https://dev.frontapp.com/reference/addlink-copy.md) — Since [Attachments](ref:plugin-sdk-attachment) that are returned as part of the [draft](ref:plugin-sdk-draft), this method enables the downloading of the content of that attachment.
+- [fetchDraft](https://dev.frontapp.com/reference/fetchdraft.md) — Fetch a draft message.
+- [fetchPath](https://dev.frontapp.com/reference/fetchpath.md) — Returns the user's current location within the application. Only supports paths that are located within the `/inboxes` route.
+- [listChannels](https://dev.frontapp.com/reference/listchannels.md) — Lists the channels accessible by the current teammate.
+- [listComments](https://dev.frontapp.com/reference/listcomments.md) — List the comments in the current conversation.
+- [listInboxes](https://dev.frontapp.com/reference/listinboxes.md) — Lists the inboxes accessible by the current teammate.
+- [listMessages](https://dev.frontapp.com/reference/listmessages.md) — List the messages in the current conversation. Note that the plugin context will only have access to messages that have loaded for the user. For different reasons, some messages within a conversation will not have loaded for a user, meaning that this function will return undefined for those messages. If you need to definitively load all messages for a conversation, use the [Core API](https://dev.frontapp.com/reference/get_conversations-conversation-id-messages).
+- [listRecipients](https://dev.frontapp.com/reference/listrecipients.md) — List the recipients in the current conversation in the order in which the messages are sent.
+- [listTags](https://dev.frontapp.com/reference/listtags.md) — Lists the tags accessible to the current teammate.
+- [listTeammates](https://dev.frontapp.com/reference/listteammates.md) — Lists the teammates in the company.
+- [listTicketStatuses](https://dev.frontapp.com/reference/listticketstatuses.md) — List the ticket statuses available for the company.
+- [move](https://dev.frontapp.com/reference/move.md) — Move the selected conversations to an inbox.
+- [openConversationInPopup](https://dev.frontapp.com/reference/openconversationinpopup.md) — Requests Front to open a conversation in a popup.
+- [openUrl](https://dev.frontapp.com/reference/openurl.md) — Requests Front to open a URL
+- [openUrlInPopup](https://dev.frontapp.com/reference/openurlinpopup.md) — Requests Front to open a URL in a popup
+- [removeLink](https://dev.frontapp.com/reference/removelink.md)
+- [search](https://dev.frontapp.com/reference/search.md) — Perform a search in Front.
+- [setStatus](https://dev.frontapp.com/reference/setstatus.md) — Set the status of the selected conversations.
+- [tag](https://dev.frontapp.com/reference/tag.md) — Add tags to the selected conversations.
+- [untag](https://dev.frontapp.com/reference/untag.md) — Remove tags from the selected conversations.
+- [updateDraft](https://dev.frontapp.com/reference/updatedraft.md) — Update a draft message.
+- [buildCancelTokenSource](https://dev.frontapp.com/reference/buildcanceltokensource.md) — Build an object to be used to cancel context API call.
+- [isCancelError](https://dev.frontapp.com/reference/iscancelerror.md) — Check if an error is a cancel error
+- [delegateAnchorClicksToFront](https://dev.frontapp.com/reference/delegateanchorclickstofront.md) — Listen for clicks on links and programatic window opens to automatically decide whether to open them via Front
+- [delegateNewWindowsToFront](https://dev.frontapp.com/reference/delegatenewwindowstofront.md)
+- [Data models](https://dev.frontapp.com/reference/plugin-sdk-objects.md)
+- [Attachment](https://dev.frontapp.com/reference/plugin-sdk-attachment.md) — An attachment is a file attached to a message or a comment.
+- [CancelToken](https://dev.frontapp.com/reference/plugin-sdk-cancel-token.md) — Token to make the invocation of a function cancellable.
+- [Channel](https://dev.frontapp.com/reference/plugin-sdk-channel.md) — A channel is a used to send and receive messages.
+- [Comment](https://dev.frontapp.com/reference/comment.md)
+- [Contact](https://dev.frontapp.com/reference/plugin-sdk-contact.md) — A contact is a record in Front Contact Manager.
+- [Context](https://dev.frontapp.com/reference/plugin-sdk-context.md) — A context represents a partial state of Front that the user is interacting with.
+- [EntryPoint](https://dev.frontapp.com/reference/entrypoint.md) — Represents data about the entry point that opened a plugin. Available from the [Context](ref:plugin-sdk-context) object.
+- [Conversation](https://dev.frontapp.com/reference/plugin-sdk-conversation.md) — A conversation is a unique thread of messages and comments.
+- [CustomField](https://dev.frontapp.com/reference/customfield.md) — Extra fields that can be custom specified by customers to augment original Front resources such as conversations or contacts.
+- [Draft message](https://dev.frontapp.com/reference/plugin-sdk-draft.md) — A draft is a message that has not been sent yet.
+- [Inbox](https://dev.frontapp.com/reference/plugn-sdk-inbox.md) — An inbox is a container for conversations.
+- [Link](https://dev.frontapp.com/reference/link.md) — A link is a specific kind of tag that links to an external URL.
+- [Message](https://dev.frontapp.com/reference/plugin-sdk-message.md)
+- [PaginationToken](https://dev.frontapp.com/reference/plugin-sdk-pagination-token.md)
+- [Recipient](https://dev.frontapp.com/reference/plugin-sdk-recipient.md)
+- [Tag](https://dev.frontapp.com/reference/plugin-sdk-tag.md) — A tag is a resource used to organize and classify conversations.
+- [Teammate](https://dev.frontapp.com/reference/plugin-sdk-teammate.md) — A teammate is a Front user.
+- [TicketStatus](https://dev.frontapp.com/reference/ticketstatus.md) — A ticket status availabe for the company.
+- [Topic](https://dev.frontapp.com/reference/plugin-sdk-topic.md) — A topic is a specific kind of tag that links to an external URL.
+- [Introduction](https://dev.frontapp.com/reference/introduction-1.md)
+- [API endpoints](https://dev.frontapp.com/reference/channel-api.md)
+- [Update Channel](https://dev.frontapp.com/reference/update-channel-1.md) — Update a channel.
+- [Message templates](https://dev.frontapp.com/reference/message-templates-1.md)
+- [Voice calls](https://dev.frontapp.com/reference/voice-calls.md)

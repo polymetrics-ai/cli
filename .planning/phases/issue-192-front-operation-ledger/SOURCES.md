@@ -41,7 +41,7 @@ No credentials were used. No secret values were requested, printed, stored, or s
 - Combined REST OpenAPI registry: 255 operations.
 - Combined method split: `GET=123`, `POST=76`, `PATCH=26`, `PUT=3`, `DELETE=27`.
 - `llms.txt` API Reference markdown links: 346.
-- Non-OpenAPI API Reference links: 91 category/guide/plugin SDK/data-model pages.
+- Non-OpenAPI/duplicate API Reference links: 92 category/guide/plugin SDK/data-model pages, including one duplicate `Update Channel` reference page.
 
 ## Parent baseline mismatch
 

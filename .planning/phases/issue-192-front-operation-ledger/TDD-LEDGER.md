@@ -1,8 +1,8 @@
 # TDD Ledger: Front Operation Ledger (#192)
 
-## Red validation planned before production edits
+## Red validation before production edits
 
-The current Front bundle should fail operation-ledger completeness because it has only 10 endpoint rows and no `operation_ledger_version: 1`.
+The current Front bundle failed operation-ledger completeness because it had only 10 endpoint rows and no `operation_ledger_version: 1`.
 
 ```bash
 python3 - <<'PY'
@@ -17,9 +17,9 @@ if count != 255:
 PY
 ```
 
-Expected initial result: fail.
+Initial result: failed with `front api_surface.json is not in operation_ledger_version=1 mode`.
 
-## Green validation planned after production edits
+## Green validation after production edits
 
 ```bash
 jq empty internal/connectors/defs/front/api_surface.json
@@ -42,11 +42,17 @@ PY
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-## Broader gates planned as applicable
+Green results:
 
-- `git diff --check`
-- `go vet ./...`
-- `go test ./cmd/connectorgen -run APISurface`
-- `go test ./internal/connectors/engine -run APISurface`
-- `go build ./cmd/pm`
-- `go test ./...` only if time permits; previous #189 local run timed out in `internal/connectors/certify/TestWriteStagesSkipWhenDisabled` while GitHub Verify passed.
+- `jq empty internal/connectors/defs/front/api_surface.json .planning/phases/issue-192-front-operation-ledger/REST-OPERATION-SUMMARY.json` — passed.
+- Count/method/classifier check — passed with 255 rows, 6 covered streams, 249 blocked operation rows.
+- `go run ./cmd/connectorgen validate internal/connectors/defs` — passed; 547 connectors checked, 0 findings.
+
+## Broader gates
+
+- `git diff --check` — passed.
+- `go vet ./...` — passed.
+- `go test ./cmd/connectorgen -run APISurface` — passed.
+- `go test ./internal/connectors/engine -run APISurface` — passed.
+- `go build ./cmd/pm` — passed.
+- `go test ./...` not rerun in this slice; previous #189 local run timed out in `internal/connectors/certify/TestWriteStagesSkipWhenDisabled` while GitHub Verify passed.

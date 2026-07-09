@@ -16,11 +16,22 @@ Result: failed with `scripts/gsd: unknown GSD command: programming-loop`; manual
 
 ## Red validation
 
-Pending plan checkpoint commit; see `TDD-LEDGER.md`.
+```bash
+python3 - <<'PY'
+import json
+from pathlib import Path
+surface = json.loads(Path('internal/connectors/defs/front/api_surface.json').read_text())
+count = len(surface.get('endpoints', []))
+if surface.get('operation_ledger_version') != 1:
+    raise SystemExit('front api_surface.json is not in operation_ledger_version=1 mode')
+if count != 255:
+    raise SystemExit(f'front api_surface endpoint count {count} != captured REST registry count 255')
+PY
+```
+
+Result: failed as expected with `front api_surface.json is not in operation_ledger_version=1 mode`.
 
 ## Focused green gates
-
-Pending production edit:
 
 ```bash
 jq empty internal/connectors/defs/front/api_surface.json
@@ -44,16 +55,39 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 git diff --check
 ```
 
-## Broader gates
+Result: passed; 255 rows, method split `GET=123`, `POST=76`, `PATCH=26`, `DELETE=27`, `PUT=3`, 6 covered streams, 249 blocked operation rows.
 
-Pending:
+## Broader gates
 
 ```bash
 go vet ./...
+```
+
+Result: passed.
+
+```bash
 go test ./cmd/connectorgen -run APISurface
+```
+
+Result: passed.
+
+```bash
 go test ./internal/connectors/engine -run APISurface
+```
+
+Result: passed.
+
+```bash
 go build ./cmd/pm
 ```
+
+Result: passed.
+
+```bash
+go test ./...
+```
+
+Result: not rerun in this slice. Previous #189 local run timed out in `internal/connectors/certify/TestWriteStagesSkipWhenDisabled`; GitHub Verify passed on #189.
 
 ## CLI/help/docs/website parity
 

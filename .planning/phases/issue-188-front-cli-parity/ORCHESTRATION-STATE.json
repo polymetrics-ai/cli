@@ -197,10 +197,10 @@
       "branch": "feat/192-front-operation-ledger",
       "pr_url": "",
       "worker": "local_critical_path",
-      "status": "plan_checkpoint",
+      "status": "implementation_checkpoint",
       "write_scope": ["internal/connectors/defs/front/api_surface.json", ".planning/phases/issue-192-front-operation-ledger"],
       "worker_directory": "",
-      "verification": "plan checkpoint pending commit",
+      "verification": "focused gates plus go vet/build passed; full go test not rerun due prior certify timeout blocker",
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
