@@ -1,7 +1,7 @@
 # Phase 1 Plan — Inventory and Surface Reconciliation
 
-**Phase:** 1 — Inventory and Surface Reconciliation  
-**Generated via:** Upstream `/gsd:plan-phase 1 --skip-research` workflow shape  
+**Phase:** 1 — Inventory and Surface Reconciliation
+**Generated via:** Upstream `/gsd:plan-phase 1 --skip-research` workflow shape
 **Issue:** #122
 
 ## Objective

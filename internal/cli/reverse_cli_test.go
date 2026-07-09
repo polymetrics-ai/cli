@@ -3,6 +3,7 @@ package cli_test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -209,6 +210,264 @@ func TestReverseETLToGitHubCreatesPullRequestAfterApproval(t *testing.T) {
 	}
 	if !strings.Contains(runStdout.String(), `"records_succeeded": 1`) {
 		t.Fatalf("unexpected run output:\n%s", runStdout.String())
+	}
+}
+
+func TestGitHubCommandWriteUsesReversePlanApproval(t *testing.T) {
+	type seenRequest struct {
+		Method string
+		Path   string
+		Body   map[string]any
+	}
+	var seen []seenRequest
+	serverErrors := make(chan string, 1)
+	reportServerError := func(format string, args ...any) {
+		select {
+		case serverErrors <- fmt.Sprintf(format, args...):
+		default:
+		}
+	}
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			reportServerError("decode GitHub request body: %v", err)
+			http.Error(w, "bad request", http.StatusBadRequest)
+			return
+		}
+		seen = append(seen, seenRequest{Method: r.Method, Path: r.URL.Path, Body: body})
+		if r.Method != http.MethodPatch || r.URL.Path != "/repos/acme/widgets/issues/101" {
+			reportServerError("unexpected GitHub request %s %s", r.Method, r.URL.Path)
+			http.Error(w, "unexpected request", http.StatusNotFound)
+			return
+		}
+		_ = json.NewEncoder(w).Encode(map[string]any{"number": 101, "state": "closed"})
+	}))
+	defer server.Close()
+	assertNoServerError := func() {
+		t.Helper()
+		select {
+		case msg := <-serverErrors:
+			t.Fatal(msg)
+		default:
+		}
+	}
+
+	root := t.TempDir()
+	runCLIForReverseTest(t, []string{"init", "--root", root, "--json"})
+	runCLIForReverseTest(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "owner=acme",
+		"--config", "repo=widgets",
+		"--config", "public_access=true",
+		"--config", "base_url=" + server.URL,
+		"--root", root,
+		"--json",
+	})
+
+	var planStdout, planStderr bytes.Buffer
+	code := cli.Run([]string{
+		"github", "issue", "close",
+		"--issue-number", "101",
+		"--credential", "github-local",
+		"--root", root,
+	}, &planStdout, &planStderr)
+	if code != 0 {
+		t.Fatalf("github issue close plan code = %d stderr = %s stdout = %s", code, planStderr.String(), planStdout.String())
+	}
+	if len(seen) != 0 {
+		t.Fatalf("plan made HTTP requests: %+v", seen)
+	}
+	planID := extractReverseField(t, planStdout.String(), `Created connector command plan (\S+)`)
+	token := extractReverseField(t, planStdout.String(), `Approval token: (\S+)`)
+
+	var previewStdout, previewStderr bytes.Buffer
+	code = cli.Run([]string{
+		"github", "issue", "close",
+		"--plan", planID,
+		"--preview",
+		"--root", root,
+		"--json",
+	}, &previewStdout, &previewStderr)
+	if code != 0 {
+		t.Fatalf("github issue close preview code = %d stderr = %s stdout = %s", code, previewStderr.String(), previewStdout.String())
+	}
+	assertNoServerError()
+	if len(seen) != 0 {
+		t.Fatalf("preview made HTTP requests: %+v", seen)
+	}
+	for _, want := range []string{`"kind": "ConnectorCommandWritePreview"`, `"connector_command": "issue close"`, `"action": "close_issue"`} {
+		if !strings.Contains(previewStdout.String(), want) {
+			t.Fatalf("preview missing %q:\n%s", want, previewStdout.String())
+		}
+	}
+
+	var wrongPathStdout, wrongPathStderr bytes.Buffer
+	code = cli.Run([]string{
+		"github", "issue", "create",
+		"--plan", planID,
+		"--preview",
+		"--root", root,
+		"--json",
+	}, &wrongPathStdout, &wrongPathStderr)
+	if code == 0 || !strings.Contains(wrongPathStdout.String()+wrongPathStderr.String(), "targets command") {
+		t.Fatalf("wrong command path result code=%d stdout=%s stderr=%s", code, wrongPathStdout.String(), wrongPathStderr.String())
+	}
+	assertNoServerError()
+	if len(seen) != 0 {
+		t.Fatalf("wrong command path made HTTP requests: %+v", seen)
+	}
+
+	var deniedStdout, deniedStderr bytes.Buffer
+	code = cli.Run([]string{
+		"github", "issue", "close",
+		"--plan", planID,
+		"--approve", "wrong-token",
+		"--root", root,
+		"--json",
+	}, &deniedStdout, &deniedStderr)
+	if code == 0 || !strings.Contains(deniedStderr.String(), "approval token is invalid") {
+		t.Fatalf("bad approval result code=%d stdout=%s stderr=%s", code, deniedStdout.String(), deniedStderr.String())
+	}
+	assertNoServerError()
+	if len(seen) != 0 {
+		t.Fatalf("bad approval made HTTP requests: %+v", seen)
+	}
+
+	runCLIForReverseTest(t, []string{
+		"credentials", "add", "outbox-local",
+		"--connector", "outbox",
+		"--config", "path=" + filepath.Join(root, ".polymetrics", "outbox"),
+		"--root", root,
+		"--json",
+	})
+	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
+		t.Fatalf("mkdir warehouse: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(warehouseDir, "not_command.jsonl"), []byte("{\"id\":\"row-1\"}\n"), 0o600); err != nil {
+		t.Fatalf("write warehouse row: %v", err)
+	}
+	var normalPlanStdout, normalPlanStderr bytes.Buffer
+	code = cli.Run([]string{
+		"reverse", "plan", "not_command",
+		"--source-table", "not_command",
+		"--destination", "outbox:outbox-local",
+		"--map", "id:id",
+		"--root", root,
+	}, &normalPlanStdout, &normalPlanStderr)
+	if code != 0 {
+		t.Fatalf("normal reverse plan code=%d stdout=%s stderr=%s", code, normalPlanStdout.String(), normalPlanStderr.String())
+	}
+	normalPlanID := extractReverseField(t, normalPlanStdout.String(), `Created reverse plan (\S+)`)
+	normalToken := extractReverseField(t, normalPlanStdout.String(), `Approval token: (\S+)`)
+	var normalRunStdout, normalRunStderr bytes.Buffer
+	code = cli.Run([]string{
+		"github", "issue", "close",
+		"--plan", normalPlanID,
+		"--approve", normalToken,
+		"--root", root,
+		"--json",
+	}, &normalRunStdout, &normalRunStderr)
+	if code == 0 || !strings.Contains(normalRunStdout.String()+normalRunStderr.String(), "not a connector command plan") {
+		t.Fatalf("normal plan via provider command result code=%d stdout=%s stderr=%s", code, normalRunStdout.String(), normalRunStderr.String())
+	}
+	assertNoServerError()
+	if len(seen) != 0 {
+		t.Fatalf("normal reverse plan via provider command made HTTP requests: %+v", seen)
+	}
+
+	var runStdout, runStderr bytes.Buffer
+	code = cli.Run([]string{
+		"github", "issue", "close",
+		"--plan", planID,
+		"--approve", token,
+		"--root", root,
+		"--json",
+	}, &runStdout, &runStderr)
+	if code != 0 {
+		t.Fatalf("github issue close run code = %d stderr = %s stdout = %s", code, runStderr.String(), runStdout.String())
+	}
+	assertNoServerError()
+	if len(seen) != 1 {
+		t.Fatalf("run request count = %d, want 1: %+v", len(seen), seen)
+	}
+	if seen[0].Body["state"] != "closed" {
+		t.Fatalf("run body = %+v, want state=closed", seen[0].Body)
+	}
+	if !strings.Contains(runStdout.String(), `"records_succeeded": 1`) {
+		t.Fatalf("unexpected run output:\n%s", runStdout.String())
+	}
+}
+
+func TestGitHubDestructiveCommandRequiresTypedConfirmation(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if r.Method != http.MethodDelete {
+			t.Fatalf("request method = %s, want DELETE", r.Method)
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	root := t.TempDir()
+	runCLIForReverseTest(t, []string{"init", "--root", root, "--json"})
+	runCLIForReverseTest(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "owner=acme",
+		"--config", "repo=widgets",
+		"--config", "public_access=true",
+		"--config", "base_url=" + server.URL,
+		"--root", root,
+		"--json",
+	})
+
+	var planStdout, planStderr bytes.Buffer
+	code := cli.Run([]string{
+		"github", "repo", "delete-2",
+		"--credential", "github-local",
+		"--root", root,
+	}, &planStdout, &planStderr)
+	if code != 0 {
+		t.Fatalf("github repo delete plan code=%d stdout=%s stderr=%s", code, planStdout.String(), planStderr.String())
+	}
+	planID := extractReverseField(t, planStdout.String(), `Created connector command plan (\S+)`)
+	token := extractReverseField(t, planStdout.String(), `Approval token: (\S+)`)
+	if calls != 0 {
+		t.Fatalf("plan dispatched destructive request; calls=%d", calls)
+	}
+
+	var deniedStdout, deniedStderr bytes.Buffer
+	code = cli.Run([]string{
+		"github", "repo", "delete-2",
+		"--plan", planID,
+		"--approve", token,
+		"--root", root,
+		"--json",
+	}, &deniedStdout, &deniedStderr)
+	if code == 0 || !strings.Contains(strings.ToLower(deniedStdout.String()+deniedStderr.String()), "confirmation") {
+		t.Fatalf("missing confirmation result code=%d stdout=%s stderr=%s", code, deniedStdout.String(), deniedStderr.String())
+	}
+	if calls != 0 {
+		t.Fatalf("missing confirmation dispatched destructive request; calls=%d", calls)
+	}
+
+	var runStdout, runStderr bytes.Buffer
+	code = cli.Run([]string{
+		"github", "repo", "delete-2",
+		"--plan", planID,
+		"--approve", token,
+		"--confirm", "destructive",
+		"--root", root,
+		"--json",
+	}, &runStdout, &runStderr)
+	if code != 0 {
+		t.Fatalf("confirmed destructive run code=%d stdout=%s stderr=%s", code, runStdout.String(), runStderr.String())
+	}
+	if calls != 1 {
+		t.Fatalf("confirmed destructive request count=%d, want 1", calls)
 	}
 }
 

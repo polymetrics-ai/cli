@@ -23,12 +23,30 @@ The orchestrator must also read:
 - `AGENTS.md`
 - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
+- `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
 - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
 - `.agents/agentic-delivery/references/gsd-pi-adapter.md`
 - `.agents/agentic-delivery/references/required-skills-routing.md`
 - `.agents/agentic-delivery/contracts/worker-handoff-template.md`
 - `.agents/agentic-delivery/schemas/orchestration-state.schema.yaml`
+
+## Activation
+
+When triggered, the orchestrator is the active execution owner, not an advisory reviewer. It creates
+or confirms parent branch/PR state, assigns workers, records state, arbitrates sub-PR merges, and
+drives review coverage until the parent issue is human-ready or blocked. Runtime adapters must
+invoke this contract; they must not fork or weaken its GSD, TDD, review, compact-mode, or human-gate
+rules.
+
+Triggers:
+
+- user references a parent issue with sub-issues
+- user references stacked PRs, parent branch, or parent PR
+- parent PR is missing or lacks review coverage
+- sub-PR merge arbitration is needed
+- CodeRabbit/Copilot review coverage gap blocks integration
+- remaining sub-issues are ready or need dependency scheduling
 
 ## Responsibilities
 
@@ -46,6 +64,27 @@ The orchestrator owns:
 - routing Copilot backup review when CodeRabbit is blocked by rate limits or unavailability
 - launching or assigning automated review disposition work
 - declaring final parent PR readiness for human approval
+
+The orchestrator must not stop after describing next steps when all required inputs are available,
+no human gate is triggered, and at least one sub-issue is worker-ready.
+
+The meaning of `spawn` is runtime-generic:
+
+- Claude Code: create Agent/Task workers.
+- Codex: explicitly invoke Codex subagent tools or a custom Codex worker after assigning a separate
+  git worktree or working directory for any worker that can edit files.
+- OpenCode: invoke configured worker subagents or worker commands with `subtask: true`; keep the
+  primary orchestrator in the main context.
+- Future runtimes: create an isolated worker context with one issue, one branch, one write scope,
+  one working directory, and the worker handoff template.
+
+If the runtime has no worker mechanism and the requested mode requires agents, record
+`not_spawned_runtime_capability_missing`.
+
+If the runtime can spawn workers but cannot isolate mutating workers from the coordinator checkout,
+record `not_spawned_isolation_missing`. Do not spawn code-writing workers into the same working tree
+as the orchestrator. Read-only explorer/reviewer agents may still run in the shared checkout when
+their prompt forbids edits.
 
 Worker agents own implementation for one assigned sub-issue. Workers do not own shared parent issue
 comments, parent PR bodies, parent branch pushes, or default sub-PR merge decisions unless the
@@ -81,10 +120,27 @@ Sub-issues may run in parallel only when all of these are true:
 - write scopes are disjoint
 - each worker has one primary issue
 - each worker has a bounded branch and PR base
+- each mutating worker has a separate worktree or working directory
 - shared parent artifacts are orchestrator-owned
 - human gates are not crossed
 
 When file ownership is unclear, run the sub-issues sequentially or split them further.
+
+At every parent orchestration turn, record whether workers were spawned. If no worker is spawned
+while work remains, the orchestrator must either take the local critical-path action that unblocks
+workers or record exactly one blocker category:
+
+- `not_spawned_dependency_blocked`
+- `not_spawned_write_scope_collision`
+- `not_spawned_human_gate`
+- `not_spawned_isolation_missing`
+- `not_spawned_runtime_capability_missing`
+- `not_spawned_review_blocked`
+- `not_spawned_verification_blocked`
+
+Compact handoffs are allowed only for agent prose. Do not compact exact code, commands, test output,
+review findings, security warnings, destructive-action warnings, ordered safety gates, or approval
+gates in worker prompts or handoffs.
 
 ## Merge Policy
 

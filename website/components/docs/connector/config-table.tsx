@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { ConnectorConfigField } from '@/lib/connectors.catalog.generated';
+import type { ConnectorConfigField } from '@/lib/connectors.types';
 import { Table, THead, TBody, TR, TH, TD } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 

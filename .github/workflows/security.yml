@@ -23,12 +23,12 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.25.11'
+          go-version: '1.25.12'
           cache: false
 
       - name: Run govulncheck
         env:
-          GOTOOLCHAIN: go1.25.11
+          GOTOOLCHAIN: go1.25.12
         run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
   codeql:
@@ -51,7 +51,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.25.11'
+          go-version: '1.25.12'
           cache: false
 
       - name: Autobuild

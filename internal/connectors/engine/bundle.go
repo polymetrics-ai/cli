@@ -8,26 +8,32 @@ import (
 	"io/fs"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
 // design §F.3): dir name == metadata.name == registry key.
 var namePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
+var graphQLNamePattern = regexp.MustCompile(`^[_A-Za-z][_0-9A-Za-z]*$`)
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
-	Name     string
-	Metadata Metadata
-	Spec     *Schema                  // compiled spec.json; SecretKeys() from x-secret
-	RawSpec  json.RawMessage          // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
-	HTTP     HTTPBase                 // streams.json "base"; zero value when no streams.json
-	Streams  []StreamSpec             // streams.json "streams"
-	Writes   []WriteAction            // writes.json "actions"; nil when writes.json absent
-	Schemas  map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
-	Surface  *APISurface              // api_surface.json
-	Docs     string                   // docs.md
-	Fixtures fs.FS                    // fixtures/ subtree; nil when absent
+	Name          string
+	Metadata      Metadata
+	Spec          *Schema                  // compiled spec.json; SecretKeys() from x-secret
+	RawSpec       json.RawMessage          // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
+	HTTP          HTTPBase                 // streams.json "base"; zero value when no streams.json
+	Streams       []StreamSpec             // streams.json "streams"
+	Writes        []WriteAction            // writes.json "actions"; nil when writes.json absent
+	Operations    []OperationSpec          // operations.json "operations"; nil when operations.json absent
+	RawOperations json.RawMessage          // verbatim operations.json bytes for validation/audit scanning
+	Schemas       map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
+	Surface       *APISurface              // api_surface.json
+	CLISurface    *CLISurface              // cli_surface.json
+	RawCLISurface json.RawMessage          // verbatim cli_surface.json bytes; nil when absent
+	Docs          string                   // docs.md
+	Fixtures      fs.FS                    // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -207,6 +213,7 @@ type StreamSpec struct {
 	Path           string                `json:"path"`
 	Query          map[string]QueryParam `json:"query,omitempty"`
 	Body           map[string]any        `json:"body,omitempty"` // POST-body streams
+	GraphQL        *GraphQLRequestSpec   `json:"graphql,omitempty"`
 	Records        RecordsSpec           `json:"records"`
 	Pagination     *PaginationSpec       `json:"pagination,omitempty"` // overrides base
 	Incremental    *IncrementalSpec      `json:"incremental,omitempty"`
@@ -367,18 +374,28 @@ type IncrementalSpec struct {
 
 // WriteAction is one entry in writes.json's "actions" array.
 type WriteAction struct {
-	Name         string          `json:"name"`
-	Kind         string          `json:"kind"` // create|update|upsert|delete|custom
-	Method       string          `json:"method"`
-	Path         string          `json:"path"`
-	PathFields   []string        `json:"path_fields,omitempty"`
-	BodyType     string          `json:"body_type,omitempty"` // json (default) | form | none
-	BodyFields   []string        `json:"body_fields,omitempty"`
-	RecordSchema json.RawMessage `json:"record_schema"`
-	Delete       *DeleteSpec     `json:"delete,omitempty"`
-	Risk         string          `json:"risk"`
-	Confirm      string          `json:"confirm,omitempty"` // "" | "destructive"
-	Hook         string          `json:"hook,omitempty"`
+	Name         string              `json:"name"`
+	Kind         string              `json:"kind"` // create|update|upsert|delete|custom
+	Method       string              `json:"method"`
+	Path         string              `json:"path"`
+	PathFields   []string            `json:"path_fields,omitempty"`
+	BodyType     string              `json:"body_type,omitempty"` // json (default) | form | none | graphql
+	BodyFields   []string            `json:"body_fields,omitempty"`
+	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
+	RecordSchema json.RawMessage     `json:"record_schema"`
+	Delete       *DeleteSpec         `json:"delete,omitempty"`
+	Risk         string              `json:"risk"`
+	Confirm      string              `json:"confirm,omitempty"` // "" | "destructive"
+	Hook         string              `json:"hook,omitempty"`
+}
+
+// GraphQLRequestSpec describes a fixed GraphQL document whose variables are
+// filled from declared templates. It is intentionally not a raw query escape
+// hatch: Document is bundle metadata, never user input.
+type GraphQLRequestSpec struct {
+	Document      string         `json:"document"`
+	OperationName string         `json:"operation_name,omitempty"`
+	Variables     map[string]any `json:"variables,omitempty"`
 }
 
 // DeleteSpec describes idempotent-delete semantics for a delete write action.
@@ -389,11 +406,12 @@ type DeleteSpec struct {
 
 // APISurface is the parsed api_surface.json (conformance input only).
 type APISurface struct {
-	API        string            `json:"api"`
-	Docs       string            `json:"docs,omitempty"`
-	ReviewedAt string            `json:"reviewed_at,omitempty"`
-	Scope      string            `json:"scope,omitempty"`
-	Endpoints  []SurfaceEndpoint `json:"endpoints"`
+	API                    string            `json:"api"`
+	Docs                   string            `json:"docs,omitempty"`
+	ReviewedAt             string            `json:"reviewed_at,omitempty"`
+	OperationLedgerVersion int               `json:"operation_ledger_version,omitempty"`
+	Scope                  string            `json:"scope,omitempty"`
+	Endpoints              []SurfaceEndpoint `json:"endpoints"`
 }
 
 // SurfaceEndpoint is one api_surface.json endpoint entry.
@@ -402,12 +420,15 @@ type SurfaceEndpoint struct {
 	Path      string            `json:"path,omitempty"`
 	CoveredBy *SurfaceCoverage  `json:"covered_by,omitempty"`
 	Excluded  *SurfaceExclusion `json:"excluded,omitempty"`
+	Operation *SurfaceOperation `json:"operation,omitempty"`
 }
 
-// SurfaceCoverage names the stream or write action that covers an endpoint.
+// SurfaceCoverage names the executable connector surface that covers an endpoint.
 type SurfaceCoverage struct {
-	Stream string `json:"stream,omitempty"`
-	Write  string `json:"write,omitempty"`
+	Stream      string   `json:"stream,omitempty"`
+	Write       string   `json:"write,omitempty"`
+	DirectRead  string   `json:"direct_read,omitempty"`
+	DirectReads []string `json:"direct_reads,omitempty"`
 }
 
 // SurfaceExclusion names why an endpoint is intentionally out of scope.
@@ -416,11 +437,192 @@ type SurfaceExclusion struct {
 	Reason   string `json:"reason,omitempty"`
 }
 
+// SurfaceOperation classifies a tracked endpoint that is not yet executable.
+// Operation rows are metadata only and must remain blocked by default.
+type SurfaceOperation struct {
+	Model            string `json:"model"`
+	Status           string `json:"status"`
+	Risk             string `json:"risk"`
+	BlockedByDefault bool   `json:"blocked_by_default"`
+	Reason           string `json:"reason"`
+	SourceURL        string `json:"source_url,omitempty"`
+	Notes            string `json:"notes,omitempty"`
+	DuplicateOf      string `json:"duplicate_of,omitempty"`
+}
+
+// OperationSpec is one reviewed, typed operation definition. The first phase
+// loads and validates these definitions only; executors are added in later
+// issue slices and every unknown kind remains rejected by the meta-schema.
+type OperationSpec struct {
+	ID              string                  `json:"id"`
+	Kind            string                  `json:"kind"`
+	Summary         string                  `json:"summary"`
+	Description     string                  `json:"description,omitempty"`
+	SourceURL       string                  `json:"source_url,omitempty"`
+	Risk            string                  `json:"risk"`
+	Approval        string                  `json:"approval"`
+	OutputPolicy    string                  `json:"output_policy"`
+	AuthScopes      []string                `json:"auth_scopes,omitempty"`
+	MutationClass   string                  `json:"mutation_class,omitempty"`
+	Destructive     bool                    `json:"destructive,omitempty"`
+	SecretSensitive bool                    `json:"secret_sensitive,omitempty"`
+	SensitivePolicy *SensitivePolicySpec    `json:"sensitive_policy,omitempty"`
+	AuditEvent      string                  `json:"audit_event,omitempty"`
+	REST            *RESTOperationSpec      `json:"rest,omitempty"`
+	GraphQL         *GraphQLOperationSpec   `json:"graphql,omitempty"`
+	XML             *XMLOperationSpec       `json:"xml,omitempty"`
+	Binary          *BinaryOperationSpec    `json:"binary,omitempty"`
+	File            *FileOperationSpec      `json:"file,omitempty"`
+	LocalGit        *LocalGitOperationSpec  `json:"local_git,omitempty"`
+	LocalFile       *LocalFileOperationSpec `json:"local_file,omitempty"`
+	Browser         *BrowserOperationSpec   `json:"browser,omitempty"`
+	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
+}
+
+type RESTOperationSpec struct {
+	Method string            `json:"method"`
+	Path   string            `json:"path"`
+	Query  map[string]string `json:"query,omitempty"`
+}
+
+// SensitivePolicySpec is the reverse-ETL sensitive/admin policy for an operation
+// whose inputs or effects must never leak (secrets, variables, elevated-scope
+// admin actions). It declares how secret values may be supplied (never inline
+// CLI by default), which record fields must be redacted everywhere, the
+// provider-specific transform that replaces a generic body template (e.g.
+// GitHub's fetch-public-key + libsodium-encrypt flow), the preflight check that
+// runs without reading secret values, and the approval mode that requires typed
+// confirmation. The first sensitive/admin policy issue (#41) implements schema
+// and validator support only; live secret writes remain blocked.
+type SensitivePolicySpec struct {
+	InputMode    string   `json:"input_mode,omitempty"`    // env | file | stdin | env_or_file | env_or_stdin (never "inline")
+	RedactFields []string `json:"redact_fields,omitempty"` // record fields redacted in docs/previews/logs/errors
+	Preflight    string   `json:"preflight,omitempty"`     // scope/availability check without reading secret values
+	Transform    string   `json:"transform,omitempty"`     // none | github_secret_encryption | provider-specific
+	ApprovalMode string   `json:"approval_mode,omitempty"` // typed_confirmation required for secret writes
+}
+
+type GraphQLOperationSpec struct {
+	Document      string         `json:"document"`
+	OperationName string         `json:"operation_name"`
+	VariablesPath string         `json:"variables_path,omitempty"`
+	Pagination    map[string]any `json:"pagination,omitempty"`
+}
+
+type XMLOperationSpec struct {
+	EnvelopeTemplate string            `json:"envelope_template"`
+	ResponsePath     string            `json:"response_path,omitempty"`
+	Headers          map[string]string `json:"headers,omitempty"`
+}
+
+type BinaryOperationSpec struct {
+	Method          string `json:"method"`
+	Path            string `json:"path"`
+	MaxBytes        int    `json:"max_bytes,omitempty"`
+	AllowOverwrite  bool   `json:"allow_overwrite,omitempty"`
+	ExtractArchives bool   `json:"extract_archives,omitempty"`
+}
+
+type FileOperationSpec struct {
+	Direction string `json:"direction"`
+	Path      string `json:"path,omitempty"`
+	MaxBytes  int    `json:"max_bytes,omitempty"`
+}
+
+type LocalGitOperationSpec struct {
+	Action      string   `json:"action"`
+	AllowedArgs []string `json:"allowed_args,omitempty"`
+}
+
+type LocalFileOperationSpec struct {
+	Action   string `json:"action"`
+	Path     string `json:"path,omitempty"`
+	MaxBytes int    `json:"max_bytes,omitempty"`
+}
+
+type BrowserOperationSpec struct {
+	Action string `json:"action"`
+	URL    string `json:"url,omitempty"`
+}
+
+type CompositeOperationSpec struct {
+	Steps []string `json:"steps"`
+}
+
+// CLISurface is the parsed cli_surface.json. It is docs/help metadata only:
+// it maps provider-style command paths to existing streams, write actions,
+// API-surface rows, or explicit unsupported/planned classifications.
+type CLISurface struct {
+	Tagline     string            `json:"tagline"`
+	Usage       string            `json:"usage"`
+	SourceCLI   *CLISourceCLI     `json:"source_cli,omitempty"`
+	Groups      []CLICommandGroup `json:"groups,omitempty"`
+	GlobalFlags []CLIFlag         `json:"global_flags,omitempty"`
+	Commands    []CLICommand      `json:"commands"`
+	HelpTopics  []CLIHelpTopic    `json:"help_topics,omitempty"`
+}
+
+// CLISourceCLI names the external provider CLI used as a parity reference.
+type CLISourceCLI struct {
+	Name      string `json:"name"`
+	Docs      string `json:"docs,omitempty"`
+	Reference string `json:"reference,omitempty"`
+	Source    string `json:"source,omitempty"`
+}
+
+// CLICommandGroup is a rendered help grouping.
+type CLICommandGroup struct {
+	ID       string   `json:"id"`
+	Title    string   `json:"title"`
+	Commands []string `json:"commands"`
+}
+
+// CLIFlag describes one command or global flag.
+type CLIFlag struct {
+	Name    string   `json:"name"`
+	Type    string   `json:"type"`
+	Summary string   `json:"summary,omitempty"`
+	Values  []string `json:"values,omitempty"`
+	MapsTo  string   `json:"maps_to,omitempty"`
+}
+
+// CLICommand is one provider-inspired command path.
+type CLICommand struct {
+	Path          string                  `json:"path"`
+	Summary       string                  `json:"summary"`
+	Intent        string                  `json:"intent"`
+	Availability  string                  `json:"availability"`
+	Stream        string                  `json:"stream,omitempty"`
+	Write         string                  `json:"write,omitempty"`
+	SourceCLIPath string                  `json:"source_cli_path,omitempty"`
+	SourceURL     string                  `json:"source_url,omitempty"`
+	Flags         []CLIFlag               `json:"flags,omitempty"`
+	Examples      []string                `json:"examples,omitempty"`
+	APISurface    []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
+	OutputPolicy  string                  `json:"output_policy,omitempty"`
+	Operation     string                  `json:"operation,omitempty"`
+	Risk          string                  `json:"risk,omitempty"`
+	Approval      string                  `json:"approval,omitempty"`
+	Notes         string                  `json:"notes,omitempty"`
+}
+
+// CLISurfaceEndpointRef points from a command to a tracked api_surface row.
+type CLISurfaceEndpointRef struct {
+	Method string `json:"method"`
+	Path   string `json:"path"`
+}
+
+// CLIHelpTopic is one rendered help topic.
+type CLIHelpTopic struct {
+	Name    string `json:"name"`
+	Summary string `json:"summary"`
+}
+
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, spec, streams, writes, apiSurface *Schema
-	err                                         error
+	metadata, spec, streams, writes, apiSurface, operations, cliSurface *Schema
+	err                                                                 error
 }{}
 
 func init() {
@@ -440,6 +642,8 @@ func init() {
 	metaSchemas.streams = compileMeta(streamsSchemaJSON)
 	metaSchemas.writes = compileMeta(writesSchemaJSON)
 	metaSchemas.apiSurface = compileMeta(apiSurfaceSchemaJSON)
+	metaSchemas.operations = compileMeta(operationsSchemaJSON)
+	metaSchemas.cliSurface = compileMeta(cliSurfaceSchemaJSON)
 }
 
 // requiredFiles lists the bundle files that must always exist relative to a
@@ -582,12 +786,22 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		return Bundle{}, err
 	}
 
+	operations, rawOperations, err := loadOperations(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
+
 	schemas, err := loadStreamSchemas(sub, dirName, streams)
 	if err != nil {
 		return Bundle{}, err
 	}
 
 	surface, err := loadAPISurface(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
+
+	cliSurface, rawCLISurface, err := loadCLISurface(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
 	}
@@ -600,17 +814,21 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	fixtures := loadFixtures(sub)
 
 	return Bundle{
-		Name:     dirName,
-		Metadata: metadata,
-		Spec:     spec,
-		RawSpec:  rawSpec,
-		HTTP:     httpBase,
-		Streams:  streams,
-		Writes:   writes,
-		Schemas:  schemas,
-		Surface:  surface,
-		Docs:     docs,
-		Fixtures: fixtures,
+		Name:          dirName,
+		Metadata:      metadata,
+		Spec:          spec,
+		RawSpec:       rawSpec,
+		HTTP:          httpBase,
+		Streams:       streams,
+		Writes:        writes,
+		Operations:    operations,
+		RawOperations: rawOperations,
+		Schemas:       schemas,
+		Surface:       surface,
+		CLISurface:    cliSurface,
+		RawCLISurface: rawCLISurface,
+		Docs:          docs,
+		Fixtures:      fixtures,
 	}, nil
 }
 
@@ -683,6 +901,9 @@ func loadStreams(sub fs.FS, dirName string, metadata Metadata) (HTTPBase, []Stre
 	if err := strictDecode(raw, &doc); err != nil {
 		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
 	}
+	if err := validateStreamGraphQL(doc.Streams); err != nil {
+		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
+	}
 	return doc.Base, doc.Streams, nil
 }
 
@@ -703,7 +924,370 @@ func loadWrites(sub fs.FS, dirName string) ([]WriteAction, error) {
 	if err := strictDecode(raw, &doc); err != nil {
 		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
 	}
+	if err := validateWriteGraphQL(doc.Actions); err != nil {
+		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
+	}
 	return doc.Actions, nil
+}
+
+func validateStreamGraphQL(streams []StreamSpec) error {
+	for i, stream := range streams {
+		if stream.GraphQL == nil {
+			continue
+		}
+		if len(stream.Body) > 0 {
+			return fmt.Errorf("stream %d (%q) cannot declare both body and graphql", i, stream.Name)
+		}
+		if method := strings.ToUpper(methodOrDefault(stream.Method)); method != "POST" {
+			return fmt.Errorf("stream %d (%q) graphql stream method must be POST, got %s", i, stream.Name, method)
+		}
+		if err := validateGraphQLSpec(stream.GraphQL, "query"); err != nil {
+			return fmt.Errorf("stream %d (%q): %w", i, stream.Name, err)
+		}
+	}
+	return nil
+}
+
+func validateWriteGraphQL(actions []WriteAction) error {
+	for i, action := range actions {
+		bodyType := bodyTypeOf(action)
+		if action.GraphQL != nil && bodyType != "graphql" {
+			return fmt.Errorf("action %d (%q) declares graphql but body_type is %q", i, action.Name, bodyType)
+		}
+		if bodyType != "graphql" {
+			continue
+		}
+		if action.GraphQL == nil {
+			return fmt.Errorf("action %d (%q) body_type graphql requires graphql", i, action.Name)
+		}
+		if len(action.BodyFields) > 0 {
+			return fmt.Errorf("action %d (%q) body_type graphql cannot declare body_fields", i, action.Name)
+		}
+		if method := strings.ToUpper(methodOrDefault(action.Method)); method != "POST" {
+			return fmt.Errorf("action %d (%q) graphql action method must be POST, got %s", i, action.Name, method)
+		}
+		if err := validateGraphQLSpec(action.GraphQL, "mutation"); err != nil {
+			return fmt.Errorf("action %d (%q): %w", i, action.Name, err)
+		}
+	}
+	return nil
+}
+
+func validateGraphQLSpec(spec *GraphQLRequestSpec, operationKind string) error {
+	if spec == nil {
+		return fmt.Errorf("graphql is required")
+	}
+	doc := strings.TrimSpace(spec.Document)
+	if doc == "" {
+		return fmt.Errorf("graphql.document is required")
+	}
+	if strings.Contains(doc, "{{") || strings.Contains(doc, "}}") {
+		return fmt.Errorf("graphql.document must be fixed bundle metadata, not a template")
+	}
+	if operationKind != "" && !graphQLDocumentStartsWith(doc, operationKind) {
+		return fmt.Errorf("graphql.document must start with %s", operationKind)
+	}
+	opName := strings.TrimSpace(spec.OperationName)
+	if opName == "" {
+		return fmt.Errorf("graphql.operation_name is required")
+	}
+	if !graphQLNamePattern.MatchString(opName) {
+		return fmt.Errorf("graphql.operation_name %q is not a valid GraphQL name", opName)
+	}
+	for name := range spec.Variables {
+		if !graphQLNamePattern.MatchString(name) {
+			return fmt.Errorf("graphql variable %q is not a valid GraphQL name", name)
+		}
+	}
+	if err := validateGraphQLVariables(spec.Variables); err != nil {
+		return err
+	}
+	return nil
+}
+
+func graphQLDocumentStartsWith(doc, kind string) bool {
+	if !strings.HasPrefix(doc, kind) {
+		return false
+	}
+	if len(doc) == len(kind) {
+		return true
+	}
+	switch doc[len(kind)] {
+	case ' ', '\t', '\n', '\r', '(', '{':
+		return true
+	default:
+		return false
+	}
+}
+
+func validateGraphQLVariables(vars map[string]any) error {
+	for name, value := range vars {
+		if err := validateGraphQLVariableValue(name, value); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func validateGraphQLDefaultForType(def, typ string) error {
+	switch typ {
+	case "integer":
+		if _, err := strconv.ParseInt(def, 10, 64); err != nil {
+			return fmt.Errorf("must be a valid integer, got %q", def)
+		}
+	case "number":
+		if _, err := strconv.ParseFloat(def, 64); err != nil {
+			return fmt.Errorf("must be a valid number, got %q", def)
+		}
+	case "boolean":
+		if _, err := strconv.ParseBool(def); err != nil {
+			return fmt.Errorf("must be a valid boolean, got %q", def)
+		}
+	}
+	return nil
+}
+
+func validateGraphQLVariableValue(name string, value any) error {
+	obj, ok := value.(map[string]any)
+	if !ok {
+		return nil
+	}
+	if _, isTemplate := obj["template"]; isTemplate {
+		if _, ok := obj["template"].(string); !ok {
+			return fmt.Errorf("graphql variable %q template must be a string", name)
+		}
+		for key := range obj {
+			if key != "template" && key != "type" && key != "omit_when_empty" && key != "default" {
+				return fmt.Errorf("graphql variable %q template object has unsupported key %q", name, key)
+			}
+		}
+		if def, ok := obj["default"]; ok {
+			defStr, ok := def.(string)
+			if !ok {
+				return fmt.Errorf("graphql variable %q default must be a string", name)
+			}
+			if typ, _ := obj["type"].(string); typ != "" && typ != "string" {
+				if err := validateGraphQLDefaultForType(defStr, typ); err != nil {
+					return fmt.Errorf("graphql variable %q default %v", name, err)
+				}
+			}
+		}
+		if omit, ok := obj["omit_when_empty"]; ok {
+			if _, ok := omit.(bool); !ok {
+				return fmt.Errorf("graphql variable %q omit_when_empty must be a boolean", name)
+			}
+		}
+		if typ, ok := obj["type"].(string); ok {
+			switch typ {
+			case "", "string", "integer", "number", "boolean":
+			default:
+				return fmt.Errorf("graphql variable %q has unsupported type %q", name, typ)
+			}
+		}
+		return nil
+	}
+	for childName, childValue := range obj {
+		if err := validateGraphQLVariableValue(childName, childValue); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func loadOperations(sub fs.FS, dirName string) ([]OperationSpec, json.RawMessage, error) {
+	if !fileExists(sub, "operations.json") {
+		return nil, nil, nil
+	}
+	raw, err := readFile(sub, "operations.json")
+	if err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.operations.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
+	}
+	var doc struct {
+		Operations []OperationSpec `json:"operations"`
+	}
+	if err := strictDecode(raw, &doc); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
+	}
+	if err := validateOperations(doc.Operations); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
+	}
+	return doc.Operations, raw, nil
+}
+
+func validateOperations(ops []OperationSpec) error {
+	seen := map[string]bool{}
+	for i, op := range ops {
+		if seen[op.ID] {
+			return fmt.Errorf("operation %d has duplicate operation id %q", i, op.ID)
+		}
+		seen[op.ID] = true
+
+		block, count := operationExecutionBlock(op)
+		if count != 1 {
+			return fmt.Errorf("operation %d (%q) must declare exactly one execution block, got %d", i, op.ID, count)
+		}
+		expected := expectedOperationBlock(op.Kind)
+		if expected == "" {
+			return fmt.Errorf("operation %d (%q) has unsupported kind %q", i, op.ID, op.Kind)
+		}
+		if block != expected {
+			return fmt.Errorf("operation %d (%q) kind %q must declare %s block, got %s", i, op.ID, op.Kind, expected, block)
+		}
+		if err := validateOperationSemantics(i, op); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func operationExecutionBlock(op OperationSpec) (string, int) {
+	var block string
+	count := 0
+	add := func(name string, present bool) {
+		if !present {
+			return
+		}
+		block = name
+		count++
+	}
+	add("rest", op.REST != nil)
+	add("graphql", op.GraphQL != nil)
+	add("xml", op.XML != nil)
+	add("binary", op.Binary != nil)
+	add("file", op.File != nil)
+	add("local_git", op.LocalGit != nil)
+	add("local_file", op.LocalFile != nil)
+	add("browser", op.Browser != nil)
+	add("composite", op.Composite != nil)
+	return block, count
+}
+
+func expectedOperationBlock(kind string) string {
+	switch kind {
+	case "rest_read", "rest_write":
+		return "rest"
+	case "graphql_query", "graphql_mutation":
+		return "graphql"
+	case "xml_export", "xml_import":
+		return "xml"
+	case "binary_download":
+		return "binary"
+	case "file_upload":
+		return "file"
+	case "local_git":
+		return "local_git"
+	case "local_file":
+		return "local_file"
+	case "browser_open":
+		return "browser"
+	case "stream_etl", "composite":
+		return "composite"
+	default:
+		return ""
+	}
+}
+
+func validateOperationSemantics(i int, op OperationSpec) error {
+	switch op.Kind {
+	case "rest_read":
+		if method := strings.ToUpper(strings.TrimSpace(op.REST.Method)); method != "GET" {
+			return fmt.Errorf("operation %d (%q) rest_read method must be GET, got %s", i, op.ID, method)
+		}
+	case "rest_write":
+		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+		if method == "GET" || method == "HEAD" || method == "" {
+			return fmt.Errorf("operation %d (%q) rest_write method must be mutating, got %s", i, op.ID, method)
+		}
+		if strings.TrimSpace(op.MutationClass) == "" || op.MutationClass == "none" {
+			return fmt.Errorf("operation %d (%q) rest_write must declare mutation_class", i, op.ID)
+		}
+		if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
+			return fmt.Errorf("operation %d (%q) rest_write must declare approval requirements", i, op.ID)
+		}
+	case "graphql_mutation", "xml_import":
+		if strings.TrimSpace(op.MutationClass) == "" || op.MutationClass == "none" {
+			return fmt.Errorf("operation %d (%q) %s must declare mutation_class", i, op.ID, op.Kind)
+		}
+		if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
+			return fmt.Errorf("operation %d (%q) %s must declare approval requirements", i, op.ID, op.Kind)
+		}
+	case "binary_download":
+		if method := strings.ToUpper(strings.TrimSpace(op.Binary.Method)); method != "GET" {
+			return fmt.Errorf("operation %d (%q) binary_download method must be GET, got %s", i, op.ID, method)
+		}
+		if op.Binary.MaxBytes <= 0 {
+			return fmt.Errorf("operation %d (%q) binary_download must declare positive max_bytes", i, op.ID)
+		}
+	case "file_upload":
+		if op.File.Direction != "upload" {
+			return fmt.Errorf("operation %d (%q) file_upload direction must be upload, got %s", i, op.ID, op.File.Direction)
+		}
+		if op.File.MaxBytes <= 0 {
+			return fmt.Errorf("operation %d (%q) file_upload must declare positive max_bytes", i, op.ID)
+		}
+		if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
+			return fmt.Errorf("operation %d (%q) file_upload must declare approval requirements", i, op.ID)
+		}
+	case "local_file":
+		if op.LocalFile.Action == "write" || op.LocalFile.Action == "mkdir" {
+			if strings.TrimSpace(op.Approval) == "" || op.Approval == "none" {
+				return fmt.Errorf("operation %d (%q) local_file mutation must declare approval requirements", i, op.ID)
+			}
+		}
+		if op.LocalFile.Action == "write" && op.LocalFile.MaxBytes <= 0 {
+			return fmt.Errorf("operation %d (%q) local_file write must declare positive max_bytes", i, op.ID)
+		}
+	}
+	if err := validateSensitivePolicy(i, op); err != nil {
+		return err
+	}
+	return nil
+}
+
+// validateSensitivePolicy enforces the sensitive/admin reverse-ETL policy model
+// (#41). An operation that is secret_sensitive or has mutation_class "secret"
+// must declare a sensitive_policy with: a non-inline input_mode, at least one
+// redact_fields entry, and approval_mode "typed_confirmation". The transform,
+// when set, must be a known value. Live secret writes remain blocked in this
+// issue; this is schema + validator support only.
+func validateSensitivePolicy(i int, op OperationSpec) error {
+	isSecret := op.SecretSensitive || strings.EqualFold(op.MutationClass, "secret")
+	if !isSecret {
+		// Non-secret operations may still declare a policy (e.g. admin actions
+		// that redact fields) but are not forced to.
+		if op.SensitivePolicy == nil {
+			return nil
+		}
+	} else if op.SensitivePolicy == nil {
+		return fmt.Errorf("operation %d (%q) is secret_sensitive but declares no sensitive_policy (input_mode, redact_fields, approval_mode)", i, op.ID)
+	}
+	p := op.SensitivePolicy
+	switch strings.ToLower(strings.TrimSpace(p.InputMode)) {
+	case "", "inline":
+		if isSecret {
+			return fmt.Errorf("operation %d (%q) sensitive_policy input_mode must not be inline; secret values must come from env/file/stdin", i, op.ID)
+		}
+	case "env", "file", "stdin", "env_or_file", "env_or_stdin":
+		// allowed
+	default:
+		return fmt.Errorf("operation %d (%q) sensitive_policy input_mode %q is not a known value", i, op.ID, p.InputMode)
+	}
+	if isSecret && len(p.RedactFields) == 0 {
+		return fmt.Errorf("operation %d (%q) sensitive_policy must declare at least one redact_fields entry", i, op.ID)
+	}
+	switch strings.ToLower(strings.TrimSpace(p.Transform)) {
+	case "", "none", "github_secret_encryption":
+		// allowed
+	default:
+		return fmt.Errorf("operation %d (%q) sensitive_policy transform %q is not a known value", i, op.ID, p.Transform)
+	}
+	if isSecret && !strings.EqualFold(p.ApprovalMode, "typed_confirmation") {
+		return fmt.Errorf("operation %d (%q) sensitive_policy approval_mode must be typed_confirmation for secret writes", i, op.ID)
+	}
+	return nil
 }
 
 func loadStreamSchemas(sub fs.FS, dirName string, streams []StreamSpec) (map[string]*StreamSchema, error) {
@@ -745,6 +1329,24 @@ func loadAPISurface(sub fs.FS, dirName string) (*APISurface, error) {
 		return nil, fmt.Errorf("load bundle %s: api_surface.json: %w", dirName, err)
 	}
 	return &surface, nil
+}
+
+func loadCLISurface(sub fs.FS, dirName string) (*CLISurface, json.RawMessage, error) {
+	if !fileExists(sub, "cli_surface.json") {
+		return nil, nil, nil
+	}
+	raw, err := readFile(sub, "cli_surface.json")
+	if err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.cliSurface.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
+	}
+	var surface CLISurface
+	if err := strictDecode(raw, &surface); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
+	}
+	return &surface, json.RawMessage(raw), nil
 }
 
 func loadFixtures(sub fs.FS) fs.FS {

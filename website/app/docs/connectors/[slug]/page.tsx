@@ -6,6 +6,7 @@ import {
   CONNECTOR_CATALOG,
   connectorBySlug,
 } from '@/lib/connectors.catalog.generated';
+import type { ConnectorCliCommand } from '@/lib/connectors.types';
 
 import { ConnectorHeader } from '@/components/docs/connector/connector-header';
 import { CapabilityMatrix } from '@/components/docs/connector/capability-matrix';
@@ -162,6 +163,91 @@ function WriteActionsTable({ connector }: { connector: NonNullable<ReturnType<ty
   );
 }
 
+function availabilityVariant(availability: string) {
+  switch (availability) {
+    case 'implemented':
+      return 'status-enabled';
+    case 'partial':
+    case 'planned':
+      return 'category';
+    default:
+      return 'release-beta';
+  }
+}
+
+function commandMapping(command: ConnectorCliCommand) {
+  if (command.stream) return `stream:${command.stream}`;
+  if (command.write) return `write:${command.write}`;
+  if (command.outputPolicy) return `policy:${command.outputPolicy}`;
+  return '—';
+}
+
+function CommandSurfaceTable({ connector }: { connector: NonNullable<ReturnType<typeof connectorBySlug>> }) {
+  const surface = connector.cliSurface;
+  if (!surface) return null;
+
+  return (
+    <Card className="overflow-hidden">
+      <div className="border-b border-line-structure bg-surface-1 px-3 py-2.5">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <p className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
+              {surface.usage}
+            </p>
+            <p className="mt-1 text-[13px] leading-relaxed text-text-secondary">
+              {surface.tagline}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            <Badge variant="category">{surface.groups.length} groups</Badge>
+            <Badge variant="category">{surface.commands.length} commands</Badge>
+            <Badge variant="capability">{surface.globalFlags.length} global flags</Badge>
+          </div>
+        </div>
+      </div>
+      <Table>
+        <THead>
+          <TR>
+            <TH>Command</TH>
+            <TH>Intent</TH>
+            <TH>Status</TH>
+            <TH>Mapping</TH>
+          </TR>
+        </THead>
+        <TBody>
+          {surface.commands.map((command) => (
+            <TR key={command.path}>
+              <TD>
+                <div className="min-w-0">
+                  <code className="break-words font-mono text-[12px] text-text-primary">
+                    {command.path}
+                  </code>
+                  {command.summary ? (
+                    <p className="mt-1 text-[12px] leading-relaxed text-text-tertiary">
+                      {command.summary}
+                    </p>
+                  ) : null}
+                </div>
+              </TD>
+              <TD className="font-mono text-[12px] text-text-tertiary">
+                {command.intent || '—'}
+              </TD>
+              <TD>
+                <Badge variant={availabilityVariant(command.availability)}>
+                  {command.availability || 'unknown'}
+                </Badge>
+              </TD>
+              <TD className="font-mono text-[12px] text-text-tertiary">
+                {commandMapping(command)}
+              </TD>
+            </TR>
+          ))}
+        </TBody>
+      </Table>
+    </Card>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────
 
 export default async function ConnectorPage({ params }: Props) {
@@ -248,6 +334,19 @@ export default async function ConnectorPage({ params }: Props) {
           </SectionHeading>
           <CliExample connector={c} />
         </section>
+
+        {/* ④ Capabilities */}
+        {c.cliSurface && (
+          <section className="min-w-0" aria-labelledby="section-command-surface">
+            <SectionHeading
+              id="section-command-surface"
+              description="Provider-style command groups generated from cli_surface.json. These entries document availability and mappings; they do not add runtime dispatch by themselves."
+            >
+              Command surface
+            </SectionHeading>
+            <CommandSurfaceTable connector={c} />
+          </section>
+        )}
 
         {/* ④ Capabilities */}
         <section className="min-w-0" aria-labelledby="section-capabilities">

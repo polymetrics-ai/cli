@@ -6,6 +6,9 @@ required_fields:
   - parent_branch
   - parent_pr
   - default_branch
+  - orchestrator
+  - ready_queue
+  - spawn_decisions
   - subissues
   - human_gates
   - updated_at
@@ -22,6 +25,31 @@ field_contract:
   default_branch:
     type: string
     example: main
+  orchestrator:
+    type: object
+    required: [mode, runtime, status]
+    mode_values: [active_owner, advisory, blocked]
+    mode_rules:
+      - active_owner is required for executable parent issue orchestration when worker runtime is available.
+      - advisory is allowed only for read-only audits, planning reviews, or explicit human-requested analysis mode.
+    status_values: [running, waiting_for_workers, waiting_for_review, blocked, human_ready]
+  ready_queue:
+    type: list
+    item_required: [number, status, dependencies, write_scope, decision]
+    decision_values:
+      - spawned
+      - read_only_spawned
+      - local_critical_path
+      - not_spawned_dependency_blocked
+      - not_spawned_write_scope_collision
+      - not_spawned_human_gate
+      - not_spawned_isolation_missing
+      - not_spawned_runtime_capability_missing
+      - not_spawned_review_blocked
+      - not_spawned_verification_blocked
+  spawn_decisions:
+    type: list
+    item_required: [timestamp, decision, issue_numbers, reason]
   subissues:
     type: list
     item_required:
@@ -32,6 +60,7 @@ field_contract:
       - worker
       - status
       - write_scope
+      - worker_directory
       - verification
       - automated_review
   subissue_status_values:

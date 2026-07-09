@@ -22,34 +22,66 @@ describe('connector data route', () => {
 
     expect(params).toHaveLength(CONNECTOR_CATALOG.length);
     expect(new Set(params.map((param) => param.slug)).size).toBe(params.length);
-    expect(params).toContainEqual({ slug: 'source-100ms' });
+    expect(params).toContainEqual({ slug: '100ms' });
   });
 
-  it('returns public generated connector data with enrichment', async () => {
-    const { response, json } = await connectorData('source-100ms');
+  it('returns public generated connector catalog data', async () => {
+    const { response, json } = await connectorData('100ms');
 
     expect(response.status).toBe(200);
     expect(json).toMatchObject({
-      slug: 'source-100ms',
+      slug: '100ms',
       name: '100ms',
-      type: 'source',
-      enrichment: expect.objectContaining({
-        prerequisites: expect.any(Array),
-        authMethods: expect.arrayContaining([
-          expect.objectContaining({ name: 'Management token' }),
-        ]),
+      category: 'api',
+      capabilities: expect.objectContaining({
+        check: true,
+        read: true,
+        write: true,
       }),
     });
-    expect(json).not.toHaveProperty('docUrl');
-    expect(json.config).toEqual(
+    expect(json.streams).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({
-          name: 'management_token',
-          required: true,
-          secret: true,
-        }),
+        expect.objectContaining({ name: 'rooms' }),
       ]),
     );
+    expect(json.writeActions).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: 'create_room' }),
+      ]),
+    );
+    expect(json.docsMd).toContain('management_token');
+  });
+
+  it('returns GitHub CLI surface metadata for docs rendering', async () => {
+    const { response, json } = await connectorData('github');
+
+    expect(response.status).toBe(200);
+    expect(json.cliSurface).toMatchObject({
+      usage: 'pm github <command> <subcommand> [flags]',
+      globalFlags: expect.arrayContaining([
+        expect.objectContaining({ name: 'json', type: 'boolean' }),
+      ]),
+      groups: expect.arrayContaining([
+        expect.objectContaining({
+          title: 'Core Commands',
+          commands: expect.arrayContaining(['issue', 'pr', 'repo', 'release']),
+        }),
+      ]),
+      commands: expect.arrayContaining([
+        expect.objectContaining({
+          path: 'issue list',
+          intent: 'etl',
+          availability: 'implemented',
+          stream: 'issues',
+        }),
+        expect.objectContaining({
+          path: 'issue create',
+          intent: 'reverse_etl',
+          availability: 'implemented',
+          write: 'create_issue',
+        }),
+      ]),
+    });
   });
 
   it('returns a 404 JSON payload for unknown connectors', async () => {

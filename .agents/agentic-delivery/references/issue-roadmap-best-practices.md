@@ -12,6 +12,7 @@ Accessed: 2026-07-06
 - GitHub branch creation for issues: https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-a-branch-for-an-issue
 - GitHub pull request issue linking: https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue
 - GitHub pull request creation: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
+- GitHub comparing branches in pull requests: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-comparing-branches-in-pull-requests
 - GitHub CLI issue create: https://cli.github.com/manual/gh_issue_create
 - GitHub CLI issue edit: https://cli.github.com/manual/gh_issue_edit
 - GitHub CLI PR create: https://cli.github.com/manual/gh_pr_create
@@ -27,8 +28,14 @@ Accessed: 2026-07-06
   priority, target dates, and phase.
 - Use repository milestones for bounded delivery phases. Milestones track groups of issues and pull
   requests, due dates, completion percentage, and open/closed counts.
-- Use parent issues for epic-sized deliverables that need one parent branch and one final parent PR.
-  GitHub sub-issues support hierarchy and progress tracking in Projects.
+- Use parent issues for epic-sized deliverables that need one parent branch and one parent PR.
+  Create the parent PR as a draft early so checks, discussion, and review automation attach to the
+  main-targeted branch from the start. GitHub sub-issues support hierarchy and progress tracking in
+  Projects.
+- GitHub pull requests compare changes in a head branch against a base branch. If the parent branch
+  has no diff yet, create a deliberate parent seed commit before opening the draft parent PR. Prefer
+  a meaningful roadmap/status scaffold when useful; otherwise use an empty commit to avoid file
+  churn.
 - Keep sub-issues small enough for one independently reviewable PR. Atlassian frames epics as
   larger bodies of work broken into stories, with stories sized to one sprint or less by default.
 - Use issue dependencies for sequencing that is not parent/child ownership. A sub-issue can be part
@@ -53,4 +60,6 @@ Accessed: 2026-07-06
 - Sub-issue: one implementation slice that can be merged into the parent branch after automated
   gates pass.
 - Sub-PR: one issue-backed PR from a sub-issue branch into the parent branch.
-- Parent PR: one final PR from the parent branch into `main`, reviewed and approved by a human.
+- Parent PR: one draft-to-final PR from the parent branch into `main`; it starts as the review and
+  integration thread, then becomes the human-approved final merge PR when the parent issue is
+  complete.

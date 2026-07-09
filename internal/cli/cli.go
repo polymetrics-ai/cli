@@ -14,12 +14,15 @@ import (
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
 )
 
 type envelope map[string]any
+
+const maxConnectorCommandLimit = 10000
 
 func Run(args []string, stdout, stderr io.Writer) int {
 	ctx := context.Background()
@@ -93,7 +96,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	case "worker":
 		err = runWorker(ctx, rest, stdout, jsonOut)
 	default:
-		err = usageErrorf("unknown command %q", cmd)
+		err = runMaybeConnectorCommand(ctx, root, cmd, rest, stdout, jsonOut)
 	}
 	if err != nil {
 		return writeError(stdout, stderr, err, jsonOut)
@@ -588,6 +591,289 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 	}
 }
 
+func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
+	if err := safety.ValidateIdentifier(connectorName, "connector"); err != nil {
+		return usageErrorf("unknown command %q", connectorName)
+	}
+	if err := connectors.RejectLegacyConnectorName(connectorName); err != nil {
+		return err
+	}
+	registry := appRegistry()
+	connector, ok := registry.Get(connectorName)
+	if !ok {
+		return usageErrorf("unknown command %q", connectorName)
+	}
+	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || surfaceProvider.CommandSurface() == nil {
+		return usageErrorf("unknown command %q", connectorName)
+	}
+	flags := parseFlags(args)
+	path := flags.values["_"]
+	if len(path) == 0 {
+		return usageErrorf("missing connector command path")
+	}
+	if err := commandrunner.Preflight(connector, path); err != nil {
+		var blocked *commandrunner.BlockedCommandError
+		if errors.As(err, &blocked) {
+			return connectorCommandBlockedError(err)
+		}
+		return err
+	}
+	return withApp(root, func(a *app.App) error {
+		return runConnectorCommand(ctx, a, connectorName, args, stdout, jsonOut)
+	})
+}
+
+func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
+	flags := parseFlags(args)
+	path := flags.values["_"]
+	if len(path) == 0 {
+		return usageErrorf("missing connector command path")
+	}
+	credential := flags.first("credential")
+	if credential == "" {
+		credential = flags.first("connection")
+	}
+	config, err := keyValues(flags.values["config"])
+	if err != nil {
+		return err
+	}
+	limit, err := parseIntFlag("limit", flags.first("limit"), 100)
+	if err != nil {
+		return err
+	}
+	if limit <= 0 {
+		limit = 100
+	}
+	if limit > maxConnectorCommandLimit {
+		limit = maxConnectorCommandLimit
+	}
+	maxBytes, err := parseIntFlag("max-bytes", flags.first("max-bytes"), 1<<20)
+	if err != nil {
+		return err
+	}
+	if maxBytes <= 0 {
+		maxBytes = 1 << 20
+	}
+	if maxBytes > commandrunner.MaxDirectReadBytes {
+		maxBytes = commandrunner.MaxDirectReadBytes
+	}
+	commandFlags := map[string][]string{}
+	for name, values := range flags.values {
+		switch name {
+		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "confirm", "plan-name":
+			continue
+		default:
+			commandFlags[name] = values
+		}
+	}
+
+	if flags.first("plan") != "" {
+		return runConnectorWriteCommandFromPlan(ctx, a, connectorName, path, flags, stdout, jsonOut)
+	}
+
+	connector, cfg, err := a.ResolveConnectorCredential(ctx, connectorName, credential, config)
+	if err != nil {
+		return err
+	}
+
+	if err := runConnectorWriteCommand(ctx, a, connectorName, credential, config, path, commandFlags, flags, stdout, jsonOut); err != commandrunner.ErrNotWriteCommand {
+		if err != nil {
+			var blocked *commandrunner.BlockedCommandError
+			if errors.As(err, &blocked) {
+				return connectorCommandBlockedError(err)
+			}
+			return err
+		}
+		return nil
+	}
+
+	rows := make([]connectors.Record, 0, limit)
+	result, err := commandrunner.Run(ctx, connector, commandrunner.Request{
+		Path:     path,
+		Flags:    commandFlags,
+		Config:   cfg,
+		Limit:    limit,
+		MaxBytes: maxBytes,
+	}, func(record connectors.Record) error {
+		rows = append(rows, record)
+		return nil
+	})
+	if err != nil {
+		var blocked *commandrunner.BlockedCommandError
+		if errors.As(err, &blocked) {
+			return connectorCommandBlockedError(err)
+		}
+		return err
+	}
+	if result.DirectRead != nil {
+		if jsonOut {
+			return writeJSON(stdout, envelope{
+				"kind":      "ConnectorCommandDirectRead",
+				"connector": result.Connector,
+				"command":   result.Command,
+				"method":    result.DirectRead.Method,
+				"path":      result.DirectRead.Path,
+				"status":    result.DirectRead.Status,
+				"response":  result.DirectRead.Body,
+			})
+		}
+		b, _ := json.MarshalIndent(result.DirectRead.Body, "", "  ")
+		fmt.Fprintln(stdout, string(b))
+		return nil
+	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{
+			"kind":      "ConnectorCommandRead",
+			"connector": result.Connector,
+			"command":   result.Command,
+			"stream":    result.Stream,
+			"count":     result.Count,
+			"records":   rows,
+		})
+	}
+	for _, row := range rows {
+		b, _ := json.Marshal(row)
+		fmt.Fprintln(stdout, string(b))
+	}
+	return nil
+}
+
+func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, credential string, config map[string]string, path []string, commandFlags map[string][]string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+	preview := truthyFlag(flags.first("preview"))
+	plan, writePreview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Name:       flags.first("plan-name"),
+		Connector:  connectorName,
+		Credential: credential,
+		Config:     config,
+		Path:       path,
+		Flags:      commandFlags,
+		Preview:    preview,
+	})
+	if err != nil {
+		return err
+	}
+	if jsonOut {
+		env := envelope{"kind": "ConnectorCommandWritePlan", "plan": safeReversePlanForOutput(plan), "approval_required": true}
+		if writePreview != nil {
+			env["write_preview"] = writePreview
+		}
+		return writeJSON(stdout, env)
+	}
+	fmt.Fprintf(stdout, "Created connector command plan %s for %s\nApproval token: %s\n", plan.ID, plan.ConnectorCommand, plan.ApprovalToken)
+	if plan.ConfirmationChallenge != "" {
+		fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
+	}
+	if writePreview != nil {
+		for _, warning := range writePreview.Warnings {
+			fmt.Fprintf(stdout, "- %s\n", warning)
+		}
+	}
+	return nil
+}
+
+func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connectorName string, path []string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
+	planID := strings.TrimSpace(flags.first("plan"))
+	approvalToken := strings.TrimSpace(flags.first("approve"))
+	preview := truthyFlag(flags.first("preview"))
+	plan, err := connectorCommandPlanForPath(a, planID, connectorName, path)
+	if err != nil {
+		return err
+	}
+	if approvalToken != "" {
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: flags.first("confirm")})
+		if err != nil {
+			return err
+		}
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
+		}
+		fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
+		return nil
+	}
+	if preview {
+		plan, writePreview, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+		if err != nil {
+			return err
+		}
+		if jsonOut {
+			return writeJSON(stdout, envelope{
+				"kind":          "ConnectorCommandWritePreview",
+				"plan":          safeReversePlanForOutput(plan),
+				"write_preview": writePreview,
+			})
+		}
+		fmt.Fprintf(stdout, "Reverse plan %s previews %s via %s\n", plan.ID, plan.ConnectorCommand, plan.Action)
+		for _, warning := range writePreview.Warnings {
+			fmt.Fprintf(stdout, "- %s\n", warning)
+		}
+		return nil
+	}
+	return usageErrorf("connector write command with --plan requires --preview or --approve")
+}
+
+func connectorCommandPlanForPath(a *app.App, planID, connectorName string, path []string) (app.ReversePlan, error) {
+	plan, err := a.GetReversePlan(planID)
+	if err != nil {
+		return app.ReversePlan{}, err
+	}
+	if plan.ConnectorCommand == "" || len(plan.ConnectorCommandPath) == 0 {
+		return app.ReversePlan{}, usageErrorf("reverse plan %q is not a connector command plan", planID)
+	}
+	if plan.DestinationConnector != connectorName {
+		return app.ReversePlan{}, validationErrorf("reverse plan %q targets connector %q, not %q", planID, plan.DestinationConnector, connectorName)
+	}
+	if !sameStringSlice(plan.ConnectorCommandPath, path) {
+		return app.ReversePlan{}, validationErrorf("reverse plan %q targets command %q, not %q", planID, strings.Join(plan.ConnectorCommandPath, " "), strings.Join(path, " "))
+	}
+	return plan, nil
+}
+
+func connectorCommandBlockedError(err error) error {
+	return &cliError{
+		category: categoryPolicy,
+		code:     "connector_command_blocked",
+		message:  err.Error(),
+		err:      err,
+	}
+}
+
+func truthyFlag(raw string) bool {
+	switch strings.ToLower(strings.TrimSpace(raw)) {
+	case "", "false", "0", "no":
+		return false
+	default:
+		return true
+	}
+}
+
+func safeReversePlansForOutput(plans []app.ReversePlan) []app.ReversePlan {
+	out := make([]app.ReversePlan, 0, len(plans))
+	for _, plan := range plans {
+		out = append(out, safeReversePlanForOutput(plan))
+	}
+	return out
+}
+
+func safeReversePlanForOutput(plan app.ReversePlan) app.ReversePlan {
+	plan.ApprovalToken = ""
+	plan.ApprovalTokenHash = ""
+	plan.ConnectorCommandRecord = nil
+	return plan
+}
+
+func sameStringSlice(a, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func directConnector(a *app.App, args []string) (connectors.Connector, connectors.RuntimeConfig, error) {
 	flags := parseFlags(args)
 	name := flags.first("connector")
@@ -693,7 +979,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		plans := a.ListReversePlans()
 		runs := a.ListReverseRuns()
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReversePlanList", "plans": plans, "runs": runs})
+			return writeJSON(stdout, envelope{"kind": "ReversePlanList", "plans": safeReversePlansForOutput(plans), "runs": runs})
 		}
 		for _, plan := range plans {
 			fmt.Fprintf(stdout, "%s\t%s\t%s\trecords=%d\n", plan.ID, plan.Status, plan.Name, plan.RecordCount)
@@ -736,11 +1022,12 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			return err
 		}
 		if jsonOut {
-			safe := plan
-			safe.ApprovalToken = ""
-			return writeJSON(stdout, envelope{"kind": "ReversePlan", "plan": safe, "approval_required": true})
+			return writeJSON(stdout, envelope{"kind": "ReversePlan", "plan": safeReversePlanForOutput(plan), "approval_required": true})
 		}
 		fmt.Fprintf(stdout, "Created reverse plan %s with %d records\nApproval token: %s\n", plan.ID, plan.RecordCount, plan.ApprovalToken)
+		if plan.ConfirmationChallenge != "" {
+			fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
+		}
 		return nil
 	case "preview":
 		if len(args) < 2 {
@@ -751,9 +1038,18 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			return err
 		}
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "ReversePlanPreview", "plan": plan})
+			env := envelope{"kind": "ReversePlanPreview", "plan": safeReversePlanForOutput(plan)}
+			if plan.ConnectorCommand != "" {
+				safePlan, writePreview, err := a.PreviewConnectorCommandPlan(ctx, args[1])
+				if err != nil {
+					return err
+				}
+				env["plan"] = safeReversePlanForOutput(safePlan)
+				env["write_preview"] = writePreview
+			}
+			return writeJSON(stdout, env)
 		}
-		b, _ := json.MarshalIndent(plan, "", "  ")
+		b, _ := json.MarshalIndent(safeReversePlanForOutput(plan), "", "  ")
 		fmt.Fprintln(stdout, string(b))
 		return nil
 	case "run":
@@ -761,7 +1057,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			return errUsage
 		}
 		flags := parseFlags(args[2:])
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve")})
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: flags.first("confirm")})
 		if err != nil {
 			return err
 		}

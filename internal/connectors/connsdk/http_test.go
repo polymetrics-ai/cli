@@ -61,6 +61,22 @@ func TestRequesterRetriesOn429ThenSucceeds(t *testing.T) {
 	}
 }
 
+func TestRequesterDoLimitedCapsCapturedBody(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"message":"0123456789"}`))
+	}))
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, Sleep: noSleep}
+	resp, err := r.DoLimited(context.Background(), http.MethodGet, "/x", nil, nil, 8)
+	if err != nil {
+		t.Fatalf("DoLimited error = %v", err)
+	}
+	if got, want := len(resp.Body), 9; got != want {
+		t.Fatalf("captured body bytes = %d, want %d", got, want)
+	}
+}
+
 func TestRequesterRetriesOn503(t *testing.T) {
 	var calls int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

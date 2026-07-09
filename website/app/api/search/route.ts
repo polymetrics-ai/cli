@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 import {
   CONNECTOR_CATALOG,
   CONNECTOR_CATALOG_COUNT,
-  type ConnectorMeta,
 } from '@/lib/connectors.catalog.generated';
+import type { ConnectorMeta } from '@/lib/connectors.types';
 import { DOCS_PAGES } from '@/lib/docs.generated';
 
 export const dynamic = 'force-dynamic';
@@ -85,6 +85,15 @@ function connectorRecord(c: ConnectorMeta): SearchRecord {
     .map((action) => `${action.name} ${action.method} ${action.kind}`)
     .join(' ');
   const docs = c.docs.map((doc) => `${doc.title} ${doc.type} ${doc.url}`).join(' ');
+  const cliSurface = c.cliSurface
+    ? [
+        c.cliSurface.usage,
+        c.cliSurface.groups.map((group) => `${group.title} ${group.commands.join(' ')}`).join(' '),
+        c.cliSurface.commands
+          .map((command) => `${command.path} ${command.summary} ${command.intent} ${command.availability} ${command.stream} ${command.write}`)
+          .join(' '),
+      ].join(' ')
+    : '';
 
   return {
     title: `${c.name} connector`,
@@ -103,8 +112,9 @@ function connectorRecord(c: ConnectorMeta): SearchRecord {
       c.capabilityLabels.join(' '),
       streams,
       writeActions,
+      cliSurface,
     ].join(' '),
-    content: cleanText(`${c.description} ${streams} ${writeActions} ${docs} ${c.docsMd}`),
+    content: cleanText(`${c.description} ${streams} ${writeActions} ${cliSurface} ${docs} ${c.docsMd}`),
     priority: c.featured ? 8 : 4,
   };
 }
@@ -115,7 +125,7 @@ const SEARCH_INDEX: SearchRecord[] = [
 ];
 
 function tokensFor(query: string): string[] {
-  return query
+  return cleanText(query)
     .toLowerCase()
     .split(/\s+/)
     .map((token) => token.trim())
@@ -133,7 +143,7 @@ function scoreRecord(record: SearchRecord, tokens: string[], query: string): num
   const url = record.url.toLowerCase();
 
   let score = record.priority;
-  const normalizedQuery = query.toLowerCase();
+  const normalizedQuery = cleanText(query).toLowerCase();
 
   if (title === normalizedQuery) score += 140;
   if (title.startsWith(normalizedQuery)) score += 80;

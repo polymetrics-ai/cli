@@ -1,13 +1,28 @@
 # Parent Issue Orchestration Loop
 
 Use this workflow when a parent issue owns multiple sub-issues and the work must proceed through a
-parent PR plus stacked sub-PRs.
+parent PR plus stacked sub-PRs. The loop is runtime-generic: "spawn" means the active coordinator
+uses the runtime's native worker mechanism, such as Claude Code `Task`, a Codex subagent job, an
+OpenCode subtask, or an equivalent future worker context.
+
+## Active Mode
+
+Execute this state machine until the parent issue is human-ready, blocked, or explicitly limited by
+the user. Do not stop after describing next steps when required inputs and permissions are available.
+
+At each coordinator turn:
+
+- build the ready queue
+- spawn or assign all independent ready workers up to runtime limits
+- record `spawned` or a `not_spawned_*` blocker category
+- keep the parent orchestrator context open until handoff, human gate, or blocker
 
 ## 1. Initialize Parent Work
 
 1. Read `AGENTS.md` and the parent issue.
 2. Read the parent orchestrator contract and stacked PR workflow.
-3. Read `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`.
+3. Read `.agents/agentic-delivery/workflows/automated-review-routing-loop.md` and
+   `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`.
 4. Confirm the parent issue has acceptance criteria, sub-issues, branch policy, verification, and
    human gates.
 5. Create or confirm the parent branch from `main`.
@@ -43,12 +58,22 @@ satisfied. Each worker prompt must include:
 - parent issue URL
 - parent branch and parent PR
 - allowed write scope
+- isolated worker directory or git worktree for mutating tasks
 - required GSD/TDD workflow
 - required verification
 - worker handoff template
 
 The orchestrator continues non-overlapping work while workers run. It must not duplicate worker
-implementation tasks.
+implementation tasks. Worker prompts may use compact status language, but exact commands, code,
+test output, safety gates, security warnings, destructive-action warnings, and approval gates must
+remain uncompressed and unambiguous.
+
+If subagent tooling exists and ready work is independent, parallel worker dispatch is the default.
+Sequential execution needs an explicit reason in the state ledger.
+
+Mutating workers must not share the coordinator checkout. If no isolated worktree or working
+directory is available, record `not_spawned_isolation_missing` and run the slice locally or with
+read-only agents.
 
 ## 4. Review Worker Handoffs
 

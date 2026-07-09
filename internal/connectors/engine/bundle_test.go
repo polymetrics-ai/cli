@@ -2,6 +2,7 @@ package engine
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -172,6 +173,780 @@ func TestBundleLoadOptionalFilesAbsent(t *testing.T) {
 	}
 	if b.Fixtures != nil {
 		t.Fatalf("Fixtures should be nil when fixtures/ absent")
+	}
+	if b.CLISurface != nil {
+		t.Fatalf("CLISurface should be nil when cli_surface.json is absent")
+	}
+}
+
+func TestBundleLoadParsesGraphQLStreamAndWriteAction(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"pagination": { "type": "none" }
+		},
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($first: Int!) { widgets(first: $first) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": { "first": { "template": "{{ config.page_size }}", "type": "integer" } }
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "delete_widget",
+				"kind": "delete",
+				"method": "POST",
+				"path": "/graphql",
+				"body_type": "graphql",
+				"graphql": {
+					"document": "mutation DeleteWidget($id: ID!) { deleteWidget(input: {id: $id}) { clientMutationId } }",
+					"operation_name": "DeleteWidget",
+					"variables": { "id": "{{ record.id }}" }
+				},
+				"record_schema": {
+					"type": "object",
+					"required": ["id"],
+					"properties": { "id": { "type": "string" } }
+				},
+				"risk": "delete"
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Streams[0].GraphQL == nil || b.Streams[0].GraphQL.OperationName != "ListWidgets" {
+		t.Fatalf("stream GraphQL = %+v, want ListWidgets", b.Streams[0].GraphQL)
+	}
+	if len(b.Writes) != 1 || b.Writes[0].GraphQL == nil || b.Writes[0].GraphQL.OperationName != "DeleteWidget" {
+		t.Fatalf("write GraphQL = %+v, want DeleteWidget", b.Writes)
+	}
+}
+
+func TestBundleLoadRejectsGraphQLWriteWithoutGraphQLBlock(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "delete_widget",
+				"kind": "delete",
+				"method": "POST",
+				"path": "/graphql",
+				"body_type": "graphql",
+				"record_schema": { "type": "object" },
+				"risk": "delete"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected body_type graphql without graphql block to fail")
+	}
+	if !strings.Contains(err.Error(), "writes.json") || !strings.Contains(err.Error(), "body_type graphql requires graphql") {
+		t.Fatalf("Load error = %q, want graphql block requirement", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsTemplatedGraphQLDocument(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query {{ config.operation }} { widgets { nodes { id } } }",
+					"operation_name": "ListWidgets"
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected templated GraphQL document to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "fixed bundle metadata") {
+		t.Fatalf("Load error = %q, want fixed document rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsGraphQLWriteQueryDocument(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "delete_widget",
+				"kind": "delete",
+				"method": "POST",
+				"path": "/graphql",
+				"body_type": "graphql",
+				"graphql": {
+					"document": "query DeleteWidget($id: ID!) { node(id: $id) { id } }",
+					"operation_name": "DeleteWidget",
+					"variables": { "id": "{{ record.id }}" }
+				},
+				"record_schema": { "type": "object" },
+				"risk": "delete"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected query document in write action to fail")
+	}
+	if !strings.Contains(err.Error(), "writes.json") || !strings.Contains(err.Error(), "must start with mutation") {
+		t.Fatalf("Load error = %q, want mutation document rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsGraphQLVariableUnsupportedType(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($first: Int!) { widgets(first: $first) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"first": { "template": "{{ config.page_size }}", "type": "int" }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected unsupported GraphQL variable type to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "unsupported type") {
+		t.Fatalf("Load error = %q, want unsupported type rejection", err.Error())
+	}
+}
+
+func TestBundleLoadParsesGraphQLVariableOmitWhenEmpty(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($after: String) { widgets(after: $after) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"after": { "template": "{{ cursor }}", "omit_when_empty": true },
+						"owner": { "template": "{{ query.owner }}", "default": "octocat" }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	if _, err := Load(fsys, "acme"); err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+}
+
+func TestBundleLoadRejectsGraphQLVariableDefaultNonString(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($owner: String!) { widgets(owner: $owner) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"owner": { "template": "{{ query.owner }}", "default": 42 }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected non-string default to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "default must be a string") {
+		t.Fatalf("Load error = %q, want default string rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsGraphQLVariableOmitWhenEmptyNonBoolean(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($after: String) { widgets(after: $after) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"after": { "template": "{{ cursor }}", "omit_when_empty": "yes" }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected non-boolean omit_when_empty to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "omit_when_empty must be a boolean") {
+		t.Fatalf("Load error = %q, want omit_when_empty boolean rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsGraphQLVariableDefaultTypeMismatch(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": { "url": "{{ config.base_url }}" },
+		"streams": [
+			{
+				"name": "widgets",
+				"method": "POST",
+				"path": "/graphql",
+				"graphql": {
+					"document": "query ListWidgets($count: Int!) { widgets(count: $count) { nodes { id } } }",
+					"operation_name": "ListWidgets",
+					"variables": {
+						"count": { "template": "{{ query.count }}", "type": "integer", "default": "not-a-number" }
+					}
+				},
+				"records": { "path": "data.widgets.nodes" },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected default/type mismatch to fail")
+	}
+	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "default") {
+		t.Fatalf("Load error = %q, want default/type mismatch rejection", err.Error())
+	}
+}
+
+func TestGitHubProjectsDiscussionsCommandsMapToGraphQLStreams(t *testing.T) {
+	b, err := Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load github: %v", err)
+	}
+
+	streams := map[string]StreamSpec{}
+	for _, stream := range b.Streams {
+		streams[stream.Name] = stream
+	}
+	for _, name := range []string{"projects", "project_items", "discussions", "discussion"} {
+		stream, ok := streams[name]
+		if !ok {
+			t.Fatalf("github stream %q missing", name)
+		}
+		if stream.GraphQL == nil {
+			t.Fatalf("github stream %q GraphQL = nil, want fixed GraphQL document", name)
+		}
+		if stream.Method != "POST" || stream.Path != "/graphql" {
+			t.Fatalf("github stream %q method/path = %s %s, want POST /graphql", name, stream.Method, stream.Path)
+		}
+		if stream.SchemaRef == "" {
+			t.Fatalf("github stream %q missing schema ref", name)
+		}
+	}
+
+	if b.CLISurface == nil {
+		t.Fatalf("github cli surface missing")
+	}
+	want := map[string]string{
+		"project list":      "projects",
+		"project item-list": "project_items",
+		"discussion list":   "discussions",
+		"discussion view":   "discussion",
+	}
+	for _, cmd := range b.CLISurface.Commands {
+		stream, ok := want[cmd.Path]
+		if !ok {
+			continue
+		}
+		if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream != stream || cmd.Operation != "" {
+			t.Fatalf("command %q = intent=%q availability=%q stream=%q operation=%q, want implemented etl stream %q with no operation",
+				cmd.Path, cmd.Intent, cmd.Availability, cmd.Stream, cmd.Operation, stream)
+		}
+		delete(want, cmd.Path)
+	}
+	if len(want) > 0 {
+		t.Fatalf("missing GitHub CLI commands: %v", want)
+	}
+}
+
+func TestBundleLoadParsesCLISurface(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"tagline": "Work with Acme from the command line.",
+		"usage": "pm acme <command> [flags]",
+		"source_cli": {
+			"name": "acmectl",
+			"docs": "https://example.com/acmectl",
+			"reference": "https://example.com/acmectl/reference"
+		},
+		"groups": [
+			{ "id": "core", "title": "Core Commands", "commands": ["widget"] }
+		],
+		"global_flags": [
+			{ "name": "json", "type": "boolean", "summary": "Write machine-readable JSON output." }
+		],
+		"commands": [
+			{
+				"path": "widget list",
+				"summary": "List widgets",
+				"intent": "etl",
+				"availability": "implemented",
+				"stream": "widgets",
+				"source_cli_path": "acmectl widget list",
+				"flags": [
+					{ "name": "state", "type": "string", "summary": "Filter by state.", "maps_to": "query.state" }
+				],
+				"examples": ["pm acme widget list --json"],
+				"api_surface": [
+					{ "method": "GET", "path": "/widgets" }
+				]
+			}
+		],
+		"help_topics": [
+			{ "name": "authentication", "summary": "Credential setup and supported auth modes." }
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("CLISurface is nil")
+	}
+	if b.CLISurface.Tagline != "Work with Acme from the command line." {
+		t.Fatalf("Tagline = %q", b.CLISurface.Tagline)
+	}
+	if len(b.CLISurface.Commands) != 1 || b.CLISurface.Commands[0].Path != "widget list" {
+		t.Fatalf("Commands = %+v", b.CLISurface.Commands)
+	}
+	if b.CLISurface.Commands[0].Stream != "widgets" {
+		t.Fatalf("Command stream = %q", b.CLISurface.Commands[0].Stream)
+	}
+	if len(b.RawCLISurface) == 0 || !strings.Contains(string(b.RawCLISurface), `"widget list"`) {
+		t.Fatalf("RawCLISurface = %q, want verbatim cli_surface.json bytes", string(b.RawCLISurface))
+	}
+}
+
+func TestBundleLoadParsesOperations(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.get",
+				"kind": "rest_read",
+				"summary": "Read one widget",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				}
+			}
+		]
+	}`)}
+	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"tagline": "Work with Acme from the command line.",
+		"usage": "pm acme <command> [flags]",
+		"commands": [
+			{
+				"path": "widget view",
+				"summary": "View a widget",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"operation": "acme.widgets.get"
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if len(b.Operations) != 1 {
+		t.Fatalf("Operations = %d, want 1", len(b.Operations))
+	}
+	op := b.Operations[0]
+	if op.ID != "acme.widgets.get" || op.Kind != "rest_read" || op.REST == nil || op.REST.Path != "/widgets/{id}" {
+		t.Fatalf("operation = %+v, want parsed rest_read operation", op)
+	}
+	if b.CLISurface.Commands[0].Operation != "acme.widgets.get" {
+		t.Fatalf("command operation = %q, want acme.widgets.get", b.CLISurface.Commands[0].Operation)
+	}
+}
+
+func TestBundleLoadRejectsUnsafeOperationKind(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.raw.shell",
+				"kind": "shell",
+				"summary": "Run shell",
+				"risk": "critical",
+				"approval": "blocked",
+				"output_policy": "json"
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected unsafe operation kind to be rejected")
+	}
+	if !strings.Contains(err.Error(), "operations.json") ||
+		!strings.Contains(err.Error(), "/operations/0/kind") ||
+		!strings.Contains(err.Error(), "not in enum") {
+		t.Fatalf("Load error = %q, want operations.json kind enum rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsOperationWithoutMatchingBlock(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.projects.list",
+				"kind": "graphql_query",
+				"summary": "List projects",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/projects"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected graphql_query without graphql block to be rejected")
+	}
+	if !strings.Contains(err.Error(), "operations.json") ||
+		!strings.Contains(err.Error(), "graphql_query") ||
+		!strings.Contains(err.Error(), "graphql") {
+		t.Fatalf("Load error = %q, want operations.json matching-block rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsOperationWithMultipleExecutionBlocks(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.get",
+				"kind": "rest_read",
+				"summary": "Read one widget",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				},
+				"graphql": {
+					"operation_name": "Widget",
+					"document": "query Widget($id: ID!) { node(id: $id) { id } }"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected operation with multiple execution blocks to be rejected")
+	}
+	if !strings.Contains(err.Error(), "operations.json") ||
+		!strings.Contains(err.Error(), "exactly one execution block") {
+		t.Fatalf("Load error = %q, want operations.json single-block rejection", err.Error())
+	}
+}
+
+const secretWriteOp = `{
+		"id": "acme.secrets.put",
+		"kind": "rest_write",
+		"summary": "Create or update a repo secret",
+		"risk": "high",
+		"approval": "plan, preview, approval, execute",
+		"output_policy": "json",
+		"mutation_class": "secret",
+		"secret_sensitive": true,
+		"rest": {
+			"method": "PUT",
+			"path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+		}%s
+	}`
+
+func TestBundleLoadRejectsSecretOperationWithoutPolicy(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"operations":[%s]}`, fmt.Sprintf(secretWriteOp, "")))}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected secret-sensitive operation without sensitive_policy to be rejected")
+	}
+	if !strings.Contains(err.Error(), "sensitive_policy") {
+		t.Fatalf("Load error = %q, want sensitive_policy rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsInlineInputModeForSecretOperation(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	policy := `, "sensitive_policy": {"input_mode": "inline", "redact_fields": ["value"], "transform": "none", "approval_mode": "typed_confirmation"}`
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"operations":[%s]}`, fmt.Sprintf(secretWriteOp, policy)))}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected inline input_mode for a secret operation to be rejected")
+	}
+	if !strings.Contains(err.Error(), "inline") || !strings.Contains(err.Error(), "input_mode") {
+		t.Fatalf("Load error = %q, want inline input_mode rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsSecretOperationWithoutTypedConfirmation(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	policy := `, "sensitive_policy": {"input_mode": "env", "redact_fields": ["value"], "transform": "github_secret_encryption", "approval_mode": "none"}`
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"operations":[%s]}`, fmt.Sprintf(secretWriteOp, policy)))}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected secret operation without typed_confirmation to be rejected")
+	}
+	if !strings.Contains(err.Error(), "typed_confirmation") {
+		t.Fatalf("Load error = %q, want typed_confirmation rejection", err.Error())
+	}
+}
+
+func TestBundleLoadAcceptsSecretOperationWithFullPolicy(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	policy := `, "sensitive_policy": {"input_mode": "env", "redact_fields": ["value"], "transform": "github_secret_encryption", "approval_mode": "typed_confirmation", "preflight": "scope_check"}`
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"operations":[%s]}`, fmt.Sprintf(secretWriteOp, policy)))}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: secret operation with full policy should be accepted: %v", err)
+	}
+	if len(b.Operations) != 1 || b.Operations[0].SensitivePolicy == nil {
+		t.Fatalf("loaded operation missing sensitive_policy: %+v", b.Operations)
+	}
+	if got := b.Operations[0].SensitivePolicy.ApprovalMode; got != "typed_confirmation" {
+		t.Fatalf("approval_mode = %q, want typed_confirmation", got)
+	}
+}
+
+func TestBundleLoadRejectsDuplicateOperationIDs(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.get",
+				"kind": "rest_read",
+				"summary": "Read one widget",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				}
+			},
+			{
+				"id": "acme.widgets.get",
+				"kind": "rest_read",
+				"summary": "Read one widget again",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected duplicate operation IDs to be rejected")
+	}
+	if !strings.Contains(err.Error(), "operations.json") ||
+		!strings.Contains(err.Error(), "duplicate operation id") {
+		t.Fatalf("Load error = %q, want duplicate operation id rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsRestWriteWithReadMethod(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.update",
+				"kind": "rest_write",
+				"summary": "Update one widget",
+				"risk": "medium",
+				"approval": "reverse ETL writes require plan, preview, approval, execute",
+				"output_policy": "json",
+				"mutation_class": "update",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected rest_write with GET to be rejected")
+	}
+	if !strings.Contains(err.Error(), "rest_write method must be mutating") {
+		t.Fatalf("Load error = %q, want rest_write method rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsBinaryDownloadWithoutPositiveLimit(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.assets.download",
+				"kind": "binary_download",
+				"summary": "Download one asset",
+				"risk": "medium",
+				"approval": "filesystem writes require explicit destination approval",
+				"output_policy": "file_manifest",
+				"binary": {
+					"method": "GET",
+					"path": "/assets/{id}"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected binary_download without max_bytes to be rejected")
+	}
+	if !strings.Contains(err.Error(), "binary_download must declare positive max_bytes") {
+		t.Fatalf("Load error = %q, want binary max_bytes rejection", err.Error())
+	}
+}
+
+func TestBundleLoadEmbeddedGitHubOperations(t *testing.T) {
+	b, err := Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	if len(b.Operations) == 0 {
+		t.Fatalf("GitHub Operations is empty; defs.FS must embed operations.json")
+	}
+	found := false
+	for _, op := range b.Operations {
+		if op.ID == "github.projects.list" && op.Kind == "graphql_query" {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("GitHub operations missing github.projects.list graphql_query example: %+v", b.Operations)
+	}
+}
+
+func TestBundleLoadEmbeddedGitHubCLISurface(t *testing.T) {
+	b, err := Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("GitHub CLISurface is nil; defs.FS must embed cli_surface.json")
+	}
+	if b.CLISurface.Usage != "pm github <command> <subcommand> [flags]" {
+		t.Fatalf("GitHub CLISurface usage = %q", b.CLISurface.Usage)
+	}
+	if len(b.CLISurface.Commands) == 0 {
+		t.Fatalf("GitHub CLISurface has no commands")
+	}
+}
+
+func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"tagline": "Work with Acme from the command line.",
+		"usage": "pm acme <command> [flags]",
+		"commands": [
+			{
+				"path": "widget list",
+				"summary": "List widgets",
+				"intent": "etl",
+				"availability": "implemented",
+				"stream": "widgets",
+				"surprise": true
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected an error for unknown cli_surface command key")
+	}
+	if !strings.Contains(err.Error(), "cli_surface.json") || !strings.Contains(err.Error(), "surprise") {
+		t.Fatalf("Load error = %q, want it to name cli_surface.json and surprise", err.Error())
 	}
 }
 
@@ -836,6 +1611,79 @@ func TestBundleLoadRejectsUnknownAPISurfaceEndpointKey(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "api_surface.json") || !strings.Contains(err.Error(), "deprecated") {
 		t.Fatalf("Load error = %q, want it to name api_surface.json and the unknown key %q", err.Error(), "deprecated")
+	}
+}
+
+func TestBundleLoadAPISurfaceOperationLedger(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{
+				"method": "GET",
+				"path": "/widgets/{id}",
+				"operation": {
+					"model": "direct_read",
+					"status": "blocked",
+					"risk": "low",
+					"blocked_by_default": true,
+					"reason": "point lookup candidate, not yet modeled as a stream",
+					"source_url": "https://example.invalid/rest/widgets"
+				}
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Surface.OperationLedgerVersion != 1 {
+		t.Fatalf("OperationLedgerVersion = %d, want 1", b.Surface.OperationLedgerVersion)
+	}
+	if len(b.Surface.Endpoints) != 2 {
+		t.Fatalf("endpoints = %d, want 2", len(b.Surface.Endpoints))
+	}
+	op := b.Surface.Endpoints[1].Operation
+	if op == nil {
+		t.Fatalf("Operation = nil, want operation metadata")
+	}
+	if op.Model != "direct_read" || op.Status != "blocked" || op.Risk != "low" {
+		t.Fatalf("Operation = %+v, want direct_read/blocked/low", op)
+	}
+	if !op.BlockedByDefault {
+		t.Fatalf("BlockedByDefault = false, want true")
+	}
+}
+
+func TestBundleLoadAPISurfaceOperationRejectsUnblockedDefault(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{
+				"method": "GET",
+				"path": "/widgets/{id}",
+				"operation": {
+					"model": "direct_read",
+					"status": "blocked",
+					"risk": "low",
+					"blocked_by_default": false,
+					"reason": "point lookup candidate, not yet modeled as a stream"
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected api_surface.json schema error for blocked_by_default=false, got nil")
+	}
+	if !strings.Contains(err.Error(), "api_surface.json") || !strings.Contains(err.Error(), "enum") {
+		t.Fatalf("Load error = %q, want api_surface.json enum error", err.Error())
 	}
 }
 

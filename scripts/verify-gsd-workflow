@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+base_ref="${1:-${GSD_BASE_REF:-}}"
+if [[ -z "$base_ref" ]]; then
+  if [[ -n "${GITHUB_BASE_REF:-}" ]]; then
+    base_ref="origin/${GITHUB_BASE_REF}"
+  else
+    base_ref="origin/main"
+  fi
+fi
+
+if ! git rev-parse --verify "$base_ref" >/dev/null 2>&1; then
+  echo "verify-gsd-workflow: base ref $base_ref is not available; fetch it or pass an explicit base ref" >&2
+  exit 2
+fi
+
+merge_base="$(git merge-base "$base_ref" HEAD)"
+changed="$(git diff --name-only "$merge_base"...HEAD)"
+
+impl_changed="$(printf '%s\n' "$changed" | grep -E '^(cmd|internal)/' || true)"
+if [[ -z "$impl_changed" ]]; then
+  echo "verify-gsd-workflow: no cmd/internal implementation changes; GSD implementation evidence not required"
+  exit 0
+fi
+
+planning_changed="$(printf '%s\n' "$changed" | grep -E '^\.planning/(traces/|trackers/|phases/.*/(PLAN|TDD-LEDGER|VERIFICATION|RUN-STATE|SUMMARY)\.(md|json)$)' || true)"
+if [[ -z "$planning_changed" ]]; then
+  cat >&2 <<'MSG'
+verify-gsd-workflow: cmd/internal changed, but no GSD planning evidence changed.
+
+For implementation or behavior-changing work, add/update at least one of:
+- .planning/traces/*
+- .planning/trackers/*
+- .planning/phases/<phase>/PLAN.md
+- .planning/phases/<phase>/TDD-LEDGER.md
+- .planning/phases/<phase>/VERIFICATION.md
+- .planning/phases/<phase>/RUN-STATE.json
+- .planning/phases/<phase>/SUMMARY.md
+
+If scripts/gsd is unavailable on this branch, record an explicit manual-GSD fallback and TDD evidence.
+MSG
+  exit 1
+fi
+
+evidence_files=()
+while IFS= read -r path; do
+  [[ -n "$path" && -f "$path" ]] && evidence_files+=("$path")
+done <<< "$planning_changed"
+
+if [[ ${#evidence_files[@]} -eq 0 ]]; then
+  echo "verify-gsd-workflow: planning evidence paths changed but none exist in HEAD" >&2
+  exit 1
+fi
+
+if ! grep -Eiq '(GSD|programming loop|manual-GSD|manual GSD|TDD|Red:|Green:)' "${evidence_files[@]}"; then
+  cat >&2 <<'MSG'
+verify-gsd-workflow: changed planning evidence does not mention GSD/TDD evidence.
+Record the GSD command used, or an explicit manual-GSD fallback, plus red/green test evidence.
+MSG
+  printf 'Evidence files checked:\n' >&2
+  printf '  %s\n' "${evidence_files[@]}" >&2
+  exit 1
+fi
+
+printf 'verify-gsd-workflow: implementation changes have GSD/TDD evidence against %s\n' "$base_ref"
+printf 'Implementation files changed:\n%s\n' "$impl_changed"
+printf 'Evidence files changed:\n%s\n' "$planning_changed"

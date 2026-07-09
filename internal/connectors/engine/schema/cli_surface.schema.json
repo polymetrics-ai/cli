@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "cli_surface.json",
+  "type": "object",
+  "required": ["tagline", "usage", "commands"],
+  "additionalProperties": false,
+  "properties": {
+    "tagline": { "type": "string" },
+    "usage": { "type": "string" },
+    "source_cli": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "docs": { "type": "string" },
+        "reference": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "commands"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "commands": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "global_flags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["boolean", "string", "integer", "enum", "string_array"]
+          },
+          "summary": { "type": "string" },
+          "values": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "maps_to": { "type": "string" }
+        }
+      }
+    },
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "summary", "intent", "availability"],
+        "additionalProperties": false,
+        "properties": {
+          "path": { "type": "string" },
+          "summary": { "type": "string" },
+          "intent": {
+            "type": "string",
+            "enum": [
+              "etl",
+              "reverse_etl",
+              "direct_read",
+              "direct_write",
+              "local_workflow",
+              "auth",
+              "config",
+              "raw_api",
+              "docs_only"
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "implemented",
+              "partial",
+              "planned",
+              "excluded",
+              "unsupported_local",
+              "unsupported_api",
+              "unsafe_or_disallowed",
+              "unknown"
+            ]
+          },
+          "stream": { "type": "string" },
+          "write": { "type": "string" },
+          "operation": { "type": "string" },
+          "source_cli_path": { "type": "string" },
+          "source_url": { "type": "string" },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "type"],
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": ["boolean", "string", "integer", "enum", "string_array"]
+                },
+                "summary": { "type": "string" },
+                "values": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "maps_to": { "type": "string" }
+              }
+            }
+          },
+          "examples": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "api_surface": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["method", "path"],
+              "additionalProperties": false,
+              "properties": {
+                "method": { "type": "string" },
+                "path": { "type": "string" }
+              }
+            }
+          },
+          "output_policy": {
+            "type": "string",
+            "enum": ["github_contents_file_metadata", "github_contents_directory"]
+          },
+          "risk": { "type": "string" },
+          "approval": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "help_topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "summary"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "summary": { "type": "string" }
+        }
+      }
+    }
+  }
+}

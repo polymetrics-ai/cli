@@ -108,29 +108,45 @@ type PlanReverseETLRequest struct {
 	Limit                 int               `json:"limit,omitempty"`
 }
 
+type PlanConnectorCommandRequest struct {
+	Name       string              `json:"name"`
+	Connector  string              `json:"connector"`
+	Credential string              `json:"credential"`
+	Config     map[string]string   `json:"config,omitempty"`
+	Path       []string            `json:"path"`
+	Flags      map[string][]string `json:"flags,omitempty"`
+	Preview    bool                `json:"preview,omitempty"`
+}
+
 type ReversePlan struct {
-	ID                    string              `json:"id"`
-	Name                  string              `json:"name"`
-	Status                string              `json:"status"`
-	SourceTable           string              `json:"source_table"`
-	DestinationConnector  string              `json:"destination_connector"`
-	DestinationCredential string              `json:"destination_credential"`
-	DestinationConfig     map[string]string   `json:"destination_config,omitempty"`
-	Action                string              `json:"action"`
-	Mappings              map[string]string   `json:"mappings"`
-	RecordCount           int                 `json:"record_count"`
-	Sample                []connectors.Record `json:"sample,omitempty"`
-	PlanHash              string              `json:"plan_hash"`
-	ApprovalTokenHash     string              `json:"approval_token_hash,omitempty"`
-	ApprovalToken         string              `json:"approval_token,omitempty"`
-	ApprovalConsumedAt    time.Time           `json:"approval_consumed_at,omitempty"`
-	CreatedAt             time.Time           `json:"created_at"`
-	ExpiresAt             time.Time           `json:"expires_at"`
+	ID                     string              `json:"id"`
+	Name                   string              `json:"name"`
+	Status                 string              `json:"status"`
+	Mode                   string              `json:"mode,omitempty"`
+	SourceTable            string              `json:"source_table"`
+	DestinationConnector   string              `json:"destination_connector"`
+	DestinationCredential  string              `json:"destination_credential"`
+	DestinationConfig      map[string]string   `json:"destination_config,omitempty"`
+	Action                 string              `json:"action"`
+	Mappings               map[string]string   `json:"mappings"`
+	ConnectorCommand       string              `json:"connector_command,omitempty"`
+	ConnectorCommandPath   []string            `json:"connector_command_path,omitempty"`
+	ConnectorCommandRecord connectors.Record   `json:"connector_command_record,omitempty"`
+	ConfirmationChallenge  string              `json:"confirmation_challenge,omitempty"`
+	RecordCount            int                 `json:"record_count"`
+	Sample                 []connectors.Record `json:"sample,omitempty"`
+	PlanHash               string              `json:"plan_hash"`
+	ApprovalTokenHash      string              `json:"approval_token_hash,omitempty"`
+	ApprovalToken          string              `json:"approval_token,omitempty"`
+	ApprovalConsumedAt     time.Time           `json:"approval_consumed_at,omitempty"`
+	CreatedAt              time.Time           `json:"created_at"`
+	ExpiresAt              time.Time           `json:"expires_at"`
 }
 
 type RunReverseETLRequest struct {
 	PlanID        string `json:"plan_id"`
 	ApprovalToken string `json:"-"`
+	Confirmation  string `json:"-"`
 }
 
 type ReverseRun struct {

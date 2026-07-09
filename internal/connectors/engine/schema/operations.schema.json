@@ -1,0 +1,197 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "operations.json",
+  "type": "object",
+  "required": ["operations"],
+  "additionalProperties": false,
+  "properties": {
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "summary", "risk", "approval", "output_policy"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "stream_etl",
+              "rest_read",
+              "rest_write",
+              "graphql_query",
+              "graphql_mutation",
+              "xml_export",
+              "xml_import",
+              "binary_download",
+              "file_upload",
+              "local_git",
+              "local_file",
+              "browser_open",
+              "composite"
+            ]
+          },
+          "summary": { "type": "string" },
+          "description": { "type": "string" },
+          "source_url": { "type": "string" },
+          "risk": {
+            "type": "string",
+            "enum": ["none", "low", "medium", "high", "critical"]
+          },
+          "approval": { "type": "string" },
+          "output_policy": { "type": "string" },
+          "auth_scopes": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "mutation_class": {
+            "type": "string",
+            "enum": ["none", "create", "update", "delete", "admin", "destructive", "secret"]
+          },
+          "destructive": { "type": "boolean" },
+          "secret_sensitive": { "type": "boolean" },
+          "sensitive_policy": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "input_mode": {
+                "type": "string",
+                "enum": ["env", "file", "stdin", "env_or_file", "env_or_stdin", "inline"]
+              },
+              "redact_fields": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "preflight": { "type": "string" },
+              "transform": {
+                "type": "string",
+                "enum": ["none", "github_secret_encryption"]
+              },
+              "approval_mode": {
+                "type": "string",
+                "enum": ["none", "typed_confirmation"]
+              }
+            }
+          },
+          "audit_event": { "type": "string" },
+          "rest": {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string" },
+              "path": { "type": "string" },
+              "query": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          },
+          "graphql": {
+            "type": "object",
+            "required": ["document", "operation_name"],
+            "additionalProperties": false,
+            "properties": {
+              "document": { "type": "string" },
+              "operation_name": { "type": "string" },
+              "variables_path": { "type": "string" },
+              "pagination": { "type": "object" }
+            }
+          },
+          "xml": {
+            "type": "object",
+            "required": ["envelope_template"],
+            "additionalProperties": false,
+            "properties": {
+              "envelope_template": { "type": "string" },
+              "response_path": { "type": "string" },
+              "headers": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          },
+          "binary": {
+            "type": "object",
+            "required": ["method", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "method": { "type": "string" },
+              "path": { "type": "string" },
+              "max_bytes": { "type": "integer" },
+              "allow_overwrite": { "type": "boolean" },
+              "extract_archives": { "type": "boolean" }
+            }
+          },
+          "file": {
+            "type": "object",
+            "required": ["direction"],
+            "additionalProperties": false,
+            "properties": {
+              "direction": {
+                "type": "string",
+                "enum": ["download", "upload", "read", "write"]
+              },
+              "path": { "type": "string" },
+              "max_bytes": { "type": "integer" }
+            }
+          },
+          "local_git": {
+            "type": "object",
+            "required": ["action"],
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": ["clone", "fetch", "checkout", "branch_create", "branch_delete", "remote_inspect", "remote_add", "status"]
+              },
+              "allowed_args": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "local_file": {
+            "type": "object",
+            "required": ["action"],
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": ["read", "write", "mkdir"]
+              },
+              "path": { "type": "string" },
+              "max_bytes": { "type": "integer" }
+            }
+          },
+          "browser": {
+            "type": "object",
+            "required": ["action"],
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": ["open"]
+              },
+              "url": { "type": "string" }
+            }
+          },
+          "composite": {
+            "type": "object",
+            "required": ["steps"],
+            "additionalProperties": false,
+            "properties": {
+              "steps": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

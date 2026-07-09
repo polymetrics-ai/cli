@@ -1,6 +1,6 @@
 // Generates website/data/connectors.generated.json from the connector bundles.
 // Run: node scripts/gen-connector-bundles.mjs
-// Reads: internal/connectors/defs/<name>/{metadata.json,streams.json,writes.json,docs.md}
+// Reads: internal/connectors/defs/<name>/{metadata.json,streams.json,writes.json,docs.md,cli_surface.json?}
 // Emits: website/data/connectors.generated.json
 
 import {
@@ -13,6 +13,8 @@ import {
 } from 'node:fs';
 import { dirname, relative, resolve, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { mapCLISurface } from './lib/cli-surface.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFS_ROOT = resolve(__dirname, '../../internal/connectors/defs');
@@ -191,6 +193,7 @@ for (const dirName of entries) {
   
   const streamsData = readJSON(join(base, 'streams.json'));
   const writesData = readJSON(join(base, 'writes.json'));
+  const cliSurface = mapCLISurface(readJSON(join(base, 'cli_surface.json')));
   const docsMd = readMD(join(base, 'docs.md'));
   
   const streams = (streamsData?.streams ?? [])
@@ -242,6 +245,7 @@ for (const dirName of entries) {
     },
     streams,
     write_actions: writeActions,
+    cli_surface: cliSurface,
     docs_md: docsMd,
     icon: mapIcon(slug, metadata),
   });

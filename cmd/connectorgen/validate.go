@@ -15,24 +15,28 @@ import (
 // constants (lowercase, package-private) so tests can assert on them without
 // string literals scattered across the corpus.
 const (
-	ruleMissingFile             = "missing_file"
-	ruleMetaSchema              = "meta_schema"
-	ruleInterpolationUnresolved = "interpolation_unresolved"
-	ruleSchemaRefMissing        = "schema_ref_missing"
-	rulePrimaryKeyMissing       = "primary_key_missing"
-	ruleCursorFieldMissing      = "cursor_field_missing"
-	ruleWritePathFields         = "write_path_fields"
-	ruleSurfaceCoverage         = "surface_coverage"
-	ruleSurfaceUnknownTarget    = "surface_unknown_target"
-	ruleSurfaceIncomplete       = "surface_incomplete"
-	ruleSurfaceCategory         = "surface_category"
-	ruleSurfaceFailFirstRun     = "surface_fail_first_run"
-	ruleNameRegex               = "name_regex"
-	ruleSecretLiteral           = "secret_literal"
-	ruleDocsHeading             = "docs_heading"
-	ruleStartDateFreeFormString = "start_date_free_form_string"
-	ruleConformanceSkipReason   = "conformance_skip_reason"
-	ruleDefaultTypeMismatch     = "default_type_mismatch"
+	ruleMissingFile              = "missing_file"
+	ruleMetaSchema               = "meta_schema"
+	ruleInterpolationUnresolved  = "interpolation_unresolved"
+	ruleSchemaRefMissing         = "schema_ref_missing"
+	rulePrimaryKeyMissing        = "primary_key_missing"
+	ruleCursorFieldMissing       = "cursor_field_missing"
+	ruleWritePathFields          = "write_path_fields"
+	ruleSurfaceCoverage          = "surface_coverage"
+	ruleSurfaceUnknownTarget     = "surface_unknown_target"
+	ruleSurfaceIncomplete        = "surface_incomplete"
+	ruleSurfaceCategory          = "surface_category"
+	ruleSurfaceOperation         = "surface_operation"
+	ruleSurfaceFailFirstRun      = "surface_fail_first_run"
+	ruleCLISurfaceUnknownTarget  = "cli_surface_unknown_target"
+	ruleCLISurfaceMissingMapping = "cli_surface_missing_mapping"
+	ruleCLISurfaceSafety         = "cli_surface_safety"
+	ruleNameRegex                = "name_regex"
+	ruleSecretLiteral            = "secret_literal"
+	ruleDocsHeading              = "docs_heading"
+	ruleStartDateFreeFormString  = "start_date_free_form_string"
+	ruleConformanceSkipReason    = "conformance_skip_reason"
+	ruleDefaultTypeMismatch      = "default_type_mismatch"
 )
 
 // dateShapedParamFormats are the incremental.param_format values whose
@@ -72,6 +76,41 @@ var surfaceCategories = map[string]bool{
 	"out_of_scope":            true,
 }
 
+var surfaceOperationModels = map[string]bool{
+	"direct_read":           true,
+	"binary_read":           true,
+	"sensitive_reverse_etl": true,
+	"admin_reverse_etl":     true,
+	"destructive_action":    true,
+	"local_workflow":        true,
+	"duplicate":             true,
+	"deprecated":            true,
+	"disallowed":            true,
+}
+
+var surfaceOperationStatuses = map[string]bool{
+	"blocked": true,
+}
+
+var surfaceOperationRisks = map[string]bool{
+	"low":      true,
+	"medium":   true,
+	"high":     true,
+	"critical": true,
+}
+
+var directReadOutputPolicies = map[string]bool{
+	"github_contents_file_metadata": true,
+	"github_contents_directory":     true,
+}
+
+var sourceRequiredOperationModels = map[string]bool{
+	"sensitive_reverse_etl": true,
+	"admin_reverse_etl":     true,
+	"destructive_action":    true,
+	"disallowed":            true,
+}
+
 // mutationMethods are the HTTP verbs api_surface rule 4 treats as write
 // endpoints for the fail-first-run capabilities.write check.
 var mutationMethods = map[string]bool{
@@ -96,7 +135,7 @@ var requiredDocHeadings = []string{
 // auth-flavored key (api_key/access_token/secret/password), or a
 // recognizable vendor secret prefix (e.g. Stripe's sk_live_/sk_test_).
 // Fixtures must only ever carry synthetic data (THREAT-MODEL §4).
-var secretLiteralPattern = regexp.MustCompile(`(?i)(bearer\s+[a-z0-9_\-\.]{16,}|(api[_-]?key|access[_-]?token|secret|password)["' ]*[:=]\s*["']?[a-z0-9_\-\.]{16,}|\bsk_(live|test)_[a-z0-9]{10,}\b)`)
+var secretLiteralPattern = regexp.MustCompile(`(?i)(bearer\s+[a-z0-9_\-\.]{16,}|(api[_-]?key|access[_-]?token|secret|password)["' ]*[:=]\s*["']?[a-z0-9_\-\.]{16,}|\bsk_(live|test)_[a-z0-9]{10,}\b|\bgh[pousr]_[a-z0-9_]{20,}\b|\bgithub_pat_[a-z0-9_]{20,}\b)`)
 
 // Finding is one validate defect: which connector/file/rule it belongs to and
 // a human-readable message.
@@ -197,8 +236,11 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkPrimaryKeysAndCursors(b)...)
 	findings = append(findings, checkWritePathFields(b)...)
 	findings = append(findings, checkAPISurface(b)...)
+	findings = append(findings, checkCLISurface(b)...)
 	findings = append(findings, checkDocsHeadings(b)...)
 	findings = append(findings, checkFixtureSecrets(b)...)
+	findings = append(findings, checkCLISurfaceSecrets(b)...)
+	findings = append(findings, checkOperationsSecrets(b)...)
 	findings = append(findings, checkConformanceSkipReason(b)...)
 	findings = append(findings, checkDefaultTypeMismatch(b)...)
 	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
@@ -232,8 +274,12 @@ func loadErrorFinding(name string, err error) Finding {
 		file = "streams.json"
 	case strings.Contains(msg, "writes.json"):
 		file = "writes.json"
+	case strings.Contains(msg, "operations.json"):
+		file = "operations.json"
 	case strings.Contains(msg, "api_surface.json"):
 		file = "api_surface.json"
+	case strings.Contains(msg, "cli_surface.json"):
+		file = "cli_surface.json"
 	}
 	return Finding{Connector: name, File: file, Rule: rule, Message: msg}
 }
@@ -334,6 +380,14 @@ func checkInterpolations(b engine.Bundle) []Finding {
 		for _, v := range s.Query {
 			check("streams.json", v.Template)
 		}
+		if s.GraphQL != nil {
+			if err := engine.ResolveCheckGraphQLVariables(s.GraphQL.Variables, specKeys); err != nil {
+				findings = append(findings, Finding{
+					Connector: b.Name, File: "streams.json", Rule: ruleInterpolationUnresolved,
+					Message: fmt.Sprintf("stream %q: %v", s.Name, err),
+				})
+			}
+		}
 		for _, v := range s.ComputedFields {
 			check("streams.json", v)
 		}
@@ -347,6 +401,14 @@ func checkInterpolations(b engine.Bundle) []Finding {
 	}
 	for _, w := range b.Writes {
 		check("writes.json", w.Path)
+		if w.GraphQL != nil {
+			if err := engine.ResolveCheckGraphQLVariables(w.GraphQL.Variables, specKeys); err != nil {
+				findings = append(findings, Finding{
+					Connector: b.Name, File: "writes.json", Rule: ruleInterpolationUnresolved,
+					Message: fmt.Sprintf("write action %q: %v", w.Name, err),
+				})
+			}
+		}
 	}
 	return findings
 }
@@ -451,13 +513,17 @@ func checkWritePathFields(b engine.Bundle) []Finding {
 }
 
 // checkAPISurface enforces design §E.1 rules 1-4:
-//  1. every endpoint has exactly one of covered_by/excluded.
-//  2. covered_by.stream/covered_by.write resolves to a declared stream/action,
-//     and every declared stream/action appears in the surface.
+//  1. every endpoint has exactly one executable covered_by row or an explicit
+//     blocked non-executable classifier. Legacy surfaces use excluded;
+//     operation-ledger surfaces use operation.
+//  2. covered_by.stream/covered_by.write/covered_by.direct_read resolves to a
+//     declared stream/action/implemented direct-read command, and every
+//     declared stream/action appears in the surface.
 //  3. excluded.category is from the closed vocabulary (defense-in-depth; the
-//     loader's meta-schema enum already enforces this at load time).
+//     loader's meta-schema enum already enforces this at load time), and
+//     operation rows use the closed operation vocabulary.
 //  4. capabilities.write/read == false is only legal when the surface has
-//     zero non-excluded mutation/GET endpoints respectively.
+//     zero executable mutation/GET endpoints respectively.
 func checkAPISurface(b engine.Bundle) []Finding {
 	if b.Surface == nil {
 		return []Finding{{
@@ -477,26 +543,54 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	for _, w := range b.Writes {
 		writes[w.Name] = true
 	}
+	directReads := map[string]bool{}
+	if b.CLISurface != nil {
+		for _, cmd := range b.CLISurface.Commands {
+			if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+				directReads[cmd.Path] = true
+			}
+		}
+	}
 
 	coveredStreams := map[string]bool{}
 	coveredWrites := map[string]bool{}
 	hasNonExcludedGET := false
 	hasNonExcludedMutation := false
+	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "")
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "" || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
 		hasExcluded := ep.Excluded != nil
+		hasOperation := ep.Operation != nil
+
+		if ledgerMode && hasExcluded {
+			findings = append(findings, Finding{
+				Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceOperation,
+				Message: fmt.Sprintf("endpoint %d (%s %s) uses legacy excluded in operation_ledger_version mode", i, ep.Method, ep.Path),
+			})
+		}
+		if !ledgerMode && hasOperation {
+			findings = append(findings, Finding{
+				Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceOperation,
+				Message: fmt.Sprintf("endpoint %d (%s %s) uses operation without operation_ledger_version", i, ep.Method, ep.Path),
+			})
+		}
 
 		switch {
-		case hasCovered && hasExcluded:
+		case hasCovered && (hasExcluded || hasOperation):
 			findings = append(findings, Finding{
 				Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-				Message: fmt.Sprintf("endpoint %d (%s %s) has both covered_by and excluded", i, ep.Method, ep.Path),
+				Message: fmt.Sprintf("endpoint %d (%s %s) has covered_by plus another classifier", i, ep.Method, ep.Path),
 			})
-		case !hasCovered && !hasExcluded:
+		case !hasCovered && !hasExcluded && !hasOperation:
 			findings = append(findings, Finding{
 				Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-				Message: fmt.Sprintf("endpoint %d (%s %s) has neither covered_by nor excluded", i, ep.Method, ep.Path),
+				Message: fmt.Sprintf("endpoint %d (%s %s) has no classifier", i, ep.Method, ep.Path),
+			})
+		case ledgerMode && hasOperation && hasExcluded:
+			findings = append(findings, Finding{
+				Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
+				Message: fmt.Sprintf("endpoint %d (%s %s) has both operation and excluded", i, ep.Method, ep.Path),
 			})
 		case hasCovered:
 			if ep.CoveredBy.Stream != "" {
@@ -519,6 +613,20 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					coveredWrites[ep.CoveredBy.Write] = true
 				}
 			}
+			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
+				if !directReads[directRead] {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceUnknownTarget,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead),
+					})
+				}
+				if !strings.EqualFold(ep.Method, "GET") {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path),
+					})
+				}
+			}
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
@@ -532,6 +640,8 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					Message: fmt.Sprintf("endpoint %d (%s %s) excluded.category %q is not in the closed vocabulary", i, ep.Method, ep.Path, ep.Excluded.Category),
 				})
 			}
+		case hasOperation:
+			findings = append(findings, checkAPISurfaceOperation(b, i, ep)...)
 		}
 	}
 
@@ -566,6 +676,412 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	}
 
 	return findings
+}
+
+func checkAPISurfaceOperation(b engine.Bundle, i int, ep engine.SurfaceEndpoint) []Finding {
+	op := ep.Operation
+	if op == nil {
+		return nil
+	}
+
+	var findings []Finding
+	add := func(message string) {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "api_surface.json",
+			Rule:      ruleSurfaceOperation,
+			Message:   fmt.Sprintf("endpoint %d (%s %s) %s", i, ep.Method, ep.Path, message),
+		})
+	}
+
+	if !surfaceOperationModels[op.Model] {
+		add(fmt.Sprintf("operation.model %q is not in the closed vocabulary", op.Model))
+	}
+	if !surfaceOperationStatuses[op.Status] {
+		add(fmt.Sprintf("operation.status %q is not in the closed vocabulary", op.Status))
+	}
+	if !surfaceOperationRisks[op.Risk] {
+		add(fmt.Sprintf("operation.risk %q is not in the closed vocabulary", op.Risk))
+	}
+	if !op.BlockedByDefault {
+		add("operation.blocked_by_default must be true")
+	}
+	if strings.TrimSpace(op.Reason) == "" {
+		add("operation.reason is required")
+	}
+	if op.Model == "duplicate" && strings.TrimSpace(op.DuplicateOf) == "" {
+		add("operation.duplicate_of is required for duplicate rows")
+	}
+	if sourceRequiredOperationModels[op.Model] &&
+		strings.TrimSpace(op.SourceURL) == "" &&
+		strings.TrimSpace(op.Notes) == "" {
+		add("operation.source_url or operation.notes is required for sensitive/admin/destructive/disallowed rows")
+	}
+	return findings
+}
+
+// checkCLISurface validates optional docs-only connector command metadata.
+// It deliberately validates references without enabling any command dispatch.
+func checkCLISurface(b engine.Bundle) []Finding {
+	if b.CLISurface == nil {
+		return nil
+	}
+
+	streams := map[string]bool{}
+	for _, s := range b.Streams {
+		streams[s.Name] = true
+	}
+	writes := map[string]engine.WriteAction{}
+	for _, w := range b.Writes {
+		writes[w.Name] = w
+	}
+	operations := map[string]engine.OperationSpec{}
+	for _, op := range b.Operations {
+		operations[op.ID] = op
+	}
+	endpoints := cliSurfaceEndpointStates(b.Surface)
+
+	var findings []Finding
+	for i, cmd := range b.CLISurface.Commands {
+		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
+		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
+		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
+		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
+		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
+	}
+	return findings
+}
+
+func checkCLISurfaceReferences(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	streams map[string]bool,
+	writes map[string]engine.WriteAction,
+	operations map[string]engine.OperationSpec,
+) []Finding {
+	var findings []Finding
+	mappings := 0
+	if cmd.Stream != "" {
+		mappings++
+	}
+	if cmd.Write != "" {
+		mappings++
+	}
+	if cmd.Operation != "" {
+		mappings++
+	}
+	if mappings > 1 {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("command %d (%q) must not reference more than one executable target (stream, write, operation)", i, cmd.Path),
+		})
+	}
+	if cmd.Stream != "" && !streams[cmd.Stream] {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceUnknownTarget,
+			Message:   fmt.Sprintf("command %d (%q) references unknown stream %q", i, cmd.Path, cmd.Stream),
+		})
+	}
+	if cmd.Write != "" {
+		if _, ok := writes[cmd.Write]; !ok {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceUnknownTarget,
+				Message:   fmt.Sprintf("command %d (%q) references unknown write action %q", i, cmd.Path, cmd.Write),
+			})
+		}
+	}
+	if cmd.Operation != "" {
+		if _, ok := operations[cmd.Operation]; !ok {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceUnknownTarget,
+				Message:   fmt.Sprintf("command %d (%q) references unknown operation %q", i, cmd.Path, cmd.Operation),
+			})
+		}
+	}
+	return findings
+}
+
+func checkCLISurfaceWriteFlags(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	writes map[string]engine.WriteAction,
+) []Finding {
+	if cmd.Availability != "implemented" || cmd.Intent != "reverse_etl" || cmd.Write == "" {
+		return nil
+	}
+
+	action, ok := writes[cmd.Write]
+	if !ok {
+		return nil
+	}
+
+	required := map[string]bool{}
+	if len(action.RecordSchema) > 0 {
+		schema, err := engine.CompileSchema(action.RecordSchema)
+		if err != nil {
+			return nil
+		}
+		for _, field := range schema.RequiredKeys() {
+			required[field] = true
+		}
+	}
+	for _, field := range action.PathFields {
+		required[field] = true
+	}
+	if len(required) == 0 {
+		return nil
+	}
+
+	mapped := map[string]bool{}
+	for _, flag := range cmd.Flags {
+		target, ok := strings.CutPrefix(flag.MapsTo, "record.")
+		if ok && target != "" {
+			mapped[target] = true
+		}
+	}
+
+	missing := make([]string, 0, len(required))
+	for field := range required {
+		if !mapped[field] {
+			missing = append(missing, field)
+		}
+	}
+	if len(missing) == 0 {
+		return nil
+	}
+	sort.Strings(missing)
+	return []Finding{{
+		Connector: b.Name,
+		File:      "cli_surface.json",
+		Rule:      ruleCLISurfaceMissingMapping,
+		Message:   fmt.Sprintf("implemented reverse ETL command %d (%q) for write %q lacks flag mappings for required record fields: %s", i, cmd.Path, cmd.Write, strings.Join(missing, ", ")),
+	}}
+}
+
+func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
+	if cmd.Availability != "implemented" {
+		return nil
+	}
+
+	switch cmd.Intent {
+	case "etl":
+		if cmd.Stream == "" && cmd.Operation == "" {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented ETL command %d (%q) must reference stream", i, cmd.Path),
+			}}
+		}
+	case "reverse_etl":
+		if cmd.Write == "" && cmd.Operation == "" {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented reverse ETL command %d (%q) must reference write action", i, cmd.Path),
+			}}
+		}
+	case "direct_read":
+		if cmd.Operation != "" {
+			return nil
+		}
+		var findings []Finding
+		if len(cmd.APISurface) != 1 {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference exactly one api_surface endpoint", i, cmd.Path),
+			})
+		}
+		for _, ep := range cmd.APISurface {
+			if strings.ToUpper(strings.TrimSpace(ep.Method)) != "GET" {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a GET api_surface endpoint, got %s", i, cmd.Path, strings.ToUpper(ep.Method)),
+				})
+			}
+			if isAbsoluteHTTPURL(ep.Path) {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a connector-relative api_surface endpoint", i, cmd.Path),
+				})
+			}
+		}
+		if !directReadOutputPolicies[cmd.OutputPolicy] {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented direct read command %d (%q) must declare a supported output_policy", i, cmd.Path),
+			})
+		}
+		if len(findings) > 0 {
+			return findings
+		}
+	case "local_workflow":
+		if cmd.Operation != "" {
+			return nil
+		}
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented local workflow command %d (%q) must reference a typed operation", i, cmd.Path),
+		}}
+	default:
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented command %d (%q) has unsupported executable intent %q", i, cmd.Path, cmd.Intent),
+		}}
+	}
+	return nil
+}
+
+func checkCLISurfaceRiskApproval(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
+	if (cmd.Availability != "implemented" && cmd.Availability != "partial") || cmd.Intent != "reverse_etl" {
+		return nil
+	}
+
+	var findings []Finding
+	if strings.TrimSpace(cmd.Risk) == "" {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("reverse ETL command %d (%q) must declare risk text", i, cmd.Path),
+		})
+	}
+	if strings.TrimSpace(cmd.Approval) == "" {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("reverse ETL command %d (%q) must declare approval text", i, cmd.Path),
+		})
+	}
+	return findings
+}
+
+func checkCLISurfaceEndpointCoverage(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	endpoints map[string]cliSurfaceEndpointState,
+) []Finding {
+	if b.Surface == nil {
+		return nil
+	}
+
+	var findings []Finding
+	for _, ep := range cmd.APISurface {
+		state, ok := endpoints[surfaceEndpointKey(ep.Method, ep.Path)]
+		if !ok {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceUnknownTarget,
+				Message:   fmt.Sprintf("command %d (%q) references unknown api_surface endpoint %s %s", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
+			})
+			continue
+		}
+		if state.excluded || state.operation != nil || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
+			if cmd.Intent == "direct_read" && directReadCoverageMatches(state.coveredBy, cmd.Path) {
+				continue
+			}
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s that is not covered by an executable surface", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
+			})
+			continue
+		}
+		if cmd.Stream != "" && state.coveredBy.Stream != cmd.Stream {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by stream %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Stream, cmd.Stream),
+			})
+		}
+		if cmd.Write != "" && state.coveredBy.Write != cmd.Write {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by write %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Write, cmd.Write),
+			})
+		}
+	}
+	return findings
+}
+
+func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceEndpointState {
+	endpoints := map[string]cliSurfaceEndpointState{}
+	if surface == nil {
+		return endpoints
+	}
+	for _, ep := range surface.Endpoints {
+		endpoints[surfaceEndpointKey(ep.Method, ep.Path)] = cliSurfaceEndpointState{
+			coveredBy: ep.CoveredBy,
+			excluded:  ep.Excluded != nil,
+			operation: ep.Operation,
+		}
+	}
+	return endpoints
+}
+
+type cliSurfaceEndpointState struct {
+	coveredBy *engine.SurfaceCoverage
+	excluded  bool
+	operation *engine.SurfaceOperation
+}
+
+func coveredDirectReadTargets(covered *engine.SurfaceCoverage) []string {
+	if covered == nil {
+		return nil
+	}
+	targets := append([]string{}, covered.DirectReads...)
+	if covered.DirectRead != "" {
+		targets = append(targets, covered.DirectRead)
+	}
+	return targets
+}
+
+func directReadCoverageMatches(covered *engine.SurfaceCoverage, path string) bool {
+	for _, target := range coveredDirectReadTargets(covered) {
+		if target == path {
+			return true
+		}
+	}
+	return false
+}
+
+func surfaceEndpointKey(method, path string) string {
+	return strings.ToUpper(strings.TrimSpace(method)) + " " + strings.TrimSpace(path)
+}
+
+func isAbsoluteHTTPURL(raw string) bool {
+	lower := strings.ToLower(strings.TrimSpace(raw))
+	return strings.HasPrefix(lower, "http://") || strings.HasPrefix(lower, "https://")
 }
 
 // checkDocsHeadings enforces the fixed docs.md heading set (design §F.6).
@@ -619,6 +1135,30 @@ func checkFixtureSecrets(b engine.Bundle) []Finding {
 		return nil
 	})
 	return findings
+}
+
+func checkCLISurfaceSecrets(b engine.Bundle) []Finding {
+	if len(b.RawCLISurface) == 0 || !secretLiteralPattern.Match(b.RawCLISurface) {
+		return nil
+	}
+	return []Finding{{
+		Connector: b.Name,
+		File:      "cli_surface.json",
+		Rule:      ruleSecretLiteral,
+		Message:   "cli_surface.json contains a secret-shaped literal",
+	}}
+}
+
+func checkOperationsSecrets(b engine.Bundle) []Finding {
+	if len(b.RawOperations) == 0 || !secretLiteralPattern.Match(b.RawOperations) {
+		return nil
+	}
+	return []Finding{{
+		Connector: b.Name,
+		File:      "operations.json",
+		Rule:      ruleSecretLiteral,
+		Message:   "operations.json contains a secret-shaped literal",
+	}}
 }
 
 // checkConformanceSkipReason enforces R3's skip-marker contract (docs/

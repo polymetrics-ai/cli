@@ -85,7 +85,30 @@ type ReadRequest struct {
 	Stream string
 	Config RuntimeConfig
 	State  map[string]string
+	Query  map[string]string
 	Limit  int
+}
+
+type DirectReadRequest struct {
+	Method       string
+	Path         string
+	Config       RuntimeConfig
+	PathParams   map[string]string
+	Query        map[string]string
+	MaxBytes     int
+	OutputPolicy string
+}
+
+type DirectReadResult struct {
+	Connector string `json:"connector"`
+	Method    string `json:"method"`
+	Path      string `json:"path"`
+	Status    int    `json:"status"`
+	Body      any    `json:"body"`
+}
+
+type DirectReader interface {
+	DirectRead(context.Context, DirectReadRequest) (DirectReadResult, error)
 }
 
 var ErrReadLimitReached = errors.New("connector read limit reached")

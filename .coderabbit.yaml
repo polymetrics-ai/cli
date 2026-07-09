@@ -1,0 +1,6 @@
+reviews:
+  path_filters:
+    - "!.planning/**"
+    - "!docs/design/generated/**"
+    - "!website/data/connectors.generated.json"
+    - "!website/lib/connectors.catalog.data.generated.json"

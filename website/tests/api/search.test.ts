@@ -50,7 +50,7 @@ describe('search API index', () => {
       expect.objectContaining({
         kind: 'connector',
         title: '100ms connector',
-        url: '/docs/connectors/source-100ms',
+        url: '/docs/connectors/100ms',
       }),
     );
   });

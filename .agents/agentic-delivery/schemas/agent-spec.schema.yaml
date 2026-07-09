@@ -24,6 +24,12 @@ field_contract:
     tags: list of routing tags
   role:
     type: single responsibility for this agent
+  activation:
+    type: optional trigger and ownership contract
+    fields:
+      mode: one of active_owner, advisory, worker, review_only
+      triggers: list of trigger phrases or task conditions
+      rule: plain-language activation rule
   objective:
     type: concrete outcome this agent owns
   skills:

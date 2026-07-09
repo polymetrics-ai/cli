@@ -1,0 +1,5266 @@
+{
+  "operations": [
+    {
+      "id": "github.projects.list",
+      "kind": "graphql_query",
+      "summary": "List GitHub Projects using a fixed GraphQL query.",
+      "source_url": "https://docs.github.com/en/graphql",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "auth_scopes": [
+        "read:project"
+      ],
+      "graphql": {
+        "operation_name": "ListProjects",
+        "document": "query ListProjects($owner: String!, $repo: String!, $first: Int!, $after: String) { repository(owner: $owner, name: $repo) { owner { __typename login ... on Organization { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } ... on User { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } } } }",
+        "pagination": {
+          "connection_path": "repository.owner.projectsV2",
+          "cursor_variable": "after",
+          "page_size_variable": "first",
+          "max_page_size": 100
+        }
+      }
+    },
+    {
+      "id": "github.project_items.list",
+      "kind": "graphql_query",
+      "summary": "List GitHub Project v2 items using a fixed GraphQL query.",
+      "source_url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "auth_scopes": [
+        "read:project"
+      ],
+      "graphql": {
+        "operation_name": "ListProjectItems",
+        "document": "query ListProjectItems($projectId: ID!, $first: Int!, $after: String) { node(id: $projectId) { ... on ProjectV2 { id number title items(first: $first, after: $after) { nodes { id type createdAt updatedAt content { __typename ... on Issue { id number title url state } ... on PullRequest { id number title url state } ... on DraftIssue { id title } } } pageInfo { hasNextPage endCursor } } } } }",
+        "pagination": {
+          "connection_path": "node.items",
+          "cursor_variable": "after",
+          "page_size_variable": "first",
+          "max_page_size": 100
+        }
+      }
+    },
+    {
+      "id": "github.discussions.list",
+      "kind": "graphql_query",
+      "summary": "List repository discussions using a fixed GraphQL query.",
+      "source_url": "https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "auth_scopes": [
+        "repo",
+        "public_repo"
+      ],
+      "graphql": {
+        "operation_name": "ListDiscussions",
+        "document": "query ListDiscussions($owner: String!, $repo: String!, $first: Int!, $after: String) { repository(owner: $owner, name: $repo) { discussions(first: $first, after: $after, orderBy: {field: UPDATED_AT, direction: DESC}) { nodes { id number title url isAnswered answerChosenAt createdAt updatedAt author { login } category { id name slug } } pageInfo { hasNextPage endCursor } } } }",
+        "pagination": {
+          "connection_path": "repository.discussions",
+          "cursor_variable": "after",
+          "page_size_variable": "first",
+          "max_page_size": 100
+        }
+      }
+    },
+    {
+      "id": "github.discussions.view",
+      "kind": "graphql_query",
+      "summary": "View one repository discussion using a fixed GraphQL query.",
+      "source_url": "https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "auth_scopes": [
+        "repo",
+        "public_repo"
+      ],
+      "graphql": {
+        "operation_name": "ViewDiscussion",
+        "document": "query ViewDiscussion($owner: String!, $repo: String!, $number: Int!) { repository(owner: $owner, name: $repo) { discussion(number: $number) { id number title body url isAnswered answerChosenAt createdAt updatedAt author { login } category { id name slug } comments(first: 20) { totalCount nodes { id body url isAnswer createdAt updatedAt author { login } } } } } }"
+      }
+    },
+    {
+      "id": "github.issue.delete",
+      "kind": "graphql_mutation",
+      "summary": "Delete an issue using a fixed GraphQL mutation.",
+      "source_url": "https://cli.github.com/manual/gh_issue_delete",
+      "risk": "critical",
+      "approval": "destructive reverse ETL writes require plan, preview, approval, execute",
+      "output_policy": "json",
+      "auth_scopes": [
+        "repo",
+        "public_repo"
+      ],
+      "mutation_class": "delete",
+      "destructive": true,
+      "graphql": {
+        "operation_name": "DeleteIssue",
+        "document": "mutation DeleteIssue($issueId: ID!) { deleteIssue(input: { issueId: $issueId }) { clientMutationId } }"
+      }
+    },
+    {
+      "id": "github.release.download_assets",
+      "kind": "binary_download",
+      "summary": "Download release assets with a bounded file-transfer policy.",
+      "source_url": "https://cli.github.com/manual/gh_release_download",
+      "risk": "medium",
+      "approval": "filesystem writes require an explicit destination policy",
+      "output_policy": "file_manifest",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "github.repo.clone",
+      "kind": "local_git",
+      "summary": "Clone a repository through a restricted local Git workflow.",
+      "source_url": "https://cli.github.com/manual/gh_repo_clone",
+      "risk": "medium",
+      "approval": "local filesystem and git mutations require explicit approval",
+      "output_policy": "local_workflow_plan",
+      "local_git": {
+        "action": "clone",
+        "allowed_args": [
+          "owner_repo",
+          "destination"
+        ]
+      }
+    },
+    {
+      "id": "github.secrets.put",
+      "kind": "rest_write",
+      "summary": "Create or update a repository Actions secret (policy-modeled, not executable in this issue).",
+      "source_url": "https://docs.github.com/en/rest/actions/secrets#create-or-update-a-repository-secret",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute plus typed confirmation",
+      "output_policy": "json",
+      "auth_scopes": [
+        "repo"
+      ],
+      "mutation_class": "secret",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "encrypted_value"
+        ],
+        "preflight": "scope_check",
+        "transform": "github_secret_encryption",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.repo",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "critical",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.repo2",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}"
+      }
+    },
+    {
+      "id": "github.actions_artifacts_artifact_id_archive_format",
+      "kind": "binary_download",
+      "summary": "Download /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "github.actions_cache_retention_limit",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/cache/retention-limit",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/cache/retention-limit"
+      }
+    },
+    {
+      "id": "github.actions_cache_retention_limit2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/cache/retention-limit",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/cache/retention-limit"
+      }
+    },
+    {
+      "id": "github.actions_cache_storage_limit",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/cache/storage-limit",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/cache/storage-limit"
+      }
+    },
+    {
+      "id": "github.actions_cache_storage_limit2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/cache/storage-limit",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/cache/storage-limit"
+      }
+    },
+    {
+      "id": "github.actions_cache_usage",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/cache/usage",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/cache/usage"
+      }
+    },
+    {
+      "id": "github.actions_caches",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/caches",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/caches"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.actions_caches2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/caches",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/caches"
+      }
+    },
+    {
+      "id": "github.actions_caches_cache_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/caches/{cache_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/caches/{cache_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.actions_concurrency_groups",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/concurrency_groups",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/concurrency_groups"
+      }
+    },
+    {
+      "id": "github.actions_concurrency_groups_concurrency_group_name",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}"
+      }
+    },
+    {
+      "id": "github.actions_jobs_job_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/jobs/{job_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}"
+      }
+    },
+    {
+      "id": "github.actions_jobs_job_id_logs",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/logs"
+      }
+    },
+    {
+      "id": "github.actions_jobs_job_id_rerun",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.actions_oidc_customization_sub",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/oidc/customization/sub",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub"
+      }
+    },
+    {
+      "id": "github.actions_oidc_customization_sub2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/oidc/customization/sub",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub"
+      }
+    },
+    {
+      "id": "github.actions_organization_secrets",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/organization-secrets",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/organization-secrets"
+      }
+    },
+    {
+      "id": "github.actions_organization_variables",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/organization-variables",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/organization-variables"
+      }
+    },
+    {
+      "id": "github.actions_permissions",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/permissions"
+      }
+    },
+    {
+      "id": "github.actions_permissions2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions"
+      }
+    },
+    {
+      "id": "github.actions_permissions_access",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/access",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/permissions/access"
+      }
+    },
+    {
+      "id": "github.actions_permissions_access2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/access",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/access"
+      }
+    },
+    {
+      "id": "github.actions_permissions_artifact_and_log_retention",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention"
+      }
+    },
+    {
+      "id": "github.actions_permissions_artifact_and_log_retention2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention"
+      }
+    },
+    {
+      "id": "github.actions_permissions_fork_pr_contributor_approval",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval"
+      }
+    },
+    {
+      "id": "github.actions_permissions_fork_pr_contributor_approval2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval"
+      }
+    },
+    {
+      "id": "github.actions_permissions_fork_pr_workflows_private_repos",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos"
+      }
+    },
+    {
+      "id": "github.actions_permissions_fork_pr_workflows_private_repos2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos"
+      }
+    },
+    {
+      "id": "github.actions_permissions_selected_actions",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/selected-actions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions"
+      }
+    },
+    {
+      "id": "github.actions_permissions_selected_actions2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/selected-actions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions"
+      }
+    },
+    {
+      "id": "github.actions_permissions_workflow",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/permissions/workflow",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/permissions/workflow"
+      }
+    },
+    {
+      "id": "github.actions_permissions_workflow2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/permissions/workflow",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/workflow"
+      }
+    },
+    {
+      "id": "github.actions_runners",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runners",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runners"
+      }
+    },
+    {
+      "id": "github.actions_runners_downloads",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runners/downloads",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runners/downloads"
+      }
+    },
+    {
+      "id": "github.actions_runners_generate_jitconfig",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runners/generate-jitconfig"
+      }
+    },
+    {
+      "id": "github.actions_runners_registration_token",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/runners/registration-token",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runners/registration-token"
+      }
+    },
+    {
+      "id": "github.actions_runners_remove_token",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/runners/remove-token",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runners/remove-token"
+      }
+    },
+    {
+      "id": "github.actions_runners_runner_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}"
+      }
+    },
+    {
+      "id": "github.actions_runners_runner_id2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runners/{runner_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}"
+      }
+    },
+    {
+      "id": "github.actions_runners_runner_id_labels",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+      }
+    },
+    {
+      "id": "github.actions_runners_runner_id_labels2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+      }
+    },
+    {
+      "id": "github.actions_runners_runner_id_labels3",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+      }
+    },
+    {
+      "id": "github.actions_runners_runner_id_labels4",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+      }
+    },
+    {
+      "id": "github.actions_runners_runner_id_labels_name",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_approvals",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/approvals",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_approve",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approve"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_attempts_attempt_number",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_attempts_attempt_number_jobs",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_attempts_attempt_number_logs",
+      "kind": "binary_download",
+      "summary": "Download /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_concurrency_groups",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_deployment_protection_rule",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_jobs",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/jobs"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_logs",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "critical",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.actions_runs_run_id_logs2",
+      "kind": "binary_download",
+      "summary": "Download /repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_pending_deployments",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_pending_deployments2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_timing",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/timing",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing"
+      }
+    },
+    {
+      "id": "github.actions_secrets",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/secrets",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/secrets"
+      }
+    },
+    {
+      "id": "github.actions_secrets_public_key",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/secrets/public-key",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/secrets/public-key"
+      }
+    },
+    {
+      "id": "github.actions_secrets_secret_name",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.actions_secrets_secret_name2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.actions_secrets_secret_name3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.actions_variables",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/variables",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/variables"
+      }
+    },
+    {
+      "id": "github.actions_variables2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/variables",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/variables"
+      }
+    },
+    {
+      "id": "github.actions_variables_name",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/variables/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+      }
+    },
+    {
+      "id": "github.actions_variables_name2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/variables/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+      }
+    },
+    {
+      "id": "github.actions_variables_name3",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/actions/variables/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+      }
+    },
+    {
+      "id": "github.actions_workflows_workflow_id_disable",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"
+      }
+    },
+    {
+      "id": "github.actions_workflows_workflow_id_enable",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"
+      }
+    },
+    {
+      "id": "github.actions_workflows_workflow_id_timing",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"
+      }
+    },
+    {
+      "id": "github.assignees_assignee",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/assignees/{assignee}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/assignees/{assignee}"
+      }
+    },
+    {
+      "id": "github.attestations",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/attestations",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/attestations"
+      }
+    },
+    {
+      "id": "github.attestations_subject_digest",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/attestations/{subject_digest}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/attestations/{subject_digest}"
+      }
+    },
+    {
+      "id": "github.autolinks",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/autolinks",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/autolinks"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.autolinks_autolink_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/autolinks/{autolink_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.automated_security_fixes",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/automated-security-fixes",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/automated-security-fixes"
+      }
+    },
+    {
+      "id": "github.automated_security_fixes2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/automated-security-fixes",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/automated-security-fixes"
+      }
+    },
+    {
+      "id": "github.automated_security_fixes3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/automated-security-fixes",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/automated-security-fixes"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_enforce_admins",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_enforce_admins2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_enforce_admins3",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_pull_request_reviews",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_pull_request_reviews2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_pull_request_reviews3",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_signatures",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_signatures2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_signatures3",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_status_checks",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_status_checks2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_status_checks3",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_status_checks_contexts",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_status_checks_contexts2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_status_checks_contexts3",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_required_status_checks_contexts4",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_apps",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_apps2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_apps3",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_apps4",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_teams",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_teams2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_teams3",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_teams4",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_users",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_users2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_users3",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+      }
+    },
+    {
+      "id": "github.branches_branch_protection_restrictions_users4",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+      }
+    },
+    {
+      "id": "github.branches_branch_rename",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/branches/{branch}/rename",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "critical",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/rename"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.check_runs",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/check-runs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/check-runs"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.check_runs_check_run_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/check-runs/{check_run_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}"
+      }
+    },
+    {
+      "id": "github.check_runs_check_run_id2",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.check_runs_check_run_id_annotations",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/annotations"
+      }
+    },
+    {
+      "id": "github.check_runs_check_run_id_rerequest",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.check_suites",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/check-suites",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/check-suites"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.check_suites_preferences",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/check-suites/preferences",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/check-suites/preferences"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.check_suites_check_suite_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/check-suites/{check_suite_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}"
+      }
+    },
+    {
+      "id": "github.check_suites_check_suite_id_check_runs",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs"
+      }
+    },
+    {
+      "id": "github.check_suites_check_suite_id_rerequest",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.code_quality_findings",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-quality/findings",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-quality/findings"
+      }
+    },
+    {
+      "id": "github.code_quality_findings_finding_number",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-quality/findings/{finding_number}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}"
+      }
+    },
+    {
+      "id": "github.code_quality_setup",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-quality/setup",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-quality/setup"
+      }
+    },
+    {
+      "id": "github.code_quality_setup2",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/code-quality/setup",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/code-quality/setup"
+      }
+    },
+    {
+      "id": "github.code_scanning_alerts_alert_number_autofix",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix"
+      }
+    },
+    {
+      "id": "github.code_scanning_alerts_alert_number_autofix2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix"
+      }
+    },
+    {
+      "id": "github.code_scanning_alerts_alert_number_autofix_commits",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits"
+      }
+    },
+    {
+      "id": "github.code_scanning_alerts_alert_number_instances",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"
+      }
+    },
+    {
+      "id": "github.code_scanning_analyses",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/analyses"
+      }
+    },
+    {
+      "id": "github.code_scanning_analyses_analysis_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
+      }
+    },
+    {
+      "id": "github.code_scanning_analyses_analysis_id2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
+      }
+    },
+    {
+      "id": "github.code_scanning_codeql_databases",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/databases",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases"
+      }
+    },
+    {
+      "id": "github.code_scanning_codeql_databases_language",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
+      }
+    },
+    {
+      "id": "github.code_scanning_codeql_databases_language2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
+      }
+    },
+    {
+      "id": "github.code_scanning_codeql_variant_analyses",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses"
+      }
+    },
+    {
+      "id": "github.code_scanning_codeql_variant_analyses_codeql_variant_analysis_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}"
+      }
+    },
+    {
+      "id": "github.code_scanning_codeql_variant_analyses_codeql_variant_analysis_id_repos_repo_owner_repo_name",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}"
+      }
+    },
+    {
+      "id": "github.code_scanning_default_setup",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/default-setup",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/default-setup"
+      }
+    },
+    {
+      "id": "github.code_scanning_default_setup2",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/code-scanning/default-setup",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/code-scanning/default-setup"
+      }
+    },
+    {
+      "id": "github.code_scanning_sarifs",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/code-scanning/sarifs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/code-scanning/sarifs"
+      }
+    },
+    {
+      "id": "github.code_scanning_sarifs_sarif_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"
+      }
+    },
+    {
+      "id": "github.code_security_configuration",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-security-configuration",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-security-configuration"
+      }
+    },
+    {
+      "id": "github.codeowners_errors",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/codeowners/errors",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/codeowners/errors"
+      }
+    },
+    {
+      "id": "github.codespaces",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/codespaces",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/codespaces"
+      }
+    },
+    {
+      "id": "github.codespaces2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/codespaces",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/codespaces"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.codespaces_devcontainers",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/devcontainers",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/codespaces/devcontainers"
+      }
+    },
+    {
+      "id": "github.codespaces_machines",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/machines",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/codespaces/machines"
+      }
+    },
+    {
+      "id": "github.codespaces_new",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/new",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/codespaces/new"
+      }
+    },
+    {
+      "id": "github.codespaces_permissions_check",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/permissions_check",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/codespaces/permissions_check"
+      }
+    },
+    {
+      "id": "github.codespaces_secrets",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/secrets",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/codespaces/secrets"
+      }
+    },
+    {
+      "id": "github.codespaces_secrets_public_key",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/public-key",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/codespaces/secrets/public-key"
+      }
+    },
+    {
+      "id": "github.codespaces_secrets_secret_name",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "github_secret_encryption",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.codespaces_secrets_secret_name2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.codespaces_secrets_secret_name3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "github_secret_encryption",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.comments_comment_id_reactions",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/comments/{comment_id}/reactions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions"
+      }
+    },
+    {
+      "id": "github.comments_comment_id_reactions2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/comments/{comment_id}/reactions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.comments_comment_id_reactions_reaction_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.commits_commit_sha_branches_where_head",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head"
+      }
+    },
+    {
+      "id": "github.commits_commit_sha_pulls",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/commits/{commit_sha}/pulls",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/commits/{commit_sha}/pulls"
+      }
+    },
+    {
+      "id": "github.commits_ref_check_runs",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/commits/{ref}/check-runs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs"
+      }
+    },
+    {
+      "id": "github.commits_ref_check_suites",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/commits/{ref}/check-suites",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/commits/{ref}/check-suites"
+      }
+    },
+    {
+      "id": "github.commits_ref_status",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/commits/{ref}/status",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/commits/{ref}/status"
+      }
+    },
+    {
+      "id": "github.commits_ref_statuses",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/commits/{ref}/statuses",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/commits/{ref}/statuses"
+      }
+    },
+    {
+      "id": "github.community_profile",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/community/profile",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/community/profile"
+      }
+    },
+    {
+      "id": "github.compare_basehead",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/compare/{basehead}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/compare/{basehead}"
+      }
+    },
+    {
+      "id": "github.copilot_cloud_agent_configuration",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/copilot/cloud-agent/configuration",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/copilot/cloud-agent/configuration"
+      }
+    },
+    {
+      "id": "github.dependabot_secrets",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/dependabot/secrets",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/dependabot/secrets"
+      }
+    },
+    {
+      "id": "github.dependabot_secrets_public_key",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/public-key",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/dependabot/secrets/public-key"
+      }
+    },
+    {
+      "id": "github.dependabot_secrets_secret_name",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.dependabot_secrets_secret_name2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.dependabot_secrets_secret_name3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.dependency_graph_compare_basehead",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}"
+      }
+    },
+    {
+      "id": "github.dependency_graph_sbom",
+      "kind": "binary_download",
+      "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/dependency-graph/sbom",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "github.dependency_graph_sbom_fetch_report_sbom_uuid",
+      "kind": "binary_download",
+      "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid}",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "github.dependency_graph_sbom_generate_report",
+      "kind": "binary_download",
+      "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom/generate-report",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/dependency-graph/sbom/generate-report",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "github.dependency_graph_snapshots",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/dependency-graph/snapshots",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/dependency-graph/snapshots"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.deployments_deployment_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/deployments/{deployment_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "critical",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.deployments_deployment_id_statuses",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
+      }
+    },
+    {
+      "id": "github.deployments_deployment_id_statuses2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.dispatches",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/dispatches",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/dispatches"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_deployment_branch_policies",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_deployment_branch_policies2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_deployment_branch_policies_branch_policy_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_deployment_branch_policies_branch_policy_id2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_deployment_branch_policies_branch_policy_id3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_deployment_protection_rules",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_deployment_protection_rules2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_deployment_protection_rules_apps",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_deployment_protection_rules_protection_rule_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_deployment_protection_rules_protection_rule_id2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_secrets",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_secrets_public_key",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_secrets_secret_name",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_secrets_secret_name2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_secrets_secret_name3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_variables",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/variables",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_variables2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/environments/{environment_name}/variables",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_variables_name",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_variables_name2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+      }
+    },
+    {
+      "id": "github.environments_environment_name_variables_name3",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+      }
+    },
+    {
+      "id": "github.git_blobs",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/git/blobs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/git/blobs"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.git_blobs_file_sha",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/git/blobs/{file_sha}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}"
+      }
+    },
+    {
+      "id": "github.git_commits",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/git/commits",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/git/commits"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.git_ref_ref",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/git/ref/{ref}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/git/ref/{ref}"
+      }
+    },
+    {
+      "id": "github.git_tags_tag_sha",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/git/tags/{tag_sha}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}"
+      }
+    },
+    {
+      "id": "github.git_trees",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/git/trees",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/git/trees"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.git_trees_tree_sha",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/git/trees/{tree_sha}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}"
+      }
+    },
+    {
+      "id": "github.hash_algorithm",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/hash-algorithm",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/hash-algorithm"
+      }
+    },
+    {
+      "id": "github.hooks_hook_id_deliveries",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/deliveries",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries"
+      }
+    },
+    {
+      "id": "github.hooks_hook_id_deliveries_delivery_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}"
+      }
+    },
+    {
+      "id": "github.hooks_hook_id_deliveries_delivery_id_attempts",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.hooks_hook_id_pings",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/pings",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/pings"
+      }
+    },
+    {
+      "id": "github.hooks_hook_id_tests",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/hooks/{hook_id}/tests",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/tests"
+      }
+    },
+    {
+      "id": "github.immutable_releases",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/immutable-releases",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/immutable-releases"
+      }
+    },
+    {
+      "id": "github.immutable_releases2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/immutable-releases",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/immutable-releases"
+      }
+    },
+    {
+      "id": "github.immutable_releases3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/immutable-releases",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/immutable-releases"
+      }
+    },
+    {
+      "id": "github.import",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/import",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/import"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.import2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/import",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/import"
+      }
+    },
+    {
+      "id": "github.import3",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/import",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/import"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.import4",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/import",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/import"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.import_authors",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/import/authors",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/import/authors"
+      }
+    },
+    {
+      "id": "github.import_authors_author_id",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/import/authors/{author_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/import/authors/{author_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.import_large_files",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/import/large_files",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/import/large_files"
+      }
+    },
+    {
+      "id": "github.import_lfs",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/import/lfs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/import/lfs"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.installation",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/installation",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/installation"
+      }
+    },
+    {
+      "id": "github.interaction_limits",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/interaction-limits",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/interaction-limits"
+      }
+    },
+    {
+      "id": "github.interaction_limits2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/interaction-limits",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/interaction-limits"
+      }
+    },
+    {
+      "id": "github.interaction_limits3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/interaction-limits",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/interaction-limits"
+      }
+    },
+    {
+      "id": "github.interaction_limits_pulls_bypass_list",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
+      }
+    },
+    {
+      "id": "github.interaction_limits_pulls_bypass_list2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
+      }
+    },
+    {
+      "id": "github.interaction_limits_pulls_bypass_list3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
+      }
+    },
+    {
+      "id": "github.invitations_invitation_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/invitations/{invitation_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/invitations/{invitation_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.invitations_invitation_id2",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/invitations/{invitation_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/invitations/{invitation_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issue_types",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issue-types",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issue-types"
+      }
+    },
+    {
+      "id": "github.issues_comments_comment_id_pin",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issues_comments_comment_id_pin2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issues_comments_comment_id_reactions",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"
+      }
+    },
+    {
+      "id": "github.issues_comments_comment_id_reactions2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issues_comments_comment_id_reactions_reaction_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_assignees_assignee",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_dependencies_blocked_by",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_dependencies_blocked_by2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_dependencies_blocked_by_issue_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_dependencies_blocking",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_issue_field_values",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_issue_field_values2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_issue_field_values3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_issue_field_values_issue_field_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_parent",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/parent",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_reactions",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/reactions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_reactions2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/reactions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_reactions_reaction_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_sub_issue",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_sub_issues",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_sub_issues2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.issues_issue_number_sub_issues_priority",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.license",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/license",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/license"
+      }
+    },
+    {
+      "id": "github.merge_upstream",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/merge-upstream",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/merge-upstream"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.milestones_milestone_number_labels",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/milestones/{milestone_number}/labels",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/milestones/{milestone_number}/labels"
+      }
+    },
+    {
+      "id": "github.notifications",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/notifications",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/notifications"
+      }
+    },
+    {
+      "id": "github.notifications2",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/notifications",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/notifications"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pages",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/pages",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/pages"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pages2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pages",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pages"
+      }
+    },
+    {
+      "id": "github.pages3",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/pages",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pages"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pages4",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/pages",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/pages"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pages_builds",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pages/builds",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pages/builds"
+      }
+    },
+    {
+      "id": "github.pages_builds2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/pages/builds",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pages/builds"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pages_builds_latest",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pages/builds/latest",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pages/builds/latest"
+      }
+    },
+    {
+      "id": "github.pages_builds_build_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pages/builds/{build_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pages/builds/{build_id}"
+      }
+    },
+    {
+      "id": "github.pages_deployments",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/pages/deployments",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pages/deployments"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pages_deployments_pages_deployment_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}"
+      }
+    },
+    {
+      "id": "github.pages_deployments_pages_deployment_id_cancel",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pages_health",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pages/health",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pages/health"
+      }
+    },
+    {
+      "id": "github.private_vulnerability_reporting",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/private-vulnerability-reporting",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
+      }
+    },
+    {
+      "id": "github.private_vulnerability_reporting2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/private-vulnerability-reporting",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
+      }
+    },
+    {
+      "id": "github.private_vulnerability_reporting3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/private-vulnerability-reporting",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
+      }
+    },
+    {
+      "id": "github.properties_values",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/properties/values",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/properties/values"
+      }
+    },
+    {
+      "id": "github.properties_values2",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/properties/values",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/properties/values"
+      }
+    },
+    {
+      "id": "github.pulls_comments_comment_id_reactions",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"
+      }
+    },
+    {
+      "id": "github.pulls_comments_comment_id_reactions2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pulls_comments_comment_id_reactions_reaction_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_codespaces",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/pulls/{pull_number}/codespaces",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/codespaces"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_commits",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/commits",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/commits"
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_files",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/files",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/files"
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_merge",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/merge",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge"
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_requested_reviewers",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_reviews",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews"
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_reviews_review_id_comments",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments"
+      }
+    },
+    {
+      "id": "github.readme",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/readme",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/readme"
+      }
+    },
+    {
+      "id": "github.readme_dir",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/readme/{dir}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/readme/{dir}"
+      }
+    },
+    {
+      "id": "github.releases_assets_asset_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/releases/assets/{asset_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}"
+      }
+    },
+    {
+      "id": "github.releases_generate_notes",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/releases/generate-notes",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/releases/generate-notes"
+      }
+    },
+    {
+      "id": "github.releases_release_id_assets",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/releases/{release_id}/assets",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
+      }
+    },
+    {
+      "id": "github.releases_release_id_assets2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/releases/{release_id}/assets",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
+      }
+    },
+    {
+      "id": "github.releases_release_id_reactions",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/releases/{release_id}/reactions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions"
+      }
+    },
+    {
+      "id": "github.releases_release_id_reactions2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/releases/{release_id}/reactions",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.releases_release_id_reactions_reaction_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.rulesets_rule_suites",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/rulesets/rule-suites",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/rulesets/rule-suites"
+      }
+    },
+    {
+      "id": "github.rulesets_rule_suites_rule_suite_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}"
+      }
+    },
+    {
+      "id": "github.rulesets_ruleset_id_history",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}/history",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history"
+      }
+    },
+    {
+      "id": "github.rulesets_ruleset_id_history_version_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}"
+      }
+    },
+    {
+      "id": "github.secret_scanning_alerts_alert_number_locations",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations"
+      }
+    },
+    {
+      "id": "github.secret_scanning_push_protection_bypasses",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/secret-scanning/push-protection-bypasses"
+      }
+    },
+    {
+      "id": "github.secret_scanning_scan_history",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/secret-scanning/scan-history",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/secret-scanning/scan-history"
+      }
+    },
+    {
+      "id": "github.security_advisories",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/security-advisories",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/security-advisories"
+      }
+    },
+    {
+      "id": "github.security_advisories_reports",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/security-advisories/reports",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/security-advisories/reports"
+      }
+    },
+    {
+      "id": "github.security_advisories_ghsa_id",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}"
+      }
+    },
+    {
+      "id": "github.security_advisories_ghsa_id_cve",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve"
+      }
+    },
+    {
+      "id": "github.security_advisories_ghsa_id_forks",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks"
+      }
+    },
+    {
+      "id": "github.stats_code_frequency",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/stats/code_frequency",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/stats/code_frequency"
+      }
+    },
+    {
+      "id": "github.stats_commit_activity",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/stats/commit_activity",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/stats/commit_activity"
+      }
+    },
+    {
+      "id": "github.stats_contributors",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/stats/contributors",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/stats/contributors"
+      }
+    },
+    {
+      "id": "github.stats_participation",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/stats/participation",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/stats/participation"
+      }
+    },
+    {
+      "id": "github.stats_punch_card",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/stats/punch_card",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/stats/punch_card"
+      }
+    },
+    {
+      "id": "github.statuses_sha",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/statuses/{sha}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/statuses/{sha}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.subscription",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/subscription",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/subscription"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.subscription2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/subscription",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/subscription"
+      }
+    },
+    {
+      "id": "github.subscription3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/subscription",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/subscription"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.tarball_ref",
+      "kind": "binary_download",
+      "summary": "Download /repos/{owner}/{repo}/tarball/{ref}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/tarball/{ref}",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": true
+      }
+    },
+    {
+      "id": "github.teams",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/teams",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/teams"
+      }
+    },
+    {
+      "id": "github.traffic_clones",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/traffic/clones",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/traffic/clones"
+      }
+    },
+    {
+      "id": "github.traffic_popular_paths",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/traffic/popular/paths",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/traffic/popular/paths"
+      }
+    },
+    {
+      "id": "github.traffic_popular_referrers",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/traffic/popular/referrers",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/traffic/popular/referrers"
+      }
+    },
+    {
+      "id": "github.traffic_views",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/traffic/views",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/traffic/views"
+      }
+    },
+    {
+      "id": "github.transfer",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/transfer",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "critical",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/transfer"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.vulnerability_alerts",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/vulnerability-alerts",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/vulnerability-alerts"
+      }
+    },
+    {
+      "id": "github.vulnerability_alerts2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/vulnerability-alerts",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/vulnerability-alerts"
+      }
+    },
+    {
+      "id": "github.vulnerability_alerts3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/vulnerability-alerts",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "high",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/vulnerability-alerts"
+      }
+    },
+    {
+      "id": "github.zipball_ref",
+      "kind": "binary_download",
+      "summary": "Download /repos/{owner}/{repo}/zipball/{ref}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "binary",
+      "binary": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/zipball/{ref}",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": true
+      }
+    }
+  ]
+}

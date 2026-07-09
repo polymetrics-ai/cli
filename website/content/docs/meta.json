@@ -10,6 +10,7 @@
     "etl",
     "query",
     "reverse-etl",
+    "github-cli-surface",
     "cli-reference",
     "architecture",
     "---",

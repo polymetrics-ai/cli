@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "discussions",
+  "type": "object",
+  "x-primary-key": ["id"],
+  "properties": {
+    "repository": { "type": "string" },
+    "id": { "type": "string" },
+    "number": { "type": "integer" },
+    "title": { "type": "string" },
+    "url": { "type": ["string", "null"] },
+    "author_login": { "type": ["string", "null"] },
+    "category_id": { "type": ["string", "null"] },
+    "category_name": { "type": ["string", "null"] },
+    "category_slug": { "type": ["string", "null"] },
+    "is_answered": { "type": ["boolean", "null"] },
+    "answer_chosen_at": { "type": ["string", "null"] },
+    "created_at": { "type": ["string", "null"] },
+    "updated_at": { "type": ["string", "null"] }
+  }
+}

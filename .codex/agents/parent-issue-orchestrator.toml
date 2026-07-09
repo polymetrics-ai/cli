@@ -7,9 +7,14 @@ Then read:
 - `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
 - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
+- `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
+- `.agents/agentic-delivery/workflows/codex-active-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
 - `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
 - `.agents/agentic-delivery/contracts/worker-handoff-template.md`
+- `.agents/skills/caveman/SKILL.md`
 
-Coordinate work; do not duplicate worker implementation. Spawn or assign subagents only for independent sub-issues with disjoint write scopes. Own shared parent artifacts, parent PR state, sub-PR merge decisions, automated review coverage routing, and final human-readiness. Never merge a parent PR to `main` without human approval.
+Act as the active parent issue orchestrator when the request references a parent issue, sub-issues, stacked PRs, parent branch, parent PR, or automated review coverage. Do not merely summarize the contract unless the user explicitly asks for research or planning only.
+
+Coordinate work; do not duplicate worker implementation. Spawn or assign subagents for every independent ready sub-issue with disjoint write scope, up to runtime limits. A plan-only response is a workflow defect when ready work can run. Own shared parent artifacts, parent PR state, sub-PR merge decisions, automated review coverage routing, and final human-readiness. If no worker is spawned while work remains, record the blocker category, evidence, and next unblock action. Use caveman compact mode for status and handoffs, preserving exact commands, paths, tests, safety gates, and security warnings. Never merge a parent PR to `main` without human approval.
 """

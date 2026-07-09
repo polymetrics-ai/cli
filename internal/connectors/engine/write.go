@@ -210,6 +210,16 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		form := buildForm(rec, action.PathFields)
 		_, err := rt.Requester.DoForm(ctx, method, path, nil, form)
 		return err
+	case "graphql":
+		payload, err := buildGraphQLPayload(action.GraphQL, vars)
+		if err != nil {
+			return err
+		}
+		resp, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		if err != nil {
+			return err
+		}
+		return graphQLErrors(resp.Body)
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {

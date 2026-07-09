@@ -12,6 +12,7 @@ default_rules:
   - Plan before production edits and keep the GSD plan, TDD ledger, and verification checklist current.
   - For CLI command, flag, output, connector surface, or help-topic changes, follow .agents/agentic-delivery/references/cli-help-docs-website-parity.md.
   - Commit and push coherent green slices to the active issue/PR branch after local green gates.
+  - Never push to main; stop only for a human gate or explicit coordinator handoff.
   - Keep PR scope to one primary issue.
   - Stop for human gates before auth, secrets, dependencies, destructive actions, deploys, or gate reductions.
 skills:
@@ -118,10 +119,13 @@ skills:
       - web-design-guidelines
       - go-engineering
     required_for:
+      - cli-surface
       - coderabbit-review
       - automated-review-routing
+      - parent-roadmap
       - stacked-pr
       - parent-orchestration
+      - review
   orchestration:
     capabilities:
       - parent issue state machine ownership
@@ -166,6 +170,8 @@ task_types:
   parent-orchestration:
     required_skill_groups: [orchestration, github_planning, review_disposition, security_review]
     primary_agent: parent-issue-orchestrator
+    activation: active_owner
+    compact_skill: caveman
   parent-roadmap:
     required_skill_groups: [github_planning, review_disposition, docs_and_ux]
     primary_agent: stacked-roadmap-coordinator
@@ -179,7 +185,7 @@ task_types:
     required_skill_groups: [api_architecture, go_tdd, security_review]
     primary_agent: operation-ledger-architect
   cli-surface:
-    required_skill_groups: [github_planning, api_architecture, go_tdd, docs_and_ux]
+    required_skill_groups: [github_planning, api_architecture, go_tdd, docs_and_ux, review_disposition]
     primary_agent: provider-cli-surface-agent
   cli-help-docs-website-parity:
     required_skill_groups: [go_tdd, docs_and_ux]

@@ -116,6 +116,7 @@ var builtinPairings = map[string][]WritePairing{
 			IDField:      "name",
 			VerifyStream: "labels",
 			VerifyField:  "name",
+			Overrides:    map[string]any{"color": "ededed"},
 		},
 		{
 			Create:       "create_issue",

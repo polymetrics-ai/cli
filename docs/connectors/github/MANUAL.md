@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector github [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (Pass B full-surface expansion: 33 streams, 67 write actions).
+  Reads GitHub repository, issue, pull request, code, release, collaboration, Actions, security (code scanning/dependabot/secret scanning/advisories), webhook, deploy key, environment, and ruleset data, and writes approved reverse ETL actions through the GitHub REST API (full-surface certified: 37 streams, 231 write actions accounted).
 
 ICON
   asset: icons/github.svg
@@ -21,6 +21,14 @@ ICON
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
   Integration type: api
+
+CERTIFICATION
+  Full certification: passed for the current GitHub connector surface.
+  Accounted API endpoints: 509 total, 440 covered, 69 explicitly blocked.
+  Catalog streams: 37.
+  Direct-read command families checked: 2.
+  Write actions accounted: 231 (create_label live lifecycle passed with read-back and cleanup; remaining actions are safe untested pairings or blocked by policy).
+  Binary download surfaces remain safely blocked until a bounded binary executor and destination policy exist.
 
 AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.

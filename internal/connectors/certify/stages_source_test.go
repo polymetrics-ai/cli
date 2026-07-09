@@ -14,6 +14,53 @@ import (
 // workdir mirroring the Makefile "smoke" recipe flags (Makefile:41), proving
 // the source-stage pipeline without any CLI wiring (Runner drives cli.Run
 // in-process via the harness built in T/B-12).
+func TestFullSweepSourceStagesAgainstSample(t *testing.T) {
+	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
+
+	r := certify.NewRunner(certify.Options{
+		Connector: "sample",
+		Stream:    "customers",
+		Limit:     50,
+		Full:      true,
+		SecretEnv: map[string]string{"token": "PM_SAMPLE_TOKEN"},
+	})
+
+	rep, err := r.Run(context.Background())
+	if err != nil {
+		t.Fatalf("Run() error = %v", err)
+	}
+	if !rep.Passed {
+		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
+	}
+	if stage := mustStage(t, rep, "full_sweep_connection_create_customers"); !stage.Passed {
+		t.Fatalf("full sweep connection stage failed: %+v", stage)
+	}
+	if stage := mustStage(t, rep, "full_sweep_connection_create_events"); !stage.Passed {
+		t.Fatalf("full sweep events connection stage failed: %+v", stage)
+	}
+	if got := countStages(rep, "etl_full_refresh_append"); got != 2 {
+		t.Fatalf("etl_full_refresh_append stages = %d, want 2 for sample's catalog streams", got)
+	}
+	if got := countStages(rep, "flow_roundtrip"); got != 2 {
+		t.Fatalf("flow_roundtrip stages = %d, want 2 for sample's catalog streams", got)
+	}
+	if got := countStages(rep, "schedule_roundtrip"); got != 2 {
+		t.Fatalf("schedule_roundtrip stages = %d, want 2 for sample's catalog streams", got)
+	}
+	if stage := mustStage(t, rep, "direct_read_sweep"); stage.Passed || !containsAny(stage.Error, "skipped:") {
+		t.Fatalf("direct_read_sweep = %+v, want documented skip for sample", stage)
+	}
+	if rep.Capabilities.DirectRead == nil || rep.Capabilities.DirectRead.Result != "skipped" {
+		t.Fatalf("Capabilities.DirectRead = %+v, want skipped", rep.Capabilities.DirectRead)
+	}
+	if stage := mustStage(t, rep, "binary_download_sweep"); stage.Passed || !containsAny(stage.Error, "skipped:") {
+		t.Fatalf("binary_download_sweep = %+v, want documented skip for sample", stage)
+	}
+	if rep.Capabilities.Binary == nil || rep.Capabilities.Binary.Result != "skipped" {
+		t.Fatalf("Capabilities.Binary = %+v, want skipped", rep.Capabilities.Binary)
+	}
+}
+
 func TestSourceStagesAgainstSample(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
@@ -203,12 +250,16 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 		// write stages 12-17 (stages_write.go) are skipped entirely in
 		// this test (Options.Write is false) — each records a documented
 		// skip with no CLI call, exactly like fixture_conformance above.
-		"write_plan_preview":   true,
-		"write_create":         true,
-		"write_verify":         true,
-		"write_cleanup":        true,
-		"cleanup_verify":       true,
-		"approval_idempotency": true,
+		"write_plan_preview":       true,
+		"write_create":             true,
+		"write_verify":             true,
+		"write_cleanup":            true,
+		"cleanup_verify":           true,
+		"approval_idempotency":     true,
+		"write_sweep_all_pairings": true,
+		"direct_read_sweep":        true,
+		"binary_download_sweep":    true,
+		"surface_inventory":        true,
 	}
 	for _, stage := range rep.Stages {
 		if metaStagesWithoutDirectCLICall[stage.Name] {
@@ -351,6 +402,16 @@ func mustStage(t *testing.T, rep certify.Report, name string) certify.StageResul
 	}
 	t.Fatalf("stage %q not found in report; stages=%+v", name, rep.Stages)
 	return certify.StageResult{}
+}
+
+func countStages(rep certify.Report, name string) int {
+	count := 0
+	for _, s := range rep.Stages {
+		if s.Name == name {
+			count++
+		}
+	}
+	return count
 }
 
 func containsAny(s string, subs ...string) bool {

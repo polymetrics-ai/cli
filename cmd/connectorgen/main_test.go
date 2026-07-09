@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"testing/fstest"
 )
 
 // --- validate: accepts the golden control bundle -----------------------------
@@ -92,6 +93,411 @@ func TestValidate_OAuth2ExtraParamsBundlePassesCleanly(t *testing.T) {
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for a well-formed oauth2_client_credentials extra_params block, got %+v", report.Findings)
 	}
+}
+
+func TestValidate_CLISurfaceValidReferencesPassCleanly(t *testing.T) {
+	report, err := validateDir(cliSurfaceBundleFS(validCLISurfaceJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for valid cli_surface.json, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceUnknownStreamIsHardFinding(t *testing.T) {
+	report, err := validateDir(cliSurfaceBundleFS(strings.ReplaceAll(validCLISurfaceJSON(), `"stream": "widgets"`, `"stream": "missing_widgets"`)))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceUnknownTarget)
+}
+
+func TestValidate_CLISurfaceImplementedETLRequiresStream(t *testing.T) {
+	report, err := validateDir(cliSurfaceBundleFS(strings.ReplaceAll(validCLISurfaceJSON(), `"stream": "widgets",`, "")))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceMissingMapping)
+}
+
+func TestValidate_CLISurfaceSecretLookingExampleIsHardFinding(t *testing.T) {
+	token := "gh" + "p_" + "1234567890abcdef1234567890abcdef1234"
+	report, err := validateDir(cliSurfaceBundleFS(strings.ReplaceAll(validCLISurfaceJSON(), `pm cli-surface widget list --json`, `pm cli-surface auth --token `+token)))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSecretLiteral)
+}
+
+func TestValidate_CLISurfaceAPIRefCannotUseExcludedEndpoint(t *testing.T) {
+	cliSurface := strings.Replace(validCLISurfaceJSON(), `{ "method": "GET", "path": "/widgets" }`, `{ "method": "GET", "path": "/widgets/export" }`, 1)
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "GET", "path": "/widgets/export", "excluded": { "category": "out_of_scope", "reason": "not exposed" } }
+		]
+	}`)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceAPIRefMustMatchStreamOrWrite(t *testing.T) {
+	cliSurface := strings.Replace(validCLISurfaceJSON(), `{ "method": "GET", "path": "/widgets" }`, `{ "method": "GET", "path": "/widget-writes" }`, 1)
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "GET", "path": "/widget-writes", "covered_by": { "write": "create_widget" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } }
+		]
+	}`)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceAPIRefFailsWhenSurfaceHasZeroEndpoints(t *testing.T) {
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"endpoints": []
+	}`)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceUnknownTarget)
+}
+
+func TestValidate_CLISurfaceReverseETLRequiresRiskAndApproval(t *testing.T) {
+	cliSurface := strings.ReplaceAll(validCLISurfaceJSON(), `
+				"risk": "creates a widget",
+				"approval": "reverse ETL writes require plan, preview, approval, execute",
+`, "")
+	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceReverseETLRequiresRequiredRecordFlagMappings(t *testing.T) {
+	cliSurface := strings.Replace(validCLISurfaceJSON(), `"maps_to": "record.name"`, `"maps_to": "query.name"`, 1)
+	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceMissingMapping)
+}
+
+func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
+	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "etl"`, `"intent": "raw_api"`, 1)
+	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceImplementedDirectWriteIsBlocked(t *testing.T) {
+	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "reverse_etl"`, `"intent": "direct_write"`, 1)
+	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceImplementedDirectReadWithOutputPolicyPasses(t *testing.T) {
+	report, err := validateDir(directReadCLISurfaceBundleFS(validDirectReadCLISurfaceJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for valid direct_read cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceImplementedDirectReadRejectsBlockedOperationLedgerEndpoint(t *testing.T) {
+	report, err := validateDir(directReadCLISurfaceBundleFSWithAPI(validDirectReadCLISurfaceJSON(), validOperationLedgerAPISurface()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceImplementedDirectReadRequiresOutputPolicy(t *testing.T) {
+	cliSurface := strings.Replace(validDirectReadCLISurfaceJSON(), `
+				"output_policy": "github_contents_file_metadata",
+`, "", 1)
+	report, err := validateDir(directReadCLISurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceImplementedDirectReadRequiresOneEndpoint(t *testing.T) {
+	cliSurface := strings.Replace(
+		validDirectReadCLISurfaceJSON(),
+		`{ "method": "GET", "path": "/widgets/{id}" }`,
+		`{ "method": "GET", "path": "/widgets/{id}" }, { "method": "GET", "path": "/widgets" }`,
+		1,
+	)
+	report, err := validateDir(directReadCLISurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceMissingMapping)
+}
+
+func TestValidate_CLISurfaceImplementedDirectReadRequiresGETRelativeEndpoint(t *testing.T) {
+	tests := []struct {
+		name       string
+		apiSurface string
+		ref        string
+	}{
+		{
+			name:       "post",
+			apiSurface: strings.Replace(validDirectReadAPISurface(), `"method": "GET",`+"\n"+`				"path": "/widgets/{id}"`, `"method": "POST",`+"\n"+`				"path": "/widgets/{id}"`, 1),
+			ref:        `{ "method": "POST", "path": "/widgets/{id}" }`,
+		},
+		{
+			name:       "absolute",
+			apiSurface: strings.Replace(validDirectReadAPISurface(), `"path": "/widgets/{id}"`, `"path": "https://evil.example.test/widgets/{id}"`, 1),
+			ref:        `{ "method": "GET", "path": "https://evil.example.test/widgets/{id}" }`,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cliSurface := strings.Replace(validDirectReadCLISurfaceJSON(), `{ "method": "GET", "path": "/widgets/{id}" }`, tt.ref, 1)
+			report, err := validateDir(directReadCLISurfaceBundleFSWithAPI(cliSurface, tt.apiSurface))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+		})
+	}
+}
+
+func TestValidate_CLISurfaceRejectsCommandWithStreamAndWrite(t *testing.T) {
+	cliSurface := strings.Replace(
+		validCLISurfaceJSON(),
+		`"stream": "widgets",`,
+		`"stream": "widgets",
+				"write": "create_widget",`,
+		1,
+	)
+	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceOperationReferencePasses(t *testing.T) {
+	report, err := validateDir(operationCLISurfaceBundleFS(validOperationCLISurfaceJSON(), validOperationsJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for valid operation-backed cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceUnknownOperationIsHardFinding(t *testing.T) {
+	cliSurface := strings.ReplaceAll(validOperationCLISurfaceJSON(), `"operation": "cli-surface.widgets.get"`, `"operation": "cli-surface.widgets.missing"`)
+	report, err := validateDir(operationCLISurfaceBundleFS(cliSurface, validOperationsJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceUnknownTarget)
+}
+
+func TestValidate_CLISurfaceRejectsCommandWithStreamAndOperation(t *testing.T) {
+	cliSurface := strings.ReplaceAll(
+		validOperationCLISurfaceJSON(),
+		`"operation": "cli-surface.widgets.get"`,
+		`"stream": "widgets", "operation": "cli-surface.widgets.get"`,
+	)
+	report, err := validateDir(operationCLISurfaceBundleFS(cliSurface, validOperationsJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_InvalidOperationsJSONFindingNamesOperationsFile(t *testing.T) {
+	report, err := validateDir(operationCLISurfaceBundleFS(validOperationCLISurfaceJSON(), strings.Replace(
+		validOperationsJSON(),
+		`"risk": "low"`,
+		`"risk": "unbounded"`,
+		1,
+	)))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	for _, finding := range report.Findings {
+		if finding.Connector == "cli-surface" && finding.Rule == ruleMetaSchema {
+			if finding.File != "operations.json" {
+				t.Fatalf("meta_schema finding file = %q, want operations.json; finding=%+v", finding.File, finding)
+			}
+			return
+		}
+	}
+	t.Fatalf("no meta_schema finding for invalid operations.json; findings=%+v", report.Findings)
+}
+
+func TestValidate_OperationsSecretLookingLiteralIsHardFinding(t *testing.T) {
+	token := "gh" + "p_" + "1234567890abcdef1234567890abcdef1234"
+	operations := strings.Replace(validOperationsJSON(), "Read widget metadata", "Read "+token, 1)
+	report, err := validateDir(operationCLISurfaceBundleFS(validOperationCLISurfaceJSON(), operations))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	for _, finding := range report.Findings {
+		if finding.Connector == "cli-surface" && finding.Rule == ruleSecretLiteral {
+			if finding.File != "operations.json" {
+				t.Fatalf("secret finding file = %q, want operations.json; finding=%+v", finding.File, finding)
+			}
+			if strings.Contains(finding.Message, token) {
+				t.Fatalf("secret finding message leaked token: %q", finding.Message)
+			}
+			return
+		}
+	}
+	t.Fatalf("no secret literal finding for operations.json; findings=%+v", report.Findings)
+}
+
+func TestValidate_APISurfaceOperationLedgerValidRowsPassCleanly(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(validOperationLedgerAPISurface()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for valid operation ledger, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_APISurfaceOperationLedgerRejectsLegacyExclusion(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "GET", "path": "/widgets/export", "excluded": { "category": "out_of_scope", "reason": "legacy exclusion" } }
+		]
+	}`))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceOperation)
+}
+
+func TestValidate_APISurfaceOperationLedgerRejectsDualClassification(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{
+				"method": "GET",
+				"path": "/widgets/{id}",
+				"covered_by": { "stream": "widgets" },
+				"operation": {
+					"model": "direct_read",
+					"status": "blocked",
+					"risk": "low",
+					"blocked_by_default": true,
+					"reason": "dual classified row"
+				}
+			}
+		]
+	}`))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceCoverage)
+}
+
+func TestValidate_APISurfaceOperationLedgerRejectsUnblockedOperationInSchema(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(strings.Replace(
+		validOperationLedgerAPISurface(),
+		`"blocked_by_default": true`,
+		`"blocked_by_default": false`,
+		1,
+	)))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleMetaSchema)
+}
+
+func TestValidate_APISurfaceOperationLedgerRequiresReason(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(strings.Replace(
+		validOperationLedgerAPISurface(),
+		`"reason": "point lookup candidate, not yet modeled as a stream"`,
+		`"reason": ""`,
+		1,
+	)))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceOperation)
+}
+
+func TestValidate_APISurfaceOperationLedgerRequiresDuplicateTarget(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(strings.Replace(
+		validOperationLedgerAPISurface(),
+		`"model": "direct_read"`,
+		`"model": "duplicate"`,
+		1,
+	)))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceOperation)
+}
+
+func TestValidate_APISurfaceOperationLedgerRequiresSourceOrNotesForSensitiveRows(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{
+				"method": "POST",
+				"path": "/org/widgets",
+				"operation": {
+					"model": "admin_reverse_etl",
+					"status": "blocked",
+					"risk": "high",
+					"blocked_by_default": true,
+					"reason": "requires organization administration scope"
+				}
+			}
+		]
+	}`))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleSurfaceOperation)
 }
 
 // TestValidate_EmptyTreeIsFine mirrors the loader contract: an empty defs/
@@ -671,6 +1077,257 @@ func TestRun_NoArgsIsUsageError(t *testing.T) {
 func singleBundleFS(t *testing.T, parent, name string) fs.FS {
 	t.Helper()
 	return onlyDirFS{FS: os.DirFS(parent), name: name}
+}
+
+func assertFindingRule(t *testing.T, report Report, connector, rule string) {
+	t.Helper()
+	for _, f := range report.Findings {
+		if f.Connector == connector && f.Rule == rule {
+			return
+		}
+	}
+	t.Fatalf("no finding for connector %q with rule %q; findings=%+v", connector, rule, report.Findings)
+}
+
+func cliSurfaceBundleFS(cliSurface string) fstest.MapFS {
+	return fstest.MapFS{
+		"cli-surface/metadata.json": &fstest.MapFile{Data: []byte(`{
+			"name": "cli-surface",
+			"display_name": "CLI Surface",
+			"description": "test connector",
+			"integration_type": "api",
+			"release_stage": "ga",
+			"capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false }
+		}`)},
+		"cli-surface/spec.json": &fstest.MapFile{Data: []byte(`{
+			"$schema": "http://json-schema.org/draft-07/schema#",
+			"type": "object",
+			"required": ["base_url"],
+			"properties": {
+				"base_url": { "type": "string" }
+			}
+		}`)},
+		"cli-surface/streams.json": &fstest.MapFile{Data: []byte(`{
+			"base": {
+				"url": "{{ config.base_url }}",
+				"check": { "method": "GET", "path": "/widgets" }
+			},
+			"streams": [
+				{ "name": "widgets", "path": "/widgets", "records": { "path": "data" }, "schema": "schemas/widgets.json" }
+			]
+		}`)},
+		"cli-surface/writes.json": &fstest.MapFile{Data: []byte(`{
+			"actions": [
+				{
+					"name": "create_widget",
+					"kind": "create",
+					"method": "POST",
+					"path": "/widgets",
+					"record_schema": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" } } },
+					"risk": "creates a widget"
+				}
+			]
+		}`)},
+		"cli-surface/api_surface.json": &fstest.MapFile{Data: []byte(`{
+			"api": "test API v1",
+			"endpoints": [
+				{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+				{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } }
+			]
+		}`)},
+		"cli-surface/schemas/widgets.json": &fstest.MapFile{Data: []byte(`{
+			"$schema": "http://json-schema.org/draft-07/schema#",
+			"type": "object",
+			"x-primary-key": ["id"],
+			"properties": {
+				"id": { "type": "integer" },
+				"name": { "type": "string" }
+			}
+		}`)},
+		"cli-surface/docs.md": &fstest.MapFile{Data: []byte(`# Overview
+
+test
+
+## Auth setup
+
+none
+
+## Streams notes
+
+none
+
+## Write actions & risks
+
+none
+
+## Known limits
+
+none
+`)},
+		"cli-surface/cli_surface.json": &fstest.MapFile{Data: []byte(cliSurface)},
+	}
+}
+
+func operationCLISurfaceBundleFS(cliSurface, operations string) fstest.MapFS {
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	return fsys
+}
+
+func validOperationsJSON() string {
+	return `{
+		"operations": [
+			{
+				"id": "cli-surface.widgets.get",
+				"kind": "rest_read",
+				"summary": "Read widget metadata",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"rest": {
+					"method": "GET",
+					"path": "/widgets/{id}"
+				}
+			}
+		]
+	}`
+}
+
+func validOperationCLISurfaceJSON() string {
+	return `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget view",
+				"summary": "View widget metadata",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.get",
+				"source_cli_path": "clis widget view",
+				"examples": ["pm cli-surface widget view --id w_1 --json"]
+			}
+		]
+	}`
+}
+
+func validCLISurfaceJSON() string {
+	return `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget list",
+				"summary": "List widgets",
+				"intent": "etl",
+				"availability": "implemented",
+				"stream": "widgets",
+				"source_cli_path": "clis widget list",
+				"api_surface": [
+					{ "method": "GET", "path": "/widgets" }
+				],
+				"examples": ["pm cli-surface widget list --json"]
+			},
+			{
+				"path": "widget create",
+				"summary": "Create a widget",
+				"intent": "reverse_etl",
+				"availability": "implemented",
+				"write": "create_widget",
+				"source_cli_path": "clis widget create",
+				"api_surface": [
+					{ "method": "POST", "path": "/widgets" }
+				],
+				"flags": [
+					{ "name": "name", "type": "string", "summary": "Widget name.", "maps_to": "record.name" }
+				],
+				"risk": "creates a widget",
+				"approval": "reverse ETL writes require plan, preview, approval, execute",
+				"examples": ["pm cli-surface widget create --json"]
+			}
+		]
+	}`
+}
+
+func validDirectReadCLISurfaceJSON() string {
+	return `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget read",
+				"summary": "Read widget metadata",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"source_cli_path": "clis widget read",
+				"api_surface": [
+					{ "method": "GET", "path": "/widgets/{id}" }
+				],
+				"output_policy": "github_contents_file_metadata",
+				"flags": [
+					{ "name": "id", "type": "string", "maps_to": "path.id" }
+				],
+				"examples": ["pm cli-surface widget read --id w_1 --json"]
+			}
+		]
+	}`
+}
+
+func directReadCLISurfaceBundleFS(cliSurface string) fstest.MapFS {
+	return directReadCLISurfaceBundleFSWithAPI(cliSurface, validDirectReadAPISurface())
+}
+
+func directReadCLISurfaceBundleFSWithAPI(cliSurface, apiSurface string) fstest.MapFS {
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	return fsys
+}
+
+func operationLedgerBundleFS(apiSurface string) fstest.MapFS {
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	return fsys
+}
+
+func validOperationLedgerAPISurface() string {
+	return `{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{
+				"method": "GET",
+				"path": "/widgets/{id}",
+				"operation": {
+					"model": "direct_read",
+					"status": "blocked",
+					"risk": "low",
+					"blocked_by_default": true,
+					"reason": "point lookup candidate, not yet modeled as a stream",
+					"source_url": "https://example.invalid/rest/widgets"
+				}
+			}
+		]
+	}`
+}
+
+func validDirectReadAPISurface() string {
+	return `{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{
+				"method": "GET",
+				"path": "/widgets/{id}",
+				"covered_by": {
+					"direct_read": "widget read"
+				}
+			}
+		]
+	}`
 }
 
 // onlyDirFS wraps an fs.FS and restricts ReadDir(".") to a single named

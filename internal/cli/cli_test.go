@@ -2,6 +2,10 @@ package cli_test
 
 import (
 	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
@@ -309,4 +313,268 @@ func TestRuntimeDoctorJSONDoesNotLeakPostgresPassword(t *testing.T) {
 	if !strings.Contains(out, `"kind": "RuntimeDoctor"`) {
 		t.Fatalf("missing RuntimeDoctor kind:\n%s", out)
 	}
+}
+
+func TestGitHubCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
+	var gotPath, gotState string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		gotState = r.URL.Query().Get("state")
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`[
+			{
+				"id": 101,
+				"node_id": "I_kwDOAA",
+				"number": 101,
+				"state": "closed",
+				"title": "closed issue",
+				"user": {"login": "octocat", "id": 1},
+				"updated_at": "2026-07-06T00:00:00Z"
+			}
+		]`))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "owner=octocat",
+		"--config", "repo=hello-world",
+		"--config", "base_url=" + srv.URL,
+		"--config", "public_access=true",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"github", "issue", "list",
+		"--credential", "github-local",
+		"--state", "closed",
+		"--limit", "1",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/repos/octocat/hello-world/issues" {
+		t.Fatalf("request path = %q, want /repos/octocat/hello-world/issues", gotPath)
+	}
+	if gotState != "closed" {
+		t.Fatalf("request state = %q, want closed", gotState)
+	}
+
+	var env struct {
+		Kind    string `json:"kind"`
+		Command string `json:"command"`
+		Stream  string `json:"stream"`
+		Count   int    `json:"count"`
+		Records []struct {
+			NodeID     string `json:"node_id"`
+			State      string `json:"state"`
+			Repository string `json:"repository"`
+			UserLogin  string `json:"user_login"`
+		} `json:"records"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandRead" || env.Command != "issue list" || env.Stream != "issues" || env.Count != 1 {
+		t.Fatalf("envelope = %+v, want kind ConnectorCommandRead command issue list stream issues count 1", env)
+	}
+	if len(env.Records) != 1 || env.Records[0].State != "closed" || env.Records[0].Repository != "octocat/hello-world" || env.Records[0].UserLogin != "octocat" {
+		t.Fatalf("records = %+v, want projected GitHub issue record", env.Records)
+	}
+}
+
+func TestGitHubCommandSurfaceClampsOversizedLimit(t *testing.T) {
+	const wantLimit = 10000
+	var body strings.Builder
+	body.WriteByte('[')
+	for i := 1; i <= wantLimit+1; i++ {
+		if i > 1 {
+			body.WriteByte(',')
+		}
+		fmt.Fprintf(&body, `{
+			"id": %d,
+			"node_id": "I_%d",
+			"number": %d,
+			"state": "open",
+			"title": "issue %d",
+			"user": {"login": "octocat", "id": 1},
+			"updated_at": "2026-07-06T00:00:00Z"
+		}`, i, i, i, i)
+	}
+	body.WriteByte(']')
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(body.String()))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "owner=octocat",
+		"--config", "repo=hello-world",
+		"--config", "base_url=" + srv.URL,
+		"--config", "public_access=true",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"github", "issue", "list",
+		"--credential", "github-local",
+		"--limit", fmt.Sprint(wantLimit + 1),
+		"--root", root,
+		"--json",
+	})
+
+	var env struct {
+		Kind  string `json:"kind"`
+		Count int    `json:"count"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandRead" || env.Count != wantLimit {
+		t.Fatalf("envelope = %+v, want clamped ConnectorCommandRead count %d", env, wantLimit)
+	}
+}
+
+func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
+	var gotPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		if r.Method != http.MethodGet {
+			t.Fatalf("method = %s, want GET", r.Method)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"name":"README.md","type":"file","encoding":"base64","content":"SGVsbG8=","download_url":"https://raw.example.test/README.md"}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "owner=octocat",
+		"--config", "repo=hello-world",
+		"--config", "base_url=" + srv.URL,
+		"--config", "public_access=true",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"github", "repo", "read-file",
+		"--credential", "github-local",
+		"--path", "README.md",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/repos/octocat/hello-world/contents/README.md" {
+		t.Fatalf("request path = %q, want contents file path", gotPath)
+	}
+
+	var env struct {
+		Kind     string         `json:"kind"`
+		Command  string         `json:"command"`
+		Method   string         `json:"method"`
+		Path     string         `json:"path"`
+		Status   int            `json:"status"`
+		Response map[string]any `json:"response"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandDirectRead" || env.Command != "repo read-file" || env.Method != "GET" || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want direct-read README result", env)
+	}
+	if env.Response["name"] != "README.md" || env.Response["type"] != "file" {
+		t.Fatalf("response = %+v, want README file metadata", env.Response)
+	}
+	if _, ok := env.Response["content"]; ok {
+		t.Fatalf("response leaked content: %+v", env.Response)
+	}
+	if _, ok := env.Response["download_url"]; ok {
+		t.Fatalf("response leaked download_url: %+v", env.Response)
+	}
+	if env.Response["content_redacted"] != true || env.Response["download_url_redacted"] != true {
+		t.Fatalf("response redaction markers = %+v, want content and download_url redacted", env.Response)
+	}
+}
+
+func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "github-local",
+		"--connector", "github",
+		"--config", "owner=octocat",
+		"--config", "repo=hello-world",
+		"--config", "public_access=true",
+		"--root", root,
+		"--json",
+	})
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"github", "issue", "create",
+		"--title", "Ship connector command plans",
+		"--credential", "github-local",
+		"--root", root,
+		"--json",
+	}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("issue create code = %d stderr=%s stdout=%s", code, stderr.String(), stdout.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"kind": "ConnectorCommandWritePlan"`, `"connector_command": "issue create"`, `"action": "create_issue"`, `"approval_required": true`} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("planned command output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+		}
+	}
+	if strings.Contains(out, "approval_token") || strings.Contains(out, "approval_token_hash") ||
+		strings.Contains(out, "connector_command_record") {
+		t.Fatalf("plan JSON leaked approval or raw command payload:\n%s", out)
+	}
+}
+
+func TestGitHubCommandSurfaceBlocksOperationBeforeCredentialResolution(t *testing.T) {
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"github", "issue", "delete",
+		"--issue-number", "40",
+		"--root", root,
+		"--json",
+	}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("issue delete code = 0, want policy error; stdout=%s", stdout.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"category": "policy"`, `"code": "connector_command_blocked"`, "issue delete", "operation github.issue.delete"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("blocked operation output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+		}
+	}
+	if strings.Contains(out, "missing --credential") || strings.Contains(stderr.String(), "missing --credential") {
+		t.Fatalf("operation-backed command attempted credential resolution before blocking:\nstdout=%s\nstderr=%s", out, stderr.String())
+	}
+}
+
+func runCLI(t *testing.T, args []string) (stdout string, stderr string) {
+	t.Helper()
+	var outBuf, errBuf bytes.Buffer
+	code := cli.Run(args, &outBuf, &errBuf)
+	if code != 0 {
+		t.Fatalf("Run(%v) code = %d stderr=%s stdout=%s", args, code, errBuf.String(), outBuf.String())
+	}
+	return outBuf.String(), errBuf.String()
 }

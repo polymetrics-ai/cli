@@ -5,11 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"reflect"
 	"strconv"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -99,6 +101,290 @@ func TestReadStaticQuery(t *testing.T) {
 	}
 	if gotQuery != "sort=asc&state=all" {
 		t.Fatalf("query = %q, want sort=asc&state=all", gotQuery)
+	}
+}
+
+func TestReadRequestQueryOverridesStaticQuery(t *testing.T) {
+	var gotQuery url.Values
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotQuery = r.URL.Query()
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Query: map[string]QueryParam{"sort": {Template: "asc"}, "state": {Template: "all"}}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Query:  map[string]string{"state": "closed"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if got := gotQuery.Get("state"); got != "closed" {
+		t.Fatalf("state query = %q, want closed", got)
+	}
+	if got := gotQuery.Get("sort"); got != "asc" {
+		t.Fatalf("sort query = %q, want asc", got)
+	}
+}
+
+// --- GraphQL request body support ---
+
+func TestReadGraphQLBodySendsFixedDocumentAndVariables(t *testing.T) {
+	var gotMethod string
+	var gotContentType string
+	var gotBody map[string]any
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotMethod = r.Method
+		gotContentType = r.Header.Get("Content-Type")
+		raw, _ := io.ReadAll(r.Body)
+		if err := json.Unmarshal(raw, &gotBody); err != nil {
+			t.Fatalf("request body JSON: %v; raw=%q", err, string(raw))
+		}
+		_, _ = w.Write([]byte(`{"data":{"widgets":{"nodes":[{"id":"w1","name":"One","updated_at":"2026-07-07T00:00:00Z"}]}}}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Method: http.MethodPost,
+		Path:   "/graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "query ListWidgets($first: Int!) { widgets(first: $first) { nodes { id name updated_at } } }",
+			OperationName: "ListWidgets",
+			Variables: map[string]any{
+				"first": map[string]any{"template": "{{ config.page_size }}", "type": "integer"},
+			},
+		},
+		Records: RecordsSpec{Path: "data.widgets.nodes"},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Config: connectors.RuntimeConfig{Config: map[string]string{"page_size": "2"}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotMethod != http.MethodPost {
+		t.Fatalf("method = %q, want POST", gotMethod)
+	}
+	if !strings.HasPrefix(gotContentType, "application/json") {
+		t.Fatalf("content-type = %q, want application/json", gotContentType)
+	}
+	if gotBody["query"] != "query ListWidgets($first: Int!) { widgets(first: $first) { nodes { id name updated_at } } }" {
+		t.Fatalf("query = %v, want fixed bundle document", gotBody["query"])
+	}
+	if gotBody["operationName"] != "ListWidgets" {
+		t.Fatalf("operationName = %v, want ListWidgets", gotBody["operationName"])
+	}
+	vars, ok := gotBody["variables"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables = %#v, want object", gotBody["variables"])
+	}
+	if vars["first"] != float64(2) {
+		t.Fatalf("variables.first = %#v, want 2", vars["first"])
+	}
+	if len(records) != 1 || records[0]["id"] != "w1" {
+		t.Fatalf("records = %+v, want one GraphQL node", records)
+	}
+}
+
+func TestReadGraphQLBodyResolvesRequestQueryVariables(t *testing.T) {
+	var gotBody map[string]any
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		raw, _ := io.ReadAll(r.Body)
+		if err := json.Unmarshal(raw, &gotBody); err != nil {
+			t.Fatalf("request body JSON: %v; raw=%q", err, string(raw))
+		}
+		_, _ = w.Write([]byte(`{"data":{"widget":{"id":"w1","name":"One","updated_at":"2026-07-07T00:00:00Z"}}}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Method: http.MethodPost,
+		Path:   "/graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "query Widget($number: Int!) { widget(number: $number) { id name updated_at } }",
+			OperationName: "Widget",
+			Variables: map[string]any{
+				"number": map[string]any{"template": "{{ query.number }}", "type": "integer"},
+			},
+		},
+		Records: RecordsSpec{Path: "data.widget", SingleObject: true},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Query:  map[string]string{"number": "42"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	vars, ok := gotBody["variables"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables = %#v, want object", gotBody["variables"])
+	}
+	if vars["number"] != float64(42) {
+		t.Fatalf("variables.number = %#v, want 42", vars["number"])
+	}
+	if len(records) != 1 || records[0]["id"] != "w1" {
+		t.Fatalf("records = %+v, want one GraphQL object", records)
+	}
+}
+
+func TestReadGraphQLBodyUsesDefaultForMissingQueryVariable(t *testing.T) {
+	var gotBody map[string]any
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		raw, _ := io.ReadAll(r.Body)
+		if err := json.Unmarshal(raw, &gotBody); err != nil {
+			t.Fatalf("request body JSON: %v; raw=%q", err, string(raw))
+		}
+		_, _ = w.Write([]byte(`{"data":{"widget":{"id":"w7","name":"Seven","updated_at":"2026-07-07T00:00:00Z"}}}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Method: http.MethodPost,
+		Path:   "/graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "query Widget($number: Int!) { widget(number: $number) { id name updated_at } }",
+			OperationName: "Widget",
+			Variables: map[string]any{
+				"number": map[string]any{"template": "{{ query.number }}", "type": "integer", "default": "7"},
+			},
+		},
+		Records: RecordsSpec{Path: "data.widget", SingleObject: true},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	vars, ok := gotBody["variables"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables = %#v, want object", gotBody["variables"])
+	}
+	if vars["number"] != float64(7) {
+		t.Fatalf("variables.number = %#v, want default 7", vars["number"])
+	}
+	if len(records) != 1 || records[0]["id"] != "w7" {
+		t.Fatalf("records = %+v, want one GraphQL object", records)
+	}
+}
+
+func TestReadGraphQLBodyOmitsExplicitlyEmptyQueryVariable(t *testing.T) {
+	var gotBody map[string]any
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		raw, _ := io.ReadAll(r.Body)
+		if err := json.Unmarshal(raw, &gotBody); err != nil {
+			t.Fatalf("request body JSON: %v; raw=%q", err, string(raw))
+		}
+		_, _ = w.Write([]byte(`{"data":{"widget":{"id":"w9","name":"Nine","updated_at":"2026-07-07T00:00:00Z"}}}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Method: http.MethodPost,
+		Path:   "/graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "query Widget($number: Int) { widget(number: $number) { id name updated_at } }",
+			OperationName: "Widget",
+			Variables: map[string]any{
+				"number": map[string]any{"template": "{{ query.number }}", "type": "integer", "default": "7", "omit_when_empty": true},
+			},
+		},
+		Records: RecordsSpec{Path: "data.widget", SingleObject: true},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Query:  map[string]string{"number": ""},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	vars, ok := gotBody["variables"].(map[string]any)
+	if !ok {
+		t.Fatalf("variables = %#v, want object", gotBody["variables"])
+	}
+	if _, exists := vars["number"]; exists {
+		t.Fatalf("variables.number should be omitted for explicitly empty query value, got %#v", vars["number"])
+	}
+	if len(records) != 1 || records[0]["id"] != "w9" {
+		t.Fatalf("records = %+v, want one GraphQL object", records)
+	}
+}
+
+func TestReadGraphQLBodyOmitsEmptyOptionalVariable(t *testing.T) {
+	var gotBodies []map[string]any
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		var gotBody map[string]any
+		raw, _ := io.ReadAll(r.Body)
+		if err := json.Unmarshal(raw, &gotBody); err != nil {
+			t.Fatalf("request body JSON: %v; raw=%q", err, string(raw))
+		}
+		gotBodies = append(gotBodies, gotBody)
+		switch len(gotBodies) {
+		case 1:
+			_, _ = w.Write([]byte(`{"data":{"widgets":{"nodes":[{"id":"w1","name":"One","updated_at":"2026-07-07T00:00:00Z"}],"pageInfo":{"hasNextPage":true,"endCursor":"cursor-2"}}}}`))
+		default:
+			_, _ = w.Write([]byte(`{"data":{"widgets":{"nodes":[{"id":"w2","name":"Two","updated_at":"2026-07-08T00:00:00Z"}],"pageInfo":{"hasNextPage":false,"endCursor":null}}}}`))
+		}
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Method: http.MethodPost,
+		Path:   "/graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "query ListWidgets($after: String) { widgets(after: $after) { nodes { id name updated_at } pageInfo { hasNextPage endCursor } } }",
+			OperationName: "ListWidgets",
+			Variables: map[string]any{
+				"after": map[string]any{"template": "{{ cursor }}", "omit_when_empty": true},
+			},
+		},
+		Records: RecordsSpec{Path: "data.widgets.nodes"},
+		Pagination: &PaginationSpec{
+			Type:        "cursor",
+			CursorParam: "after",
+			TokenPath:   "data.widgets.pageInfo.endCursor",
+			StopPath:    "data.widgets.pageInfo.hasNextPage",
+		},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(gotBodies) != 2 {
+		t.Fatalf("request count = %d, want 2", len(gotBodies))
+	}
+	firstVars, ok := gotBodies[0]["variables"].(map[string]any)
+	if !ok {
+		t.Fatalf("first variables = %#v, want object", gotBodies[0]["variables"])
+	}
+	if _, present := firstVars["after"]; present {
+		t.Fatalf("first variables = %#v, want after omitted on first page", firstVars)
+	}
+	secondVars := gotBodies[1]["variables"].(map[string]any)
+	if secondVars["after"] != "cursor-2" {
+		t.Fatalf("second variables.after = %#v, want cursor-2", secondVars["after"])
+	}
+	if len(records) != 2 {
+		t.Fatalf("records = %+v, want two records", records)
+	}
+}
+
+func TestReadGraphQLErrorsFailClosed(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, _ = io.Copy(io.Discard, r.Body)
+		_, _ = w.Write([]byte(`{"errors":[{"message":"rate limit"}],"data":{"widgets":{"nodes":[]}}}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Method: http.MethodPost,
+		Path:   "/graphql",
+		GraphQL: &GraphQLRequestSpec{
+			Document:      "query ListWidgets { widgets { nodes { id } } }",
+			OperationName: "ListWidgets",
+		},
+		Records: RecordsSpec{Path: "data.widgets.nodes"},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err == nil {
+		t.Fatalf("Read: want GraphQL errors[] to fail closed")
+	}
+	if !strings.Contains(strings.ToLower(err.Error()), "graphql") || !strings.Contains(err.Error(), "rate limit") {
+		t.Fatalf("error = %q, want GraphQL error details", err.Error())
 	}
 }
 
@@ -339,6 +625,30 @@ func TestReadIncrementalLowerBoundFromStateCursor(t *testing.T) {
 	}
 	if gotSince != "2026-01-01T00:00:00Z" {
 		t.Fatalf("since = %q, want 2026-01-01T00:00:00Z", gotSince)
+	}
+}
+
+func TestReadIncrementalRequestParamOverridesRequestQueryCollision(t *testing.T) {
+	var gotSince string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotSince = r.URL.Query().Get("since")
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Incremental: &IncrementalSpec{CursorField: "updated_at", RequestParam: "since", ParamFormat: "rfc3339"},
+	})
+
+	req := connectors.ReadRequest{
+		Stream: "widgets",
+		State:  map[string]string{"cursor": "2026-01-01T00:00:00Z"},
+		Query:  map[string]string{"since": "2025-01-01T00:00:00Z"},
+	}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotSince != "2026-01-01T00:00:00Z" {
+		t.Fatalf("since = %q, want cursor value to override request query collision", gotSince)
 	}
 }
 

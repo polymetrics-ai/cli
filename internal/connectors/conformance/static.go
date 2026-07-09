@@ -65,6 +65,36 @@ var surfaceCategories = map[string]bool{
 	"out_of_scope":            true,
 }
 
+var surfaceOperationModels = map[string]bool{
+	"direct_read":           true,
+	"binary_read":           true,
+	"sensitive_reverse_etl": true,
+	"admin_reverse_etl":     true,
+	"destructive_action":    true,
+	"local_workflow":        true,
+	"duplicate":             true,
+	"deprecated":            true,
+	"disallowed":            true,
+}
+
+var surfaceOperationStatuses = map[string]bool{
+	"blocked": true,
+}
+
+var surfaceOperationRisks = map[string]bool{
+	"low":      true,
+	"medium":   true,
+	"high":     true,
+	"critical": true,
+}
+
+var sourceRequiredOperationModels = map[string]bool{
+	"sensitive_reverse_etl": true,
+	"admin_reverse_etl":     true,
+	"destructive_action":    true,
+	"disallowed":            true,
+}
+
 // mutationMethods are the HTTP verbs api_surface rule 4 treats as write
 // endpoints for the fail-first-run capabilities.write check.
 var mutationMethods = map[string]bool{
@@ -208,6 +238,11 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 				return fmt.Errorf("stream %q: %w", s.Name, err)
 			}
 		}
+		if s.GraphQL != nil {
+			if err := engine.ResolveCheckGraphQLVariables(s.GraphQL.Variables, specKeys); err != nil {
+				return fmt.Errorf("stream %q: %w", s.Name, err)
+			}
+		}
 		for _, v := range s.ComputedFields {
 			if err := check(v); err != nil {
 				return fmt.Errorf("stream %q: %w", s.Name, err)
@@ -217,6 +252,11 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 	for _, w := range b.Writes {
 		if err := check(w.Path); err != nil {
 			return fmt.Errorf("write action %q: %w", w.Name, err)
+		}
+		if w.GraphQL != nil {
+			if err := engine.ResolveCheckGraphQLVariables(w.GraphQL.Variables, specKeys); err != nil {
+				return fmt.Errorf("write action %q: %w", w.Name, err)
+			}
 		}
 	}
 	return nil
@@ -237,10 +277,11 @@ func checkWriteSchemasValid(b engine.Bundle) error {
 }
 
 // checkSurfaceComplete enforces design §E.1 rules 1-4: every endpoint has
-// exactly one of covered_by/excluded; covered_by resolves to a declared
-// stream/action and every declared stream/action appears in the surface;
-// excluded.category is from the closed vocabulary; capabilities.write/read
-// == false is only legal when the surface has no non-excluded mutation/GET
+// exactly one executable covered_by row or an explicit blocked non-executable
+// classifier; covered_by resolves to a declared stream/action/direct-read
+// command and every declared stream/action appears in the surface;
+// excluded/operation classifiers use closed vocabularies; capabilities.write/read
+// == false is only legal when the surface has no executable mutation/GET
 // endpoint respectively.
 func checkSurfaceComplete(b engine.Bundle) error {
 	if b.Surface == nil {
@@ -255,21 +296,40 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	for _, w := range b.Writes {
 		writes[w.Name] = true
 	}
+	directReads := map[string]bool{}
+	if b.CLISurface != nil {
+		for _, cmd := range b.CLISurface.Commands {
+			if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+				directReads[cmd.Path] = true
+			}
+		}
+	}
 
 	coveredStreams := map[string]bool{}
 	coveredWrites := map[string]bool{}
 	hasNonExcludedGET := false
 	hasNonExcludedMutation := false
+	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "")
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "" || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
 		hasExcluded := ep.Excluded != nil
+		hasOperation := ep.Operation != nil
+
+		if ledgerMode && hasExcluded {
+			return fmt.Errorf("endpoint %d (%s %s) uses legacy excluded in operation_ledger_version mode", i, ep.Method, ep.Path)
+		}
+		if !ledgerMode && hasOperation {
+			return fmt.Errorf("endpoint %d (%s %s) uses operation without operation_ledger_version", i, ep.Method, ep.Path)
+		}
 
 		switch {
-		case hasCovered && hasExcluded:
-			return fmt.Errorf("endpoint %d (%s %s) has both covered_by and excluded", i, ep.Method, ep.Path)
-		case !hasCovered && !hasExcluded:
-			return fmt.Errorf("endpoint %d (%s %s) has neither covered_by nor excluded", i, ep.Method, ep.Path)
+		case hasCovered && (hasExcluded || hasOperation):
+			return fmt.Errorf("endpoint %d (%s %s) has covered_by plus another classifier", i, ep.Method, ep.Path)
+		case !hasCovered && !hasExcluded && !hasOperation:
+			return fmt.Errorf("endpoint %d (%s %s) has no classifier", i, ep.Method, ep.Path)
+		case ledgerMode && hasOperation && hasExcluded:
+			return fmt.Errorf("endpoint %d (%s %s) has both operation and excluded", i, ep.Method, ep.Path)
 		case hasCovered:
 			if ep.CoveredBy.Stream != "" {
 				if !streams[ep.CoveredBy.Stream] {
@@ -283,6 +343,14 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				}
 				coveredWrites[ep.CoveredBy.Write] = true
 			}
+			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
+				if !directReads[directRead] {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead)
+				}
+				if !strings.EqualFold(ep.Method, "GET") {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path)
+				}
+			}
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
@@ -292,6 +360,10 @@ func checkSurfaceComplete(b engine.Bundle) error {
 		case hasExcluded:
 			if !surfaceCategories[ep.Excluded.Category] {
 				return fmt.Errorf("endpoint %d (%s %s) excluded.category %q is not in the closed vocabulary", i, ep.Method, ep.Path, ep.Excluded.Category)
+			}
+		case hasOperation:
+			if err := checkSurfaceOperation(i, ep); err != nil {
+				return err
 			}
 		}
 	}
@@ -317,6 +389,38 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	return nil
 }
 
+func checkSurfaceOperation(i int, ep engine.SurfaceEndpoint) error {
+	op := ep.Operation
+	if op == nil {
+		return nil
+	}
+	prefix := fmt.Sprintf("endpoint %d (%s %s)", i, ep.Method, ep.Path)
+	if !surfaceOperationModels[op.Model] {
+		return fmt.Errorf("%s operation.model %q is not in the closed vocabulary", prefix, op.Model)
+	}
+	if !surfaceOperationStatuses[op.Status] {
+		return fmt.Errorf("%s operation.status %q is not in the closed vocabulary", prefix, op.Status)
+	}
+	if !surfaceOperationRisks[op.Risk] {
+		return fmt.Errorf("%s operation.risk %q is not in the closed vocabulary", prefix, op.Risk)
+	}
+	if !op.BlockedByDefault {
+		return fmt.Errorf("%s operation.blocked_by_default must be true", prefix)
+	}
+	if strings.TrimSpace(op.Reason) == "" {
+		return fmt.Errorf("%s operation.reason is required", prefix)
+	}
+	if op.Model == "duplicate" && strings.TrimSpace(op.DuplicateOf) == "" {
+		return fmt.Errorf("%s operation.duplicate_of is required for duplicate rows", prefix)
+	}
+	if sourceRequiredOperationModels[op.Model] &&
+		strings.TrimSpace(op.SourceURL) == "" &&
+		strings.TrimSpace(op.Notes) == "" {
+		return fmt.Errorf("%s operation.source_url or operation.notes is required for sensitive/admin/destructive/disallowed rows", prefix)
+	}
+	return nil
+}
+
 // checkDocsPresent enforces the fixed docs.md heading set (design §F.6).
 // Headings are matched as Markdown "#"/"##" lines by exact (trimmed) text.
 func checkDocsPresent(b engine.Bundle) error {
@@ -335,6 +439,17 @@ func checkDocsPresent(b engine.Bundle) error {
 		}
 	}
 	return nil
+}
+
+func coveredDirectReadTargets(covered *engine.SurfaceCoverage) []string {
+	if covered == nil {
+		return nil
+	}
+	targets := append([]string{}, covered.DirectReads...)
+	if covered.DirectRead != "" {
+		targets = append(targets, covered.DirectRead)
+	}
+	return targets
 }
 
 // checkSecretRedaction scans docs.md and every fixture file's raw bytes for

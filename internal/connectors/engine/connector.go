@@ -82,6 +82,10 @@ func (c *Connector) Definition() connectors.Definition {
 	return synthesizeDefinition(c.bundle)
 }
 
+func (c *Connector) CommandSurface() *connectors.CommandSurface {
+	return synthesizeCommandSurface(c.bundle)
+}
+
 func (c *Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
 	return Check(ctx, c.bundle, cfg, c.hooks)
 }
@@ -102,6 +106,10 @@ func (c *Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (
 
 func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	return Read(ctx, c.bundle, req, c.hooks, emit)
+}
+
+func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
+	return DirectRead(ctx, c.bundle, req, c.hooks)
 }
 
 // InitialState satisfies connectors.StatefulReader by delegating to the
@@ -162,6 +170,10 @@ func (b Base) Metadata() connectors.Metadata {
 
 func (b Base) Definition() connectors.Definition {
 	return synthesizeDefinition(b.bundle)
+}
+
+func (b Base) CommandSurface() *connectors.CommandSurface {
+	return synthesizeCommandSurface(b.bundle)
 }
 
 // synthesizeMetadata is the single source of truth for bundle -> Metadata,
@@ -230,6 +242,7 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			Method:         a.Method,
 			Path:           a.Path,
 			Risk:           a.Risk,
+			Confirm:        a.Confirm,
 		})
 	}
 
@@ -295,6 +308,88 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 			Write:    b.Metadata.Risk.Write,
 			Approval: b.Metadata.Risk.Approval,
 		},
+	}
+}
+
+func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
+	if b.CLISurface == nil {
+		return nil
+	}
+	surface := b.CLISurface
+	out := &connectors.CommandSurface{
+		Tagline:     surface.Tagline,
+		Usage:       surface.Usage,
+		Groups:      make([]connectors.CommandSurfaceGroup, 0, len(surface.Groups)),
+		GlobalFlags: make([]connectors.CommandSurfaceFlag, 0, len(surface.GlobalFlags)),
+		Commands:    make([]connectors.CommandSurfaceCommand, 0, len(surface.Commands)),
+		HelpTopics:  make([]connectors.CommandSurfaceHelpTopic, 0, len(surface.HelpTopics)),
+	}
+	if surface.SourceCLI != nil {
+		out.SourceCLI = &connectors.CommandSurfaceSource{
+			Name:      surface.SourceCLI.Name,
+			Docs:      surface.SourceCLI.Docs,
+			Reference: surface.SourceCLI.Reference,
+			Source:    surface.SourceCLI.Source,
+		}
+	}
+	for _, group := range surface.Groups {
+		out.Groups = append(out.Groups, connectors.CommandSurfaceGroup{
+			ID:       group.ID,
+			Title:    group.Title,
+			Commands: append([]string(nil), group.Commands...),
+		})
+	}
+	for _, flag := range surface.GlobalFlags {
+		out.GlobalFlags = append(out.GlobalFlags, commandSurfaceFlag(flag))
+	}
+	for _, cmd := range surface.Commands {
+		flags := make([]connectors.CommandSurfaceFlag, 0, len(cmd.Flags))
+		for _, flag := range cmd.Flags {
+			flags = append(flags, commandSurfaceFlag(flag))
+		}
+		out.Commands = append(out.Commands, connectors.CommandSurfaceCommand{
+			Path:          cmd.Path,
+			Summary:       cmd.Summary,
+			Intent:        cmd.Intent,
+			Availability:  cmd.Availability,
+			Stream:        cmd.Stream,
+			Write:         cmd.Write,
+			Operation:     cmd.Operation,
+			SourceCLIPath: cmd.SourceCLIPath,
+			SourceURL:     cmd.SourceURL,
+			Flags:         flags,
+			Examples:      append([]string(nil), cmd.Examples...),
+			APISurface:    commandSurfaceEndpointRefs(cmd.APISurface),
+			OutputPolicy:  cmd.OutputPolicy,
+			Risk:          cmd.Risk,
+			Approval:      cmd.Approval,
+			Notes:         cmd.Notes,
+		})
+	}
+	for _, topic := range surface.HelpTopics {
+		out.HelpTopics = append(out.HelpTopics, connectors.CommandSurfaceHelpTopic{
+			Name:    topic.Name,
+			Summary: topic.Summary,
+		})
+	}
+	return out
+}
+
+func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.CommandSurfaceEndpointRef {
+	out := make([]connectors.CommandSurfaceEndpointRef, 0, len(refs))
+	for _, ref := range refs {
+		out = append(out, connectors.CommandSurfaceEndpointRef{Method: ref.Method, Path: ref.Path})
+	}
+	return out
+}
+
+func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
+	return connectors.CommandSurfaceFlag{
+		Name:    flag.Name,
+		Type:    flag.Type,
+		Summary: flag.Summary,
+		Values:  append([]string(nil), flag.Values...),
+		MapsTo:  flag.MapsTo,
 	}
 }
 

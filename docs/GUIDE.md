@@ -270,10 +270,13 @@ pm connectors inspect stripe --json
 **118 native connectors** are implemented today (a `646`-connector catalog is the
 roadmap). A few notes:
 
-- **GitHub** (`github`) — public reads need no token; private/higher-rate-limit reads
-  use a classic/fine-grained PAT, OAuth token, Actions `GITHUB_TOKEN`, an installation
-  token, or a GitHub App (auto-signs a JWT → installation token). Full read streams +
-  reverse-ETL write actions.
+- **GitHub** (`github`) — full certification passed for the current connector surface:
+  509 API endpoints accounted, 37 catalog streams, 2 direct-read command families, and
+  231 write actions accounted. Public reads need no token; private/higher-rate-limit
+  reads use a classic/fine-grained PAT, OAuth token, Actions `GITHUB_TOKEN`, an
+  installation token, or a GitHub App (auto-signs a JWT → installation token). The
+  safe `create_label` write lifecycle passed with read-back and cleanup; other writes
+  remain approval-gated and are either safe untested pairings or blocked by policy.
 - **Stripe** (`stripe`) — Bearer (secret key) auth, cursor pagination, core CRM/billing
   streams, plus `create_customer` / `update_customer` writes.
 - **Postgres** (`postgres`) — connects via `pgx`; discovers schemas/columns; snapshot +

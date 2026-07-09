@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ExternalLink } from 'lucide-react';
-import type { ConnectorDocLink } from '@/lib/connectors.catalog.generated';
+import type { ConnectorDocLink } from '@/lib/connectors.types';
 import { Card } from '@/components/ui/card';
 
 interface DocLinksProps {

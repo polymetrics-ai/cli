@@ -2,7 +2,24 @@
 
 This repository uses GSD-style local programming loops for implementation phases.
 
-Use this prompt family when asking Codex, Claude, or another implementation agent to execute a scoped phase.
+Use this prompt family when asking Codex, Claude, Pi, or another implementation agent to execute a scoped phase.
+
+Runtime adapters:
+
+- Claude Code: `/gsd:programming-loop` is the reference command shape. It uses a lean in-session
+  orchestrator and worker subagents.
+- Codex: `.codex/agents/gsd-loop-orchestrator.toml` and
+  `.agents/agentic-delivery/workflows/codex-active-orchestration-loop.md` mirror the same loop.
+  Codex subagents are explicit, so parent issue prompts must say to spawn the orchestrator/workers.
+- OpenCode: `.opencode/agents/gsd-loop-orchestrator.md` and
+  `.opencode/commands/gsd-programming-loop.md` mirror the same loop with project-local agents.
+- Pi: `.pi/prompts/pm-orchestrate.md`, `.pi/prompts/pm-gsd-loop.md`, and
+  `.pi/prompts/pm-review-loop.md` mirror the same loop, with `.pi/agents/pm-scout.md`,
+  `.pi/agents/pm-reviewer.md`, and `.pi/agents/pm-gsd-worker.md` as the subagent roster. Launch
+  with `pi --tools read,bash,edit,write,grep,find,ls,subagent --approve`.
+- All runtimes: `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` is the shared
+  contract. Use `.agents/skills/caveman/SKILL.md` for compact status and handoffs.
+  The GSD helper scripts are preflight/gate tools only; they never count as worker orchestration.
 
 ## Base Prompt
 
@@ -22,8 +39,15 @@ Required context:
 - Read the phase artifacts under .planning/phases/<phase>/
 
 Rules:
-- Use workflow.use_worktrees=false.
+- Keep coordinator edits in the active checkout. For parent issue fan-out, every mutating worker
+  needs its own isolated worktree or working directory before spawn; read-only workers may share the
+  checkout.
 - Use workflow.tdd_mode=true.
+- For parent issues with ready sub-issues, keep orchestration active: spawn or assign all
+  independent ready workers up to runtime limits, or record why no worker can run.
+- After the preflight script returns, the live agent must immediately make a spawn decision:
+  `spawned`, `read_only_spawned`, `local_critical_path`, or one `not_spawned_*` blocker. A script
+  status alone is not progress.
 - Start with a red test or validation artifact for behavior changes.
 - Keep Go code simple, explicit, context-aware, and testable.
 - Keep secrets out of logs, prompt output, JSON responses, and test fixtures.
@@ -54,10 +78,35 @@ Canonical prompts for the GSD Universal Programming Loop roles in this milestone
 
 | Role | Model |
 |---|---|
-| gsd-loop-coordinator, gsd-loop-planner, gsd-loop-reviewer, gsd-planner | `fable` |
-| gsd-loop-backend, gsd-loop-tester, gsd-loop-security, gsd-loop-reliability-observability, gsd-plan-checker, gsd-verifier, gsd-executor, gsd-debugger | `sonnet` (Sonnet 5) |
+| all GSD loop roles | `gpt-5.5` with `xhigh` reasoning effort |
 
 Overrides live in `.planning/config.json` `model_overrides`.
+
+### Model routing (cost efficiency)
+
+Not every task needs the most capable model. Prototype on `gpt-5.5:xhigh` to establish a baseline,
+then route cheaper models to recon/classification once evals pass. Pi agent frontmatter sets
+per-agent `model` and `thinking` (see the `pi-sub-agent` README); Codex/OpenCode pick up the
+`model_overrides` entries below:
+
+| Pi agent / override key | Model | Rationale |
+|---|---|---|
+| `pm-scout` | `gpt-5.4-mini:high` | Read-only recon is cheap; smaller model is sufficient. |
+| `pm-gsd-worker` | `gpt-5.5:high` | Implementation needs capability but not orchestrator-grade reasoning. |
+| `pm-reviewer` | `gpt-5.5:xhigh` | Adversarial review benefits from deepest reasoning. |
+| orchestrator (`/pm-orchestrate`) | `gpt-5.5:xhigh` (default) | Owns spawn/merge/review decisions; inherit default. |
+
+Record an eval baseline note in the phase `VERIFICATION.md` before downgrading a role further.
+
+## Runtime policy
+
+The GSD loop is runtime-neutral. Claude, Codex, OpenCode, and Pi adapters must point back to
+`.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` instead of forking policy. For
+parent issues, the active parent orchestrator is mandatory when subagent tools are available and
+ready sub-issues have disjoint write scopes.
+
+Use `caveman` compact mode for orchestration status, worker prompts, and handoffs. Do not compress
+safety gates, code, commands, exact test output, or security warnings past clarity.
 
 ## Go skill policy (user directive: cc-skills-golang)
 
@@ -77,7 +126,7 @@ Every implementation/test/review prompt MUST name the skills to apply from
 ## Template: migration executor (Pass A bundle agent)
 
 ```text
-ROLE: Connector migration executor (gsd-loop-backend, model=sonnet). Migrate the connectors below
+ROLE: Connector migration executor (gsd-loop-backend, model=gpt-5.5:xhigh). Migrate the connectors below
 to the declarative architecture. Follow docs/migration/conventions.md EXACTLY. Deviations are
 defects. Apply cc-skills-golang skills: golang-code-style, golang-naming, golang-error-handling,
 golang-testing.
@@ -113,8 +162,7 @@ REPORT: structured JSON per docs/migration/result.schema.json. Report honestly; 
 ## Template: adversarial reviewer
 
 ```text
-ROLE: Adversarial reviewer (gsd-loop-reviewer, model=fable; sampled fan-out reviews may run
-sonnet). READ-ONLY. Review connectors <list> against docs/migration/conventions.md and each API's
+ROLE: Adversarial reviewer (gsd-loop-reviewer, model=gpt-5.5:xhigh). READ-ONLY. Review connectors <list> against docs/migration/conventions.md and each API's
 documentation_url (fetch it; spot-check 3 streams' schemas and EVERY write action's
 method/path/required fields). Apply cc-skills-golang GOLANG-AI-DRIVEN-REVIEW.md, golang-lint,
 golang-modernize. Check: schema fidelity, write-action correctness, fixture realism (not
@@ -125,7 +173,7 @@ Verdict JSON per docs/migration/review.schema.json.
 ## Template: repair agent
 
 ```text
-ROLE: Repair executor (gsd-loop-backend, model=sonnet). The wave gate failed for your bundle.
+ROLE: Repair executor (gsd-loop-backend, model=gpt-5.5:xhigh). The wave gate failed for your bundle.
 Original task: <original prompt>. Gate/review failure log: <log>. Fix root cause; never weaken
 tests or gates. Same FORBIDDEN and SELF-VERIFY rules as the original task.
 ```
@@ -133,7 +181,7 @@ tests or gates. Same FORBIDDEN and SELF-VERIFY rules as the original task.
 ## Template: capability-expansion agent (Pass B)
 
 ```text
-ROLE: Capability expansion executor (gsd-loop-backend, model=sonnet). For connector <name>:
+ROLE: Capability expansion executor (gsd-loop-backend, model=gpt-5.5:xhigh). For connector <name>:
 1) From <documentation_url> (+ official application docs), write
    internal/connectors/defs/<name>/api_surface.json — EVERY documented endpoint: method, path,
    covered_by {stream|write} XOR excluded {category, reason} (closed vocabulary in conventions).
@@ -148,4 +196,3 @@ ROLE: Capability expansion executor (gsd-loop-backend, model=sonnet). For connec
 Run the GSD Universal Programming Loop using the repo PRD
 (`docs/plans/universal-programming-loop-prd.md`), this prompt library, the strict TDD gate, local
 verification (`make verify` + golangci-lint), and committed phase traces.
-
