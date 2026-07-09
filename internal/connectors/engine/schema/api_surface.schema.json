@@ -58,8 +58,12 @@
               "model": {
                 "type": "string",
                 "enum": [
+                  "stream_etl",
+                  "query_etl",
                   "direct_read",
+                  "reverse_etl",
                   "binary_read",
+                  "binary_write",
                   "sensitive_reverse_etl",
                   "admin_reverse_etl",
                   "destructive_action",

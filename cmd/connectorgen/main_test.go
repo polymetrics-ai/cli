@@ -420,6 +420,68 @@ func TestValidate_HubSpotCLISurfaceMetadata(t *testing.T) {
 	}
 }
 
+func TestValidate_HubSpotOperationLedgerOfficialCounts(t *testing.T) {
+	defsRoot := filepath.Join("..", "..", "internal", "connectors", "defs")
+	raw, err := os.ReadFile(filepath.Join(defsRoot, "hubspot", "api_surface.json"))
+	if err != nil {
+		t.Fatalf("read hubspot api_surface.json: %v", err)
+	}
+	var surface struct {
+		OperationLedgerVersion int `json:"operation_ledger_version"`
+		Endpoints              []struct {
+			Method    string          `json:"method"`
+			Path      string          `json:"path"`
+			Excluded  json.RawMessage `json:"excluded"`
+			Operation *struct {
+				Model            string `json:"model"`
+				Status           string `json:"status"`
+				BlockedByDefault bool   `json:"blocked_by_default"`
+			} `json:"operation"`
+		} `json:"endpoints"`
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("unmarshal hubspot api_surface.json: %v", err)
+	}
+	if surface.OperationLedgerVersion != 1 {
+		t.Fatalf("operation_ledger_version = %d, want 1", surface.OperationLedgerVersion)
+	}
+	if len(surface.Endpoints) != 3060 {
+		t.Fatalf("HubSpot endpoint count = %d, want 3060", len(surface.Endpoints))
+	}
+
+	methodCounts := map[string]int{}
+	modelCounts := map[string]int{}
+	seen := map[string]bool{}
+	for i, ep := range surface.Endpoints {
+		key := strings.ToUpper(ep.Method) + " " + ep.Path
+		if seen[key] {
+			t.Fatalf("duplicate HubSpot endpoint %q", key)
+		}
+		seen[key] = true
+		methodCounts[strings.ToUpper(ep.Method)]++
+		if len(ep.Excluded) > 0 && string(ep.Excluded) != "null" {
+			t.Fatalf("HubSpot endpoint %d (%s) uses legacy excluded row in operation ledger", i, key)
+		}
+		if ep.Operation == nil {
+			t.Fatalf("HubSpot endpoint %d (%s) has no operation classifier", i, key)
+		}
+		if ep.Operation.Status != "blocked" || !ep.Operation.BlockedByDefault {
+			t.Fatalf("HubSpot endpoint %d (%s) operation is not safely blocked by default: %+v", i, key, ep.Operation)
+		}
+		modelCounts[ep.Operation.Model]++
+	}
+	for method, want := range map[string]int{"GET": 1038, "POST": 1314, "PUT": 169, "PATCH": 232, "DELETE": 307} {
+		if got := methodCounts[method]; got != want {
+			t.Fatalf("HubSpot %s count = %d, want %d; counts=%+v", method, got, want, methodCounts)
+		}
+	}
+	for _, wantModel := range []string{"stream_etl", "query_etl", "direct_read", "reverse_etl", "binary_read", "binary_write", "admin_reverse_etl", "destructive_action"} {
+		if modelCounts[wantModel] == 0 {
+			t.Fatalf("HubSpot operation ledger has no %q rows; model counts=%+v", wantModel, modelCounts)
+		}
+	}
+}
+
 func TestValidate_CLISurfaceRejectsCommandWithStreamAndOperation(t *testing.T) {
 	cliSurface := strings.ReplaceAll(
 		validOperationCLISurfaceJSON(),
@@ -482,6 +544,71 @@ func TestValidate_APISurfaceOperationLedgerValidRowsPassCleanly(t *testing.T) {
 	}
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for valid operation ledger, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_APISurfaceOperationLedgerAppCandidateModelsPassCleanly(t *testing.T) {
+	report, err := validateDir(operationLedgerBundleFS(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{
+				"method": "GET",
+				"path": "/candidate-widgets",
+				"operation": {
+					"model": "stream_etl",
+					"status": "blocked",
+					"risk": "low",
+					"blocked_by_default": true,
+					"reason": "collection stream candidate; execution lands in the stream runner lane",
+					"notes": "test row"
+				}
+			},
+			{
+				"method": "POST",
+				"path": "/widgets/search",
+				"operation": {
+					"model": "query_etl",
+					"status": "blocked",
+					"risk": "low",
+					"blocked_by_default": true,
+					"reason": "POST query candidate; execution requires fixed body schema",
+					"notes": "test row"
+				}
+			},
+			{
+				"method": "PATCH",
+				"path": "/widgets/{id}",
+				"operation": {
+					"model": "reverse_etl",
+					"status": "blocked",
+					"risk": "medium",
+					"blocked_by_default": true,
+					"reason": "mutation candidate; execution requires named writes.json action",
+					"notes": "test row"
+				}
+			},
+			{
+				"method": "POST",
+				"path": "/files/upload",
+				"operation": {
+					"model": "binary_write",
+					"status": "blocked",
+					"risk": "high",
+					"blocked_by_default": true,
+					"reason": "file upload candidate; execution requires bounded file policy",
+					"notes": "test row"
+				}
+			}
+		]
+	}`))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for app candidate operation ledger models, got %+v", report.Findings)
 	}
 }
 

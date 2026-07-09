@@ -51,6 +51,13 @@ Issue #134 passed targeted and broad gates:
 - Updated connector counts for the 548th declarative bundle.
 - Cached declarative bundle loading inside `bundleregistry.New()` so cold full-suite tests stay under the default package timeout while callers still receive fresh registries.
 
+Issue #137 operation-ledger evidence:
+
+- Red tests failed before production edits for missing HubSpot 3,060-operation ledger and missing `stream_etl` operation-model schema support.
+- Green tests passed after generating the official ledger from HubSpot public OpenAPI specs and extending blocked-candidate model vocabulary.
+- Full gate command passed: `gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify && go run ./cmd/connectorgen validate internal/connectors/defs`.
+- Ledger totals: 401 OpenAPI files, 4,396 raw versioned operations, 3,060 unique method/path operations; GET 1,038, POST 1,314, PUT 169, PATCH 232, DELETE 307.
+
 ## Safety/TDD notes
 
 - Do not use credentials.

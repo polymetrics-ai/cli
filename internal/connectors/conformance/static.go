@@ -66,8 +66,12 @@ var surfaceCategories = map[string]bool{
 }
 
 var surfaceOperationModels = map[string]bool{
+	"stream_etl":            true,
+	"query_etl":             true,
 	"direct_read":           true,
+	"reverse_etl":           true,
 	"binary_read":           true,
+	"binary_write":          true,
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
 	"destructive_action":    true,
@@ -89,6 +93,10 @@ var surfaceOperationRisks = map[string]bool{
 }
 
 var sourceRequiredOperationModels = map[string]bool{
+	"stream_etl":            true,
+	"query_etl":             true,
+	"reverse_etl":           true,
+	"binary_write":          true,
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
 	"destructive_action":    true,

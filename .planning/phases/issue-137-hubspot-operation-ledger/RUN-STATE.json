@@ -1,0 +1,82 @@
+{
+  "phase": "issue-137-hubspot-operation-ledger",
+  "parent_issue": 132,
+  "issue": 137,
+  "parent_branch": "feat/132-hubspot-cli-parity",
+  "active_branch": "feat/137-hubspot-operation-ledger",
+  "stack_base": "feat/134-hubspot-cli-surface-metadata",
+  "runtime": "pi-api-harness",
+  "gsd": {
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json": "passed_69_commands",
+    "programming_loop_prompt": "blocked_unknown_command",
+    "fallback": "manual_universal_programming_loop_with_scripts_gsd_plan_phase_prompt"
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-graphql",
+    "golang-lint"
+  ],
+  "status": "sub_pr_green_review_blocked_auto_skipped",
+  "verificationPassed": true,
+  "verificationBlocker": "none",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "no subagent/isolation tool available; continue sequentially on stacked branch after #134 metadata scaffold"
+    },
+    {
+      "cycle": "tdd-red",
+      "decision": "local_critical_path",
+      "reason": "added failing HubSpot official ledger count test and app-candidate model validation test before production edits"
+    },
+    {
+      "cycle": "targeted-green",
+      "decision": "local_critical_path",
+      "reason": "generated full 3,060-operation HubSpot ledger and expanded blocked candidate model vocabulary; targeted tests and connectorgen/docs validation passed"
+    },
+    {
+      "cycle": "broad-gates",
+      "decision": "local_critical_path",
+      "reason": "kept conformance operation-model vocabulary in lockstep after broad test failure; final gofmt/vet/test/build/make verify/connectorgen validate passed"
+    },
+    {
+      "cycle": "sub_pr",
+      "decision": "opened_stacked_pr",
+      "reason": "opened https://github.com/polymetrics-ai/cli/pull/239 against #134 branch because #137 depends on #134 scaffold"
+    },
+    {
+      "cycle": "automated_review",
+      "decision": "blocked_auto_skipped_no_review_artifact",
+      "reason": "CodeRabbit auto skipped stacked PR because base is non-default; Copilot reviewer API request returned no active reviewer; coverage must route through parent PR after integration or human fallback"
+    },
+    {
+      "cycle": "remote_checks",
+      "decision": "green",
+      "reason": "PR #239 remote checks succeeded: verify, GSD evidence, issue guard, branch/title, govulncheck, CodeQL, Dependency Review"
+    }
+  ],
+  "human_gates": [
+    "new dependencies",
+    "live HubSpot credentials or live API checks",
+    "auth scope changes",
+    "destructive/admin external actions",
+    "reverse ETL execution",
+    "binary transfer runtime enablement without explicit destination policy",
+    "generic raw write tools"
+  ],
+  "updated_at": "2026-07-09T20:51:14Z"
+}
