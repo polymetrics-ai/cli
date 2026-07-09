@@ -22,17 +22,17 @@
   "ready_queue": [
     {
       "number": 205,
-      "status": "worker_ready",
+      "status": "full_local_green",
       "dependencies": [],
-      "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold plus issue-205 planning",
+      "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold, generated connector docs/catalog, catalog-count tests/help text, plus issue-205 planning",
       "decision": "local_critical_path"
     },
     {
       "number": 208,
-      "status": "planned",
+      "status": "worker_ready",
       "dependencies": [205],
       "write_scope": "internal/connectors/defs/crisp/api_surface.json operation ledger",
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "ready_after_205_green"
     },
     {
       "number": 207,
@@ -91,10 +91,10 @@
       "branch": "feat/205-crisp-cli-surface-metadata",
       "pr_url": "",
       "worker": "local-critical-path",
-      "status": "worker_ready",
-      "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold plus issue-205 planning",
-      "worker_directory": "current checkout until stacked branch/worktree is created",
-      "verification": "pending",
+      "status": "full_local_green",
+      "write_scope": "internal/connectors/defs/crisp metadata/api/cli surface scaffold, generated connector docs/catalog, catalog-count tests/help text, plus issue-205 planning",
+      "worker_directory": "current checkout on feat/205-crisp-cli-surface-metadata",
+      "verification": "passed: temp-root connectorgen validate, all-defs connectorgen validate, conformance smoke, connectors inspect/docs smokes, make verify",
       "automated_review": {
         "primary_route": "blocked",
         "status": "pending",
@@ -116,5 +116,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T00:10:00Z"
+  "updated_at": "2026-07-10T02:20:00Z"
 }

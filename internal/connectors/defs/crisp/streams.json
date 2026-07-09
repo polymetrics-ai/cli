@@ -1,0 +1,40 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ secrets.identifier }}",
+        "password": "{{ secrets.key }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/v1/website/{{ config.website_id }}"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "class": "auth",
+        "hint": "Crisp credentials are missing or invalid; re-run pm credentials add crisp from environment variables or stdin."
+      },
+      {
+        "status": 403,
+        "class": "auth",
+        "hint": "Crisp credential scope does not allow this operation."
+      },
+      {
+        "status": 404,
+        "class": "not_found",
+        "hint": "Crisp website or resource was not found."
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "Crisp API rate limit exceeded; retry after the provider window."
+      }
+    ]
+  },
+  "streams": []
+}
