@@ -40,3 +40,25 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
 Results: all passed. Current Help Scout operation coverage: 145 endpoint rows, 73 JSON direct-read commands, 66 typed reverse-ETL writes, 4 stream commands, 2 bounded binary operation rows.
+
+### Red/green — Help renderer
+
+Red:
+
+```bash
+go test ./internal/cli -run TestHelpScoutConnectorNamespaceRendersCommandSurfaceHelp
+```
+
+Result: failed because `pm help help-scout`, `pm help-scout`, and `pm help-scout --help` returned missing-help/missing-path errors.
+
+Green:
+
+```bash
+go test ./internal/cli -run 'HelpScoutConnectorNamespaceRendersCommandSurfaceHelp|HelpScoutCommandSurface|Manual'
+go build ./cmd/pm
+./pm help help-scout
+./pm help-scout
+./pm help-scout --help
+```
+
+Result: passed; connector namespace/help now renders the connector manual and command surface without credentials.

@@ -238,6 +238,10 @@ ACTIONS
   help <name>
     Alias for the human connector manual.
 
+  <connector>
+    A bare connector command with a command surface, such as pm github or
+    pm help-scout, renders that connector's manual and command summary.
+
 EXAMPLES
   pm connectors
   pm connectors --json
@@ -246,6 +250,8 @@ EXAMPLES
   pm connectors catalog --capability write --stage generally_available --json
   pm connectors inspect github
   pm connectors inspect github --json
+  pm github
+  pm help-scout
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem

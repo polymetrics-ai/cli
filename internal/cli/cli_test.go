@@ -545,6 +545,29 @@ func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 	}
 }
 
+func TestHelpScoutConnectorNamespaceRendersCommandSurfaceHelp(t *testing.T) {
+	tests := [][]string{
+		{"help", "help-scout"},
+		{"help-scout"},
+		{"help-scout", "--help"},
+	}
+	for _, args := range tests {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr = %s stdout = %s", args, code, stderr.String(), stdout.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{"Help Scout", "COMMAND SURFACE", "conversations reply create", "customers get"} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("Help Scout help missing %q:\n%s", want, out)
+				}
+			}
+		})
+	}
+}
+
 func TestHelpScoutCommandSurfaceRunsJSONDirectRead(t *testing.T) {
 	var gotTokenPath, gotReadPath, gotAuth string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
