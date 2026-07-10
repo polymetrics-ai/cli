@@ -1,9 +1,11 @@
 # Claude Review Rubric — polymetrics-ai/cli
 
-Claude reads this on every `@claude` review. Keep it short and high-signal.
-This reviewer is **on-demand and complementary** to CodeRabbit (primary auto-review)
-and Copilot (fallback) — spend effort where an LLM that has read the *whole codebase*
-adds value, not on style nits the linters and CodeRabbit already catch.
+Claude reads this on every review — automatically when a trusted author opens a PR,
+and on-demand when someone comments `@claude`. Claude is the **primary reviewer** for
+this repo, so be thorough: cover correctness, design, and tests. Lean on the linters
+(`golangci-lint`, `go vet`) for pure style so you can spend attention where an LLM that
+has read the *whole codebase* adds the most value — but never skip a real issue just
+because it looks like a lint nit.
 
 ## 0. Load context first (don't review the diff blind)
 - Read `CLAUDE.md`, `AGENTS.md`, and the relevant `.agents/*` contract files.
