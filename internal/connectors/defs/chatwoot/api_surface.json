@@ -27,25 +27,15 @@
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_account"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/actions/contact_merge",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "contact merge can irreversibly combine records; blocked until typed destructive reverse-ETL semantics and confirmation are implemented.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "merge_contact"
       }
     },
     {
@@ -58,13 +48,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/agent_bots",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_agent_bot"
       }
     },
     {
@@ -77,25 +62,15 @@
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_agent_bot"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_agent_bot"
       }
     },
     {
@@ -108,37 +83,22 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/agents",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_agent"
       }
     },
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/agents/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_agent"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/agents/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_agent"
       }
     },
     {
@@ -158,13 +118,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/automation_rules",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_automation_rule"
       }
     },
     {
@@ -177,25 +132,15 @@
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_automation_rule"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_automation_rule"
       }
     },
     {
@@ -208,37 +153,22 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/canned_responses",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_canned_response"
       }
     },
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_canned_response"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/canned_responses/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_canned_response"
       }
     },
     {
@@ -258,13 +188,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/contacts/filter",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "filter_contacts"
       }
     },
     {
@@ -291,25 +216,15 @@
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/contacts/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_contact"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/contacts/{id}/contact_inboxes",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_contact_inbox"
       }
     },
     {
@@ -336,13 +251,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "set_contact_labels"
       }
     },
     {
@@ -362,13 +272,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/conversations/filter",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "filter_conversations"
       }
     },
     {
@@ -388,37 +293,22 @@
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_conversation"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/assignments",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "assign_conversation"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/custom_attributes",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_conversation_custom_attributes"
       }
     },
     {
@@ -431,13 +321,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "set_conversation_labels"
       }
     },
     {
@@ -457,13 +342,8 @@
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages/{message_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_conversation_message"
       }
     },
     {
@@ -476,13 +356,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_priority",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "toggle_conversation_priority"
       }
     },
     {
@@ -514,13 +389,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_custom_attribute_definition"
       }
     },
     {
@@ -533,25 +403,15 @@
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_custom_attribute_definition"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_custom_attribute_definition"
       }
     },
     {
@@ -564,13 +424,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/custom_filters",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_custom_filter"
       }
     },
     {
@@ -583,61 +438,36 @@
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_custom_filter"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_custom_filter"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/inbox_members",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_inbox_member"
       }
     },
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/inbox_members",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_inbox_member"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/inbox_members",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_inbox_member"
       }
     },
     {
@@ -657,13 +487,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/inboxes",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_inbox"
       }
     },
     {
@@ -676,13 +501,8 @@
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_inbox"
       }
     },
     {
@@ -695,13 +515,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/inboxes/{id}/set_agent_bot",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "set_inbox_agent_bot"
       }
     },
     {
@@ -714,37 +529,22 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/integrations/hooks",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_integration_hook"
       }
     },
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_integration_hook"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/integrations/hooks/{hook_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_integration_hook"
       }
     },
     {
@@ -771,25 +571,15 @@
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/labels/{id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "product-data mutation candidate; blocked until a named reverse-ETL action declares exact schema, path fields, risk text, preview, and approval.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_label"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/labels/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_label"
       }
     },
     {
@@ -802,49 +592,29 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/portals",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_portal"
       }
     },
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/portals/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_portal"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/portals/{id}/articles",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_portal_article"
       }
     },
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/portals/{id}/categories",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_portal_category"
       }
     },
     {
@@ -864,13 +634,8 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/teams",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_team"
       }
     },
     {
@@ -883,25 +648,15 @@
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_team"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_team"
       }
     },
     {
@@ -914,37 +669,22 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_team_member"
       }
     },
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_team_member"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_team_member"
       }
     },
     {
@@ -957,37 +697,22 @@
     {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/webhooks",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_webhook"
       }
     },
     {
       "method": "PATCH",
       "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "account/admin configuration mutation candidate; blocked until a named reverse-ETL action declares schema, scope, preview, approval, and typed confirmation where needed.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_webhook"
       }
     },
     {
       "method": "DELETE",
       "path": "/api/v1/accounts/{account_id}/webhooks/{webhook_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_webhook"
       }
     },
     {
@@ -1000,14 +725,8 @@
     {
       "method": "PUT",
       "path": "/api/v1/profile",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "profile/password/avatar mutation candidate; blocked until a named sensitive reverse-ETL action declares exact schema, risk text, preview, approval, and binary/file policy for multipart avatar payloads.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json",
-        "notes": "Multipart avatar/profile updates require the later bounded binary/file policy before any file-bearing action is exposed."
+      "covered_by": {
+        "write": "update_profile"
       }
     },
     {
@@ -1090,13 +809,8 @@
     {
       "method": "POST",
       "path": "/platform/api/v1/accounts",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_platform_account"
       }
     },
     {
@@ -1109,25 +823,15 @@
     {
       "method": "PATCH",
       "path": "/platform/api/v1/accounts/{account_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_platform_account"
       }
     },
     {
       "method": "DELETE",
       "path": "/platform/api/v1/accounts/{account_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_platform_account"
       }
     },
     {
@@ -1140,25 +844,15 @@
     {
       "method": "POST",
       "path": "/platform/api/v1/accounts/{account_id}/account_users",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_platform_account_user"
       }
     },
     {
       "method": "DELETE",
       "path": "/platform/api/v1/accounts/{account_id}/account_users",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_platform_account_user"
       }
     },
     {
@@ -1171,13 +865,8 @@
     {
       "method": "POST",
       "path": "/platform/api/v1/agent_bots",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_platform_agent_bot"
       }
     },
     {
@@ -1190,37 +879,22 @@
     {
       "method": "PATCH",
       "path": "/platform/api/v1/agent_bots/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_platform_agent_bot"
       }
     },
     {
       "method": "DELETE",
       "path": "/platform/api/v1/agent_bots/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_platform_agent_bot"
       }
     },
     {
       "method": "POST",
       "path": "/platform/api/v1/users",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_platform_user"
       }
     },
     {
@@ -1233,25 +907,15 @@
     {
       "method": "PATCH",
       "path": "/platform/api/v1/users/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Platform API administration mutation candidate; blocked until elevated-scope auth, typed schema, approval text, and audit policy are implemented.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_platform_user"
       }
     },
     {
       "method": "DELETE",
       "path": "/platform/api/v1/users/{id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "destructive deletion candidate; blocked until a named reverse-ETL action declares path fields, dry-run preview, destructive confirmation, and cleanup expectations.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "delete_platform_user"
       }
     },
     {
@@ -1271,13 +935,8 @@
     {
       "method": "POST",
       "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_public_inbox_contact"
       }
     },
     {
@@ -1290,13 +949,8 @@
     {
       "method": "PATCH",
       "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_public_inbox_contact"
       }
     },
     {
@@ -1309,13 +963,8 @@
     {
       "method": "POST",
       "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_public_inbox_contact_conversation"
       }
     },
     {
@@ -1335,37 +984,22 @@
     {
       "method": "POST",
       "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "create_public_inbox_contact_conversation_message"
       }
     },
     {
       "method": "PATCH",
       "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages/{message_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "update_public_inbox_contact_conversation_message"
       }
     },
     {
       "method": "POST",
       "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/toggle_status",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Public inbox/customer-facing mutation candidate; blocked until typed customer-visible reverse-ETL action, preview, approval, and abuse-safe bounds exist.",
-        "source_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json"
+      "covered_by": {
+        "write": "toggle_public_conversation_status"
       }
     },
     {

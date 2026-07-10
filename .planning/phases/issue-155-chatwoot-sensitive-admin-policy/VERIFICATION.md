@@ -2,16 +2,16 @@
 
 ## Targeted checks
 
-- [ ] `go test ./internal/connectors/engine -run Write -count=1`
-- [ ] `go test ./internal/connectors/commandrunner -run Write -count=1`
-- [ ] `go test ./cmd/connectorgen -run Chatwoot -count=1`
-- [ ] `go test ./internal/connectors/conformance -run 'TestConformance/chatwoot' -count=1`
-- [ ] `go test ./internal/connectors/bundleregistry -run Chatwoot -count=1`
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs`
-- [ ] `go run ./cmd/pm docs validate --connectors-dir docs/connectors`
-- [ ] `cd website && pnpm run gen:website-data`
-- [ ] `cd website && pnpm run test:unit -- --run tests/api/connector-data.test.ts`
-- [ ] `git diff --check`
+- [x] `go test ./internal/connectors/engine -run Write -count=1`
+- [x] `go test ./internal/connectors/commandrunner -run Write -count=1`
+- [x] `go test ./cmd/connectorgen -run Chatwoot -count=1`
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/chatwoot' -count=1`
+- [x] `go test ./internal/connectors/bundleregistry -run Chatwoot -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs`
+- [x] `go run ./cmd/pm docs validate --connectors-dir docs/connectors`
+- [x] `cd website && pnpm run gen:website-data`
+- [x] `cd website && pnpm run test:unit -- --run tests/api/connector-data.test.ts`
+- [x] `git diff --check`
 
 ## Full gates
 

@@ -9,17 +9,37 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["inbox_id"],
+        "required": [
+          "inbox_id"
+        ],
         "properties": {
-          "inbox_id": { "type": "integer" },
-          "name": { "type": "string" },
-          "email": { "type": "string" },
-          "phone_number": { "type": "string" },
-          "identifier": { "type": "string" },
-          "blocked": { "type": "boolean" },
-          "avatar_url": { "type": "string" },
-          "additional_attributes": { "type": "object" },
-          "custom_attributes": { "type": "object" }
+          "inbox_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "blocked": {
+            "type": "boolean"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "additional_attributes": {
+            "type": "object"
+          },
+          "custom_attributes": {
+            "type": "object"
+          }
         }
       },
       "risk": "creates a new Chatwoot contact record; low risk, no customer notification"
@@ -29,22 +49,44 @@
       "kind": "update",
       "method": "PUT",
       "path": "/contacts/{{ record.id }}",
-      "path_fields": ["id"],
+      "path_fields": [
+        "id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["id"],
+        "required": [
+          "id"
+        ],
         "properties": {
-          "id": { "type": "integer" },
-          "name": { "type": "string" },
-          "email": { "type": "string" },
-          "phone_number": { "type": "string" },
-          "identifier": { "type": "string" },
-          "blocked": { "type": "boolean" },
-          "avatar_url": { "type": "string" },
-          "additional_attributes": { "type": "object" },
-          "custom_attributes": { "type": "object" }
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "blocked": {
+            "type": "boolean"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "additional_attributes": {
+            "type": "object"
+          },
+          "custom_attributes": {
+            "type": "object"
+          }
         }
       },
       "risk": "updates an existing Chatwoot contact's profile fields; low risk, no customer notification"
@@ -58,16 +100,39 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["source_id"],
+        "required": [
+          "source_id"
+        ],
         "properties": {
-          "source_id": { "type": "string" },
-          "inbox_id": { "type": "integer" },
-          "contact_id": { "type": "integer" },
-          "status": { "type": "string", "enum": ["open", "resolved", "pending"] },
-          "assignee_id": { "type": "integer" },
-          "team_id": { "type": "integer" },
-          "additional_attributes": { "type": "object" },
-          "custom_attributes": { "type": "object" }
+          "source_id": {
+            "type": "string"
+          },
+          "inbox_id": {
+            "type": "integer"
+          },
+          "contact_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "resolved",
+              "pending"
+            ]
+          },
+          "assignee_id": {
+            "type": "integer"
+          },
+          "team_id": {
+            "type": "integer"
+          },
+          "additional_attributes": {
+            "type": "object"
+          },
+          "custom_attributes": {
+            "type": "object"
+          }
         }
       },
       "risk": "creates a new conversation in the target inbox; customer-visible once the initial message is delivered through a live channel"
@@ -77,22 +142,48 @@
       "kind": "create",
       "method": "POST",
       "path": "/conversations/{{ record.conversation_id }}/messages",
-      "path_fields": ["conversation_id"],
+      "path_fields": [
+        "conversation_id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["conversation_id", "content"],
+        "required": [
+          "conversation_id",
+          "content"
+        ],
         "properties": {
-          "conversation_id": { "type": "integer" },
-          "content": { "type": "string" },
-          "message_type": { "type": "string", "enum": ["outgoing", "incoming"] },
-          "private": { "type": "boolean" },
+          "conversation_id": {
+            "type": "integer"
+          },
+          "content": {
+            "type": "string"
+          },
+          "message_type": {
+            "type": "string",
+            "enum": [
+              "outgoing",
+              "incoming"
+            ]
+          },
+          "private": {
+            "type": "boolean"
+          },
           "content_type": {
             "type": "string",
-            "enum": ["text", "input_email", "cards", "input_select", "form", "article"]
+            "enum": [
+              "text",
+              "input_email",
+              "cards",
+              "input_select",
+              "form",
+              "article"
+            ]
           },
-          "content_attributes": { "type": "object" }
+          "content_attributes": {
+            "type": "object"
+          }
         }
       },
       "risk": "sends a message into a conversation; customer-visible unless private is true and may notify the contact through the inbox channel"
@@ -102,16 +193,33 @@
       "kind": "update",
       "method": "POST",
       "path": "/conversations/{{ record.conversation_id }}/toggle_status",
-      "path_fields": ["conversation_id"],
+      "path_fields": [
+        "conversation_id"
+      ],
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["conversation_id", "status"],
+        "required": [
+          "conversation_id",
+          "status"
+        ],
         "properties": {
-          "conversation_id": { "type": "integer" },
-          "status": { "type": "string", "enum": ["open", "resolved", "pending", "snoozed"] },
-          "snoozed_until": { "type": "integer" }
+          "conversation_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "resolved",
+              "pending",
+              "snoozed"
+            ]
+          },
+          "snoozed_until": {
+            "type": "integer"
+          }
         }
       },
       "risk": "changes a conversation's status (open/resolved/pending/snoozed); may affect agent routing and reporting metrics"
@@ -125,15 +233,2984 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["title"],
+        "required": [
+          "title"
+        ],
         "properties": {
-          "title": { "type": "string" },
-          "description": { "type": "string" },
-          "color": { "type": "string" },
-          "show_on_sidebar": { "type": "boolean" }
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "show_on_sidebar": {
+            "type": "boolean"
+          }
         }
       },
       "risk": "creates a new account-wide label; low risk, visible to all agents in the sidebar when show_on_sidebar is true"
+    },
+    {
+      "name": "update_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "support_email": {
+            "type": "string"
+          },
+          "auto_resolve_after": {
+            "type": "integer"
+          },
+          "auto_resolve_message": {
+            "type": "string"
+          },
+          "auto_resolve_ignore_waiting": {
+            "type": "boolean"
+          },
+          "industry": {
+            "type": "string"
+          },
+          "company_size": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "locale",
+        "domain",
+        "support_email",
+        "auto_resolve_after",
+        "auto_resolve_message",
+        "auto_resolve_ignore_waiting",
+        "industry",
+        "company_size",
+        "timezone"
+      ]
+    },
+    {
+      "name": "merge_contact",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/actions/contact_merge",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "base_contact_id": {
+            "type": "integer"
+          },
+          "mergee_contact_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "base_contact_id",
+          "mergee_contact_id"
+        ]
+      },
+      "risk": "critical: destructive_action Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "base_contact_id",
+        "mergee_contact_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_agent_bot",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agent_bots",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "outgoing_url": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "bot_type": {
+            "type": "integer"
+          },
+          "bot_config": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "description",
+        "outgoing_url",
+        "avatar",
+        "avatar_url",
+        "bot_type",
+        "bot_config"
+      ]
+    },
+    {
+      "name": "update_agent_bot",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agent_bots/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "outgoing_url": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "bot_type": {
+            "type": "integer"
+          },
+          "bot_config": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "description",
+        "outgoing_url",
+        "avatar",
+        "avatar_url",
+        "bot_type",
+        "bot_config"
+      ]
+    },
+    {
+      "name": "delete_agent_bot",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agent_bots/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_agent",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agents",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "agent",
+              "administrator"
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "online",
+              "busy",
+              "offline"
+            ]
+          },
+          "auto_offline": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "role"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "email",
+        "role",
+        "availability",
+        "auto_offline"
+      ]
+    },
+    {
+      "name": "update_agent",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agents/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "agent",
+              "administrator"
+            ]
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "online",
+              "busy",
+              "offline"
+            ]
+          },
+          "auto_offline": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "role"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "role",
+        "availability",
+        "auto_offline"
+      ]
+    },
+    {
+      "name": "delete_agent",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/agents/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_automation_rule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/automation_rules",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "event_name": {
+            "type": "string",
+            "enum": [
+              "conversation_created",
+              "conversation_updated",
+              "conversation_resolved",
+              "message_created"
+            ]
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "description",
+        "event_name",
+        "active",
+        "actions",
+        "conditions"
+      ]
+    },
+    {
+      "name": "update_automation_rule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/automation_rules/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "event_name": {
+            "type": "string",
+            "enum": [
+              "conversation_created",
+              "conversation_updated",
+              "conversation_resolved",
+              "message_created"
+            ]
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "description",
+        "event_name",
+        "active",
+        "actions",
+        "conditions"
+      ]
+    },
+    {
+      "name": "delete_automation_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/automation_rules/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_canned_response",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/canned_responses",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "short_code": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "content",
+        "short_code"
+      ]
+    },
+    {
+      "name": "update_canned_response",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/canned_responses/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "content": {
+            "type": "string"
+          },
+          "short_code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "content",
+        "short_code"
+      ]
+    },
+    {
+      "name": "delete_canned_response",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/canned_responses/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "filter_contacts",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/contacts/filter",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "payload": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "payload"
+      ]
+    },
+    {
+      "name": "delete_contact",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/contacts/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_contact_inbox",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/contacts/{{ record.id }}/contact_inboxes",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "inbox_id": {
+            "type": "number"
+          },
+          "source_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "inbox_id"
+        ]
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "inbox_id",
+        "source_id"
+      ]
+    },
+    {
+      "name": "set_contact_labels",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/contacts/{{ record.id }}/labels",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "labels"
+        ]
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "labels"
+      ]
+    },
+    {
+      "name": "filter_conversations",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/filter",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "payload": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "payload"
+      ]
+    },
+    {
+      "name": "update_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "urgent",
+              "high",
+              "medium",
+              "low",
+              "none"
+            ]
+          },
+          "sla_policy_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "priority",
+        "sla_policy_id"
+      ]
+    },
+    {
+      "name": "assign_conversation",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/assignments",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "assignee_id": {
+            "type": "number"
+          },
+          "team_id": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "conversation_id"
+        ]
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "assignee_id",
+        "team_id"
+      ]
+    },
+    {
+      "name": "update_conversation_custom_attributes",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/custom_attributes",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "custom_attributes": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "conversation_id",
+          "custom_attributes"
+        ]
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "custom_attributes"
+      ]
+    },
+    {
+      "name": "set_conversation_labels",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/labels",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "conversation_id",
+          "labels"
+        ]
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "labels"
+      ]
+    },
+    {
+      "name": "delete_conversation_message",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/messages/{{ record.message_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "message_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "conversation_id",
+          "message_id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "conversation_id",
+        "message_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "toggle_conversation_priority",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/conversations/{{ record.conversation_id }}/toggle_priority",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "conversation_id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "urgent",
+              "high",
+              "medium",
+              "low",
+              "none"
+            ]
+          }
+        },
+        "required": [
+          "conversation_id",
+          "priority"
+        ]
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "priority"
+      ]
+    },
+    {
+      "name": "create_custom_attribute_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_attribute_definitions",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "attribute_display_name": {
+            "type": "string"
+          },
+          "attribute_display_type": {
+            "type": "integer"
+          },
+          "attribute_description": {
+            "type": "string"
+          },
+          "attribute_key": {
+            "type": "string"
+          },
+          "attribute_values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attribute_model": {
+            "type": "integer"
+          },
+          "regex_pattern": {
+            "type": "string"
+          },
+          "regex_cue": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "attribute_display_name",
+        "attribute_display_type",
+        "attribute_description",
+        "attribute_key",
+        "attribute_values",
+        "attribute_model",
+        "regex_pattern",
+        "regex_cue"
+      ]
+    },
+    {
+      "name": "update_custom_attribute_definition",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_attribute_definitions/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "attribute_display_name": {
+            "type": "string"
+          },
+          "attribute_display_type": {
+            "type": "integer"
+          },
+          "attribute_description": {
+            "type": "string"
+          },
+          "attribute_key": {
+            "type": "string"
+          },
+          "attribute_values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attribute_model": {
+            "type": "integer"
+          },
+          "regex_pattern": {
+            "type": "string"
+          },
+          "regex_cue": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "attribute_display_name",
+        "attribute_display_type",
+        "attribute_description",
+        "attribute_key",
+        "attribute_values",
+        "attribute_model",
+        "regex_pattern",
+        "regex_cue"
+      ]
+    },
+    {
+      "name": "delete_custom_attribute_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_attribute_definitions/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_custom_filter",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_filters",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "conversation",
+              "contact",
+              "report"
+            ]
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "type",
+        "query"
+      ]
+    },
+    {
+      "name": "update_custom_filter",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_filters/{{ record.custom_filter_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_filter_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "conversation",
+              "contact",
+              "report"
+            ]
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_filter_id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "custom_filter_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "type",
+        "query"
+      ]
+    },
+    {
+      "name": "delete_custom_filter",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/custom_filters/{{ record.custom_filter_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "custom_filter_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "custom_filter_id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "custom_filter_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_inbox_member",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inbox_members",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inbox_id": {
+            "type": "integer"
+          },
+          "user_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "inbox_id",
+          "user_ids"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "inbox_id",
+        "user_ids"
+      ]
+    },
+    {
+      "name": "update_inbox_member",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inbox_members",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inbox_id": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "inbox_id",
+          "user_ids"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "inbox_id",
+        "user_ids"
+      ]
+    },
+    {
+      "name": "delete_inbox_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inbox_members",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inbox_id": {
+            "type": "string"
+          },
+          "user_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "inbox_id",
+          "user_ids"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "inbox_id",
+        "user_ids"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_inbox",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inboxes",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "greeting_enabled": {
+            "type": "boolean"
+          },
+          "greeting_message": {
+            "type": "string"
+          },
+          "enable_email_collect": {
+            "type": "boolean"
+          },
+          "csat_survey_enabled": {
+            "type": "boolean"
+          },
+          "csat_config": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "enable_auto_assignment": {
+            "type": "boolean"
+          },
+          "working_hours_enabled": {
+            "type": "boolean"
+          },
+          "out_of_office_message": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "allow_messages_after_resolved": {
+            "type": "boolean"
+          },
+          "lock_to_single_conversation": {
+            "type": "boolean"
+          },
+          "portal_id": {
+            "type": "integer"
+          },
+          "sender_name_type": {
+            "type": "string",
+            "enum": [
+              "friendly",
+              "professional"
+            ]
+          },
+          "business_name": {
+            "type": "string"
+          },
+          "channel": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "avatar",
+        "greeting_enabled",
+        "greeting_message",
+        "enable_email_collect",
+        "csat_survey_enabled",
+        "csat_config",
+        "enable_auto_assignment",
+        "working_hours_enabled",
+        "out_of_office_message",
+        "timezone",
+        "allow_messages_after_resolved",
+        "lock_to_single_conversation",
+        "portal_id",
+        "sender_name_type",
+        "business_name",
+        "channel"
+      ]
+    },
+    {
+      "name": "update_inbox",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inboxes/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "greeting_enabled": {
+            "type": "boolean"
+          },
+          "greeting_message": {
+            "type": "string"
+          },
+          "enable_email_collect": {
+            "type": "boolean"
+          },
+          "csat_survey_enabled": {
+            "type": "boolean"
+          },
+          "csat_config": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "enable_auto_assignment": {
+            "type": "boolean"
+          },
+          "working_hours_enabled": {
+            "type": "boolean"
+          },
+          "out_of_office_message": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "allow_messages_after_resolved": {
+            "type": "boolean"
+          },
+          "lock_to_single_conversation": {
+            "type": "boolean"
+          },
+          "portal_id": {
+            "type": "integer"
+          },
+          "sender_name_type": {
+            "type": "string",
+            "enum": [
+              "friendly",
+              "professional"
+            ]
+          },
+          "business_name": {
+            "type": "string"
+          },
+          "channel": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "avatar",
+        "greeting_enabled",
+        "greeting_message",
+        "enable_email_collect",
+        "csat_survey_enabled",
+        "csat_config",
+        "enable_auto_assignment",
+        "working_hours_enabled",
+        "out_of_office_message",
+        "timezone",
+        "allow_messages_after_resolved",
+        "lock_to_single_conversation",
+        "portal_id",
+        "sender_name_type",
+        "business_name",
+        "channel"
+      ]
+    },
+    {
+      "name": "set_inbox_agent_bot",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/inboxes/{{ record.id }}/set_agent_bot",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "agent_bot": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "agent_bot"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "agent_bot"
+      ]
+    },
+    {
+      "name": "create_integration_hook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/integrations/hooks",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "app_id": {
+            "type": "integer"
+          },
+          "inbox_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "settings": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "app_id",
+        "inbox_id",
+        "status",
+        "settings"
+      ]
+    },
+    {
+      "name": "update_integration_hook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/integrations/hooks/{{ record.hook_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "hook_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "settings": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "hook_id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "hook_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "status",
+        "settings"
+      ]
+    },
+    {
+      "name": "delete_integration_hook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/integrations/hooks/{{ record.hook_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "hook_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "hook_id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "hook_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_label",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/labels/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "show_on_sidebar": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "title",
+        "description",
+        "color",
+        "show_on_sidebar"
+      ]
+    },
+    {
+      "name": "delete_label",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/labels/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_portal",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/portals",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "color": {
+            "type": "string"
+          },
+          "custom_domain": {
+            "type": "string"
+          },
+          "header_text": {
+            "type": "string"
+          },
+          "homepage_link": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "page_title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "color",
+        "custom_domain",
+        "header_text",
+        "homepage_link",
+        "name",
+        "page_title",
+        "slug",
+        "archived",
+        "config"
+      ]
+    },
+    {
+      "name": "update_portal",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/portals/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "color": {
+            "type": "string"
+          },
+          "custom_domain": {
+            "type": "string"
+          },
+          "header_text": {
+            "type": "string"
+          },
+          "homepage_link": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "page_title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "archived": {
+            "type": "boolean"
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "color",
+        "custom_domain",
+        "header_text",
+        "homepage_link",
+        "name",
+        "page_title",
+        "slug",
+        "archived",
+        "config"
+      ]
+    },
+    {
+      "name": "create_portal_article",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/portals/{{ record.id }}/articles",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "content": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": "integer"
+          },
+          "author_id": {
+            "type": "integer"
+          },
+          "associated_article_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "meta": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "title",
+        "slug",
+        "position",
+        "content",
+        "description",
+        "category_id",
+        "author_id",
+        "associated_article_id",
+        "status",
+        "locale",
+        "meta"
+      ]
+    },
+    {
+      "name": "create_portal_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/portals/{{ record.id }}/categories",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "parent_category_id": {
+            "type": "integer"
+          },
+          "associated_category_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "description",
+        "position",
+        "slug",
+        "locale",
+        "icon",
+        "parent_category_id",
+        "associated_category_id"
+      ]
+    },
+    {
+      "name": "create_team",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "allow_auto_assign": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "description",
+        "allow_auto_assign"
+      ]
+    },
+    {
+      "name": "update_team",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams/{{ record.team_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "team_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "allow_auto_assign": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "team_id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "description",
+        "allow_auto_assign"
+      ]
+    },
+    {
+      "name": "delete_team",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams/{{ record.team_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "team_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "team_id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_team_member",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams/{{ record.team_id }}/team_members",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "team_id": {
+            "type": "integer"
+          },
+          "user_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "team_id",
+          "user_ids"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "user_ids"
+      ]
+    },
+    {
+      "name": "update_team_member",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams/{{ record.team_id }}/team_members",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "team_id": {
+            "type": "integer"
+          },
+          "user_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "team_id",
+          "user_ids"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "user_ids"
+      ]
+    },
+    {
+      "name": "delete_team_member",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/teams/{{ record.team_id }}/team_members",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "team_id": {
+            "type": "integer"
+          },
+          "user_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "team_id",
+          "user_ids"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "user_ids"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/accounts/{{ config.account_id }}/webhooks",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "subscriptions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "conversation_created",
+                "conversation_status_changed",
+                "conversation_updated",
+                "message_created",
+                "message_updated",
+                "contact_created",
+                "contact_updated",
+                "webwidget_triggered",
+                "conversation_typing_on",
+                "conversation_typing_off"
+              ]
+            }
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "url",
+        "name",
+        "subscriptions"
+      ]
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/accounts/{{ config.account_id }}/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "webhook_id": {
+            "type": "integer"
+          },
+          "url": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "subscriptions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "conversation_created",
+                "conversation_status_changed",
+                "conversation_updated",
+                "message_created",
+                "message_updated",
+                "contact_created",
+                "contact_updated",
+                "webwidget_triggered",
+                "conversation_typing_on",
+                "conversation_typing_off"
+              ]
+            }
+          }
+        },
+        "required": [
+          "webhook_id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "url",
+        "name",
+        "subscriptions"
+      ]
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/accounts/{{ config.account_id }}/webhooks/{{ record.webhook_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "webhook_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "webhook_id"
+        ]
+      },
+      "risk": "high: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_profile",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/profile",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "profile": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "profile"
+        ]
+      },
+      "risk": "medium: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "profile"
+      ]
+    },
+    {
+      "name": "create_platform_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/platform/api/v1/accounts",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "support_email": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "suspended"
+            ]
+          },
+          "limits": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "custom_attributes": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "locale",
+        "domain",
+        "support_email",
+        "status",
+        "limits",
+        "custom_attributes"
+      ]
+    },
+    {
+      "name": "update_platform_account",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/platform/api/v1/accounts/{{ record.account_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "support_email": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "suspended"
+            ]
+          },
+          "limits": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "custom_attributes": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "account_id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "account_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "locale",
+        "domain",
+        "support_email",
+        "status",
+        "limits",
+        "custom_attributes"
+      ]
+    },
+    {
+      "name": "delete_platform_account",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/platform/api/v1/accounts/{{ record.account_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "account_id"
+        ]
+      },
+      "risk": "critical: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "account_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_platform_account_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/platform/api/v1/accounts/{{ record.account_id }}/account_users",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer"
+          },
+          "role": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id",
+          "user_id",
+          "role"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "account_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "user_id",
+        "role"
+      ]
+    },
+    {
+      "name": "delete_platform_account_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/platform/api/v1/accounts/{{ record.account_id }}/account_users",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "account_id"
+        ]
+      },
+      "risk": "critical: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "account_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_platform_agent_bot",
+      "kind": "create",
+      "method": "POST",
+      "path": "/platform/api/v1/agent_bots",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "outgoing_url": {
+            "type": "string"
+          },
+          "account_id": {
+            "type": "integer"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "avatar_url": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "description",
+        "outgoing_url",
+        "account_id",
+        "avatar",
+        "avatar_url"
+      ]
+    },
+    {
+      "name": "update_platform_agent_bot",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/platform/api/v1/agent_bots/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "outgoing_url": {
+            "type": "string"
+          },
+          "account_id": {
+            "type": "integer"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "avatar_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "description",
+        "outgoing_url",
+        "account_id",
+        "avatar",
+        "avatar_url"
+      ]
+    },
+    {
+      "name": "delete_platform_agent_bot",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/platform/api/v1/agent_bots/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "critical: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_platform_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/platform/api/v1/users",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "custom_attributes": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "display_name",
+        "email",
+        "password",
+        "custom_attributes"
+      ]
+    },
+    {
+      "name": "update_platform_user",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/platform/api/v1/users/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "custom_attributes": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high: admin_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "display_name",
+        "email",
+        "password",
+        "custom_attributes"
+      ]
+    },
+    {
+      "name": "delete_platform_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/platform/api/v1/users/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "critical: destructive_action Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_public_inbox_contact",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{{ record.inbox_identifier }}/contacts",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inbox_identifier": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "identifier_hash": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "custom_attributes": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "inbox_identifier"
+        ]
+      },
+      "risk": "high: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "inbox_identifier"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "identifier",
+        "identifier_hash",
+        "email",
+        "name",
+        "phone_number",
+        "avatar",
+        "custom_attributes"
+      ]
+    },
+    {
+      "name": "update_public_inbox_contact",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/api/v1/inboxes/{{ record.inbox_identifier }}/contacts/{{ record.contact_identifier }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inbox_identifier": {
+            "type": "string"
+          },
+          "contact_identifier": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "identifier_hash": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "custom_attributes": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "inbox_identifier",
+          "contact_identifier"
+        ]
+      },
+      "risk": "high: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "inbox_identifier",
+        "contact_identifier"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "identifier",
+        "identifier_hash",
+        "email",
+        "name",
+        "phone_number",
+        "avatar",
+        "custom_attributes"
+      ]
+    },
+    {
+      "name": "create_public_inbox_contact_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{{ record.inbox_identifier }}/contacts/{{ record.contact_identifier }}/conversations",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inbox_identifier": {
+            "type": "string"
+          },
+          "contact_identifier": {
+            "type": "string"
+          },
+          "custom_attributes": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "inbox_identifier",
+          "contact_identifier"
+        ]
+      },
+      "risk": "high: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "inbox_identifier",
+        "contact_identifier"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "custom_attributes"
+      ]
+    },
+    {
+      "name": "create_public_inbox_contact_conversation_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{{ record.inbox_identifier }}/contacts/{{ record.contact_identifier }}/conversations/{{ record.conversation_id }}/messages",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inbox_identifier": {
+            "type": "string"
+          },
+          "contact_identifier": {
+            "type": "string"
+          },
+          "conversation_id": {
+            "type": "integer"
+          },
+          "content": {
+            "type": "string"
+          },
+          "echo_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "inbox_identifier",
+          "contact_identifier",
+          "conversation_id"
+        ]
+      },
+      "risk": "high: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "inbox_identifier",
+        "contact_identifier",
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "content",
+        "echo_id"
+      ]
+    },
+    {
+      "name": "update_public_inbox_contact_conversation_message",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/public/api/v1/inboxes/{{ record.inbox_identifier }}/contacts/{{ record.contact_identifier }}/conversations/{{ record.conversation_id }}/messages/{{ record.message_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inbox_identifier": {
+            "type": "string"
+          },
+          "contact_identifier": {
+            "type": "string"
+          },
+          "conversation_id": {
+            "type": "integer"
+          },
+          "message_id": {
+            "type": "integer"
+          },
+          "submitted_values": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "inbox_identifier",
+          "contact_identifier",
+          "conversation_id",
+          "message_id"
+        ]
+      },
+      "risk": "high: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "inbox_identifier",
+        "contact_identifier",
+        "conversation_id",
+        "message_id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "submitted_values"
+      ]
+    },
+    {
+      "name": "toggle_public_conversation_status",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/public/api/v1/inboxes/{{ record.inbox_identifier }}/contacts/{{ record.contact_identifier }}/conversations/{{ record.conversation_id }}/toggle_status",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inbox_identifier": {
+            "type": "string"
+          },
+          "contact_identifier": {
+            "type": "string"
+          },
+          "conversation_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "inbox_identifier",
+          "contact_identifier",
+          "conversation_id"
+        ]
+      },
+      "risk": "high: sensitive_reverse_etl Chatwoot operation; reverse ETL approval required",
+      "path_fields": [
+        "inbox_identifier",
+        "contact_identifier",
+        "conversation_id"
+      ],
+      "body_type": "none"
     }
   ]
 }

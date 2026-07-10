@@ -140,9 +140,14 @@
       "cycle": "issue-154-parent-verify-fix",
       "decision": "remote_verify_fix_pending_push",
       "reason": "Parent PR verify failed because the Chatwoot guide test still expected the old generated --connection punctuation; updated the test expectation and targeted tests passed."
+    },
+    {
+      "cycle": "issue-155-targeted-verification",
+      "decision": "sub_pr_pending_full_gates_pending",
+      "reason": "Issue #155 sensitive/admin/destructive implementation passed targeted engine/commandrunner/connectorgen/conformance/bundleregistry/docs/website checks."
     }
   ],
   "verificationPassed": false,
-  "verificationStatus": "#149, #150, #151, #152, #153, and #154 integrated into parent; parent review pending for #154; parent branch final verification pending after remaining sub-issues",
+  "verificationStatus": "#149, #150, #151, #152, #153, and #154 integrated into parent; #155 targeted verification passed on a stacked branch; parent branch final verification pending after remaining sub-issues",
   "updated_at": "2026-07-10T00:00:00Z"
 }

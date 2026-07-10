@@ -131,18 +131,28 @@
     },
     {
       "number": 155,
-      "status": "ready",
+      "status": "implemented_targeted_verified",
       "dependencies": [
         149,
         152
       ],
       "write_scope": [
-        "internal/connectors/defs/chatwoot/writes.json",
         "internal/connectors/defs/chatwoot/api_surface.json",
         "internal/connectors/defs/chatwoot/cli_surface.json",
+        "internal/connectors/defs/chatwoot/writes.json",
+        "internal/connectors/defs/chatwoot/metadata.json",
+        "internal/connectors/defs/chatwoot/docs.md",
+        "internal/connectors/engine/write.go",
+        "internal/connectors/engine/write_test.go",
+        "cmd/connectorgen/chatwoot_api_surface_test.go",
+        "internal/connectors/bundleregistry/registry_test.go",
+        "docs/connectors/chatwoot",
+        "website/data/connectors.generated.json",
+        "website/lib/connectors.catalog.data.generated.json",
+        "website/tests/api/connector-data.test.ts",
         ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
       ],
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "sub_pr_pending_full_gates_pending"
     }
   ],
   "spawn_decisions": [
@@ -263,6 +273,14 @@
         154
       ],
       "reason": "PR #255 remote checks passed and was squash-merged into parent commit 10f58f0b; CodeRabbit skipped the sub-PR due non-default base, so parent PR #223 fallback review is pending."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "sub_pr_pending_full_gates_pending",
+      "issue_numbers": [
+        155
+      ],
+      "reason": "Issue #155 implementation and targeted verification completed locally on feat/155-chatwoot-sensitive-admin-policy; full gates, stacked PR, remote checks, and review routing remain pending."
     }
   ],
   "subissues": [
@@ -441,6 +459,42 @@
         "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
         "fallback_route": "none",
         "disposition_summary": "CodeRabbit skipped PR #255 (non-default base); parent fallback pending.",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 155,
+      "url": "https://github.com/polymetrics-ai/cli/issues/155",
+      "branch": "feat/155-chatwoot-sensitive-admin-policy",
+      "pr_url": "pending",
+      "worker": "coordinator-local-critical-path",
+      "status": "implemented_targeted_verified",
+      "write_scope": [
+        "internal/connectors/defs/chatwoot/api_surface.json",
+        "internal/connectors/defs/chatwoot/cli_surface.json",
+        "internal/connectors/defs/chatwoot/writes.json",
+        "internal/connectors/defs/chatwoot/metadata.json",
+        "internal/connectors/defs/chatwoot/docs.md",
+        "internal/connectors/engine/write.go",
+        "internal/connectors/engine/write_test.go",
+        "cmd/connectorgen/chatwoot_api_surface_test.go",
+        "internal/connectors/bundleregistry/registry_test.go",
+        "docs/connectors/chatwoot",
+        "website/data/connectors.generated.json",
+        "website/lib/connectors.catalog.data.generated.json",
+        "website/tests/api/connector-data.test.ts",
+        ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
+      "verification": "targeted checks passed; full gates pending before PR",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "not_started_pr_pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
         "disposition_url": "pending"
       }
     }
