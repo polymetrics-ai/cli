@@ -17,7 +17,7 @@ func TestConnectorCatalogCLIJSON(t *testing.T) {
 		t.Fatalf("Run(connectors list --all --json) code = %d stderr = %s", code, stderr.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{`"kind": "ConnectorCatalog"`, `"count": 551`, `"name": "github"`, `"display_name": "GitHub"`, `"write_actions"`, `"icon"`, `"path": "icons/github.svg"`} {
+	for _, want := range []string{`"kind": "ConnectorCatalog"`, `"count": 552`, `"name": "github"`, `"display_name": "GitHub"`, `"write_actions"`, `"icon"`, `"path": "icons/github.svg"`} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("catalog json missing %q:\n%s", want, out[:min(len(out), 2000)])
 		}

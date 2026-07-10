@@ -1,0 +1,13 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
+    ]
+  },
+  "streams": []
+}

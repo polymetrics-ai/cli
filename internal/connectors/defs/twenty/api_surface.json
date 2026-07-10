@@ -1,0 +1,7 @@
+{
+  "api": "Twenty CRM REST API (https://api.twenty.com/rest)",
+  "docs": "https://docs.twenty.com/developers/extend/api",
+  "reviewed_at": "2026-07-10",
+  "scope": "S1 foundation skeleton only: endpoints are intentionally empty until S3 #280, S4 #281, and S5 #282 introduce researched endpoints together with their covering streams and writes. The 168-operation manifest source of truth is preserved at .planning/auto-loop/RESEARCH/twenty/RESEARCH.json.",
+  "endpoints": []
+}
