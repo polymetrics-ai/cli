@@ -110,18 +110,24 @@
     },
     {
       "number": 154,
-      "status": "ready",
+      "status": "pr_open_remote_pending",
       "dependencies": [
         149,
         152
       ],
       "write_scope": [
-        "internal/connectors/defs/chatwoot",
-        "internal/connectors/engine",
-        "internal/connectors/commandrunner",
+        "internal/connectors/engine/direct_read.go",
+        "internal/connectors/engine/direct_read_test.go",
+        "cmd/connectorgen/chatwoot_api_surface_test.go",
+        "internal/connectors/defs/chatwoot/api_surface.json",
+        "internal/connectors/defs/chatwoot/cli_surface.json",
+        "internal/connectors/defs/chatwoot/docs.md",
+        "docs/connectors/chatwoot",
+        "website/data/connectors.generated.json",
+        "website/lib/connectors.catalog.data.generated.json",
         ".planning/phases/issue-154-chatwoot-advanced-query-binary"
       ],
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "remote_checks_pending"
     },
     {
       "number": 155,
@@ -249,6 +255,14 @@
         153
       ],
       "reason": "Parent PR #223 checks after #153 integration completed successfully: verify, govulncheck, Website checks/image, CodeQL, Dependency Review, branch-name, pr-title, require-linked-issue, and gsd-workflow-evidence."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "remote_checks_pending",
+      "issue_numbers": [
+        154
+      ],
+      "reason": "PR #255 opened for issue #154; remote checks and automated review routing pending."
     }
   ],
   "subissues": [
@@ -396,6 +410,38 @@
         "fallback_route": "none",
         "disposition_summary": "CodeRabbit skipped #249 because the base was non-default and skipped #223 automatic review because it is draft. After #249 was squash-merged to parent, manual @coderabbitai review was requested on #223 and CodeRabbit replied Review finished; no actionable inline findings were present.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/223#issuecomment-4930945092"
+      }
+    },
+    {
+      "number": 154,
+      "url": "https://github.com/polymetrics-ai/cli/issues/154",
+      "branch": "feat/154-chatwoot-advanced-query-binary",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/255",
+      "worker": "coordinator-local-critical-path",
+      "status": "pr_open_remote_pending",
+      "write_scope": [
+        "internal/connectors/engine/direct_read.go",
+        "internal/connectors/engine/direct_read_test.go",
+        "cmd/connectorgen/chatwoot_api_surface_test.go",
+        "internal/connectors/defs/chatwoot/api_surface.json",
+        "internal/connectors/defs/chatwoot/cli_surface.json",
+        "internal/connectors/defs/chatwoot/docs.md",
+        "docs/connectors/chatwoot",
+        "website/data/connectors.generated.json",
+        "website/lib/connectors.catalog.data.generated.json",
+        ".planning/phases/issue-154-chatwoot-advanced-query-binary"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
+      "verification": "targeted checks plus gofmt, go vet, go test ./..., go build ./cmd/pm, and make verify passed; PR pending",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "remote_checks_pending",
+        "head_sha": "85f1c9919327755df2a8de20d33045fd6b420d73",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
       }
     }
   ],

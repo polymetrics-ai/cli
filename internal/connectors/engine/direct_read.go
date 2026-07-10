@@ -172,6 +172,10 @@ func directReadRequesterPath(baseURL, resolvedPath string) string {
 	if strings.HasPrefix(path, basePath+"/") {
 		return strings.TrimPrefix(path, basePath)
 	}
+	if u.Scheme != "" && u.Host != "" && strings.HasPrefix(path, "/") {
+		root := url.URL{Scheme: u.Scheme, Host: u.Host, Path: path}
+		return root.String()
+	}
 	return resolvedPath
 }
 

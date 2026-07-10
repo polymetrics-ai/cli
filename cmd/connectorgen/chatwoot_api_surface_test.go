@@ -99,8 +99,8 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(uniquePaths) != 89 {
 		t.Fatalf("unique paths = %d, want 89", len(uniquePaths))
 	}
-	if covered != 16 {
-		t.Fatalf("covered endpoints = %d, want 16", covered)
+	if covered != 66 {
+		t.Fatalf("covered endpoints = %d, want 66", covered)
 	}
 	if streamCovered != 7 {
 		t.Fatalf("stream covered endpoints = %d, want 7", streamCovered)
@@ -108,11 +108,11 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if writeCovered != 6 {
 		t.Fatalf("write covered endpoints = %d, want 6", writeCovered)
 	}
-	if directReadCovered != 3 {
-		t.Fatalf("direct read covered endpoints = %d, want 3", directReadCovered)
+	if directReadCovered != 53 {
+		t.Fatalf("direct read covered endpoints = %d, want 53", directReadCovered)
 	}
-	if operations != 128 {
-		t.Fatalf("operation endpoints = %d, want 128", operations)
+	if operations != 78 {
+		t.Fatalf("operation endpoints = %d, want 78", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -131,13 +131,13 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"PUT":    2,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"GET":  10,
+		"GET":  60,
 		"POST": 5,
 		"PUT":  1,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE": 18,
-		"GET":    52,
+		"GET":    2,
 		"PATCH":  21,
 		"POST":   36,
 		"PUT":    1,
@@ -145,18 +145,17 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	assertStringIntMap(t, "models", models, map[string]int{
 		"admin_reverse_etl":     35,
 		"destructive_action":    19,
-		"direct_read":           50,
 		"disallowed":            4,
 		"duplicate":             1,
 		"sensitive_reverse_etl": 19,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
 		"critical": 5,
-		"high":     61,
+		"high":     55,
 		"low":      5,
-		"medium":   57,
+		"medium":   13,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 128,
+		"blocked": 78,
 	})
 }
