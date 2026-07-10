@@ -1,14 +1,14 @@
 {
   "name": "crisp",
   "display_name": "Crisp",
-  "description": "Inventory scaffold for the Crisp REST API v1 connector. The official 220-operation surface is recorded in api_surface.json and cli_surface.json; executable streams, direct reads, binary policy, and reverse-ETL writes land in follow-up #204 subissues before this parent is ready.",
+  "description": "Crisp REST API v1 connector with explicit executable coverage for the official 220-operation surface: bounded JSON direct reads for GET endpoints and gated reverse-ETL actions for mutations.",
   "integration_type": "api",
   "docs_url": "https://docs.crisp.chat/references/rest-api/v1/",
   "release_stage": "alpha",
   "capabilities": {
     "check": true,
-    "read": false,
-    "write": false,
+    "read": true,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,8 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "Crisp REST API reads may include website visitor, conversation, people, campaign, and helpdesk data; executable reads are not exposed by #205.",
-    "write": "Crisp REST API mutations can create, update, delete, import, export, or administer website resources; all writes remain blocked until typed reverse-ETL actions and approvals are declared.",
-    "approval": "Future reverse ETL writes require plan, preview, approval token, and typed confirmation for destructive/admin operations."
+    "read": "Crisp REST API reads may include website visitor, conversation, people, campaign, and helpdesk data. Direct-read commands are bounded to the configured byte limit and fixed official endpoints.",
+    "write": "Crisp REST API mutations can create, update, delete, import, export, or administer website resources. All write commands are explicit named reverse-ETL actions that require plan, preview, and approval; destructive/admin actions require typed confirmation.",
+    "approval": "Reverse ETL writes require plan, preview, approval token, and typed confirmation for destructive/admin operations."
   }
 }

@@ -78,6 +78,42 @@ func (f *fakeConnector) DryRunWrite(_ context.Context, req connectors.WriteReque
 	return connectors.WritePreview{Action: req.Action, RecordsStaged: len(records)}, nil
 }
 
+func TestRunDirectReadSupportsGenericJSONResponsePolicy(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "conversation get",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				OutputPolicy: "json_response",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/v1/website/{website_id}/conversation/{session_id}"},
+				},
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "session-id", Type: "string", MapsTo: "path.session_id"},
+				},
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path: []string{"conversation", "get"},
+		Flags: map[string][]string{
+			"session-id": {"session_123"},
+		},
+		Config: connectors.RuntimeConfig{Config: map[string]string{"website_id": "website_123"}},
+	}, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Run direct_read json_response: %v", err)
+	}
+	if connector.directReadReq.OutputPolicy != "json_response" {
+		t.Fatalf("direct read output policy = %q, want json_response", connector.directReadReq.OutputPolicy)
+	}
+	if got := connector.directReadReq.PathParams["session_id"]; got != "session_123" {
+		t.Fatalf("direct read session_id = %q, want session_123", got)
+	}
+}
+
 func TestRunImplementedStreamCommand(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{

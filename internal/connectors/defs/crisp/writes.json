@@ -1,0 +1,2950 @@
+{
+  "actions": [
+    {
+      "name": "create_website",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Creates a new website.'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "delete_website",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes an existing website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "abort_website_deletion",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/expunge",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Aborts scheduled deletion for an existing website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_suggested_conversation_segment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/conversations/suggest/segment",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes a suggested conversation segment for website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_suggested_conversation_data_key",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/conversations/suggest/data",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes a suggested conversation data key for website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "submit_spam_conversation_decision",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversations/spam/{{ record.spam_id }}/decision",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "spam_id"
+        ],
+        "properties": {
+          "spam_id": {
+            "type": "string",
+            "description": "Crisp path parameter spam_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Submits decision on spam conversation (this allows to accepts or rejects a spam). If rejected, a spam message will be gone forever. If accepted, it will get transformed into a regular conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "spam_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "create_new_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Creates a new conversation.'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "remove_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Removes a conversation in website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "initiate_conversation_existing_session",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/initiate",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Initiates a conversation from an existing session.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "send_message_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/message",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Sends a message in an existing conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_message_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/message/{{ record.fingerprint }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id",
+          "fingerprint"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          },
+          "fingerprint": {
+            "type": "string",
+            "description": "Crisp path parameter fingerprint."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Edits an existing message in an existing conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id",
+        "fingerprint"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_message_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/message/{{ record.fingerprint }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id",
+          "fingerprint"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          },
+          "fingerprint": {
+            "type": "string",
+            "description": "Crisp path parameter fingerprint."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Removes an existing message in an existing conversation. Used to retract a previously-sent message.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "session_id",
+        "fingerprint"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "compose_message_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/compose",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Starts or stop composing a message in an existing conversation. This route is used for MagicType preview.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "mark_messages_as_read_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/read",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Marks messages as read in conversation. Either using given message fingerprints, or all messages.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "mark_conversation_as_unread",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/unread",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Marks whole conversation as unread.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "mark_messages_as_delivered_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/delivered",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Marks messages as delivered in conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_conversation_open_state",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/open",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Updates conversation open state for authenticated operator user. Lets other operators see which conversation people are on at any given moment. This state automatically expires after a while, if not renewed.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "assign_conversation_routing",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/routing",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Assigns conversation routing to an operator, or unassign.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_conversation_inbox",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/inbox",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Updates inbox used for conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_conversation_metas",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/meta",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Updates conversation meta information.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "change_conversation_state",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/state",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Updates conversation state (resolved, unresolved or pending).'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "save_conversation_participants",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/participants",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Saves conversation participants (external participants, eg. emails to be set in CC).'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "block_incoming_messages_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/block",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Blocks further incoming messages from a conversation. Messages from visitor will be silently dropped, but you can still send messages to visitor.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_verify_status_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/verify",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Updates conversation verify status. When a conversation user is verified, a verified badge shows in the Crisp apps.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "request_identity_verification_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/verify/identity",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Requests a verification of an identity channel for conversation. Verifying a channel automatically marks the whole conversation as verified, showing a verified badge in the Crisp apps.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "redeem_identity_verification_link_conversation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/verify/identity/link",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Redeems a verification link to verify an identity channel for conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "request_email_transcript_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/transcript",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Requests an email transcript for a conversation. The transcript is emailed to the authenticated user, or to the indicated email. It contains all conversation history and may be kept for as an external record.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "request_chatbox_binding_purge_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/purge",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Requests a chatbox binding purge for conversation. The visitor must be online for the purge to be proceeded.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "request_user_feedback_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/feedback",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Requests feedback from user for conversation. The visitor must be online for the feedback request to be delivered.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "initiate_browsing_session_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/browsing",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Initiates browsing session for conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "send_action_existing_browsing_session",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/browsing/{{ record.browsing_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id",
+          "browsing_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          },
+          "browsing_id": {
+            "type": "string",
+            "description": "Crisp path parameter browsing_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Sends an action to an existing browsing session. Used to send stream actions to a browsing session (eg. to start or stop the stream session).'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id",
+        "browsing_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "assist_existing_browsing_session",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/browsing/{{ record.browsing_id }}/assist",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id",
+          "browsing_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          },
+          "browsing_id": {
+            "type": "string",
+            "description": "Crisp path parameter browsing_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Assists an existing browsing session. Used by LiveAssist™ to start or stop an assist session, used by operators to take control on the screen of user browser (mouse move and scroll).'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id",
+        "browsing_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "initiate_new_call_session_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/call",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Initiates a new audio/video call session for conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "abort_ongoing_call_session_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/call/{{ record.call_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id",
+          "call_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          },
+          "call_id": {
+            "type": "string",
+            "description": "Crisp path parameter call_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Aborts the ongoing audio/video call session for conversation.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "session_id",
+        "call_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "transmit_signaling_ongoing_call_session",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/call/{{ record.call_id }}/signaling",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id",
+          "call_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          },
+          "call_id": {
+            "type": "string",
+            "description": "Crisp path parameter call_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Transmits a signaling payload for the ongoing audio/video call session for conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id",
+        "call_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "request_tool_call_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/tool",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Requests a new WebMCP tool call on the chatbox widget for conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "deliver_widget_button_action_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/widget/{{ record.plugin_id }}/button",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id",
+          "plugin_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          },
+          "plugin_id": {
+            "type": "string",
+            "description": "Crisp path parameter plugin_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Delivers a button action on plugin widget for conversation, used to perform an action on the plugin, eg. refund a user. A hook will be sent to the plugin widget receiver.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "session_id",
+        "plugin_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "deliver_widget_data_action_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/widget/{{ record.plugin_id }}/data",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id",
+          "plugin_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          },
+          "plugin_id": {
+            "type": "string",
+            "description": "Crisp path parameter plugin_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Delivers a data action on plugin widget for conversation, used to either fetch or edit a data value from the plugin, eg. fetch a user unpaid balance. A hook will be sent to the plugin widget receiver.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "session_id",
+        "plugin_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "schedule_reminder_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/reminder",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Schedules a reminder in the future for conversation, with a note to your future-self. A push notification and an email will be sent, as well as a note in the conversation.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "report_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/conversation/{{ record.session_id }}/report",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "session_id"
+        ],
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "Crisp path parameter session_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Reports a conversation to Crisp and remove it from the inbox. This can be used to move an entire conversation to spams.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "session_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_suggested_people_segment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/people/suggest/segment",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes a suggested segment for people.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_suggested_people_data_key",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/people/suggest/data",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes a suggested data key for people.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_suggested_people_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/people/suggest/event",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes a suggested event for people.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_new_people_profile",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/people/profile",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Adds a new people profile.'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "save_people_profile",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/people/profile/{{ record.people_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "people_id"
+        ],
+        "properties": {
+          "people_id": {
+            "type": "string",
+            "description": "Crisp path parameter people_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Saves people profile, and overwrite all previous information.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "people_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_people_profile",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/people/profile/{{ record.people_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "people_id"
+        ],
+        "properties": {
+          "people_id": {
+            "type": "string",
+            "description": "Crisp path parameter people_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Updates people profile, and save only changed fields on the previous profile revision.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "people_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "remove_people_profile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/people/profile/{{ record.people_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "people_id"
+        ],
+        "properties": {
+          "people_id": {
+            "type": "string",
+            "description": "Crisp path parameter people_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Removes people profile in website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "people_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_people_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/people/events/{{ record.people_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "people_id"
+        ],
+        "properties": {
+          "people_id": {
+            "type": "string",
+            "description": "Crisp path parameter people_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Stacks an event for people.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "people_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "save_people_data",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/people/data/{{ record.people_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "people_id"
+        ],
+        "properties": {
+          "people_id": {
+            "type": "string",
+            "description": "Crisp path parameter people_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Saves stored data for people. This replaces any already-set data with the new data keys.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "people_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_people_data",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/people/data/{{ record.people_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "people_id"
+        ],
+        "properties": {
+          "people_id": {
+            "type": "string",
+            "description": "Crisp path parameter people_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Updates stored data for people. This merges the new data keys with already-set data.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "people_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "update_people_subscription_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/people/subscription/{{ record.people_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "people_id"
+        ],
+        "properties": {
+          "people_id": {
+            "type": "string",
+            "description": "Crisp path parameter people_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Updates current subscription status for people (subscribe or unsubscribe).'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "people_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "export_people_profiles",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/people/export/profiles",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp file/import/export-style operation for 'Exports people profiles. The exported data is sent back to email to the requester user.'; fixed endpoint only, no unbounded local file execution, requires approval",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "import_people_profiles",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/people/import/profiles",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp file/import/export-style operation for 'Imports people profiles. The imported data, eg. a CSV file containing user emails and full names is used to populate website user database.'; fixed endpoint only, no unbounded local file execution, requires approval",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "clear_blocked_visitors_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/visitors/blocked/{{ record.block_rule }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "block_rule"
+        ],
+        "properties": {
+          "block_rule": {
+            "type": "string",
+            "description": "Crisp path parameter block_rule."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Clears all blocked visitors in rule list on website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "block_rule"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "flush_last_active_website_operators",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/operators/active",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Flushes the list of last active website operators, ie. operators who last replied to a visitor message.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "send_email_website_operators",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/operators/email",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Sends an email to target website operators. The email will be delivered to each operator account email address.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "invite_website_operator",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/operator",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Invites an email to join website as operator. The target email doesn't need to be a valid Crisp account, since Crisp will send an invite email to that email. The receiver is then prompted to click on a link to either join the website with an existing account, or create a new account on the fly.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "change_operator_membership",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/operator/{{ record.user_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "Crisp path parameter user_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Changes the membership of an existing operator. Useful to downgrade or upgrade an operator from/to owner role, or change their title in the team.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unlink_operator_website",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/operator/{{ record.user_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "Crisp path parameter user_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Unlinks given operator from website. Note that the last operator in the website cannot be unlinked.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "initialize_helpdesk",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Initializes a new helpdesk for website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_helpdesk",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes helpdesk for website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_helpdesk_locale",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Adds a locale for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_helpdesk_locale",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes a locale for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "locale"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_new_helpdesk_locale_article",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/article",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Adds a new locale article for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "save_helpdesk_locale_article",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/article/{{ record.article_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "article_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "article_id": {
+            "type": "string",
+            "description": "Crisp path parameter article_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Saves a locale article for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "article_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_helpdesk_locale_article",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/article/{{ record.article_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "article_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "article_id": {
+            "type": "string",
+            "description": "Crisp path parameter article_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Updates a locale article for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "article_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_helpdesk_locale_article",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/article/{{ record.article_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "article_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "article_id": {
+            "type": "string",
+            "description": "Crisp path parameter article_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes a locale article for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "locale",
+        "article_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_helpdesk_locale_article_category",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/article/{{ record.article_id }}/category",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "article_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "article_id": {
+            "type": "string",
+            "description": "Crisp path parameter article_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Updates a locale article category for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "article_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "save_helpdesk_locale_article_alternate",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/article/{{ record.article_id }}/alternate/{{ record.locale_linked }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "article_id",
+          "locale_linked"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "article_id": {
+            "type": "string",
+            "description": "Crisp path parameter article_id."
+          },
+          "locale_linked": {
+            "type": "string",
+            "description": "Crisp path parameter locale_linked."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Saves alternate locale on a locale article for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "article_id",
+        "locale_linked"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_helpdesk_locale_article_alternate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/article/{{ record.article_id }}/alternate/{{ record.locale_linked }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "article_id",
+          "locale_linked"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "article_id": {
+            "type": "string",
+            "description": "Crisp path parameter article_id."
+          },
+          "locale_linked": {
+            "type": "string",
+            "description": "Crisp path parameter locale_linked."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes alternate locale on a locale article for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "locale",
+        "article_id",
+        "locale_linked"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "publish_helpdesk_locale_article",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/article/{{ record.article_id }}/publish",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "article_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "article_id": {
+            "type": "string",
+            "description": "Crisp path parameter article_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Publishes a locale article for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "article_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unpublish_helpdesk_locale_article",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/article/{{ record.article_id }}/unpublish",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "article_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "article_id": {
+            "type": "string",
+            "description": "Crisp path parameter article_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Unpublishes a locale article for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "article_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_helpdesk_locale_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/category",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Adds a locale category for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "save_helpdesk_locale_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/category/{{ record.category_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "category_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "category_id": {
+            "type": "string",
+            "description": "Crisp path parameter category_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Saves a locale category for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "category_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_helpdesk_locale_category",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/category/{{ record.category_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "category_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "category_id": {
+            "type": "string",
+            "description": "Crisp path parameter category_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Updates a locale category for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "category_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_helpdesk_locale_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/category/{{ record.category_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "category_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "category_id": {
+            "type": "string",
+            "description": "Crisp path parameter category_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes a locale category for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "locale",
+        "category_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_helpdesk_locale_section",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/category/{{ record.category_id }}/section",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "category_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "category_id": {
+            "type": "string",
+            "description": "Crisp path parameter category_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Adds a locale section for helpdesk in website and category.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "category_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "save_helpdesk_locale_section",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/category/{{ record.category_id }}/section/{{ record.section_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "category_id",
+          "section_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "category_id": {
+            "type": "string",
+            "description": "Crisp path parameter category_id."
+          },
+          "section_id": {
+            "type": "string",
+            "description": "Crisp path parameter section_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Saves a locale section for helpdesk in website and category.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "category_id",
+        "section_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_helpdesk_locale_section",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/category/{{ record.category_id }}/section/{{ record.section_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "category_id",
+          "section_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "category_id": {
+            "type": "string",
+            "description": "Crisp path parameter category_id."
+          },
+          "section_id": {
+            "type": "string",
+            "description": "Crisp path parameter section_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Updates a locale section for helpdesk in website and category.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "locale",
+        "category_id",
+        "section_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_helpdesk_locale_section",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/category/{{ record.category_id }}/section/{{ record.section_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale",
+          "category_id",
+          "section_id"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          },
+          "category_id": {
+            "type": "string",
+            "description": "Crisp path parameter category_id."
+          },
+          "section_id": {
+            "type": "string",
+            "description": "Crisp path parameter section_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes a locale section for helpdesk in website and category.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "locale",
+        "category_id",
+        "section_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "import_external_helpdesk_locale",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/import",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          }
+        }
+      },
+      "risk": "high risk Crisp file/import/export-style operation for 'Imports a whole external helpdesk to Crisp, as a Crisp Helpdesk. The import crawler pipeline is asynchronous.'; fixed endpoint only, no unbounded local file execution, requires approval",
+      "path_fields": [
+        "locale"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "export_helpdesk_locale_articles",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/locale/{{ record.locale }}/export",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "locale"
+        ],
+        "properties": {
+          "locale": {
+            "type": "string",
+            "description": "Crisp path parameter locale."
+          }
+        }
+      },
+      "risk": "high risk Crisp file/import/export-style operation for 'Exports helpdesk articles for locale. The exported data is sent back to email to the requester user.'; fixed endpoint only, no unbounded local file execution, requires approval",
+      "path_fields": [
+        "locale"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_helpdesk_redirection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/redirection",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Adds a redirection for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_helpdesk_redirection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/redirection/{{ record.redirection_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "redirection_id"
+        ],
+        "properties": {
+          "redirection_id": {
+            "type": "string",
+            "description": "Crisp path parameter redirection_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes a redirection for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "redirection_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "save_helpdesk_settings",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/settings",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Saves settings for helpdesk in website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "request_helpdesk_domain_change",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/helpdesk/domain",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Requests a change in the domain used for helpdesk. The change will be propagated once all setup steps are fulfilled (see the setup route).'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_new_campaign_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/campaigns/template",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Creates a new campaign template.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "save_campaign_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/campaigns/template/{{ record.template_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "template_id"
+        ],
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "description": "Crisp path parameter template_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Saves a campaign template in website, and overwrite previous template information.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "template_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_campaign_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/campaigns/template/{{ record.template_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "template_id"
+        ],
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "description": "Crisp path parameter template_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Updates a campaign template in website, and save only changed fields.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "template_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_campaign_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/campaigns/template/{{ record.template_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "template_id"
+        ],
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "description": "Crisp path parameter template_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Removes a campaign template in website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "template_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_new_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/campaign",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Creates a new campaign.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "save_campaign",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/campaign/{{ record.campaign_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "campaign_id"
+        ],
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "description": "Crisp path parameter campaign_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Saves a campaign in website, and overwrite previous campaign information.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "campaign_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_campaign",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/campaign/{{ record.campaign_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "campaign_id"
+        ],
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "description": "Crisp path parameter campaign_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Updates a campaign in website, and save only changed fields.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "campaign_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_campaign",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/campaign/{{ record.campaign_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "campaign_id"
+        ],
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "description": "Crisp path parameter campaign_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Removes a campaign in website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "campaign_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "dispatch_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/campaign/{{ record.campaign_id }}/dispatch",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "campaign_id"
+        ],
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "description": "Crisp path parameter campaign_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Dispatches a ready campaign.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "campaign_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "resume_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/campaign/{{ record.campaign_id }}/resume",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "campaign_id"
+        ],
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "description": "Crisp path parameter campaign_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Resumes a paused and dispatched campaign.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "campaign_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "pause_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/campaign/{{ record.campaign_id }}/pause",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "campaign_id"
+        ],
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "description": "Crisp path parameter campaign_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Pauses a running and dispatched campaign.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "campaign_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "test_campaign",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/campaign/{{ record.campaign_id }}/test",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "campaign_id"
+        ],
+        "properties": {
+          "campaign_id": {
+            "type": "string",
+            "description": "Crisp path parameter campaign_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Tests a ready campaign.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "campaign_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "generate_analytics",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/analytics/generate",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Generates analytics for given type and metric in website.'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_resolve_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/batch/resolve",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Resolves given (or all) items in website (conversations).'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_unresolve_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/batch/unresolve",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Unresolves given items in website (conversations).'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_read_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/batch/read",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Marks given (or all) items as read in website (conversations).'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_unread_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/batch/unread",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Marks given items as unread in website (conversations).'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_report_items",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/batch/report",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Reports given items in website (conversations).'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_block_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/batch/block",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Blocks or unblocks given items in website (conversations).'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_routing_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/batch/routing",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Assigns or unassigns operator for given items in website (conversations).'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_inbox_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/batch/inbox",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Moves given items to a different inbox in website (conversations).'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_segments_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/batch/segments",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Assigns segments to given items in website (conversations or people).'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_data_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/batch/data",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Assigns data to given items in website (conversations or people).'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "batch_remove_items",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/batch/remove",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Removes given items in website (conversations or people).'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "batch_order_website_inboxes",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/inboxes/batch/order",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Changes order for multiple matching inboxes on website.'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "create_new_website_inbox",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/inbox",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Creates a new inbox for website.'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "save_website_inbox",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/website/{{ config.website_id }}/inbox/{{ record.inbox_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "inbox_id"
+        ],
+        "properties": {
+          "inbox_id": {
+            "type": "string",
+            "description": "Crisp path parameter inbox_id."
+          }
+        }
+      },
+      "risk": "medium risk Crisp mutation for 'Saves inbox for website.'; requires reverse ETL plan, preview, and approval",
+      "path_fields": [
+        "inbox_id"
+      ],
+      "body_type": "json"
+    },
+    {
+      "name": "delete_website_inbox",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/website/{{ config.website_id }}/inbox/{{ record.inbox_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "inbox_id"
+        ],
+        "properties": {
+          "inbox_id": {
+            "type": "string",
+            "description": "Crisp path parameter inbox_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Deletes inbox for website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "inbox_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_website_settings",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/settings",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Updates the current settings for a website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_verify_settings",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/website/{{ config.website_id }}/verify/settings",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Updates verify settings.'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "roll_verify_key",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/website/{{ config.website_id }}/verify/key",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "medium risk Crisp mutation for 'Rolls verify key. This requests a new keypair to be generated. Previous key will be invalidated.'; requires reverse ETL plan, preview, and approval",
+      "body_type": "json"
+    },
+    {
+      "name": "subscribe_website_plugin",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{{ config.website_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Subscribes a given website to a given plugin.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unsubscribe_plugin_website",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/plugins/subscription/{{ config.website_id }}/{{ record.plugin_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "plugin_id"
+        ],
+        "properties": {
+          "plugin_id": {
+            "type": "string",
+            "description": "Crisp path parameter plugin_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp destructive mutation for 'Unsubscribes a given plugin from a given website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "path_fields": [
+        "plugin_id"
+      ],
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "save_subscription_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v1/plugins/subscription/{{ config.website_id }}/{{ record.plugin_id }}/settings",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "plugin_id"
+        ],
+        "properties": {
+          "plugin_id": {
+            "type": "string",
+            "description": "Crisp path parameter plugin_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Saves plugin subscription settings (overwrites existing settings). Used to configure a given plugin on a given website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "plugin_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_subscription_settings",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/plugins/subscription/{{ config.website_id }}/{{ record.plugin_id }}/settings",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "plugin_id"
+        ],
+        "properties": {
+          "plugin_id": {
+            "type": "string",
+            "description": "Crisp path parameter plugin_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Updates plugin subscription settings (merges with existing settings). Used to configure a given plugin on a given website.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "plugin_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "report_plugin_usage_bill",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{{ config.website_id }}/{{ record.plugin_id }}/bill/usage",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "plugin_id"
+        ],
+        "properties": {
+          "plugin_id": {
+            "type": "string",
+            "description": "Crisp path parameter plugin_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Reports a billable usage for a website using a subscribed plugin. This billable usage will be invoiced to the user whenever they get charged for other Crisp subscriptions.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "plugin_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "forward_plugin_payload_channel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{{ config.website_id }}/{{ record.plugin_id }}/channel",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "plugin_id"
+        ],
+        "properties": {
+          "plugin_id": {
+            "type": "string",
+            "description": "Crisp path parameter plugin_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Forwards generic payload given generic namespace to plugin channel.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "plugin_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "dispatch_plugin_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/plugins/subscription/{{ config.website_id }}/{{ record.plugin_id }}/event",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "plugin_id"
+        ],
+        "properties": {
+          "plugin_id": {
+            "type": "string",
+            "description": "Crisp path parameter plugin_id."
+          }
+        }
+      },
+      "risk": "high risk Crisp administrative mutation for 'Dispatches a generic data event for plugin, for use with Web Hooks.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "path_fields": [
+        "plugin_id"
+      ],
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "subscribe_website_plan",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/plans/subscription/{{ config.website_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Subscribes a given website to a given plan.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unsubscribe_plan_website",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v1/plans/subscription/{{ config.website_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp destructive mutation for 'Unsubscribes a given plan from a given website.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "none",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
+    },
+    {
+      "name": "change_bill_period_website_plan_subscription",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/plans/subscription/{{ config.website_id }}/bill/period",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Changes how often the website subscription is paid for. The payment method will be debited at selected interval for the due amount.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "redeem_coupon_website_plan_subscription",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v1/plans/subscription/{{ config.website_id }}/coupon",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp administrative mutation for 'Redeems a coupon for a website subscription. This applies coupon rebates and upgrades immediately to the subscription.'; requires reverse ETL plan, preview, approval, and typed confirmation when prompted",
+      "body_type": "json",
+      "confirm": "destructive"
+    },
+    {
+      "name": "generate_bucket_url",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v1/bucket/url/generate",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "risk": "high risk Crisp file/import/export-style operation for 'Generates a bucket URL. The URL is signed, and lets you upload a file directly to it.'; fixed endpoint only, no unbounded local file execution, requires approval",
+      "body_type": "json",
+      "confirm": "destructive"
+    }
+  ]
+}

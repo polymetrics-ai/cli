@@ -22,9 +22,13 @@ const (
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
+	directReadPolicyJSONResponse               = "json_response"
 )
 
-var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
+var (
+	surfacePathVarPattern       = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
+	surfaceQueryTemplatePattern = regexp.MustCompile(`\{[?&][^}]*\}`)
+)
 
 func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
@@ -112,6 +116,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
+	case directReadPolicyJSONResponse:
+		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
@@ -119,6 +125,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 
 func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 	switch policy {
+	case directReadPolicyJSONResponse:
+		return body, nil
 	case directReadPolicyGitHubContentsFileMetadata:
 		obj, ok := body.(map[string]any)
 		if !ok {
@@ -234,6 +242,7 @@ func resolveSurfaceEndpointPath(template string, cfg connectors.RuntimeConfig, p
 	if isAbsoluteHTTPURL(template) {
 		return "", fmt.Errorf("direct read endpoint must be connector-relative, got absolute URL")
 	}
+	template = surfaceQueryTemplatePattern.ReplaceAllString(template, "")
 	var firstErr error
 	resolved := surfacePathVarPattern.ReplaceAllStringFunc(template, func(match string) string {
 		if firstErr != nil {
