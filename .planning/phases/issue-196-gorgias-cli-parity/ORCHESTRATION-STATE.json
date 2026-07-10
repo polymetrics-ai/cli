@@ -48,7 +48,7 @@
     },
     {
       "number": 199,
-      "status": "sub_pr_open",
+      "status": "provisionally_integrated",
       "dependencies": [
         197,
         200
@@ -64,7 +64,7 @@
         "cmd/connectorgen/gorgias_api_surface_test.go",
         ".planning/phases/issue-199-gorgias-stream-runner"
       ],
-      "decision": "local_critical_path"
+      "decision": "merged_to_parent_review_pending"
     },
     {
       "number": 201,
@@ -94,7 +94,7 @@
         "internal/connectors/defs/gorgias",
         ".planning/phases/issue-202-gorgias-advanced-query-binary"
       ],
-      "decision": "ready_after_200_provisional_integration"
+      "decision": "ready_after_199_provisional_integration"
     },
     {
       "number": 203,
@@ -109,7 +109,7 @@
         "internal/app",
         ".planning/phases/issue-203-gorgias-sensitive-admin-policy"
       ],
-      "decision": "ready_after_200_provisional_integration"
+      "decision": "ready_after_199_provisional_integration"
     },
     {
       "number": 198,
@@ -204,6 +204,14 @@
         199
       ],
       "reason": "Pi harness lacks subagent spawning, so #199 was executed locally after #200 provisional integration. Sub-PR #268 opened against parent branch after local verification passed."
+    },
+    {
+      "timestamp": "2026-07-10T10:37:00Z",
+      "decision": "provisional_integration",
+      "issue_numbers": [
+        199
+      ],
+      "reason": "Sub-PR #268 checks passed and was squash-merged into the parent branch as 5dd39e17. CodeRabbit did not review the non-default stacked PR; parent PR fallback review coverage remains pending."
     }
   ],
   "subissues": [
@@ -264,7 +272,7 @@
       "branch": "feat/199-gorgias-stream-runner",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/268",
       "worker": "local_critical_path_pi_orchestrator",
-      "status": "sub_pr_open",
+      "status": "provisionally_integrated",
       "write_scope": [
         "internal/connectors/defs/gorgias/streams.json",
         "internal/connectors/defs/gorgias/schemas",
@@ -277,15 +285,15 @@
         ".planning/phases/issue-199-gorgias-stream-runner"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
-      "verification": "local focused gates and broad gate passed: go vet ./..., go test ./..., go build ./cmd/pm, make verify",
+      "verification": "local focused gates, broad gate, sub-PR checks, and parent branch squash merge passed",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
-        "head_sha": "067ffc20e56613ed6ce3bb2b6b8a127c0ee0c7ec",
-        "reviewed_range": "pending for stacked sub-PR #268; if CodeRabbit skips non-default base, parent PR fallback coverage is required before final integration",
-        "coverage_route": "stacked_sub_pr_then_parent_pr_fallback",
+        "status": "skipped_or_absent",
+        "head_sha": "277cb57695c6b3bb374c373fded6888d9c26e1f5",
+        "reviewed_range": "Sub-PR #268 had no CodeRabbit status/review comments while targeting the non-default parent branch; parent PR fallback coverage pending after squash merge 5dd39e17.",
+        "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "Awaiting automated review/check coverage; no findings to disposition yet.",
+        "disposition_summary": "No actionable review findings received; skipped/absent automated review is recorded as non-approval pending parent PR fallback.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/268"
       }
     },
@@ -403,5 +411,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T10:30:00Z"
+  "updated_at": "2026-07-10T10:37:00Z"
 }

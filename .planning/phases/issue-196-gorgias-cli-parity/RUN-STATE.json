@@ -108,8 +108,19 @@
         199
       ],
       "reason": "Expanded Gorgias stream coverage to 24 streams with red/green TDD evidence, passed local gates, and opened sub-PR #268 to the parent branch."
+    },
+    {
+      "timestamp": "2026-07-10T10:37:00Z",
+      "cycle": "issue-199-provisional-integration",
+      "decision": "provisional_integration",
+      "issue_numbers": [
+        199,
+        202,
+        203
+      ],
+      "reason": "Sub-PR #268 green and squash-merged into parent branch; #202/#203 remain ready, while automated review coverage for #199 remains pending parent PR fallback."
     }
   ],
   "verificationPassed": false,
-  "verificationBlocker": "sub-PR #268 automated review/check coverage pending; parent fallback review still pending for provisionally integrated #197/#200"
+  "verificationBlocker": "automated review coverage pending for #197/#200/#199 because stacked PR review was skipped/absent and draft parent PR CodeRabbit coverage is skipped"
 }
