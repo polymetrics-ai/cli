@@ -48,3 +48,12 @@ Green:
 
 Refactor:
 - Kept unsupported multipart/top-level-array payloads as typed blocked operation metadata with bounded schemas/policies instead of adding a generic raw upload/write path.
+
+## 2026-07-10 engine-shape issues #252/#253/#254
+
+Red plan:
+- #252: operation direct-read POST JSON body construction, schema validation, output redaction, commandrunner typed body mappings, validator safety.
+- #253: top-level JSON array write body shape, schema validation, preview redaction, validator safety.
+- #254: stdlib multipart request construction, local path/size safety, engine multipart writes, preview redaction, validator safety.
+
+Green/refactor pending implementation.

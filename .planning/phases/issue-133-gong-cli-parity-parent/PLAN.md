@@ -113,3 +113,13 @@ Integrated coverage:
 - 23 typed JSON reverse-ETL write actions in `writes.json`.
 - 16 typed operation metadata rows for POST read-query and multipart/top-level-array executor gaps.
 - No generic raw HTTP write, arbitrary body, shell write, SQL write, or credentialed Gong check was introduced.
+
+## 2026-07-10 engine-shape implementation expansion
+
+Created follow-up implementation issues from the #146 analysis to close the remaining Gong executor gaps:
+
+- #252 — typed POST read-query operation execution.
+- #253 — schema-gated top-level JSON array request bodies.
+- #254 — bounded typed multipart upload support.
+
+Runtime decision: no subagent tool is available in this Pi API session and the write scopes overlap in `internal/connectors/engine`, `internal/connectors/commandrunner`, `cmd/connectorgen`, and Gong definitions, so the parent orchestrator records `local_critical_path_runtime_capability_missing` and executes the slices sequentially on `feat/133-gong-cli-parity`.

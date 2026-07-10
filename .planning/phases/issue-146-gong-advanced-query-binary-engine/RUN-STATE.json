@@ -3,6 +3,7 @@
   "parent_issue": 133,
   "phase": "issue-146-gong-advanced-query-binary-engine",
   "status": "green_local_integrated",
+  "planning_status": "analysis_replan_recorded",
   "updated_at": "2026-07-10T00:00:00Z",
   "gsd": {
     "doctor": "passed",
@@ -37,5 +38,30 @@
     "go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1",
     "go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs"
   ],
-  "docs_parity": "pm help docs reviewed; pm docs validate passed; docs/connectors/gong and website generated catalog updated"
+  "docs_parity": "pm help docs reviewed; pm docs validate passed; docs/connectors/gong and website generated catalog updated",
+  "engine_support_replan": {
+    "scope": "analysis_only_no_production_code",
+    "requested_shapes": [
+      "post_read_query_fixed_json_body",
+      "multipart_upload",
+      "top_level_array_request_body"
+    ],
+    "recommendation": "schema-gated typed operation/direct-read and write-action extensions; no raw generic body/upload command",
+    "human_gates": [
+      "credentialed Gong checks",
+      "reverse ETL execution",
+      "destructive external actions",
+      "new dependencies",
+      "parent PR merge to main"
+    ],
+    "planned_tests": [
+      "connsdk multipart fixture tests",
+      "engine operation direct-read tests",
+      "engine json_array write tests",
+      "engine multipart write tests",
+      "commandrunner operation/body mapping tests",
+      "connectorgen validator tests",
+      "Gong definition parity tests"
+    ]
+  }
 }

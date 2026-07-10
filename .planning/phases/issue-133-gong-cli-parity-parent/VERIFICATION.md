@@ -83,3 +83,12 @@ Applies to later CLI-visible lanes (#141-#143, #145-#147). #144 is connector met
 - [x] `./pm help connectors`
 - [x] `./pm connectors inspect gong`
 - [x] `./pm connectors inspect gong --json`
+
+## Engine-shape issues #252/#253/#254 pending gates
+
+- [ ] `go test ./internal/connectors/connsdk -run Multipart -count=1`
+- [ ] `go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1`
+- [ ] `go test ./internal/connectors/commandrunner -run 'OperationDirectRead|JSONArray|Multipart' -count=1`
+- [ ] `go test ./cmd/connectorgen -run 'Operation|Gong' -count=1`
+- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs`
+- [ ] `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`

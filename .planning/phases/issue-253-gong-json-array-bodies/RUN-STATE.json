@@ -1,0 +1,15 @@
+{
+  "issue": 253,
+  "parent_issue": 133,
+  "phase": "issue-253-gong-json-array-bodies",
+  "status": "planned",
+  "updated_at": "2026-07-10T00:00:00Z",
+  "branch": "feat/133-gong-cli-parity",
+  "pr": "https://github.com/polymetrics-ai/cli/pull/232",
+  "gsd": {
+    "doctor": "passed",
+    "plan_phase_prompt": "scripts/gsd prompt plan-phase 253 --skip-research --tdd",
+    "programming_loop": "manual_fallback_unknown_command"
+  },
+  "human_gates": ["credentialed Gong checks", "reverse ETL execution", "destructive external actions", "new dependencies", "parent PR merge to main"]
+}
