@@ -720,6 +720,45 @@ func TestRunImplementedDirectReadCommandWithJSONPolicy(t *testing.T) {
 	}
 }
 
+func TestRunImplementedDirectReadCommandWithBinaryManifestPolicy(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "binary show-attachment",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/api/v2/attachments/{attachment_id}"},
+				},
+				OutputPolicy: "binary_manifest",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "attachment-id", Type: "string", MapsTo: "path.attachment_id"},
+				},
+			},
+		},
+	}}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:  []string{"binary", "show-attachment"},
+		Flags: map[string][]string{"attachment-id": []string{"123"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("DirectRead = nil, want result")
+	}
+	if connector.directReadReq.OutputPolicy != "binary_manifest" {
+		t.Fatalf("direct read output policy = %q, want binary_manifest", connector.directReadReq.OutputPolicy)
+	}
+	if connector.directReadReq.PathParams["attachment_id"] != "123" {
+		t.Fatalf("attachment path param = %q, want 123", connector.directReadReq.PathParams["attachment_id"])
+	}
+}
+
 func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 	tests := []struct {
 		name     string

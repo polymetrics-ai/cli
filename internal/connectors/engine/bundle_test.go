@@ -1112,12 +1112,16 @@ func TestBundleLoadZendeskDirectReadCommandCoverage(t *testing.T) {
 		if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
 			directReadCommands[cmd.Path] = cmd
 		}
+		if cmd.Path == "binary candidates" {
+			t.Fatalf("Zendesk still has planned binary candidates placeholder: %+v", cmd)
+		}
 	}
-	if got, want := len(directReadCommands), 212; got != want {
+	if got, want := len(directReadCommands), 249; got != want {
 		t.Fatalf("implemented Zendesk direct-read commands = %d, want %d", got, want)
 	}
 
-	covered := 0
+	jsonCovered := 0
+	binaryCovered := 0
 	for _, ep := range b.Surface.Endpoints {
 		if ep.CoveredBy == nil || ep.CoveredBy.DirectRead == "" {
 			continue
@@ -1129,13 +1133,20 @@ func TestBundleLoadZendeskDirectReadCommandCoverage(t *testing.T) {
 		if len(cmd.APISurface) != 1 || cmd.APISurface[0].Path != ep.Path || !strings.EqualFold(cmd.APISurface[0].Method, ep.Method) {
 			t.Fatalf("command %q api_surface = %+v, want %s %s", cmd.Path, cmd.APISurface, ep.Method, ep.Path)
 		}
-		if cmd.OutputPolicy != "json" {
-			t.Fatalf("command %q output_policy = %q, want json", cmd.Path, cmd.OutputPolicy)
+		switch cmd.OutputPolicy {
+		case "json":
+			jsonCovered++
+		case "binary_manifest":
+			binaryCovered++
+		default:
+			t.Fatalf("command %q output_policy = %q, want json or binary_manifest", cmd.Path, cmd.OutputPolicy)
 		}
-		covered++
 	}
-	if covered != 212 {
-		t.Fatalf("covered direct-read endpoints = %d, want 212", covered)
+	if jsonCovered != 212 {
+		t.Fatalf("covered JSON direct-read endpoints = %d, want 212", jsonCovered)
+	}
+	if binaryCovered != 37 {
+		t.Fatalf("covered binary direct-read endpoints = %d, want 37", binaryCovered)
 	}
 }
 

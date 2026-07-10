@@ -181,6 +181,76 @@ func TestDirectReadRejectsOversizedResponse(t *testing.T) {
 	}
 }
 
+func TestDirectReadBinaryManifestReturnsMetadataOnly(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v2/attachments/123" {
+			t.Fatalf("path = %s, want attachment path", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/pdf")
+		w.Header().Set("Content-Length", "25")
+		_, _ = w.Write([]byte("synthetic-binary-body-data"))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/api/v2/attachments/{attachment_id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/api/v2/attachments/{attachment_id}",
+		PathParams:   map[string]string{"attachment_id": "123"},
+		MaxBytes:     64,
+		OutputPolicy: "binary_manifest",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want metadata map", result.Body)
+	}
+	for _, forbidden := range []string{"body", "content", "data", "base64"} {
+		if _, ok := body[forbidden]; ok {
+			t.Fatalf("binary manifest exposed %q: %+v", forbidden, body)
+		}
+	}
+	if body["content_type"] != "application/pdf" {
+		t.Fatalf("content_type = %v, want application/pdf", body["content_type"])
+	}
+	if body["content_length"] != "25" {
+		t.Fatalf("content_length = %v, want header value", body["content_length"])
+	}
+	if body["bytes_read"].(int) != len("synthetic-binary-body-data") {
+		t.Fatalf("bytes_read = %v, want bounded byte count", body["bytes_read"])
+	}
+}
+
+func TestDirectReadBinaryManifestMarksTruncatedResponses(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/octet-stream")
+		_, _ = w.Write([]byte("0123456789"))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/api/v2/attachments/{attachment_id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/api/v2/attachments/{attachment_id}",
+		PathParams:   map[string]string{"attachment_id": "123"},
+		MaxBytes:     4,
+		OutputPolicy: "binary_manifest",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want metadata map", result.Body)
+	}
+	if body["truncated"] != true {
+		t.Fatalf("truncated = %v, want true", body["truncated"])
+	}
+	if body["bytes_read"].(int) != 4 {
+		t.Fatalf("bytes_read = %v, want max bytes", body["bytes_read"])
+	}
+}
+
 func TestDirectReadJSONPolicyReturnsDecodedBody(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/api/v2/account/settings" {
