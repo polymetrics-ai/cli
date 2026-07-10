@@ -23,7 +23,7 @@ GSD programming-loop registry command is unavailable (`scripts/gsd: unknown GSD 
 - #183: stream-runner tests must fail first for missing Freshchat stream command behavior or pagination/cursor gaps.
 - #184: operation-ledger validation must fail first for missing/incorrect operation classifications.
 - #185: complete; direct-read tests failed first for unsupported Freshchat bounded JSON direct-read policy, then passed after `freshchat_users_fetch` policy/metadata/docs/conformance updates.
-- #186: advanced query/binary tests must fail first for provider-specific body/query or bounded binary policy gaps.
+- #186: complete; upload operation-policy tests failed first for missing Freshchat typed `file_upload` operation metadata, then passed after operations/docs/fail-closed command wiring.
 - #187: sensitive/admin policy tests must fail first for missing redaction/approval/typed confirmation classifications.
 
 ## Safety notes
