@@ -17,7 +17,7 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi",
-    "status": "parent_review_pending"
+    "status": "worker_in_progress"
   },
   "ready_queue": [
     {
@@ -33,78 +33,109 @@
     },
     {
       "number": 168,
-      "status": "planned",
-      "dependencies": [165],
+      "status": "worker_in_progress",
+      "dependencies": [
+        165
+      ],
       "write_scope": [
         "internal/connectors/defs/intercom/api_surface.json",
         ".planning/phases/issue-168-intercom-operation-ledger"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_combined"
     },
     {
       "number": 166,
-      "status": "planned",
-      "dependencies": [165],
+      "status": "worker_in_progress",
+      "dependencies": [
+        165
+      ],
       "write_scope": [
         "docs/cli",
         "website",
         "internal/connectors/defs/intercom/cli_surface.json",
         ".planning/phases/issue-166-intercom-help-renderer"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_combined"
     },
     {
       "number": 167,
-      "status": "planned",
-      "dependencies": [165, 168],
+      "status": "worker_in_progress",
+      "dependencies": [
+        165,
+        168
+      ],
       "write_scope": [
         "internal/connectors/defs/intercom/streams.json",
         "internal/connectors/defs/intercom/schemas",
         "internal/connectors/defs/intercom/fixtures",
         ".planning/phases/issue-167-intercom-stream-runner"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_combined"
     },
     {
       "number": 169,
-      "status": "planned",
-      "dependencies": [165, 168],
+      "status": "worker_in_progress",
+      "dependencies": [
+        165,
+        168
+      ],
       "write_scope": [
         "internal/connectors/defs/intercom/cli_surface.json",
         "internal/connectors/engine/direct_read.go",
         ".planning/phases/issue-169-intercom-direct-read"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_combined"
     },
     {
       "number": 170,
-      "status": "planned",
-      "dependencies": [168, 169],
+      "status": "worker_in_progress",
+      "dependencies": [
+        168,
+        169
+      ],
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
         ".planning/phases/issue-170-intercom-advanced-query-binary"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_combined"
     },
     {
       "number": 171,
-      "status": "planned",
-      "dependencies": [168, 170],
+      "status": "worker_in_progress",
+      "dependencies": [
+        168,
+        170
+      ],
       "write_scope": [
         "internal/connectors/defs/intercom/writes.json",
         "internal/connectors/defs/intercom/cli_surface.json",
         ".planning/phases/issue-171-intercom-sensitive-admin-policy"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "local_critical_path_combined"
     }
   ],
   "spawn_decisions": [
     {
       "timestamp": "2026-07-09T19:35:34Z",
       "decision": "local_critical_path",
-      "issue_numbers": [165],
+      "issue_numbers": [
+        165
+      ],
       "reason": "Parent PR is missing and this Pi tool surface has no subagent tool; coordinator will create the planning checkpoint and execute the first metadata slice inline before any production edits."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path_combined",
+      "issue_numbers": [
+        166,
+        167,
+        168,
+        169,
+        170,
+        171
+      ],
+      "reason": "User requested complete implementation. Pi tool surface has no isolated mutating subagent/worktree dispatch in this session, and remaining Intercom lanes collide on internal/connectors/defs/intercom, so coordinator is executing a combined stacked branch with per-issue planning artifacts before production edits."
     }
   ],
   "subissues": [
@@ -132,6 +163,162 @@
         "disposition_summary": "Issue #165 is provisionally integrated. CodeRabbit skipped PR #234 because the base was non-default and skipped parent PR #220 because it is draft; coverage remains pending until parent PR review or approved fallback.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4928867117"
       }
+    },
+    {
+      "number": 166,
+      "url": "https://github.com/polymetrics-ai/cli/issues/166",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "pending",
+      "worker": "pi-coordinator-inline",
+      "status": "worker_in_progress",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-166-intercom-help-renderer"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending",
+        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "fallback_route": "none"
+      }
+    },
+    {
+      "number": 167,
+      "url": "https://github.com/polymetrics-ai/cli/issues/167",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "pending",
+      "worker": "pi-coordinator-inline",
+      "status": "worker_in_progress",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-167-intercom-stream-runner"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending",
+        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "fallback_route": "none"
+      }
+    },
+    {
+      "number": 168,
+      "url": "https://github.com/polymetrics-ai/cli/issues/168",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "pending",
+      "worker": "pi-coordinator-inline",
+      "status": "worker_in_progress",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-168-intercom-operation-ledger"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending",
+        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "fallback_route": "none"
+      }
+    },
+    {
+      "number": 169,
+      "url": "https://github.com/polymetrics-ai/cli/issues/169",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "pending",
+      "worker": "pi-coordinator-inline",
+      "status": "worker_in_progress",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-169-intercom-direct-read"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending",
+        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "fallback_route": "none"
+      }
+    },
+    {
+      "number": 170,
+      "url": "https://github.com/polymetrics-ai/cli/issues/170",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "pending",
+      "worker": "pi-coordinator-inline",
+      "status": "worker_in_progress",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-170-intercom-advanced-query-binary"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending",
+        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "fallback_route": "none"
+      }
+    },
+    {
+      "number": 171,
+      "url": "https://github.com/polymetrics-ai/cli/issues/171",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "pending",
+      "worker": "pi-coordinator-inline",
+      "status": "worker_in_progress",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-171-intercom-sensitive-admin-policy"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending",
+        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "fallback_route": "none"
+      }
     }
   ],
   "human_gates": [
@@ -144,5 +331,5 @@
     "production deployment",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T20:46:30Z"
+  "updated_at": "2026-07-10T00:00:00Z"
 }
