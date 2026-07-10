@@ -11,22 +11,40 @@
     {
       "id": "support",
       "title": "Support Desk Commands",
-      "commands": ["conversation", "contact", "message"]
+      "commands": [
+        "conversation",
+        "contact",
+        "message"
+      ]
     },
     {
       "id": "workspace",
       "title": "Workspace Metadata Commands",
-      "commands": ["inbox", "agent", "team", "label"]
+      "commands": [
+        "inbox",
+        "agent",
+        "team",
+        "label"
+      ]
     },
     {
       "id": "admin",
       "title": "Blocked Admin And Configuration Commands",
-      "commands": ["account", "automation", "webhook", "portal", "platform"]
+      "commands": [
+        "account",
+        "automation",
+        "webhook",
+        "portal",
+        "platform"
+      ]
     },
     {
       "id": "reports",
       "title": "Planned Reporting And Audit Commands",
-      "commands": ["report", "audit-log"]
+      "commands": [
+        "report",
+        "audit-log"
+      ]
     }
   ],
   "global_flags": [
@@ -54,14 +72,25 @@
         {
           "name": "status",
           "type": "enum",
-          "values": ["all", "open", "resolved", "pending", "snoozed"],
+          "values": [
+            "all",
+            "open",
+            "resolved",
+            "pending",
+            "snoozed"
+          ],
           "summary": "Filter conversations by status when the runner supports query overrides.",
           "maps_to": "query.status"
         }
       ],
-      "examples": ["pm chatwoot conversation list --json"],
+      "examples": [
+        "pm chatwoot conversation list --json"
+      ],
       "api_surface": [
-        { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations" }
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/conversations"
+        }
       ]
     },
     {
@@ -79,9 +108,14 @@
           "maps_to": "path.conversation_id"
         }
       ],
-      "examples": ["pm chatwoot conversation view --conversation-id 42 --json"],
+      "examples": [
+        "pm chatwoot conversation view --conversation-id 42 --json"
+      ],
       "api_surface": [
-        { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}" }
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}"
+        }
       ],
       "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
     },
@@ -116,14 +150,23 @@
         {
           "name": "status",
           "type": "enum",
-          "values": ["open", "resolved", "pending"],
+          "values": [
+            "open",
+            "resolved",
+            "pending"
+          ],
           "summary": "Initial conversation status.",
           "maps_to": "record.status"
         }
       ],
-      "examples": ["pm chatwoot conversation create --source-id customer-123 --json"],
+      "examples": [
+        "pm chatwoot conversation create --source-id customer-123 --json"
+      ],
       "api_surface": [
-        { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations" }
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations"
+        }
       ]
     },
     {
@@ -145,7 +188,12 @@
         {
           "name": "status",
           "type": "enum",
-          "values": ["open", "resolved", "pending", "snoozed"],
+          "values": [
+            "open",
+            "resolved",
+            "pending",
+            "snoozed"
+          ],
           "summary": "Target status.",
           "maps_to": "record.status"
         },
@@ -156,9 +204,14 @@
           "maps_to": "record.snoozed_until"
         }
       ],
-      "examples": ["pm chatwoot conversation toggle-status --conversation-id 42 --status resolved --json"],
+      "examples": [
+        "pm chatwoot conversation toggle-status --conversation-id 42 --status resolved --json"
+      ],
       "api_surface": [
-        { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status" }
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/toggle_status"
+        }
       ]
     },
     {
@@ -168,9 +221,14 @@
       "availability": "implemented",
       "stream": "messages",
       "source_url": "https://developers.chatwoot.com/api-reference/messages/get-messages",
-      "examples": ["pm chatwoot message list --json"],
+      "examples": [
+        "pm chatwoot message list --json"
+      ],
       "api_surface": [
-        { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages" }
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages"
+        }
       ],
       "notes": "The messages stream fans out across conversations; single-conversation message direct reads are planned separately."
     },
@@ -199,7 +257,10 @@
         {
           "name": "message-type",
           "type": "enum",
-          "values": ["outgoing", "incoming"],
+          "values": [
+            "outgoing",
+            "incoming"
+          ],
           "summary": "Chatwoot message type.",
           "maps_to": "record.message_type"
         },
@@ -210,9 +271,14 @@
           "maps_to": "record.private"
         }
       ],
-      "examples": ["pm chatwoot message send --conversation-id 42 --content 'Follow-up sent from approved plan' --json"],
+      "examples": [
+        "pm chatwoot message send --conversation-id 42 --content 'Follow-up sent from approved plan' --json"
+      ],
       "api_surface": [
-        { "method": "POST", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages" }
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages"
+        }
       ]
     },
     {
@@ -222,9 +288,14 @@
       "availability": "implemented",
       "stream": "contacts",
       "source_url": "https://developers.chatwoot.com/api-reference/contacts/list-contacts",
-      "examples": ["pm chatwoot contact list --json"],
+      "examples": [
+        "pm chatwoot contact list --json"
+      ],
       "api_surface": [
-        { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts" }
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/contacts"
+        }
       ]
     },
     {
@@ -242,9 +313,14 @@
           "maps_to": "path.id"
         }
       ],
-      "examples": ["pm chatwoot contact view --id 123 --json"],
+      "examples": [
+        "pm chatwoot contact view --id 123 --json"
+      ],
       "api_surface": [
-        { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/{id}" }
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/contacts/{id}"
+        }
       ],
       "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
     },
@@ -263,9 +339,14 @@
           "maps_to": "query.q"
         }
       ],
-      "examples": ["pm chatwoot contact search --q alice --json"],
+      "examples": [
+        "pm chatwoot contact search --q alice --json"
+      ],
       "api_surface": [
-        { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/search" }
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/contacts/search"
+        }
       ],
       "notes": "Bounded query direct read; response JSON is capped and secret-shaped keys are redacted."
     },
@@ -304,9 +385,14 @@
           "maps_to": "record.phone_number"
         }
       ],
-      "examples": ["pm chatwoot contact create --inbox-id 7 --email user@example.invalid --json"],
+      "examples": [
+        "pm chatwoot contact create --inbox-id 7 --email user@example.invalid --json"
+      ],
       "api_surface": [
-        { "method": "POST", "path": "/api/v1/accounts/{account_id}/contacts" }
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/contacts"
+        }
       ]
     },
     {
@@ -344,9 +430,14 @@
           "maps_to": "record.phone_number"
         }
       ],
-      "examples": ["pm chatwoot contact update --id 123 --name 'Updated name' --json"],
+      "examples": [
+        "pm chatwoot contact update --id 123 --name 'Updated name' --json"
+      ],
       "api_surface": [
-        { "method": "PUT", "path": "/api/v1/accounts/{account_id}/contacts/{id}" }
+        {
+          "method": "PUT",
+          "path": "/api/v1/accounts/{account_id}/contacts/{id}"
+        }
       ]
     },
     {
@@ -366,9 +457,14 @@
       "availability": "implemented",
       "stream": "inboxes",
       "source_url": "https://developers.chatwoot.com/api-reference/inboxes/list-all-inboxes",
-      "examples": ["pm chatwoot inbox list --json"],
+      "examples": [
+        "pm chatwoot inbox list --json"
+      ],
       "api_surface": [
-        { "method": "GET", "path": "/api/v1/accounts/{account_id}/inboxes" }
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/inboxes"
+        }
       ]
     },
     {
@@ -378,9 +474,14 @@
       "availability": "implemented",
       "stream": "agents",
       "source_url": "https://developers.chatwoot.com/api-reference/agents/list-agents-in-account",
-      "examples": ["pm chatwoot agent list --json"],
+      "examples": [
+        "pm chatwoot agent list --json"
+      ],
       "api_surface": [
-        { "method": "GET", "path": "/api/v1/accounts/{account_id}/agents" }
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/agents"
+        }
       ]
     },
     {
@@ -390,9 +491,14 @@
       "availability": "implemented",
       "stream": "teams",
       "source_url": "https://developers.chatwoot.com/api-reference/teams/list-all-teams",
-      "examples": ["pm chatwoot team list --json"],
+      "examples": [
+        "pm chatwoot team list --json"
+      ],
       "api_surface": [
-        { "method": "GET", "path": "/api/v1/accounts/{account_id}/teams" }
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/teams"
+        }
       ]
     },
     {
@@ -402,9 +508,14 @@
       "availability": "implemented",
       "stream": "labels",
       "source_url": "https://developers.chatwoot.com/api-reference/labels/list-all-labels",
-      "examples": ["pm chatwoot label list --json"],
+      "examples": [
+        "pm chatwoot label list --json"
+      ],
       "api_surface": [
-        { "method": "GET", "path": "/api/v1/accounts/{account_id}/labels" }
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/labels"
+        }
       ]
     },
     {
@@ -442,26 +553,1239 @@
           "maps_to": "record.show_on_sidebar"
         }
       ],
-      "examples": ["pm chatwoot label create --title priority --json"],
+      "examples": [
+        "pm chatwoot label create --title priority --json"
+      ],
       "api_surface": [
-        { "method": "POST", "path": "/api/v1/accounts/{account_id}/labels" }
+        {
+          "method": "POST",
+          "path": "/api/v1/accounts/{account_id}/labels"
+        }
       ]
     },
     {
-      "path": "report account",
-      "summary": "Read account report metrics",
+      "path": "account view",
+      "summary": "Read account view",
       "intent": "direct_read",
-      "availability": "planned",
-      "source_url": "https://developers.chatwoot.com/api-reference/reports/get-account-reports",
-      "notes": "Blocked until report direct reads add required bounds and redacted output policy."
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot account view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "agent-bot list",
+      "summary": "Read agent bot list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot agent-bot list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/agent_bots"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "agent-bot view",
+      "summary": "Read agent bot view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot agent-bot view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/agent_bots/{id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
     },
     {
       "path": "audit-log list",
-      "summary": "List audit logs",
+      "summary": "Read audit log list",
       "intent": "direct_read",
-      "availability": "planned",
-      "source_url": "https://developers.chatwoot.com/api-reference/audit-logs/list-audit-logs-in-account",
-      "notes": "Blocked until direct reads support bounded audit-log pagination and redaction."
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "page",
+          "type": "integer",
+          "summary": "Page number for pagination",
+          "maps_to": "query.page"
+        }
+      ],
+      "examples": [
+        "pm chatwoot audit-log list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/audit_logs"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "automation-rule list",
+      "summary": "Read automation rule list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "page",
+          "type": "integer",
+          "summary": "The page parameter",
+          "maps_to": "query.page"
+        }
+      ],
+      "examples": [
+        "pm chatwoot automation-rule list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/automation_rules"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "automation-rule view",
+      "summary": "Read automation rule view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot automation-rule view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/automation_rules/{id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "canned-response list",
+      "summary": "Read canned response list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot canned-response list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/canned_responses"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "contact contactable-inbox list",
+      "summary": "Read contact contactable inbox list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot contact contactable-inbox list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "contact conversation list",
+      "summary": "Read contact conversation list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot contact conversation list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "contact label list",
+      "summary": "Read contact label list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot contact label list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "conversation meta view",
+      "summary": "Read conversation meta view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "status",
+          "type": "enum",
+          "summary": "Filter by conversation status.",
+          "maps_to": "query.status",
+          "values": [
+            "all",
+            "open",
+            "resolved",
+            "pending",
+            "snoozed"
+          ]
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "summary": "Filters conversations with messages containing the search term",
+          "maps_to": "query.q"
+        },
+        {
+          "name": "inbox-id",
+          "type": "integer",
+          "summary": "inbox_id query parameter.",
+          "maps_to": "query.inbox_id"
+        },
+        {
+          "name": "team-id",
+          "type": "integer",
+          "summary": "team_id query parameter.",
+          "maps_to": "query.team_id"
+        },
+        {
+          "name": "labels",
+          "type": "string_array",
+          "summary": "labels query parameter.",
+          "maps_to": "query.labels"
+        }
+      ],
+      "examples": [
+        "pm chatwoot conversation meta view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/conversations/meta"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "conversation label list",
+      "summary": "Read conversation label list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "integer",
+          "summary": "conversation_id path value.",
+          "maps_to": "path.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot conversation label list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "conversation reporting-event list",
+      "summary": "Read conversation reporting event list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "integer",
+          "summary": "conversation_id path value.",
+          "maps_to": "path.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot conversation reporting-event list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "custom-attribute-definition list",
+      "summary": "Read custom attribute definition list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "attribute-model",
+          "type": "enum",
+          "summary": "conversation_attribute(0)/contact_attribute(1)",
+          "maps_to": "query.attribute_model",
+          "values": [
+            "0",
+            "1"
+          ]
+        }
+      ],
+      "examples": [
+        "pm chatwoot custom-attribute-definition list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "custom-attribute-definition view",
+      "summary": "Read custom attribute definition view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot custom-attribute-definition view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "custom-filter list",
+      "summary": "Read custom filter list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot custom-filter list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/custom_filters"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "custom-filter view",
+      "summary": "Read custom filter view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "custom-filter-id",
+          "type": "integer",
+          "summary": "custom_filter_id path value.",
+          "maps_to": "path.custom_filter_id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot custom-filter view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "inbox-member list",
+      "summary": "Read inbox member list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "inbox-id",
+          "type": "integer",
+          "summary": "inbox_id path value.",
+          "maps_to": "path.inbox_id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot inbox-member list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/inbox_members/{inbox_id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "inbox view",
+      "summary": "Read inbox view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot inbox view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/inboxes/{id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "inbox agent-bot list",
+      "summary": "Read inbox agent bot list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot inbox agent-bot list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "integration app list",
+      "summary": "Read integration app list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot integration app list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/integrations/apps"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "label view",
+      "summary": "Read label view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot label view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/labels/{id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "portal list",
+      "summary": "Read portal list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot portal list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/portals"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "reporting-event list",
+      "summary": "Read reporting event list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "page",
+          "type": "integer",
+          "summary": "The page parameter",
+          "maps_to": "query.page"
+        },
+        {
+          "name": "since",
+          "type": "string",
+          "summary": "The timestamp from where events should start (Unix timestamp in seconds)",
+          "maps_to": "query.since"
+        },
+        {
+          "name": "until",
+          "type": "string",
+          "summary": "The timestamp from where events should stop (Unix timestamp in seconds)",
+          "maps_to": "query.until"
+        },
+        {
+          "name": "inbox-id",
+          "type": "string",
+          "summary": "Filter events by inbox ID",
+          "maps_to": "query.inbox_id"
+        },
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Filter events by user/agent ID",
+          "maps_to": "query.user_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Filter events by event name (e.g., first_response, resolution, reply_time)",
+          "maps_to": "query.name"
+        }
+      ],
+      "examples": [
+        "pm chatwoot reporting-event list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/reporting_events"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "team view",
+      "summary": "Read team view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "integer",
+          "summary": "team_id path value.",
+          "maps_to": "path.team_id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot team view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/teams/{team_id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "team team-member list",
+      "summary": "Read team team member list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "integer",
+          "summary": "team_id path value.",
+          "maps_to": "path.team_id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot team team-member list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "webhook list",
+      "summary": "Read webhook list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot webhook list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/accounts/{account_id}/webhooks"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "profile view",
+      "summary": "Read profile view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot profile view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/profile"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "report account",
+      "summary": "Read report account",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot report account --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "report conversation list",
+      "summary": "Read report conversation list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot report conversation list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/conversations"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "report conversation list-alt",
+      "summary": "Read report conversation list alt",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot report conversation list-alt --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/conversations/"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "report first-response-time-distribution list",
+      "summary": "Read report first response time distribution list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot report first-response-time-distribution list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/first_response_time_distribution"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "report inbox-label-matrix list",
+      "summary": "Read report inbox label matrix list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot report inbox-label-matrix list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/inbox_label_matrix"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "report outgoing-messages-count list",
+      "summary": "Read report outgoing messages count list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "group-by",
+          "type": "enum",
+          "summary": "The entity to group outgoing message counts by.",
+          "maps_to": "query.group_by",
+          "values": [
+            "agent",
+            "team",
+            "inbox",
+            "label"
+          ]
+        }
+      ],
+      "examples": [
+        "pm chatwoot report outgoing-messages-count list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/outgoing_messages_count"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "report summary view",
+      "summary": "Read report summary view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot report summary view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/reports/summary"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "summary-report agent list",
+      "summary": "Read summary report agent list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot summary-report agent list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/summary_reports/agent"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "summary-report channel list",
+      "summary": "Read summary report channel list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot summary-report channel list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/summary_reports/channel"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "summary-report inbox list",
+      "summary": "Read summary report inbox list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot summary-report inbox list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/summary_reports/inbox"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "summary-report team list",
+      "summary": "Read summary report team list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot summary-report team list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/summary_reports/team"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "platform account view",
+      "summary": "Read platform account view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "account-id",
+          "type": "integer",
+          "summary": "account_id path value.",
+          "maps_to": "path.account_id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot platform account view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/platform/api/v1/accounts/{account_id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "platform account-user list",
+      "summary": "Read platform account user list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "account-id",
+          "type": "integer",
+          "summary": "account_id path value.",
+          "maps_to": "path.account_id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot platform account-user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/platform/api/v1/accounts/{account_id}/account_users"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "platform agent-bot list",
+      "summary": "Read platform agent bot list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [],
+      "examples": [
+        "pm chatwoot platform agent-bot list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/platform/api/v1/agent_bots"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "platform agent-bot view",
+      "summary": "Read platform agent bot view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot platform agent-bot view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/platform/api/v1/agent_bots/{id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "platform user view",
+      "summary": "Read platform user view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot platform user view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/platform/api/v1/users/{id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "platform user login view",
+      "summary": "Read platform user login view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "id path value.",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot platform user login view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/platform/api/v1/users/{id}/login"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "public inbox view",
+      "summary": "Read public inbox view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "inbox-identifier",
+          "type": "string",
+          "summary": "inbox_identifier path value.",
+          "maps_to": "path.inbox_identifier"
+        }
+      ],
+      "examples": [
+        "pm chatwoot public inbox view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/api/v1/inboxes/{inbox_identifier}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "public inbox contact view",
+      "summary": "Read public inbox contact view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "inbox-identifier",
+          "type": "string",
+          "summary": "inbox_identifier path value.",
+          "maps_to": "path.inbox_identifier"
+        },
+        {
+          "name": "contact-identifier",
+          "type": "string",
+          "summary": "contact_identifier path value.",
+          "maps_to": "path.contact_identifier"
+        }
+      ],
+      "examples": [
+        "pm chatwoot public inbox contact view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "public inbox contact conversation list",
+      "summary": "Read public inbox contact conversation list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "inbox-identifier",
+          "type": "string",
+          "summary": "inbox_identifier path value.",
+          "maps_to": "path.inbox_identifier"
+        },
+        {
+          "name": "contact-identifier",
+          "type": "string",
+          "summary": "contact_identifier path value.",
+          "maps_to": "path.contact_identifier"
+        }
+      ],
+      "examples": [
+        "pm chatwoot public inbox contact conversation list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "public inbox contact conversation view",
+      "summary": "Read public inbox contact conversation view",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "inbox-identifier",
+          "type": "string",
+          "summary": "inbox_identifier path value.",
+          "maps_to": "path.inbox_identifier"
+        },
+        {
+          "name": "contact-identifier",
+          "type": "string",
+          "summary": "contact_identifier path value.",
+          "maps_to": "path.contact_identifier"
+        },
+        {
+          "name": "conversation-id",
+          "type": "integer",
+          "summary": "conversation_id path value.",
+          "maps_to": "path.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot public inbox contact conversation view --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
+    },
+    {
+      "path": "public inbox contact conversation message list",
+      "summary": "Read public inbox contact conversation message list",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "output_policy": "bounded_json",
+      "flags": [
+        {
+          "name": "inbox-identifier",
+          "type": "string",
+          "summary": "inbox_identifier path value.",
+          "maps_to": "path.inbox_identifier"
+        },
+        {
+          "name": "contact-identifier",
+          "type": "string",
+          "summary": "contact_identifier path value.",
+          "maps_to": "path.contact_identifier"
+        },
+        {
+          "name": "conversation-id",
+          "type": "integer",
+          "summary": "conversation_id path value.",
+          "maps_to": "path.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm chatwoot public inbox contact conversation message list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages"
+        }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
     },
     {
       "path": "account update",
@@ -520,7 +1844,7 @@
     },
     {
       "name": "chatwoot-direct-reads",
-      "summary": "Direct-read commands are implemented for selected conversation/contact lookups with bounded JSON output; reports, audit logs, public inbox reads, and binary/file endpoints remain planned."
+      "summary": "Direct-read commands are implemented for official Chatwoot GET operations with bounded JSON output, except duplicate/disallowed rows; mutation endpoints remain governed by reverse-ETL policy."
     }
   ]
 }

@@ -2,9 +2,9 @@
 
 | Cycle | Red test / evidence | Expected failure | Green change | Status |
 |---|---|---|---|---|
-| 1 | `go test ./internal/connectors/engine -run TestDirectReadRootRelativeEndpointUsesConfiguredOrigin -count=1` | Root-relative direct read under a scoped base path dispatches under `/api/v1/accounts/{account_id}` instead of the Chatwoot origin root. | Update direct-read request path resolution for root-relative official paths. | planned |
-| 2 | `go test ./cmd/connectorgen -run TestChatwootAPISurfaceOperationLedgerMetrics -count=1` | Remaining official GET operations stay `operation.model=direct_read` instead of covered direct-read commands. | Generate bounded JSON direct-read commands and `covered_by.direct_read` rows. | planned |
-| 3 | `go run ./cmd/connectorgen validate internal/connectors/defs` | New command surface must resolve to declared direct-read rows and supported output policy. | Validate all connector defs. | planned |
+| 1 | `go test ./internal/connectors/engine -run TestDirectReadRootRelativeEndpointUsesConfiguredOrigin -count=1` | Captured red failure: root-relative direct read under a scoped base path dispatched under `/api/v1/accounts/{account_id}` instead of the Chatwoot origin root. | Updated direct-read request path resolution for root-relative official paths. | passed |
+| 2 | `go test ./cmd/connectorgen -run TestChatwootAPISurfaceOperationLedgerMetrics -count=1` | Captured red failure after metadata generation until counts were updated: remaining official GET operations moved from `operation.model=direct_read` to covered direct-read commands. | Generated bounded JSON direct-read commands and `covered_by.direct_read` rows. | passed |
+| 3 | `go run ./cmd/connectorgen validate internal/connectors/defs` | New command surface had to resolve to declared direct-read rows and supported output policy. | Validated all connector defs. | passed |
 
 ## Notes
 

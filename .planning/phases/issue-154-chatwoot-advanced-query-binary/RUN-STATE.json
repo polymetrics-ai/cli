@@ -3,20 +3,40 @@
   "parentIssue": 148,
   "branch": "feat/154-chatwoot-advanced-query-binary",
   "baseBranch": "feat/148-chatwoot-cli-parity",
-  "status": "planned",
+  "status": "full_verified_pr_pending",
   "gsd": {
     "adapter": "scripts/gsd",
     "programmingLoop": "manual_fallback",
     "reason": "scripts/gsd prompt programming-loop returned unknown GSD command; planning/TDD/verification artifacts are maintained manually"
   },
-  "verificationPassed": false,
-  "targetedVerificationPassed": false,
+  "verificationPassed": true,
+  "targetedVerificationPassed": true,
   "reviewStatus": "not_started",
   "events": [
     {
       "timestamp": "2026-07-10T00:00:00Z",
       "event": "planned",
       "detail": "Created #154 GSD/TDD/verification artifacts before production edits."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "red_test",
+      "detail": "DirectRead root-relative endpoint test failed with the request under /api/v1/accounts/{account_id}/platform instead of the configured origin root."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "implemented",
+      "detail": "Added root-relative direct-read origin handling and covered the remaining official Chatwoot GET operations with bounded JSON direct-read commands."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "targeted_verification",
+      "detail": "Engine/commandrunner direct-read tests, Chatwoot connectorgen metrics, Chatwoot conformance, connector validation, docs validation, website connector data test, and git diff --check passed."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "full_verification",
+      "detail": "gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify passed."
     }
   ]
 }

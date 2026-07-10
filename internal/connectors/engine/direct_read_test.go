@@ -337,6 +337,48 @@ func TestDirectReadScopedBasePathEndpointDoesNotDuplicatePrefix(t *testing.T) {
 	}
 }
 
+func TestDirectReadRootRelativeEndpointUsesConfiguredOrigin(t *testing.T) {
+	var gotPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"id":7,"type":"account"}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "chatwoot",
+		HTTP: HTTPBase{URL: srv.URL + "/api/v1/accounts/{{ config.account_id }}"},
+		Surface: &APISurface{
+			OperationLedgerVersion: 1,
+			Endpoints: []SurfaceEndpoint{
+				{
+					Method: http.MethodGet,
+					Path:   "/platform/api/v1/accounts/{id}",
+					CoveredBy: &SurfaceCoverage{
+						DirectRead: "platform account view",
+					},
+				},
+			},
+		},
+	}
+	_, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method: http.MethodGet,
+		Path:   "/platform/api/v1/accounts/{id}",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"account_id": "1",
+		}},
+		PathParams:   map[string]string{"id": "7"},
+		OutputPolicy: "bounded_json",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if gotPath != "/platform/api/v1/accounts/7" {
+		t.Fatalf("request path = %q, want root-relative platform path on configured origin", gotPath)
+	}
+}
+
 func TestDirectReadDirectoryPolicyRejectsFileResponse(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

@@ -20,12 +20,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "account view"
       }
     },
     {
@@ -55,12 +51,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/agent_bots",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "agent-bot list"
       }
     },
     {
@@ -78,12 +70,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "agent-bot view"
       }
     },
     {
@@ -156,24 +144,15 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/audit_logs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "audit-log list"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/automation_rules",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "automation-rule list"
       }
     },
     {
@@ -191,12 +170,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "automation-rule view"
       }
     },
     {
@@ -226,12 +201,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/canned_responses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "canned-response list"
       }
     },
     {
@@ -344,34 +315,22 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "contact contactable-inbox list"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "contact conversation list"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "contact label list"
       }
     },
     {
@@ -415,12 +374,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/conversations/meta",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "conversation meta view"
       }
     },
     {
@@ -469,12 +424,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "conversation label list"
       }
     },
     {
@@ -518,13 +469,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "conversation reporting-event list"
       }
     },
     {
@@ -561,12 +507,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "custom-attribute-definition list"
       }
     },
     {
@@ -584,12 +526,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "custom-attribute-definition view"
       }
     },
     {
@@ -619,12 +557,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/custom_filters",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "custom-filter list"
       }
     },
     {
@@ -642,12 +576,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "custom-filter view"
       }
     },
     {
@@ -713,12 +643,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/inbox_members/{inbox_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "inbox-member list"
       }
     },
     {
@@ -743,12 +669,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "inbox view"
       }
     },
     {
@@ -766,12 +688,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "inbox agent-bot list"
       }
     },
     {
@@ -789,12 +707,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/integrations/apps",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "integration app list"
       }
     },
     {
@@ -850,12 +764,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/labels/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "label view"
       }
     },
     {
@@ -885,12 +795,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/portals",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "portal list"
       }
     },
     {
@@ -944,13 +850,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/reporting_events",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "reporting-event list"
       }
     },
     {
@@ -975,12 +876,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "team view"
       }
     },
     {
@@ -1010,12 +907,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "team team-member list"
       }
     },
     {
@@ -1057,12 +950,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/webhooks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "webhook list"
       }
     },
     {
@@ -1104,12 +993,8 @@
     {
       "method": "GET",
       "path": "/api/v1/profile",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "profile view"
       }
     },
     {
@@ -1128,133 +1013,78 @@
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/reports",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "report account"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/reports/conversations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "report conversation list"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/reports/conversations/",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "report conversation list-alt"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/reports/first_response_time_distribution",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "report first-response-time-distribution list"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/reports/inbox_label_matrix",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "report inbox-label-matrix list"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/reports/outgoing_messages_count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "report outgoing-messages-count list"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/reports/summary",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "report summary view"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/summary_reports/agent",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "summary-report agent list"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/summary_reports/channel",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "summary-report channel list"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/summary_reports/inbox",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "summary-report inbox list"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/accounts/{account_id}/summary_reports/team",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Report/audit output can contain operational metrics or audit data and needs explicit bounded filters."
+      "covered_by": {
+        "direct_read": "summary-report team list"
       }
     },
     {
@@ -1272,13 +1102,8 @@
     {
       "method": "GET",
       "path": "/platform/api/v1/accounts/{account_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      "covered_by": {
+        "direct_read": "platform account view"
       }
     },
     {
@@ -1308,13 +1133,8 @@
     {
       "method": "GET",
       "path": "/platform/api/v1/accounts/{account_id}/account_users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      "covered_by": {
+        "direct_read": "platform account-user list"
       }
     },
     {
@@ -1344,13 +1164,8 @@
     {
       "method": "GET",
       "path": "/platform/api/v1/agent_bots",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      "covered_by": {
+        "direct_read": "platform agent-bot list"
       }
     },
     {
@@ -1368,13 +1183,8 @@
     {
       "method": "GET",
       "path": "/platform/api/v1/agent_bots/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      "covered_by": {
+        "direct_read": "platform agent-bot view"
       }
     },
     {
@@ -1416,13 +1226,8 @@
     {
       "method": "GET",
       "path": "/platform/api/v1/users/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      "covered_by": {
+        "direct_read": "platform user view"
       }
     },
     {
@@ -1452,25 +1257,15 @@
     {
       "method": "GET",
       "path": "/platform/api/v1/users/{id}/login",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Platform API uses elevated platform API credentials and can expose account/user administration data."
+      "covered_by": {
+        "direct_read": "platform user login view"
       }
     },
     {
       "method": "GET",
       "path": "/public/api/v1/inboxes/{inbox_identifier}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Public inbox API is customer-facing and uses inbox/contact identifiers rather than the account API base path."
+      "covered_by": {
+        "direct_read": "public inbox view"
       }
     },
     {
@@ -1488,13 +1283,8 @@
     {
       "method": "GET",
       "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Public inbox API is customer-facing and uses inbox/contact identifiers rather than the account API base path."
+      "covered_by": {
+        "direct_read": "public inbox contact view"
       }
     },
     {
@@ -1512,13 +1302,8 @@
     {
       "method": "GET",
       "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Public inbox API is customer-facing and uses inbox/contact identifiers rather than the account API base path."
+      "covered_by": {
+        "direct_read": "public inbox contact conversation list"
       }
     },
     {
@@ -1536,25 +1321,15 @@
     {
       "method": "GET",
       "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Public inbox API is customer-facing and uses inbox/contact identifiers rather than the account API base path."
+      "covered_by": {
+        "direct_read": "public inbox contact conversation view"
       }
     },
     {
       "method": "GET",
       "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output.",
-        "notes": "Public inbox API is customer-facing and uses inbox/contact identifiers rather than the account API base path."
+      "covered_by": {
+        "direct_read": "public inbox contact conversation message list"
       }
     },
     {
