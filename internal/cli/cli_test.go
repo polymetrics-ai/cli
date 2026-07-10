@@ -315,6 +315,48 @@ func TestRuntimeDoctorJSONDoesNotLeakPostgresPassword(t *testing.T) {
 	}
 }
 
+func TestZendeskConnectorHelpTopicRendersWithoutCredentials(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"help", "zendesk"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(help zendesk) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"pm connectors inspect zendesk", "COMMAND SURFACE", "Reverse ETL", "plan → preview → approval → execute"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("help zendesk missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestZendeskBareCommandRendersHelpWithoutCredentials(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"zendesk"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(zendesk) code = %d stderr = %s stdout = %s", code, stderr.String(), stdout.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"pm connectors inspect zendesk", "COMMAND SURFACE", "read list-tickets"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("bare zendesk help missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestZendeskConnectorCommandHelpRendersWithoutCredentials(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"zendesk", "read", "list-tickets", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(zendesk read list-tickets --help) code = %d stderr = %s stdout = %s", code, stderr.String(), stdout.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"pm zendesk read list-tickets", "List Tickets", "GET /api/v2/tickets", "--json"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("zendesk command help missing %q:\n%s", want, out)
+		}
+	}
+}
+
 func TestGitHubCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
 	var gotPath, gotState string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

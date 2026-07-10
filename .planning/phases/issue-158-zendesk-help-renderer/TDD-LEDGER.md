@@ -3,7 +3,7 @@
 ## Cycle 1 — connector namespace help
 
 - Red target: `pm help zendesk`, bare `pm zendesk`, and `pm zendesk read list-tickets --help` render help without credentials.
-- Red evidence: pending.
+- Red evidence: `go test ./internal/cli -run 'Zendesk.*Help' -count=1` failed because `help zendesk` was missing, bare `zendesk` returned missing command path, and command `--help` attempted project/credential resolution.
 - Green implementation: pending.
 
 ## Manual GSD fallback
