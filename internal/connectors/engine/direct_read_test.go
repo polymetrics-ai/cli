@@ -50,6 +50,35 @@ func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
 	}
 }
 
+func TestDirectReadAllowsGenericJSONOutputPolicy(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/v2/conversations/123" {
+			t.Fatalf("path = %s, want Help Scout conversation path", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"id":123,"subject":"Support request"}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/v2/conversations/{conversation_id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/conversations/{conversation_id}",
+		PathParams:   map[string]string{"conversation_id": "123"},
+		MaxBytes:     1024,
+		OutputPolicy: "json",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	if body["subject"] != "Support request" {
+		t.Fatalf("body subject = %v, want Support request", body["subject"])
+	}
+}
+
 func TestDirectReadResolvesPathWithConfigDefaults(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/repos/octo/hello/contents/README.md" {

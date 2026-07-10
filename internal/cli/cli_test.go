@@ -545,6 +545,135 @@ func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 	}
 }
 
+func TestHelpScoutConnectorNamespaceRendersCommandSurfaceHelp(t *testing.T) {
+	tests := [][]string{
+		{"help", "help-scout"},
+		{"help-scout"},
+		{"help-scout", "--help"},
+	}
+	for _, args := range tests {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr = %s stdout = %s", args, code, stderr.String(), stdout.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{"Help Scout", "COMMAND SURFACE", "conversations reply create", "customers get"} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("Help Scout help missing %q:\n%s", want, out)
+				}
+			}
+		})
+	}
+}
+
+func TestHelpScoutCommandSurfaceRunsJSONDirectRead(t *testing.T) {
+	var gotTokenPath, gotReadPath, gotAuth string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/oauth2/token":
+			gotTokenPath = r.URL.Path
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"access_token":"test-token","token_type":"bearer","expires_in":3600}`))
+		case "/v2/customers/123":
+			gotReadPath = r.URL.Path
+			gotAuth = r.Header.Get("Authorization")
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"id":123,"firstName":"Ada","lastName":"Lovelace"}`))
+		default:
+			t.Fatalf("unexpected path %s", r.URL.Path)
+		}
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	t.Setenv("PM_TEST_HELPSCOUT_CLIENT_ID", "test-client")
+	t.Setenv("PM_TEST_HELPSCOUT_CLIENT_SECRET", "test-secret")
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "help-scout-local",
+		"--connector", "help-scout",
+		"--from-env", "client_id=PM_TEST_HELPSCOUT_CLIENT_ID",
+		"--from-env", "client_secret=PM_TEST_HELPSCOUT_CLIENT_SECRET",
+		"--config", "base_url=" + srv.URL,
+		"--config", "token_url=" + srv.URL + "/oauth2/token",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"help-scout", "customers", "get",
+		"--credential", "help-scout-local",
+		"--customer-id", "123",
+		"--root", root,
+		"--json",
+	})
+	if gotTokenPath != "/oauth2/token" || gotReadPath != "/v2/customers/123" {
+		t.Fatalf("paths token=%q read=%q, want token/read paths", gotTokenPath, gotReadPath)
+	}
+	if gotAuth != "Bearer test-token" {
+		t.Fatalf("Authorization = %q, want bearer token", gotAuth)
+	}
+
+	var env struct {
+		Kind     string         `json:"kind"`
+		Command  string         `json:"command"`
+		Method   string         `json:"method"`
+		Status   int            `json:"status"`
+		Response map[string]any `json:"response"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandDirectRead" || env.Command != "customers get" || env.Method != "GET" || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want Help Scout direct-read customer", env)
+	}
+	if env.Response["firstName"] != "Ada" {
+		t.Fatalf("response = %+v, want firstName Ada", env.Response)
+	}
+}
+
+func TestHelpScoutCommandSurfacePlansReverseETLCommand(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("PM_TEST_HELPSCOUT_CLIENT_ID", "test-client")
+	t.Setenv("PM_TEST_HELPSCOUT_CLIENT_SECRET", "test-secret")
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "help-scout-local",
+		"--connector", "help-scout",
+		"--from-env", "client_id=PM_TEST_HELPSCOUT_CLIENT_ID",
+		"--from-env", "client_secret=PM_TEST_HELPSCOUT_CLIENT_SECRET",
+		"--config", "base_url=https://api.helpscout.invalid",
+		"--config", "token_url=https://api.helpscout.invalid/oauth2/token",
+		"--root", root,
+		"--json",
+	})
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"help-scout", "conversations", "reply", "create",
+		"--credential", "help-scout-local",
+		"--conversation-id", "123",
+		"--text", "Thanks for the update",
+		"--preview", "true",
+		"--root", root,
+		"--json",
+	}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Help Scout reply create code = %d stderr=%s stdout=%s", code, stderr.String(), stdout.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"kind": "ConnectorCommandWritePlan"`, `"connector_command": "conversations reply create"`, `"action": "create_reply_thread"`, `"approval_required": true`, `"write_preview"`} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("planned Help Scout command output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+		}
+	}
+	if strings.Contains(out, "approval_token") || strings.Contains(out, "approval_token_hash") || strings.Contains(out, "connector_command_record") {
+		t.Fatalf("plan JSON leaked approval or raw command payload:\n%s", out)
+	}
+}
+
 func TestGitHubCommandSurfaceBlocksOperationBeforeCredentialResolution(t *testing.T) {
 	root := t.TempDir()
 	runCLI(t, []string{"init", "--root", root, "--json"})

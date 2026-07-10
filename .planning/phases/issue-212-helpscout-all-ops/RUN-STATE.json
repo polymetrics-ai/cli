@@ -1,0 +1,75 @@
+{
+  "phase": "issue-212-helpscout-all-ops",
+  "issue": 212,
+  "status": "draft_pr_opened",
+  "branch": "feat/212-helpscout-all-ops",
+  "base_branch": "feat/213-helpscout-cli-surface-metadata",
+  "parent_branch": "feat/212-helpscout-cli-parity",
+  "parent_pr": "https://github.com/polymetrics-ai/cli/pull/230",
+  "depends_on_sub_pr": "https://github.com/polymetrics-ai/cli/pull/236",
+  "gsd": {
+    "doctor": "passed",
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-212-helpscout-all-ops --skip-research --tdd",
+    "programming_loop": "unavailable: unknown GSD command: programming-loop",
+    "manual_fallback": true
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-spf13-cobra",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation"
+  ],
+  "verificationPassed": false,
+  "verificationStatus": "full local gate passed; website typecheck remains blocked by missing node_modules/tsc",
+  "safety": {
+    "credentialed_checks": false,
+    "new_dependencies": false,
+    "secrets_requested_or_stored": false,
+    "generic_write_tools": false,
+    "reverse_etl_execution": false
+  },
+  "coverage": {
+    "official_endpoints": 145,
+    "stream_commands": 4,
+    "json_direct_read_commands": 73,
+    "typed_write_actions": 66,
+    "binary_operation_rows": 2
+  },
+  "pullRequest": {
+    "number": 258,
+    "url": "https://github.com/polymetrics-ai/cli/pull/258",
+    "base": "feat/213-helpscout-cli-surface-metadata",
+    "head": "feat/212-helpscout-all-ops",
+    "draft": true,
+    "stackedOn": "https://github.com/polymetrics-ai/cli/pull/236",
+    "ci": "green",
+    "reviewCoverage": "blocked: CodeRabbit skipped because PR is draft; stacked non-default-base review still required",
+    "reviewRoutingComment": "https://github.com/polymetrics-ai/cli/pull/258#issuecomment-4933338552"
+  },
+  "checks": [
+    { "command": "go test ./internal/connectors/engine -run 'DirectRead|Operations|CLISurface'", "result": "pass" },
+    { "command": "go test ./cmd/connectorgen -run 'HelpScout|CLISurface|Operation'", "result": "pass" },
+    { "command": "go test ./internal/connectors/commandrunner -run 'DirectRead|Operation|WriteCommand'", "result": "pass" },
+    { "command": "go test ./internal/cli -run 'HelpScoutConnectorNamespaceRendersCommandSurfaceHelp|HelpScoutCommandSurface|Manual'", "result": "pass" },
+    { "command": "go test ./internal/connectors/conformance -run 'TestConformance/help-scout'", "result": "pass" },
+    { "command": "go run ./cmd/connectorgen validate internal/connectors/defs", "result": "pass" },
+    { "command": "./pm docs validate --connectors-dir docs/connectors", "result": "pass" },
+    { "command": "cd website && pnpm run gen:website-data", "result": "pass" },
+    { "command": "cd website && pnpm run typecheck", "result": "blocked", "reason": "tsc not found; website/node_modules missing" },
+    { "command": "gofmt -w cmd internal", "result": "pass" },
+    { "command": "go vet ./...", "result": "pass" },
+    { "command": "go test ./...", "result": "pass" },
+    { "command": "go build ./cmd/pm", "result": "pass" },
+    { "command": "make verify", "result": "pass" }
+  ],
+  "updated_at": "2026-07-10T00:00:00Z"
+}

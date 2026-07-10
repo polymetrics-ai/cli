@@ -1,7 +1,20 @@
 {
-  "request": { "method": "GET", "path": "/mailboxes" },
+  "request": {
+    "method": "GET",
+    "path": "/v2/mailboxes"
+  },
   "response": {
     "status": 200,
-    "body": { "_embedded": { "mailboxes": [] }, "page": { "number": 1, "size": 50, "totalElements": 0, "totalPages": 0 } }
+    "body": {
+      "_embedded": {
+        "mailboxes": []
+      },
+      "page": {
+        "number": 1,
+        "size": 50,
+        "totalElements": 0,
+        "totalPages": 0
+      }
+    }
   }
 }

@@ -130,6 +130,10 @@ func runHelp(args []string, stdout io.Writer) error {
 	}
 	text, ok := docs[topic]
 	if !ok {
+		if manual, mok := connectorManual(topic); mok {
+			fmt.Fprint(stdout, manual)
+			return nil
+		}
 		return fmt.Errorf("help topic %q not found", topic)
 	}
 	fmt.Fprint(stdout, text)
@@ -147,12 +151,48 @@ func isManualCommand(cmd string) bool {
 func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	text, ok := docs[topic]
 	if !ok {
+		if manual, mok := connectorManual(topic); mok {
+			if jsonOut {
+				return writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": manual})
+			}
+			fmt.Fprint(stdout, manual)
+			return nil
+		}
 		return fmt.Errorf("help topic %q not found", topic)
 	}
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": text})
 	}
 	fmt.Fprint(stdout, text)
+	return nil
+}
+
+func connectorManual(name string) (string, bool) {
+	if strings.TrimSpace(name) == "" {
+		return "", false
+	}
+	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
+		return "", false
+	}
+	if err := connectors.RejectLegacyConnectorName(name); err != nil {
+		return "", false
+	}
+	connector, ok := appRegistry().Get(name)
+	if !ok {
+		return "", false
+	}
+	return connectors.RenderConnectorManual(connector), true
+}
+
+func writeConnectorManual(name string, stdout io.Writer, jsonOut bool) error {
+	manual, ok := connectorManual(name)
+	if !ok {
+		return usageErrorf("unknown command %q", name)
+	}
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": name, "manual": manual})
+	}
+	fmt.Fprint(stdout, manual)
 	return nil
 }
 
@@ -610,7 +650,7 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
-		return usageErrorf("missing connector command path")
+		return writeConnectorManual(connectorName, stdout, jsonOut)
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError

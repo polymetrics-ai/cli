@@ -1,0 +1,2843 @@
+{
+  "actions": [
+    {
+      "name": "delete_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/conversations/{{ record.conversation_id }}/attachments/{{ record.attachment_id }}",
+      "path_fields": [
+        "conversation_id",
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "attachment_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "attachment_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "upload_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/threads/{{ record.thread_id }}/attachments",
+      "path_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "thread_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "thread_id": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "fileName",
+        "mimeType",
+        "data"
+      ]
+    },
+    {
+      "name": "update_custom_fields",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/conversations/{{ record.conversation_id }}/fields",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "fields"
+      ]
+    },
+    {
+      "name": "delete_snooze",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/conversations/{{ record.conversation_id }}/snooze",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_snooze",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/conversations/{{ record.conversation_id }}/snooze",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "snoozedUntil": {
+            "type": "string"
+          },
+          "unsnoozeOnCustomerReply": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "snoozedUntil",
+        "unsnoozeOnCustomerReply"
+      ]
+    },
+    {
+      "name": "update_tags",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/conversations/{{ record.conversation_id }}/tags",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "tags"
+      ]
+    },
+    {
+      "name": "delete_thread_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/conversations/{{ record.conversation_id }}/threads/{{ record.thread_id }}/schedule",
+      "path_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "thread_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "thread_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "publish_thread_schedule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/conversations/{{ record.conversation_id }}/threads/{{ record.thread_id }}/schedule",
+      "path_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "thread_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "thread_id": {
+            "type": "string"
+          },
+          "op": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "op",
+        "path",
+        "value"
+      ]
+    },
+    {
+      "name": "update_thread_schedule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/conversations/{{ record.conversation_id }}/threads/{{ record.thread_id }}/schedule",
+      "path_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "thread_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "thread_id": {
+            "type": "string"
+          },
+          "scheduledFor": {
+            "type": "string"
+          },
+          "unscheduleOnCustomerReply": {
+            "type": "boolean"
+          },
+          "sendAsCreator": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "scheduledFor",
+        "unscheduleOnCustomerReply",
+        "sendAsCreator"
+      ]
+    },
+    {
+      "name": "create_chat_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/chats",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "customer": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer"
+              }
+            }
+          },
+          "text": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "fileName": {
+                  "type": "string"
+                },
+                "mimeType": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "customer",
+        "text",
+        "attachments"
+      ]
+    },
+    {
+      "name": "create_customer_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/customer",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "customer": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer"
+              }
+            }
+          },
+          "text": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "fileName": {
+                  "type": "string"
+                },
+                "mimeType": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "customer",
+        "text",
+        "attachments"
+      ]
+    },
+    {
+      "name": "create_note",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/notes",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "fileName": {
+                  "type": "string"
+                },
+                "mimeType": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "text",
+        "attachments"
+      ]
+    },
+    {
+      "name": "create_phone_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/phones",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "customer": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer"
+              }
+            }
+          },
+          "text": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "fileName": {
+                  "type": "string"
+                },
+                "mimeType": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "customer",
+        "text",
+        "attachments"
+      ]
+    },
+    {
+      "name": "create_reply_thread",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations/{{ record.conversation_id }}/reply",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "customer": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "integer"
+              }
+            }
+          },
+          "text": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "fileName": {
+                  "type": "string"
+                },
+                "mimeType": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "customer",
+        "text",
+        "attachments"
+      ]
+    },
+    {
+      "name": "update_thread",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/conversations/{{ record.conversation_id }}/threads/{{ record.thread_id }}",
+      "path_fields": [
+        "conversation_id",
+        "thread_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id",
+          "thread_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "thread_id": {
+            "type": "string"
+          },
+          "op": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "op",
+        "path",
+        "value"
+      ]
+    },
+    {
+      "name": "create_conversation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/conversations",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "subject": {
+            "type": "string"
+          },
+          "customer": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              }
+            }
+          },
+          "mailboxId": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "threads": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "customer": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "text": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "subject",
+        "customer",
+        "mailboxId",
+        "type",
+        "status",
+        "createdAt",
+        "threads",
+        "tags",
+        "fields"
+      ]
+    },
+    {
+      "name": "delete_conversation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/conversations/{{ record.conversation_id }}",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_conversation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/conversations/{{ record.conversation_id }}",
+      "path_fields": [
+        "conversation_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "conversation_id"
+        ],
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "op": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "op",
+        "path",
+        "value"
+      ]
+    },
+    {
+      "name": "create_address",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/address",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "city",
+        "state",
+        "postalCode",
+        "country",
+        "lines"
+      ]
+    },
+    {
+      "name": "delete_address",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/address",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_address",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/address",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "city",
+        "state",
+        "postalCode",
+        "country",
+        "lines"
+      ]
+    },
+    {
+      "name": "create_chat_handle",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/chats",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "type",
+        "value"
+      ]
+    },
+    {
+      "name": "delete_chat_handle",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/chats/{{ record.chat_id }}",
+      "path_fields": [
+        "customer_id",
+        "chat_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id",
+          "chat_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "chat_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_chat_handles",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/chats/{{ record.chat_id }}",
+      "path_fields": [
+        "customer_id",
+        "chat_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id",
+          "chat_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "chat_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "type",
+        "value"
+      ]
+    },
+    {
+      "name": "create_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/emails",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "type",
+        "value"
+      ]
+    },
+    {
+      "name": "delete_email",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/emails/{{ record.email_id }}",
+      "path_fields": [
+        "customer_id",
+        "email_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id",
+          "email_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "email_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_email",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/emails/{{ record.email_id }}",
+      "path_fields": [
+        "customer_id",
+        "email_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id",
+          "email_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "email_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "type",
+        "value"
+      ]
+    },
+    {
+      "name": "create_phone",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/phones",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "type",
+        "value"
+      ]
+    },
+    {
+      "name": "delete_phone",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/phones/{{ record.phone_id }}",
+      "path_fields": [
+        "customer_id",
+        "phone_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id",
+          "phone_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "phone_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_phone",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/phones/{{ record.phone_id }}",
+      "path_fields": [
+        "customer_id",
+        "phone_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id",
+          "phone_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "phone_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "type",
+        "value"
+      ]
+    },
+    {
+      "name": "create_social_profile",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/social-profiles",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "type",
+        "value"
+      ]
+    },
+    {
+      "name": "delete_social_profile",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/social-profiles/{{ record.social_profile_id }}",
+      "path_fields": [
+        "customer_id",
+        "social_profile_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id",
+          "social_profile_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "social_profile_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_social_profile",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/social-profiles/{{ record.social_profile_id }}",
+      "path_fields": [
+        "customer_id",
+        "social_profile_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id",
+          "social_profile_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "social_profile_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "type",
+        "value"
+      ]
+    },
+    {
+      "name": "create_website",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers/{{ record.customer_id }}/websites",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "value"
+      ]
+    },
+    {
+      "name": "delete_website",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}/websites/{{ record.website_id }}",
+      "path_fields": [
+        "customer_id",
+        "website_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id",
+          "website_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "website_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_website",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}/websites/{{ record.website_id }}",
+      "path_fields": [
+        "customer_id",
+        "website_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id",
+          "website_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "website_id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "value"
+      ]
+    },
+    {
+      "name": "create_customer",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customers",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "photoUrl": {
+            "type": "string"
+          },
+          "photoType": {
+            "type": "string"
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "background": {
+            "type": "string"
+          },
+          "age": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "integer"
+          },
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "firstName",
+        "lastName",
+        "photoUrl",
+        "photoType",
+        "jobTitle",
+        "location",
+        "background",
+        "age",
+        "gender",
+        "organization",
+        "organizationId",
+        "emails"
+      ]
+    },
+    {
+      "name": "delete_customer",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_customer_asynchronously",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customers/{{ record.customer_id }}?async=true",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "overwrite_customer",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/customers/{{ record.customer_id }}",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "photoUrl": {
+            "type": "string"
+          },
+          "photoType": {
+            "type": "string"
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "background": {
+            "type": "string"
+          },
+          "age": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "organization": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "firstName",
+        "lastName",
+        "photoUrl",
+        "photoType",
+        "jobTitle",
+        "location",
+        "background",
+        "age",
+        "gender",
+        "organization",
+        "organizationId"
+      ]
+    },
+    {
+      "name": "update_customer",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/customers/{{ record.customer_id }}",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "op": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "op",
+        "path",
+        "value"
+      ]
+    },
+    {
+      "name": "update_routing_configuration",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/mailboxes/{{ record.mailbox_id }}/routing",
+      "path_fields": [
+        "mailbox_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mailbox_id"
+        ],
+        "properties": {
+          "mailbox_id": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "assignmentLimit": {
+            "type": "integer"
+          },
+          "assignmentMethod": {
+            "type": "string"
+          },
+          "userIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "state",
+        "assignmentLimit",
+        "assignmentMethod",
+        "userIds"
+      ]
+    },
+    {
+      "name": "create_saved_reply",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/mailboxes/{{ record.mailbox_id }}/saved-replies",
+      "path_fields": [
+        "mailbox_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mailbox_id"
+        ],
+        "properties": {
+          "mailbox_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "chatText": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "name",
+        "text",
+        "chatText"
+      ]
+    },
+    {
+      "name": "delete_saved_reply",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/mailboxes/{{ record.mailbox_id }}/saved-replies/{{ record.saved_reply_id }}",
+      "path_fields": [
+        "mailbox_id",
+        "saved_reply_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mailbox_id",
+          "saved_reply_id"
+        ],
+        "properties": {
+          "mailbox_id": {
+            "type": "string"
+          },
+          "saved_reply_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_saved_reply",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/mailboxes/{{ record.mailbox_id }}/saved-replies/{{ record.saved_reply_id }}",
+      "path_fields": [
+        "mailbox_id",
+        "saved_reply_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mailbox_id",
+          "saved_reply_id"
+        ],
+        "properties": {
+          "mailbox_id": {
+            "type": "string"
+          },
+          "saved_reply_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "chatText": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "name",
+        "text",
+        "chatText"
+      ]
+    },
+    {
+      "name": "create_organization_property_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/organizations/properties",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "type",
+        "slug",
+        "name",
+        "options"
+      ]
+    },
+    {
+      "name": "delete_organization_property_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/organizations/properties/{{ record.property_slug }}",
+      "path_fields": [
+        "property_slug"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "property_slug"
+        ],
+        "properties": {
+          "property_slug": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "remove_organization_property_value",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/organizations/{{ record.organization_id }}/properties/{{ record.property_slug }}",
+      "path_fields": [
+        "organization_id",
+        "property_slug"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id",
+          "property_slug"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "property_slug": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "set_organization_property_value",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/organizations/{{ record.organization_id }}/properties/{{ record.property_slug }}",
+      "path_fields": [
+        "organization_id",
+        "property_slug"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id",
+          "property_slug"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "property_slug": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "value"
+      ]
+    },
+    {
+      "name": "update_organization_property_definition",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/organizations/properties/{{ record.property_slug }}",
+      "path_fields": [
+        "property_slug"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "property_slug"
+        ],
+        "properties": {
+          "property_slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "name",
+        "options"
+      ]
+    },
+    {
+      "name": "create_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/organizations",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "phones": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "brandColor": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "name",
+        "domain",
+        "website",
+        "description",
+        "location",
+        "note",
+        "phones",
+        "brandColor"
+      ]
+    },
+    {
+      "name": "delete_organization_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/organizations/{{ record.organization_id }}",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_organization",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/organizations/{{ record.organization_id }}",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "brandColor": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "phones": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "domains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "name",
+        "website",
+        "description",
+        "location",
+        "brandColor",
+        "note",
+        "phones",
+        "domains"
+      ]
+    },
+    {
+      "name": "create_customer_property_definition",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/customer-properties",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "type",
+        "slug",
+        "name",
+        "options"
+      ]
+    },
+    {
+      "name": "delete_customer_property_definition",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/customer-properties/{{ record.property_slug }}",
+      "path_fields": [
+        "property_slug"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "property_slug"
+        ],
+        "properties": {
+          "property_slug": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_customer_properties",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/customers/{{ record.customer_id }}/properties",
+      "path_fields": [
+        "customer_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "customer_id"
+        ],
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "op": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "op",
+        "value",
+        "path"
+      ]
+    },
+    {
+      "name": "update_team_members",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/teams/{{ record.team_id }}/members",
+      "path_fields": [
+        "team_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "team_id"
+        ],
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "addedUserIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "deletedUserIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "addedUserIds",
+        "deletedUserIds"
+      ]
+    },
+    {
+      "name": "update_conversation_reassignment_configuration",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/users/{{ record.user_id }}/conversation-reassignment",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "awayDuration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "hours": {
+                "type": "integer"
+              },
+              "minutes": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "enabled",
+        "awayDuration"
+      ]
+    },
+    {
+      "name": "set_user_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/users/{{ record.user_id }}/status",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "customStatus": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "emoji": {
+                "type": "string"
+              },
+              "emojiName": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "status",
+        "customStatus"
+      ]
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/users",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "sendInvite": {
+            "type": "boolean"
+          },
+          "mailboxes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "emailAccess": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "firstName",
+        "lastName",
+        "email",
+        "role",
+        "timezone",
+        "jobTitle",
+        "phone",
+        "sendInvite",
+        "mailboxes"
+      ]
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/users/{{ record.user_id }}",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "user_id"
+        ],
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/webhooks",
+      "path_fields": [],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "secret": {
+            "type": "string"
+          },
+          "payloadVersion": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "url",
+        "events",
+        "secret",
+        "payloadVersion",
+        "label"
+      ]
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/v2/webhooks/{{ record.webhook_id }}",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Deletes Help Scout data or configuration.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/webhooks/{{ record.webhook_id }}",
+      "path_fields": [
+        "webhook_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "webhook_id"
+        ],
+        "properties": {
+          "webhook_id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "secret": {
+            "type": "string"
+          },
+          "payloadVersion": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "url",
+        "events",
+        "secret",
+        "payloadVersion",
+        "label"
+      ]
+    },
+    {
+      "name": "run_manual_workflows",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/workflows/{{ record.workflow_id }}/run",
+      "path_fields": [
+        "workflow_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "workflow_id"
+        ],
+        "properties": {
+          "workflow_id": {
+            "type": "string"
+          },
+          "conversationIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "conversationIds"
+      ]
+    },
+    {
+      "name": "update_workflow_status",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/v2/workflows/{{ record.workflow_id }}",
+      "path_fields": [
+        "workflow_id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "workflow_id"
+        ],
+        "properties": {
+          "workflow_id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "op": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Mutates Help Scout Inbox API data.",
+      "confirm": "destructive",
+      "body_fields": [
+        "value",
+        "op",
+        "path"
+      ]
+    }
+  ]
+}

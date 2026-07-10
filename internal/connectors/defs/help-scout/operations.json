@@ -1,0 +1,2093 @@
+{
+  "operations": [
+    {
+      "id": "help-scout.v2.conversations.get",
+      "kind": "rest_read",
+      "summary": "List Conversations",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/conversations"
+      }
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.attachments.attachment-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Attachment",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/conversations/{conversation_id}/attachments/{attachment_id}"
+      },
+      "audit_event": "help_scout.delete_attachment"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.attachments.attachment-id.file.get",
+      "kind": "binary_download",
+      "summary": "Download Attachment File",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
+      "risk": "medium",
+      "approval": "binary downloads require bounded output policy and explicit destination approval before execution",
+      "output_policy": "file_manifest",
+      "binary": {
+        "method": "GET",
+        "path": "/v2/conversations/{conversation_id}/attachments/{attachment_id}/file",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.attachments.attachment-id.data.get",
+      "kind": "rest_read",
+      "summary": "Get Attachment Data",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-data/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/conversations/{conversation_id}/attachments/{attachment_id}/data"
+      }
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.threads.thread-id.attachments.post",
+      "kind": "rest_write",
+      "summary": "Upload Attachment",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/attachments"
+      },
+      "audit_event": "help_scout.upload_attachment"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.fields.put",
+      "kind": "rest_write",
+      "summary": "Update Custom Fields",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/custom_fields/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/conversations/{conversation_id}/fields"
+      },
+      "audit_event": "help_scout.update_custom_fields"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.snooze.delete",
+      "kind": "rest_write",
+      "summary": "Delete Snooze",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/conversations/{conversation_id}/snooze"
+      },
+      "audit_event": "help_scout.delete_snooze"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.snooze.put",
+      "kind": "rest_write",
+      "summary": "Update Snooze",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/conversations/{conversation_id}/snooze"
+      },
+      "audit_event": "help_scout.update_snooze"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.tags.put",
+      "kind": "rest_write",
+      "summary": "Update Tags",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/tags/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/conversations/{conversation_id}/tags"
+      },
+      "audit_event": "help_scout.update_tags"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.threads.thread-id.schedule.delete",
+      "kind": "rest_write",
+      "summary": "Delete Thread Schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/schedule"
+      },
+      "audit_event": "help_scout.delete_thread_schedule"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.threads.thread-id.schedule.patch",
+      "kind": "rest_write",
+      "summary": "Publish Thread Schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/publish/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/schedule"
+      },
+      "audit_event": "help_scout.publish_thread_schedule"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.threads.thread-id.schedule.put",
+      "kind": "rest_write",
+      "summary": "Update Thread Schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/schedule"
+      },
+      "audit_event": "help_scout.update_thread_schedule"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.chats.post",
+      "kind": "rest_write",
+      "summary": "Create Chat Thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/chat/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/conversations/{conversation_id}/chats"
+      },
+      "audit_event": "help_scout.create_chat_thread"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.customer.post",
+      "kind": "rest_write",
+      "summary": "Create Customer Thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/customer/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/conversations/{conversation_id}/customer"
+      },
+      "audit_event": "help_scout.create_customer_thread"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.notes.post",
+      "kind": "rest_write",
+      "summary": "Create Note",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/note/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/conversations/{conversation_id}/notes"
+      },
+      "audit_event": "help_scout.create_note"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.phones.post",
+      "kind": "rest_write",
+      "summary": "Create Phone Thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/phone/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/conversations/{conversation_id}/phones"
+      },
+      "audit_event": "help_scout.create_phone_thread"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.reply.post",
+      "kind": "rest_write",
+      "summary": "Create Reply Thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/reply/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/conversations/{conversation_id}/reply"
+      },
+      "audit_event": "help_scout.create_reply_thread"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.threads.thread-id.original-source.get",
+      "kind": "binary_download",
+      "summary": "Get Thread Original Source / Get Thread Original Source (RFC 822)",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/thread-source-json/",
+      "risk": "medium",
+      "approval": "binary downloads require bounded output policy and explicit destination approval before execution",
+      "output_policy": "file_manifest",
+      "binary": {
+        "method": "GET",
+        "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/original-source",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.threads.get",
+      "kind": "rest_read",
+      "summary": "List Threads",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/conversations/{conversation_id}/threads"
+      }
+    },
+    {
+      "id": "help-scout.v3.conversations.conversation-id.threads.get",
+      "kind": "rest_read",
+      "summary": "List Threads (v3)",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/conversations/{conversation_id}/threads"
+      }
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.threads.thread-id.patch",
+      "kind": "rest_write",
+      "summary": "Update Thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/conversations/{conversation_id}/threads/{thread_id}"
+      },
+      "audit_event": "help_scout.update_thread"
+    },
+    {
+      "id": "help-scout.v2.conversations.post",
+      "kind": "rest_write",
+      "summary": "Create Conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/conversations"
+      },
+      "audit_event": "help_scout.create_conversation"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/conversations/{conversation_id}"
+      },
+      "audit_event": "help_scout.delete_conversation"
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.get",
+      "kind": "rest_read",
+      "summary": "Get Conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/conversations/{conversation_id}"
+      }
+    },
+    {
+      "id": "help-scout.v3.conversations.conversation-id.get",
+      "kind": "rest_read",
+      "summary": "Get Conversation (v3)",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/conversations/{conversation_id}"
+      }
+    },
+    {
+      "id": "help-scout.v2.conversations.conversation-id.patch",
+      "kind": "rest_write",
+      "summary": "Update Conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/conversations/{conversation_id}"
+      },
+      "audit_event": "help_scout.update_conversation"
+    },
+    {
+      "id": "help-scout.v2.customers.get",
+      "kind": "rest_read",
+      "summary": "List Customers",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/customers"
+      }
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.address.post",
+      "kind": "rest_write",
+      "summary": "Create Address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/customers/{customer_id}/address"
+      },
+      "audit_event": "help_scout.create_address"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.address.delete",
+      "kind": "rest_write",
+      "summary": "Delete Address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}/address"
+      },
+      "audit_event": "help_scout.delete_address"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.address.get",
+      "kind": "rest_read",
+      "summary": "Get Address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/customers/{customer_id}/address"
+      }
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.address.put",
+      "kind": "rest_write",
+      "summary": "Update Address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/customers/{customer_id}/address"
+      },
+      "audit_event": "help_scout.update_address"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.chats.post",
+      "kind": "rest_write",
+      "summary": "Create Chat Handle",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/customers/{customer_id}/chats"
+      },
+      "audit_event": "help_scout.create_chat_handle"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.chats.chat-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Chat Handle",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}/chats/{chat_id}"
+      },
+      "audit_event": "help_scout.delete_chat_handle"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.chats.get",
+      "kind": "rest_read",
+      "summary": "List Chats Handles",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/customers/{customer_id}/chats"
+      }
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.chats.chat-id.put",
+      "kind": "rest_write",
+      "summary": "Update Chat Handles",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/customers/{customer_id}/chats/{chat_id}"
+      },
+      "audit_event": "help_scout.update_chat_handles"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.emails.post",
+      "kind": "rest_write",
+      "summary": "Create Email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/customers/{customer_id}/emails"
+      },
+      "audit_event": "help_scout.create_email"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.emails.email-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}/emails/{email_id}"
+      },
+      "audit_event": "help_scout.delete_email"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.emails.get",
+      "kind": "rest_read",
+      "summary": "List Emails",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/customers/{customer_id}/emails"
+      }
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.emails.email-id.put",
+      "kind": "rest_write",
+      "summary": "Update Email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/customers/{customer_id}/emails/{email_id}"
+      },
+      "audit_event": "help_scout.update_email"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.phones.post",
+      "kind": "rest_write",
+      "summary": "Create Phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/customers/{customer_id}/phones"
+      },
+      "audit_event": "help_scout.create_phone"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.phones.phone-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}/phones/{phone_id}"
+      },
+      "audit_event": "help_scout.delete_phone"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.phones.get",
+      "kind": "rest_read",
+      "summary": "List Phones",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/customers/{customer_id}/phones"
+      }
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.phones.phone-id.put",
+      "kind": "rest_write",
+      "summary": "Update Phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/customers/{customer_id}/phones/{phone_id}"
+      },
+      "audit_event": "help_scout.update_phone"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.social-profiles.post",
+      "kind": "rest_write",
+      "summary": "Create Social Profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/customers/{customer_id}/social-profiles"
+      },
+      "audit_event": "help_scout.create_social_profile"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.social-profiles.social-profile-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Social Profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}/social-profiles/{social_profile_id}"
+      },
+      "audit_event": "help_scout.delete_social_profile"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.social-profiles.get",
+      "kind": "rest_read",
+      "summary": "List Social Profiles",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/customers/{customer_id}/social-profiles"
+      }
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.social-profiles.social-profile-id.put",
+      "kind": "rest_write",
+      "summary": "Update Social Profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/customers/{customer_id}/social-profiles/{social_profile_id}"
+      },
+      "audit_event": "help_scout.update_social_profile"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.websites.post",
+      "kind": "rest_write",
+      "summary": "Create Website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/customers/{customer_id}/websites"
+      },
+      "audit_event": "help_scout.create_website"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.websites.website-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}/websites/{website_id}"
+      },
+      "audit_event": "help_scout.delete_website"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.websites.get",
+      "kind": "rest_read",
+      "summary": "List Websites",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/customers/{customer_id}/websites"
+      }
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.websites.website-id.put",
+      "kind": "rest_write",
+      "summary": "Update Website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/customers/{customer_id}/websites/{website_id}"
+      },
+      "audit_event": "help_scout.update_website"
+    },
+    {
+      "id": "help-scout.v2.customers.post",
+      "kind": "rest_write",
+      "summary": "Create Customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/customers"
+      },
+      "audit_event": "help_scout.create_customer"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}"
+      },
+      "audit_event": "help_scout.delete_customer"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.async.true.delete",
+      "kind": "rest_write",
+      "summary": "Delete Customer Asynchronously",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete-async/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/customers/{customer_id}?async=true"
+      },
+      "audit_event": "help_scout.delete_customer_asynchronously"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.get",
+      "kind": "rest_read",
+      "summary": "Get Customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/customers/{customer_id}"
+      }
+    },
+    {
+      "id": "help-scout.v3.customers.get",
+      "kind": "rest_read",
+      "summary": "List Customers (v3)",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/customers"
+      }
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.put",
+      "kind": "rest_write",
+      "summary": "Overwrite Customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/overwrite/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/customers/{customer_id}"
+      },
+      "audit_event": "help_scout.overwrite_customer"
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.patch",
+      "kind": "rest_write",
+      "summary": "Update Customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/customers/{customer_id}"
+      },
+      "audit_event": "help_scout.update_customer"
+    },
+    {
+      "id": "help-scout.v2.mailboxes.mailbox-id.routing.get",
+      "kind": "rest_read",
+      "summary": "Get Routing configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/mailboxes/{mailbox_id}/routing"
+      }
+    },
+    {
+      "id": "help-scout.v2.mailboxes.mailbox-id.routing.put",
+      "kind": "rest_write",
+      "summary": "Update Routing configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/mailboxes/{mailbox_id}/routing"
+      },
+      "audit_event": "help_scout.update_routing_configuration"
+    },
+    {
+      "id": "help-scout.v2.mailboxes.mailbox-id.saved-replies.post",
+      "kind": "rest_write",
+      "summary": "Create Saved Reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/mailboxes/{mailbox_id}/saved-replies"
+      },
+      "audit_event": "help_scout.create_saved_reply"
+    },
+    {
+      "id": "help-scout.v2.mailboxes.mailbox-id.saved-replies.saved-reply-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Saved Reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/mailboxes/{mailbox_id}/saved-replies/{saved_reply_id}"
+      },
+      "audit_event": "help_scout.delete_saved_reply"
+    },
+    {
+      "id": "help-scout.v2.mailboxes.mailbox-id.saved-replies.saved-reply-id.get",
+      "kind": "rest_read",
+      "summary": "Get Saved Reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/mailboxes/{mailbox_id}/saved-replies/{saved_reply_id}"
+      }
+    },
+    {
+      "id": "help-scout.v2.mailboxes.mailbox-id.saved-replies.get",
+      "kind": "rest_read",
+      "summary": "List Saved Replies",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/mailboxes/{mailbox_id}/saved-replies"
+      }
+    },
+    {
+      "id": "help-scout.v2.mailboxes.mailbox-id.saved-replies.saved-reply-id.put",
+      "kind": "rest_write",
+      "summary": "Update Saved Reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/mailboxes/{mailbox_id}/saved-replies/{saved_reply_id}"
+      },
+      "audit_event": "help_scout.update_saved_reply"
+    },
+    {
+      "id": "help-scout.v2.mailboxes.mailbox-id.get",
+      "kind": "rest_read",
+      "summary": "Get Inbox",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/mailboxes/{mailbox_id}"
+      }
+    },
+    {
+      "id": "help-scout.v2.mailboxes.mailbox-id.fields.get",
+      "kind": "rest_read",
+      "summary": "List Inbox Custom Fields",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-fields/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/mailboxes/{mailbox_id}/fields"
+      }
+    },
+    {
+      "id": "help-scout.v2.mailboxes.mailbox-id.folders.get",
+      "kind": "rest_read",
+      "summary": "List Inbox Folders",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-folders/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/mailboxes/{mailbox_id}/folders"
+      }
+    },
+    {
+      "id": "help-scout.v2.mailboxes.get",
+      "kind": "rest_read",
+      "summary": "List Inboxes",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/mailboxes"
+      }
+    },
+    {
+      "id": "help-scout.v2.organizations.organization-id.get",
+      "kind": "rest_read",
+      "summary": "Get Organization by ID",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/organizations/{organization_id}"
+      }
+    },
+    {
+      "id": "help-scout.v2.organizations.properties.post",
+      "kind": "rest_write",
+      "summary": "Create Organization Property Definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/organizations/properties"
+      },
+      "audit_event": "help_scout.create_organization_property_definition"
+    },
+    {
+      "id": "help-scout.v2.organizations.properties.property-slug.delete",
+      "kind": "rest_write",
+      "summary": "Delete Organization Property Definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/organizations/properties/{property_slug}"
+      },
+      "audit_event": "help_scout.delete_organization_property_definition"
+    },
+    {
+      "id": "help-scout.v2.organizations.properties.property-slug.get",
+      "kind": "rest_read",
+      "summary": "Get Organization Property Definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/organizations/properties/{property_slug}"
+      }
+    },
+    {
+      "id": "help-scout.v2.organizations.properties.get",
+      "kind": "rest_read",
+      "summary": "List Organization Property Definitions",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/organizations/properties"
+      }
+    },
+    {
+      "id": "help-scout.v2.organizations.organization-id.properties.property-slug.delete",
+      "kind": "rest_write",
+      "summary": "Remove Organization Property Value",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/remove-value/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/organizations/{organization_id}/properties/{property_slug}"
+      },
+      "audit_event": "help_scout.remove_organization_property_value"
+    },
+    {
+      "id": "help-scout.v2.organizations.organization-id.properties.property-slug.put",
+      "kind": "rest_write",
+      "summary": "Set Organization Property Value",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/set-value/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/organizations/{organization_id}/properties/{property_slug}"
+      },
+      "audit_event": "help_scout.set_organization_property_value"
+    },
+    {
+      "id": "help-scout.v2.organizations.properties.property-slug.put",
+      "kind": "rest_write",
+      "summary": "Update Organization Property Definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/organizations/properties/{property_slug}"
+      },
+      "audit_event": "help_scout.update_organization_property_definition"
+    },
+    {
+      "id": "help-scout.v2.organizations.post",
+      "kind": "rest_write",
+      "summary": "Create Organization",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/organizations"
+      },
+      "audit_event": "help_scout.create_organization"
+    },
+    {
+      "id": "help-scout.v2.organizations.organization-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Organization by ID",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/organizations/{organization_id}"
+      },
+      "audit_event": "help_scout.delete_organization_by_id"
+    },
+    {
+      "id": "help-scout.v2.organizations.organization-id.conversations.get",
+      "kind": "rest_read",
+      "summary": "Get Organization Conversations",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-conversations/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/organizations/{organization_id}/conversations"
+      }
+    },
+    {
+      "id": "help-scout.v2.organizations.organization-id.customers.get",
+      "kind": "rest_read",
+      "summary": "Get Organization Customers",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-customers/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/organizations/{organization_id}/customers"
+      }
+    },
+    {
+      "id": "help-scout.v2.organizations.get",
+      "kind": "rest_read",
+      "summary": "List Organizations",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/organizations"
+      }
+    },
+    {
+      "id": "help-scout.v2.organizations.organization-id.put",
+      "kind": "rest_write",
+      "summary": "Update Organization",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/organizations/{organization_id}"
+      },
+      "audit_event": "help_scout.update_organization"
+    },
+    {
+      "id": "help-scout.v2.customer-properties.post",
+      "kind": "rest_write",
+      "summary": "Create Customer Property Definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/customer-properties"
+      },
+      "audit_event": "help_scout.create_customer_property_definition"
+    },
+    {
+      "id": "help-scout.v2.customer-properties.property-slug.delete",
+      "kind": "rest_write",
+      "summary": "Delete Customer Property Definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/customer-properties/{property_slug}"
+      },
+      "audit_event": "help_scout.delete_customer_property_definition"
+    },
+    {
+      "id": "help-scout.v2.customer-properties.get",
+      "kind": "rest_read",
+      "summary": "List Customer Property Definitions",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/customer-properties"
+      }
+    },
+    {
+      "id": "help-scout.v2.customers.customer-id.properties.patch",
+      "kind": "rest_write",
+      "summary": "Update Customer Properties",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/customers/{customer_id}/properties"
+      },
+      "audit_event": "help_scout.update_customer_properties"
+    },
+    {
+      "id": "help-scout.v2.ratings.rating-id.get",
+      "kind": "rest_read",
+      "summary": "Get Satisfaction Rating",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/ratings/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/ratings/{rating_id}"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.company.get",
+      "kind": "rest_read",
+      "summary": "Company Overall Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-overall/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/company"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.company.customers-helped.get",
+      "kind": "rest_read",
+      "summary": "Company Customers Helped",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-customers-helped/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/company/customers-helped"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.company.drilldown.get",
+      "kind": "rest_read",
+      "summary": "Company Drilldown",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-drilldown/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/company/drilldown"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.conversations.get",
+      "kind": "rest_read",
+      "summary": "Conversations - Overall Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-overall/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.conversations.volume-by-channel.get",
+      "kind": "rest_read",
+      "summary": "All Channels - Volumes by Channel",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-volume-by-channel/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/volume-by-channel"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.conversations.busy-times.get",
+      "kind": "rest_read",
+      "summary": "Conversations - Busiest Time of Day",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-busy-times/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/busy-times"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.conversations.drilldown.get",
+      "kind": "rest_read",
+      "summary": "Conversations - Drilldown",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-drilldown/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/drilldown"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.conversations.fields-drilldown.get",
+      "kind": "rest_read",
+      "summary": "Conversations - Drilldown by Field",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-field-drilldown/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/fields-drilldown"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.conversations.new.get",
+      "kind": "rest_read",
+      "summary": "Conversations - New Conversations",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/new"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.conversations.new-drilldown.get",
+      "kind": "rest_read",
+      "summary": "Conversations - New Conversations Drilldown",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new-drilldown/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/new-drilldown"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.conversations.received-messages.get",
+      "kind": "rest_read",
+      "summary": "Conversations - Received Messages Statistics",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-received-messages/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/conversations/received-messages"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.docs.get",
+      "kind": "rest_read",
+      "summary": "Docs Overall Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/docs/reports-docs-overall/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/docs"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.happiness.get",
+      "kind": "rest_read",
+      "summary": "Happiness Overall Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-overall/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/happiness"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.happiness.ratings.get",
+      "kind": "rest_read",
+      "summary": "Happiness Ratings Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-ratings/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/happiness/ratings"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.productivity.get",
+      "kind": "rest_read",
+      "summary": "Productivity Overall Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-overall/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.productivity.first-response-time.get",
+      "kind": "rest_read",
+      "summary": "Productivity - First Response Time",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-first-response-time/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity/first-response-time"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.productivity.replies-sent.get",
+      "kind": "rest_read",
+      "summary": "Productivity - Replies Sent",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-replies-sent/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity/replies-sent"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.productivity.resolution-time.get",
+      "kind": "rest_read",
+      "summary": "Productivity - Resolution Time",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolution-time/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity/resolution-time"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.productivity.resolved.get",
+      "kind": "rest_read",
+      "summary": "Productivity - Resolved",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolved/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity/resolved"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.productivity.response-time.get",
+      "kind": "rest_read",
+      "summary": "Productivity - Response Time",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-respose-time/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/productivity/response-time"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.user.get",
+      "kind": "rest_read",
+      "summary": "User/Team Overall Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.user.conversation-history.get",
+      "kind": "rest_read",
+      "summary": "User Conversation History",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-conversation-history/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/conversation-history"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.user.customers-helped.get",
+      "kind": "rest_read",
+      "summary": "User Customers Helped",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-customer-helped/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/customers-helped"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.user.drilldown.get",
+      "kind": "rest_read",
+      "summary": "User Drill-down",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-drilldown/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/drilldown"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.user.happiness.get",
+      "kind": "rest_read",
+      "summary": "User Happiness",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/happiness"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.user.ratings.get",
+      "kind": "rest_read",
+      "summary": "User Happiness drilldown",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness-drilldown/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/ratings"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.user.replies.get",
+      "kind": "rest_read",
+      "summary": "User Replies",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-replies/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/replies"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.user.resolutions.get",
+      "kind": "rest_read",
+      "summary": "User Resolutions",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-resolutions/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/resolutions"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.user.chat.get",
+      "kind": "rest_read",
+      "summary": "User/Team Chat Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-chat/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/user/chat"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.chat.get",
+      "kind": "rest_read",
+      "summary": "Chat Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/chat/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/chat"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.email.get",
+      "kind": "rest_read",
+      "summary": "Email Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/email/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/email"
+      }
+    },
+    {
+      "id": "help-scout.v2.reports.phone.get",
+      "kind": "rest_read",
+      "summary": "Phone Report",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/phone/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports/phone"
+      }
+    },
+    {
+      "id": "help-scout.v3.system-users.system-user-id.get",
+      "kind": "rest_read",
+      "summary": "Get System User",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/system-users/{system_user_id}"
+      }
+    },
+    {
+      "id": "help-scout.v3.system-users.get",
+      "kind": "rest_read",
+      "summary": "List System Users",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/system-users"
+      }
+    },
+    {
+      "id": "help-scout.v2.tags.tag-id.get",
+      "kind": "rest_read",
+      "summary": "Get Tag by ID",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/tags/{tag_id}"
+      }
+    },
+    {
+      "id": "help-scout.v2.tags.get",
+      "kind": "rest_read",
+      "summary": "List Tags",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/tags"
+      }
+    },
+    {
+      "id": "help-scout.v2.teams.team-id.members.get",
+      "kind": "rest_read",
+      "summary": "List Team Members",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-team-members/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/teams/{team_id}/members"
+      }
+    },
+    {
+      "id": "help-scout.v2.teams.get",
+      "kind": "rest_read",
+      "summary": "List Teams",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-teams/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/teams"
+      }
+    },
+    {
+      "id": "help-scout.v2.teams.team-id.members.put",
+      "kind": "rest_write",
+      "summary": "Update Team Members",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/update-team-members/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/teams/{team_id}/members"
+      },
+      "audit_event": "help_scout.update_team_members"
+    },
+    {
+      "id": "help-scout.v2.users.get",
+      "kind": "rest_read",
+      "summary": "List Users",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users"
+      }
+    },
+    {
+      "id": "help-scout.v2.users.user-id.conversation-reassignment.get",
+      "kind": "rest_read",
+      "summary": "Get Conversation Reassignment configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation%20reassignment/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{user_id}/conversation-reassignment"
+      }
+    },
+    {
+      "id": "help-scout.v2.users.user-id.conversation-reassignment.put",
+      "kind": "rest_write",
+      "summary": "Update Conversation Reassignment configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation%20reassignment/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/users/{user_id}/conversation-reassignment"
+      },
+      "audit_event": "help_scout.update_conversation_reassignment_configuration"
+    },
+    {
+      "id": "help-scout.v2.users.user-id.status.get",
+      "kind": "rest_read",
+      "summary": "Get user status",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{user_id}/status"
+      }
+    },
+    {
+      "id": "help-scout.v2.users.status.get",
+      "kind": "rest_read",
+      "summary": "List users statuses",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/status"
+      }
+    },
+    {
+      "id": "help-scout.v2.users.user-id.status.put",
+      "kind": "rest_write",
+      "summary": "Set user status",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/set/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/users/{user_id}/status"
+      },
+      "audit_event": "help_scout.set_user_status"
+    },
+    {
+      "id": "help-scout.v2.users.post",
+      "kind": "rest_write",
+      "summary": "Create User",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users"
+      },
+      "audit_event": "help_scout.create_user"
+    },
+    {
+      "id": "help-scout.v2.users.user-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete User",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/users/{user_id}"
+      },
+      "audit_event": "help_scout.delete_user"
+    },
+    {
+      "id": "help-scout.v2.users.me.get",
+      "kind": "rest_read",
+      "summary": "Get Resource Owner",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/me/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/me"
+      }
+    },
+    {
+      "id": "help-scout.v2.users.user-id.get",
+      "kind": "rest_read",
+      "summary": "Get User",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{user_id}"
+      }
+    },
+    {
+      "id": "help-scout.v2.webhooks.post",
+      "kind": "rest_write",
+      "summary": "Create Webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/create/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/webhooks"
+      },
+      "audit_event": "help_scout.create_webhook"
+    },
+    {
+      "id": "help-scout.v2.webhooks.webhook-id.delete",
+      "kind": "rest_write",
+      "summary": "Delete Webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/delete/",
+      "risk": "critical",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/webhooks/{webhook_id}"
+      },
+      "audit_event": "help_scout.delete_webhook"
+    },
+    {
+      "id": "help-scout.v2.webhooks.webhook-id.get",
+      "kind": "rest_read",
+      "summary": "Get Webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/get/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhooks/{webhook_id}"
+      }
+    },
+    {
+      "id": "help-scout.v2.webhooks.get",
+      "kind": "rest_read",
+      "summary": "List Webhooks",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhooks"
+      }
+    },
+    {
+      "id": "help-scout.v2.webhooks.webhook-id.put",
+      "kind": "rest_write",
+      "summary": "Update Webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/webhooks/{webhook_id}"
+      },
+      "audit_event": "help_scout.update_webhook"
+    },
+    {
+      "id": "help-scout.v2.workflows.get",
+      "kind": "rest_read",
+      "summary": "List Workflows",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/list/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workflows"
+      }
+    },
+    {
+      "id": "help-scout.v2.workflows.workflow-id.run.post",
+      "kind": "rest_write",
+      "summary": "Run Manual Workflows",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/run/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workflows/{workflow_id}/run"
+      },
+      "audit_event": "help_scout.run_manual_workflows"
+    },
+    {
+      "id": "help-scout.v2.workflows.workflow-id.patch",
+      "kind": "rest_write",
+      "summary": "Update workflow status",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/update/",
+      "risk": "medium",
+      "approval": "plan, preview, approval token, and typed destructive confirmation via reverse ETL",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PATCH",
+        "path": "/v2/workflows/{workflow_id}"
+      },
+      "audit_event": "help_scout.update_workflow_status"
+    }
+  ]
+}

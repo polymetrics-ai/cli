@@ -210,7 +210,7 @@
 | `harvest` | [`icons/harvest.svg`](../icons/harvest.svg) | Harvest | `api` | ga | check, catalog, read | 15 | 0 | [Documentation](https://help.getharvest.com/api-v2/) | bundle definition |
 | `height` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Height | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.height.app/api) | bundle definition |
 | `hellobaton` | [`icons/hellobaton.svg`](../icons/hellobaton.svg) | Hellobaton | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](manual intervention needed) | bundle definition |
-| `help-scout` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Help Scout | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developer.helpscout.com/mailbox-api/) | bundle definition |
+| `help-scout` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Help Scout | `api` | ga | check, catalog, read, write | 4 | 66 | [Documentation](https://developer.helpscout.com/mailbox-api/) | bundle definition |
 | `hibob` | [`icons/hibob.svg`](../icons/hibob.svg) | HiBob | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://apidocs.hibob.com/) | bundle definition |
 | `high-level` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | High Level | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://highlevel.stoplight.io/) | bundle definition |
 | `hoorayhr` | [`icons/hoorayhr.svg`](../icons/hoorayhr.svg) | HoorayHR | `api` | beta | check, catalog, read | 4 | 0 | [Documentation](https://hoorayhr.io) | bundle definition |
