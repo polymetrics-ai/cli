@@ -51,3 +51,16 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
 Runtime-backed checks are optional and are not required for this planning/metadata slice because no credentials or local services are needed.
+
+## 2026-07-10 — post-#155 parent verification
+
+Passed after squash-merging issue #155 as `debf010a`:
+
+- `gofmt -w cmd internal`
+- `go vet ./...`
+- `go test ./...`
+- `go build ./cmd/pm`
+- `make verify`
+- `go run ./cmd/connectorgen validate internal/connectors/defs`
+
+Parent PR #223 remote checks and CodeRabbit fallback review remain pending for the latest parent commits.

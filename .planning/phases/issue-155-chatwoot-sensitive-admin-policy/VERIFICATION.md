@@ -23,6 +23,13 @@
 
 ## Remote/review
 
-- [ ] Push branch `feat/155-chatwoot-sensitive-admin-policy`.
-- [ ] Open stacked PR to `feat/148-chatwoot-cli-parity` with `Refs #155`.
-- [ ] Route CodeRabbit/parent fallback review if the non-default-base sub-PR is skipped.
+- [x] Push branch `feat/155-chatwoot-sensitive-admin-policy`.
+- [x] Open stacked PR #264 to `feat/148-chatwoot-cli-parity` with `Refs #155`.
+- [ ] Route CodeRabbit parent fallback review on PR #223 because non-default-base PR #264 was not reviewed.
+
+## Parent integration
+
+- [x] PR #264 remote checks passed.
+- [x] PR #264 squash-merged into parent branch as `debf010a`.
+- [x] Parent post-integration local gates passed: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, `go run ./cmd/connectorgen validate internal/connectors/defs`.
+- [ ] Parent PR #223 CodeRabbit fallback review for integrated #155 commits.

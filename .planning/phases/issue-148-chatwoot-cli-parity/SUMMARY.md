@@ -37,3 +37,7 @@ Status: in progress.
 ## Safety
 
 No secrets requested or used. No credentialed connector checks. No dependency changes. No external writes. Parent PR merge to `main` remains human-gated.
+
+## 2026-07-10 update
+
+Issue #155 sensitive/admin/destructive write parity was squash-merged into the parent branch as `debf010a`. Chatwoot connector parity now covers 139 of 144 official operations: 7 streams, 53 bounded direct reads, and 79 typed write endpoints; 4 disallowed rows and 1 duplicate row remain blocked by policy. Full parent local gates passed after integration. Parent PR #223 still needs remote checks and CodeRabbit fallback coverage before human review.

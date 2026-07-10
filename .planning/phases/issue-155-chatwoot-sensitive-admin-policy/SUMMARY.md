@@ -1,6 +1,6 @@
 # Summary — Issue #155 Chatwoot sensitive/admin/destructive policy
 
-Status: full verified; stacked PR pending.
+Status: integrated into parent as `debf010a`; parent review fallback pending.
 
 Completed slice:
 
@@ -11,3 +11,5 @@ Completed slice:
 - Updated Chatwoot API/CLI surface, writes, docs/manual/skill, website data, and tests.
 
 Verification passed: targeted checks plus `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify`.
+
+Parent post-integration verification passed: `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and `go run ./cmd/connectorgen validate internal/connectors/defs`.

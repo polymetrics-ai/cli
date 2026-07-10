@@ -131,7 +131,7 @@
     },
     {
       "number": 155,
-      "status": "remote_checks_passed_review_pending",
+      "status": "integrated_parent_verified",
       "dependencies": [
         149,
         152
@@ -152,7 +152,7 @@
         "website/tests/api/connector-data.test.ts",
         ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
       ],
-      "decision": "integrate_then_parent_review_fallback"
+      "decision": "parent_review_fallback_pending"
     }
   ],
   "spawn_decisions": [
@@ -276,11 +276,11 @@
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
-      "decision": "integrate_then_parent_review_fallback",
+      "decision": "parent_review_fallback_pending",
       "issue_numbers": [
         155
       ],
-      "reason": "PR #264 remote checks passed and merge state is clean; CodeRabbit did not review the non-default-base PR, so parent PR #223 fallback review is required after squash integration."
+      "reason": "Issue #155 was squash-merged into parent as debf010a and parent full local verification passed; parent PR #223 CodeRabbit fallback review is pending for the integrated commit range."
     }
   ],
   "subissues": [
@@ -468,7 +468,7 @@
       "branch": "feat/155-chatwoot-sensitive-admin-policy",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/264",
       "worker": "coordinator-local-critical-path",
-      "status": "remote_checks_passed_review_pending",
+      "status": "integrated_parent_verified",
       "write_scope": [
         "internal/connectors/defs/chatwoot/api_surface.json",
         "internal/connectors/defs/chatwoot/cli_surface.json",
@@ -486,17 +486,18 @@
         ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "PR #264 remote checks passed; parent CodeRabbit fallback pending after integration",
+      "verification": "PR #264 remote checks passed, squash-merged as debf010a, and parent full local gates passed after integration.",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "parent_fallback_required_after_integration",
-        "head_sha": "af119b39b9822ae248b2363663c36a1a9ad17008",
-        "reviewed_range": "pending",
+        "status": "parent_fallback_pending",
+        "head_sha": "debf010a",
+        "reviewed_range": "pending_parent_review_for_debf010a_and_integration_record",
         "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
         "fallback_route": "none",
         "disposition_summary": "pending",
         "disposition_url": "pending"
-      }
+      },
+      "merge_commit": "debf010a"
     }
   ],
   "human_gates": [

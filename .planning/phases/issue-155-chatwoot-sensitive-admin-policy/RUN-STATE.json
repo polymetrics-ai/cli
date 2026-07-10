@@ -3,7 +3,7 @@
   "parentIssue": 148,
   "branch": "feat/155-chatwoot-sensitive-admin-policy",
   "baseBranch": "feat/148-chatwoot-cli-parity",
-  "status": "remote_checks_passed_review_pending",
+  "status": "integrated_parent_verified",
   "gsd": {
     "adapter": "scripts/gsd",
     "programmingLoop": "manual_fallback",
@@ -52,8 +52,14 @@
       "timestamp": "2026-07-10T00:00:00Z",
       "event": "automated_review_pending_parent_fallback",
       "detail": "No CodeRabbit review/comment appeared on non-default-base PR #264; parent PR #223 fallback review is required after integration."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "integrated_parent_verified",
+      "detail": "PR #264 was squash-merged into feat/148-chatwoot-cli-parity as debf010a; parent full local gates passed after integration."
     }
   ],
   "pr": 264,
-  "prUrl": "https://github.com/polymetrics-ai/cli/pull/264"
+  "prUrl": "https://github.com/polymetrics-ai/cli/pull/264",
+  "mergeCommit": "debf010a"
 }
