@@ -3,32 +3,20 @@
   "docs": "https://developer.zendesk.com/zendesk/oas.yaml",
   "reviewed_at": "2026-07-09",
   "operation_ledger_version": 1,
-  "scope": "Issue #160 operation ledger: every operation in the official Zendesk OAS is listed exactly once in operations.json and every api_surface row retains a blocked operation classifier that matches a typed ledger entry. Executable streams, direct reads, binary downloads, and reverse-ETL writes remain enabled only by later issue lanes.",
+  "scope": "Issue #161 direct-read lane: 282 safe JSON GET operations are exposed as typed, bounded direct-read commands; remaining operations stay blocked as operation-ledger rows until stream, binary, and reverse-ETL lanes enable them.",
   "endpoints": [
     {
       "method": "GET",
       "path": "/api/v2/{target_type}/{target_id}/relationship_fields/{field_id}/{source_type}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetSourcesByTarget; tags=Lookup Relationships; summary=Get sources by target"
+      "covered_by": {
+        "direct_read": "read get-sources-by-target"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/account/email_settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetAccountEmailSettings; tags=Account Settings; summary=Show Email Settings"
+      "covered_by": {
+        "direct_read": "read get-account-email-settings"
       }
     },
     {
@@ -47,14 +35,8 @@
     {
       "method": "GET",
       "path": "/api/v2/account/settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowAccountSettings; tags=Account Settings; summary=Show Settings"
+      "covered_by": {
+        "direct_read": "read show-account-settings"
       }
     },
     {
@@ -86,53 +68,29 @@
     {
       "method": "GET",
       "path": "/api/v2/accounts/available",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=VerifySubdomainAvailability; tags=Reseller; summary=Verify Subdomain Availability"
+      "covered_by": {
+        "direct_read": "read verify-subdomain-availability"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/activities",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListActivities; tags=Activity Stream; summary=List Activities"
+      "covered_by": {
+        "direct_read": "read list-activities"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/activities/{activity_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowActivity; tags=Activity Stream; summary=Show Activity"
+      "covered_by": {
+        "direct_read": "read show-activity"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/activities/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountActivities; tags=Activity Stream; summary=Count Activities"
+      "covered_by": {
+        "direct_read": "read count-activities"
       }
     },
     {
@@ -177,14 +135,8 @@
     {
       "method": "GET",
       "path": "/api/v2/approval_requests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListApprovalRequests; tags=Approval Requests; summary=List Approval Requests"
+      "covered_by": {
+        "direct_read": "read list-approval-requests"
       }
     },
     {
@@ -242,27 +194,15 @@
     {
       "method": "GET",
       "path": "/api/v2/audit_logs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAuditLogs; tags=Audit Logs; summary=List Audit Logs"
+      "covered_by": {
+        "direct_read": "read list-audit-logs"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/audit_logs/{audit_log_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowAuditLog; tags=Audit Logs; summary=Show Audit Log"
+      "covered_by": {
+        "direct_read": "read show-audit-log"
       }
     },
     {
@@ -281,14 +221,8 @@
     {
       "method": "GET",
       "path": "/api/v2/autocomplete/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=AutocompleteTags; tags=Tags; summary=Search Tags"
+      "covered_by": {
+        "direct_read": "read autocomplete-tags"
       }
     },
     {
@@ -307,14 +241,8 @@
     {
       "method": "GET",
       "path": "/api/v2/automations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAutomations; tags=Automations; summary=List Automations"
+      "covered_by": {
+        "direct_read": "read list-automations"
       }
     },
     {
@@ -333,14 +261,8 @@
     {
       "method": "GET",
       "path": "/api/v2/automations/{automation_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowAutomation; tags=Automations; summary=Show Automation"
+      "covered_by": {
+        "direct_read": "read show-automation"
       }
     },
     {
@@ -372,14 +294,8 @@
     {
       "method": "GET",
       "path": "/api/v2/automations/active",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListActiveAutomations; tags=Automations; summary=List Active Automations"
+      "covered_by": {
+        "direct_read": "read list-active-automations"
       }
     },
     {
@@ -398,14 +314,8 @@
     {
       "method": "GET",
       "path": "/api/v2/automations/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=SearchAutomations; tags=Automations; summary=Search Automations"
+      "covered_by": {
+        "direct_read": "read search-automations"
       }
     },
     {
@@ -463,27 +373,15 @@
     {
       "method": "GET",
       "path": "/api/v2/brand_agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListBrandAgents; tags=Brand Agents; summary=List Brand Agent Memberships"
+      "covered_by": {
+        "direct_read": "read list-brand-agents"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/brand_agents/{brand_agent_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowBrandAgentById; tags=Brand Agents; summary=Show Brand Agent Membership"
+      "covered_by": {
+        "direct_read": "read show-brand-agent-by-id"
       }
     },
     {
@@ -502,14 +400,8 @@
     {
       "method": "GET",
       "path": "/api/v2/brands",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListBrands; tags=Brands; summary=List Brands"
+      "covered_by": {
+        "direct_read": "read list-brands"
       }
     },
     {
@@ -528,14 +420,8 @@
     {
       "method": "GET",
       "path": "/api/v2/brands/{brand_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowBrand; tags=Brands; summary=Show a Brand"
+      "covered_by": {
+        "direct_read": "read show-brand"
       }
     },
     {
@@ -567,27 +453,15 @@
     {
       "method": "GET",
       "path": "/api/v2/brands/{brand_id}/agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListBrandAgentsByBrand; tags=Brand Agents, Brands; summary=List Agents By Brand"
+      "covered_by": {
+        "direct_read": "read list-brand-agents-by-brand"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/brands/{brand_id}/check_host_mapping",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CheckHostMappingValidityForExistingBrand; tags=Brands; summary=Check Host Mapping Validity for an Existing Brand"
+      "covered_by": {
+        "direct_read": "read check-host-mapping-validity-for-existing-brand"
       }
     },
     {
@@ -619,40 +493,22 @@
     {
       "method": "GET",
       "path": "/api/v2/brands/check_host_mapping",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CheckHostMappingValidity; tags=Brands; summary=Check Host Mapping Validity"
+      "covered_by": {
+        "direct_read": "read check-host-mapping-validity"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/channels/twitter/monitored_twitter_handles",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListMonitoredTwitterHandles; tags=X Channel; summary=List Monitored X Handles"
+      "covered_by": {
+        "direct_read": "read list-monitored-twitter-handles"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/channels/twitter/monitored_twitter_handles/{monitored_twitter_handle_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowMonitoredTwitterHandle; tags=X Channel; summary=Show Monitored X Handle"
+      "covered_by": {
+        "direct_read": "read show-monitored-twitter-handle"
       }
     },
     {
@@ -671,14 +527,8 @@
     {
       "method": "GET",
       "path": "/api/v2/channels/twitter/tickets/{comment_id}/statuses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GettingTwicketStatus; tags=X Channel; summary=List Ticket statuses"
+      "covered_by": {
+        "direct_read": "read getting-twicket-status"
       }
     },
     {
@@ -762,14 +612,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListCustomObjects; tags=Custom Objects; summary=List Custom Objects"
+      "covered_by": {
+        "direct_read": "read list-custom-objects"
       }
     },
     {
@@ -788,14 +632,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCustomObject; tags=Custom Objects; summary=Show Custom Object"
+      "covered_by": {
+        "direct_read": "read show-custom-object"
       }
     },
     {
@@ -827,14 +665,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/access_rules",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAccessRules; tags=Custom Object Permissions; summary=List Access Rules"
+      "covered_by": {
+        "direct_read": "read list-access-rules"
       }
     },
     {
@@ -853,14 +685,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/access_rules/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowAccessRule; tags=Custom Object Permissions; summary=Show Access Rule"
+      "covered_by": {
+        "direct_read": "read show-access-rule"
       }
     },
     {
@@ -892,27 +718,15 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/access_rules/definitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAccessRuleDefinitions; tags=Custom Object Permissions; summary=List Access Rule Definitions"
+      "covered_by": {
+        "direct_read": "read list-access-rule-definitions"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/fields",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListCustomObjectFields; tags=Custom Object Fields; summary=List Custom Object Fields"
+      "covered_by": {
+        "direct_read": "read list-custom-object-fields"
       }
     },
     {
@@ -931,14 +745,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/fields/{custom_object_field_key_or_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCustomObjectField; tags=Custom Object Fields; summary=Show Custom Object Field"
+      "covered_by": {
+        "direct_read": "read show-custom-object-field"
       }
     },
     {
@@ -996,40 +804,22 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/limits/field_limit",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CustomObjectFieldsLimit; tags=Custom Object Fields; summary=Custom Object Fields Limit"
+      "covered_by": {
+        "direct_read": "read custom-object-fields-limit"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/permission_policies",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListPermissionPolicies; tags=Custom Object Permissions; summary=List Permission Policies"
+      "covered_by": {
+        "direct_read": "read list-permission-policies"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/permission_policies/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowPermissionPolicy; tags=Custom Object Permissions; summary=Show Permission Policy"
+      "covered_by": {
+        "direct_read": "read show-permission-policy"
       }
     },
     {
@@ -1048,14 +838,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/records",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListCustomObjectRecords; tags=Custom Object Records; summary=List Custom Object Records"
+      "covered_by": {
+        "direct_read": "read list-custom-object-records"
       }
     },
     {
@@ -1100,14 +884,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/{custom_object_record_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCustomObjectRecord; tags=Custom Object Records; summary=Show Custom Object Record"
+      "covered_by": {
+        "direct_read": "read show-custom-object-record"
       }
     },
     {
@@ -1204,40 +982,22 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/autocomplete",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=AutocompleteCustomObjectRecordSearch; tags=Custom Object Records; summary=Autocomplete Custom Object Record Search"
+      "covered_by": {
+        "direct_read": "read autocomplete-custom-object-record-search"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountCustomObjectRecords; tags=Custom Object Records; summary=Count Custom Object Records"
+      "covered_by": {
+        "direct_read": "read count-custom-object-records"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=SearchCustomObjectRecords; tags=Custom Object Records; summary=Search Custom Object Records"
+      "covered_by": {
+        "direct_read": "read search-custom-object-records"
       }
     },
     {
@@ -1256,14 +1016,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/triggers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListObjectTriggers; tags=Object Triggers; summary=List Object Triggers"
+      "covered_by": {
+        "direct_read": "read list-object-triggers"
       }
     },
     {
@@ -1282,14 +1036,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetObjectTrigger; tags=Object Triggers; summary=Show Object Trigger"
+      "covered_by": {
+        "direct_read": "read get-object-trigger"
       }
     },
     {
@@ -1321,27 +1069,15 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/triggers/active",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListActiveObjectTriggers; tags=Object Triggers; summary=List Active Object Triggers"
+      "covered_by": {
+        "direct_read": "read list-active-object-triggers"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/triggers/definitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListObjectTriggersDefinitions; tags=Object Triggers; summary=List Object Trigger Action and Condition Definitions"
+      "covered_by": {
+        "direct_read": "read list-object-triggers-definitions"
       }
     },
     {
@@ -1360,14 +1096,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/triggers/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=SearchObjectTriggers; tags=Object Triggers; summary=Search Object Triggers"
+      "covered_by": {
+        "direct_read": "read search-object-triggers"
       }
     },
     {
@@ -1386,40 +1116,22 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/limits/object_limit",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CustomObjectsLimit; tags=Custom Objects; summary=Custom Objects Limit"
+      "covered_by": {
+        "direct_read": "read custom-objects-limit"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/limits/record_limit",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CustomObjectRecordsLimit; tags=Custom Object Records; summary=Custom Object Records Limit"
+      "covered_by": {
+        "direct_read": "read custom-object-records-limit"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/custom_roles",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListCustomRoles; tags=Custom Roles; summary=List Custom Roles"
+      "covered_by": {
+        "direct_read": "read list-custom-roles"
       }
     },
     {
@@ -1438,14 +1150,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_roles/{custom_role_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCustomRoleById; tags=Custom Roles; summary=Show Custom Role"
+      "covered_by": {
+        "direct_read": "read show-custom-role-by-id"
       }
     },
     {
@@ -1490,14 +1196,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_statuses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListCustomStatuses; tags=Custom Ticket Statuses; summary=List Custom Ticket Statuses"
+      "covered_by": {
+        "direct_read": "read list-custom-statuses"
       }
     },
     {
@@ -1516,14 +1216,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_statuses/{custom_status_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCustomStatus; tags=Custom Ticket Statuses; summary=Show Custom Ticket Status"
+      "covered_by": {
+        "direct_read": "read show-custom-status"
       }
     },
     {
@@ -1633,27 +1327,15 @@
     {
       "method": "GET",
       "path": "/api/v2/deleted_users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListDeletedUsers; tags=Users; summary=List Deleted Users"
+      "covered_by": {
+        "direct_read": "read list-deleted-users"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/deleted_users/{deleted_user_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowDeletedUser; tags=Users; summary=Show Deleted User"
+      "covered_by": {
+        "direct_read": "read show-deleted-user"
       }
     },
     {
@@ -1672,27 +1354,15 @@
     {
       "method": "GET",
       "path": "/api/v2/deleted_users/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountDeletedUsers; tags=Users; summary=Count Deleted Users"
+      "covered_by": {
+        "direct_read": "read count-deleted-users"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/deletion_schedules",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListDeletionSchedules; tags=Deletion Schedules; summary=List Deletion Schedules"
+      "covered_by": {
+        "direct_read": "read list-deletion-schedules"
       }
     },
     {
@@ -1711,14 +1381,8 @@
     {
       "method": "GET",
       "path": "/api/v2/deletion_schedules/{deletion_schedule_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetDeletionSchedule; tags=Deletion Schedules; summary=Get Deletion Schedule"
+      "covered_by": {
+        "direct_read": "read get-deletion-schedule"
       }
     },
     {
@@ -1919,53 +1583,29 @@
     {
       "method": "GET",
       "path": "/api/v2/email_notifications",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListEmailNotifications; tags=Email Notifications; summary=List Email Notifications"
+      "covered_by": {
+        "direct_read": "read list-email-notifications"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/email_notifications/{notification_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowEmailNotification; tags=Email Notifications; summary=Show Email Notification"
+      "covered_by": {
+        "direct_read": "read show-email-notification"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/email_notifications/show_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowManyEmailNotifications; tags=Email Notifications; summary=Show Many Email Notifications"
+      "covered_by": {
+        "direct_read": "read show-many-email-notifications"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/end_users/{user_id}/identities",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListEndUserIdentities; tags=User Identities; summary=List End User Identities"
+      "covered_by": {
+        "direct_read": "read list-end-user-identities"
       }
     },
     {
@@ -1984,14 +1624,8 @@
     {
       "method": "GET",
       "path": "/api/v2/end_users/{user_id}/identities/{user_identity_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowEndUserIdentity; tags=User Identities; summary=Show End User Identity"
+      "covered_by": {
+        "direct_read": "read show-end-user-identity"
       }
     },
     {
@@ -2036,14 +1670,8 @@
     {
       "method": "GET",
       "path": "/api/v2/group_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListGroupMemberships; tags=Group Memberships; summary=List Memberships"
+      "covered_by": {
+        "direct_read": "read list-group-memberships"
       }
     },
     {
@@ -2062,14 +1690,8 @@
     {
       "method": "GET",
       "path": "/api/v2/group_memberships/{group_membership_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowGroupMembershipById; tags=Group Memberships; summary=Show Membership"
+      "covered_by": {
+        "direct_read": "read show-group-membership-by-id"
       }
     },
     {
@@ -2088,14 +1710,8 @@
     {
       "method": "GET",
       "path": "/api/v2/group_memberships/assignable",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAssignableGroupMemberships; tags=Group Memberships; summary=List Assignable Memberships"
+      "covered_by": {
+        "direct_read": "read list-assignable-group-memberships"
       }
     },
     {
@@ -2127,14 +1743,8 @@
     {
       "method": "GET",
       "path": "/api/v2/group_slas/policies",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListGroupSLAPolicies; tags=Group SLA Policies; summary=List Group SLA Policies"
+      "covered_by": {
+        "direct_read": "read list-group-sla-policies"
       }
     },
     {
@@ -2153,14 +1763,8 @@
     {
       "method": "GET",
       "path": "/api/v2/group_slas/policies/{group_sla_policy_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowGroupSLAPolicy; tags=Group SLA Policies; summary=Show Group SLA Policy"
+      "covered_by": {
+        "direct_read": "read show-group-sla-policy"
       }
     },
     {
@@ -2192,14 +1796,8 @@
     {
       "method": "GET",
       "path": "/api/v2/group_slas/policies/definitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=RetrieveGroupSLAPolicyFilterDefinitionItems; tags=Group SLA Policies; summary=Retrieve Supported Filter Definition Items"
+      "covered_by": {
+        "direct_read": "read retrieve-group-sla-policy-filter-definition-items"
       }
     },
     {
@@ -2218,14 +1816,8 @@
     {
       "method": "GET",
       "path": "/api/v2/groups",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListGroups; tags=Groups; summary=List Groups"
+      "covered_by": {
+        "direct_read": "read list-groups"
       }
     },
     {
@@ -2244,14 +1836,8 @@
     {
       "method": "GET",
       "path": "/api/v2/groups/{group_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowGroupById; tags=Groups; summary=Show Group"
+      "covered_by": {
+        "direct_read": "read show-group-by-id"
       }
     },
     {
@@ -2283,79 +1869,43 @@
     {
       "method": "GET",
       "path": "/api/v2/groups/{group_id}/memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListGroupMembershipsByGroup; tags=Group Memberships, Groups; summary=List Memberships By Group"
+      "covered_by": {
+        "direct_read": "read list-group-memberships-by-group"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/groups/{group_id}/memberships/assignable",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAssignableGroupMembershipsByGroup; tags=Group Memberships, Groups; summary=List Assignable Memberships By Group"
+      "covered_by": {
+        "direct_read": "read list-assignable-group-memberships-by-group"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/groups/{group_id}/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListGroupUsers; tags=Users, Groups; summary=List Users By Group"
+      "covered_by": {
+        "direct_read": "read list-group-users"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/groups/{group_id}/users/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountGroupUsers; tags=Users, Groups; summary=Count Users By Group"
+      "covered_by": {
+        "direct_read": "read count-group-users"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/groups/assignable",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAssignableGroups; tags=Groups; summary=List Assignable Groups"
+      "covered_by": {
+        "direct_read": "read list-assignable-groups"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/groups/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountGroups; tags=Groups; summary=Count Groups"
+      "covered_by": {
+        "direct_read": "read count-groups"
       }
     },
     {
@@ -2543,14 +2093,8 @@
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/asset_types",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListItamAssetTypes; tags=ITAM Asset Types; summary=List Asset Types"
+      "covered_by": {
+        "direct_read": "read list-itam-asset-types"
       }
     },
     {
@@ -2569,14 +2113,8 @@
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowItamAssetType; tags=ITAM Asset Types; summary=Show Asset Type"
+      "covered_by": {
+        "direct_read": "read show-itam-asset-type"
       }
     },
     {
@@ -2608,14 +2146,8 @@
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}/fields",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListItamAssetTypeFields; tags=ITAM Asset Fields; summary=List Asset Fields"
+      "covered_by": {
+        "direct_read": "read list-itam-asset-type-fields"
       }
     },
     {
@@ -2634,14 +2166,8 @@
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}/fields/{asset_type_field_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowItamAssetTypeField; tags=ITAM Asset Fields; summary=Show Asset Field"
+      "covered_by": {
+        "direct_read": "read show-itam-asset-type-field"
       }
     },
     {
@@ -2673,14 +2199,8 @@
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/assets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListItamAssets; tags=ITAM Assets; summary=List Assets"
+      "covered_by": {
+        "direct_read": "read list-itam-assets"
       }
     },
     {
@@ -2699,14 +2219,8 @@
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/assets/{asset_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowItamAsset; tags=ITAM Assets; summary=Show Asset"
+      "covered_by": {
+        "direct_read": "read show-itam-asset"
       }
     },
     {
@@ -2751,14 +2265,8 @@
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/assets/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=SearchItamAssets; tags=ITAM Assets; summary=Search Assets"
+      "covered_by": {
+        "direct_read": "read search-itam-assets"
       }
     },
     {
@@ -2777,14 +2285,8 @@
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/locations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListItamLocations; tags=ITAM Asset Locations; summary=List Asset Locations"
+      "covered_by": {
+        "direct_read": "read list-itam-locations"
       }
     },
     {
@@ -2803,14 +2305,8 @@
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/locations/{location_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowItamLocation; tags=ITAM Asset Locations; summary=Show Asset Location"
+      "covered_by": {
+        "direct_read": "read show-itam-location"
       }
     },
     {
@@ -2842,157 +2338,85 @@
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/statuses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListItamStatuses; tags=ITAM Asset Statuses; summary=List Asset Statuses"
+      "covered_by": {
+        "direct_read": "read list-itam-statuses"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/it_asset_management/statuses/{status_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowItamStatus; tags=ITAM Asset Statuses; summary=Show Asset Status"
+      "covered_by": {
+        "direct_read": "read show-itam-status"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/job_statuses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListJobStatuses; tags=Job Statuses; summary=List Job Statuses"
+      "covered_by": {
+        "direct_read": "read list-job-statuses"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/job_statuses/{job_status_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowJobStatus; tags=Job Statuses; summary=Show Job Status"
+      "covered_by": {
+        "direct_read": "read show-job-status"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/job_statuses/show_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowManyJobStatuses; tags=Job Statuses; summary=Show Many Job Statuses"
+      "covered_by": {
+        "direct_read": "read show-many-job-statuses"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/locales",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListLocales; tags=Locales; summary=List Locales"
+      "covered_by": {
+        "direct_read": "read list-locales"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/locales/{locale_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowLocaleById; tags=Locales; summary=Show Locale"
+      "covered_by": {
+        "direct_read": "read show-locale-by-id"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/locales/agent",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListLocalesForAgent; tags=Locales; summary=List Locales for Agent"
+      "covered_by": {
+        "direct_read": "read list-locales-for-agent"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/locales/current",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCurrentLocale; tags=Locales; summary=Show Current Locale"
+      "covered_by": {
+        "direct_read": "read show-current-locale"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/locales/detect_best_locale",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DetectBestLocale; tags=Locales; summary=Detect Best Language for User"
+      "covered_by": {
+        "direct_read": "read detect-best-locale"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/locales/public",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAvailablePublicLocales; tags=Locales; summary=List Available Public Locales"
+      "covered_by": {
+        "direct_read": "read list-available-public-locales"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/macros",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListMacros; tags=Macros; summary=List Macros"
+      "covered_by": {
+        "direct_read": "read list-macros"
       }
     },
     {
@@ -3011,14 +2435,8 @@
     {
       "method": "GET",
       "path": "/api/v2/macros/{macro_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowMacro; tags=Macros; summary=Show Macro"
+      "covered_by": {
+        "direct_read": "read show-macro"
       }
     },
     {
@@ -3050,14 +2468,8 @@
     {
       "method": "GET",
       "path": "/api/v2/macros/{macro_id}/apply",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowChangesToTicket; tags=Macros; summary=Show Changes to Ticket"
+      "covered_by": {
+        "direct_read": "read show-changes-to-ticket"
       }
     },
     {
@@ -3089,27 +2501,15 @@
     {
       "method": "GET",
       "path": "/api/v2/macros/actions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListMacrosActions; tags=Macros; summary=List Supported Actions for Macros"
+      "covered_by": {
+        "direct_read": "read list-macros-actions"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/macros/active",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListActiveMacros; tags=Macros; summary=List Active Macros"
+      "covered_by": {
+        "direct_read": "read list-active-macros"
       }
     },
     {
@@ -3141,27 +2541,15 @@
     {
       "method": "GET",
       "path": "/api/v2/macros/categories",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListMacroCategories; tags=Macros; summary=List Macro Categories"
+      "covered_by": {
+        "direct_read": "read list-macro-categories"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/macros/definitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListMacroActionDefinitions; tags=Macros; summary=List Macro Action Definitions"
+      "covered_by": {
+        "direct_read": "read list-macro-action-definitions"
       }
     },
     {
@@ -3180,27 +2568,15 @@
     {
       "method": "GET",
       "path": "/api/v2/macros/new",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowDerivedMacro; tags=Macros; summary=Show Macro Replica"
+      "covered_by": {
+        "direct_read": "read show-derived-macro"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/macros/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=SearchMacro; tags=Macros; summary=Search Macros"
+      "covered_by": {
+        "direct_read": "read search-macro"
       }
     },
     {
@@ -3219,14 +2595,8 @@
     {
       "method": "GET",
       "path": "/api/v2/oauth/clients",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOAuthClients; tags=OAuth Clients; summary=List Clients"
+      "covered_by": {
+        "direct_read": "read list-o-auth-clients"
       }
     },
     {
@@ -3245,14 +2615,8 @@
     {
       "method": "GET",
       "path": "/api/v2/oauth/clients/{oauth_client_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowClient; tags=OAuth Clients; summary=Show Client"
+      "covered_by": {
+        "direct_read": "read show-client"
       }
     },
     {
@@ -3297,53 +2661,29 @@
     {
       "method": "GET",
       "path": "/api/v2/oauth/global_clients",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListGlobalOAuthClients; tags=Global Clients; summary=List Global OAuth Clients"
+      "covered_by": {
+        "direct_read": "read list-global-o-auth-clients"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/oauth/global_clients/{global_client_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowGlobalClient; tags=Global Clients; summary=Show Global OAuth Client"
+      "covered_by": {
+        "direct_read": "read show-global-client"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/oauth/global_clients/token_summary",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GlobalOAuthClientsTokenSummary; tags=Global Clients; summary=Show Token summary for Global OAuth Clients"
+      "covered_by": {
+        "direct_read": "read global-o-auth-clients-token-summary"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/oauth/tokens",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOAuthTokens; tags=OAuth Tokens; summary=List Tokens"
+      "covered_by": {
+        "direct_read": "read list-o-auth-tokens"
       }
     },
     {
@@ -3362,14 +2702,8 @@
     {
       "method": "GET",
       "path": "/api/v2/oauth/tokens/{oauth_token_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowToken; tags=OAuth Tokens; summary=Show Token"
+      "covered_by": {
+        "direct_read": "read show-token"
       }
     },
     {
@@ -3388,14 +2722,8 @@
     {
       "method": "GET",
       "path": "/api/v2/oauth/tokens/current",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCurrentToken; tags=OAuth Tokens; summary=Show Current Token"
+      "covered_by": {
+        "direct_read": "read show-current-token"
       }
     },
     {
@@ -3414,14 +2742,8 @@
     {
       "method": "GET",
       "path": "/api/v2/organization_fields",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizationFields; tags=Organization Fields; summary=List Organization Fields"
+      "covered_by": {
+        "direct_read": "read list-organization-fields"
       }
     },
     {
@@ -3440,14 +2762,8 @@
     {
       "method": "GET",
       "path": "/api/v2/organization_fields/{organization_field_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowOrganizationField; tags=Organization Fields; summary=Show Organization Field"
+      "covered_by": {
+        "direct_read": "read show-organization-field"
       }
     },
     {
@@ -3492,14 +2808,8 @@
     {
       "method": "GET",
       "path": "/api/v2/organization_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizationMemberships; tags=Organization Memberships; summary=List Memberships"
+      "covered_by": {
+        "direct_read": "read list-organization-memberships"
       }
     },
     {
@@ -3518,14 +2828,8 @@
     {
       "method": "GET",
       "path": "/api/v2/organization_memberships/{organization_membership_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowOrganizationMembershipById; tags=Organization Memberships; summary=Show Membership"
+      "covered_by": {
+        "direct_read": "read show-organization-membership-by-id"
       }
     },
     {
@@ -3570,27 +2874,15 @@
     {
       "method": "GET",
       "path": "/api/v2/organization_merges/{organization_merge_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowOrganizationMerge; tags=Organizations; summary=Show Organization Merge"
+      "covered_by": {
+        "direct_read": "read show-organization-merge"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organization_subscriptions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizationSubscriptions; tags=Organization Subscriptions; summary=List Organization Subscriptions"
+      "covered_by": {
+        "direct_read": "read list-organization-subscriptions"
       }
     },
     {
@@ -3609,14 +2901,8 @@
     {
       "method": "GET",
       "path": "/api/v2/organization_subscriptions/{organization_subscription_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowOrganizationSubscription; tags=Organization Subscriptions; summary=Show Organization Subscription"
+      "covered_by": {
+        "direct_read": "read show-organization-subscription"
       }
     },
     {
@@ -3635,14 +2921,8 @@
     {
       "method": "GET",
       "path": "/api/v2/organizations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizations; tags=Organizations; summary=List Organizations"
+      "covered_by": {
+        "direct_read": "read list-organizations"
       }
     },
     {
@@ -3661,14 +2941,8 @@
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowOrganization; tags=Organizations; summary=Show Organization"
+      "covered_by": {
+        "direct_read": "read show-organization"
       }
     },
     {
@@ -3713,79 +2987,43 @@
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/merges",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizationMerges; tags=Organizations; summary=List Organization Merges"
+      "covered_by": {
+        "direct_read": "read list-organization-merges"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/organization_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizationMembershipsByOrganization; tags=Organization Memberships; summary=List Organization Memberships by Organization"
+      "covered_by": {
+        "direct_read": "read list-organization-memberships-by-organization"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/related",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=OrganizationRelated; tags=Organizations; summary=Show Organization's Related Information"
+      "covered_by": {
+        "direct_read": "read organization-related"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/requests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizationRequests; tags=Requests; summary=List Organization Requests"
+      "covered_by": {
+        "direct_read": "read list-organization-requests"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/subscriptions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizationSubscriptionsByOrganization; tags=Organization Subscriptions, Organizations; summary=List Subscriptions By Organization"
+      "covered_by": {
+        "direct_read": "read list-organization-subscriptions-by-organization"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizationTags; tags=Tags; summary=List Organization Tags"
+      "covered_by": {
+        "direct_read": "read list-organization-tags"
       }
     },
     {
@@ -3830,79 +3068,43 @@
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/tickets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizationTickets; tags=Tickets; summary=List Organization Tickets"
+      "covered_by": {
+        "direct_read": "read list-organization-tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/tickets/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountOrganizationTickets; tags=Tickets; summary=Count Organization Tickets"
+      "covered_by": {
+        "direct_read": "read count-organization-tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOrganizationUsers; tags=Users; summary=List Organization Users"
+      "covered_by": {
+        "direct_read": "read list-organization-users"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/{organization_id}/users/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountOrganizationUsers; tags=Users; summary=Count Organization Users"
+      "covered_by": {
+        "direct_read": "read count-organization-users"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/autocomplete",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=AutocompleteOrganizations; tags=Organizations; summary=Autocomplete Organizations"
+      "covered_by": {
+        "direct_read": "read autocomplete-organizations"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountOrganizations; tags=Organizations; summary=Count Organizations"
+      "covered_by": {
+        "direct_read": "read count-organizations"
       }
     },
     {
@@ -3947,27 +3149,15 @@
     {
       "method": "GET",
       "path": "/api/v2/organizations/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=SearchOrganizations; tags=Organizations; summary=Search Organizations"
+      "covered_by": {
+        "direct_read": "read search-organizations"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/show_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowManyOrganizations; tags=Organizations; summary=Show Many Organizations"
+      "covered_by": {
+        "direct_read": "read show-many-organizations"
       }
     },
     {
@@ -3986,14 +3176,8 @@
     {
       "method": "GET",
       "path": "/api/v2/problems",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketProblems; tags=Tickets; summary=List Ticket Problems"
+      "covered_by": {
+        "direct_read": "read list-ticket-problems"
       }
     },
     {
@@ -4025,14 +3209,8 @@
     {
       "method": "GET",
       "path": "/api/v2/queues",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListQueues; tags=Omnichannel Routing Queues; summary=List queues"
+      "covered_by": {
+        "direct_read": "read list-queues"
       }
     },
     {
@@ -4051,14 +3229,8 @@
     {
       "method": "GET",
       "path": "/api/v2/queues/{queue_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowQueueById; tags=Omnichannel Routing Queues; summary=Show Queue"
+      "covered_by": {
+        "direct_read": "read show-queue-by-id"
       }
     },
     {
@@ -4090,14 +3262,8 @@
     {
       "method": "GET",
       "path": "/api/v2/queues/definitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListQueueDefinitions; tags=Omnichannel Routing Queues; summary=List Queue Definitions"
+      "covered_by": {
+        "direct_read": "read list-queue-definitions"
       }
     },
     {
@@ -4116,14 +3282,8 @@
     {
       "method": "GET",
       "path": "/api/v2/recipient_addresses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSupportAddresses; tags=Support Addresses; summary=List Support Addresses"
+      "covered_by": {
+        "direct_read": "read list-support-addresses"
       }
     },
     {
@@ -4142,14 +3302,8 @@
     {
       "method": "GET",
       "path": "/api/v2/recipient_addresses/{support_address_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowSupportAddress; tags=Support Addresses; summary=Show Support Address"
+      "covered_by": {
+        "direct_read": "read show-support-address"
       }
     },
     {
@@ -4194,40 +3348,22 @@
     {
       "method": "GET",
       "path": "/api/v2/relationships/definitions/{target_type}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetRelationshipFilterDefinitions; tags=Lookup Relationships; summary=Filter Definitions"
+      "covered_by": {
+        "direct_read": "read get-relationship-filter-definitions"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/remote_authentications",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListRemoteAuthentications; tags=Remote Authentications; summary=List Remote Authentications"
+      "covered_by": {
+        "direct_read": "read list-remote-authentications"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/requests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListRequests; tags=Requests; summary=List Requests"
+      "covered_by": {
+        "direct_read": "read list-requests"
       }
     },
     {
@@ -4246,14 +3382,8 @@
     {
       "method": "GET",
       "path": "/api/v2/requests/{request_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowRequest; tags=Requests; summary=Show Request"
+      "covered_by": {
+        "direct_read": "read show-request"
       }
     },
     {
@@ -4272,92 +3402,50 @@
     {
       "method": "GET",
       "path": "/api/v2/requests/{request_id}/comments",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListComments; tags=Requests; summary=Listing Comments"
+      "covered_by": {
+        "direct_read": "read list-comments"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/requests/{request_id}/comments/{ticket_comment_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowComment; tags=Requests; summary=Getting Comments"
+      "covered_by": {
+        "direct_read": "read show-comment"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/requests/ccd",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListCCDRequests; tags=Requests; summary=List CCD Requests"
+      "covered_by": {
+        "direct_read": "read list-ccd-requests"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/requests/open",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListOpenRequests; tags=Requests; summary=List Open Requests"
+      "covered_by": {
+        "direct_read": "read list-open-requests"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/requests/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=SearchRequests; tags=Requests; summary=Search Requests"
+      "covered_by": {
+        "direct_read": "read search-requests"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/requests/solved",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSolvedRequests; tags=Requests; summary=List Solved Requests"
+      "covered_by": {
+        "direct_read": "read list-solved-requests"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/resource_collections",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListResourceCollections; tags=Resource Collections; summary=List Resource Collections"
+      "covered_by": {
+        "direct_read": "read list-resource-collections"
       }
     },
     {
@@ -4376,14 +3464,8 @@
     {
       "method": "GET",
       "path": "/api/v2/resource_collections/{resource_collection_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=RetrieveResourceCollection; tags=Resource Collections; summary=Show Resource Collection"
+      "covered_by": {
+        "direct_read": "read retrieve-resource-collection"
       }
     },
     {
@@ -4415,14 +3497,8 @@
     {
       "method": "GET",
       "path": "/api/v2/routing/agents/{user_id}/instance_values",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAGentAttributeValues; tags=Skill Based Routing; summary=List Agent Attribute Values"
+      "covered_by": {
+        "direct_read": "read list-a-gent-attribute-values"
       }
     },
     {
@@ -4441,14 +3517,8 @@
     {
       "method": "GET",
       "path": "/api/v2/routing/agents/instance_values",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListManyAgentsAttributeValues; tags=Skill Based Routing; summary=List Attribute Values for Many Agents"
+      "covered_by": {
+        "direct_read": "read list-many-agents-attribute-values"
       }
     },
     {
@@ -4467,14 +3537,8 @@
     {
       "method": "GET",
       "path": "/api/v2/routing/attributes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAccountAttributes; tags=Skill Based Routing; summary=List Account Attributes"
+      "covered_by": {
+        "direct_read": "read list-account-attributes"
       }
     },
     {
@@ -4493,14 +3557,8 @@
     {
       "method": "GET",
       "path": "/api/v2/routing/attributes/{attribute_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowAttribute; tags=Skill Based Routing; summary=Show Attribute"
+      "covered_by": {
+        "direct_read": "read show-attribute"
       }
     },
     {
@@ -4532,14 +3590,8 @@
     {
       "method": "GET",
       "path": "/api/v2/routing/attributes/{attribute_id}/values",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAttributeValues; tags=Skill Based Routing; summary=List Attribute Values for an Attribute"
+      "covered_by": {
+        "direct_read": "read list-attribute-values"
       }
     },
     {
@@ -4558,14 +3610,8 @@
     {
       "method": "GET",
       "path": "/api/v2/routing/attributes/{attribute_id}/values/{attribute_value_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowAttributeValue; tags=Skill Based Routing; summary=Show Attribute Value"
+      "covered_by": {
+        "direct_read": "read show-attribute-value"
       }
     },
     {
@@ -4597,40 +3643,22 @@
     {
       "method": "GET",
       "path": "/api/v2/routing/attributes/definitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListRoutingAttributeDefinitions; tags=Skill Based Routing; summary=List Routing Attribute Definitions"
+      "covered_by": {
+        "direct_read": "read list-routing-attribute-definitions"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/routing/requirements/fulfilled",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketsFullfilledByUser; tags=Skill Based Routing; summary=List Tickets Fulfilled by a User"
+      "covered_by": {
+        "direct_read": "read list-tickets-fullfilled-by-user"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/routing/tickets/{ticket_id}/instance_values",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketAttributeValues; tags=Skill Based Routing; summary=List Ticket Attribute Values"
+      "covered_by": {
+        "direct_read": "read list-ticket-attribute-values"
       }
     },
     {
@@ -4649,79 +3677,43 @@
     {
       "method": "GET",
       "path": "/api/v2/satisfaction_ratings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSatisfactionRatings; tags=Satisfaction Ratings; summary=List Satisfaction Ratings"
+      "covered_by": {
+        "direct_read": "read list-satisfaction-ratings"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/satisfaction_ratings/{satisfaction_rating_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowSatisfactionRating; tags=Satisfaction Ratings; summary=Show Satisfaction Rating"
+      "covered_by": {
+        "direct_read": "read show-satisfaction-rating"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/satisfaction_ratings/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountSatisfactionRatings; tags=Satisfaction Ratings; summary=Count Satisfaction Ratings"
+      "covered_by": {
+        "direct_read": "read count-satisfaction-ratings"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/satisfaction_reasons",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSatisfactionRatingReasons; tags=Satisfaction Reasons; summary=List Reasons for Satisfaction Rating"
+      "covered_by": {
+        "direct_read": "read list-satisfaction-rating-reasons"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/satisfaction_reasons/{satisfaction_reason_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowSatisfactionRatings; tags=Satisfaction Reasons; summary=Show Reason for Satisfaction Rating"
+      "covered_by": {
+        "direct_read": "read show-satisfaction-ratings"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/saved_searches",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSavedSearches; tags=Saved Searches; summary=List Saved Searches"
+      "covered_by": {
+        "direct_read": "read list-saved-searches"
       }
     },
     {
@@ -4779,14 +3771,8 @@
     {
       "method": "GET",
       "path": "/api/v2/search/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountSearchResults; tags=Search; summary=Show Results Count"
+      "covered_by": {
+        "direct_read": "read count-search-results"
       }
     },
     {
@@ -4805,40 +3791,22 @@
     {
       "method": "GET",
       "path": "/api/v2/security_settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowSecuritySettings; tags=Security Settings; summary=Show Security Settings"
+      "covered_by": {
+        "direct_read": "read show-security-settings"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/sessions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSessions; tags=Sessions; summary=List Sessions"
+      "covered_by": {
+        "direct_read": "read list-sessions"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/sharing_agreements",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSharingAgreements; tags=Sharing Agreements; summary=List Sharing Agreements"
+      "covered_by": {
+        "direct_read": "read list-sharing-agreements"
       }
     },
     {
@@ -4857,14 +3825,8 @@
     {
       "method": "GET",
       "path": "/api/v2/sharing_agreements/{sharing_agreement_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowSharingAgreement; tags=Sharing Agreements; summary=Show a Sharing Agreement"
+      "covered_by": {
+        "direct_read": "read show-sharing-agreement"
       }
     },
     {
@@ -4922,14 +3884,8 @@
     {
       "method": "GET",
       "path": "/api/v2/slas/policies",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSLAPolicies; tags=SLA Policies; summary=List SLA Policies"
+      "covered_by": {
+        "direct_read": "read list-sla-policies"
       }
     },
     {
@@ -4948,14 +3904,8 @@
     {
       "method": "GET",
       "path": "/api/v2/slas/policies/{sla_policy_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowSLAPolicy; tags=SLA Policies; summary=Show SLA Policy"
+      "covered_by": {
+        "direct_read": "read show-sla-policy"
       }
     },
     {
@@ -4987,14 +3937,8 @@
     {
       "method": "GET",
       "path": "/api/v2/slas/policies/definitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=RetrieveSLAPolicyFilterDefinitionItems; tags=SLA Policies; summary=Retrieve Supported Filter Definition Items"
+      "covered_by": {
+        "direct_read": "read retrieve-sla-policy-filter-definition-items"
       }
     },
     {
@@ -5013,27 +3957,15 @@
     {
       "method": "GET",
       "path": "/api/v2/suspended_tickets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSuspendedTickets; tags=Suspended Tickets; summary=List Suspended Tickets"
+      "covered_by": {
+        "direct_read": "read list-suspended-tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/suspended_tickets/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowSuspendedTickets; tags=Suspended Tickets; summary=Show Suspended Ticket"
+      "covered_by": {
+        "direct_read": "read show-suspended-tickets"
       }
     },
     {
@@ -5130,66 +4062,36 @@
     {
       "method": "GET",
       "path": "/api/v2/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTags; tags=Tags; summary=List Tags"
+      "covered_by": {
+        "direct_read": "read list-tags"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/tags/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountTags; tags=Tags; summary=Count Tags"
+      "covered_by": {
+        "direct_read": "read count-tags"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/target_failures",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTargetFailures; tags=Target Failures; summary=List Target Failures"
+      "covered_by": {
+        "direct_read": "read list-target-failures"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/target_failures/{target_failure_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTargetFailure; tags=Target Failures; summary=Show Target Failure"
+      "covered_by": {
+        "direct_read": "read show-target-failure"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/targets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTargets; tags=Targets; summary=List Targets"
+      "covered_by": {
+        "direct_read": "read list-targets"
       }
     },
     {
@@ -5208,14 +4110,8 @@
     {
       "method": "GET",
       "path": "/api/v2/targets/{target_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTarget; tags=Targets; summary=Show Target"
+      "covered_by": {
+        "direct_read": "read show-target"
       }
     },
     {
@@ -5247,14 +4143,8 @@
     {
       "method": "GET",
       "path": "/api/v2/task_list_templates",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTaskListTemplates; tags=Task List Templates; summary=List Task List Templates"
+      "covered_by": {
+        "direct_read": "read list-task-list-templates"
       }
     },
     {
@@ -5273,14 +4163,8 @@
     {
       "method": "GET",
       "path": "/api/v2/task_list_templates/{task_list_template_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTaskListTemplate; tags=Task List Templates; summary=Show Task List Template"
+      "covered_by": {
+        "direct_read": "read show-task-list-template"
       }
     },
     {
@@ -5312,14 +4196,8 @@
     {
       "method": "GET",
       "path": "/api/v2/task_list_templates/{task_list_template_id}/tasks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetTasksByTaskListTemplateId; tags=Task List Templates; summary=Get Tasks by Task List Template Id"
+      "covered_by": {
+        "direct_read": "read get-tasks-by-task-list-template-id"
       }
     },
     {
@@ -5377,14 +4255,8 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_fields",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketFields; tags=Ticket Fields; summary=List Ticket Fields"
+      "covered_by": {
+        "direct_read": "read list-ticket-fields"
       }
     },
     {
@@ -5403,14 +4275,8 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_fields/{ticket_field_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTicketfield; tags=Ticket Fields; summary=Show Ticket Field"
+      "covered_by": {
+        "direct_read": "read show-ticketfield"
       }
     },
     {
@@ -5442,14 +4308,8 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_fields/{ticket_field_id}/options",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketFieldOptions; tags=Ticket Fields; summary=List Ticket Field Options"
+      "covered_by": {
+        "direct_read": "read list-ticket-field-options"
       }
     },
     {
@@ -5468,14 +4328,8 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_fields/{ticket_field_id}/options/{ticket_field_option_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTicketFieldOption; tags=Ticket Fields; summary=Show Ticket Field Option"
+      "covered_by": {
+        "direct_read": "read show-ticket-field-option"
       }
     },
     {
@@ -5494,14 +4348,8 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_fields/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountTicketFields; tags=Ticket Fields; summary=Count Ticket Fields"
+      "covered_by": {
+        "direct_read": "read count-ticket-fields"
       }
     },
     {
@@ -5520,53 +4368,29 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_fields/show_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowManyTicketFields; tags=Ticket Fields; summary=Show Many Ticket Fields"
+      "covered_by": {
+        "direct_read": "read show-many-ticket-fields"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/ticket_form_statuses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketFormStatuses; tags=Ticket Form Statuses; summary=List Ticket Form Statuses"
+      "covered_by": {
+        "direct_read": "read list-ticket-form-statuses"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/ticket_form_statuses/show_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowManyTicketFormStatuses; tags=Ticket Form Statuses; summary=Show Many Ticket Form Statuses"
+      "covered_by": {
+        "direct_read": "read show-many-ticket-form-statuses"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/ticket_forms",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketForms; tags=Ticket Forms; summary=List Ticket Forms"
+      "covered_by": {
+        "direct_read": "read list-ticket-forms"
       }
     },
     {
@@ -5585,14 +4409,8 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_forms/{ticket_form_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTicketForm; tags=Ticket Forms; summary=Show Ticket Form"
+      "covered_by": {
+        "direct_read": "read show-ticket-form"
       }
     },
     {
@@ -5637,14 +4455,8 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=TicketFormTicketFormStatuses; tags=Ticket Forms, Ticket Form Statuses; summary=List Ticket Form Statuses of a Ticket Form"
+      "covered_by": {
+        "direct_read": "read ticket-form-ticket-form-statuses"
       }
     },
     {
@@ -5728,14 +4540,8 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_forms/show_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowManyTicketForms; tags=Ticket Forms; summary=Show Many Ticket Forms"
+      "covered_by": {
+        "direct_read": "read show-many-ticket-forms"
       }
     },
     {
@@ -5754,27 +4560,15 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_metrics/{ticket_metric_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTicketMetrics; tags=Ticket Metrics; summary=Show Ticket Metrics"
+      "covered_by": {
+        "direct_read": "read show-ticket-metrics"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/tickets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTickets; tags=Tickets; summary=List Tickets"
+      "covered_by": {
+        "direct_read": "read list-tickets"
       }
     },
     {
@@ -5793,14 +4587,8 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTicket; tags=Tickets; summary=Show Ticket"
+      "covered_by": {
+        "direct_read": "read show-ticket"
       }
     },
     {
@@ -5845,14 +4633,8 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/audits/{ticket_audit_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTicketAudit; tags=Ticket Audits; summary=Show Audit"
+      "covered_by": {
+        "direct_read": "read show-ticket-audit"
       }
     },
     {
@@ -5871,27 +4653,15 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/audits/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountAuditsForTicket; tags=Ticket Audits; summary=Count Audits for a Ticket"
+      "covered_by": {
+        "direct_read": "read count-audits-for-ticket"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/collaborators",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketCollaborators; tags=Tickets; summary=List Collaborators for a Ticket"
+      "covered_by": {
+        "direct_read": "read list-ticket-collaborators"
       }
     },
     {
@@ -5949,79 +4719,43 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/comments/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountTicketComments; tags=Ticket Comments; summary=Count Ticket Comments"
+      "covered_by": {
+        "direct_read": "read count-ticket-comments"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/conversation_log",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListConversationLogForTicket; tags=Conversation Log; summary=List Conversation log for Ticket"
+      "covered_by": {
+        "direct_read": "read list-conversation-log-for-ticket"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/email_ccs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketEmailCCs; tags=Tickets; summary=List Email CCs for a Ticket"
+      "covered_by": {
+        "direct_read": "read list-ticket-email-c-cs"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/followers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketFollowers; tags=Tickets; summary=List Followers for a Ticket"
+      "covered_by": {
+        "direct_read": "read list-ticket-followers"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/incidents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketIncidents; tags=Tickets; summary=List Ticket Incidents"
+      "covered_by": {
+        "direct_read": "read list-ticket-incidents"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/macros/{macro_id}/apply",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTicketAfterChanges; tags=Macros; summary=Show Ticket After Changes"
+      "covered_by": {
+        "direct_read": "read show-ticket-after-changes"
       }
     },
     {
@@ -6053,14 +4787,8 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/metrics",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTicketMetricsByTicket; tags=Ticket Metrics, Tickets; summary=Show Ticket Metrics By Ticket"
+      "covered_by": {
+        "direct_read": "read show-ticket-metrics-by-ticket"
       }
     },
     {
@@ -6105,14 +4833,8 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListResourceTags; tags=Tags; summary=List Resource Tags"
+      "covered_by": {
+        "direct_read": "read list-resource-tags"
       }
     },
     {
@@ -6157,14 +4879,8 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/task_lists",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTaskList; tags=Task Lists; summary=Show Task List"
+      "covered_by": {
+        "direct_read": "read show-task-list"
       }
     },
     {
@@ -6183,14 +4899,8 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountTickets; tags=Tickets; summary=Count Tickets"
+      "covered_by": {
+        "direct_read": "read count-tickets"
       }
     },
     {
@@ -6248,27 +4958,15 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/recent",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListRecentTickets; tags=Tickets; summary=List Recent Tickets"
+      "covered_by": {
+        "direct_read": "read list-recent-tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/tickets/show_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=TicketsShowMany; tags=Tickets; summary=Show Multiple Tickets"
+      "covered_by": {
+        "direct_read": "read tickets-show-many"
       }
     },
     {
@@ -6287,14 +4985,8 @@
     {
       "method": "GET",
       "path": "/api/v2/trigger_categories",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTriggerCategories; tags=Trigger Categories; summary=List Ticket Trigger Categories"
+      "covered_by": {
+        "direct_read": "read list-trigger-categories"
       }
     },
     {
@@ -6313,14 +5005,8 @@
     {
       "method": "GET",
       "path": "/api/v2/trigger_categories/{trigger_category_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTriggerCategoryById; tags=Trigger Categories; summary=Show Ticket Trigger Category"
+      "covered_by": {
+        "direct_read": "read show-trigger-category-by-id"
       }
     },
     {
@@ -6365,14 +5051,8 @@
     {
       "method": "GET",
       "path": "/api/v2/triggers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTriggers; tags=Triggers; summary=List Ticket Triggers"
+      "covered_by": {
+        "direct_read": "read list-triggers"
       }
     },
     {
@@ -6391,14 +5071,8 @@
     {
       "method": "GET",
       "path": "/api/v2/triggers/{trigger_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetTrigger; tags=Triggers; summary=Show Ticket Trigger"
+      "covered_by": {
+        "direct_read": "read get-trigger"
       }
     },
     {
@@ -6430,53 +5104,29 @@
     {
       "method": "GET",
       "path": "/api/v2/triggers/{trigger_id}/revisions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTriggerRevisions; tags=Triggers; summary=List Ticket Trigger Revisions"
+      "covered_by": {
+        "direct_read": "read list-trigger-revisions"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/triggers/{trigger_id}/revisions/{trigger_revision_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=TriggerRevision; tags=Triggers; summary=Show Ticket Trigger Revision"
+      "covered_by": {
+        "direct_read": "read trigger-revision"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/triggers/active",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListActiveTriggers; tags=Triggers; summary=List Active Ticket Triggers"
+      "covered_by": {
+        "direct_read": "read list-active-triggers"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/triggers/definitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTriggerActionConditionDefinitions; tags=Triggers; summary=List Ticket Trigger Action and Condition Definitions"
+      "covered_by": {
+        "direct_read": "read list-trigger-action-condition-definitions"
       }
     },
     {
@@ -6508,14 +5158,8 @@
     {
       "method": "GET",
       "path": "/api/v2/triggers/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=SearchTriggers; tags=Triggers; summary=Search Ticket Triggers"
+      "covered_by": {
+        "direct_read": "read search-triggers"
       }
     },
     {
@@ -6560,14 +5204,8 @@
     {
       "method": "GET",
       "path": "/api/v2/user_fields",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserFields; tags=User Fields; summary=List User Fields"
+      "covered_by": {
+        "direct_read": "read list-user-fields"
       }
     },
     {
@@ -6586,14 +5224,8 @@
     {
       "method": "GET",
       "path": "/api/v2/user_fields/{user_field_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowUserField; tags=User Fields; summary=Show User Field"
+      "covered_by": {
+        "direct_read": "read show-user-field"
       }
     },
     {
@@ -6625,14 +5257,8 @@
     {
       "method": "GET",
       "path": "/api/v2/user_fields/{user_field_id}/options",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserFieldOptions; tags=User Fields; summary=List User Field Options"
+      "covered_by": {
+        "direct_read": "read list-user-field-options"
       }
     },
     {
@@ -6651,14 +5277,8 @@
     {
       "method": "GET",
       "path": "/api/v2/user_fields/{user_field_id}/options/{user_field_option_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowUserFieldOption; tags=User Fields; summary=Show a User Field Option"
+      "covered_by": {
+        "direct_read": "read show-user-field-option"
       }
     },
     {
@@ -6690,27 +5310,15 @@
     {
       "method": "GET",
       "path": "/api/v2/user_fields/show_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowManyUserFields; tags=User Fields; summary=Show Many User Fields"
+      "covered_by": {
+        "direct_read": "read show-many-user-fields"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUsers; tags=Users; summary=List Users"
+      "covered_by": {
+        "direct_read": "read list-users"
       }
     },
     {
@@ -6729,14 +5337,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowUser; tags=Users; summary=Show User"
+      "covered_by": {
+        "direct_read": "read show-user"
       }
     },
     {
@@ -6768,66 +5370,36 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/brand_agents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserBrandAgents; tags=Brand Agents, Users; summary=List Brand Agent Memberships By User"
+      "covered_by": {
+        "direct_read": "read list-user-brand-agents"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/brand_agents/{brand_agent_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowUserBrandAgentById; tags=Brand Agents, Users; summary=Show Brand Agent Membership By User"
+      "covered_by": {
+        "direct_read": "read show-user-brand-agent-by-id"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/compliance_deletion_statuses",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowUserComplianceDeletionStatuses; tags=Users; summary=Show Compliance Deletion Statuses"
+      "covered_by": {
+        "direct_read": "read show-user-compliance-deletion-statuses"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/entitlements/full",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetUserEntitlementsFull; tags=Users; summary=Get Full User Entitlements"
+      "covered_by": {
+        "direct_read": "read get-user-entitlements-full"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/group_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserGroupMemberships; tags=Group Memberships; summary=List Group Memberships by User"
+      "covered_by": {
+        "direct_read": "read list-user-group-memberships"
       }
     },
     {
@@ -6846,14 +5418,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/group_memberships/{group_membership_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowUserGroupMembershipById; tags=Group Memberships, Users; summary=Show User's Group Membership"
+      "covered_by": {
+        "direct_read": "read show-user-group-membership-by-id"
       }
     },
     {
@@ -6885,40 +5451,22 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/groups",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserGroups; tags=Groups; summary=List User Groups"
+      "covered_by": {
+        "direct_read": "read list-user-groups"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/groups/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountUserGroups; tags=Groups; summary=Count User Groups"
+      "covered_by": {
+        "direct_read": "read count-user-groups"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/identities",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserIdentities; tags=User Identities; summary=List Identities"
+      "covered_by": {
+        "direct_read": "read list-user-identities"
       }
     },
     {
@@ -6937,14 +5485,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/identities/{user_identity_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowUserIdentity; tags=User Identities; summary=Show Identity"
+      "covered_by": {
+        "direct_read": "read show-user-identity"
       }
     },
     {
@@ -7028,14 +5570,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/organization_memberships",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserOrganizationMemberships; tags=Organization Memberships; summary=List Organization Memberships by User"
+      "covered_by": {
+        "direct_read": "read list-user-organization-memberships"
       }
     },
     {
@@ -7054,14 +5590,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/organization_memberships/{organization_membership_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowOrganizationMembershipByUserId; tags=Organization Memberships; summary=Show Organization Membership by User"
+      "covered_by": {
+        "direct_read": "read show-organization-membership-by-user-id"
       }
     },
     {
@@ -7093,27 +5623,15 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/organization_subscriptions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserOrganizationSubscriptions; tags=Organization Subscriptions, Users; summary=List User's Organization Subscriptions"
+      "covered_by": {
+        "direct_read": "read list-user-organization-subscriptions"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/organizations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserOrganizations; tags=Organizations; summary=List User Organizations"
+      "covered_by": {
+        "direct_read": "read list-user-organizations"
       }
     },
     {
@@ -7145,14 +5663,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/organizations/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountUserOrganizations; tags=Organizations, Users; summary=Count User's Organizations"
+      "covered_by": {
+        "direct_read": "read count-user-organizations"
       }
     },
     {
@@ -7184,53 +5696,29 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/password/requirements",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetUserPasswordRequirements; tags=User Passwords; summary=List password requirements"
+      "covered_by": {
+        "direct_read": "read get-user-password-requirements"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/related",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowUserRelated; tags=Users; summary=Show User Related Information"
+      "covered_by": {
+        "direct_read": "read show-user-related"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/requests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserRequests; tags=Requests; summary=List User Requests"
+      "covered_by": {
+        "direct_read": "read list-user-requests"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/sessions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserSessions; tags=Sessions, Users; summary=List Sessions for User"
+      "covered_by": {
+        "direct_read": "read list-user-sessions"
       }
     },
     {
@@ -7249,14 +5737,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/sessions/{session_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowSession; tags=Sessions; summary=Show Session"
+      "covered_by": {
+        "direct_read": "read show-session"
       }
     },
     {
@@ -7288,14 +5770,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserTags; tags=Tags; summary=List User Tags"
+      "covered_by": {
+        "direct_read": "read list-user-tags"
       }
     },
     {
@@ -7340,92 +5816,50 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/tickets/assigned",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserAssignedTickets; tags=Tickets; summary=List User Assigned Tickets"
+      "covered_by": {
+        "direct_read": "read list-user-assigned-tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/tickets/assigned/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountUserAssignedTickets; tags=Tickets; summary=Count User Assigned Tickets"
+      "covered_by": {
+        "direct_read": "read count-user-assigned-tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/tickets/ccd",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserCCDTickets; tags=Tickets; summary=List User CCD Tickets"
+      "covered_by": {
+        "direct_read": "read list-user-ccd-tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/tickets/ccd/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountUserCCDTickets; tags=Tickets; summary=Count User CCD Tickets"
+      "covered_by": {
+        "direct_read": "read count-user-ccd-tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/tickets/followed",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserFollowedTickets; tags=Tickets; summary=List User Followed Tickets"
+      "covered_by": {
+        "direct_read": "read list-user-followed-tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/tickets/requested",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListUserRequestedTickets; tags=Tickets; summary=List User Requested Tickets"
+      "covered_by": {
+        "direct_read": "read list-user-requested-tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/autocomplete",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=AutocompleteUsers; tags=Users; summary=Autocomplete Users"
+      "covered_by": {
+        "direct_read": "read autocomplete-users"
       }
     },
     {
@@ -7444,14 +5878,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountUsers; tags=Users; summary=Count Users"
+      "covered_by": {
+        "direct_read": "read count-users"
       }
     },
     {
@@ -7522,14 +5950,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/me",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCurrentUser; tags=Users; summary=Show Self"
+      "covered_by": {
+        "direct_read": "read show-current-user"
       }
     },
     {
@@ -7548,53 +5970,29 @@
     {
       "method": "GET",
       "path": "/api/v2/users/me/oauth/clients",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListCurrentUserOAuthClients; tags=OAuth Clients; summary=List Current User's Clients"
+      "covered_by": {
+        "direct_read": "read list-current-user-o-auth-clients"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/me/session",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCurrentlyAuthenticatedSession; tags=Sessions; summary=Show the Currently Authenticated Session"
+      "covered_by": {
+        "direct_read": "read show-currently-authenticated-session"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/me/session/renew",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=RenewCurrentSession; tags=Sessions; summary=Renew the current session"
+      "covered_by": {
+        "direct_read": "read renew-current-session"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/me/settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowCurrentUserSettings; tags=Users; summary=Show Current User Settings"
+      "covered_by": {
+        "direct_read": "read show-current-user-settings"
       }
     },
     {
@@ -7626,27 +6024,15 @@
     {
       "method": "GET",
       "path": "/api/v2/users/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=SearchUsers; tags=Users; summary=Search Users"
+      "covered_by": {
+        "direct_read": "read search-users"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/show_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowManyUsers; tags=Users; summary=Show Many Users"
+      "covered_by": {
+        "direct_read": "read show-many-users"
       }
     },
     {
@@ -7665,14 +6051,8 @@
     {
       "method": "GET",
       "path": "/api/v2/views",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListViews; tags=Views; summary=List Views"
+      "covered_by": {
+        "direct_read": "read list-views"
       }
     },
     {
@@ -7691,14 +6071,8 @@
     {
       "method": "GET",
       "path": "/api/v2/views/{view_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowView; tags=Views; summary=Show View"
+      "covered_by": {
+        "direct_read": "read show-view"
       }
     },
     {
@@ -7730,14 +6104,8 @@
     {
       "method": "GET",
       "path": "/api/v2/views/{view_id}/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetViewCount; tags=Views; summary=Count Tickets in View"
+      "covered_by": {
+        "direct_read": "read get-view-count"
       }
     },
     {
@@ -7769,79 +6137,43 @@
     {
       "method": "GET",
       "path": "/api/v2/views/{view_id}/tickets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketsFromView; tags=Views; summary=List Tickets From a View"
+      "covered_by": {
+        "direct_read": "read list-tickets-from-view"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/views/active",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListActiveViews; tags=Views; summary=List Active Views"
+      "covered_by": {
+        "direct_read": "read list-active-views"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/views/compact",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListCompactViews; tags=Views; summary=List Views - Compact"
+      "covered_by": {
+        "direct_read": "read list-compact-views"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/views/count",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CountViews; tags=Views; summary=Count Views"
+      "covered_by": {
+        "direct_read": "read count-views"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/views/count_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GetViewCounts; tags=Views; summary=Count Tickets in Views"
+      "covered_by": {
+        "direct_read": "read get-view-counts"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/views/definitions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListViewDefinitions; tags=Views; summary=List View Filter Definitions"
+      "covered_by": {
+        "direct_read": "read list-view-definitions"
       }
     },
     {
@@ -7886,27 +6218,15 @@
     {
       "method": "GET",
       "path": "/api/v2/views/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=SearchViews; tags=Views; summary=Search Views"
+      "covered_by": {
+        "direct_read": "read search-views"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/views/show_many",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListViewsById; tags=Views; summary=List Views By ID"
+      "covered_by": {
+        "direct_read": "read list-views-by-id"
       }
     },
     {
@@ -7925,14 +6245,8 @@
     {
       "method": "GET",
       "path": "/api/v2/workspaces",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListWorkspaces; tags=Workspaces; summary=List Workspaces"
+      "covered_by": {
+        "direct_read": "read list-workspaces"
       }
     },
     {
@@ -7951,14 +6265,8 @@
     {
       "method": "GET",
       "path": "/api/v2/workspaces/{workspace_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "read accounted in operations.json; executable direct-read or stream mapping remains blocked until #159/#161",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowWorkspace; tags=Workspaces; summary=Show Workspace"
+      "covered_by": {
+        "direct_read": "read show-workspace"
       }
     },
     {

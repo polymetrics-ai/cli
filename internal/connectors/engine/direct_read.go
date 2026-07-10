@@ -20,6 +20,7 @@ import (
 const (
 	defaultDirectReadMaxBytes                  = 1 << 20
 	defaultDirectReadTimeout                   = 30 * time.Second
+	directReadPolicyJSON                       = "json"
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
 )
@@ -107,6 +108,8 @@ func clampDirectReadMaxBytes(maxBytes int) int {
 
 func validateDirectReadOutputPolicy(policy string, pathParams map[string]string) error {
 	switch policy {
+	case directReadPolicyJSON:
+		return nil
 	case directReadPolicyGitHubContentsFileMetadata, directReadPolicyGitHubContentsDirectory:
 		if err := rejectSensitiveRepositoryPath(pathParams["path"]); err != nil {
 			return err
@@ -119,6 +122,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 
 func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 	switch policy {
+	case directReadPolicyJSON:
+		return body, nil
 	case directReadPolicyGitHubContentsFileMetadata:
 		obj, ok := body.(map[string]any)
 		if !ok {
@@ -291,7 +296,7 @@ func encodeSurfacePathValue(name, value string) (string, error) {
 func directReadQuery(query map[string]string) (url.Values, error) {
 	values := url.Values{}
 	for name, value := range query {
-		if err := safety.ValidateIdentifier(name, "query parameter"); err != nil {
+		if err := validateDirectReadQueryParameter(name); err != nil {
 			return nil, err
 		}
 		if err := safety.RejectDangerousChars(value, "query parameter "+name); err != nil {
@@ -300,6 +305,29 @@ func directReadQuery(query map[string]string) (url.Values, error) {
 		values.Set(name, value)
 	}
 	return values, nil
+}
+
+func validateDirectReadQueryParameter(name string) error {
+	if strings.TrimSpace(name) == "" {
+		return fmt.Errorf("query parameter is required")
+	}
+	if err := safety.RejectDangerousChars(name, "query parameter"); err != nil {
+		return err
+	}
+	for _, r := range name {
+		switch {
+		case r >= 'a' && r <= 'z':
+		case r >= 'A' && r <= 'Z':
+		case r >= '0' && r <= '9':
+		case r == '_' || r == '-' || r == '.' || r == '[' || r == ']':
+		default:
+			return fmt.Errorf("query parameter contains invalid character %q", r)
+		}
+	}
+	if strings.Contains(name, "..") {
+		return fmt.Errorf("query parameter must not contain path traversal")
+	}
+	return nil
 }
 
 func isAbsoluteHTTPURL(raw string) bool {

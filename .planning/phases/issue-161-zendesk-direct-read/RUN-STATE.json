@@ -2,7 +2,7 @@
   "phase": "issue-161-zendesk-direct-read",
   "issue": 161,
   "parent_issue": 156,
-  "status": "planned",
+  "status": "targeted_green",
   "runtime": "pi",
   "branch": "feat/161-zendesk-direct-read",
   "base_branch": "feat/160-zendesk-operation-ledger",
@@ -17,6 +17,6 @@
     "manual_fallback": true
   },
   "verificationPassed": false,
-  "verificationNotes": "Planning checkpoint only; no production edits yet.",
-  "updated_at": "2026-07-10T01:00:00Z"
+  "verificationNotes": "Targeted engine/commandrunner/connectorgen/docs validation passed; broad handoff gates pending.",
+  "updated_at": "2026-07-10T02:00:00Z"
 }

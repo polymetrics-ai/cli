@@ -7,7 +7,7 @@
   "release_stage": "alpha",
   "capabilities": {
     "check": true,
-    "read": false,
+    "read": true,
     "write": false,
     "query": false,
     "cdc": false,
@@ -17,8 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "operation-ledger bundle in issue #160; later lanes enable safe ETL streams and bounded direct reads from the official Zendesk OAS",
+    "read": "bounded direct-read JSON commands are enabled for 282 typed GET operations; ETL streams and binary downloads are still gated by later Zendesk lanes",
     "write": "operation-ledger bundle in issue #160; Zendesk mutations remain blocked until typed reverse-ETL schemas, approval text, redaction, and destructive confirmation are added",
-    "approval": "all external writes remain plan → preview → approval → execute and blocked in this slice"
+    "approval": "all external writes remain plan \u2192 preview \u2192 approval \u2192 execute and blocked in this slice"
   }
 }

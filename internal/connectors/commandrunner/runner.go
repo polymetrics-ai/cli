@@ -347,7 +347,7 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {
 	switch policy {
-	case "github_contents_file_metadata", "github_contents_directory":
+	case "json", "github_contents_file_metadata", "github_contents_directory":
 		return true
 	default:
 		return false
@@ -508,7 +508,7 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 			pathParams[target] = value
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
-			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
+			if err := validateDirectReadQueryParameter(target); err != nil {
 				return nil, nil, err
 			}
 			query[target] = value
@@ -522,6 +522,29 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 		}
 	}
 	return pathParams, query, nil
+}
+
+func validateDirectReadQueryParameter(name string) error {
+	if strings.TrimSpace(name) == "" {
+		return fmt.Errorf("query parameter is required")
+	}
+	if err := safety.RejectDangerousChars(name, "query parameter"); err != nil {
+		return err
+	}
+	for _, r := range name {
+		switch {
+		case r >= 'a' && r <= 'z':
+		case r >= 'A' && r <= 'Z':
+		case r >= '0' && r <= '9':
+		case r == '_' || r == '-' || r == '.' || r == '[' || r == ']':
+		default:
+			return fmt.Errorf("query parameter contains invalid character %q", r)
+		}
+	}
+	if strings.Contains(name, "..") {
+		return fmt.Errorf("query parameter must not contain path traversal")
+	}
+	return nil
 }
 
 func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (connectors.Record, error) {

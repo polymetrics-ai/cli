@@ -973,15 +973,21 @@ func TestBundleLoadZendeskOperationLedger(t *testing.T) {
 	}
 
 	for _, ep := range b.Surface.Endpoints {
-		if ep.CoveredBy != nil || ep.Excluded != nil {
-			t.Fatalf("endpoint %s %s uses executable/legacy classifier in operation-ledger slice", ep.Method, ep.Path)
-		}
-		if ep.Operation == nil {
-			t.Fatalf("endpoint %s %s has no blocked operation classifier", ep.Method, ep.Path)
+		if ep.Excluded != nil {
+			t.Fatalf("endpoint %s %s uses legacy excluded classifier in operation-ledger bundle", ep.Method, ep.Path)
 		}
 		op, ok := opsByEndpoint[strings.ToUpper(ep.Method)+" "+ep.Path]
 		if !ok {
 			t.Fatalf("endpoint %s %s has no matching operations.json entry", ep.Method, ep.Path)
+		}
+		if ep.CoveredBy != nil {
+			if ep.CoveredBy.DirectRead == "" && len(ep.CoveredBy.DirectReads) == 0 && ep.CoveredBy.Stream == "" && ep.CoveredBy.Write == "" {
+				t.Fatalf("endpoint %s %s has empty covered_by classifier", ep.Method, ep.Path)
+			}
+			continue
+		}
+		if ep.Operation == nil {
+			t.Fatalf("endpoint %s %s has neither executable coverage nor blocked operation classifier", ep.Method, ep.Path)
 		}
 		switch ep.Operation.Model {
 		case "direct_read":
@@ -1024,11 +1030,8 @@ func TestBundleLoadZendeskDirectReadCommandCoverage(t *testing.T) {
 
 	covered := 0
 	for _, ep := range b.Surface.Endpoints {
-		if ep.Operation == nil || ep.Operation.Model != "direct_read" {
-			continue
-		}
 		if ep.CoveredBy == nil || ep.CoveredBy.DirectRead == "" {
-			t.Fatalf("direct-read endpoint %s %s missing covered_by.direct_read", ep.Method, ep.Path)
+			continue
 		}
 		cmd, ok := directReadCommands[ep.CoveredBy.DirectRead]
 		if !ok {

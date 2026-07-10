@@ -1,8 +1,8 @@
 # Overview
 
 Zendesk is an issue #160 operation-ledger bundle for the official Zendesk Support API OAS. It
-tracks 617 operations across 429 paths in `operations.json` without enabling streams,
-direct reads, binary downloads, or writes yet.
+tracks 617 operations across 429 paths in `operations.json` and enables 282 bounded JSON direct
+reads without enabling streams, binary downloads, or writes yet.
 
 Operation method baseline: GET=320, PUT=89, POST=110, DELETE=85, PATCH=13.
 
@@ -34,7 +34,7 @@ remains plan → preview → approval → execute.
 
 ## Known limits
 
-- This bundle is a metadata scaffold only; it does not claim executable read/write parity yet.
+- This bundle enables typed bounded JSON direct reads but does not claim stream, binary-download, or write parity yet.
 - `api_surface.json` uses blocked-by-default operation rows and `operations.json` carries typed REST
   and binary operation metadata so the official OAS inventory can be reviewed without exposing raw
   generic HTTP tools.
