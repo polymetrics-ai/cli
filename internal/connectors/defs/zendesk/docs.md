@@ -2,8 +2,8 @@
 
 Zendesk is an issue #160 operation-ledger bundle for the official Zendesk Support API OAS. It
 tracks 617 operations across 429 paths in `operations.json`, enables 70 top-level ETL streams, and
-keeps bounded JSON direct reads for remaining typed GET operations without enabling binary downloads
-or writes yet.
+keeps bounded JSON direct reads for remaining typed GET operations, and models 295 non-deprecated
+mutations as gated reverse-ETL writes without enabling binary downloads yet.
 
 Operation method baseline: GET=320, PUT=89, POST=110, DELETE=85, PATCH=13.
 
@@ -29,14 +29,13 @@ child collections that require arbitrary path IDs remain direct reads.
 
 ## Write actions & risks
 
-No Zendesk write actions are enabled in this ledger slice. Mutation candidates in `api_surface.json`
-and `operations.json` remain blocked by default until later lanes add typed reverse-ETL schemas,
-risk text, approval text, redaction policy, and `confirm: destructive` where required. Reverse ETL
-remains plan → preview → approval → execute.
+Zendesk write actions are endpoint-specific reverse-ETL actions generated from the official OAS.
+All writes require plan → preview → approval → execute. DELETE actions include `confirm:
+destructive`; deprecated mutating operations stay blocked in the operation ledger.
 
 ## Known limits
 
-- This bundle enables top-level ETL streams and typed bounded JSON direct reads but does not claim binary-download or write parity yet.
+- This bundle enables top-level ETL streams, typed bounded JSON direct reads, and gated reverse-ETL writes; binary downloads remain policy-only until the binary lane is completed.
 - `api_surface.json` uses blocked-by-default operation rows and `operations.json` carries typed REST
   and binary operation metadata so the official OAS inventory can be reviewed without exposing raw
   generic HTTP tools.

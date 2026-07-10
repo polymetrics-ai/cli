@@ -7,7 +7,7 @@ description: Zendesk connector knowledge and safe action guide.
 
 ## Purpose
 
-Operation ledger and typed read surface for the official Zendesk Support API; stream-backed reads and bounded direct reads are enabled while binary and write lanes remain gated.
+Typed stream/read/write surface for the official Zendesk Support API; binary lanes remain gated and all mutations use reverse-ETL approval flow.
 
 ## Icon
 
@@ -18,7 +18,7 @@ Operation ledger and typed read surface for the official Zendesk Support API; st
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=true query=false
 - Integration type: api
 
 ## Authentication
@@ -311,16 +311,1085 @@ Operation ledger and typed read surface for the official Zendesk Support API; st
 
 - ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
+## Reverse ETL Actions
+
+- update_account_email_settings:
+  - endpoint: PUT /api/v2/account/email_settings
+  - risk: high
+- update_account_settings:
+  - endpoint: PUT /api/v2/account/settings
+  - risk: high
+- create_trial_account:
+  - endpoint: POST /api/v2/accounts
+  - risk: high
+- report_channelback_error:
+  - endpoint: POST /api/v2/any_channel/channelback/report_error
+  - risk: high
+- push_content_to_support:
+  - endpoint: POST /api/v2/any_channel/push
+  - risk: high
+- validate_token:
+  - endpoint: POST /api/v2/any_channel/validate_token
+  - risk: high
+- create_approval_request:
+  - endpoint: POST /api/v2/approval_requests
+  - risk: high
+- update_attachment:
+  - endpoint: PUT /api/v2/attachments/{{ record.attachment_id }}
+  - required fields: attachment_id
+  - risk: high
+- delete_attachment:
+  - endpoint: DELETE /api/v2/attachments/{{ record.attachment_id }}
+  - required fields: attachment_id
+  - risk: critical
+- export_audit_logs:
+  - endpoint: POST /api/v2/audit_logs/export
+  - risk: high
+- autocomplete_tags_post:
+  - endpoint: POST /api/v2/autocomplete/tags
+  - risk: high
+- create_automation:
+  - endpoint: POST /api/v2/automations
+  - risk: high
+- update_automation:
+  - endpoint: PUT /api/v2/automations/{{ record.automation_id }}
+  - required fields: automation_id
+  - risk: high
+- delete_automation:
+  - endpoint: DELETE /api/v2/automations/{{ record.automation_id }}
+  - required fields: automation_id
+  - risk: critical
+- bulk_delete_automations:
+  - endpoint: DELETE /api/v2/automations/destroy_many
+  - risk: critical
+- update_many_automations:
+  - endpoint: PUT /api/v2/automations/update_many
+  - risk: high
+- create_bookmark:
+  - endpoint: POST /api/v2/bookmarks
+  - risk: high
+- delete_bookmark:
+  - endpoint: DELETE /api/v2/bookmarks/{{ record.bookmark_id }}
+  - required fields: bookmark_id
+  - risk: critical
+- delete_brand_agent_by_id:
+  - endpoint: DELETE /api/v2/brand_agents/{{ record.brand_agent_id }}
+  - required fields: brand_agent_id
+  - risk: critical
+- create_brand:
+  - endpoint: POST /api/v2/brands
+  - risk: high
+- update_brand:
+  - endpoint: PUT /api/v2/brands/{{ record.brand_id }}
+  - required fields: brand_id
+  - risk: high
+- delete_brand:
+  - endpoint: DELETE /api/v2/brands/{{ record.brand_id }}
+  - required fields: brand_id
+  - risk: critical
+- update_brand_logo:
+  - endpoint: PUT /api/v2/brands/{{ record.brand_id }}/logo
+  - required fields: brand_id
+  - risk: high
+- delete_brand_logo:
+  - endpoint: DELETE /api/v2/brands/{{ record.brand_id }}/logo
+  - required fields: brand_id
+  - risk: critical
+- create_ticket_from_tweet:
+  - endpoint: POST /api/v2/channels/twitter/tickets
+  - risk: high
+- open_ticket_in_agent_browser:
+  - endpoint: POST /api/v2/channels/voice/agents/{{ record.agent_id }}/tickets/{{ record.ticket_id }}/display
+  - required fields: agent_id, ticket_id
+  - risk: high
+- open_users_profile_in_agent_browser:
+  - endpoint: POST /api/v2/channels/voice/agents/{{ record.agent_id }}/users/{{ record.user_id }}/display
+  - required fields: agent_id, user_id
+  - risk: high
+- create_ticket_or_voicemail_ticket:
+  - endpoint: POST /api/v2/channels/voice/tickets
+  - risk: high
+- redact_chat_comment_attachment:
+  - endpoint: PUT /api/v2/chat_file_redactions/{{ record.ticket_id }}
+  - required fields: ticket_id
+  - risk: high
+- redact_chat_comment:
+  - endpoint: PUT /api/v2/chat_redactions/{{ record.ticket_id }}
+  - required fields: ticket_id
+  - risk: high
+- create_custom_object:
+  - endpoint: POST /api/v2/custom_objects
+  - risk: high
+- update_custom_object:
+  - endpoint: PATCH /api/v2/custom_objects/{{ record.custom_object_key }}
+  - required fields: custom_object_key
+  - risk: high
+- delete_custom_object:
+  - endpoint: DELETE /api/v2/custom_objects/{{ record.custom_object_key }}
+  - required fields: custom_object_key
+  - risk: critical
+- create_access_rule:
+  - endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/access_rules
+  - required fields: custom_object_key
+  - risk: high
+- update_access_rule:
+  - endpoint: PATCH /api/v2/custom_objects/{{ record.custom_object_key }}/access_rules/{{ record.id }}
+  - required fields: custom_object_key, id
+  - risk: high
+- delete_access_rule:
+  - endpoint: DELETE /api/v2/custom_objects/{{ record.custom_object_key }}/access_rules/{{ record.id }}
+  - required fields: custom_object_key, id
+  - risk: critical
+- create_custom_object_field:
+  - endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/fields
+  - required fields: custom_object_key
+  - risk: high
+- update_custom_object_field:
+  - endpoint: PATCH /api/v2/custom_objects/{{ record.custom_object_key }}/fields/{{ record.custom_object_field_key_or_id }}
+  - required fields: custom_object_key, custom_object_field_key_or_id
+  - risk: high
+- delete_custom_object_field:
+  - endpoint: DELETE /api/v2/custom_objects/{{ record.custom_object_key }}/fields/{{ record.custom_object_field_key_or_id }}
+  - required fields: custom_object_key, custom_object_field_key_or_id
+  - risk: critical
+- reorder_custom_object_fields:
+  - endpoint: PUT /api/v2/custom_objects/{{ record.custom_object_key }}/fields/reorder
+  - required fields: custom_object_key
+  - risk: high
+- custom_object_record_bulk_jobs:
+  - endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/jobs
+  - required fields: custom_object_key
+  - risk: high
+- update_permission_policy:
+  - endpoint: PATCH /api/v2/custom_objects/{{ record.custom_object_key }}/permission_policies/{{ record.id }}
+  - required fields: custom_object_key, id
+  - risk: high
+- create_custom_object_record:
+  - endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/records
+  - required fields: custom_object_key
+  - risk: high
+- upsert_custom_object_record_by_external_id_or_name:
+  - endpoint: PATCH /api/v2/custom_objects/{{ record.custom_object_key }}/records
+  - required fields: custom_object_key
+  - risk: high
+- delete_custom_object_record_by_external_id_or_name:
+  - endpoint: DELETE /api/v2/custom_objects/{{ record.custom_object_key }}/records
+  - required fields: custom_object_key
+  - risk: critical
+- update_custom_object_record:
+  - endpoint: PATCH /api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.custom_object_record_id }}
+  - required fields: custom_object_key, custom_object_record_id
+  - risk: high
+- delete_custom_object_record:
+  - endpoint: DELETE /api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.custom_object_record_id }}
+  - required fields: custom_object_key, custom_object_record_id
+  - risk: critical
+- create_custom_object_record_attachment:
+  - endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments
+  - required fields: custom_object_key, record_id
+  - risk: high
+- update_custom_object_record_attachment:
+  - endpoint: PUT /api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments/{{ record.id }}
+  - required fields: custom_object_key, record_id, id
+  - risk: high
+- delete_custom_object_record_attachment:
+  - endpoint: DELETE /api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments/{{ record.id }}
+  - required fields: custom_object_key, record_id, id
+  - risk: critical
+- filtered_search_custom_object_records:
+  - endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/records/search
+  - required fields: custom_object_key
+  - risk: high
+- create_object_trigger:
+  - endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/triggers
+  - required fields: custom_object_key
+  - risk: high
+- update_object_trigger:
+  - endpoint: PUT /api/v2/custom_objects/{{ record.custom_object_key }}/triggers/{{ record.trigger_id }}
+  - required fields: custom_object_key, trigger_id
+  - risk: high
+- delete_object_trigger:
+  - endpoint: DELETE /api/v2/custom_objects/{{ record.custom_object_key }}/triggers/{{ record.trigger_id }}
+  - required fields: custom_object_key, trigger_id
+  - risk: critical
+- delete_many_object_triggers:
+  - endpoint: DELETE /api/v2/custom_objects/{{ record.custom_object_key }}/triggers/destroy_many
+  - required fields: custom_object_key
+  - risk: critical
+- update_many_object_triggers:
+  - endpoint: PUT /api/v2/custom_objects/{{ record.custom_object_key }}/triggers/update_many
+  - required fields: custom_object_key
+  - risk: high
+- create_custom_role:
+  - endpoint: POST /api/v2/custom_roles
+  - risk: high
+- update_custom_role_by_id:
+  - endpoint: PUT /api/v2/custom_roles/{{ record.custom_role_id }}
+  - required fields: custom_role_id
+  - risk: high
+- delete_custom_role_by_id:
+  - endpoint: DELETE /api/v2/custom_roles/{{ record.custom_role_id }}
+  - required fields: custom_role_id
+  - risk: critical
+- bulk_update_default_custom_status:
+  - endpoint: PUT /api/v2/custom_status/default
+  - risk: high
+- create_custom_status:
+  - endpoint: POST /api/v2/custom_statuses
+  - risk: high
+- update_custom_status:
+  - endpoint: PUT /api/v2/custom_statuses/{{ record.custom_status_id }}
+  - required fields: custom_status_id
+  - risk: high
+- delete_custom_status:
+  - endpoint: DELETE /api/v2/custom_statuses/{{ record.custom_status_id }}
+  - required fields: custom_status_id
+  - risk: critical
+- create_ticket_form_statuses_for_custom_status:
+  - endpoint: POST /api/v2/custom_statuses/{{ record.custom_status_id }}/ticket_form_statuses
+  - required fields: custom_status_id
+  - risk: high
+- delete_ticket_permanently:
+  - endpoint: DELETE /api/v2/deleted_tickets/{{ record.ticket_id }}
+  - required fields: ticket_id
+  - risk: critical
+- restore_deleted_ticket:
+  - endpoint: PUT /api/v2/deleted_tickets/{{ record.ticket_id }}/restore
+  - required fields: ticket_id
+  - risk: high
+- bulk_permanently_delete_tickets:
+  - endpoint: DELETE /api/v2/deleted_tickets/destroy_many
+  - risk: critical
+- bulk_restore_deleted_tickets:
+  - endpoint: PUT /api/v2/deleted_tickets/restore_many
+  - risk: high
+- permanently_delete_user:
+  - endpoint: DELETE /api/v2/deleted_users/{{ record.deleted_user_id }}
+  - required fields: deleted_user_id
+  - risk: critical
+- create_deletion_schedule:
+  - endpoint: POST /api/v2/deletion_schedules
+  - risk: high
+- update_deletion_schedule:
+  - endpoint: PUT /api/v2/deletion_schedules/{{ record.deletion_schedule_id }}
+  - required fields: deletion_schedule_id
+  - risk: high
+- delete_deletion_schedule:
+  - endpoint: DELETE /api/v2/deletion_schedules/{{ record.deletion_schedule_id }}
+  - required fields: deletion_schedule_id
+  - risk: critical
+- create_dynamic_content:
+  - endpoint: POST /api/v2/dynamic_content/items
+  - risk: high
+- update_dynamic_content_item:
+  - endpoint: PUT /api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}
+  - required fields: dynamic_content_item_id
+  - risk: high
+- delete_dynamic_content_item:
+  - endpoint: DELETE /api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}
+  - required fields: dynamic_content_item_id
+  - risk: critical
+- create_dynamic_content_variant:
+  - endpoint: POST /api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants
+  - required fields: dynamic_content_item_id
+  - risk: high
+- update_dynamic_content_variant:
+  - endpoint: PUT /api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants/{{ record.dynamic_content_variant_id }}
+  - required fields: dynamic_content_item_id, dynamic_content_variant_id
+  - risk: high
+- delete_dynamic_content_variant:
+  - endpoint: DELETE /api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants/{{ record.dynamic_content_variant_id }}
+  - required fields: dynamic_content_item_id, dynamic_content_variant_id
+  - risk: critical
+- create_many_dynamic_content_variants:
+  - endpoint: POST /api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants/create_many
+  - required fields: dynamic_content_item_id
+  - risk: high
+- update_many_dynamic_content_variants:
+  - endpoint: PUT /api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants/update_many
+  - required fields: dynamic_content_item_id
+  - risk: high
+- create_end_user_identity:
+  - endpoint: POST /api/v2/end_users/{{ record.user_id }}/identities
+  - required fields: user_id
+  - risk: high
+- delete_end_user_identity:
+  - endpoint: DELETE /api/v2/end_users/{{ record.user_id }}/identities/{{ record.user_identity_id }}
+  - required fields: user_id, user_identity_id
+  - risk: critical
+- make_end_user_identity_primary:
+  - endpoint: PUT /api/v2/end_users/{{ record.user_id }}/identities/{{ record.user_identity_id }}/make_primary
+  - required fields: user_id, user_identity_id
+  - risk: high
+- request_end_user_verification:
+  - endpoint: PUT /api/v2/end_users/{{ record.user_id }}/identities/{{ record.user_identity_id }}/request_verification
+  - required fields: user_id, user_identity_id
+  - risk: high
+- create_group_membership:
+  - endpoint: POST /api/v2/group_memberships
+  - risk: high
+- delete_group_membership:
+  - endpoint: DELETE /api/v2/group_memberships/{{ record.group_membership_id }}
+  - required fields: group_membership_id
+  - risk: critical
+- group_membership_bulk_create:
+  - endpoint: POST /api/v2/group_memberships/create_many
+  - risk: high
+- group_membership_bulk_delete:
+  - endpoint: DELETE /api/v2/group_memberships/destroy_many
+  - risk: critical
+- create_group_sla_policy:
+  - endpoint: POST /api/v2/group_slas/policies
+  - risk: high
+- update_group_sla_policy:
+  - endpoint: PUT /api/v2/group_slas/policies/{{ record.group_sla_policy_id }}
+  - required fields: group_sla_policy_id
+  - risk: high
+- delete_group_sla_policy:
+  - endpoint: DELETE /api/v2/group_slas/policies/{{ record.group_sla_policy_id }}
+  - required fields: group_sla_policy_id
+  - risk: critical
+- reorder_group_sla_policies:
+  - endpoint: PUT /api/v2/group_slas/policies/reorder
+  - risk: high
+- create_group:
+  - endpoint: POST /api/v2/groups
+  - risk: high
+- update_group:
+  - endpoint: PUT /api/v2/groups/{{ record.group_id }}
+  - required fields: group_id
+  - risk: high
+- delete_group:
+  - endpoint: DELETE /api/v2/groups/{{ record.group_id }}
+  - required fields: group_id
+  - risk: critical
+- ticket_import:
+  - endpoint: POST /api/v2/imports/tickets
+  - risk: high
+- ticket_bulk_import:
+  - endpoint: POST /api/v2/imports/tickets/create_many
+  - risk: high
+- create_itam_asset_type:
+  - endpoint: POST /api/v2/it_asset_management/asset_types
+  - risk: high
+- update_itam_asset_type:
+  - endpoint: PATCH /api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}
+  - required fields: asset_type_id
+  - risk: high
+- delete_itam_asset_type:
+  - endpoint: DELETE /api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}
+  - required fields: asset_type_id
+  - risk: critical
+- create_itam_asset_type_field:
+  - endpoint: POST /api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields
+  - required fields: asset_type_id
+  - risk: high
+- update_itam_asset_type_field:
+  - endpoint: PATCH /api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields/{{ record.asset_type_field_id }}
+  - required fields: asset_type_id, asset_type_field_id
+  - risk: high
+- delete_itam_asset_type_field:
+  - endpoint: DELETE /api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields/{{ record.asset_type_field_id }}
+  - required fields: asset_type_id, asset_type_field_id
+  - risk: critical
+- create_itam_asset:
+  - endpoint: POST /api/v2/it_asset_management/assets
+  - risk: high
+- update_itam_asset:
+  - endpoint: PATCH /api/v2/it_asset_management/assets/{{ record.asset_id }}
+  - required fields: asset_id
+  - risk: high
+- delete_itam_asset:
+  - endpoint: DELETE /api/v2/it_asset_management/assets/{{ record.asset_id }}
+  - required fields: asset_id
+  - risk: critical
+- itam_asset_bulk_jobs:
+  - endpoint: POST /api/v2/it_asset_management/assets/jobs
+  - risk: high
+- filtered_search_itam_assets:
+  - endpoint: POST /api/v2/it_asset_management/assets/search
+  - risk: high
+- create_itam_location:
+  - endpoint: POST /api/v2/it_asset_management/locations
+  - risk: high
+- update_itam_location:
+  - endpoint: PATCH /api/v2/it_asset_management/locations/{{ record.location_id }}
+  - required fields: location_id
+  - risk: high
+- delete_itam_location:
+  - endpoint: DELETE /api/v2/it_asset_management/locations/{{ record.location_id }}
+  - required fields: location_id
+  - risk: critical
+- create_macro:
+  - endpoint: POST /api/v2/macros
+  - risk: high
+- update_macro:
+  - endpoint: PUT /api/v2/macros/{{ record.macro_id }}
+  - required fields: macro_id
+  - risk: high
+- delete_macro:
+  - endpoint: DELETE /api/v2/macros/{{ record.macro_id }}
+  - required fields: macro_id
+  - risk: critical
+- create_associated_macro_attachment:
+  - endpoint: POST /api/v2/macros/{{ record.macro_id }}/attachments
+  - required fields: macro_id
+  - risk: high
+- create_macro_attachment:
+  - endpoint: POST /api/v2/macros/attachments
+  - risk: high
+- delete_many_macros:
+  - endpoint: DELETE /api/v2/macros/destroy_many
+  - risk: critical
+- update_many_macros:
+  - endpoint: PUT /api/v2/macros/update_many
+  - risk: high
+- create_o_auth_client:
+  - endpoint: POST /api/v2/oauth/clients
+  - risk: high
+- update_client:
+  - endpoint: PUT /api/v2/oauth/clients/{{ record.oauth_client_id }}
+  - required fields: oauth_client_id
+  - risk: high
+- delete_client:
+  - endpoint: DELETE /api/v2/oauth/clients/{{ record.oauth_client_id }}
+  - required fields: oauth_client_id
+  - risk: critical
+- client_generate_secret:
+  - endpoint: PUT /api/v2/oauth/clients/{{ record.oauth_client_id }}/generate_secret
+  - required fields: oauth_client_id
+  - risk: high
+- create_o_auth_token:
+  - endpoint: POST /api/v2/oauth/tokens
+  - risk: high
+- revoke_o_auth_token:
+  - endpoint: DELETE /api/v2/oauth/tokens/{{ record.oauth_token_id }}
+  - required fields: oauth_token_id
+  - risk: critical
+- revoke_current_o_auth_token:
+  - endpoint: DELETE /api/v2/oauth/tokens/current
+  - risk: critical
+- create_organization_field:
+  - endpoint: POST /api/v2/organization_fields
+  - risk: high
+- update_organization_field:
+  - endpoint: PUT /api/v2/organization_fields/{{ record.organization_field_id }}
+  - required fields: organization_field_id
+  - risk: high
+- delete_organization_field:
+  - endpoint: DELETE /api/v2/organization_fields/{{ record.organization_field_id }}
+  - required fields: organization_field_id
+  - risk: critical
+- reorder_organization_field:
+  - endpoint: PUT /api/v2/organization_fields/reorder
+  - risk: high
+- create_organization_membership:
+  - endpoint: POST /api/v2/organization_memberships
+  - risk: high
+- delete_organization_membership:
+  - endpoint: DELETE /api/v2/organization_memberships/{{ record.organization_membership_id }}
+  - required fields: organization_membership_id
+  - risk: critical
+- create_many_organization_memberships:
+  - endpoint: POST /api/v2/organization_memberships/create_many
+  - risk: high
+- delete_many_organization_memberships:
+  - endpoint: DELETE /api/v2/organization_memberships/destroy_many
+  - risk: critical
+- create_organization_subscription:
+  - endpoint: POST /api/v2/organization_subscriptions
+  - risk: high
+- delete_organization_subscription:
+  - endpoint: DELETE /api/v2/organization_subscriptions/{{ record.organization_subscription_id }}
+  - required fields: organization_subscription_id
+  - risk: critical
+- create_organization:
+  - endpoint: POST /api/v2/organizations
+  - risk: high
+- update_organization:
+  - endpoint: PUT /api/v2/organizations/{{ record.organization_id }}
+  - required fields: organization_id
+  - risk: high
+- delete_organization:
+  - endpoint: DELETE /api/v2/organizations/{{ record.organization_id }}
+  - required fields: organization_id
+  - risk: critical
+- create_organization_merge:
+  - endpoint: POST /api/v2/organizations/{{ record.organization_id }}/merge
+  - required fields: organization_id
+  - risk: high
+- set_organization_tags:
+  - endpoint: POST /api/v2/organizations/{{ record.organization_id }}/tags
+  - required fields: organization_id
+  - risk: high
+- add_organization_tags:
+  - endpoint: PUT /api/v2/organizations/{{ record.organization_id }}/tags
+  - required fields: organization_id
+  - risk: high
+- remove_organization_tags:
+  - endpoint: DELETE /api/v2/organizations/{{ record.organization_id }}/tags
+  - required fields: organization_id
+  - risk: critical
+- create_many_organizations:
+  - endpoint: POST /api/v2/organizations/create_many
+  - risk: high
+- create_or_update_organization:
+  - endpoint: POST /api/v2/organizations/create_or_update
+  - risk: high
+- delete_many_organizations:
+  - endpoint: DELETE /api/v2/organizations/destroy_many
+  - risk: critical
+- update_many_organizations:
+  - endpoint: PUT /api/v2/organizations/update_many
+  - risk: high
+- autocomplete_problems:
+  - endpoint: POST /api/v2/problems/autocomplete
+  - risk: high
+- push_notification_devices:
+  - endpoint: POST /api/v2/push_notification_devices/destroy_many
+  - risk: high
+- create_queue:
+  - endpoint: POST /api/v2/queues
+  - risk: high
+- update_queue:
+  - endpoint: PUT /api/v2/queues/{{ record.queue_id }}
+  - required fields: queue_id
+  - risk: high
+- delete_queue:
+  - endpoint: DELETE /api/v2/queues/{{ record.queue_id }}
+  - required fields: queue_id
+  - risk: critical
+- reorder_queues:
+  - endpoint: PATCH /api/v2/queues/order
+  - risk: high
+- create_support_address:
+  - endpoint: POST /api/v2/recipient_addresses
+  - risk: high
+- update_support_address:
+  - endpoint: PUT /api/v2/recipient_addresses/{{ record.support_address_id }}
+  - required fields: support_address_id
+  - risk: high
+- delete_recipient_address:
+  - endpoint: DELETE /api/v2/recipient_addresses/{{ record.support_address_id }}
+  - required fields: support_address_id
+  - risk: critical
+- verify_support_address_forwarding:
+  - endpoint: PUT /api/v2/recipient_addresses/{{ record.support_address_id }}/verify
+  - required fields: support_address_id
+  - risk: high
+- create_request:
+  - endpoint: POST /api/v2/requests
+  - risk: high
+- update_request:
+  - endpoint: PUT /api/v2/requests/{{ record.request_id }}
+  - required fields: request_id
+  - risk: high
+- create_resource_collection:
+  - endpoint: POST /api/v2/resource_collections
+  - risk: high
+- update_resource_collection:
+  - endpoint: PUT /api/v2/resource_collections/{{ record.resource_collection_id }}
+  - required fields: resource_collection_id
+  - risk: high
+- delete_resource_collection:
+  - endpoint: DELETE /api/v2/resource_collections/{{ record.resource_collection_id }}
+  - required fields: resource_collection_id
+  - risk: critical
+- set_agent_attribute_values:
+  - endpoint: POST /api/v2/routing/agents/{{ record.user_id }}/instance_values
+  - required fields: user_id
+  - risk: high
+- bulk_set_agent_attribute_values_job:
+  - endpoint: POST /api/v2/routing/agents/instance_values/jobs
+  - risk: high
+- create_attribute:
+  - endpoint: POST /api/v2/routing/attributes
+  - risk: high
+- update_attribute:
+  - endpoint: PUT /api/v2/routing/attributes/{{ record.attribute_id }}
+  - required fields: attribute_id
+  - risk: high
+- delete_attribute:
+  - endpoint: DELETE /api/v2/routing/attributes/{{ record.attribute_id }}
+  - required fields: attribute_id
+  - risk: critical
+- create_attribute_value:
+  - endpoint: POST /api/v2/routing/attributes/{{ record.attribute_id }}/values
+  - required fields: attribute_id
+  - risk: high
+- update_attribute_value:
+  - endpoint: PATCH /api/v2/routing/attributes/{{ record.attribute_id }}/values/{{ record.attribute_value_id }}
+  - required fields: attribute_id, attribute_value_id
+  - risk: high
+- delete_attribute_value:
+  - endpoint: DELETE /api/v2/routing/attributes/{{ record.attribute_id }}/values/{{ record.attribute_value_id }}
+  - required fields: attribute_id, attribute_value_id
+  - risk: critical
+- set_ticket_attribute_values:
+  - endpoint: POST /api/v2/routing/tickets/{{ record.ticket_id }}/instance_values
+  - required fields: ticket_id
+  - risk: high
+- create_saved_search:
+  - endpoint: POST /api/v2/saved_searches
+  - risk: high
+- update_saved_search:
+  - endpoint: PUT /api/v2/saved_searches/{{ record.id }}
+  - required fields: id
+  - risk: high
+- delete_saved_search:
+  - endpoint: DELETE /api/v2/saved_searches/{{ record.id }}
+  - required fields: id
+  - risk: critical
+- create_sharing_agreement:
+  - endpoint: POST /api/v2/sharing_agreements
+  - risk: high
+- update_sharing_agreement:
+  - endpoint: PUT /api/v2/sharing_agreements/{{ record.sharing_agreement_id }}
+  - required fields: sharing_agreement_id
+  - risk: high
+- delete_sharing_agreement:
+  - endpoint: DELETE /api/v2/sharing_agreements/{{ record.sharing_agreement_id }}
+  - required fields: sharing_agreement_id
+  - risk: critical
+- record_new_skip:
+  - endpoint: POST /api/v2/skips
+  - risk: high
+- create_sla_policy:
+  - endpoint: POST /api/v2/slas/policies
+  - risk: high
+- update_sla_policy:
+  - endpoint: PUT /api/v2/slas/policies/{{ record.sla_policy_id }}
+  - required fields: sla_policy_id
+  - risk: high
+- delete_sla_policy:
+  - endpoint: DELETE /api/v2/slas/policies/{{ record.sla_policy_id }}
+  - required fields: sla_policy_id
+  - risk: critical
+- reorder_sla_policies:
+  - endpoint: PUT /api/v2/slas/policies/reorder
+  - risk: high
+- delete_suspended_ticket:
+  - endpoint: DELETE /api/v2/suspended_tickets/{{ record.id }}
+  - required fields: id
+  - risk: critical
+- recover_suspended_ticket:
+  - endpoint: PUT /api/v2/suspended_tickets/{{ record.id }}/recover
+  - required fields: id
+  - risk: high
+- suspended_tickets_attachments:
+  - endpoint: POST /api/v2/suspended_tickets/attachments
+  - risk: high
+- bulk_recover_suspended_tickets:
+  - endpoint: PUT /api/v2/suspended_tickets/bulk_recover
+  - risk: high
+- delete_suspended_tickets:
+  - endpoint: DELETE /api/v2/suspended_tickets/destroy_many
+  - risk: critical
+- export_suspended_tickets:
+  - endpoint: POST /api/v2/suspended_tickets/export
+  - risk: high
+- recover_suspended_tickets:
+  - endpoint: PUT /api/v2/suspended_tickets/recover_many
+  - risk: high
+- create_target:
+  - endpoint: POST /api/v2/targets
+  - risk: high
+- update_target:
+  - endpoint: PUT /api/v2/targets/{{ record.target_id }}
+  - required fields: target_id
+  - risk: high
+- delete_target:
+  - endpoint: DELETE /api/v2/targets/{{ record.target_id }}
+  - required fields: target_id
+  - risk: critical
+- create_task_list_template:
+  - endpoint: POST /api/v2/task_list_templates
+  - risk: high
+- update_task_list_template:
+  - endpoint: PUT /api/v2/task_list_templates/{{ record.task_list_template_id }}
+  - required fields: task_list_template_id
+  - risk: high
+- delete_task_list_template:
+  - endpoint: DELETE /api/v2/task_list_templates/{{ record.task_list_template_id }}
+  - required fields: task_list_template_id
+  - risk: critical
+- create_ticket_content_pin:
+  - endpoint: POST /api/v2/ticket_content_pins
+  - risk: high
+- delete_ticket_content_pin:
+  - endpoint: DELETE /api/v2/ticket_content_pins/{{ record.content_pin_id }}
+  - required fields: content_pin_id
+  - risk: critical
+- create_ticket_field:
+  - endpoint: POST /api/v2/ticket_fields
+  - risk: high
+- update_ticket_field:
+  - endpoint: PUT /api/v2/ticket_fields/{{ record.ticket_field_id }}
+  - required fields: ticket_field_id
+  - risk: high
+- delete_ticket_field:
+  - endpoint: DELETE /api/v2/ticket_fields/{{ record.ticket_field_id }}
+  - required fields: ticket_field_id
+  - risk: critical
+- create_or_update_ticket_field_option:
+  - endpoint: POST /api/v2/ticket_fields/{{ record.ticket_field_id }}/options
+  - required fields: ticket_field_id
+  - risk: high
+- delete_ticket_field_option:
+  - endpoint: DELETE /api/v2/ticket_fields/{{ record.ticket_field_id }}/options/{{ record.ticket_field_option_id }}
+  - required fields: ticket_field_id, ticket_field_option_id
+  - risk: critical
+- reorder_ticket_fields:
+  - endpoint: PUT /api/v2/ticket_fields/reorder
+  - risk: high
+- create_ticket_form:
+  - endpoint: POST /api/v2/ticket_forms
+  - risk: high
+- update_ticket_form:
+  - endpoint: PUT /api/v2/ticket_forms/{{ record.ticket_form_id }}
+  - required fields: ticket_form_id
+  - risk: high
+- delete_ticket_form:
+  - endpoint: DELETE /api/v2/ticket_forms/{{ record.ticket_form_id }}
+  - required fields: ticket_form_id
+  - risk: critical
+- clone_ticket_form:
+  - endpoint: POST /api/v2/ticket_forms/{{ record.ticket_form_id }}/clone
+  - required fields: ticket_form_id
+  - risk: high
+- create_ticket_form_statuses:
+  - endpoint: POST /api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses
+  - required fields: ticket_form_id
+  - risk: high
+- update_ticket_form_statuses:
+  - endpoint: PUT /api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses
+  - required fields: ticket_form_id
+  - risk: high
+- delete_ticket_form_statuses:
+  - endpoint: DELETE /api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses
+  - required fields: ticket_form_id
+  - risk: critical
+- update_ticket_form_status_by_id:
+  - endpoint: PUT /api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses/{{ record.ticket_form_status_id }}
+  - required fields: ticket_form_id, ticket_form_status_id
+  - risk: high
+- delete_ticket_form_status_by_id:
+  - endpoint: DELETE /api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses/{{ record.ticket_form_status_id }}
+  - required fields: ticket_form_id, ticket_form_status_id
+  - risk: critical
+- reorder_ticket_forms:
+  - endpoint: PUT /api/v2/ticket_forms/reorder
+  - risk: high
+- create_ticket:
+  - endpoint: POST /api/v2/tickets
+  - risk: high
+- update_ticket:
+  - endpoint: PUT /api/v2/tickets/{{ record.ticket_id }}
+  - required fields: ticket_id
+  - risk: high
+- delete_ticket:
+  - endpoint: DELETE /api/v2/tickets/{{ record.ticket_id }}
+  - required fields: ticket_id
+  - risk: critical
+- make_ticket_comment_private_from_audits:
+  - endpoint: PUT /api/v2/tickets/{{ record.ticket_id }}/audits/{{ record.ticket_audit_id }}/make_private
+  - required fields: ticket_id, ticket_audit_id
+  - risk: high
+- redact_comment_attachment:
+  - endpoint: PUT /api/v2/tickets/{{ record.ticket_id }}/comments/{{ record.comment_id }}/attachments/{{ record.attachment_id }}/redact
+  - required fields: ticket_id, comment_id, attachment_id
+  - risk: high
+- make_ticket_comment_private:
+  - endpoint: PUT /api/v2/tickets/{{ record.ticket_id }}/comments/{{ record.ticket_comment_id }}/make_private
+  - required fields: ticket_id, ticket_comment_id
+  - risk: high
+- redact_string_in_comment:
+  - endpoint: PUT /api/v2/tickets/{{ record.ticket_id }}/comments/{{ record.ticket_comment_id }}/redact
+  - required fields: ticket_id, ticket_comment_id
+  - risk: high
+- mark_ticket_as_spam_and_suspend_requester:
+  - endpoint: PUT /api/v2/tickets/{{ record.ticket_id }}/mark_as_spam
+  - required fields: ticket_id
+  - risk: high
+- merge_tickets_into_target_ticket:
+  - endpoint: POST /api/v2/tickets/{{ record.ticket_id }}/merge
+  - required fields: ticket_id
+  - risk: high
+- create_ticket_satisfaction_rating:
+  - endpoint: POST /api/v2/tickets/{{ record.ticket_id }}/satisfaction_rating
+  - required fields: ticket_id
+  - risk: high
+- set_tags_ticket:
+  - endpoint: POST /api/v2/tickets/{{ record.ticket_id }}/tags
+  - required fields: ticket_id
+  - risk: high
+- put_tags_ticket:
+  - endpoint: PUT /api/v2/tickets/{{ record.ticket_id }}/tags
+  - required fields: ticket_id
+  - risk: high
+- delete_tags_ticket:
+  - endpoint: DELETE /api/v2/tickets/{{ record.ticket_id }}/tags
+  - required fields: ticket_id
+  - risk: critical
+- create_task_list:
+  - endpoint: POST /api/v2/tickets/{{ record.ticket_id }}/task_lists
+  - required fields: ticket_id
+  - risk: high
+- tickets_create_many:
+  - endpoint: POST /api/v2/tickets/create_many
+  - risk: high
+- bulk_delete_tickets:
+  - endpoint: DELETE /api/v2/tickets/destroy_many
+  - risk: critical
+- mark_many_tickets_as_spam:
+  - endpoint: PUT /api/v2/tickets/mark_many_as_spam
+  - risk: high
+- tickets_update_many:
+  - endpoint: PUT /api/v2/tickets/update_many
+  - risk: high
+- create_trigger_category:
+  - endpoint: POST /api/v2/trigger_categories
+  - risk: high
+- update_trigger_category:
+  - endpoint: PATCH /api/v2/trigger_categories/{{ record.trigger_category_id }}
+  - required fields: trigger_category_id
+  - risk: high
+- delete_trigger_category:
+  - endpoint: DELETE /api/v2/trigger_categories/{{ record.trigger_category_id }}
+  - required fields: trigger_category_id
+  - risk: critical
+- batch_operate_trigger_categories:
+  - endpoint: POST /api/v2/trigger_categories/jobs
+  - risk: high
+- create_trigger:
+  - endpoint: POST /api/v2/triggers
+  - risk: high
+- update_trigger:
+  - endpoint: PUT /api/v2/triggers/{{ record.trigger_id }}
+  - required fields: trigger_id
+  - risk: high
+- delete_trigger:
+  - endpoint: DELETE /api/v2/triggers/{{ record.trigger_id }}
+  - required fields: trigger_id
+  - risk: critical
+- delete_many_triggers:
+  - endpoint: DELETE /api/v2/triggers/destroy_many
+  - risk: critical
+- reorder_triggers:
+  - endpoint: PUT /api/v2/triggers/reorder
+  - risk: high
+- update_many_triggers:
+  - endpoint: PUT /api/v2/triggers/update_many
+  - risk: high
+- upload_files:
+  - endpoint: POST /api/v2/uploads
+  - risk: high
+- delete_upload:
+  - endpoint: DELETE /api/v2/uploads/{{ record.token }}
+  - required fields: token
+  - risk: critical
+- create_user_field:
+  - endpoint: POST /api/v2/user_fields
+  - risk: high
+- update_user_field:
+  - endpoint: PUT /api/v2/user_fields/{{ record.user_field_id }}
+  - required fields: user_field_id
+  - risk: high
+- delete_user_field:
+  - endpoint: DELETE /api/v2/user_fields/{{ record.user_field_id }}
+  - required fields: user_field_id
+  - risk: critical
+- create_or_update_user_field_option:
+  - endpoint: POST /api/v2/user_fields/{{ record.user_field_id }}/options
+  - required fields: user_field_id
+  - risk: high
+- delete_user_field_option:
+  - endpoint: DELETE /api/v2/user_fields/{{ record.user_field_id }}/options/{{ record.user_field_option_id }}
+  - required fields: user_field_id, user_field_option_id
+  - risk: critical
+- reorder_user_field:
+  - endpoint: PUT /api/v2/user_fields/reorder
+  - risk: high
+- create_user:
+  - endpoint: POST /api/v2/users
+  - risk: high
+- update_user:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}
+  - required fields: user_id
+  - risk: high
+- delete_user:
+  - endpoint: DELETE /api/v2/users/{{ record.user_id }}
+  - required fields: user_id
+  - risk: critical
+- create_user_group_membership:
+  - endpoint: POST /api/v2/users/{{ record.user_id }}/group_memberships
+  - required fields: user_id
+  - risk: high
+- delete_user_group_membership:
+  - endpoint: DELETE /api/v2/users/{{ record.user_id }}/group_memberships/{{ record.group_membership_id }}
+  - required fields: user_id, group_membership_id
+  - risk: critical
+- group_membership_set_default:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}/group_memberships/{{ record.group_membership_id }}/make_default
+  - required fields: user_id, group_membership_id
+  - risk: high
+- create_user_identity:
+  - endpoint: POST /api/v2/users/{{ record.user_id }}/identities
+  - required fields: user_id
+  - risk: high
+- update_user_identity:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}
+  - required fields: user_id, user_identity_id
+  - risk: high
+- delete_user_identity:
+  - endpoint: DELETE /api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}
+  - required fields: user_id, user_identity_id
+  - risk: critical
+- make_user_identity_primary:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}/make_primary
+  - required fields: user_id, user_identity_id
+  - risk: high
+- request_user_verification:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}/request_verification
+  - required fields: user_id, user_identity_id
+  - risk: high
+- verify_user_identity:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}/verify
+  - required fields: user_id, user_identity_id
+  - risk: high
+- merge_end_users:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}/merge
+  - required fields: user_id
+  - risk: high
+- create_user_organization_membership:
+  - endpoint: POST /api/v2/users/{{ record.user_id }}/organization_memberships
+  - required fields: user_id
+  - risk: high
+- delete_user_organization_membership:
+  - endpoint: DELETE /api/v2/users/{{ record.user_id }}/organization_memberships/{{ record.organization_membership_id }}
+  - required fields: user_id, organization_membership_id
+  - risk: critical
+- set_organization_membership_as_default:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}/organization_memberships/{{ record.organization_membership_id }}/make_default
+  - required fields: user_id, organization_membership_id
+  - risk: high
+- unassign_organization:
+  - endpoint: DELETE /api/v2/users/{{ record.user_id }}/organizations/{{ record.organization_id }}
+  - required fields: user_id, organization_id
+  - risk: critical
+- set_organization_as_default:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}/organizations/{{ record.organization_id }}/make_default
+  - required fields: user_id, organization_id
+  - risk: high
+- set_user_password:
+  - endpoint: POST /api/v2/users/{{ record.user_id }}/password
+  - required fields: user_id
+  - risk: high
+- change_own_password:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}/password
+  - required fields: user_id
+  - risk: high
+- bulk_delete_sessions_by_user_id:
+  - endpoint: DELETE /api/v2/users/{{ record.user_id }}/sessions
+  - required fields: user_id
+  - risk: critical
+- delete_session:
+  - endpoint: DELETE /api/v2/users/{{ record.user_id }}/sessions/{{ record.session_id }}
+  - required fields: user_id, session_id
+  - risk: critical
+- set_user_tags:
+  - endpoint: POST /api/v2/users/{{ record.user_id }}/tags
+  - required fields: user_id
+  - risk: high
+- put_user_tags:
+  - endpoint: PUT /api/v2/users/{{ record.user_id }}/tags
+  - required fields: user_id
+  - risk: high
+- delete_user_tags:
+  - endpoint: DELETE /api/v2/users/{{ record.user_id }}/tags
+  - required fields: user_id
+  - risk: critical
+- autocomplete_users_post:
+  - endpoint: POST /api/v2/users/autocomplete
+  - risk: high
+- create_many_users:
+  - endpoint: POST /api/v2/users/create_many
+  - risk: high
+- create_or_update_user:
+  - endpoint: POST /api/v2/users/create_or_update
+  - risk: high
+- create_or_update_many_users:
+  - endpoint: POST /api/v2/users/create_or_update_many
+  - risk: high
+- destroy_many_users:
+  - endpoint: DELETE /api/v2/users/destroy_many
+  - risk: critical
+- logout_many_users:
+  - endpoint: POST /api/v2/users/logout_many
+  - risk: high
+- delete_authenticated_session:
+  - endpoint: DELETE /api/v2/users/me/logout
+  - risk: critical
+- update_current_user_settings:
+  - endpoint: PUT /api/v2/users/me/settings
+  - risk: high
+- request_user_create:
+  - endpoint: POST /api/v2/users/request_create
+  - risk: high
+- update_many_users:
+  - endpoint: PUT /api/v2/users/update_many
+  - risk: high
+- create_view:
+  - endpoint: POST /api/v2/views
+  - risk: high
+- update_view:
+  - endpoint: PUT /api/v2/views/{{ record.view_id }}
+  - required fields: view_id
+  - risk: high
+- delete_view:
+  - endpoint: DELETE /api/v2/views/{{ record.view_id }}
+  - required fields: view_id
+  - risk: critical
+- bulk_delete_views:
+  - endpoint: DELETE /api/v2/views/destroy_many
+  - risk: critical
+- preview_views:
+  - endpoint: POST /api/v2/views/preview
+  - risk: high
+- preview_count:
+  - endpoint: POST /api/v2/views/preview/count
+  - risk: high
+- update_many_views:
+  - endpoint: PUT /api/v2/views/update_many
+  - risk: high
+- create_workspace:
+  - endpoint: POST /api/v2/workspaces
+  - risk: high
+- update_workspace:
+  - endpoint: PUT /api/v2/workspaces/{{ record.workspace_id }}
+  - required fields: workspace_id
+  - risk: high
+- delete_workspace:
+  - endpoint: DELETE /api/v2/workspaces/{{ record.workspace_id }}
+  - required fields: workspace_id
+  - risk: critical
+- destroy_many_workspaces:
+  - endpoint: DELETE /api/v2/workspaces/destroy_many
+  - risk: critical
+- reorder_workspaces:
+  - endpoint: PUT /api/v2/workspaces/reorder
+  - risk: high
+
 ## Security
 
 - read risk: bounded ETL streams are enabled for 70 top-level collection reads and bounded direct-read JSON commands remain enabled for typed GET operations; binary downloads are still gated by later Zendesk lanes
-- write risk: operation-ledger bundle in issue #160; Zendesk mutations remain blocked until typed reverse-ETL schemas, approval text, redaction, and destructive confirmation are added
-- approval: all external writes remain plan → preview → approval → execute and blocked in this slice
+- write risk: 295 non-deprecated Zendesk mutating operations are modeled as typed reverse-ETL actions; destructive DELETE actions require typed confirmation and all writes require plan, preview, approval, execute
+- approval: all external writes require plan → preview → approval → execute; destructive actions also require typed confirmation
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface
 
-- Work with Zendesk Support API streams and typed reads from the command line.
+- Work with Zendesk Support API streams, typed reads, and gated reverse-ETL writes from the command line.
 - Usage: pm zendesk <command> [flags]
 - Source CLI: Zendesk API reference (https://developer.zendesk.com/zendesk/oas.yaml)
 - Global flags:
@@ -613,6 +1682,301 @@ Operation ledger and typed read surface for the official Zendesk Support API; st
   - binary candidates - Review Zendesk binary/file read candidates from the official OAS [intent=direct_read availability=planned]; notes: Metadata inventory only. api_surface.json tracks 37 binary/file read candidates; #162 must define bounded size/path/download policy before execution.
 - Write Candidates
   - write candidates - Review Zendesk sensitive/admin write candidates from the official OAS [intent=reverse_etl availability=planned]; approval: reverse ETL execution remains plan → preview → approval → execute.; risk: Zendesk mutation candidates remain blocked until typed reverse-ETL schemas, risk text, approval text, redaction, and policy gates are added.; notes: Metadata inventory only. api_surface.json tracks 210 sensitive/admin reverse-ETL candidates.
+  - write update-account-email-settings - Update Email Settings [intent=reverse_etl availability=implemented write=update_account_email_settings]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-account-settings - Update Account Settings [intent=reverse_etl availability=implemented write=update_account_settings]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-trial-account - Create Trial Account [intent=reverse_etl availability=implemented write=create_trial_account]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write report-channelback-error - Report Channelback Error to Zendesk [intent=reverse_etl availability=implemented write=report_channelback_error]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write push-content-to-support - Push Content to Support [intent=reverse_etl availability=implemented write=push_content_to_support]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write validate-token - Validate Token [intent=reverse_etl availability=implemented write=validate_token]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-approval-request - Create Approval Request [intent=reverse_etl availability=implemented write=create_approval_request]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-attachment - Update Attachment for Malware [intent=reverse_etl availability=implemented write=update_attachment]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --attachment-id
+  - write delete-attachment - Delete Attachment [intent=reverse_etl availability=implemented write=delete_attachment]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --attachment-id
+  - write export-audit-logs - Export Audit Logs [intent=reverse_etl availability=implemented write=export_audit_logs]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write autocomplete-tags-post - Search Tags by Request Body [intent=reverse_etl availability=implemented write=autocomplete_tags_post]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-automation - Create Automation [intent=reverse_etl availability=implemented write=create_automation]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-automation - Update Automation [intent=reverse_etl availability=implemented write=update_automation]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --automation-id
+  - write delete-automation - Delete Automation [intent=reverse_etl availability=implemented write=delete_automation]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --automation-id
+  - write bulk-delete-automations - Bulk Delete Automations [intent=reverse_etl availability=implemented write=bulk_delete_automations]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write update-many-automations - Update Many Automations [intent=reverse_etl availability=implemented write=update_many_automations]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-bookmark - Create Bookmark [intent=reverse_etl availability=implemented write=create_bookmark]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-bookmark - Delete Bookmark [intent=reverse_etl availability=implemented write=delete_bookmark]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --bookmark-id
+  - write delete-brand-agent-by-id - Delete Brand Agent Membership [intent=reverse_etl availability=implemented write=delete_brand_agent_by_id]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --brand-agent-id
+  - write create-brand - Create Brand [intent=reverse_etl availability=implemented write=create_brand]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-brand - Update a Brand [intent=reverse_etl availability=implemented write=update_brand]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --brand-id
+  - write delete-brand - Delete a Brand [intent=reverse_etl availability=implemented write=delete_brand]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --brand-id
+  - write update-brand-logo - Update a Brand Logo [intent=reverse_etl availability=implemented write=update_brand_logo]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --brand-id
+  - write delete-brand-logo - Delete a Brand Logo [intent=reverse_etl availability=implemented write=delete_brand_logo]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --brand-id
+  - write create-ticket-from-tweet - Create Ticket from Tweet [intent=reverse_etl availability=implemented write=create_ticket_from_tweet]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write open-ticket-in-agent-browser - Open Ticket in Agent's Browser [intent=reverse_etl availability=implemented write=open_ticket_in_agent_browser]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --agent-id, --ticket-id
+  - write open-users-profile-in-agent-browser - Open a User's Profile in an Agent's Browser [intent=reverse_etl availability=implemented write=open_users_profile_in_agent_browser]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --agent-id, --user-id
+  - write create-ticket-or-voicemail-ticket - Create Ticket or Voicemail Ticket [intent=reverse_etl availability=implemented write=create_ticket_or_voicemail_ticket]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write redact-chat-comment-attachment - Redact Chat Comment Attachment [intent=reverse_etl availability=implemented write=redact_chat_comment_attachment]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write redact-chat-comment - Redact Chat Comment [intent=reverse_etl availability=implemented write=redact_chat_comment]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write create-custom-object - Create Custom Object [intent=reverse_etl availability=implemented write=create_custom_object]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-custom-object - Update Custom Object [intent=reverse_etl availability=implemented write=update_custom_object]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key
+  - write delete-custom-object - Delete Custom Object [intent=reverse_etl availability=implemented write=delete_custom_object]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --custom-object-key
+  - write create-access-rule - Create Access Rule [intent=reverse_etl availability=implemented write=create_access_rule]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key
+  - write update-access-rule - Update Access Rule [intent=reverse_etl availability=implemented write=update_access_rule]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key, --id
+  - write delete-access-rule - Delete Access Rule [intent=reverse_etl availability=implemented write=delete_access_rule]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --custom-object-key, --id
+  - write create-custom-object-field - Create Custom Object Field [intent=reverse_etl availability=implemented write=create_custom_object_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key
+  - write update-custom-object-field - Update Custom Object Field [intent=reverse_etl availability=implemented write=update_custom_object_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key, --custom-object-field-key-or-id
+  - write delete-custom-object-field - Delete Custom Object Field [intent=reverse_etl availability=implemented write=delete_custom_object_field]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --custom-object-key, --custom-object-field-key-or-id
+  - write reorder-custom-object-fields - Reorder Custom Fields of an Object [intent=reverse_etl availability=implemented write=reorder_custom_object_fields]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key
+  - write custom-object-record-bulk-jobs - Custom Object Record Bulk Jobs [intent=reverse_etl availability=implemented write=custom_object_record_bulk_jobs]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key
+  - write update-permission-policy - Update Permission Policy [intent=reverse_etl availability=implemented write=update_permission_policy]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key, --id
+  - write create-custom-object-record - Create Custom Object Record [intent=reverse_etl availability=implemented write=create_custom_object_record]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key
+  - write upsert-custom-object-record-by-external-id-or-name - Create or Update Custom Object Record [intent=reverse_etl availability=implemented write=upsert_custom_object_record_by_external_id_or_name]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key
+  - write delete-custom-object-record-by-external-id-or-name - Delete Custom Object Record by External Id Or Name [intent=reverse_etl availability=implemented write=delete_custom_object_record_by_external_id_or_name]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --custom-object-key
+  - write update-custom-object-record - Update Custom Object Record [intent=reverse_etl availability=implemented write=update_custom_object_record]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key, --custom-object-record-id
+  - write delete-custom-object-record - Delete Custom Object Record [intent=reverse_etl availability=implemented write=delete_custom_object_record]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --custom-object-key, --custom-object-record-id
+  - write create-custom-object-record-attachment - Create Custom Object Record Attachment [intent=reverse_etl availability=implemented write=create_custom_object_record_attachment]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key, --record-id
+  - write update-custom-object-record-attachment - Update Custom Object Record Attachment for Malware [intent=reverse_etl availability=implemented write=update_custom_object_record_attachment]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key, --record-id, --id
+  - write delete-custom-object-record-attachment - Delete Custom Object Record Attachment [intent=reverse_etl availability=implemented write=delete_custom_object_record_attachment]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --custom-object-key, --record-id, --id
+  - write filtered-search-custom-object-records - Filtered Search of Custom Object Records [intent=reverse_etl availability=implemented write=filtered_search_custom_object_records]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key
+  - write create-object-trigger - Create Object Trigger [intent=reverse_etl availability=implemented write=create_object_trigger]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key
+  - write update-object-trigger - Update Object Trigger [intent=reverse_etl availability=implemented write=update_object_trigger]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key, --trigger-id
+  - write delete-object-trigger - Delete Object Trigger [intent=reverse_etl availability=implemented write=delete_object_trigger]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --custom-object-key, --trigger-id
+  - write delete-many-object-triggers - Delete Many Object Triggers [intent=reverse_etl availability=implemented write=delete_many_object_triggers]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --custom-object-key
+  - write update-many-object-triggers - Update Many Object Triggers [intent=reverse_etl availability=implemented write=update_many_object_triggers]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-object-key
+  - write create-custom-role - Create Custom Role [intent=reverse_etl availability=implemented write=create_custom_role]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-custom-role-by-id - Update Custom Role [intent=reverse_etl availability=implemented write=update_custom_role_by_id]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-role-id
+  - write delete-custom-role-by-id - Delete Custom Role [intent=reverse_etl availability=implemented write=delete_custom_role_by_id]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --custom-role-id
+  - write bulk-update-default-custom-status - Bulk Update Default Custom Ticket Status [intent=reverse_etl availability=implemented write=bulk_update_default_custom_status]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-custom-status - Create Custom Ticket Status [intent=reverse_etl availability=implemented write=create_custom_status]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-custom-status - Update Custom Ticket Status [intent=reverse_etl availability=implemented write=update_custom_status]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-status-id
+  - write delete-custom-status - Delete Custom Ticket Status [intent=reverse_etl availability=implemented write=delete_custom_status]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --custom-status-id
+  - write create-ticket-form-statuses-for-custom-status - Create Ticket Form Statuses for a Custom Status [intent=reverse_etl availability=implemented write=create_ticket_form_statuses_for_custom_status]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --custom-status-id
+  - write delete-ticket-permanently - Delete Ticket Permanently [intent=reverse_etl availability=implemented write=delete_ticket_permanently]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --ticket-id
+  - write restore-deleted-ticket - Restore a Previously Deleted Ticket [intent=reverse_etl availability=implemented write=restore_deleted_ticket]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write bulk-permanently-delete-tickets - Delete Multiple Tickets Permanently [intent=reverse_etl availability=implemented write=bulk_permanently_delete_tickets]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write bulk-restore-deleted-tickets - Restore Previously Deleted Tickets in Bulk [intent=reverse_etl availability=implemented write=bulk_restore_deleted_tickets]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write permanently-delete-user - Permanently Delete User [intent=reverse_etl availability=implemented write=permanently_delete_user]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --deleted-user-id
+  - write create-deletion-schedule - Create Deletion Schedule [intent=reverse_etl availability=implemented write=create_deletion_schedule]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-deletion-schedule - Update Deletion Schedule [intent=reverse_etl availability=implemented write=update_deletion_schedule]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --deletion-schedule-id
+  - write delete-deletion-schedule - Delete Deletion Schedule [intent=reverse_etl availability=implemented write=delete_deletion_schedule]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --deletion-schedule-id
+  - write create-dynamic-content - Create Item [intent=reverse_etl availability=implemented write=create_dynamic_content]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-dynamic-content-item - Update Item [intent=reverse_etl availability=implemented write=update_dynamic_content_item]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --dynamic-content-item-id
+  - write delete-dynamic-content-item - Delete Item [intent=reverse_etl availability=implemented write=delete_dynamic_content_item]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --dynamic-content-item-id
+  - write create-dynamic-content-variant - Create Variant [intent=reverse_etl availability=implemented write=create_dynamic_content_variant]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --dynamic-content-item-id
+  - write update-dynamic-content-variant - Update Variant [intent=reverse_etl availability=implemented write=update_dynamic_content_variant]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --dynamic-content-item-id, --dynamic-content-variant-id
+  - write delete-dynamic-content-variant - Delete Variant [intent=reverse_etl availability=implemented write=delete_dynamic_content_variant]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --dynamic-content-item-id, --dynamic-content-variant-id
+  - write create-many-dynamic-content-variants - Create Many Variants [intent=reverse_etl availability=implemented write=create_many_dynamic_content_variants]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --dynamic-content-item-id
+  - write update-many-dynamic-content-variants - Update Many Variants [intent=reverse_etl availability=implemented write=update_many_dynamic_content_variants]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --dynamic-content-item-id
+  - write create-end-user-identity - Create End User Identity [intent=reverse_etl availability=implemented write=create_end_user_identity]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write delete-end-user-identity - Delete End User Identity [intent=reverse_etl availability=implemented write=delete_end_user_identity]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-id, --user-identity-id
+  - write make-end-user-identity-primary - Make End User Identity Primary [intent=reverse_etl availability=implemented write=make_end_user_identity_primary]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id, --user-identity-id
+  - write request-end-user-verification - Request End User Verification [intent=reverse_etl availability=implemented write=request_end_user_verification]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id, --user-identity-id
+  - write create-group-membership - Create Membership [intent=reverse_etl availability=implemented write=create_group_membership]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-group-membership - Delete Membership [intent=reverse_etl availability=implemented write=delete_group_membership]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --group-membership-id
+  - write group-membership-bulk-create - Bulk Create Memberships [intent=reverse_etl availability=implemented write=group_membership_bulk_create]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write group-membership-bulk-delete - Bulk Delete Memberships [intent=reverse_etl availability=implemented write=group_membership_bulk_delete]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write create-group-sla-policy - Create Group SLA Policy [intent=reverse_etl availability=implemented write=create_group_sla_policy]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-group-sla-policy - Update Group SLA Policy [intent=reverse_etl availability=implemented write=update_group_sla_policy]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --group-sla-policy-id
+  - write delete-group-sla-policy - Delete Group SLA Policy [intent=reverse_etl availability=implemented write=delete_group_sla_policy]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --group-sla-policy-id
+  - write reorder-group-sla-policies - Reorder Group SLA Policies [intent=reverse_etl availability=implemented write=reorder_group_sla_policies]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-group - Create Group [intent=reverse_etl availability=implemented write=create_group]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-group - Update Group [intent=reverse_etl availability=implemented write=update_group]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --group-id
+  - write delete-group - Delete Group [intent=reverse_etl availability=implemented write=delete_group]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --group-id
+  - write ticket-import - Ticket Import [intent=reverse_etl availability=implemented write=ticket_import]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write ticket-bulk-import - Ticket Bulk Import [intent=reverse_etl availability=implemented write=ticket_bulk_import]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-itam-asset-type - Create Asset Type [intent=reverse_etl availability=implemented write=create_itam_asset_type]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-itam-asset-type - Update Asset Type [intent=reverse_etl availability=implemented write=update_itam_asset_type]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --asset-type-id
+  - write delete-itam-asset-type - Delete Asset Type [intent=reverse_etl availability=implemented write=delete_itam_asset_type]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --asset-type-id
+  - write create-itam-asset-type-field - Create Asset Field [intent=reverse_etl availability=implemented write=create_itam_asset_type_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --asset-type-id
+  - write update-itam-asset-type-field - Update Asset Field [intent=reverse_etl availability=implemented write=update_itam_asset_type_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --asset-type-id, --asset-type-field-id
+  - write delete-itam-asset-type-field - Delete Asset Field [intent=reverse_etl availability=implemented write=delete_itam_asset_type_field]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --asset-type-id, --asset-type-field-id
+  - write create-itam-asset - Create Asset [intent=reverse_etl availability=implemented write=create_itam_asset]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-itam-asset - Update Asset [intent=reverse_etl availability=implemented write=update_itam_asset]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --asset-id
+  - write delete-itam-asset - Delete Asset [intent=reverse_etl availability=implemented write=delete_itam_asset]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --asset-id
+  - write itam-asset-bulk-jobs - Asset Bulk Jobs [intent=reverse_etl availability=implemented write=itam_asset_bulk_jobs]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write filtered-search-itam-assets - Filtered Search of Assets [intent=reverse_etl availability=implemented write=filtered_search_itam_assets]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-itam-location - Create Asset Location [intent=reverse_etl availability=implemented write=create_itam_location]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-itam-location - Update Asset Location [intent=reverse_etl availability=implemented write=update_itam_location]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --location-id
+  - write delete-itam-location - Delete Asset Location [intent=reverse_etl availability=implemented write=delete_itam_location]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --location-id
+  - write create-macro - Create Macro [intent=reverse_etl availability=implemented write=create_macro]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-macro - Update Macro [intent=reverse_etl availability=implemented write=update_macro]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --macro-id
+  - write delete-macro - Delete Macro [intent=reverse_etl availability=implemented write=delete_macro]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --macro-id
+  - write create-associated-macro-attachment - Create Macro Attachment [intent=reverse_etl availability=implemented write=create_associated_macro_attachment]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --macro-id
+  - write create-macro-attachment - Create Unassociated Macro Attachment [intent=reverse_etl availability=implemented write=create_macro_attachment]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-many-macros - Bulk Delete Macros [intent=reverse_etl availability=implemented write=delete_many_macros]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write update-many-macros - Update Many Macros [intent=reverse_etl availability=implemented write=update_many_macros]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-o-auth-client - Create Client [intent=reverse_etl availability=implemented write=create_o_auth_client]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-client - Update Client [intent=reverse_etl availability=implemented write=update_client]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --oauth-client-id
+  - write delete-client - Delete Client [intent=reverse_etl availability=implemented write=delete_client]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --oauth-client-id
+  - write client-generate-secret - Generate Secret [intent=reverse_etl availability=implemented write=client_generate_secret]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --oauth-client-id
+  - write create-o-auth-token - Create Token [intent=reverse_etl availability=implemented write=create_o_auth_token]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write revoke-o-auth-token - Revoke Token [intent=reverse_etl availability=implemented write=revoke_o_auth_token]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --oauth-token-id
+  - write revoke-current-o-auth-token - Revoke Current Token [intent=reverse_etl availability=implemented write=revoke_current_o_auth_token]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write create-organization-field - Create Organization Field [intent=reverse_etl availability=implemented write=create_organization_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-organization-field - Update Organization Field [intent=reverse_etl availability=implemented write=update_organization_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --organization-field-id
+  - write delete-organization-field - Delete Organization Field [intent=reverse_etl availability=implemented write=delete_organization_field]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --organization-field-id
+  - write reorder-organization-field - Reorder Organization Field [intent=reverse_etl availability=implemented write=reorder_organization_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-organization-membership - Create Membership [intent=reverse_etl availability=implemented write=create_organization_membership]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-organization-membership - Delete Membership [intent=reverse_etl availability=implemented write=delete_organization_membership]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --organization-membership-id
+  - write create-many-organization-memberships - Create Many Memberships [intent=reverse_etl availability=implemented write=create_many_organization_memberships]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-many-organization-memberships - Bulk Delete Memberships [intent=reverse_etl availability=implemented write=delete_many_organization_memberships]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write create-organization-subscription - Create Organization Subscription [intent=reverse_etl availability=implemented write=create_organization_subscription]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-organization-subscription - Delete Organization Subscription [intent=reverse_etl availability=implemented write=delete_organization_subscription]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --organization-subscription-id
+  - write create-organization - Create Organization [intent=reverse_etl availability=implemented write=create_organization]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-organization - Update Organization [intent=reverse_etl availability=implemented write=update_organization]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --organization-id
+  - write delete-organization - Delete Organization [intent=reverse_etl availability=implemented write=delete_organization]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --organization-id
+  - write create-organization-merge - Merge Organization With Another Organization [intent=reverse_etl availability=implemented write=create_organization_merge]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --organization-id
+  - write set-organization-tags - Set Organization Tags [intent=reverse_etl availability=implemented write=set_organization_tags]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --organization-id
+  - write add-organization-tags - Add Organization Tags [intent=reverse_etl availability=implemented write=add_organization_tags]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --organization-id
+  - write remove-organization-tags - Remove Organization Tags [intent=reverse_etl availability=implemented write=remove_organization_tags]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --organization-id
+  - write create-many-organizations - Create Many Organizations [intent=reverse_etl availability=implemented write=create_many_organizations]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-or-update-organization - Create Or Update Organization [intent=reverse_etl availability=implemented write=create_or_update_organization]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-many-organizations - Bulk Delete Organizations [intent=reverse_etl availability=implemented write=delete_many_organizations]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write update-many-organizations - Update Many Organizations [intent=reverse_etl availability=implemented write=update_many_organizations]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write autocomplete-problems - Autocomplete Problems [intent=reverse_etl availability=implemented write=autocomplete_problems]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write push-notification-devices - Bulk Unregister Push Notification Devices [intent=reverse_etl availability=implemented write=push_notification_devices]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-queue - Create Queue [intent=reverse_etl availability=implemented write=create_queue]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-queue - Update Queue [intent=reverse_etl availability=implemented write=update_queue]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --queue-id
+  - write delete-queue - Delete Queue [intent=reverse_etl availability=implemented write=delete_queue]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --queue-id
+  - write reorder-queues - Reorder Queues [intent=reverse_etl availability=implemented write=reorder_queues]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-support-address - Create Support Address [intent=reverse_etl availability=implemented write=create_support_address]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-support-address - Update Support Address [intent=reverse_etl availability=implemented write=update_support_address]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --support-address-id
+  - write delete-recipient-address - Delete Support Address [intent=reverse_etl availability=implemented write=delete_recipient_address]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --support-address-id
+  - write verify-support-address-forwarding - Verify Support Address Forwarding [intent=reverse_etl availability=implemented write=verify_support_address_forwarding]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --support-address-id
+  - write create-request - Create Request [intent=reverse_etl availability=implemented write=create_request]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-request - Update Request [intent=reverse_etl availability=implemented write=update_request]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --request-id
+  - write create-resource-collection - Create Resource Collection [intent=reverse_etl availability=implemented write=create_resource_collection]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-resource-collection - Update Resource Collection [intent=reverse_etl availability=implemented write=update_resource_collection]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --resource-collection-id
+  - write delete-resource-collection - Delete Resource Collection [intent=reverse_etl availability=implemented write=delete_resource_collection]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --resource-collection-id
+  - write set-agent-attribute-values - Set Agent Attribute Values [intent=reverse_etl availability=implemented write=set_agent_attribute_values]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write bulk-set-agent-attribute-values-job - Bulk Set Agent Attribute Values Jobs [intent=reverse_etl availability=implemented write=bulk_set_agent_attribute_values_job]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-attribute - Create Attribute [intent=reverse_etl availability=implemented write=create_attribute]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-attribute - Update Attribute [intent=reverse_etl availability=implemented write=update_attribute]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --attribute-id
+  - write delete-attribute - Delete Attribute [intent=reverse_etl availability=implemented write=delete_attribute]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --attribute-id
+  - write create-attribute-value - Create Attribute Value [intent=reverse_etl availability=implemented write=create_attribute_value]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --attribute-id
+  - write update-attribute-value - Update Attribute Value [intent=reverse_etl availability=implemented write=update_attribute_value]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --attribute-id, --attribute-value-id
+  - write delete-attribute-value - Delete Attribute Value [intent=reverse_etl availability=implemented write=delete_attribute_value]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --attribute-id, --attribute-value-id
+  - write set-ticket-attribute-values - Set Ticket Attribute Values [intent=reverse_etl availability=implemented write=set_ticket_attribute_values]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write create-saved-search - Create Saved Search [intent=reverse_etl availability=implemented write=create_saved_search]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-saved-search - Update Saved Search [intent=reverse_etl availability=implemented write=update_saved_search]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --id
+  - write delete-saved-search - Delete Saved Search [intent=reverse_etl availability=implemented write=delete_saved_search]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --id
+  - write create-sharing-agreement - Create Sharing Agreement [intent=reverse_etl availability=implemented write=create_sharing_agreement]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-sharing-agreement - Update a Sharing Agreement [intent=reverse_etl availability=implemented write=update_sharing_agreement]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --sharing-agreement-id
+  - write delete-sharing-agreement - Delete a Sharing Agreement [intent=reverse_etl availability=implemented write=delete_sharing_agreement]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --sharing-agreement-id
+  - write record-new-skip - Record a New Skip for the Current User [intent=reverse_etl availability=implemented write=record_new_skip]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-sla-policy - Create SLA Policy [intent=reverse_etl availability=implemented write=create_sla_policy]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-sla-policy - Update SLA Policy [intent=reverse_etl availability=implemented write=update_sla_policy]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --sla-policy-id
+  - write delete-sla-policy - Delete SLA Policy [intent=reverse_etl availability=implemented write=delete_sla_policy]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --sla-policy-id
+  - write reorder-sla-policies - Reorder SLA Policies [intent=reverse_etl availability=implemented write=reorder_sla_policies]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-suspended-ticket - Delete Suspended Ticket [intent=reverse_etl availability=implemented write=delete_suspended_ticket]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --id
+  - write recover-suspended-ticket - Recover Suspended Ticket [intent=reverse_etl availability=implemented write=recover_suspended_ticket]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --id
+  - write suspended-tickets-attachments - Suspended Ticket Attachments [intent=reverse_etl availability=implemented write=suspended_tickets_attachments]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write bulk-recover-suspended-tickets - Bulk Recover Suspended Tickets [intent=reverse_etl availability=implemented write=bulk_recover_suspended_tickets]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-suspended-tickets - Delete Multiple Suspended Tickets [intent=reverse_etl availability=implemented write=delete_suspended_tickets]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write export-suspended-tickets - Export Suspended Tickets [intent=reverse_etl availability=implemented write=export_suspended_tickets]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write recover-suspended-tickets - Recover Multiple Suspended Tickets [intent=reverse_etl availability=implemented write=recover_suspended_tickets]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-target - Create Target [intent=reverse_etl availability=implemented write=create_target]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-target - Update Target [intent=reverse_etl availability=implemented write=update_target]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --target-id
+  - write delete-target - Delete Target [intent=reverse_etl availability=implemented write=delete_target]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --target-id
+  - write create-task-list-template - Create Task List Template [intent=reverse_etl availability=implemented write=create_task_list_template]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-task-list-template - Update Task List Template [intent=reverse_etl availability=implemented write=update_task_list_template]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --task-list-template-id
+  - write delete-task-list-template - Delete Task List Template [intent=reverse_etl availability=implemented write=delete_task_list_template]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --task-list-template-id
+  - write create-ticket-content-pin - Create Ticket Content Pin [intent=reverse_etl availability=implemented write=create_ticket_content_pin]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-ticket-content-pin - Delete Content Pin from Ticket [intent=reverse_etl availability=implemented write=delete_ticket_content_pin]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --content-pin-id
+  - write create-ticket-field - Create Ticket Field [intent=reverse_etl availability=implemented write=create_ticket_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-ticket-field - Update Ticket Field [intent=reverse_etl availability=implemented write=update_ticket_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-field-id
+  - write delete-ticket-field - Delete Ticket Field [intent=reverse_etl availability=implemented write=delete_ticket_field]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --ticket-field-id
+  - write create-or-update-ticket-field-option - Create or Update Ticket Field Option [intent=reverse_etl availability=implemented write=create_or_update_ticket_field_option]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-field-id
+  - write delete-ticket-field-option - Delete Ticket Field Option [intent=reverse_etl availability=implemented write=delete_ticket_field_option]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --ticket-field-id, --ticket-field-option-id
+  - write reorder-ticket-fields - Reorder Ticket Fields [intent=reverse_etl availability=implemented write=reorder_ticket_fields]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-ticket-form - Create Ticket Form [intent=reverse_etl availability=implemented write=create_ticket_form]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-ticket-form - Update Ticket Form [intent=reverse_etl availability=implemented write=update_ticket_form]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-form-id
+  - write delete-ticket-form - Delete Ticket Form [intent=reverse_etl availability=implemented write=delete_ticket_form]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --ticket-form-id
+  - write clone-ticket-form - Clone an Already Existing Ticket Form [intent=reverse_etl availability=implemented write=clone_ticket_form]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-form-id
+  - write create-ticket-form-statuses - Create Ticket Form Statuses [intent=reverse_etl availability=implemented write=create_ticket_form_statuses]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-form-id
+  - write update-ticket-form-statuses - Bulk Update Ticket Form Statuses of a Ticket Form [intent=reverse_etl availability=implemented write=update_ticket_form_statuses]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-form-id
+  - write delete-ticket-form-statuses - Delete Ticket Form Statuses [intent=reverse_etl availability=implemented write=delete_ticket_form_statuses]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --ticket-form-id
+  - write update-ticket-form-status-by-id - Update Ticket Form Status By Id [intent=reverse_etl availability=implemented write=update_ticket_form_status_by_id]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-form-id, --ticket-form-status-id
+  - write delete-ticket-form-status-by-id - Delete Ticket Form Status By Id [intent=reverse_etl availability=implemented write=delete_ticket_form_status_by_id]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --ticket-form-id, --ticket-form-status-id
+  - write reorder-ticket-forms - Reorder Ticket Forms [intent=reverse_etl availability=implemented write=reorder_ticket_forms]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-ticket - Create Ticket [intent=reverse_etl availability=implemented write=create_ticket]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-ticket - Update Ticket [intent=reverse_etl availability=implemented write=update_ticket]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write delete-ticket - Delete Ticket [intent=reverse_etl availability=implemented write=delete_ticket]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --ticket-id
+  - write make-ticket-comment-private-from-audits - Change a Comment From Public To Private [intent=reverse_etl availability=implemented write=make_ticket_comment_private_from_audits]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id, --ticket-audit-id
+  - write redact-comment-attachment - Redact Comment Attachment [intent=reverse_etl availability=implemented write=redact_comment_attachment]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id, --comment-id, --attachment-id
+  - write make-ticket-comment-private - Make Comment Private [intent=reverse_etl availability=implemented write=make_ticket_comment_private]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id, --ticket-comment-id
+  - write redact-string-in-comment - Redact String in Comment [intent=reverse_etl availability=implemented write=redact_string_in_comment]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id, --ticket-comment-id
+  - write mark-ticket-as-spam-and-suspend-requester - Mark Ticket as Spam and Suspend Requester [intent=reverse_etl availability=implemented write=mark_ticket_as_spam_and_suspend_requester]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write merge-tickets-into-target-ticket - Merge Tickets into Target Ticket [intent=reverse_etl availability=implemented write=merge_tickets_into_target_ticket]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write create-ticket-satisfaction-rating - Create a Satisfaction Rating [intent=reverse_etl availability=implemented write=create_ticket_satisfaction_rating]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write set-tags-ticket - Set Tags [intent=reverse_etl availability=implemented write=set_tags_ticket]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write put-tags-ticket - Add Tags [intent=reverse_etl availability=implemented write=put_tags_ticket]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write delete-tags-ticket - Remove Tags [intent=reverse_etl availability=implemented write=delete_tags_ticket]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --ticket-id
+  - write create-task-list - Create Task List [intent=reverse_etl availability=implemented write=create_task_list]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --ticket-id
+  - write tickets-create-many - Create Many Tickets [intent=reverse_etl availability=implemented write=tickets_create_many]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write bulk-delete-tickets - Bulk Delete Tickets [intent=reverse_etl availability=implemented write=bulk_delete_tickets]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write mark-many-tickets-as-spam - Bulk Mark Tickets as Spam [intent=reverse_etl availability=implemented write=mark_many_tickets_as_spam]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write tickets-update-many - Update Many Tickets [intent=reverse_etl availability=implemented write=tickets_update_many]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-trigger-category - Create Ticket Trigger Category [intent=reverse_etl availability=implemented write=create_trigger_category]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-trigger-category - Update Ticket Trigger Category [intent=reverse_etl availability=implemented write=update_trigger_category]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --trigger-category-id
+  - write delete-trigger-category - Delete Ticket Trigger Category [intent=reverse_etl availability=implemented write=delete_trigger_category]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --trigger-category-id
+  - write batch-operate-trigger-categories - Create Batch Job for Ticket Trigger Categories [intent=reverse_etl availability=implemented write=batch_operate_trigger_categories]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-trigger - Create Trigger [intent=reverse_etl availability=implemented write=create_trigger]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-trigger - Update Ticket Trigger [intent=reverse_etl availability=implemented write=update_trigger]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --trigger-id
+  - write delete-trigger - Delete Ticket Trigger [intent=reverse_etl availability=implemented write=delete_trigger]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --trigger-id
+  - write delete-many-triggers - Bulk Delete Ticket Triggers [intent=reverse_etl availability=implemented write=delete_many_triggers]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write reorder-triggers - Reorder Ticket Triggers [intent=reverse_etl availability=implemented write=reorder_triggers]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-many-triggers - Update Many Ticket Triggers [intent=reverse_etl availability=implemented write=update_many_triggers]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write upload-files - Upload Files [intent=reverse_etl availability=implemented write=upload_files]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-upload - Delete Upload [intent=reverse_etl availability=implemented write=delete_upload]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --token
+  - write create-user-field - Create User Field [intent=reverse_etl availability=implemented write=create_user_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-user-field - Update User Field [intent=reverse_etl availability=implemented write=update_user_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-field-id
+  - write delete-user-field - Delete User Field [intent=reverse_etl availability=implemented write=delete_user_field]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-field-id
+  - write create-or-update-user-field-option - Create or Update a User Field Option [intent=reverse_etl availability=implemented write=create_or_update_user_field_option]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-field-id
+  - write delete-user-field-option - Delete User Field Option [intent=reverse_etl availability=implemented write=delete_user_field_option]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-field-id, --user-field-option-id
+  - write reorder-user-field - Reorder User Field [intent=reverse_etl availability=implemented write=reorder_user_field]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-user - Create User [intent=reverse_etl availability=implemented write=create_user]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-user - Update User [intent=reverse_etl availability=implemented write=update_user]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write delete-user - Delete User [intent=reverse_etl availability=implemented write=delete_user]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-id
+  - write create-user-group-membership - Create Group Membership for User [intent=reverse_etl availability=implemented write=create_user_group_membership]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write delete-user-group-membership - Delete User's Group Membership [intent=reverse_etl availability=implemented write=delete_user_group_membership]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-id, --group-membership-id
+  - write group-membership-set-default - Set Membership as Default [intent=reverse_etl availability=implemented write=group_membership_set_default]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id, --group-membership-id
+  - write create-user-identity - Create Identity [intent=reverse_etl availability=implemented write=create_user_identity]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write update-user-identity - Update Identity [intent=reverse_etl availability=implemented write=update_user_identity]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id, --user-identity-id
+  - write delete-user-identity - Delete Identity [intent=reverse_etl availability=implemented write=delete_user_identity]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-id, --user-identity-id
+  - write make-user-identity-primary - Make Identity Primary [intent=reverse_etl availability=implemented write=make_user_identity_primary]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id, --user-identity-id
+  - write request-user-verification - Request User Verification [intent=reverse_etl availability=implemented write=request_user_verification]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id, --user-identity-id
+  - write verify-user-identity - Verify Identity [intent=reverse_etl availability=implemented write=verify_user_identity]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id, --user-identity-id
+  - write merge-end-users - Merge End Users [intent=reverse_etl availability=implemented write=merge_end_users]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write create-user-organization-membership - Create Organization Membership for User [intent=reverse_etl availability=implemented write=create_user_organization_membership]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write delete-user-organization-membership - Delete Organization Membership for User [intent=reverse_etl availability=implemented write=delete_user_organization_membership]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-id, --organization-membership-id
+  - write set-organization-membership-as-default - Set Membership as Default [intent=reverse_etl availability=implemented write=set_organization_membership_as_default]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id, --organization-membership-id
+  - write unassign-organization - Unassign Organization [intent=reverse_etl availability=implemented write=unassign_organization]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-id, --organization-id
+  - write set-organization-as-default - Set Organization as Default [intent=reverse_etl availability=implemented write=set_organization_as_default]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id, --organization-id
+  - write set-user-password - Set a User's Password [intent=reverse_etl availability=implemented write=set_user_password]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write change-own-password - Change Your Password [intent=reverse_etl availability=implemented write=change_own_password]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write bulk-delete-sessions-by-user-id - Bulk Delete Sessions [intent=reverse_etl availability=implemented write=bulk_delete_sessions_by_user_id]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-id
+  - write delete-session - Delete Session [intent=reverse_etl availability=implemented write=delete_session]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-id, --session-id
+  - write set-user-tags - Set User Tags [intent=reverse_etl availability=implemented write=set_user_tags]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write put-user-tags - Add User Tags [intent=reverse_etl availability=implemented write=put_user_tags]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --user-id
+  - write delete-user-tags - Remove User Tags [intent=reverse_etl availability=implemented write=delete_user_tags]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --user-id
+  - write autocomplete-users-post - Autocomplete Users by Request Body [intent=reverse_etl availability=implemented write=autocomplete_users_post]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-many-users - Create Many Users [intent=reverse_etl availability=implemented write=create_many_users]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-or-update-user - Create Or Update User [intent=reverse_etl availability=implemented write=create_or_update_user]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-or-update-many-users - Create Or Update Many Users [intent=reverse_etl availability=implemented write=create_or_update_many_users]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write destroy-many-users - Bulk Delete Users [intent=reverse_etl availability=implemented write=destroy_many_users]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write logout-many-users - Logout many users [intent=reverse_etl availability=implemented write=logout_many_users]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write delete-authenticated-session - Delete the Authenticated Session [intent=reverse_etl availability=implemented write=delete_authenticated_session]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write update-current-user-settings - Update Current User Settings [intent=reverse_etl availability=implemented write=update_current_user_settings]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write request-user-create - Request User Create [intent=reverse_etl availability=implemented write=request_user_create]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-many-users - Update Many Users [intent=reverse_etl availability=implemented write=update_many_users]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-view - Create View [intent=reverse_etl availability=implemented write=create_view]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-view - Update View [intent=reverse_etl availability=implemented write=update_view]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --view-id
+  - write delete-view - Delete View [intent=reverse_etl availability=implemented write=delete_view]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --view-id
+  - write bulk-delete-views - Bulk Delete Views [intent=reverse_etl availability=implemented write=bulk_delete_views]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write preview-views - Preview Views [intent=reverse_etl availability=implemented write=preview_views]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write preview-count - Preview Ticket Count [intent=reverse_etl availability=implemented write=preview_count]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-many-views - Update Many Views [intent=reverse_etl availability=implemented write=update_many_views]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write create-workspace - Create Workspace [intent=reverse_etl availability=implemented write=create_workspace]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
+  - write update-workspace - Update Workspace [intent=reverse_etl availability=implemented write=update_workspace]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.; flags: --workspace-id
+  - write delete-workspace - Delete Workspace [intent=reverse_etl availability=implemented write=delete_workspace]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.; flags: --workspace-id
+  - write destroy-many-workspaces - Bulk Delete Workspaces [intent=reverse_etl availability=implemented write=destroy_many_workspaces]; approval: Plan, preview, approval token, execute, and --confirm destructive are required.; risk: Destructive Zendesk mutation; requires typed confirmation.
+  - write reorder-workspaces - Reorder Workspaces [intent=reverse_etl availability=implemented write=reorder_workspaces]; approval: Plan, preview, approval token, and execute are required.; risk: Zendesk mutation; staged through reverse ETL approval gates.
   - destructive candidates - Review Zendesk destructive write candidates from the official OAS [intent=reverse_etl availability=planned]; approval: reverse ETL execution remains plan → preview → approval → execute with typed confirmation for destructive actions.; risk: Zendesk DELETE operations are destructive and remain blocked until typed reverse-ETL schemas, risk text, approval text, redaction, and destructive confirmation are added.; notes: Metadata inventory only. api_surface.json tracks 85 destructive-action candidates.
 - Blocked Metadata
   - deprecated operations - Review deprecated Zendesk operations from the official OAS [intent=docs_only availability=unsafe_or_disallowed]; notes: Metadata inventory only. api_surface.json tracks 3 deprecated operation rows; #160 must confirm replacements or blockers.
@@ -640,3 +2004,4 @@ pm connectors inspect zendesk --json
 - Run pm connectors inspect zendesk before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

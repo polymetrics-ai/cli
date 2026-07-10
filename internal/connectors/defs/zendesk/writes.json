@@ -1,0 +1,6824 @@
+{
+  "actions": [
+    {
+      "name": "update_account_email_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/account/email_settings",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "settings": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_account_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/account/settings",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_trial_account",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/accounts",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "report_channelback_error",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/any_channel/channelback/report_error",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "push_content_to_support",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/any_channel/push",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "validate_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/any_channel/validate_token",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_approval_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/approval_requests",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "assignee_group_id": {
+            "type": "integer"
+          },
+          "assignee_user_id": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "ticket_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_attachment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "attachment_id": {
+            "type": "string"
+          },
+          "attachment": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "attachment_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "attachment_id"
+      ]
+    },
+    {
+      "name": "delete_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/attachments/{{ record.attachment_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "attachment_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "attachment_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "attachment_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "export_audit_logs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/audit_logs/export",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "autocomplete_tags_post",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/autocomplete/tags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_automation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/automations",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_automation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/automations/{{ record.automation_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "automation_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "automation_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "automation_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_automation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/automations/{{ record.automation_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "automation_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "automation_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "automation_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "bulk_delete_automations",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/automations/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_many_automations",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/automations/update_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_bookmark",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/bookmarks",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "bookmark": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "delete_bookmark",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/bookmarks/{{ record.bookmark_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "bookmark_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "bookmark_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "bookmark_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_brand_agent_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/brand_agents/{{ record.brand_agent_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "brand_agent_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "brand_agent_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "brand_agent_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_brand",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/brands",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "brand": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_brand",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/brands/{{ record.brand_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "brand_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "brand_id"
+      ]
+    },
+    {
+      "name": "delete_brand",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/brands/{{ record.brand_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "brand_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "brand_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_brand_logo",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/brands/{{ record.brand_id }}/logo",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "brand[logo][uploaded_data]": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "brand_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "brand_id"
+      ],
+      "body_type": "form"
+    },
+    {
+      "name": "delete_brand_logo",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/brands/{{ record.brand_id }}/logo",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "brand_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "brand_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_ticket_from_tweet",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/channels/twitter/tickets",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "open_ticket_in_agent_browser",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/channels/voice/agents/{{ record.agent_id }}/tickets/{{ record.ticket_id }}/display",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "agent_id": {
+            "type": "string"
+          },
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_id",
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "agent_id",
+        "ticket_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "open_users_profile_in_agent_browser",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/channels/voice/agents/{{ record.agent_id }}/users/{{ record.user_id }}/display",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "agent_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_id",
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "agent_id",
+        "user_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_ticket_or_voicemail_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/channels/voice/tickets",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "display_to_agent": {
+            "type": "integer"
+          },
+          "ticket": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "redact_chat_comment_attachment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/chat_file_redactions/{{ record.ticket_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "redact_chat_comment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/chat_redactions/{{ record.ticket_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_custom_object",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_custom_object",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_custom_object",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_access_rule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/access_rules",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "access_rule": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key"
+      ]
+    },
+    {
+      "name": "update_access_rule",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/access_rules/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "access_rule": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key",
+        "id"
+      ]
+    },
+    {
+      "name": "delete_access_rule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/access_rules/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "custom_object_key",
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_custom_object_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/fields",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "custom_object_field": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key"
+      ]
+    },
+    {
+      "name": "update_custom_object_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/fields/{{ record.custom_object_field_key_or_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "custom_object_field_key_or_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "custom_object_field_key_or_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key",
+        "custom_object_field_key_or_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_custom_object_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/fields/{{ record.custom_object_field_key_or_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "custom_object_field_key_or_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "custom_object_field_key_or_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "custom_object_key",
+        "custom_object_field_key_or_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_custom_object_fields",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/fields/reorder",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "custom_object_record_bulk_jobs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/jobs",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "job": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key"
+      ]
+    },
+    {
+      "name": "update_permission_policy",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/permission_policies/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "policy": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key",
+        "id"
+      ]
+    },
+    {
+      "name": "create_custom_object_record",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "custom_object_record": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key"
+      ]
+    },
+    {
+      "name": "upsert_custom_object_record_by_external_id_or_name",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "custom_object_record": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key"
+      ]
+    },
+    {
+      "name": "delete_custom_object_record_by_external_id_or_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_custom_object_record",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.custom_object_record_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "custom_object_record_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "custom_object_record_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key",
+        "custom_object_record_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_custom_object_record",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.custom_object_record_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "custom_object_record_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "custom_object_record_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "custom_object_key",
+        "custom_object_record_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_custom_object_record_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "record_id": {
+            "type": "string"
+          },
+          "uploaded_data": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "record_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key",
+        "record_id"
+      ],
+      "body_type": "form"
+    },
+    {
+      "name": "update_custom_object_record_attachment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "record_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "custom_object_record_attachment": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "record_id",
+          "id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key",
+        "record_id",
+        "id"
+      ]
+    },
+    {
+      "name": "delete_custom_object_record_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "record_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "record_id",
+          "id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "custom_object_key",
+        "record_id",
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "filtered_search_custom_object_records",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/search",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key"
+      ]
+    },
+    {
+      "name": "create_object_trigger",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key"
+      ]
+    },
+    {
+      "name": "update_object_trigger",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/{{ record.trigger_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "trigger_id": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "trigger_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key",
+        "trigger_id"
+      ]
+    },
+    {
+      "name": "delete_object_trigger",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/{{ record.trigger_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "trigger_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key",
+          "trigger_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "custom_object_key",
+        "trigger_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_many_object_triggers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "custom_object_key"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_many_object_triggers",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/update_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_object_key": {
+            "type": "string"
+          },
+          "triggers": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_object_key"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_object_key"
+      ]
+    },
+    {
+      "name": "create_custom_role",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_roles",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_custom_role_by_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_roles/{{ record.custom_role_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_role_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_role_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_role_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_custom_role_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_roles/{{ record.custom_role_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_role_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_role_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "custom_role_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "bulk_update_default_custom_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_status/default",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ids": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_custom_status",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_statuses",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_status": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_custom_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/custom_statuses/{{ record.custom_status_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_status_id": {
+            "type": "string"
+          },
+          "custom_status": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_status_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_status_id"
+      ]
+    },
+    {
+      "name": "delete_custom_status",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/custom_statuses/{{ record.custom_status_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_status_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "custom_status_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "custom_status_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_ticket_form_statuses_for_custom_status",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/custom_statuses/{{ record.custom_status_id }}/ticket_form_statuses",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "custom_status_id": {
+            "type": "string"
+          },
+          "ticket_form_status": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "custom_status_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "custom_status_id"
+      ]
+    },
+    {
+      "name": "delete_ticket_permanently",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/deleted_tickets/{{ record.ticket_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "restore_deleted_ticket",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/deleted_tickets/{{ record.ticket_id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "bulk_permanently_delete_tickets",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/deleted_tickets/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "bulk_restore_deleted_tickets",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/deleted_tickets/restore_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "permanently_delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/deleted_users/{{ record.deleted_user_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "deleted_user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "deleted_user_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "deleted_user_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_deletion_schedule",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/deletion_schedules",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "deletion_schedule": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_deletion_schedule",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/deletion_schedules/{{ record.deletion_schedule_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "deletion_schedule_id": {
+            "type": "string"
+          },
+          "deletion_schedule": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "deletion_schedule_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "deletion_schedule_id"
+      ]
+    },
+    {
+      "name": "delete_deletion_schedule",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/deletion_schedules/{{ record.deletion_schedule_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "deletion_schedule_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "deletion_schedule_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "deletion_schedule_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_dynamic_content",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/dynamic_content/items",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_dynamic_content_item",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "dynamic_content_item_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dynamic_content_item_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "dynamic_content_item_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_dynamic_content_item",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "dynamic_content_item_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dynamic_content_item_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "dynamic_content_item_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_dynamic_content_variant",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "dynamic_content_item_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dynamic_content_item_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "dynamic_content_item_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "update_dynamic_content_variant",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants/{{ record.dynamic_content_variant_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "dynamic_content_item_id": {
+            "type": "string"
+          },
+          "dynamic_content_variant_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dynamic_content_item_id",
+          "dynamic_content_variant_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "dynamic_content_item_id",
+        "dynamic_content_variant_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_dynamic_content_variant",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants/{{ record.dynamic_content_variant_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "dynamic_content_item_id": {
+            "type": "string"
+          },
+          "dynamic_content_variant_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dynamic_content_item_id",
+          "dynamic_content_variant_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "dynamic_content_item_id",
+        "dynamic_content_variant_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_many_dynamic_content_variants",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants/create_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "dynamic_content_item_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dynamic_content_item_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "dynamic_content_item_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "update_many_dynamic_content_variants",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/dynamic_content/items/{{ record.dynamic_content_item_id }}/variants/update_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "dynamic_content_item_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "dynamic_content_item_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "dynamic_content_item_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_end_user_identity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/end_users/{{ record.user_id }}/identities",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_end_user_identity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/end_users/{{ record.user_id }}/identities/{{ record.user_identity_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_identity_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "user_identity_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_id",
+        "user_identity_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "make_end_user_identity_primary",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/end_users/{{ record.user_id }}/identities/{{ record.user_identity_id }}/make_primary",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_identity_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "user_identity_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id",
+        "user_identity_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "request_end_user_verification",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/end_users/{{ record.user_id }}/identities/{{ record.user_identity_id }}/request_verification",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_identity_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "user_identity_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id",
+        "user_identity_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_group_membership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/group_memberships",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "group_membership": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "delete_group_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/group_memberships/{{ record.group_membership_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "group_membership_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group_membership_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "group_membership_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "group_membership_bulk_create",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/group_memberships/create_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "group_memberships": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "group_membership_bulk_delete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/group_memberships/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_group_sla_policy",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/group_slas/policies",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_group_sla_policy",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/group_slas/policies/{{ record.group_sla_policy_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "group_sla_policy_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group_sla_policy_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "group_sla_policy_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_group_sla_policy",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/group_slas/policies/{{ record.group_sla_policy_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "group_sla_policy_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group_sla_policy_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "group_sla_policy_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_group_sla_policies",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/group_slas/policies/reorder",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/groups",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "group": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/groups/{{ record.group_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "group_id": {
+            "type": "string"
+          },
+          "group": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "group_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "group_id"
+      ]
+    },
+    {
+      "name": "delete_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/groups/{{ record.group_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "group_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "group_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "group_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "ticket_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/imports/tickets",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "ticket_bulk_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/imports/tickets/create_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "tickets": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_itam_asset_type",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/asset_types",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "asset_type": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_itam_asset_type",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "asset_type_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset_type_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "asset_type_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_itam_asset_type",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "asset_type_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset_type_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "asset_type_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_itam_asset_type_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "asset_type_id": {
+            "type": "string"
+          },
+          "field": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "asset_type_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "asset_type_id"
+      ]
+    },
+    {
+      "name": "update_itam_asset_type_field",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields/{{ record.asset_type_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "asset_type_id": {
+            "type": "string"
+          },
+          "asset_type_field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset_type_id",
+          "asset_type_field_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "asset_type_id",
+        "asset_type_field_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_itam_asset_type_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields/{{ record.asset_type_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "asset_type_id": {
+            "type": "string"
+          },
+          "asset_type_field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset_type_id",
+          "asset_type_field_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "asset_type_id",
+        "asset_type_field_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_itam_asset",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/assets",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "asset": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_itam_asset",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/it_asset_management/assets/{{ record.asset_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "asset_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "asset_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_itam_asset",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/assets/{{ record.asset_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "asset_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "asset_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "itam_asset_bulk_jobs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/assets/jobs",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "job": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "filtered_search_itam_assets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/assets/search",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_itam_location",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/it_asset_management/locations",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "location": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_itam_location",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/it_asset_management/locations/{{ record.location_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "location_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "location_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_itam_location",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/it_asset_management/locations/{{ record.location_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "location_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "location_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "location_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_macro",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/macros",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "macro": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_macro",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/macros/{{ record.macro_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "macro_id": {
+            "type": "string"
+          },
+          "macro": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "macro_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "macro_id"
+      ]
+    },
+    {
+      "name": "delete_macro",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/macros/{{ record.macro_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "macro_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "macro_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "macro_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_associated_macro_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/macros/{{ record.macro_id }}/attachments",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "macro_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "macro_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "macro_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_macro_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/macros/attachments",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "delete_many_macros",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/macros/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_many_macros",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/macros/update_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "macros": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_o_auth_client",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/oauth/clients",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_client",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/oauth/clients/{{ record.oauth_client_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "oauth_client_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "oauth_client_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "oauth_client_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_client",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/oauth/clients/{{ record.oauth_client_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "oauth_client_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "oauth_client_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "oauth_client_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "client_generate_secret",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/oauth/clients/{{ record.oauth_client_id }}/generate_secret",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "oauth_client_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "oauth_client_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "oauth_client_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_o_auth_token",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/oauth/tokens",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "revoke_o_auth_token",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/oauth/tokens/{{ record.oauth_token_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "oauth_token_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "oauth_token_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "oauth_token_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "revoke_current_o_auth_token",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/oauth/tokens/current",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_organization_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organization_fields",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_organization_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/organization_fields/{{ record.organization_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_field_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "organization_field_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_organization_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organization_fields/{{ record.organization_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_field_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "organization_field_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_organization_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/organization_fields/reorder",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_organization_membership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organization_memberships",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "delete_organization_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organization_memberships/{{ record.organization_membership_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_membership_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_membership_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "organization_membership_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_many_organization_memberships",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organization_memberships/create_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "delete_many_organization_memberships",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organization_memberships/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_organization_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organization_subscriptions",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_subscription": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "delete_organization_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organization_subscriptions/{{ record.organization_subscription_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_subscription_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_subscription_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "organization_subscription_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organizations",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_organization",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/organizations/{{ record.organization_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_organization",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organizations/{{ record.organization_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_organization_merge",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organizations/{{ record.organization_id }}/merge",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "organization_merge": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "organization_id"
+      ]
+    },
+    {
+      "name": "set_organization_tags",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organizations/{{ record.organization_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "add_organization_tags",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/organizations/{{ record.organization_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "remove_organization_tags",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organizations/{{ record.organization_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "organization_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "organization_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_many_organizations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organizations/create_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_or_update_organization",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/organizations/create_or_update",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "delete_many_organizations",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/organizations/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_many_organizations",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/organizations/update_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "autocomplete_problems",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/problems/autocomplete",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "push_notification_devices",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/push_notification_devices/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "push_notification_devices": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_queue",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/queues",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_queue",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/queues/{{ record.queue_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "queue_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "queue_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "queue_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_queue",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/queues/{{ record.queue_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "queue_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "queue_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "queue_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_queues",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/queues/order",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_support_address",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/recipient_addresses",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_support_address",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/recipient_addresses/{{ record.support_address_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "support_address_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "support_address_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "support_address_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_recipient_address",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/recipient_addresses/{{ record.support_address_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "support_address_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "support_address_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "support_address_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "verify_support_address_forwarding",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/recipient_addresses/{{ record.support_address_id }}/verify",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "support_address_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "support_address_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "support_address_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/requests",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_request",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/requests/{{ record.request_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "request_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "request_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_resource_collection",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/resource_collections",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_resource_collection",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/resource_collections/{{ record.resource_collection_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "resource_collection_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_collection_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "resource_collection_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_resource_collection",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/resource_collections/{{ record.resource_collection_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "resource_collection_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_collection_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "resource_collection_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "set_agent_attribute_values",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/routing/agents/{{ record.user_id }}/instance_values",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "bulk_set_agent_attribute_values_job",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/routing/agents/instance_values/jobs",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "job": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_attribute",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/routing/attributes",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_attribute",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/routing/attributes/{{ record.attribute_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "attribute_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "attribute_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "attribute_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_attribute",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/routing/attributes/{{ record.attribute_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "attribute_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "attribute_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "attribute_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_attribute_value",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/routing/attributes/{{ record.attribute_id }}/values",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "attribute_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "attribute_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "attribute_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "update_attribute_value",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/routing/attributes/{{ record.attribute_id }}/values/{{ record.attribute_value_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "attribute_id": {
+            "type": "string"
+          },
+          "attribute_value_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "attribute_id",
+          "attribute_value_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "attribute_id",
+        "attribute_value_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_attribute_value",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/routing/attributes/{{ record.attribute_id }}/values/{{ record.attribute_value_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "attribute_id": {
+            "type": "string"
+          },
+          "attribute_value_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "attribute_id",
+          "attribute_value_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "attribute_id",
+        "attribute_value_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "set_ticket_attribute_values",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/routing/tickets/{{ record.ticket_id }}/instance_values",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_saved_search",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/saved_searches",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "filters": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_saved_search",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/saved_searches/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "filters": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_saved_search",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/saved_searches/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_sharing_agreement",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/sharing_agreements",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_sharing_agreement",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/sharing_agreements/{{ record.sharing_agreement_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "sharing_agreement_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sharing_agreement_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "sharing_agreement_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_sharing_agreement",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/sharing_agreements/{{ record.sharing_agreement_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "sharing_agreement_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sharing_agreement_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "sharing_agreement_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "record_new_skip",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/skips",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_sla_policy",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/slas/policies",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_sla_policy",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/slas/policies/{{ record.sla_policy_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "sla_policy_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sla_policy_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "sla_policy_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_sla_policy",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/slas/policies/{{ record.sla_policy_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "sla_policy_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sla_policy_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "sla_policy_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_sla_policies",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/slas/policies/reorder",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "delete_suspended_ticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/suspended_tickets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "recover_suspended_ticket",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/suspended_tickets/{{ record.id }}/recover",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "suspended_tickets_attachments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/suspended_tickets/attachments",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "bulk_recover_suspended_tickets",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/suspended_tickets/bulk_recover",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "author": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "delete_suspended_tickets",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/suspended_tickets/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "export_suspended_tickets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/suspended_tickets/export",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "recover_suspended_tickets",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/suspended_tickets/recover_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_target",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/targets",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_target",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/targets/{{ record.target_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "target_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "target_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "target_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_target",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/targets/{{ record.target_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "target_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "target_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "target_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_task_list_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/task_list_templates",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "task_list_template": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_task_list_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/task_list_templates/{{ record.task_list_template_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "task_list_template_id": {
+            "type": "string"
+          },
+          "task_list_template": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "task_list_template_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "task_list_template_id"
+      ]
+    },
+    {
+      "name": "delete_task_list_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/task_list_templates/{{ record.task_list_template_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "task_list_template_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_list_template_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "task_list_template_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_ticket_content_pin",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/ticket_content_pins",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_content_pin": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "delete_ticket_content_pin",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_content_pins/{{ record.content_pin_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "content_pin_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content_pin_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "content_pin_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_ticket_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/ticket_fields",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_ticket_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/ticket_fields/{{ record.ticket_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_field_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_field_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_ticket_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_fields/{{ record.ticket_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_field_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "ticket_field_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_or_update_ticket_field_option",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/ticket_fields/{{ record.ticket_field_id }}/options",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_field_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_field_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_ticket_field_option",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_fields/{{ record.ticket_field_id }}/options/{{ record.ticket_field_option_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_field_id": {
+            "type": "string"
+          },
+          "ticket_field_option_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_field_id",
+          "ticket_field_option_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "ticket_field_id",
+        "ticket_field_option_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_ticket_fields",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/ticket_fields/reorder",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_ticket_form",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/ticket_forms",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_ticket_form",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_form_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_form_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_ticket_form",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_form_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "ticket_form_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "clone_ticket_form",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/clone",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_form_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_form_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_ticket_form_statuses",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          },
+          "ticket_form_status": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "ticket_form_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_form_id"
+      ]
+    },
+    {
+      "name": "update_ticket_form_statuses",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          },
+          "ticket_form_status": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "ticket_form_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_form_id"
+      ]
+    },
+    {
+      "name": "delete_ticket_form_statuses",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "ticket_form_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "ticket_form_id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_ticket_form_status_by_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses/{{ record.ticket_form_status_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          },
+          "ticket_form_status_id": {
+            "type": "string"
+          },
+          "ticket_form_status": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "ticket_form_id",
+          "ticket_form_status_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_form_id",
+        "ticket_form_status_id"
+      ]
+    },
+    {
+      "name": "delete_ticket_form_status_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses/{{ record.ticket_form_status_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_form_id": {
+            "type": "string"
+          },
+          "ticket_form_status_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_form_id",
+          "ticket_form_status_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "ticket_form_id",
+        "ticket_form_status_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_ticket_forms",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/ticket_forms/reorder",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/tickets",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "system_metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "ticket": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_ticket",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "system_metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "ticket": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "delete_ticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "make_ticket_comment_private_from_audits",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/audits/{{ record.ticket_audit_id }}/make_private",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "ticket_audit_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "ticket_audit_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id",
+        "ticket_audit_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "redact_comment_attachment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/comments/{{ record.comment_id }}/attachments/{{ record.attachment_id }}/redact",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "comment_id": {
+            "type": "string"
+          },
+          "attachment_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "comment_id",
+          "attachment_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id",
+        "comment_id",
+        "attachment_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "make_ticket_comment_private",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/comments/{{ record.ticket_comment_id }}/make_private",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "ticket_comment_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "ticket_comment_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id",
+        "ticket_comment_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "redact_string_in_comment",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/comments/{{ record.ticket_comment_id }}/redact",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "ticket_comment_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "ticket_comment_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id",
+        "ticket_comment_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "mark_ticket_as_spam_and_suspend_requester",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/mark_as_spam",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "merge_tickets_into_target_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/merge",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "ids": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "source_comment": {
+            "type": "string"
+          },
+          "source_comment_is_public": {
+            "type": "boolean"
+          },
+          "target_comment": {
+            "type": "string"
+          },
+          "target_comment_is_public": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "create_ticket_satisfaction_rating",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/satisfaction_rating",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "set_tags_ticket",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "put_tags_ticket",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_tags_ticket",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "ticket_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_task_list",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/tickets/{{ record.ticket_id }}/task_lists",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "task_list": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "ticket_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "tickets_create_many",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/tickets/create_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "tickets": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "bulk_delete_tickets",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/tickets/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "mark_many_tickets_as_spam",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/mark_many_as_spam",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "tickets_update_many",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/tickets/update_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_trigger_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/trigger_categories",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "trigger_category": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_trigger_category",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/trigger_categories/{{ record.trigger_category_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "trigger_category_id": {
+            "type": "string"
+          },
+          "trigger_category": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "trigger_category_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "trigger_category_id"
+      ]
+    },
+    {
+      "name": "delete_trigger_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/trigger_categories/{{ record.trigger_category_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "trigger_category_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "trigger_category_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "trigger_category_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "batch_operate_trigger_categories",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/trigger_categories/jobs",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "job": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_trigger",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/triggers",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "trigger": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_trigger",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/triggers/{{ record.trigger_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "trigger_id": {
+            "type": "string"
+          },
+          "trigger": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "trigger_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "trigger_id"
+      ]
+    },
+    {
+      "name": "delete_trigger",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/triggers/{{ record.trigger_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "trigger_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "trigger_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "trigger_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_many_triggers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/triggers/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_triggers",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/triggers/reorder",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_many_triggers",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/triggers/update_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "triggers": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "upload_files",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/uploads",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "delete_upload",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/uploads/{{ record.token }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "token"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_user_field",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/user_fields",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_user_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/user_fields/{{ record.user_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_field_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_field_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_user_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/user_fields/{{ record.user_field_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_field_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_field_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_or_update_user_field_option",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/user_fields/{{ record.user_field_id }}/options",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_field_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_field_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_field_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_user_field_option",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/user_fields/{{ record.user_field_id }}/options/{{ record.user_field_option_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_field_id": {
+            "type": "string"
+          },
+          "user_field_option_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_field_id",
+          "user_field_option_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_field_id",
+        "user_field_option_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_user_field",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/user_fields/reorder",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_user",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "delete_user",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_user_group_membership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/{{ record.user_id }}/group_memberships",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "group_membership": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "delete_user_group_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/group_memberships/{{ record.group_membership_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "group_membership_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "group_membership_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_id",
+        "group_membership_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "group_membership_set_default",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/group_memberships/{{ record.group_membership_id }}/make_default",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "group_membership_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "group_membership_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id",
+        "group_membership_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "create_user_identity",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/{{ record.user_id }}/identities",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "update_user_identity",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_identity_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "user_identity_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id",
+        "user_identity_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_user_identity",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_identity_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "user_identity_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_id",
+        "user_identity_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "make_user_identity_primary",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}/make_primary",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_identity_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "user_identity_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id",
+        "user_identity_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "request_user_verification",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}/request_verification",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_identity_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "user_identity_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id",
+        "user_identity_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "verify_user_identity",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/identities/{{ record.user_identity_id }}/verify",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user_identity_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "user_identity_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id",
+        "user_identity_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "merge_end_users",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/merge",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ]
+    },
+    {
+      "name": "create_user_organization_membership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/{{ record.user_id }}/organization_memberships",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_user_organization_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/organization_memberships/{{ record.organization_membership_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "organization_membership_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "organization_membership_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_id",
+        "organization_membership_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "set_organization_membership_as_default",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/organization_memberships/{{ record.organization_membership_id }}/make_default",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "organization_membership_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "organization_membership_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id",
+        "organization_membership_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "unassign_organization",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/organizations/{{ record.organization_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "organization_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_id",
+        "organization_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "set_organization_as_default",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/organizations/{{ record.organization_id }}/make_default",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "organization_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "organization_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id",
+        "organization_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "set_user_password",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/{{ record.user_id }}/password",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "change_own_password",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/password",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "bulk_delete_sessions_by_user_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/sessions",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_session",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/sessions/{{ record.session_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "session_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id",
+          "session_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_id",
+        "session_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "set_user_tags",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/{{ record.user_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "put_user_tags",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/{{ record.user_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_user_tags",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/{{ record.user_id }}/tags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "user_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "autocomplete_users_post",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/autocomplete",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "brand_id": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "field_id": {
+            "type": "integer"
+          },
+          "filter": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_many_users",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/create_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "users": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_or_update_user",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/create_or_update",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_or_update_many_users",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/create_or_update_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "users": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "destroy_many_users",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "logout_many_users",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/logout_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "delete_authenticated_session",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/users/me/logout",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_current_user_settings",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/me/settings",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "settings": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "request_user_create",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/request_create",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "user": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_many_users",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/users/update_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high"
+    },
+    {
+      "name": "create_view",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/views",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_view",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/views/{{ record.view_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "view_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "view_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "view_id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "delete_view",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/views/{{ record.view_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "view_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "view_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "view_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "bulk_delete_views",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/views/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "preview_views",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/views/preview",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "preview_count",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/views/preview/count",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "update_many_views",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/views/update_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "high",
+      "body_type": "none"
+    },
+    {
+      "name": "create_workspace",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/workspaces",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "workspace": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    },
+    {
+      "name": "update_workspace",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/workspaces/{{ record.workspace_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          },
+          "workspace": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "risk": "high",
+      "path_fields": [
+        "workspace_id"
+      ]
+    },
+    {
+      "name": "delete_workspace",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/workspaces/{{ record.workspace_id }}",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "workspace_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workspace_id"
+        ]
+      },
+      "risk": "critical",
+      "path_fields": [
+        "workspace_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "destroy_many_workspaces",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v2/workspaces/destroy_many",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {}
+      },
+      "risk": "critical",
+      "body_type": "none",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": false,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reorder_workspaces",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v2/workspaces/reorder",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ids": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "high"
+    }
+  ]
+}

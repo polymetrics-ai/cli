@@ -2,7 +2,7 @@
   "phase": "issue-163-zendesk-sensitive-admin-policy",
   "issue": 163,
   "parent_issue": 156,
-  "status": "planned",
+  "status": "targeted_green",
   "runtime": "pi",
   "branch": "feat/163-zendesk-sensitive-admin-policy",
   "base_branch": "feat/159-zendesk-stream-runner",
@@ -17,6 +17,6 @@
     "manual_fallback": true
   },
   "verificationPassed": false,
-  "verificationNotes": "Planning checkpoint only; no production edits yet.",
-  "updated_at": "2026-07-10T03:15:00Z"
+  "verificationNotes": "Targeted engine/connectorgen/docs validation passed; broad handoff gates pending.",
+  "updated_at": "2026-07-10T04:00:00Z"
 }

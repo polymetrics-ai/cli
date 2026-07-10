@@ -1,14 +1,14 @@
 {
   "name": "zendesk",
   "display_name": "Zendesk",
-  "description": "Operation ledger and typed read surface for the official Zendesk Support API; stream-backed reads and bounded direct reads are enabled while binary and write lanes remain gated.",
+  "description": "Typed stream/read/write surface for the official Zendesk Support API; binary lanes remain gated and all mutations use reverse-ETL approval flow.",
   "integration_type": "api",
   "docs_url": "https://developer.zendesk.com/api-reference/",
   "release_stage": "alpha",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -18,7 +18,7 @@
   },
   "risk": {
     "read": "bounded ETL streams are enabled for 70 top-level collection reads and bounded direct-read JSON commands remain enabled for typed GET operations; binary downloads are still gated by later Zendesk lanes",
-    "write": "operation-ledger bundle in issue #160; Zendesk mutations remain blocked until typed reverse-ETL schemas, approval text, redaction, and destructive confirmation are added",
-    "approval": "all external writes remain plan \u2192 preview \u2192 approval \u2192 execute and blocked in this slice"
+    "write": "295 non-deprecated Zendesk mutating operations are modeled as typed reverse-ETL actions; destructive DELETE actions require typed confirmation and all writes require plan, preview, approval, execute",
+    "approval": "all external writes require plan \u2192 preview \u2192 approval \u2192 execute; destructive actions also require typed confirmation"
   }
 }
