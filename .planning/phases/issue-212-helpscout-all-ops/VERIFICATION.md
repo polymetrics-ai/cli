@@ -63,3 +63,11 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
 Result: passed.
+
+## PR / CI
+
+Draft stacked PR: https://github.com/polymetrics-ai/cli/pull/258
+
+Base: `feat/213-helpscout-cli-surface-metadata` (#236). Head: `feat/212-helpscout-all-ops`.
+
+Initial CI status after opening: in progress.

@@ -1,6 +1,6 @@
 # Summary: issue-212 Help Scout all operations
 
-Status: implemented locally; full verification and PR/review routing pending.
+Status: implemented locally with draft stacked PR open: https://github.com/polymetrics-ai/cli/pull/258 (base `feat/213-helpscout-cli-surface-metadata`, stacked on #236). Review routing/CI are pending.
 
 ## Delivered
 

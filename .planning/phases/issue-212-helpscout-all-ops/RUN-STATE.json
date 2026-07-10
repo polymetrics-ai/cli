@@ -1,7 +1,7 @@
 {
   "phase": "issue-212-helpscout-all-ops",
   "issue": 212,
-  "status": "implemented_local_focused_green",
+  "status": "draft_pr_opened",
   "branch": "feat/212-helpscout-all-ops",
   "base_branch": "feat/213-helpscout-cli-surface-metadata",
   "parent_branch": "feat/212-helpscout-cli-parity",
@@ -43,6 +43,14 @@
     "json_direct_read_commands": 73,
     "typed_write_actions": 66,
     "binary_operation_rows": 2
+  },
+  "pullRequest": {
+    "number": 258,
+    "url": "https://github.com/polymetrics-ai/cli/pull/258",
+    "base": "feat/213-helpscout-cli-surface-metadata",
+    "head": "feat/212-helpscout-all-ops",
+    "draft": true,
+    "stackedOn": "https://github.com/polymetrics-ai/cli/pull/236"
   },
   "checks": [
     { "command": "go test ./internal/connectors/engine -run 'DirectRead|Operations|CLISurface'", "result": "pass" },
