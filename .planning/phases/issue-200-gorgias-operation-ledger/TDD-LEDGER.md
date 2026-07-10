@@ -26,7 +26,23 @@ Initial result: failed as expected with `operation_ledger_version = 0, want 1`. 
 
 ## Green evidence
 
-Pending implementation.
+Focused green commands after generating the 114-row ledger:
+
+```bash
+go test ./cmd/connectorgen -run GorgiasAPISurfaceOperationLedger
+jq empty internal/connectors/defs/gorgias/api_surface.json .planning/phases/issue-197-gorgias-cli-surface-metadata/OFFICIAL-OPERATIONS.json
+go run ./cmd/connectorgen validate internal/connectors/defs
+go test ./internal/connectors/conformance -run 'TestConformance/gorgias'
+git diff --check
+```
+
+Results:
+
+- Gorgias ledger metrics test passed.
+- JSON parse check passed.
+- Full connector definition validation passed: 547 connector(s) checked, 0 findings.
+- Gorgias conformance test passed.
+- Diff whitespace check passed.
 
 ## Refactor notes
 

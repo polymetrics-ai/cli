@@ -38,6 +38,7 @@ Replace the partial Gorgias API surface with an operation ledger that accounts f
 
 - `internal/connectors/defs/gorgias/api_surface.json`
 - `cmd/connectorgen/gorgias_api_surface_test.go` for static ledger regression coverage
+- `internal/connectors/defs/gorgias/docs.md` only for operation-ledger scope wording
 - `.planning/phases/issue-200-gorgias-operation-ledger/**`
 - `.planning/phases/issue-196-gorgias-cli-parity/**` only for parent orchestration state updates after verification/PR work
 

@@ -14,7 +14,11 @@ git diff --check
 
 ## Focused results
 
-Pending.
+- `go test ./cmd/connectorgen -run GorgiasAPISurfaceOperationLedger`: passed.
+- `jq empty internal/connectors/defs/gorgias/api_surface.json .planning/phases/issue-197-gorgias-cli-surface-metadata/OFFICIAL-OPERATIONS.json`: passed.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: passed, 547 connector(s) checked, 0 findings.
+- `go test ./internal/connectors/conformance -run 'TestConformance/gorgias'`: passed.
+- `git diff --check`: passed.
 
 ## Broader commands
 
@@ -28,7 +32,7 @@ make verify
 
 ## Broader results
 
-Pending.
+Pending final broad gate run.
 
 ## CLI help/docs/website parity
 
