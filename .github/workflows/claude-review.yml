@@ -82,16 +82,23 @@ jobs:
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
-            You are the primary reviewer for this pull request. Perform a thorough,
+            You are the primary reviewer for this pull request. Perform a
             context-aware review following .github/claude-review-rubric.md.
             The base branch is checked out; use `gh pr diff` to see the change.
+            Be economical with your turn budget: prioritize hand-written Go and
+            connector-definition logic; skim or skip large generated artifacts
+            (fixtures, schema/api_surface JSON, generated docs). Focus on the
+            highest-value findings and post at most ~15 inline comments — do not flag
+            every trivial nit. If the diff is very large, deep-review the highest-risk
+            areas and state in the summary what you did and did NOT cover.
+            ALWAYS finish by posting ONE top-level summary via `gh pr comment`, even if
+            you could not review everything — never end by running out of turns.
             Do NOT run the PR's build or tests. Post code-specific issues as INLINE
-            comments (mcp__github_inline_comment__create_inline_comment, confirmed:true)
-            and ONE concise top-level summary via `gh pr comment`. Only output GitHub
-            comments — no chat messages.
+            comments (mcp__github_inline_comment__create_inline_comment, confirmed:true).
+            Only output GitHub comments — no chat messages.
           claude_args: |
             --model claude-sonnet-5
-            --max-turns 25
+            --max-turns 40
             --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr comment:*),Bash(gh api:*),Bash(go vet ./...),Bash(golangci-lint run:*),Read,Grep,Glob,LS"
 
   # ───────────────────────────────────────────────────────────────────────────
@@ -132,8 +139,8 @@ jobs:
           # The rubric is injected as a system prompt for consistency.
           claude_args: |
             --model claude-sonnet-5
-            --max-turns 20
-            --append-system-prompt "You are the primary code reviewer for polymetrics-ai/cli, a Go local-first data CLI (ETL, embedded DuckDB SQL, reverse ETL, connectors). Before reviewing, read CLAUDE.md, AGENTS.md, the relevant files in .agents/, and CONTRIBUTING.md to load project conventions, then read the changed files and surrounding packages — do not review the diff in isolation. Follow .github/claude-review-rubric.md. Post code-specific issues as INLINE comments via mcp__github_inline_comment__create_inline_comment (confirmed:true) and one concise top-level summary via 'gh pr comment'. Do not run the PR's build or tests. Only output GitHub comments, never chat messages. Be specific and cite file:line."
+            --max-turns 40
+            --append-system-prompt "You are the primary code reviewer for polymetrics-ai/cli, a Go local-first data CLI (ETL, embedded DuckDB SQL, reverse ETL, connectors). Before reviewing, read CLAUDE.md, AGENTS.md, the relevant files in .agents/, and CONTRIBUTING.md to load project conventions, then read the changed files and surrounding packages — do not review the diff in isolation. Follow .github/claude-review-rubric.md. Be economical with your turn budget: prioritize hand-written Go and connector-definition logic; skim or skip large generated artifacts (fixtures, schema/api_surface JSON, generated docs); post at most ~15 high-value inline comments rather than every nit. If the diff is very large, deep-review the highest-risk areas and state in the summary what you did and did NOT cover. ALWAYS finish by posting one top-level summary via 'gh pr comment', even if you could not review everything — never end by running out of turns. Post code-specific issues as INLINE comments via mcp__github_inline_comment__create_inline_comment (confirmed:true). Do not run the PR's build or tests. Only output GitHub comments, never chat messages. Be specific and cite file:line."
             --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr comment:*),Bash(gh api:*),Bash(go vet ./...),Bash(golangci-lint run:*),Read,Grep,Glob,LS"
 
 # ─────────────────────────────────────────────────────────────────────────────
