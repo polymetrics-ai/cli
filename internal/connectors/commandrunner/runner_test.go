@@ -688,6 +688,38 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunImplementedDirectReadCommandWithJSONPolicy(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "account settings show",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/api/v2/account/settings"},
+				},
+				OutputPolicy: "json",
+			},
+		},
+	}}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path: []string{"account", "settings", "show"},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("DirectRead = nil, want result")
+	}
+	if connector.directReadReq.OutputPolicy != "json" {
+		t.Fatalf("direct read output policy = %q, want json", connector.directReadReq.OutputPolicy)
+	}
+}
+
 func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 	tests := []struct {
 		name     string

@@ -1004,6 +1004,49 @@ func TestBundleLoadZendeskOperationLedger(t *testing.T) {
 	}
 }
 
+func TestBundleLoadZendeskDirectReadCommandCoverage(t *testing.T) {
+	b, err := Load(os.DirFS("../defs"), "zendesk")
+	if err != nil {
+		t.Fatalf("Load(defs dir, zendesk): %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("Zendesk CLISurface is nil")
+	}
+	directReadCommands := map[string]CLICommand{}
+	for _, cmd := range b.CLISurface.Commands {
+		if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+			directReadCommands[cmd.Path] = cmd
+		}
+	}
+	if got, want := len(directReadCommands), 282; got != want {
+		t.Fatalf("implemented Zendesk direct-read commands = %d, want %d", got, want)
+	}
+
+	covered := 0
+	for _, ep := range b.Surface.Endpoints {
+		if ep.Operation == nil || ep.Operation.Model != "direct_read" {
+			continue
+		}
+		if ep.CoveredBy == nil || ep.CoveredBy.DirectRead == "" {
+			t.Fatalf("direct-read endpoint %s %s missing covered_by.direct_read", ep.Method, ep.Path)
+		}
+		cmd, ok := directReadCommands[ep.CoveredBy.DirectRead]
+		if !ok {
+			t.Fatalf("direct-read endpoint %s %s references unknown command %q", ep.Method, ep.Path, ep.CoveredBy.DirectRead)
+		}
+		if len(cmd.APISurface) != 1 || cmd.APISurface[0].Path != ep.Path || !strings.EqualFold(cmd.APISurface[0].Method, ep.Method) {
+			t.Fatalf("command %q api_surface = %+v, want %s %s", cmd.Path, cmd.APISurface, ep.Method, ep.Path)
+		}
+		if cmd.OutputPolicy != "json" {
+			t.Fatalf("command %q output_policy = %q, want json", cmd.Path, cmd.OutputPolicy)
+		}
+		covered++
+	}
+	if covered != 282 {
+		t.Fatalf("covered direct-read endpoints = %d, want 282", covered)
+	}
+}
+
 func operationMethodPath(op OperationSpec) (string, string) {
 	switch {
 	case op.REST != nil:

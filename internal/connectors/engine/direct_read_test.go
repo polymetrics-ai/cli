@@ -181,6 +181,34 @@ func TestDirectReadRejectsOversizedResponse(t *testing.T) {
 	}
 }
 
+func TestDirectReadJSONPolicyReturnsDecodedBody(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v2/account/settings" {
+			t.Fatalf("path = %s, want settings path", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"settings":{"locale":"en-us"}}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/api/v2/account/settings"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/api/v2/account/settings",
+		MaxBytes:     1024,
+		OutputPolicy: "json",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	if _, ok := body["settings"].(map[string]any); !ok {
+		t.Fatalf("settings body = %+v, want decoded JSON object", body)
+	}
+}
+
 func TestDirectReadRedactsGitHubFileContent(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

@@ -3,13 +3,13 @@
 ## Cycle 1 — generic JSON direct-read policy
 
 - Red target: commandrunner and engine reject `json` direct-read output policy before this slice.
-- Red evidence: pending.
+- Red evidence: `go test ./internal/connectors/engine -run 'JSONPolicy|ZendeskDirectRead' -count=1` failed with `direct read output policy "json" is not supported`.
 - Green implementation: pending.
 
 ## Cycle 2 — Zendesk direct-read command coverage
 
 - Red target: Zendesk bundle exposes 282 implemented direct-read commands with api_surface coverage.
-- Red evidence: pending.
+- Red evidence: same red test run failed with `implemented Zendesk direct-read commands = 0, want 282`.
 - Green implementation: pending.
 
 ## Manual GSD fallback
