@@ -87,8 +87,20 @@
         200
       ],
       "reason": "Generated complete 114-operation Gorgias ledger with red/green TDD evidence, passed local gates, and opened sub-PR #267 to the parent branch."
+    },
+    {
+      "timestamp": "2026-07-10T09:45:00Z",
+      "cycle": "issue-200-provisional-integration",
+      "decision": "provisional_integration",
+      "issue_numbers": [
+        200,
+        199,
+        202,
+        203
+      ],
+      "reason": "Sub-PR #267 green and squash-merged into parent branch; #199/#202/#203 are now unblocked, while automated review coverage for #200 remains pending parent PR fallback."
     }
   ],
   "verificationPassed": false,
-  "verificationBlocker": "sub-PR #267 automated review/check coverage pending; #197 parent fallback review still pending because draft parent PR skipped CodeRabbit"
+  "verificationBlocker": "automated review coverage pending for #197/#200 because stacked PR review was skipped/absent and draft parent PR CodeRabbit coverage is pending/skipped"
 }

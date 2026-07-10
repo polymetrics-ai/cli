@@ -17,7 +17,7 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi",
-    "status": "parent_review_pending"
+    "status": "subissues_active_review_pending"
   },
   "ready_queue": [
     {
@@ -34,7 +34,7 @@
     },
     {
       "number": 200,
-      "status": "sub_pr_open",
+      "status": "provisionally_integrated",
       "dependencies": [
         197
       ],
@@ -44,11 +44,11 @@
         "cmd/connectorgen/gorgias_api_surface_test.go",
         ".planning/phases/issue-200-gorgias-operation-ledger"
       ],
-      "decision": "local_critical_path"
+      "decision": "merged_to_parent_review_pending"
     },
     {
       "number": 199,
-      "status": "planned",
+      "status": "worker_ready",
       "dependencies": [
         197,
         200
@@ -59,7 +59,7 @@
         "internal/connectors/defs/gorgias/fixtures",
         ".planning/phases/issue-199-gorgias-stream-runner"
       ],
-      "decision": "not_spawned_dependency_blocked_until_200_integrated"
+      "decision": "ready_after_200_provisional_integration"
     },
     {
       "number": 201,
@@ -75,11 +75,11 @@
         "internal/cli",
         ".planning/phases/issue-201-gorgias-direct-read"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_dependency_blocked_until_202"
     },
     {
       "number": 202,
-      "status": "planned",
+      "status": "worker_ready",
       "dependencies": [
         197,
         200
@@ -89,11 +89,11 @@
         "internal/connectors/defs/gorgias",
         ".planning/phases/issue-202-gorgias-advanced-query-binary"
       ],
-      "decision": "not_spawned_dependency_blocked_until_200_integrated"
+      "decision": "ready_after_200_provisional_integration"
     },
     {
       "number": 203,
-      "status": "planned",
+      "status": "worker_ready",
       "dependencies": [
         197,
         200
@@ -104,7 +104,7 @@
         "internal/app",
         ".planning/phases/issue-203-gorgias-sensitive-admin-policy"
       ],
-      "decision": "not_spawned_dependency_blocked_until_200_integrated"
+      "decision": "ready_after_200_provisional_integration"
     },
     {
       "number": 198,
@@ -173,6 +173,24 @@
         200
       ],
       "reason": "Pi harness lacks subagent spawning, so #200 was executed locally after #197 surface capture. Sub-PR #267 opened against parent branch after local verification passed."
+    },
+    {
+      "timestamp": "2026-07-10T09:45:00Z",
+      "decision": "provisional_integration",
+      "issue_numbers": [
+        200
+      ],
+      "reason": "Sub-PR #267 checks passed and was squash-merged into the parent branch as d10c3eb7. CodeRabbit did not review the non-default stacked PR; parent PR fallback review coverage remains pending."
+    },
+    {
+      "timestamp": "2026-07-10T09:46:00Z",
+      "decision": "ready_queue_updated",
+      "issue_numbers": [
+        199,
+        202,
+        203
+      ],
+      "reason": "#200 operation ledger is provisionally integrated, unblocking stream runner, advanced query/binary, and sensitive/admin policy lanes for local execution or worker assignment."
     }
   ],
   "subissues": [
@@ -259,7 +277,7 @@
       "branch": "feat/200-gorgias-operation-ledger",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/267",
       "worker": "local_critical_path_pi_orchestrator",
-      "status": "sub_pr_open",
+      "status": "provisionally_integrated",
       "write_scope": [
         "internal/connectors/defs/gorgias/api_surface.json",
         "internal/connectors/defs/gorgias/docs.md",
@@ -267,15 +285,15 @@
         ".planning/phases/issue-200-gorgias-operation-ledger"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
-      "verification": "local focused gates and broad gate passed: go vet ./..., go test ./..., go build ./cmd/pm, make verify",
+      "verification": "local focused gates, broad gate, sub-PR checks, and parent branch squash merge passed",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
-        "head_sha": "1ff0fdfa8c2b4919e3b71b635de54d142e53758b",
-        "reviewed_range": "pending for stacked sub-PR #267; if CodeRabbit skips non-default base, parent PR fallback coverage is required before provisional integration is final",
-        "coverage_route": "stacked_sub_pr_then_parent_pr_fallback",
+        "status": "skipped_or_absent",
+        "head_sha": "340216b000bc2be7c7bd725178ad6b0c652a1fd3",
+        "reviewed_range": "Sub-PR #267 had no CodeRabbit status/review comments while targeting the non-default parent branch; parent PR fallback coverage pending after squash merge d10c3eb7.",
+        "coverage_route": "parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "Awaiting automated review/check coverage; no findings to disposition yet.",
+        "disposition_summary": "No actionable review findings received; skipped/absent automated review is recorded as non-approval pending parent PR fallback.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/267"
       }
     },
@@ -367,5 +385,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T00:00:00Z"
+  "updated_at": "2026-07-10T09:46:00Z"
 }
