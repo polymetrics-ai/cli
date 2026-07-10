@@ -15,13 +15,13 @@ Branch: `feat/199-gorgias-stream-runner`
 
 ## Red evidence
 
-Pending: add focused Gorgias stream-runner regression test, then run:
+Added `TestGorgiasStreamRunnerReadSweep` in `cmd/connectorgen/gorgias_api_surface_test.go`, then ran:
 
 ```bash
 go test ./cmd/connectorgen -run 'Gorgias(APISurfaceOperationLedger|StreamRunner)'
 ```
 
-Expected initial failure: current parent baseline exposes 4 Gorgias streams and 4 `covered_by.stream` API rows; #199 target is 24 safe stream rows.
+Initial result: failed as expected because the current parent baseline exposes only `customers`, `messages`, `satisfaction_surveys`, and `tickets`; #199 target is 24 safe stream rows plus matching `covered_by.stream` API rows.
 
 ## Green evidence
 
