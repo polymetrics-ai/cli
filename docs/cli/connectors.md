@@ -77,8 +77,9 @@ FRESHCHAT COMMAND SURFACE
     escape hatch.
 
   Freshchat writes remain reverse ETL only: plan, preview, approval token, then
-  execute. Multipart file/image upload commands are listed as excluded and do
-  not expose a raw upload escape hatch.
+  execute. Multipart file/image upload commands are listed as unsupported local
+  workflows backed by typed file_upload operation metadata; they remain blocked
+  and do not expose a raw upload escape hatch.
 
 GITHUB ETL STREAMS
   issues

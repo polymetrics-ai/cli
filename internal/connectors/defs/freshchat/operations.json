@@ -1,0 +1,36 @@
+{
+  "operations": [
+    {
+      "id": "freshchat.files.upload",
+      "kind": "file_upload",
+      "summary": "Upload a Freshchat file through a typed multipart policy.",
+      "description": "Reviewed metadata for the official Freshchat file upload endpoint. Execution remains blocked until a bounded multipart executor is implemented; this operation must not become a raw local-file or HTTP upload escape hatch.",
+      "source_url": "https://developers.freshchat.com/api/",
+      "risk": "medium",
+      "approval": "File uploads require plan, preview, approval, explicit local file selection, size validation, and typed confirmation before execution.",
+      "output_policy": "freshchat_upload_metadata_redacted",
+      "mutation_class": "create",
+      "file": {
+        "direction": "upload",
+        "path": "/files/upload",
+        "max_bytes": 10485760
+      }
+    },
+    {
+      "id": "freshchat.images.upload",
+      "kind": "file_upload",
+      "summary": "Upload a Freshchat image through a typed multipart policy.",
+      "description": "Reviewed metadata for the official Freshchat image upload endpoint. Execution remains blocked until a bounded multipart executor is implemented; this operation must not become a raw local-file or HTTP upload escape hatch.",
+      "source_url": "https://developers.freshchat.com/api/",
+      "risk": "medium",
+      "approval": "Image uploads require plan, preview, approval, explicit local file selection, size validation, and typed confirmation before execution.",
+      "output_policy": "freshchat_upload_metadata_redacted",
+      "mutation_class": "create",
+      "file": {
+        "direction": "upload",
+        "path": "/images/upload",
+        "max_bytes": 10485760
+      }
+    }
+  ]
+}

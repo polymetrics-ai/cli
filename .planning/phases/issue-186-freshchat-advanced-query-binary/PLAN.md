@@ -34,7 +34,7 @@ Focused:
 
 ```bash
 go test ./internal/connectors/engine -run TestBundleLoadEmbeddedFreshchatFileUploadOperations
-go test ./internal/connectors/commandrunner -run TestRunFreshchatUploadCommandsBlockTypedOperationsBeforeCredentials
+go test ./internal/cli -run TestFreshchatUploadCommandsBlockTypedOperationsBeforeCredentialResolution
 go test ./cmd/connectorgen -run 'TestValidate_CLISurface|TestFreshchatAPISurfaceLedger|TestFreshchatBinaryUploadCommandsUseTypedOperations'
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```

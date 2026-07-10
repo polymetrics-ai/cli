@@ -18,4 +18,34 @@ Add operation metadata and command-surface wiring while preserving blocked-by-de
 
 ## Verification ledger
 
-Pending.
+Red evidence:
+
+```bash
+gofmt -w internal/connectors/engine/bundle_test.go internal/cli/cli_test.go cmd/connectorgen/freshchat_api_surface_test.go
+go test ./internal/connectors/engine -run TestBundleLoadEmbeddedFreshchatFileUploadOperations
+```
+
+Initial failure: Freshchat operations missing `freshchat.files.upload` / `freshchat.images.upload` because no `operations.json` existed.
+
+Green focused gates:
+
+```bash
+go test ./internal/connectors/engine -run TestBundleLoadEmbeddedFreshchatFileUploadOperations
+go test ./internal/cli -run TestFreshchatUploadCommandsBlockTypedOperationsBeforeCredentialResolution
+go test ./cmd/connectorgen -run 'TestValidate_CLISurface|TestFreshchatAPISurfaceLedger|TestFreshchatBinaryUploadCommandsUseTypedOperations'
+go run ./cmd/connectorgen validate internal/connectors/defs
+```
+
+Results: pass; connectorgen reported `547 connector(s) checked, 0 findings`.
+
+Full gates pass:
+
+```bash
+cd website && pnpm run gen:website-data
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+```

@@ -541,17 +541,19 @@
       "path": "file upload",
       "summary": "Upload a Freshchat file",
       "intent": "direct_write",
-      "availability": "excluded",
+      "availability": "unsupported_local",
+      "operation": "freshchat.files.upload",
       "source_url": "https://developers.freshchat.com/api/",
-      "notes": "Requires multipart/binary upload policy and is tracked by issue #186; no raw upload command is exposed."
+      "notes": "Typed file_upload operation metadata declares the Freshchat endpoint and max_bytes policy, but execution remains blocked until a bounded multipart executor exists; no raw upload command is exposed."
     },
     {
       "path": "image upload",
       "summary": "Upload a Freshchat image",
       "intent": "direct_write",
-      "availability": "excluded",
+      "availability": "unsupported_local",
+      "operation": "freshchat.images.upload",
       "source_url": "https://developers.freshchat.com/api/",
-      "notes": "Requires multipart/binary upload policy and is tracked by issue #186; no raw upload command is exposed."
+      "notes": "Typed file_upload operation metadata declares the Freshchat endpoint and max_bytes policy, but execution remains blocked until a bounded multipart executor exists; no raw upload command is exposed."
     }
   ],
   "help_topics": [
