@@ -322,7 +322,7 @@ func TestZendeskConnectorHelpTopicRendersWithoutCredentials(t *testing.T) {
 		t.Fatalf("Run(help zendesk) code = %d stderr = %s", code, stderr.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{"pm connectors inspect zendesk", "COMMAND SURFACE", "Reverse ETL", "plan → preview → approval → execute"} {
+	for _, want := range []string{"pm connectors inspect zendesk", "COMMAND SURFACE", "reverse-ETL", "plan → preview → approval → execute"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("help zendesk missing %q:\n%s", want, out)
 		}

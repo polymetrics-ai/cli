@@ -4,7 +4,7 @@
 
 - Red target: `pm help zendesk`, bare `pm zendesk`, and `pm zendesk read list-tickets --help` render help without credentials.
 - Red evidence: `go test ./internal/cli -run 'Zendesk.*Help' -count=1` failed because `help zendesk` was missing, bare `zendesk` returned missing command path, and command `--help` attempted project/credential resolution.
-- Green implementation: pending.
+- Green implementation: Added dynamic connector manual fallback for `pm help <connector>`/`pm <connector> --help`, bare connector namespace help, and command-specific help rendering from `cli_surface.json`; `go test ./internal/cli -run 'Zendesk.*Help' -count=1` passes.
 
 ## Manual GSD fallback
 

@@ -43,6 +43,12 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	}
 	if len(rest) > 0 && (rest[0] == "--help" || rest[0] == "-h" || rest[0] == "help") {
 		if err := writeManual(cmd, stdout, jsonOut); err != nil {
+			if ok, connectorErr := writeConnectorManual(cmd, stdout, jsonOut); ok {
+				if connectorErr != nil {
+					return writeError(stdout, stderr, connectorErr, jsonOut)
+				}
+				return 0
+			}
 			return writeError(stdout, stderr, err, jsonOut)
 		}
 		return 0
@@ -130,6 +136,9 @@ func runHelp(args []string, stdout io.Writer) error {
 	}
 	text, ok := docs[topic]
 	if !ok {
+		if ok, err := writeConnectorManual(topic, stdout, false); ok {
+			return err
+		}
 		return fmt.Errorf("help topic %q not found", topic)
 	}
 	fmt.Fprint(stdout, text)
@@ -154,6 +163,141 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	}
 	fmt.Fprint(stdout, text)
 	return nil
+}
+
+func writeConnectorManual(name string, stdout io.Writer, jsonOut bool) (bool, error) {
+	connector, ok := connectorWithCommandSurface(name)
+	if !ok {
+		return false, nil
+	}
+	manual := connectors.RenderConnectorManual(connector)
+	if jsonOut {
+		return true, writeJSON(stdout, envelope{"kind": "CommandManual", "command": name, "manual": manual})
+	}
+	fmt.Fprint(stdout, manual)
+	return true, nil
+}
+
+func connectorWithCommandSurface(name string) (connectors.Connector, bool) {
+	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
+		return nil, false
+	}
+	if err := connectors.RejectLegacyConnectorName(name); err != nil {
+		return nil, false
+	}
+	connector, ok := appRegistry().Get(name)
+	if !ok {
+		return nil, false
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		return nil, false
+	}
+	return connector, true
+}
+
+func writeConnectorCommandHelp(connector connectors.Connector, path []string, stdout io.Writer, jsonOut bool) error {
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		return usageErrorf("connector %q has no command surface", connector.Name())
+	}
+	if len(path) == 0 {
+		_, err := writeConnectorManual(connector.Name(), stdout, jsonOut)
+		return err
+	}
+	for i, part := range path {
+		if err := safety.ValidateIdentifier(part, fmt.Sprintf("command path segment %d", i+1)); err != nil {
+			return err
+		}
+	}
+	commandPath := strings.Join(path, " ")
+	var found connectors.CommandSurfaceCommand
+	ok = false
+	for _, cmd := range provider.CommandSurface().Commands {
+		if cmd.Path == commandPath {
+			found = cmd
+			ok = true
+			break
+		}
+	}
+	if !ok {
+		return usageErrorf("unknown connector command %q", commandPath)
+	}
+	help := connectorCommandHelpText(connector.Name(), provider.CommandSurface(), found)
+	if jsonOut {
+		return writeJSON(stdout, envelope{"kind": "ConnectorCommandHelp", "connector": connector.Name(), "command": commandPath, "help": help})
+	}
+	fmt.Fprint(stdout, help)
+	return nil
+}
+
+func connectorCommandHelpText(connectorName string, surface *connectors.CommandSurface, cmd connectors.CommandSurfaceCommand) string {
+	var b strings.Builder
+	fmt.Fprintf(&b, "NAME\n  pm %s %s - %s\n\n", connectorName, cmd.Path, cmd.Summary)
+	fmt.Fprintf(&b, "SYNOPSIS\n  pm %s %s [flags]\n\n", connectorName, cmd.Path)
+	b.WriteString("DESCRIPTION\n")
+	if cmd.Notes != "" {
+		fmt.Fprintf(&b, "  %s\n", cmd.Notes)
+	} else {
+		fmt.Fprintf(&b, "  %s\n", cmd.Summary)
+	}
+	fmt.Fprintf(&b, "  intent=%s availability=%s\n", cmd.Intent, cmd.Availability)
+	if cmd.Stream != "" {
+		fmt.Fprintf(&b, "  stream=%s\n", cmd.Stream)
+	}
+	if cmd.Write != "" {
+		fmt.Fprintf(&b, "  write=%s\n", cmd.Write)
+	}
+	if cmd.Operation != "" {
+		fmt.Fprintf(&b, "  operation=%s\n", cmd.Operation)
+	}
+	if len(cmd.APISurface) > 0 {
+		b.WriteString("\nAPI SURFACE\n")
+		for _, ep := range cmd.APISurface {
+			fmt.Fprintf(&b, "  %s %s\n", strings.ToUpper(ep.Method), ep.Path)
+		}
+	}
+	b.WriteString("\nFLAGS\n")
+	for _, flag := range surface.GlobalFlags {
+		writeConnectorHelpFlag(&b, flag)
+	}
+	for _, flag := range cmd.Flags {
+		writeConnectorHelpFlag(&b, flag)
+	}
+	if cmd.Risk != "" || cmd.Approval != "" {
+		b.WriteString("\nSAFETY\n")
+		if cmd.Risk != "" {
+			fmt.Fprintf(&b, "  risk: %s\n", cmd.Risk)
+		}
+		if cmd.Approval != "" {
+			fmt.Fprintf(&b, "  approval: %s\n", cmd.Approval)
+		}
+	}
+	if len(cmd.Examples) > 0 {
+		b.WriteString("\nEXAMPLES\n")
+		for _, example := range cmd.Examples {
+			fmt.Fprintf(&b, "  %s\n", example)
+		}
+	}
+	b.WriteString("\nEXIT STATUS\n  0 success\n  1 runtime error\n  2 usage error\n")
+	return b.String()
+}
+
+func writeConnectorHelpFlag(b *strings.Builder, flag connectors.CommandSurfaceFlag) {
+	if flag.Name == "" {
+		return
+	}
+	fmt.Fprintf(b, "  --%s (%s)", flag.Name, flag.Type)
+	if flag.Summary != "" {
+		fmt.Fprintf(b, ": %s", flag.Summary)
+	}
+	if flag.MapsTo != "" {
+		fmt.Fprintf(b, " [maps_to=%s]", flag.MapsTo)
+	}
+	if len(flag.Values) > 0 {
+		fmt.Fprintf(b, " [values=%s]", strings.Join(flag.Values, "|"))
+	}
+	b.WriteByte('\n')
 }
 
 func runConnectors(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -609,8 +753,12 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	}
 	flags := parseFlags(args)
 	path := flags.values["_"]
+	if flags.first("help") != "" {
+		return writeConnectorCommandHelp(connector, path, stdout, jsonOut)
+	}
 	if len(path) == 0 {
-		return usageErrorf("missing connector command path")
+		_, err := writeConnectorManual(connectorName, stdout, jsonOut)
+		return err
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError
