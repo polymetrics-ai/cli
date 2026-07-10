@@ -34,15 +34,17 @@
     },
     {
       "number": 200,
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "dependencies": [
         197
       ],
       "write_scope": [
         "internal/connectors/defs/gorgias/api_surface.json",
+        "internal/connectors/defs/gorgias/docs.md",
+        "cmd/connectorgen/gorgias_api_surface_test.go",
         ".planning/phases/issue-200-gorgias-operation-ledger"
       ],
-      "decision": "not_spawned_review_blocked"
+      "decision": "local_critical_path"
     },
     {
       "number": 199,
@@ -57,7 +59,7 @@
         "internal/connectors/defs/gorgias/fixtures",
         ".planning/phases/issue-199-gorgias-stream-runner"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_dependency_blocked_until_200_integrated"
     },
     {
       "number": 201,
@@ -87,7 +89,7 @@
         "internal/connectors/defs/gorgias",
         ".planning/phases/issue-202-gorgias-advanced-query-binary"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_dependency_blocked_until_200_integrated"
     },
     {
       "number": 203,
@@ -102,7 +104,7 @@
         "internal/app",
         ".planning/phases/issue-203-gorgias-sensitive-admin-policy"
       ],
-      "decision": "not_spawned_dependency_blocked"
+      "decision": "not_spawned_dependency_blocked_until_200_integrated"
     },
     {
       "number": 198,
@@ -163,6 +165,14 @@
         200
       ],
       "reason": "Parent PR #229 checks passed after #197 provisional integration, but CodeRabbit skipped because the parent PR is draft; review coverage for #197 remains pending."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        200
+      ],
+      "reason": "Pi harness lacks subagent spawning, so #200 was executed locally after #197 surface capture. Sub-PR #267 opened against parent branch after local verification passed."
     }
   ],
   "subissues": [
@@ -247,24 +257,26 @@
       "number": 200,
       "url": "https://github.com/polymetrics-ai/cli/issues/200",
       "branch": "feat/200-gorgias-operation-ledger",
-      "pr_url": "",
-      "worker": "pending",
-      "status": "planned",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/267",
+      "worker": "local_critical_path_pi_orchestrator",
+      "status": "sub_pr_open",
       "write_scope": [
         "internal/connectors/defs/gorgias/api_surface.json",
+        "internal/connectors/defs/gorgias/docs.md",
+        "cmd/connectorgen/gorgias_api_surface_test.go",
         ".planning/phases/issue-200-gorgias-operation-ledger"
       ],
-      "worker_directory": "",
-      "verification": "blocked_on_dependencies",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-196-gorgias-cli-parity",
+      "verification": "local focused gates and broad gate passed: go vet ./..., go test ./..., go build ./cmd/pm, make verify",
       "automated_review": {
-        "primary_route": "blocked",
+        "primary_route": "coderabbit_auto",
         "status": "pending",
-        "head_sha": "",
-        "reviewed_range": "pending",
-        "coverage_route": "blocked",
+        "head_sha": "1ff0fdfa8c2b4919e3b71b635de54d142e53758b",
+        "reviewed_range": "pending for stacked sub-PR #267; if CodeRabbit skips non-default base, parent PR fallback coverage is required before provisional integration is final",
+        "coverage_route": "stacked_sub_pr_then_parent_pr_fallback",
         "fallback_route": "none",
-        "disposition_summary": "Blocked on #197 official surface refresh",
-        "disposition_url": ""
+        "disposition_summary": "Awaiting automated review/check coverage; no findings to disposition yet.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/267"
       }
     },
     {
@@ -355,5 +367,5 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T21:45:00Z"
+  "updated_at": "2026-07-10T00:00:00Z"
 }

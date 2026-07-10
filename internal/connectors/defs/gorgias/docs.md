@@ -63,9 +63,9 @@ customers, messages, and satisfaction surveys.
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage currently includes 4 stream-backed endpoint group(s) and 7 legacy out-of-scope rows.
-- The public Gorgias llms.txt plus linked ReadMe OpenAPI pages expose 114 operations. Issue #200
-  owns the complete operation ledger; this metadata slice does not claim full 114-operation runtime
-  parity.
+- API surface metadata now accounts for all 114 public operations captured from Gorgias `llms.txt`
+  plus linked ReadMe OpenAPI pages.
+- Executable API coverage remains limited to the 4 stream-backed endpoint groups listed above; the
+  other operation-ledger rows are blocked metadata and do not claim runtime parity.
 - Planned CLI entries in `cli_surface.json` are discovery/help metadata only until later lanes add
   streams, direct reads, binary policies, or typed reverse-ETL actions.

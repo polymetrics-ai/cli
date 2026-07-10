@@ -78,8 +78,17 @@
         200
       ],
       "reason": "Parent PR #229 checks passed; CodeRabbit skipped draft parent PR, so #197 review coverage remains pending and #200 is paused behind review routing."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "cycle": "issue-200-sub-pr-open",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        200
+      ],
+      "reason": "Generated complete 114-operation Gorgias ledger with red/green TDD evidence, passed local gates, and opened sub-PR #267 to the parent branch."
     }
   ],
   "verificationPassed": false,
-  "verificationBlocker": "automated review coverage pending because CodeRabbit skipped draft parent PR #229"
+  "verificationBlocker": "sub-PR #267 automated review/check coverage pending; #197 parent fallback review still pending because draft parent PR skipped CodeRabbit"
 }

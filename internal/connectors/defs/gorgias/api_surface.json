@@ -1,14 +1,73 @@
 {
   "api": "Gorgias REST API (https://<domain>.gorgias.com/api)",
-  "docs": "https://developers.gorgias.com/reference",
-  "reviewed_at": "2026-07-09",
-  "scope": "issue #197 CLI metadata bridge: the current executable surface remains the 4 legacy-parity read streams only (tickets, customers, messages, satisfaction-surveys). The public Gorgias llms.txt plus linked ReadMe OpenAPI pages expose 114 operations; issue #200 owns full operation-ledger classification before later stream, direct-read, binary, and reverse-ETL lanes claim implementation.",
+  "docs": "https://developers.gorgias.com/reference; https://developers.gorgias.com/llms.txt",
+  "reviewed_at": "2026-07-10",
+  "operation_ledger_version": 1,
+  "scope": "issue #200 operation ledger: all 114 public Gorgias operations captured from llms.txt-linked ReadMe/OpenAPI pages are accounted for. Only the four existing read streams are executable; all other direct-read, binary/file, reverse-ETL, admin, destructive, and product-scope operations remain blocked metadata until their dedicated implementation lanes add typed behavior and safety gates.",
   "endpoints": [
     {
       "method": "GET",
-      "path": "/tickets",
-      "covered_by": {
-        "stream": "tickets"
+      "path": "/account",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Retrieve your account is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-account.md",
+        "notes": "operation_id: get-account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/account/settings",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List settings is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-account-settings.md",
+        "notes": "operation_id: list-account-settings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/account/settings",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create a setting mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-account-setting.md",
+        "notes": "operation_id: create-account-setting"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/account/settings/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update a setting mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-account-setting.md",
+        "notes": "operation_id: update-account-setting"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete customers can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-customers.md",
+        "notes": "operation_id: delete-customers"
       }
     },
     {
@@ -19,10 +78,588 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/customers",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Create a customer mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-customer.md",
+        "notes": "operation_id: create-customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/merge",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Merge two customers can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/merge-customers.md",
+        "notes": "operation_id: merge-customers"
+      }
+    },
+    {
       "method": "GET",
-      "path": "/messages",
-      "covered_by": {
-        "stream": "messages"
+      "path": "/customers/{customer_id}/custom-fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List customer field values is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-customer-custom-fields-values.md",
+        "notes": "operation_id: list-customer-custom-fields-values"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{customer_id}/custom-fields",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Update customer fields values mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-values.md",
+        "notes": "operation_id: update-customer-custom-field-values"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/custom-fields/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete customer field value can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-customer-custom-field-value.md",
+        "notes": "operation_id: delete-customer-custom-field-value"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{customer_id}/custom-fields/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Update customer field value mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-value.md",
+        "notes": "operation_id: update-customer-custom-field-value"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{customer_id}/data",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Set customer data mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-customer-data.md",
+        "notes": "operation_id: update-customer-data"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a customer can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-customer.md",
+        "notes": "operation_id: delete-customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Retrieve a customer is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-customer.md",
+        "notes": "operation_id: get-customer"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Update a customer mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-customer.md",
+        "notes": "operation_id: update-customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom-fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "List custom fields is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-custom-fields.md",
+        "notes": "operation_id: list-custom-fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom-fields",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create a custom field mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-custom-field.md",
+        "notes": "operation_id: create-custom-field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom-fields",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Bulk update a list of custom fields mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-custom-fields.md",
+        "notes": "operation_id: update-custom-fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom-fields/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a custom field is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-custom-field.md",
+        "notes": "operation_id: get-custom-field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/custom-fields/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update a custom field mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-custom-field.md",
+        "notes": "operation_id: update-custom-field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List events is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-events.md",
+        "notes": "operation_id: list-events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Retrieve an event is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-event.md",
+        "notes": "operation_id: get-event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/upload",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Upload files uses file, recording, upload, or export payload semantics; it remains blocked until typed binary policy is implemented instead of raw passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/post_api-upload.md",
+        "notes": "operation_id: unavailable"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{file_type}/download/{domain_hash}/{resource_name}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Download a file uses file, recording, upload, or export payload semantics; it remains blocked until typed binary policy is implemented instead of raw passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/download-file.md",
+        "notes": "operation_id: download-file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List integrations is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-integrations.md",
+        "notes": "operation_id: list-integrations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/integrations",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create an integration mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-integration.md",
+        "notes": "operation_id: create-integration"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/integrations/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete an integration can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-integration.md",
+        "notes": "operation_id: delete-integration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/integrations/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Retrieve an integration is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-integration.md",
+        "notes": "operation_id: get-integration"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/integrations/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update an integration mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-integration.md",
+        "notes": "operation_id: update-integration"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "List jobs is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-jobs.md",
+        "notes": "operation_id: list-jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/jobs",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create a job mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-job.md",
+        "notes": "operation_id: create-job"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/jobs/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Cancel a job can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/cancel-job.md",
+        "notes": "operation_id: cancel-job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a job is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-job.md",
+        "notes": "operation_id: get-job"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/jobs/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update a job mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-job.md",
+        "notes": "operation_id: update-job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macros",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "List macros is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-macros.md",
+        "notes": "operation_id: list-macros"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/macros",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create a macro mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-macro.md",
+        "notes": "operation_id: create-macro"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/macros/archive",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Archive macros mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/bulk-archive-macros.md",
+        "notes": "operation_id: bulk-archive-macros"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/macros/unarchive",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Unarchive macros mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/bulk-unarchive-macros.md",
+        "notes": "operation_id: bulk-unarchive-macros"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/macros/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a macro can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-macro.md",
+        "notes": "operation_id: delete-macro"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macros/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a macro is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-macro.md",
+        "notes": "operation_id: get-macro"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/macros/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update a macro mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-macro.md",
+        "notes": "operation_id: update-macro"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metric-cards/{slug}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a metric card by slug is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-metric-card.md",
+        "notes": "operation_id: get-metric-card"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metric-cards",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Search metric cards is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/search-metric-cards.md",
+        "notes": "operation_id: search-metric-cards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metric-cards/{slug}/feedback",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Submit feedback on a metric card definition is product-feedback or control-plane scoped and does not map to connector ETL/reverse-ETL data movement; no raw passthrough is exposed.",
+        "source_url": "https://developers.gorgias.com/reference/create-metric-card-feedback.md",
+        "notes": "operation_id: create-metric-card-feedback; product-scope blocked"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "List rules is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-rules.md",
+        "notes": "operation_id: list-rules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rules",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create a rule mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-rule.md",
+        "notes": "operation_id: create-rule"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rules/priorities",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update rules' priorities mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-rules-priorities.md",
+        "notes": "operation_id: update-rules-priorities"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rules/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a rule can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-rule.md",
+        "notes": "operation_id: delete-rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rules/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a rule is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-rule.md",
+        "notes": "operation_id: get-rule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rules/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update a rule mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-rule.md",
+        "notes": "operation_id: update-rule"
       }
     },
     {
@@ -34,58 +671,796 @@
     },
     {
       "method": "POST",
-      "path": "/tickets",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "path": "/satisfaction-surveys",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Create a survey mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-satisfaction-survey.md",
+        "notes": "operation_id: create-satisfaction-survey"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/satisfaction-surveys/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a survey is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-satisfaction-survey.md",
+        "notes": "operation_id: get-satisfaction-survey"
       }
     },
     {
       "method": "PUT",
-      "path": "/tickets/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "path": "/satisfaction-surveys/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Update a survey mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-satisfaction-survey.md",
+        "notes": "operation_id: update-satisfaction-survey"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Search for resources is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/search-1.md",
+        "notes": "operation_id: search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stats/{name}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a statistic is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-legacy-statistic.md",
+        "notes": "operation_id: get-legacy-statistic; legacy statistic endpoint"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stats/{name}/download",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Download a statistic uses file, recording, upload, or export payload semantics; it remains blocked until typed binary policy is implemented instead of raw passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/download-legacy-statistic.md",
+        "notes": "operation_id: download-legacy-statistic; legacy statistic endpoint"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete tags can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-tags.md",
+        "notes": "operation_id: delete-tags"
       }
     },
     {
       "method": "GET",
       "path": "/tags",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "List tags is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-tags.md",
+        "notes": "operation_id: list-tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create a tag mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-tag.md",
+        "notes": "operation_id: create-tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tags/{destination_tag_id}/merge",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Merge tags can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/merge-tags.md",
+        "notes": "operation_id: merge-tags"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a tag can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-tag.md",
+        "notes": "operation_id: delete-tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a tag is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-tag.md",
+        "notes": "operation_id: get-tag"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tags/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update a tag mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-tag.md",
+        "notes": "operation_id: update-tag"
       }
     },
     {
       "method": "GET",
       "path": "/teams",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "List teams is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-teams.md",
+        "notes": "operation_id: list-teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create a team mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-team.md",
+        "notes": "operation_id: create-team"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a team can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-team.md",
+        "notes": "operation_id: delete-team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a team is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-team.md",
+        "notes": "operation_id: get-team"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/teams/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update a team mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-team.md",
+        "notes": "operation_id: update-team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets",
+      "covered_by": {
+        "stream": "tickets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Create a ticket mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-ticket.md",
+        "notes": "operation_id: create-ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a ticket can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-ticket.md",
+        "notes": "operation_id: delete-ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Retrieve a ticket is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-ticket.md",
+        "notes": "operation_id: get-ticket"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Update a ticket mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-ticket.md",
+        "notes": "operation_id: update-ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/custom-fields",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List ticket field values is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-ticket-custom-fields.md",
+        "notes": "operation_id: list-ticket-custom-fields"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}/custom-fields",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Update ticket fields values mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-fields.md",
+        "notes": "operation_id: update-ticket-custom-fields"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/custom-fields/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete ticket field value can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-ticket-custom-field.md",
+        "notes": "operation_id: delete-ticket-custom-field"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}/custom-fields/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Update ticket field value mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-field.md",
+        "notes": "operation_id: update-ticket-custom-field"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/tags",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Remove ticket tags can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-ticket-tags.md",
+        "notes": "operation_id: delete-ticket-tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/tags",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Add ticket tags mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-ticket-tags.md",
+        "notes": "operation_id: create-ticket-tags"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}/tags",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Set ticket tags mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-ticket-tags.md",
+        "notes": "operation_id: update-ticket-tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/tags",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List ticket tags is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-ticket-tags.md",
+        "notes": "operation_id: list-ticket-tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages",
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/messages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List messages of a ticket is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-ticket-messages.md",
+        "notes": "operation_id: list-ticket-messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/messages",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Create a message mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-ticket-message.md",
+        "notes": "operation_id: create-ticket-message"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/messages/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a message can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-ticket-message.md",
+        "notes": "operation_id: delete-ticket-message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}/messages/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Retrieve a message is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-ticket-message.md",
+        "notes": "operation_id: get-ticket-message"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}/messages/{id}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Update a message mutates customer, ticket, message, or survey data; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-ticket-message.md",
+        "notes": "operation_id: update-ticket-message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List users is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-users.md",
+        "notes": "operation_id: list-users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create a user mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-user.md",
+        "notes": "operation_id: create-user"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/users/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a user can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-user.md",
+        "notes": "operation_id: delete-user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Retrieve a user is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-user.md",
+        "notes": "operation_id: get-user"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/users/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update a user mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-user.md",
+        "notes": "operation_id: update-user"
       }
     },
     {
       "method": "GET",
       "path": "/views",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "List views is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-views.md",
+        "notes": "operation_id: list-views"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/views",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create a view mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-view.md",
+        "notes": "operation_id: create-view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/views/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a view can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-view.md",
+        "notes": "operation_id: delete-view"
       }
     },
     {
       "method": "GET",
-      "path": "/rules",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/views/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a view is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-view.md",
+        "notes": "operation_id: get-view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/views/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update a view mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-view.md",
+        "notes": "operation_id: update-view"
       }
     },
     {
       "method": "GET",
-      "path": "/integrations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/views/{view_id}/items",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "List view's items is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-view-items.md",
+        "notes": "operation_id: list-view-items"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/views/{view_id}/items",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Search for view's items mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-view-items.md",
+        "notes": "operation_id: update-view-items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-calls",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List voice calls is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-voice-calls.md",
+        "notes": "operation_id: list-voice-calls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-calls/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Retrieve a voice call is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-voice-call.md",
+        "notes": "operation_id: get-voice-call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-call-recordings",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List voice call recordings uses file, recording, upload, or export payload semantics; it remains blocked until typed binary policy is implemented instead of raw passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/list-voice-call-recordings.md",
+        "notes": "operation_id: list-voice-call-recordings"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/phone/voice-call-recordings/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a voice call recording can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-voice-call-recording.md",
+        "notes": "operation_id: delete-voice-call-recording"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-call-recordings/{id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Retrieve a voice call recording uses file, recording, upload, or export payload semantics; it remains blocked until typed binary policy is implemented instead of raw passthrough.",
+        "source_url": "https://developers.gorgias.com/reference/get-voice-call-recording.md",
+        "notes": "operation_id: get-voice-call-recording"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-call-events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "List voice call events is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-voice-call-events.md",
+        "notes": "operation_id: list-voice-call-events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phone/voice-call-events/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Retrieve a voice call event is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-voice-call-event.md",
+        "notes": "operation_id: get-voice-call-event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/widgets",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "List widgets is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/list-widgets.md",
+        "notes": "operation_id: list-widgets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/widgets",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Create a widget mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/create-widget.md",
+        "notes": "operation_id: create-widget"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/widgets/{id}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Delete a widget can delete, merge, cancel, or remove records; it remains blocked until destructive action policy and typed confirmation are implemented.",
+        "source_url": "https://developers.gorgias.com/reference/delete-widget.md",
+        "notes": "operation_id: delete-widget"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/widgets/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a widget is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-widget.md",
+        "notes": "operation_id: get-widget"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/widgets/{id}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Update a widget mutates account, configuration, integration, or admin state; it remains blocked until a typed reverse-ETL action with plan, preview, approval, and execute is implemented.",
+        "source_url": "https://developers.gorgias.com/reference/update-widget.md",
+        "notes": "operation_id: update-widget"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/reporting/stats",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Retrieve a statistic is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
+        "source_url": "https://developers.gorgias.com/reference/get-statistic.md",
+        "notes": "operation_id: get-statistic"
       }
     }
   ]
