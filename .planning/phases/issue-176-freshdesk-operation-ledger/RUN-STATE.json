@@ -1,0 +1,26 @@
+{
+  "phase": "issue-176-freshdesk-operation-ledger",
+  "issue": 176,
+  "parent_issue": 172,
+  "status": "planned_red_baseline",
+  "gsd": {
+    "mode": "manual_fallback",
+    "reason": "scripts/gsd prompt programming-loop is not registered in this adapter; following .pi/prompts/pm-gsd-loop.md and gsd-universal-runtime-loop.md manually."
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Pi subagent tool is unavailable in this harness and the work touches shared direct-read policy plus Freshdesk defs."
+    }
+  ],
+  "tdd": {
+    "redEvidence": [
+      "freshdesk implemented coverage=5, blocked=165, total=170; exit=1"
+    ],
+    "greenEvidence": [],
+    "refactorEvidence": []
+  },
+  "verificationPassed": false,
+  "updated_at": "2026-07-10T00:00:00Z"
+}
