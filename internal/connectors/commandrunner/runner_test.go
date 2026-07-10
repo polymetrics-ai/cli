@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/bundleregistry"
 )
 
 type fakeConnector struct {
@@ -307,6 +308,85 @@ func TestBuildWriteCommandCarriesDestructiveConfirmationChallenge(t *testing.T) 
 	}
 	if result.ConfirmationChallenge != "destructive" {
 		t.Fatalf("ConfirmationChallenge = %q, want destructive", result.ConfirmationChallenge)
+	}
+}
+
+func TestFreshchatSensitiveAdminWriteCommandsCarryConfirmationChallenges(t *testing.T) {
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("freshchat")
+	if !ok {
+		t.Fatal("freshchat connector not registered")
+	}
+
+	tests := []struct {
+		name    string
+		path    []string
+		flags   map[string][]string
+		confirm string
+	}{
+		{
+			name:    "user delete",
+			path:    []string{"user", "delete"},
+			flags:   map[string][]string{"user-id": {"user_123"}},
+			confirm: "destructive",
+		},
+		{
+			name: "agent create",
+			path: []string{"agent", "create"},
+			flags: map[string][]string{
+				"email":      {"agent@example.invalid"},
+				"first-name": {"Ada"},
+				"last-name":  {"Lovelace"},
+				"role-id":    {"role_123"},
+			},
+			confirm: "admin",
+		},
+		{
+			name: "agent update",
+			path: []string{"agent", "update"},
+			flags: map[string][]string{
+				"agent-id":       {"agent_123"},
+				"first-name":     {"Ada"},
+				"last-name":      {"Lovelace"},
+				"role-id":        {"role_123"},
+				"is-deactivated": {"false"},
+			},
+			confirm: "admin",
+		},
+		{
+			name:    "agent status-update",
+			path:    []string{"agent", "status-update"},
+			flags:   map[string][]string{"agent-id": {"agent_123"}, "status": {"available"}},
+			confirm: "admin",
+		},
+		{
+			name:    "agent delete",
+			path:    []string{"agent", "delete"},
+			flags:   map[string][]string{"agent-id": {"agent_123"}},
+			confirm: "destructive",
+		},
+		{
+			name: "report extract",
+			path: []string{"report", "extract"},
+			flags: map[string][]string{
+				"start":  {"2026-01-01T00:00:00Z"},
+				"end":    {"2026-01-02T00:00:00Z"},
+				"event":  {"conversation_created"},
+				"format": {"json"},
+			},
+			confirm: "sensitive",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := BuildWriteCommand(context.Background(), connector, Request{Path: tt.path, Flags: tt.flags})
+			if err != nil {
+				t.Fatalf("BuildWriteCommand: %v", err)
+			}
+			if result.ConfirmationChallenge != tt.confirm {
+				t.Fatalf("ConfirmationChallenge = %q, want %q", result.ConfirmationChallenge, tt.confirm)
+			}
+		})
 	}
 }
 

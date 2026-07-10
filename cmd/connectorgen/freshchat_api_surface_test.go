@@ -86,6 +86,42 @@ func TestFreshchatAPISurfaceOperationLedger(t *testing.T) {
 	})
 }
 
+func TestFreshchatSensitiveAdminWritesRequireTypedConfirmation(t *testing.T) {
+	raw, err := os.ReadFile("../../internal/connectors/defs/freshchat/writes.json")
+	if err != nil {
+		t.Fatalf("read freshchat writes.json: %v", err)
+	}
+	var writes struct {
+		Actions []struct {
+			Name    string `json:"name"`
+			Confirm string `json:"confirm"`
+		} `json:"actions"`
+	}
+	if err := json.Unmarshal(raw, &writes); err != nil {
+		t.Fatalf("unmarshal freshchat writes.json: %v", err)
+	}
+
+	confirmByAction := map[string]string{}
+	for _, action := range writes.Actions {
+		confirmByAction[action.Name] = action.Confirm
+	}
+	want := map[string]string{
+		"delete_user":                    "destructive",
+		"create_agent":                   "admin",
+		"update_agent":                   "admin",
+		"update_agent_status":            "admin",
+		"delete_agent":                   "destructive",
+		"send_conversation_message":      "sensitive",
+		"send_outbound_whatsapp_message": "sensitive",
+		"extract_report":                 "sensitive",
+	}
+	for action, confirm := range want {
+		if got := confirmByAction[action]; got != confirm {
+			t.Fatalf("write action %q confirm = %q, want %q", action, got, confirm)
+		}
+	}
+}
+
 func TestFreshchatBinaryUploadCommandsUseTypedOperations(t *testing.T) {
 	cliRaw, err := os.ReadFile("../../internal/connectors/defs/freshchat/cli_surface.json")
 	if err != nil {
