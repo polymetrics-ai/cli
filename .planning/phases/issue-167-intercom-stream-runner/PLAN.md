@@ -84,4 +84,4 @@ Complete Intercom connector CLI parity for the official Intercom OpenAPI 2.14 su
 
 - Stream runner implemented: Intercom stream set expanded and conformance fixtures pass with bounded query defaults.
 - Combined branch `feat/166-171-intercom-complete-implementation` passed local gates; see sibling phase `issue-166-171-intercom-complete-implementation` for full TDD and verification evidence.
-- Stacked PR #257 is open against the parent branch; CI/review routing pending.
+- Stacked PR #257 passed CI and was squash-merged into the parent branch at `8362291f`; parent PR review/fallback coverage pending.

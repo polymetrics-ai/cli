@@ -29,7 +29,7 @@
 - `go test ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/cli ./internal/connectors/conformance -count=1` passed.
 - Full gates passed: `go vet ./...`, `go test ./... -timeout=20m`, `go build ./cmd/pm`, `make verify`.
 - Implementation checkpoint commit: `bb382e48 feat(intercom): implement complete CLI command parity`.
-- Stacked PR opened: https://github.com/polymetrics-ai/cli/pull/257.
+- Stacked PR opened: https://github.com/polymetrics-ai/cli/pull/257; CI passed and the PR was squash-merged into the parent branch at `8362291f`.
 
 ## Refactor / fix evidence
 
