@@ -79,7 +79,7 @@
     },
     {
       "number": 185,
-      "status": "ready_after_181_184_integration",
+      "status": "in_progress_local_critical_path",
       "dependencies": [
         181,
         184
@@ -87,7 +87,7 @@
       "write_scope": [
         "direct-read metadata/engine/tests for Freshchat"
       ],
-      "decision": "ready_local_critical_path_or_worker_when_available"
+      "decision": "started_local_critical_path"
     },
     {
       "number": 186,
@@ -153,6 +153,14 @@
         183
       ],
       "reason": "PR #247 CI passed and was squash-merged to parent branch as fd49739a; automated review remains pending through parent PR coverage/fallback."
+    },
+    {
+      "timestamp": "2026-07-09T23:36:00Z",
+      "decision": "started_local_critical_path",
+      "issue_numbers": [
+        185
+      ],
+      "reason": "Issue #185 direct read is unblocked; no Pi subagent tool is available, so start locally on feat/185-freshchat-direct-read."
     }
   ],
   "subissues": [
@@ -254,5 +262,5 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-09T23:31:42Z"
+  "updated_at": "2026-07-09T23:36:00Z"
 }

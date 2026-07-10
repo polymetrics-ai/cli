@@ -145,7 +145,16 @@
       "issue_numbers": [
         183
       ]
+    },
+    {
+      "timestamp": "2026-07-09T23:36:00Z",
+      "cycle": "subissue-start",
+      "decision": "started_local_critical_path",
+      "reason": "Issue #185 direct read is unblocked by #181/#184 integration; no Pi subagent tool is available, so start locally on feat/185-freshchat-direct-read.",
+      "issue_numbers": [
+        185
+      ]
     }
   ],
-  "updated_at": "2026-07-09T23:31:42Z"
+  "updated_at": "2026-07-09T23:36:00Z"
 }

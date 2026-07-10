@@ -30,7 +30,7 @@ func TestFreshchatAPISurfaceOperationLedger(t *testing.T) {
 		t.Fatalf("operation_ledger_version = %d, want 1", surface.OperationLedgerVersion)
 	}
 
-	streams, writes, excluded, operations := 0, 0, 0, 0
+	streams, writes, directReads, excluded, operations := 0, 0, 0, 0, 0
 	models := map[string]int{}
 	for i, ep := range surface.Endpoints {
 		if _, ok := ep.CoveredBy["stream"]; ok {
@@ -38,6 +38,9 @@ func TestFreshchatAPISurfaceOperationLedger(t *testing.T) {
 		}
 		if _, ok := ep.CoveredBy["write"]; ok {
 			writes++
+		}
+		if _, ok := ep.CoveredBy["direct_read"]; ok {
+			directReads++
 		}
 		if len(ep.Excluded) > 0 {
 			excluded++
@@ -69,14 +72,16 @@ func TestFreshchatAPISurfaceOperationLedger(t *testing.T) {
 	if writes != 13 {
 		t.Fatalf("write endpoints = %d, want 13", writes)
 	}
-	if operations != 3 {
-		t.Fatalf("blocked operation endpoints = %d, want 3", operations)
+	if directReads != 1 {
+		t.Fatalf("direct-read endpoints = %d, want 1", directReads)
+	}
+	if operations != 2 {
+		t.Fatalf("blocked operation endpoints = %d, want 2", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
 	}
 	assertStringIntMap(t, "models", models, map[string]int{
-		"direct_read": 1,
-		"disallowed":  2,
+		"disallowed": 2,
 	})
 }

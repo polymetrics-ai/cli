@@ -22,6 +22,7 @@ const (
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
+	directReadPolicyFreshchatUsersFetch        = "freshchat_users_fetch"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -31,8 +32,11 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		return connectors.DirectReadResult{}, err
 	}
 	method := strings.ToUpper(strings.TrimSpace(req.Method))
-	if method != http.MethodGet {
-		return connectors.DirectReadResult{}, fmt.Errorf("direct read requires GET, got %s", method)
+	if !directReadMethodAllowed(method, req.OutputPolicy) {
+		return connectors.DirectReadResult{}, fmt.Errorf("direct read output policy %q does not allow method %s", req.OutputPolicy, method)
+	}
+	if method == http.MethodPost && len(req.Body) == 0 {
+		return connectors.DirectReadResult{}, fmt.Errorf("direct read POST requires a non-empty request body")
 	}
 	if isAbsoluteHTTPURL(req.Path) {
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read endpoint must be connector-relative, got absolute URL")
@@ -62,7 +66,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
-	resp, err := rt.Requester.DoLimited(ctx, method, resolvedPath, query, nil, maxBytes)
+	resp, err := rt.Requester.DoLimited(ctx, method, resolvedPath, query, req.Body, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		msg := safety.RedactErrorText(err.Error())
@@ -112,8 +116,21 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
+	case directReadPolicyFreshchatUsersFetch:
+		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
+	}
+}
+
+func directReadMethodAllowed(method, policy string) bool {
+	switch policy {
+	case directReadPolicyGitHubContentsFileMetadata, directReadPolicyGitHubContentsDirectory:
+		return method == http.MethodGet
+	case directReadPolicyFreshchatUsersFetch:
+		return method == http.MethodPost
+	default:
+		return false
 	}
 }
 
@@ -142,6 +159,21 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 			out = append(out, item)
 		}
 		return out, nil
+	case directReadPolicyFreshchatUsersFetch:
+		obj, ok := body.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("direct read output policy %q requires a response object", policy)
+		}
+		users, ok := obj["users"].([]any)
+		if !ok {
+			return nil, fmt.Errorf("direct read output policy %q requires a users array", policy)
+		}
+		out := make(map[string]any, len(obj))
+		for k, v := range obj {
+			out[k] = redactSensitiveJSONValue(v)
+		}
+		out["users"] = redactSensitiveJSONValue(users)
+		return out, nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
@@ -162,6 +194,39 @@ func redactGitHubContentsObject(in map[string]any) map[string]any {
 		}
 	}
 	return out
+}
+
+func redactSensitiveJSONValue(value any) any {
+	switch v := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(v))
+		for key, item := range v {
+			if isSensitiveDirectReadKey(key) {
+				out[key] = "***"
+				continue
+			}
+			out[key] = redactSensitiveJSONValue(item)
+		}
+		return out
+	case []any:
+		out := make([]any, 0, len(v))
+		for _, item := range v {
+			out = append(out, redactSensitiveJSONValue(item))
+		}
+		return out
+	default:
+		return value
+	}
+}
+
+func isSensitiveDirectReadKey(key string) bool {
+	normalized := strings.ToLower(strings.ReplaceAll(key, "-", "_"))
+	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "authorization"} {
+		if strings.Contains(normalized, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 func rejectSensitiveRepositoryPath(value string) error {

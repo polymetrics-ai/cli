@@ -102,11 +102,19 @@
     },
     {
       "path": "user fetch",
-      "summary": "Fetch a request-body-selected subset of Freshchat users",
+      "summary": "Fetch Freshchat users by id list",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developers.freshchat.com/api/",
-      "notes": "POST /users/fetch is read-like but requires request-body criteria; bounded direct-read body support is tracked by issues #185 and #186."
+      "api_surface": [
+        { "method": "POST", "path": "/users/fetch" }
+      ],
+      "output_policy": "freshchat_users_fetch",
+      "flags": [
+        { "name": "id", "type": "string_array", "summary": "Freshchat user ids. Repeat or comma-separate to fetch multiple users.", "maps_to": "body.ids" }
+      ],
+      "examples": ["pm freshchat user fetch --id user_123 --id user_456 --json"],
+      "notes": "Typed direct-read body support is limited to the Freshchat users/fetch ids array; this is not a raw HTTP POST escape hatch."
     },
     {
       "path": "user view",

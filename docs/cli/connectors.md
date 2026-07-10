@@ -71,6 +71,11 @@ FRESHCHAT COMMAND SURFACE
     Use --config for scoped detail streams until direct-read path flags are
     implemented.
 
+  pm freshchat user fetch --credential <name> --id user_123 --id user_456 --json
+    Runs the typed direct-read `POST /users/fetch` command with a bounded JSON
+    body containing only the declared ids array. This is not a generic HTTP POST
+    escape hatch.
+
   Freshchat writes remain reverse ETL only: plan, preview, approval token, then
   execute. Multipart file/image upload commands are listed as excluded and do
   not expose a raw upload escape hatch.

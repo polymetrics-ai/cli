@@ -100,6 +100,49 @@ func TestDirectReadRejectsAbsoluteURL(t *testing.T) {
 	}
 }
 
+func TestDirectReadFreshchatUsersFetchPOST(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", r.Method)
+		}
+		if r.URL.Path != "/users/fetch" {
+			t.Fatalf("path = %s, want /users/fetch", r.URL.Path)
+		}
+		var body map[string][]string
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode request body: %v", err)
+		}
+		if got := strings.Join(body["ids"], ","); got != "user_1,user_2" {
+			t.Fatalf("body ids = %q, want user_1,user_2", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"users":[{"id":"user_1"},{"id":"user_2"}]}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodPost, "/users/fetch"), connectors.DirectReadRequest{
+		Method:       http.MethodPost,
+		Path:         "/users/fetch",
+		Body:         map[string]any{"ids": []string{"user_1", "user_2"}},
+		MaxBytes:     1024,
+		OutputPolicy: "freshchat_users_fetch",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("status = %d, want 200", result.Status)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	users, ok := body["users"].([]any)
+	if !ok || len(users) != 2 {
+		t.Fatalf("body users = %#v, want two users", body["users"])
+	}
+}
+
 func TestDirectReadRejectsMutationMethod(t *testing.T) {
 	_, err := DirectRead(context.Background(), directReadBundle("https://api.github.test", http.MethodPost, "/repos/{owner}/{repo}/contents/{path}"), connectors.DirectReadRequest{
 		Method:       http.MethodPost,
@@ -110,8 +153,8 @@ func TestDirectReadRejectsMutationMethod(t *testing.T) {
 	if err == nil {
 		t.Fatal("DirectRead error = nil, want mutation rejection")
 	}
-	if !strings.Contains(err.Error(), "GET") {
-		t.Fatalf("DirectRead error = %q, want GET", err.Error())
+	if !strings.Contains(err.Error(), "does not allow method POST") {
+		t.Fatalf("DirectRead error = %q, want method-policy rejection", err.Error())
 	}
 }
 

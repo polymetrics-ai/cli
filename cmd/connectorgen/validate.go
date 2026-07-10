@@ -102,6 +102,7 @@ var surfaceOperationRisks = map[string]bool{
 var directReadOutputPolicies = map[string]bool{
 	"github_contents_file_metadata": true,
 	"github_contents_directory":     true,
+	"freshchat_users_fetch":         true,
 }
 
 var sourceRequiredOperationModels = map[string]bool{
@@ -109,6 +110,29 @@ var sourceRequiredOperationModels = map[string]bool{
 	"admin_reverse_etl":     true,
 	"destructive_action":    true,
 	"disallowed":            true,
+}
+
+func directReadMethodAllowed(method, outputPolicy string) bool {
+	switch outputPolicy {
+	case "github_contents_file_metadata", "github_contents_directory":
+		return method == "GET"
+	case "freshchat_users_fetch":
+		return method == "POST"
+	default:
+		return false
+	}
+}
+
+func implementedDirectReadCommand(b engine.Bundle, path string) (engine.CLICommand, bool) {
+	if b.CLISurface == nil {
+		return engine.CLICommand{}, false
+	}
+	for _, cmd := range b.CLISurface.Commands {
+		if cmd.Path == path && cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+			return cmd, true
+		}
+	}
+	return engine.CLICommand{}, false
 }
 
 // mutationMethods are the HTTP verbs api_surface rule 4 treats as write
@@ -614,16 +638,18 @@ func checkAPISurface(b engine.Bundle) []Finding {
 				}
 			}
 			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
-				if !directReads[directRead] {
+				cmd, ok := implementedDirectReadCommand(b, directRead)
+				if !ok {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceUnknownTarget,
 						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead),
 					})
+					continue
 				}
-				if !strings.EqualFold(ep.Method, "GET") {
+				if cmd.Operation == "" && !directReadMethodAllowed(strings.ToUpper(ep.Method), cmd.OutputPolicy) {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path),
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read %q does not allow method %s with output_policy %q", i, ep.Method, ep.Path, directRead, strings.ToUpper(ep.Method), cmd.OutputPolicy),
 					})
 				}
 			}
@@ -906,12 +932,12 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 			})
 		}
 		for _, ep := range cmd.APISurface {
-			if strings.ToUpper(strings.TrimSpace(ep.Method)) != "GET" {
+			if !directReadMethodAllowed(strings.ToUpper(strings.TrimSpace(ep.Method)), cmd.OutputPolicy) {
 				findings = append(findings, Finding{
 					Connector: b.Name,
 					File:      "cli_surface.json",
 					Rule:      ruleCLISurfaceSafety,
-					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a GET api_surface endpoint, got %s", i, cmd.Path, strings.ToUpper(ep.Method)),
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) does not support api_surface method %s with output_policy %q", i, cmd.Path, strings.ToUpper(ep.Method), cmd.OutputPolicy),
 				})
 			}
 			if isAbsoluteHTTPURL(ep.Path) {
