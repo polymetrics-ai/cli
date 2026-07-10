@@ -44,11 +44,12 @@ Issues: #78, #83-#89
    - `golangci-lint run` (full-repo run currently blocked by unrelated pre-existing issues; `golangci-lint run --new-from-rev origin/main` passes)
    - `make verify` if time allows ✅
    - CLI parity checks for root/help/connector leaf help/docs.
-4. Push rebased branch with `--force-with-lease` only after local gates pass. Pending decision because full-repo `golangci-lint run` fails outside PR scope.
-5. Request one Claude review pass with `gh pr comment 127 --body "@claude review this PR"`.
-6. Collect inline and summary comments, triage every finding, and reply in-thread using the required disposition template.
-7. Implement accepted fixes only after disposition analysis, with tests and docs/website parity updates when behavior/docs change.
-8. Re-run targeted + broad gates, push reviewed fix commits, request one more Claude pass only if needed, and report final status.
+4. Fix full-repository `golangci-lint run` blockers now that the coordinator requested clearing the gate before review. Keep fixes mechanical and dependency-free. ✅
+5. Push rebased branch with `--force-with-lease` only after local gates pass. Pending.
+6. Request one Claude review pass with `gh pr comment 127 --body "@claude review this PR"`.
+7. Collect inline and summary comments, triage every finding, and reply in-thread using the required disposition template.
+8. Implement accepted fixes only after disposition analysis, with tests and docs/website parity updates when behavior/docs change.
+9. Re-run targeted + broad gates, push reviewed fix commits, request one more Claude pass only if needed, and report final status.
 
 ## Safety boundaries
 

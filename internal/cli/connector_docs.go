@@ -190,20 +190,6 @@ func definitionDocsMarkdown(def connectors.Definition) string {
 	return "[Documentation](" + markdownCell(def.DocsURL) + ")"
 }
 
-func connectorDocsProviderReference(values ...string) bool {
-	token := connectorDocsProviderReferenceToken()
-	for _, value := range values {
-		if strings.Contains(strings.ToLower(value), token) {
-			return true
-		}
-	}
-	return false
-}
-
-func connectorDocsProviderReferenceToken() string {
-	return "air" + "byte"
-}
-
 func markdownCell(value string) string {
 	value = strings.ReplaceAll(value, "|", "\\|")
 	value = strings.ReplaceAll(value, "\n", " ")
@@ -276,7 +262,7 @@ func copyFile(src, dst string) error {
 	if err != nil {
 		return fmt.Errorf("open connector icon %s: %w", src, err)
 	}
-	defer in.Close()
+	defer func() { _ = in.Close() }()
 	out, err := os.OpenFile(dst, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o644)
 	if err != nil {
 		return fmt.Errorf("create connector icon %s: %w", dst, err)

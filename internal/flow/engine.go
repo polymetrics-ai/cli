@@ -105,9 +105,11 @@ func (e *Engine) acquireLease() error {
 		}
 		return err
 	}
-	defer f.Close()
-	fmt.Fprintf(f, "%d\n", os.Getpid())
-	return nil
+	if _, err := fmt.Fprintf(f, "%d\n", os.Getpid()); err != nil {
+		_ = f.Close()
+		return err
+	}
+	return f.Close()
 }
 
 func (e *Engine) releaseLease() {

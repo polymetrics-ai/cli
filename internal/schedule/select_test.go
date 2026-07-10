@@ -2,7 +2,6 @@ package schedule
 
 import (
 	"context"
-	"os"
 	"testing"
 )
 
@@ -18,8 +17,7 @@ func TestSelectBackend_ForceCrontab(t *testing.T) {
 
 func TestSelectBackend_TemporalReachable(t *testing.T) {
 	ctx := context.Background()
-	os.Setenv("POLYMETRICS_TEMPORAL_ADDR", "localhost:7233")
-	defer os.Unsetenv("POLYMETRICS_TEMPORAL_ADDR")
+	t.Setenv("POLYMETRICS_TEMPORAL_ADDR", "localhost:7233")
 	alwaysOK := func(_ context.Context, _ string) bool { return true }
 	b := SelectBackend(ctx, false, alwaysOK)
 	if b.Kind() != KindTemporal {
@@ -29,8 +27,7 @@ func TestSelectBackend_TemporalReachable(t *testing.T) {
 
 func TestSelectBackend_TemporalUnreachableFallsBack(t *testing.T) {
 	ctx := context.Background()
-	os.Setenv("POLYMETRICS_TEMPORAL_ADDR", "localhost:7233")
-	defer os.Unsetenv("POLYMETRICS_TEMPORAL_ADDR")
+	t.Setenv("POLYMETRICS_TEMPORAL_ADDR", "localhost:7233")
 	alwaysFail := func(_ context.Context, _ string) bool { return false }
 	b := SelectBackend(ctx, false, alwaysFail)
 	if b.Kind() == KindTemporal {
@@ -40,7 +37,7 @@ func TestSelectBackend_TemporalUnreachableFallsBack(t *testing.T) {
 
 func TestSelectBackend_Darwin(t *testing.T) {
 	ctx := context.Background()
-	os.Unsetenv("POLYMETRICS_TEMPORAL_ADDR")
+	t.Setenv("POLYMETRICS_TEMPORAL_ADDR", "")
 	b := SelectBackend(ctx, false, nil)
 	// On darwin expect launchd; the NOT-YET-IMPLEMENTED stub returns crontab, so this is RED on darwin.
 	if goOS() == "darwin" {
@@ -52,7 +49,7 @@ func TestSelectBackend_Darwin(t *testing.T) {
 
 func TestSelectBackend_Linux(t *testing.T) {
 	ctx := context.Background()
-	os.Unsetenv("POLYMETRICS_TEMPORAL_ADDR")
+	t.Setenv("POLYMETRICS_TEMPORAL_ADDR", "")
 	b := SelectBackend(ctx, false, nil)
 	if goOS() == "linux" {
 		if b.Kind() == KindLaunchd {

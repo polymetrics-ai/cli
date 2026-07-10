@@ -40,10 +40,13 @@ func (l JSONLedger) Append(ctx context.Context, record RunRecord) error {
 	if err != nil {
 		return fmt.Errorf("open json ledger: %w", err)
 	}
-	defer file.Close()
 	enc := json.NewEncoder(file)
 	if err := enc.Encode(record); err != nil {
+		_ = file.Close()
 		return fmt.Errorf("write json ledger: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return fmt.Errorf("close json ledger: %w", err)
 	}
 	return nil
 }

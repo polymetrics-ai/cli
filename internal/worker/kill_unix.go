@@ -13,6 +13,3 @@ import (
 func setProcAttr(cmd *exec.Cmd) {
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 }
-
-// killSupported reports whether process-group kill is available on this OS.
-func killSupported() bool { return true }

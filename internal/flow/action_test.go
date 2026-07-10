@@ -529,7 +529,6 @@ func TestActionReceiptWrittenToLedger(t *testing.T) {
 type stubActionRunner struct {
 	mu       sync.Mutex
 	executed []string // run IDs passed to Execute
-	planErr  error
 }
 
 func (s *stubActionRunner) ExecuteStep(ctx context.Context, step FlowStep, records []map[string]any, token, runID string) (ActionResult, error) {

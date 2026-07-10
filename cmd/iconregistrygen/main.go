@@ -76,23 +76,26 @@ func fatal(err error) {
 
 func loadRegistry(source string) (registryFile, error) {
 	var data []byte
-	var err error
 	if strings.HasPrefix(source, "http://") || strings.HasPrefix(source, "https://") {
 		client := http.Client{Timeout: 30 * time.Second}
 		resp, err := client.Get(source)
 		if err != nil {
 			return registryFile{}, fmt.Errorf("fetch registry: %w", err)
 		}
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 			return registryFile{}, fmt.Errorf("fetch registry returned %s", resp.Status)
 		}
 		data, err = io.ReadAll(resp.Body)
+		if err != nil {
+			return registryFile{}, fmt.Errorf("read registry response: %w", err)
+		}
 	} else {
+		var err error
 		data, err = os.ReadFile(source)
-	}
-	if err != nil {
-		return registryFile{}, err
+		if err != nil {
+			return registryFile{}, err
+		}
 	}
 	var registry registryFile
 	if err := json.Unmarshal(data, &registry); err != nil {
@@ -285,7 +288,7 @@ func downloadIconAsset(client http.Client, iconsDir string, asset iconAsset) err
 	if err != nil {
 		return fmt.Errorf("fetch icon %s: %w", asset.SourceURL, err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return fmt.Errorf("fetch icon %s returned %s", asset.SourceURL, resp.Status)
 	}
@@ -345,18 +348,5 @@ func stringValue(value any) string {
 
 func boolValue(value any) bool {
 	typed, _ := value.(bool)
-	return typed
-}
-
-func mapValue(value any) map[string]any {
-	typed, _ := value.(map[string]any)
-	if typed == nil {
-		return map[string]any{}
-	}
-	return typed
-}
-
-func anySlice(value any) []any {
-	typed, _ := value.([]any)
 	return typed
 }

@@ -79,14 +79,14 @@ func writeOutTable(dir, table string, records []connectors.Record, mode, specNam
 		out["_rlm_spec"] = specName
 		out["_rlm_scored_at"] = scoredAt
 		if err := enc.Encode(out); err != nil {
-			f.Close()
-			os.Remove(tmpPath)
+			_ = f.Close()
+			_ = os.Remove(tmpPath)
 			return err
 		}
 	}
 
 	if err := f.Close(); err != nil {
-		os.Remove(tmpPath)
+		_ = os.Remove(tmpPath)
 		return err
 	}
 

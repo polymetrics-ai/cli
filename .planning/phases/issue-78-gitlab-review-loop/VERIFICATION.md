@@ -7,7 +7,7 @@
 - [x] `go build ./cmd/pm`
 - [x] `go test -timeout 20m ./...`
 - [x] `make connectorgen-validate`
-- [x] `golangci-lint run --new-from-rev origin/main`
+- [x] `golangci-lint run`
 - [x] `make verify`
 - [x] CLI parity help checks:
   - [x] `./pm help gitlab`
@@ -20,6 +20,7 @@
 ## Results
 
 - Rebase onto `origin/main` completed without conflicts.
-- Local branch-specific gates passed after fixing a new lint issue in `internal/cli/cli.go`.
+- Full `golangci-lint run` initially failed on 52 errcheck/staticcheck/unused/ineffassign findings. The coordinator requested fixing this gate before push/review.
+- Mechanical lint cleanup completed without new dependencies or credentialed checks.
+- Final `golangci-lint run` passed with `0 issues`.
 - `make verify` passed.
-- `golangci-lint run` without a diff scope still fails on repository-wide pre-existing issues unrelated to the GitLab PR (errcheck/staticcheck/unused findings in cmd/iconregistrygen, cmd/prissueguard, runtime/RLM/schedule/state, etc.). `golangci-lint run --new-from-rev origin/main` passes with `0 issues`, and `make verify`'s configured connector lint scope passes with `0 issues`.

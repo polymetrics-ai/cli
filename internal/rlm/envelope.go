@@ -22,7 +22,7 @@ func readEnvelopedRecords(path string) ([]connectors.Record, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	var records []connectors.Record
 	sc := bufio.NewScanner(f)

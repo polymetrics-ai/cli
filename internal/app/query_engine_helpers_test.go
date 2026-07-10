@@ -20,7 +20,7 @@ func seedWarehouseTable(t *testing.T, root, table string, records []map[string]a
 	if err != nil {
 		t.Fatalf("create table file: %v", err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 	enc := json.NewEncoder(f)
 	for _, rec := range records {
 		if err := enc.Encode(rec); err != nil {

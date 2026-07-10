@@ -37,7 +37,9 @@ func runWorkerServe(ctx context.Context, stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		_ = writeJSON(stdout, envelope{"kind": "WorkerServe", "status": "starting", "addr": addr, "task_queue": worker.TaskQueue})
 	} else {
-		fmt.Fprintf(stdout, "pm worker serving on task queue %q (temporal=%s); Ctrl-C to stop\n", worker.TaskQueue, addr)
+		if _, err := fmt.Fprintf(stdout, "pm worker serving on task queue %q (temporal=%s); Ctrl-C to stop\n", worker.TaskQueue, addr); err != nil {
+			return err
+		}
 	}
 	return worker.Serve(ctx, addr)
 }
@@ -62,9 +64,9 @@ func runWorkerStatus(ctx context.Context, stdout io.Writer, jsonOut bool) error 
 		})
 	}
 	if addr == "" {
-		fmt.Fprintln(stdout, "worker status: POLYMETRICS_TEMPORAL_ADDR not set (RLM agent backend disabled)")
-		return nil
+		_, err := fmt.Fprintln(stdout, "worker status: POLYMETRICS_TEMPORAL_ADDR not set (RLM agent backend disabled)")
+		return err
 	}
-	fmt.Fprintf(stdout, "worker status: temporal=%s reachable=%v task_queue=%s\n", addr, reachable, worker.TaskQueue)
-	return nil
+	_, err := fmt.Fprintf(stdout, "worker status: temporal=%s reachable=%v task_queue=%s\n", addr, reachable, worker.TaskQueue)
+	return err
 }

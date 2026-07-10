@@ -30,7 +30,7 @@ func run(args []string, stdout io.Writer, stderr io.Writer, getenv func(string) 
 	if bodyFile != "" {
 		data, err := os.ReadFile(bodyFile)
 		if err != nil {
-			fmt.Fprintf(stderr, "read PR body file: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "read PR body file: %v\n", err)
 			return 2
 		}
 		body = string(data)
@@ -38,13 +38,13 @@ func run(args []string, stdout io.Writer, stderr io.Writer, getenv func(string) 
 
 	result := issueguard.ValidatePR(title, body)
 	if result.OK {
-		fmt.Fprintf(stdout, "issueguard: ok (%d linked issue%s)\n", len(result.Issues), plural(len(result.Issues)))
+		_, _ = fmt.Fprintf(stdout, "issueguard: ok (%d linked issue%s)\n", len(result.Issues), plural(len(result.Issues)))
 		return 0
 	}
 
-	fmt.Fprintln(stderr, "issueguard: blocked")
+	_, _ = fmt.Fprintln(stderr, "issueguard: blocked")
 	for _, violation := range result.Violations {
-		fmt.Fprintf(stderr, "- %s\n", violation)
+		_, _ = fmt.Fprintf(stderr, "- %s\n", violation)
 	}
 	return 1
 }

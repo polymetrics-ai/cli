@@ -453,7 +453,7 @@ func (File) Read(ctx context.Context, req ReadRequest, emit func(Record) error) 
 	if err != nil {
 		return fmt.Errorf("open file source %s: %w", path, err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	switch strings.ToLower(filepath.Ext(path)) {
 	case ".csv":
@@ -516,7 +516,7 @@ func (Warehouse) Read(ctx context.Context, req ReadRequest, emit func(Record) er
 	if err != nil {
 		return fmt.Errorf("open warehouse table %s: %w", req.Stream, err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	return readJSONL(ctx, file, emit)
 }
 
@@ -540,7 +540,7 @@ func (Warehouse) Write(ctx context.Context, req WriteRequest, records []Record) 
 	if err != nil {
 		return WriteResult{}, fmt.Errorf("open warehouse table %s: %w", table, err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	n, err := writeJSONL(ctx, file, records)
 	if err != nil {
 		return WriteResult{}, err
@@ -604,7 +604,7 @@ func (Outbox) Write(ctx context.Context, req WriteRequest, records []Record) (Wr
 	if err != nil {
 		return WriteResult{}, fmt.Errorf("open outbox %s: %w", name, err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	n, err := writeJSONL(ctx, file, enriched)
 	if err != nil {
 		return WriteResult{}, err

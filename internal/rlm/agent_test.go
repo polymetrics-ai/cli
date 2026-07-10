@@ -186,7 +186,9 @@ func writeAgentFixtureOutputWithManifest(t *testing.T, jobDir string, rows []con
 			t.Fatal(err)
 		}
 	}
-	f.Close()
+	if err := f.Close(); err != nil {
+		t.Fatal(err)
+	}
 	mb, _ := json.Marshal(agentManifest{ExpectedCount: expected, RecordsRead: expected})
 	if err := os.WriteFile(filepath.Join(outDir, "manifest.json"), mb, 0o600); err != nil {
 		t.Fatal(err)
