@@ -10,8 +10,9 @@ This page is the public website contract for the `pm` CLI. When a command is add
 | Surface | Contract |
 |---|---|
 | `pm --help` | Prints the root manual. |
-| `pm help <topic>` | Prints the embedded manual for a command group. |
+| `pm help <topic>` | Prints the embedded manual for a command group or connector command surface. |
 | `pm <command> --help` | Prints that command group's embedded manual. |
+| `pm <connector> <command> --help` | Prints generated connector command flags, API paths, and safety notes without reading credentials. |
 | `--json` | Emits a structured envelope for commands that support machine output. |
 | `--root <path>` | Selects the project root containing `.polymetrics`. |
 
@@ -42,12 +43,16 @@ This page is the public website contract for the `pm` CLI. When a command is add
 | `pm schedule` | `pm schedule create`, `pm schedule list`, `pm schedule install`, `pm schedule remove` | [/docs/architecture](/docs/architecture) |
 | `pm worker` | `pm worker serve`, `pm worker status` | [/docs/architecture](/docs/architecture) |
 
-## Connector command metadata
+## Connector command surfaces
 
-The GitHub connector has gh-inspired command metadata for future help rendering and safe command
-execution, but it is not a dispatched `pm github ...` command tree yet. See
-[/docs/github-cli-surface](/docs/github-cli-surface) for the current metadata, safety labels, and
-staged parity roadmap.
+Bundle-backed connectors can expose typed command surfaces through metadata. Run `pm help <connector>`,
+`pm <connector>`, or `pm <connector> --help` to render the connector manual; run
+`pm <connector> <command> --help` for command-specific flags, API paths, and safety notes. Runtime
+help rendering is metadata-only and does not open the local project or resolve credentials.
+
+GitHub and Zendesk are the first broad command-surface examples. GitHub remains the certification
+reference; Zendesk maps the official Support API into streams, bounded direct reads, and reverse-ETL
+actions that preserve plan → preview → approval → execute safety gates.
 
 ## Workspace commands
 

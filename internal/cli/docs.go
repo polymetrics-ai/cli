@@ -160,13 +160,19 @@ DESCRIPTION
   pm connectors inspect <name> to see write=true/false, ETL STREAMS, and
   REVERSE ETL ACTIONS without reading credentials.
 
+  Bundle-backed connectors may also expose a typed command surface. For those
+  connectors, pm help <connector>, pm <connector>, and pm <connector> --help
+  render the same connector manual, while pm <connector> <command> --help
+  renders command-specific flags, API paths, and safety notes without opening a
+  project or resolving credentials.
+
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
   source-/destination-prefixed names.
 
 CATALOG
   The connector catalog is generated from local connector metadata. The current
-  runtime catalog has 551 bare-name entries: 547 declarative bundles plus the
+  runtime catalog has 552 bare-name entries: 548 declarative bundles plus the
   local sample, file, warehouse, and outbox primitives. Use --all or the catalog
   subcommand when an agent needs to discover the complete connector universe.
   Use --capability read, write, cdc, or query to filter by executable surface.
@@ -238,6 +244,12 @@ ACTIONS
   help <name>
     Alias for the human connector manual.
 
+  <connector>
+    Dynamic connector namespace for bundle-backed command surfaces. Example:
+    pm zendesk shows the Zendesk connector manual, and
+    pm zendesk read list-tickets --help shows command-specific API and flag
+    metadata without reading credentials.
+
 EXAMPLES
   pm connectors
   pm connectors --json
@@ -246,6 +258,9 @@ EXAMPLES
   pm connectors catalog --capability write --stage generally_available --json
   pm connectors inspect github
   pm connectors inspect github --json
+  pm help zendesk
+  pm zendesk
+  pm zendesk read list-tickets --help
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem

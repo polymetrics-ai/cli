@@ -487,7 +487,11 @@ func streamSection(manifest Manifest) GuideSection {
 	}
 	lines := []string{}
 	for _, stream := range manifest.Streams {
-		lines = append(lines, stream.Name+": "+stream.Description)
+		line := stream.Name + ":"
+		if description := strings.TrimSpace(stream.Description); description != "" {
+			line += " " + description
+		}
+		lines = append(lines, line)
 		if len(stream.PrimaryKey) > 0 {
 			lines = append(lines, "  primary key: "+strings.Join(stream.PrimaryKey, ", "))
 		}
@@ -528,7 +532,11 @@ func writeActionSection(manifest Manifest) GuideSection {
 	}
 	lines := []string{}
 	for _, action := range manifest.WriteActions {
-		lines = append(lines, action.Name+": "+action.Description)
+		line := action.Name + ":"
+		if description := strings.TrimSpace(action.Description); description != "" {
+			line += " " + description
+		}
+		lines = append(lines, line)
 		if action.Method != "" || action.Path != "" {
 			lines = append(lines, "  endpoint: "+strings.TrimSpace(action.Method+" "+action.Path))
 		}
