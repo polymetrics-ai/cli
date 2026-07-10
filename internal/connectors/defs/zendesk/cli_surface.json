@@ -46,44 +46,813 @@
   ],
   "commands": [
     {
-      "path": "read candidates",
-      "summary": "Review Zendesk direct-read operations from the official OAS",
-      "intent": "docs_only",
-      "availability": "planned",
-      "source_cli_path": "Zendesk OAS GET operations",
-      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "notes": "This bundle now exposes 282 typed, bounded JSON direct-read commands. ETL streams and binary downloads remain separate lanes."
-    },
-    {
-      "path": "binary candidates",
-      "summary": "Review Zendesk binary/file read candidates from the official OAS",
+      "path": "binary show-attachment",
+      "summary": "Show Attachment",
       "intent": "direct_read",
-      "availability": "planned",
-      "source_cli_path": "Zendesk OAS GET binary/file-like operations",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ShowAttachment",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "notes": "Metadata inventory only. api_surface.json tracks 37 binary/file read candidates; #162 must define bounded size/path/download policy before execution."
+      "flags": [
+        {
+          "name": "attachment-id",
+          "type": "string",
+          "summary": "Path parameter attachment_id",
+          "maps_to": "path.attachment_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/attachments/{attachment_id}"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
     },
     {
-      "path": "write candidates",
-      "summary": "Review Zendesk sensitive/admin write candidates from the official OAS",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "source_cli_path": "Zendesk OAS POST PUT PATCH operations",
+      "path": "binary list-bookmarks",
+      "summary": "List Bookmarks",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListBookmarks",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "Zendesk mutation candidates remain blocked until typed reverse-ETL schemas, risk text, approval text, redaction, and policy gates are added.",
-      "approval": "Reverse ETL execution remains plan \u2192 preview \u2192 approval \u2192 execute.",
-      "notes": "Metadata inventory only. api_surface.json tracks 210 sensitive/admin reverse-ETL candidates."
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/bookmarks"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
     },
     {
-      "path": "destructive candidates",
-      "summary": "Review Zendesk destructive write candidates from the official OAS",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "source_cli_path": "Zendesk OAS DELETE operations",
+      "path": "binary list-custom-object-record-attachments",
+      "summary": "List Custom Object Record Attachments",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListCustomObjectRecordAttachments",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "Zendesk DELETE operations are destructive and remain blocked until typed reverse-ETL schemas, risk text, approval text, redaction, and destructive confirmation are added.",
-      "approval": "Reverse ETL execution remains plan \u2192 preview \u2192 approval \u2192 execute with typed confirmation for destructive actions.",
-      "notes": "Metadata inventory only. api_surface.json tracks 85 destructive-action candidates."
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Path parameter custom_object_key",
+          "maps_to": "path.custom_object_key"
+        },
+        {
+          "name": "record-id",
+          "type": "string",
+          "summary": "Path parameter record_id",
+          "maps_to": "path.record_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary download-custom-object-record-attachment",
+      "summary": "Download Custom Object Record Attachment",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS DownloadCustomObjectRecordAttachment",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Path parameter custom_object_key",
+          "maps_to": "path.custom_object_key"
+        },
+        {
+          "name": "record-id",
+          "type": "string",
+          "summary": "Path parameter record_id",
+          "maps_to": "path.record_id"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Path parameter id",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}/download"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-deleted-tickets",
+      "summary": "List Deleted Tickets",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListDeletedTickets",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/deleted_tickets"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-dynamic-contents",
+      "summary": "List Items",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListDynamicContents",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dynamic_content/items"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary show-dynamic-content-item",
+      "summary": "Show Item",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ShowDynamicContentItem",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "dynamic-content-item-id",
+          "type": "string",
+          "summary": "Path parameter dynamic_content_item_id",
+          "maps_to": "path.dynamic_content_item_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary dynamic-content-list-variants",
+      "summary": "List Variants",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS DynamicContentListVariants",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "dynamic-content-item-id",
+          "type": "string",
+          "summary": "Path parameter dynamic_content_item_id",
+          "maps_to": "path.dynamic_content_item_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary show-dynamic-content-variant",
+      "summary": "Show Variant",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ShowDynamicContentVariant",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "dynamic-content-item-id",
+          "type": "string",
+          "summary": "Path parameter dynamic_content_item_id",
+          "maps_to": "path.dynamic_content_item_id"
+        },
+        {
+          "name": "dynamic-content-variant-id",
+          "type": "string",
+          "summary": "Path parameter dynamic_content_variant_id",
+          "maps_to": "path.dynamic_content_variant_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary show-many-dynamic-contents",
+      "summary": "Show Many Items",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ShowManyDynamicContents",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dynamic_content/items/show_many"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-sample-export",
+      "summary": "Incremental Sample Export",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalSampleExport",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "incremental-resource",
+          "type": "string",
+          "summary": "Path parameter incremental_resource",
+          "maps_to": "path.incremental_resource"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/{incremental_resource}/sample"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-custom-object-record-export-cursor",
+      "summary": "Incremental Custom Object Record Export, Cursor Based",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalCustomObjectRecordExportCursor",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "custom-object-key",
+          "type": "string",
+          "summary": "Path parameter custom_object_key",
+          "maps_to": "path.custom_object_key"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/custom_objects/{custom_object_key}/cursor"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-organization-export",
+      "summary": "Incremental Organization Export",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalOrganizationExport",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/organizations"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-skil-based-routing-attribute-values-export",
+      "summary": "Incremental Attributes Values Export",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalSkilBasedRoutingAttributeValuesExport",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/routing/attribute_values"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-skil-based-routing-attributes-export",
+      "summary": "Incremental Attributes Export",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalSkilBasedRoutingAttributesExport",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/routing/attributes"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-skil-based-routing-instance-values-export",
+      "summary": "Incremental Instance Values Export",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalSkilBasedRoutingInstanceValuesExport",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/routing/instance_values"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-ticket-events",
+      "summary": "Incremental Ticket Event Export",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalTicketEvents",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/ticket_events"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-ticket-metric-events",
+      "summary": "List Ticket Metric Events",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListTicketMetricEvents",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/ticket_metric_events"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-ticket-export-time",
+      "summary": "Incremental Ticket Export, Time Based",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalTicketExportTime",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/tickets"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-ticket-export-cursor",
+      "summary": "Incremental Ticket Export, Cursor Based",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalTicketExportCursor",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/tickets/cursor"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-user-export-time",
+      "summary": "Incremental User Export, Time Based",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalUserExportTime",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/users"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary incremental-user-export-cursor",
+      "summary": "Incremental User Export, Cursor Based",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS IncrementalUserExportCursor",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/incremental/users/cursor"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-macro-attachments",
+      "summary": "List Macro Attachments",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListMacroAttachments",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "macro-id",
+          "type": "string",
+          "summary": "Path parameter macro_id",
+          "maps_to": "path.macro_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/macros/{macro_id}/attachments"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary show-macro-attachment",
+      "summary": "Show Macro Attachment",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ShowMacroAttachment",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "attachment-id",
+          "type": "string",
+          "summary": "Path parameter attachment_id",
+          "maps_to": "path.attachment_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/macros/attachments/{attachment_id}"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-search-results",
+      "summary": "List Search Results",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListSearchResults",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/search"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary export-search-results",
+      "summary": "Export Search Results",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ExportSearchResults",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/search/export"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-skips",
+      "summary": "List All Skips",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListSkips",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/skips"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-ticket-audits",
+      "summary": "List All Ticket Audits",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListTicketAudits",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/ticket_audits"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-ticket-content-pins",
+      "summary": "List Ticket Content Pins",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListTicketContentPins",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/ticket_content_pins"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-ticket-metrics",
+      "summary": "List Ticket Metrics",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListTicketMetrics",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/ticket_metrics"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-audits-for-ticket",
+      "summary": "List Audits for a Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListAuditsForTicket",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter ticket_id",
+          "maps_to": "path.ticket_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/tickets/{ticket_id}/audits"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-ticket-comments",
+      "summary": "List Comments",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListTicketComments",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter ticket_id",
+          "maps_to": "path.ticket_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/tickets/{ticket_id}/comments"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-ticket-skips-by-ticket",
+      "summary": "List Ticket Skips By Ticket",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListTicketSkipsByTicket",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "ticket-id",
+          "type": "string",
+          "summary": "Path parameter ticket_id",
+          "maps_to": "path.ticket_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/tickets/{ticket_id}/skips"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary show-ticket-by-messaging-conversation-id",
+      "summary": "Show Ticket by Messaging Conversation ID",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ShowTicketByMessagingConversationId",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Path parameter conversation_id",
+          "maps_to": "path.conversation_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/tickets/messaging/conversations/{conversation_id}/ticket"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary list-ticket-skips",
+      "summary": "List Ticket Skips",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ListTicketSkips",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "Path parameter user_id",
+          "maps_to": "path.user_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/users/{user_id}/skips"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary execute-view",
+      "summary": "Execute View",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ExecuteView",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Path parameter view_id",
+          "maps_to": "path.view_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/views/{view_id}/execute"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
+    },
+    {
+      "path": "binary export-view",
+      "summary": "Export View",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_cli_path": "Zendesk OAS ExportView",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "flags": [
+        {
+          "name": "view-id",
+          "type": "string",
+          "summary": "Path parameter view_id",
+          "maps_to": "path.view_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/views/{view_id}/export"
+        }
+      ],
+      "output_policy": "binary_manifest",
+      "risk": "Metadata-only binary/file read; response body bytes are never emitted or written to disk.",
+      "notes": "Executes a bounded GET and returns a binary manifest with content type, content length, bytes read, truncation status, and body_redacted=true."
     },
     {
       "path": "deprecated operations",

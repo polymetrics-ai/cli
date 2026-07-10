@@ -101,6 +101,7 @@ var surfaceOperationRisks = map[string]bool{
 
 var directReadOutputPolicies = map[string]bool{
 	"json":                          true,
+	"binary_manifest":               true,
 	"github_contents_file_metadata": true,
 	"github_contents_directory":     true,
 }

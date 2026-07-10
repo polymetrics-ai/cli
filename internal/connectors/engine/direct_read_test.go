@@ -187,7 +187,7 @@ func TestDirectReadBinaryManifestReturnsMetadataOnly(t *testing.T) {
 			t.Fatalf("path = %s, want attachment path", r.URL.Path)
 		}
 		w.Header().Set("Content-Type", "application/pdf")
-		w.Header().Set("Content-Length", "25")
+		w.Header().Set("Content-Length", "26")
 		_, _ = w.Write([]byte("synthetic-binary-body-data"))
 	}))
 	defer srv.Close()
@@ -214,7 +214,7 @@ func TestDirectReadBinaryManifestReturnsMetadataOnly(t *testing.T) {
 	if body["content_type"] != "application/pdf" {
 		t.Fatalf("content_type = %v, want application/pdf", body["content_type"])
 	}
-	if body["content_length"] != "25" {
+	if body["content_length"] != "26" {
 		t.Fatalf("content_length = %v, want header value", body["content_length"])
 	}
 	if body["bytes_read"].(int) != len("synthetic-binary-body-data") {

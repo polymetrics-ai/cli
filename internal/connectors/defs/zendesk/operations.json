@@ -229,7 +229,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/attachments/{attachment_id}",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -482,7 +482,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/bookmarks",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -1296,7 +1296,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -1359,7 +1359,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}/download",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -1786,7 +1786,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/deleted_tickets",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -1997,7 +1997,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/dynamic_content/items",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2029,7 +2029,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2077,7 +2077,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2109,7 +2109,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2187,7 +2187,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/dynamic_content/items/show_many",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2730,7 +2730,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/{incremental_resource}/sample",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2747,7 +2747,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/custom_objects/{custom_object_key}/cursor",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2764,7 +2764,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/organizations",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2781,7 +2781,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/routing/attribute_values",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2798,7 +2798,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/routing/attributes",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2815,7 +2815,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/routing/instance_values",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2832,7 +2832,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/ticket_events",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2849,7 +2849,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/ticket_metric_events",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2866,7 +2866,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/tickets",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2883,7 +2883,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/tickets/cursor",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2900,7 +2900,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/users",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -2917,7 +2917,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/incremental/users/cursor",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -3516,7 +3516,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/macros/{macro_id}/attachments",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -3591,7 +3591,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/macros/attachments/{attachment_id}",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -5432,7 +5432,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/search",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -5463,7 +5463,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/search/export",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -5582,7 +5582,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/skips",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -6070,7 +6070,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/ticket_audits",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -6087,7 +6087,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/ticket_content_pins",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -6548,7 +6548,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/ticket_metrics",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -6653,7 +6653,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/tickets/{ticket_id}/audits",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -6727,7 +6727,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/tickets/{ticket_id}/comments",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -6946,7 +6946,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/tickets/{ticket_id}/skips",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -7112,7 +7112,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/tickets/messaging/conversations/{conversation_id}/ticket",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -8289,7 +8289,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/users/{user_id}/skips",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -8816,7 +8816,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/views/{view_id}/execute",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }
@@ -8833,7 +8833,7 @@
       "binary": {
         "method": "GET",
         "path": "/api/v2/views/{view_id}/export",
-        "max_bytes": 104857600,
+        "max_bytes": 1048576,
         "allow_overwrite": false,
         "extract_archives": false
       }

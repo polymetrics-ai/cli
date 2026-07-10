@@ -347,7 +347,7 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {
 	switch policy {
-	case "json", "github_contents_file_metadata", "github_contents_directory":
+	case "json", "binary_manifest", "github_contents_file_metadata", "github_contents_directory":
 		return true
 	default:
 		return false

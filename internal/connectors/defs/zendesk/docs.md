@@ -1,9 +1,9 @@
 # Overview
 
 Zendesk is an issue #160 operation-ledger bundle for the official Zendesk Support API OAS. It
-tracks 617 operations across 429 paths in `operations.json`, enables 70 top-level ETL streams, and
-keeps bounded JSON direct reads for remaining typed GET operations, and models 295 non-deprecated
-mutations as gated reverse-ETL writes without enabling binary downloads yet.
+tracks 617 operations across 429 paths in `operations.json`, enables 70 top-level ETL streams,
+keeps bounded JSON direct reads for remaining typed GET operations, exposes binary/file-like GETs as
+metadata-only manifests, and models 295 non-deprecated mutations as gated reverse-ETL writes.
 
 Operation method baseline: GET=320, PUT=89, POST=110, DELETE=85, PATCH=13.
 
@@ -35,9 +35,8 @@ destructive`; deprecated mutating operations stay blocked in the operation ledge
 
 ## Known limits
 
-- This bundle enables top-level ETL streams, typed bounded JSON direct reads, and gated reverse-ETL writes; binary downloads remain policy-only until the binary lane is completed.
-- `api_surface.json` uses blocked-by-default operation rows and `operations.json` carries typed REST
-  and binary operation metadata so the official OAS inventory can be reviewed without exposing raw
-  generic HTTP tools.
-- `cli_surface.json` is command/help metadata only and does not add runtime `pm zendesk` dispatch.
+- This bundle enables top-level ETL streams, typed bounded JSON direct reads, metadata-only binary manifests, and gated reverse-ETL writes.
+- Binary/file-like GET commands use `output_policy=binary_manifest`: pm reads at most the bounded direct-read byte cap, emits content type/length/truncation metadata, and never emits body bytes, base64 payloads, or destination file writes.
+- `api_surface.json` uses blocked-by-default operation rows for intentionally non-executable/deprecated endpoints and `operations.json` carries typed REST and binary operation metadata so the official OAS inventory can be reviewed without exposing raw generic HTTP tools.
+- `cli_surface.json` powers runtime `pm zendesk ...` help and typed dispatch; it does not expose generic raw API access.
 - No credentialed Zendesk checks were run while authoring this metadata.

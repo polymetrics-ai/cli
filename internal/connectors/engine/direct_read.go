@@ -21,6 +21,7 @@ const (
 	defaultDirectReadMaxBytes                  = 1 << 20
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyJSON                       = "json"
+	directReadPolicyBinaryManifest             = "binary_manifest"
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
 )
@@ -76,6 +77,15 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read %s %s: %s", method, req.Path, msg)
 	}
 
+	if req.OutputPolicy == directReadPolicyBinaryManifest {
+		return connectors.DirectReadResult{
+			Connector: b.Name,
+			Method:    method,
+			Path:      resolvedPath,
+			Status:    resp.Status,
+			Body:      binaryManifest(resp.Header, resp.Body, maxBytes),
+		}, nil
+	}
 	if len(resp.Body) > maxBytes {
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read response too large: %d bytes exceeds limit %d", len(resp.Body), maxBytes)
 	}
@@ -108,7 +118,7 @@ func clampDirectReadMaxBytes(maxBytes int) int {
 
 func validateDirectReadOutputPolicy(policy string, pathParams map[string]string) error {
 	switch policy {
-	case directReadPolicyJSON:
+	case directReadPolicyJSON, directReadPolicyBinaryManifest:
 		return nil
 	case directReadPolicyGitHubContentsFileMetadata, directReadPolicyGitHubContentsDirectory:
 		if err := rejectSensitiveRepositoryPath(pathParams["path"]); err != nil {
@@ -117,6 +127,26 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
+	}
+}
+
+func binaryManifest(header http.Header, body []byte, maxBytes int) map[string]any {
+	bytesRead := len(body)
+	truncated := false
+	if bytesRead > maxBytes {
+		bytesRead = maxBytes
+		truncated = true
+	}
+	return map[string]any{
+		"body_redacted":    true,
+		"bytes_read":       bytesRead,
+		"content_length":   header.Get("Content-Length"),
+		"content_type":     header.Get("Content-Type"),
+		"max_bytes":        maxBytes,
+		"output_policy":    directReadPolicyBinaryManifest,
+		"truncated":        truncated,
+		"write_to_disk":    false,
+		"extract_archives": false,
 	}
 }
 

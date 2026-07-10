@@ -113,14 +113,8 @@
     {
       "method": "GET",
       "path": "/api/v2/attachments/{attachment_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowAttachment; tags=Attachments; summary=Show Attachment"
+      "covered_by": {
+        "direct_read": "binary show-attachment"
       }
     },
     {
@@ -238,14 +232,8 @@
     {
       "method": "GET",
       "path": "/api/v2/bookmarks",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListBookmarks; tags=Bookmarks; summary=List Bookmarks"
+      "covered_by": {
+        "direct_read": "binary list-bookmarks"
       }
     },
     {
@@ -635,14 +623,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListCustomObjectRecordAttachments; tags=Custom Object Record Attachments; summary=List Custom Object Record Attachments"
+      "covered_by": {
+        "direct_read": "binary list-custom-object-record-attachments"
       }
     },
     {
@@ -669,14 +651,8 @@
     {
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}/download",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DownloadCustomObjectRecordAttachment; tags=Custom Object Record Attachments; summary=Download Custom Object Record Attachment"
+      "covered_by": {
+        "direct_read": "binary download-custom-object-record-attachment"
       }
     },
     {
@@ -878,14 +854,8 @@
     {
       "method": "GET",
       "path": "/api/v2/deleted_tickets",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListDeletedTickets; tags=Tickets; summary=List Deleted Tickets"
+      "covered_by": {
+        "direct_read": "binary list-deleted-tickets"
       }
     },
     {
@@ -982,14 +952,8 @@
     {
       "method": "GET",
       "path": "/api/v2/dynamic_content/items",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListDynamicContents; tags=Dynamic Content; summary=List Items"
+      "covered_by": {
+        "direct_read": "binary list-dynamic-contents"
       }
     },
     {
@@ -1002,14 +966,8 @@
     {
       "method": "GET",
       "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowDynamicContentItem; tags=Dynamic Content; summary=Show Item"
+      "covered_by": {
+        "direct_read": "binary show-dynamic-content-item"
       }
     },
     {
@@ -1029,14 +987,8 @@
     {
       "method": "GET",
       "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=DynamicContentListVariants; tags=Dynamic Content Item Variants; summary=List Variants"
+      "covered_by": {
+        "direct_read": "binary dynamic-content-list-variants"
       }
     },
     {
@@ -1049,14 +1001,8 @@
     {
       "method": "GET",
       "path": "/api/v2/dynamic_content/items/{dynamic_content_item_id}/variants/{dynamic_content_variant_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowDynamicContentVariant; tags=Dynamic Content Item Variants; summary=Show Variant"
+      "covered_by": {
+        "direct_read": "binary show-dynamic-content-variant"
       }
     },
     {
@@ -1090,14 +1036,8 @@
     {
       "method": "GET",
       "path": "/api/v2/dynamic_content/items/show_many",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowManyDynamicContents; tags=Dynamic Content; summary=Show Many Items"
+      "covered_by": {
+        "direct_read": "binary show-many-dynamic-contents"
       }
     },
     {
@@ -1355,157 +1295,85 @@
     {
       "method": "GET",
       "path": "/api/v2/incremental/{incremental_resource}/sample",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalSampleExport; tags=Incremental Export; summary=Incremental Sample Export"
+      "covered_by": {
+        "direct_read": "binary incremental-sample-export"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/custom_objects/{custom_object_key}/cursor",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalCustomObjectRecordExportCursor; tags=Custom Object Records, Incremental Export; summary=Incremental Custom Object Record Export, Cursor Based"
+      "covered_by": {
+        "direct_read": "binary incremental-custom-object-record-export-cursor"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/organizations",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalOrganizationExport; tags=Incremental Export; summary=Incremental Organization Export"
+      "covered_by": {
+        "direct_read": "binary incremental-organization-export"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/routing/attribute_values",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalSkilBasedRoutingAttributeValuesExport; tags=Incremental Skill Based Routing; summary=Incremental Attributes Values Export"
+      "covered_by": {
+        "direct_read": "binary incremental-skil-based-routing-attribute-values-export"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/routing/attributes",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalSkilBasedRoutingAttributesExport; tags=Incremental Skill Based Routing; summary=Incremental Attributes Export"
+      "covered_by": {
+        "direct_read": "binary incremental-skil-based-routing-attributes-export"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/routing/instance_values",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalSkilBasedRoutingInstanceValuesExport; tags=Incremental Skill Based Routing; summary=Incremental Instance Values Export"
+      "covered_by": {
+        "direct_read": "binary incremental-skil-based-routing-instance-values-export"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/ticket_events",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalTicketEvents; tags=Incremental Export; summary=Incremental Ticket Event Export"
+      "covered_by": {
+        "direct_read": "binary incremental-ticket-events"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/ticket_metric_events",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketMetricEvents; tags=Ticket Metric Events; summary=List Ticket Metric Events"
+      "covered_by": {
+        "direct_read": "binary list-ticket-metric-events"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/tickets",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalTicketExportTime; tags=Incremental Export; summary=Incremental Ticket Export, Time Based"
+      "covered_by": {
+        "direct_read": "binary incremental-ticket-export-time"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/tickets/cursor",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalTicketExportCursor; tags=Incremental Export; summary=Incremental Ticket Export, Cursor Based"
+      "covered_by": {
+        "direct_read": "binary incremental-ticket-export-cursor"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/users",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalUserExportTime; tags=Incremental Export; summary=Incremental User Export, Time Based"
+      "covered_by": {
+        "direct_read": "binary incremental-user-export-time"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/incremental/users/cursor",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=IncrementalUserExportCursor; tags=Incremental Export; summary=Incremental User Export, Cursor Based"
+      "covered_by": {
+        "direct_read": "binary incremental-user-export-cursor"
       }
     },
     {
@@ -1791,14 +1659,8 @@
     {
       "method": "GET",
       "path": "/api/v2/macros/{macro_id}/attachments",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListMacroAttachments; tags=Macros; summary=List Macro Attachments"
+      "covered_by": {
+        "direct_read": "binary list-macro-attachments"
       }
     },
     {
@@ -1832,14 +1694,8 @@
     {
       "method": "GET",
       "path": "/api/v2/macros/attachments/{attachment_id}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowMacroAttachment; tags=Macros; summary=Show Macro Attachment"
+      "covered_by": {
+        "direct_read": "binary show-macro-attachment"
       }
     },
     {
@@ -2720,14 +2576,8 @@
     {
       "method": "GET",
       "path": "/api/v2/search",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSearchResults; tags=Search; summary=List Search Results"
+      "covered_by": {
+        "direct_read": "binary list-search-results"
       }
     },
     {
@@ -2740,14 +2590,8 @@
     {
       "method": "GET",
       "path": "/api/v2/search/export",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ExportSearchResults; tags=Search; summary=Export Search Results"
+      "covered_by": {
+        "direct_read": "binary export-search-results"
       }
     },
     {
@@ -2802,14 +2646,8 @@
     {
       "method": "GET",
       "path": "/api/v2/skips",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListSkips; tags=Ticket Skips; summary=List All Skips"
+      "covered_by": {
+        "direct_read": "binary list-skips"
       }
     },
     {
@@ -3039,27 +2877,15 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_audits",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketAudits; tags=Ticket Audits; summary=List All Ticket Audits"
+      "covered_by": {
+        "direct_read": "binary list-ticket-audits"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/ticket_content_pins",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketContentPins; tags=Ticket Content Pins; summary=List Ticket Content Pins"
+      "covered_by": {
+        "direct_read": "binary list-ticket-content-pins"
       }
     },
     {
@@ -3275,14 +3101,8 @@
     {
       "method": "GET",
       "path": "/api/v2/ticket_metrics",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketMetrics; tags=Ticket Metrics; summary=List Ticket Metrics"
+      "covered_by": {
+        "direct_read": "binary list-ticket-metrics"
       }
     },
     {
@@ -3330,14 +3150,8 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/audits",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListAuditsForTicket; tags=Ticket Audits; summary=List Audits for a Ticket"
+      "covered_by": {
+        "direct_read": "binary list-audits-for-ticket"
       }
     },
     {
@@ -3371,14 +3185,8 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/comments",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketComments; tags=Ticket Comments; summary=List Comments"
+      "covered_by": {
+        "direct_read": "binary list-ticket-comments"
       }
     },
     {
@@ -3488,14 +3296,8 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/skips",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketSkipsByTicket; tags=Ticket Skips, Tickets; summary=List Ticket Skips By Ticket"
+      "covered_by": {
+        "direct_read": "binary list-ticket-skips-by-ticket"
       }
     },
     {
@@ -3571,14 +3373,8 @@
     {
       "method": "GET",
       "path": "/api/v2/tickets/messaging/conversations/{conversation_id}/ticket",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ShowTicketByMessagingConversationId; tags=Tickets; summary=Show Ticket by Messaging Conversation ID"
+      "covered_by": {
+        "direct_read": "binary show-ticket-by-messaging-conversation-id"
       }
     },
     {
@@ -4137,14 +3933,8 @@
     {
       "method": "GET",
       "path": "/api/v2/users/{user_id}/skips",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ListTicketSkips; tags=Ticket Skips; summary=List Ticket Skips"
+      "covered_by": {
+        "direct_read": "binary list-ticket-skips"
       }
     },
     {
@@ -4395,27 +4185,15 @@
     {
       "method": "GET",
       "path": "/api/v2/views/{view_id}/execute",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ExecuteView; tags=Views; summary=Execute View"
+      "covered_by": {
+        "direct_read": "binary execute-view"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/views/{view_id}/export",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/file read accounted in operations.json with bounded max_bytes policy; executable download remains blocked until #162",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ExportView; tags=Views; summary=Export View"
+      "covered_by": {
+        "direct_read": "binary export-view"
       }
     },
     {
