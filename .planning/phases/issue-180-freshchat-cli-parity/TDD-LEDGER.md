@@ -37,6 +37,12 @@ GSD programming-loop registry command is unavailable (`scripts/gsd: unknown GSD 
 - Green evidence: focused package tests, full local gates, connectorgen validation, and CLI/docs parity checks pass after review fixes.
 - Disposition note: the `api_key`-only help-test suggestion was treated as partially valid because runtime help intentionally names secret fields without values; the test now rejects concrete sample/serialized secret markers while allowing documented `api_key (secret)` field names.
 
+## Parent incremental CodeRabbit follow-up TDD
+
+- Review-red evidence: CodeRabbit incremental run `4fc19851-a5f4-406a-9af5-99fc3c344157` reported one minor and one nitpick finding against the review-fix range: malformed `--credential` flag metadata punctuation and duplicated Freshchat upload `availability=unsupported_local unsupported local workflow` wording.
+- Regression coverage added: `TestCommandSurfaceRenderingNormalizesStructuredMetadata` covers structured flag metadata rendering and prevents non-local upload commands from duplicating unsupported-local wording.
+- Green evidence: focused tests, docs validation, connectorgen validation, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, and docs grep all pass after the follow-up fix.
+
 ## Parent final verification
 
 Final parent local gates pass after all sub-issue merges:

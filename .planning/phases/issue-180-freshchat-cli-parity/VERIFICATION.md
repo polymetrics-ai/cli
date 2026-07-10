@@ -101,7 +101,34 @@ Results:
 - `make verify`: pass, including docs validation, smoke flow, `golangci-lint`, and connectorgen validation.
 - CLI help/docs parity checks: pass (`./pm help connectors`, `./pm connectors`, `./pm freshchat --help`, docs/website grep).
 
-Incremental CodeRabbit review after pushing these fixes remains pending.
+Incremental CodeRabbit review after pushing these fixes reported two still-valid docs/rendering polish findings in run `4fc19851-a5f4-406a-9af5-99fc3c344157`.
+
+## Parent incremental CodeRabbit follow-up verification
+
+CodeRabbit incremental run `4fc19851-a5f4-406a-9af5-99fc3c344157` reviewed `c6d32aeb3a047e239e56f75b6a41523d81df0882..888f2730b3db6c0f8ee300c3261370212de6043e` and reported a malformed Freshchat credential flag rendering plus duplicated `unsupported_local` upload wording. After follow-up fixes:
+
+```bash
+gofmt -w internal/connectors/guide.go internal/connectors/guide_test.go
+go test ./internal/connectors ./internal/connectors/bundleregistry ./internal/cli
+go run ./cmd/pm docs validate --connectors-dir docs/connectors
+go run ./cmd/connectorgen validate internal/connectors/defs
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+rg "credential\\.:|unsupported_local unsupported local workflow" docs website internal -n
+```
+
+Results:
+
+- Focused guide/bundleregistry/CLI tests: pass.
+- Docs validation: pass.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
+- `go vet ./...`: pass.
+- `go test ./...`: pass.
+- `go build ./cmd/pm`: pass.
+- `make verify`: pass, including docs validation, smoke flow, `golangci-lint`, and connectorgen validation.
+- Grep confirms no generated docs/runtime content contains `credential.:` or `unsupported_local unsupported local workflow` (only the regression test contains the guarded string).
 
 ## Integrated sub-issue verification checkpoints
 

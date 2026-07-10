@@ -168,8 +168,8 @@ COMMAND SURFACE
   Usage: pm freshchat <command> [flags]
   Global flags:
     --json (boolean): Write machine-readable JSON output.
-    --credential (string): Use a saved Freshchat connector credential.: maps_to=credential
-    --connection (string): Alias for --credential.: maps_to=connection
+    --credential (string): Use a saved Freshchat connector credential; maps_to=credential
+    --connection (string): Alias for --credential; maps_to=connection
   Account Commands
     account configuration - Read Freshchat account configuration [intent=etl availability=implemented stream=account_configuration]
     business-hours status - Check whether a Freshchat group is within business hours [intent=etl availability=implemented stream=business_hours_status]; notes: Requires business_hours_group_id in connector config; use --config business_hours_group_id=<group_id> with the generic connector command runner.
@@ -210,8 +210,8 @@ COMMAND SURFACE
     metrics historical - Read Freshchat historical metrics [intent=etl availability=implemented stream=historical_metrics]; notes: Requires metrics_metric, metrics_start, and metrics_end in connector config.
     metrics instant - Read Freshchat instant metrics [intent=etl availability=implemented stream=instant_metrics]; notes: Requires metrics_metric in connector config.
   File Commands
-    file upload - Upload a Freshchat file [intent=direct_write availability=unsupported_local unsupported local workflow]; notes: Typed file_upload operation metadata declares the Freshchat endpoint and max_bytes policy, but execution remains blocked until a bounded multipart executor exists; no raw upload command is exposed.
-    image upload - Upload a Freshchat image [intent=direct_write availability=unsupported_local unsupported local workflow]; notes: Typed file_upload operation metadata declares the Freshchat endpoint and max_bytes policy, but execution remains blocked until a bounded multipart executor exists; no raw upload command is exposed.
+    file upload - Upload a Freshchat file [intent=direct_write availability=unsupported_local]; notes: Typed file_upload operation metadata declares the Freshchat endpoint and max_bytes policy, but execution remains blocked until a bounded multipart executor exists; no raw upload command is exposed.
+    image upload - Upload a Freshchat image [intent=direct_write availability=unsupported_local]; notes: Typed file_upload operation metadata declares the Freshchat endpoint and max_bytes policy, but execution remains blocked until a bounded multipart executor exists; no raw upload command is exposed.
   Help topics:
     freshchat - Freshchat command metadata maps account, user, conversation, agent, directory, outbound, report, and metrics APIs to safe connector intents.
     freshchat-writes - Freshchat writes remain reverse ETL plan, preview, approval, execute operations; destructive deletes, admin changes, and sensitive message/report actions require typed confirmation.

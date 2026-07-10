@@ -17,12 +17,12 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi-api-harness",
-    "status": "review_fixes_green_incremental_review_pending"
+    "status": "incremental_review_followup_green_review_pending"
   },
   "ready_queue": [
     {
       "number": 181,
-      "status": "integrated_parent_incremental_review_pending",
+      "status": "integrated_parent_final_incremental_review_pending",
       "dependencies": [
         "parent_pr_open"
       ],
@@ -35,7 +35,7 @@
     },
     {
       "number": 182,
-      "status": "integrated_parent_incremental_review_pending",
+      "status": "integrated_parent_final_incremental_review_pending",
       "dependencies": [
         181,
         184
@@ -51,7 +51,7 @@
     },
     {
       "number": 183,
-      "status": "integrated_parent_incremental_review_pending",
+      "status": "integrated_parent_final_incremental_review_pending",
       "dependencies": [
         181,
         184
@@ -65,7 +65,7 @@
     },
     {
       "number": 184,
-      "status": "integrated_parent_incremental_review_pending",
+      "status": "integrated_parent_final_incremental_review_pending",
       "dependencies": [
         181
       ],
@@ -79,7 +79,7 @@
     },
     {
       "number": 185,
-      "status": "integrated_parent_incremental_review_pending",
+      "status": "integrated_parent_final_incremental_review_pending",
       "dependencies": [
         181,
         184
@@ -91,7 +91,7 @@
     },
     {
       "number": 186,
-      "status": "integrated_parent_incremental_review_pending",
+      "status": "integrated_parent_final_incremental_review_pending",
       "dependencies": [
         184,
         185
@@ -103,7 +103,7 @@
     },
     {
       "number": 187,
-      "status": "integrated_parent_incremental_review_pending",
+      "status": "integrated_parent_final_incremental_review_pending",
       "dependencies": [
         184
       ],
@@ -200,6 +200,21 @@
         187
       ],
       "reason": "Parent PR #226 CodeRabbit review completed with actionable findings. No subagent tool is available, so fixes were handled locally on feat/180-freshchat-cli-parity; full local gates now pass and incremental review is pending after push."
+    },
+    {
+      "timestamp": "2026-07-10T04:05:00Z",
+      "decision": "parent_incremental_findings_addressed_locally",
+      "issue_numbers": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187
+      ],
+      "reason": "Parent PR #226 CodeRabbit incremental run 4fc19851-a5f4-406a-9af5-99fc3c344157 reported Freshchat docs/rendering polish findings. No subagent tool is available, so fixes were handled locally; full local gates now pass and final incremental review is pending after push."
     }
   ],
   "subissues": [
@@ -367,10 +382,10 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T02:47:13Z",
+  "updated_at": "2026-07-10T04:05:00Z",
   "parent_review": {
     "primary_route": "coderabbit_automatic_then_manual_retry",
-    "status": "findings_addressed_incremental_review_pending",
+    "status": "incremental_followup_addressed_final_review_pending",
     "run_id": "321be408-2a1b-4ece-a55c-0e4333fc0b51",
     "reviewed_range": "ae01c3f962fe089fc26e274fba1f9bbad540f7dd..c6d32aeb3a047e239e56f75b6a41523d81df0882",
     "findings": {
@@ -383,6 +398,18 @@
       ]
     },
     "disposition_summary": "Addressed valid fixture read_query, max_items, upload max_bytes, redaction, shared direct-read helper, and docs/test findings. The api_key-only help-test suggestion was adjusted to block secret sample values while preserving documented secret field names.",
-    "local_verification": "website data generation, gofmt, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate, and CLI/help/docs parity checks pass."
+    "local_verification": "website data generation, gofmt, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate, and CLI/help/docs parity checks pass.",
+    "incremental_run_id": "4fc19851-a5f4-406a-9af5-99fc3c344157",
+    "incremental_reviewed_range": "c6d32aeb3a047e239e56f75b6a41523d81df0882..888f2730b3db6c0f8ee300c3261370212de6043e",
+    "incremental_findings": {
+      "minor_comments": 1,
+      "nitpicks": 1,
+      "summary": [
+        "malformed Freshchat credential flag rendering",
+        "duplicated unsupported_local upload wording"
+      ]
+    },
+    "incremental_disposition_summary": "Addressed still-valid docs/rendering findings by normalizing command-surface flag metadata punctuation and limiting unsupported-local free-text metadata to true local_workflow commands; regenerated Freshchat manual/skill docs.",
+    "incremental_local_verification": "focused tests, docs validation, connectorgen validation, go vet ./..., go test ./..., go build ./cmd/pm, make verify, and docs grep pass."
   }
 }
