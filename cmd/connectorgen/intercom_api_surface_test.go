@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestIntercomAPISurfaceOperationLedgerMetrics(t *testing.T) {
+func TestIntercomAPISurfaceFullCoverage(t *testing.T) {
 	raw, err := os.ReadFile("../../internal/connectors/defs/intercom/api_surface.json")
 	if err != nil {
 		t.Fatalf("read intercom api_surface.json: %v", err)
@@ -16,7 +16,7 @@ func TestIntercomAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		OperationLedgerVersion int `json:"operation_ledger_version"`
 		Endpoints              []struct {
 			Method    string             `json:"method"`
-			CoveredBy map[string]string  `json:"covered_by"`
+			CoveredBy map[string]any     `json:"covered_by"`
 			Excluded  map[string]any     `json:"excluded"`
 			Operation *intercomOperation `json:"operation"`
 		} `json:"endpoints"`
@@ -31,6 +31,7 @@ func TestIntercomAPISurfaceOperationLedgerMetrics(t *testing.T) {
 
 	totalByMethod := map[string]int{}
 	coveredByMethod := map[string]int{}
+	coverageModels := map[string]int{}
 	operationByMethod := map[string]int{}
 	models := map[string]int{}
 	coveredStreams := map[string]int{}
@@ -41,9 +42,17 @@ func TestIntercomAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		if len(ep.CoveredBy) > 0 {
 			covered++
 			coveredByMethod[ep.Method]++
-			if stream := ep.CoveredBy["stream"]; stream != "" {
+			for model, value := range ep.CoveredBy {
+				if isEmptyCoverageValue(value) {
+					continue
+				}
+				coverageModels[model]++
+			}
+			if stream, _ := ep.CoveredBy["stream"].(string); stream != "" {
 				coveredStreams[stream]++
 			}
+		} else {
+			t.Fatalf("endpoint %d %s is not covered by stream, direct read, write, binary policy, or explicit block", i, ep.Method)
 		}
 		if len(ep.Excluded) > 0 {
 			excluded++
@@ -70,11 +79,11 @@ func TestIntercomAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 149 {
 		t.Fatalf("endpoints = %d, want 149", len(surface.Endpoints))
 	}
-	if covered != 5 {
-		t.Fatalf("covered endpoints = %d, want 5", covered)
+	if covered != 149 {
+		t.Fatalf("covered endpoints = %d, want 149", covered)
 	}
-	if operations != 144 {
-		t.Fatalf("operation endpoints = %d, want 144", operations)
+	if operations != 0 {
+		t.Fatalf("operation endpoints = %d, want 0 blocked metadata-only rows; models=%+v byMethod=%+v", operations, models, operationByMethod)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -86,25 +95,31 @@ func TestIntercomAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"PUT":    16,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"GET": 5,
-	})
-	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE": 19,
-		"GET":    62,
+		"GET":    67,
 		"POST":   47,
 		"PUT":    16,
 	})
-	assertStringIntMap(t, "coveredStreams", coveredStreams, map[string]int{
-		"admins":        1,
-		"companies":     1,
-		"contacts":      1,
-		"conversations": 1,
-		"tags":          1,
-	})
-	for _, model := range []string{"direct_read", "binary_read", "sensitive_reverse_etl", "admin_reverse_etl", "destructive_action"} {
-		if models[model] == 0 {
-			t.Fatalf("operation model %q was not represented; models=%+v", model, models)
+	for _, model := range []string{"stream", "direct_read", "direct_reads", "write"} {
+		if coverageModels[model] == 0 {
+			t.Fatalf("coverage model %q was not represented; coverage=%+v", model, coverageModels)
 		}
+	}
+	for _, stream := range []string{"admins", "companies", "contacts", "conversations", "tags"} {
+		if coveredStreams[stream] == 0 {
+			t.Fatalf("required stream %q was not represented; streams=%+v", stream, coveredStreams)
+		}
+	}
+}
+
+func isEmptyCoverageValue(value any) bool {
+	switch v := value.(type) {
+	case string:
+		return v == ""
+	case []any:
+		return len(v) == 0
+	default:
+		return value == nil
 	}
 }
 

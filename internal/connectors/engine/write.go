@@ -205,17 +205,22 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	}
 	method := methodOrDefault(action.Method)
 
+	query, err := buildWriteQuery(action.Query, vars)
+	if err != nil {
+		return fmt.Errorf("engine: write action %q: resolve query: %w", action.Name, err)
+	}
+
 	switch bodyTypeOf(action) {
 	case "form":
-		form := buildForm(rec, action.PathFields)
-		_, err := rt.Requester.DoForm(ctx, method, path, nil, form)
+		form := buildForm(rec, writeBodyExcludedFields(action))
+		_, err := rt.Requester.DoForm(ctx, method, path, query, form)
 		return err
 	case "graphql":
 		payload, err := buildGraphQLPayload(action.GraphQL, vars)
 		if err != nil {
 			return err
 		}
-		resp, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		resp, err := rt.Requester.Do(ctx, method, path, query, payload)
 		if err != nil {
 			return err
 		}
@@ -223,25 +228,48 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {
-			_, err := rt.Requester.Do(ctx, method, path, nil, nil)
+			_, err := rt.Requester.Do(ctx, method, path, query, nil)
 			return err
 		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, body)
+		_, err := rt.Requester.Do(ctx, method, path, query, body)
 		return err
 	default: // "json" (default)
 		var body map[string]any
 		if len(action.BodyFields) > 0 {
 			body = buildBodyFieldsPayload(rec, action.BodyFields)
 		} else {
-			body = buildJSONBody(rec, action.PathFields)
+			body = buildJSONBody(rec, writeBodyExcludedFields(action))
 		}
 		var payload any
 		if len(body) > 0 {
 			payload = body
 		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err := rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	}
+}
+
+func writeBodyExcludedFields(action WriteAction) []string {
+	out := append([]string(nil), action.PathFields...)
+	for field := range action.Query {
+		out = append(out, field)
+	}
+	return out
+}
+
+func buildWriteQuery(templates map[string]string, vars Vars) (url.Values, error) {
+	values := url.Values{}
+	for name, tmpl := range templates {
+		resolved, err := Interpolate(tmpl, vars)
+		if err != nil {
+			return nil, fmt.Errorf("%s: %w", name, err)
+		}
+		if strings.TrimSpace(resolved) == "" {
+			continue
+		}
+		values.Set(name, resolved)
+	}
+	return values, nil
 }
 
 func bodyTypeOf(action WriteAction) string {
@@ -251,10 +279,10 @@ func bodyTypeOf(action WriteAction) string {
 	return action.BodyType
 }
 
-// buildJSONBody returns every record field not consumed by path_fields
-// (design §B.2 default body construction rule).
-func buildJSONBody(rec connectors.Record, pathFields []string) map[string]any {
-	excluded := toSet(pathFields)
+// buildJSONBody returns every record field not consumed by path or query
+// fields (design §B.2 default body construction rule).
+func buildJSONBody(rec connectors.Record, excludedFields []string) map[string]any {
+	excluded := toSet(excludedFields)
 	out := make(map[string]any, len(rec))
 	for k, v := range rec {
 		if excluded[k] {
@@ -281,10 +309,10 @@ func buildBodyFieldsPayload(rec connectors.Record, bodyFields []string) map[stri
 }
 
 // buildForm builds a url.Values form body from every record field not
-// consumed by path_fields, stringifying each value (matches
+// consumed by path/query fields, stringifying each value (matches
 // stripe/write.go's customerForm shape/intent, generalized to any record).
-func buildForm(rec connectors.Record, pathFields []string) url.Values {
-	excluded := toSet(pathFields)
+func buildForm(rec connectors.Record, excludedFields []string) url.Values {
+	excluded := toSet(excludedFields)
 	keys := make([]string, 0, len(rec))
 	for k := range rec {
 		if excluded[k] {

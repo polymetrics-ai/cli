@@ -407,7 +407,7 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 }
 
 func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, query map[string]string, page *connsdk.NextPage, pag PaginationSpec, formattedLowerBound string, fc fanoutContext) (any, error) {
-	if stream.GraphQL == nil {
+	if stream.GraphQL == nil && len(stream.Body) == 0 {
 		return nil, nil
 	}
 	var cursor string
@@ -417,7 +417,10 @@ func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, que
 	vars := requestVars(cfg, nil, cursor, query)
 	vars.IncrementalLowerBound = formattedLowerBound
 	vars.FanoutID = fc.id
-	return buildGraphQLPayload(stream.GraphQL, vars)
+	if stream.GraphQL != nil {
+		return buildGraphQLPayload(stream.GraphQL, vars)
+	}
+	return resolveGraphQLVariables(stream.Body, vars)
 }
 
 // cloneAndSetQuery returns a copy of base with key set to value — used to
@@ -1238,12 +1241,11 @@ func isUnresolvedRecordPath(err error) bool {
 }
 
 // isUnresolvedConfigSecretOrIncremental reports whether err is the typed
-// unresolvedKeyError for the "config", "secrets", or "incremental" namespace
-// (gap-loop item 3, extended by S3 item 1: buildInitialQuery's object-form
-// QueryParam tolerance is scoped to an absent config/secrets/incremental-
-// lower-bound key specifically — any OTHER interpolation failure, e.g. CRLF
-// injection or an unknown filter/namespace, still propagates as a hard error
-// even for an omit_when_absent/default-bearing entry). "incremental" covers
+// unresolvedKeyError for namespaces whose absence can be handled by object-form
+// query defaults/omits: "config", "secrets", "query", or "incremental".
+// Any OTHER interpolation failure, e.g. CRLF injection or an unknown
+// filter/namespace, still propagates as a hard error even for an
+// omit_when_absent/default-bearing entry. "incremental" covers
 // exactly one key today ("lower_bound"), which resolves as unresolved/absent
 // whenever no incremental lower bound applies (fresh full sync, or no
 // incremental spec at all) — see resolveIncrementalRef, interpolate.go.
@@ -1253,7 +1255,7 @@ func isUnresolvedConfigSecretOrIncremental(err error) bool {
 		return false
 	}
 	switch unresolved.Namespace {
-	case "config", "secrets", "incremental":
+	case "config", "secrets", "query", "incremental":
 		return true
 	default:
 		return false

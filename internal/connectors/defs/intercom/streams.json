@@ -6,52 +6,673 @@
       "Intercom-Version": "{{ config.api_version }}"
     },
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
       "cursor_param": "starting_after",
-      "token_path": "pages.next.starting_after"
+      "token_path": "pages.next.starting_after",
+      "page_size": 50
     },
-    "check": { "method": "GET", "path": "/admins" },
+    "check": {
+      "method": "GET",
+      "path": "/admins"
+    },
     "error_map": [
-      { "status": 401, "hint": "intercom access_token is missing or invalid; re-run pm credentials add intercom" },
-      { "status": 429, "class": "rate_limited", "hint": "intercom rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "intercom access_token is missing or invalid; re-run pm credentials add intercom"
+      },
+      {
+        "status": 403,
+        "hint": "intercom token lacks access to this Intercom workspace operation"
+      },
+      {
+        "status": 404,
+        "hint": "intercom resource not found or not visible to the configured token"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "intercom rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "contacts",
       "path": "/contacts",
-      "query": { "per_page": "50" },
-      "records": { "path": "data" },
-      "schema": "schemas/contacts.json"
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/contacts.json",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
     },
     {
       "name": "companies",
       "path": "/companies",
-      "query": { "per_page": "50" },
-      "records": { "path": "data" },
-      "schema": "schemas/companies.json"
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/companies.json",
+      "query": {
+        "name": {
+          "template": "{{ query.name }}",
+          "omit_when_absent": true
+        },
+        "company_id": {
+          "template": "{{ query.company_id }}",
+          "omit_when_absent": true
+        },
+        "tag_id": {
+          "template": "{{ query.tag_id }}",
+          "omit_when_absent": true
+        },
+        "segment_id": {
+          "template": "{{ query.segment_id }}",
+          "omit_when_absent": true
+        },
+        "page": {
+          "template": "{{ query.page }}",
+          "default": "1"
+        },
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
     },
     {
       "name": "conversations",
       "path": "/conversations",
-      "query": { "per_page": "50" },
-      "records": { "path": "data" },
-      "schema": "schemas/conversations.json"
+      "records": {
+        "path": "conversations"
+      },
+      "schema": "schemas/conversations.json",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        },
+        "starting_after": {
+          "template": "{{ query.starting_after }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "admins",
       "path": "/admins",
-      "records": { "path": "data" },
-      "schema": "schemas/admins.json"
+      "records": {
+        "path": "admins"
+      },
+      "schema": "schemas/admins.json",
+      "query": {
+        "display_avatar": {
+          "template": "{{ query.display_avatar }}",
+          "omit_when_absent": true
+        },
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
     },
     {
       "name": "tags",
       "path": "/tags",
-      "records": { "path": "data" },
-      "schema": "schemas/tags.json"
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tags.json",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "admin_activity_log",
+      "path": "/admins/activity_logs",
+      "records": {
+        "path": "activity_logs"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "created_at_after": {
+          "template": "{{ query.created_at_after }}",
+          "omit_when_absent": true
+        },
+        "created_at_before": {
+          "template": "{{ query.created_at_before }}",
+          "omit_when_absent": true
+        },
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "ai_content_import_source",
+      "path": "/ai/content_import_sources",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "ai_external_page",
+      "path": "/ai/external_pages",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "article",
+      "path": "/articles",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "article_search",
+      "path": "/articles/search",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "phrase": {
+          "template": "{{ query.phrase }}",
+          "omit_when_absent": true
+        },
+        "state": {
+          "template": "{{ query.state }}",
+          "omit_when_absent": true
+        },
+        "help_center_id": {
+          "template": "{{ query.help_center_id }}",
+          "omit_when_absent": true
+        },
+        "highlight": {
+          "template": "{{ query.highlight }}",
+          "omit_when_absent": true
+        },
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "away_status_reason",
+      "path": "/away_status_reasons",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "call",
+      "path": "/calls",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "page": {
+          "template": "{{ query.page }}",
+          "default": "1"
+        },
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "call_search_search",
+      "path": "/calls/search",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "method": "POST",
+      "body": {
+        "conversation_ids": [
+          {
+            "template": "{{ query.conversation_id }}",
+            "default": "synthetic-conversation"
+          }
+        ]
+      }
+    },
+    {
+      "name": "company_list",
+      "path": "/companies/list",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "method": "POST",
+      "query": {
+        "page": {
+          "template": "{{ query.page }}",
+          "default": "1"
+        },
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        },
+        "order": {
+          "template": "{{ query.order }}",
+          "omit_when_absent": true
+        }
+      },
+      "pagination": {
+        "type": "page_number",
+        "page_param": "page",
+        "size_param": "per_page",
+        "start_page": 1,
+        "page_size": 50
+      }
+    },
+    {
+      "name": "contact_search_search",
+      "path": "/contacts/search",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "method": "POST",
+      "body": {
+        "query": {
+          "operator": "AND",
+          "value": [
+            {
+              "field": {
+                "template": "{{ query.query_field }}",
+                "default": "created_at"
+              },
+              "operator": {
+                "template": "{{ query.query_operator }}",
+                "default": ">"
+              },
+              "value": {
+                "template": "{{ query.query_value }}",
+                "default": "0"
+              }
+            }
+          ]
+        },
+        "pagination": {
+          "per_page": {
+            "template": "{{ query.per_page }}",
+            "default": "50",
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "name": "conversation_search_search",
+      "path": "/conversations/search",
+      "records": {
+        "path": "conversations"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "method": "POST",
+      "body": {
+        "query": {
+          "operator": "AND",
+          "value": [
+            {
+              "field": {
+                "template": "{{ query.query_field }}",
+                "default": "created_at"
+              },
+              "operator": {
+                "template": "{{ query.query_operator }}",
+                "default": ">"
+              },
+              "value": {
+                "template": "{{ query.query_value }}",
+                "default": "0"
+              }
+            }
+          ]
+        },
+        "pagination": {
+          "per_page": {
+            "template": "{{ query.per_page }}",
+            "default": "50",
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "name": "data_attribute",
+      "path": "/data_attributes",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "model": {
+          "template": "{{ query.model }}",
+          "omit_when_absent": true
+        },
+        "include_archived": {
+          "template": "{{ query.include_archived }}",
+          "omit_when_absent": true
+        },
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "event",
+      "path": "/events",
+      "records": {
+        "path": "events"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "filter": {
+          "template": "{{ query.filter }}",
+          "omit_when_absent": true
+        },
+        "type": {
+          "template": "{{ query.type }}",
+          "omit_when_absent": true
+        },
+        "summary": {
+          "template": "{{ query.summary }}",
+          "omit_when_absent": true
+        },
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "export_reporting_data",
+      "path": "/export/reporting_data/get_datasets",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "help_center_collection",
+      "path": "/help_center/collections",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "help_center_help_center",
+      "path": "/help_center/help_centers",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "internal_article",
+      "path": "/internal_articles",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "internal_article_search",
+      "path": "/internal_articles/search",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "folder_id": {
+          "template": "{{ query.folder_id }}",
+          "omit_when_absent": true
+        },
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "new_news_item",
+      "path": "/news/news_items",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "new_newsfeed",
+      "path": "/news/newsfeeds",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "segment",
+      "path": "/segments",
+      "records": {
+        "path": "segments"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "include_count": {
+          "template": "{{ query.include_count }}",
+          "omit_when_absent": true
+        },
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "subscription_type",
+      "path": "/subscription_types",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "team",
+      "path": "/teams",
+      "records": {
+        "path": "teams"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "ticket_search_search",
+      "path": "/tickets/search",
+      "records": {
+        "path": "tickets"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "method": "POST",
+      "body": {
+        "query": {
+          "operator": "AND",
+          "value": [
+            {
+              "field": {
+                "template": "{{ query.query_field }}",
+                "default": "created_at"
+              },
+              "operator": {
+                "template": "{{ query.query_operator }}",
+                "default": ">"
+              },
+              "value": {
+                "template": "{{ query.query_value }}",
+                "default": "0"
+              }
+            }
+          ]
+        },
+        "pagination": {
+          "per_page": {
+            "template": "{{ query.per_page }}",
+            "default": "50",
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "name": "ticket_state",
+      "path": "/ticket_states",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
+    },
+    {
+      "name": "ticket_type",
+      "path": "/ticket_types",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/passthrough.json",
+      "projection": "passthrough",
+      "query": {
+        "per_page": {
+          "template": "{{ query.per_page }}",
+          "default": "50"
+        }
+      }
     }
   ]
 }

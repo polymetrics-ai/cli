@@ -379,6 +379,7 @@ type WriteAction struct {
 	Method       string              `json:"method"`
 	Path         string              `json:"path"`
 	PathFields   []string            `json:"path_fields,omitempty"`
+	Query        map[string]string   `json:"query,omitempty"`
 	BodyType     string              `json:"body_type,omitempty"` // json (default) | form | none | graphql
 	BodyFields   []string            `json:"body_fields,omitempty"`
 	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`

@@ -11,6 +11,7 @@
     "query",
     "reverse-etl",
     "github-cli-surface",
+    "intercom-cli-surface",
     "cli-reference",
     "architecture",
     "---",

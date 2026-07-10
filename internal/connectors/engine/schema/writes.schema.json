@@ -17,6 +17,7 @@
           "method": { "type": "string" },
           "path": { "type": "string" },
           "path_fields": { "type": "array", "items": { "type": "string" } },
+          "query": { "type": "object" },
           "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql"] },
           "body_fields": { "type": "array", "items": { "type": "string" } },
           "graphql": {

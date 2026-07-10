@@ -1,0 +1,48 @@
+---
+title: Intercom CLI Surface
+description: Intercom connector command parity, operation coverage, and approval-gated write behavior.
+---
+
+The Intercom connector command surface is declared in
+`internal/connectors/defs/intercom/cli_surface.json` and is backed by the official
+[Intercom REST API 2.14 OpenAPI document](https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml).
+
+## Current surface
+
+| Metric | Value |
+|---|---:|
+| Official operations accounted for | 149 |
+| Command entries | 149 |
+| ETL stream endpoints | 31 |
+| Direct JSON read endpoints | 37 |
+| Bounded text/binary metadata endpoints | 4 |
+| Reverse ETL write endpoints | 77 |
+
+## Runtime model
+
+```bash
+pm intercom
+pm help intercom
+pm intercom contact list --credential intercom-local --limit 25 --json
+pm intercom contact view --credential intercom-local --contact-id <id> --json
+```
+
+Write commands are reverse ETL plans first:
+
+```bash
+pm intercom contact create --credential intercom-local --email ada@example.test --preview --json
+pm intercom contact create --plan <plan-id> --preview --json
+pm intercom contact create --plan <plan-id> --approve <approval-token> --json
+```
+
+<Callout type="warn">
+  Intercom writes never execute from a raw generic HTTP command. They require a typed write action,
+  plan, preview, approval token, and execute. Destructive/admin write actions also require the typed
+  confirmation challenge declared by the connector.
+</Callout>
+
+## Safety notes
+
+Store `access_token` in credentials from an environment variable or stdin. Direct-read commands are
+fixed to declared Intercom endpoints and bounded by `--max-bytes`. Binary/file endpoints return
+metadata or bounded text rather than writing arbitrary files.

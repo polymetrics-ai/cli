@@ -7,7 +7,7 @@
     "status": 200,
     "body": {
       "type": "list",
-      "data": [
+      "admins": [
         {
           "id": "admin_fixture_1",
           "type": "admin",
