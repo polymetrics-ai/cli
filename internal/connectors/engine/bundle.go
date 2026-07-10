@@ -243,12 +243,10 @@ type FanOutSpec struct {
 
 // FanOutIDsFrom is EXACTLY ONE of ConfigKey (a config value holding a
 // comma-separated id list, e.g. appfollow's app_collection_ids) or Request (a
-// preliminary GET, fully paginated to exhaustion using either its own optional
-// pagination block or the stream's effective pagination spec, whose extracted
-// records yield one id per record at IDField) — declaring both, or neither, is
-// a read-time error (newFanOutIDs), mirroring cursor pagination's
-// token_path/last_record_field mutual exclusivity (bundle.go's own
-// PaginationSpec doc comment).
+// preliminary GET whose extracted records yield one id per record at IDField).
+// Request pagination resolves in fanOutIDsFromRequest by using the request's
+// optional pagination block first, then the stream-level pagination override,
+// then bundle HTTP pagination.
 type FanOutIDsFrom struct {
 	ConfigKey string            `json:"config_key,omitempty"`
 	Request   *FanOutIDsRequest `json:"request,omitempty"`

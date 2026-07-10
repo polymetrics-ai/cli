@@ -56,7 +56,7 @@
     {
       "name": "connection",
       "type": "string",
-      "summary": "Use a saved Chatwoot connector credential and account scope.",
+      "summary": "Use a saved Chatwoot connector credential and account scope",
       "maps_to": "connection"
     }
   ],

@@ -130,6 +130,11 @@
       "cycle": "issue-154-integration",
       "decision": "integrated_parent_review_pending",
       "reason": "PR #255 remote checks passed and was squash-merged into parent commit 10f58f0b. CodeRabbit skipped the non-default-base sub-PR, so parent PR #223 fallback review is pending."
+    },
+    {
+      "cycle": "issue-154-parent-review-fix",
+      "decision": "review_fix_pending_push",
+      "reason": "Parent PR fallback CodeRabbit review replied Review finished. Existing actionable findings were dispositioned: valid comment/doc grammar findings fixed; stale cli_surface line reference is no longer applicable to current metadata."
     }
   ],
   "verificationPassed": false,

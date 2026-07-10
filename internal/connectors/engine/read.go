@@ -113,12 +113,10 @@ func readFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors
 
 // resolveFanOutIDs resolves stream.FanOut.IDsFrom's id list, exactly one of
 // two mutually-exclusive forms: ConfigKey (a comma-separated config value,
-// trimmed and empty-entries-dropped) or Request (one preliminary GET,
-// paginated to exhaustion using the request's optional pagination override or
-// the stream's effective pagination spec, extracting IDField off every record
-// found at RecordsPath). Declaring both, or neither, is a read-time error —
-// mirroring PaginationSpec.token_path/last_record_field's identical
-// mutual-exclusivity error shape (paginate.go's newCursorPaginator).
+// trimmed and empty-entries-dropped) or Request (one preliminary GET whose
+// extracted records yield IDs from RecordsPath/IDField). Request pagination is
+// resolved later by fanOutIDsFromRequest: request-level override first, then
+// stream-level pagination, then bundle HTTP pagination.
 func resolveFanOutIDs(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime) ([]string, error) {
 	fo := stream.FanOut
 	hasConfigKey := fo.IDsFrom.ConfigKey != ""

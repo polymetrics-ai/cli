@@ -94,7 +94,7 @@ COMMAND SURFACE
   Source CLI: chatwoot-api (https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json)
   Global flags:
     --json (boolean): Write machine-readable JSON output.
-    --connection (string): Use a saved Chatwoot connector credential and account scope.; maps_to=connection
+    --connection (string): Use a saved Chatwoot connector credential and account scope; maps_to=connection
   Support Desk Commands
     conversation list - List account conversations [intent=etl availability=implemented stream=conversations]; flags: --status
     conversation view - View one conversation [intent=direct_read availability=implemented]; notes: Bounded direct read; response JSON is capped and secret-shaped keys are redacted.; flags: --conversation-id
