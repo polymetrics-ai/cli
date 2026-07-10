@@ -31,6 +31,14 @@ make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
+2026-07-10 combined #166-#171 local verification:
+
+- `gofmt -w cmd internal` passed.
+- `go vet ./...` passed.
+- `go test ./... -timeout=20m` passed.
+- `go build ./cmd/pm` passed.
+- `make verify` passed, including `go run ./cmd/connectorgen validate internal/connectors/defs` with 547 connectors and 0 findings.
+
 ## Runtime / Credentials
 
 - No credentialed connector checks are planned or allowed without explicit human request.
@@ -40,3 +48,13 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 ## CLI Help / Docs / Website Parity
 
 Parent applies. Each CLI-visible slice must record runtime help, bare namespace behavior, command help, docs/website/generated artifact status, and tests or explicit exemptions.
+
+2026-07-10 combined #166-#171 parity checks passed:
+
+- `./pm help intercom`
+- `./pm intercom`
+- `./pm intercom contact list --help`
+- `./pm intercom contact view --help`
+- `./pm intercom contact create --help`
+- temp-root `./pm intercom contact create --credential intercom-local --email test@example.com --preview --json` returned a write plan without a live Intercom call.
+- Added `docs/cli/intercom.md` and `website/content/docs/intercom-cli-surface.mdx`.

@@ -22,8 +22,17 @@
   - Stacked PR opened: https://github.com/polymetrics-ai/cli/pull/234
   - Sub-PR CI passed and was squash-merged into parent at `fded1e72`; automated review coverage remains pending because CodeRabbit skipped the non-default base and draft parent PR.
 
-Each remaining sub-issue must add its own red/green/refactor entries before production edits.
+- Combined issues #166-#171 implementation branch:
+  - Branch: `feat/166-171-intercom-complete-implementation`
+  - Plan checkpoint commit: `b2ac74cd chore(intercom): plan complete CLI implementation`
+  - Red-test checkpoint commit: `2299d0ab test(intercom): define complete CLI parity contracts`
+  - Green implementation/local verification completed on 2026-07-10; commit/PR pending.
+  - Coverage: 149/149 official Intercom operations represented as stream, bounded direct read/text/binary metadata, or typed reverse-ETL write command.
+  - Local broad gates passed: `go vet ./...`, `go test ./... -timeout=20m`, `go build ./cmd/pm`, `make verify`.
+
+Each remaining sub-issue must keep per-issue evidence updated through PR/review routing.
 
 ## Refactor Evidence
 
-Pending.
+- Query-param default/omit logic extended to absent command query flags so conformance fixtures can execute stream defaults safely.
+- Secret-shaped docs example removed and fixtures realigned to declared records paths.

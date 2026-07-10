@@ -1,24 +1,25 @@
 {
   "name": "intercom",
   "display_name": "Intercom",
-  "description": "Reads Intercom contacts, companies, conversations, admins, and tags; tracks the full Intercom REST API 2.14 surface for safe CLI parity follow-up work.",
+  "description": "Reads and writes the full Intercom REST API 2.14 surface through bounded streams, direct reads, binary metadata policies, and approval-gated reverse ETL actions.",
   "integration_type": "api",
   "docs_url": "https://developers.intercom.com/docs/references/rest-api/api.intercom.io",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
-    "query": false,
+    "write": true,
+    "query": true,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Intercom API reads can include customer, company, conversation, admin, and tag data from the configured workspace",
-    "write": "no write actions are currently executable; planned mutations remain blocked by default until typed reverse-ETL schemas and approval gates are implemented",
-    "approval": "metadata-only planned writes do not execute; future reverse ETL writes require plan, preview, approval, execute, and destructive typed confirmation where applicable"
+    "read": "external Intercom API reads can include customer, company, conversation, admin, support, and content data from the configured workspace",
+    "write": "Intercom reverse ETL actions can mutate customers, companies, conversations, help center content, tickets, tags, admin settings, exports, and other workspace resources",
+    "approval": "reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require typed confirmation before execution"
   }
 }

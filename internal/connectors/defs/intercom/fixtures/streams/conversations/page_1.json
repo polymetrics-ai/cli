@@ -8,7 +8,7 @@
     "status": 200,
     "body": {
       "type": "list",
-      "data": [
+      "conversations": [
         {
           "id": "conversation_fixture_1",
           "type": "conversation",

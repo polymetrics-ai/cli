@@ -78,3 +78,10 @@ Complete Intercom connector CLI parity for the official Intercom OpenAPI 2.14 su
 ## Human gates
 
 - Any new dependency, token-scope change, credentialed/live Intercom run, destructive external action, reverse ETL execution, or parent PR merge to `main`.
+
+
+## Local status: 2026-07-10
+
+- Sensitive/admin policy implemented: 77 typed reverse-ETL write actions with plan/preview/approval and destructive/admin confirmation metadata.
+- Combined branch `feat/166-171-intercom-complete-implementation` passed local gates; see sibling phase `issue-166-171-intercom-complete-implementation` for full TDD and verification evidence.
+- PR/review routing remains pending after commit/push.

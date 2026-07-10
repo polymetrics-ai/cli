@@ -322,9 +322,23 @@ func TestIntercomConnectorCommandHelpRendersCommandSurface(t *testing.T) {
 		t.Fatalf("Run(intercom) code = %d stderr = %s", code, stderr.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{"NAME", "SYNOPSIS", "COMMANDS", "pm intercom", "contact list", "contact view", "reverse ETL writes require plan, preview, approval, execute"} {
+	for _, want := range []string{"NAME", "SYNOPSIS", "COMMANDS", "pm intercom", "contact list", "contact view", "Reverse ETL writes require plan, preview, approval, execute"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("intercom help missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestIntercomHelpTopicRendersConnectorSurface(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"help", "intercom"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(help intercom) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"NAME", "pm intercom", "contact list", "contact create"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("help intercom missing %q:\n%s", want, out)
 		}
 	}
 }
@@ -340,6 +354,42 @@ func TestIntercomConnectorCommandSubcommandHelpRendersFlags(t *testing.T) {
 		if !strings.Contains(out, want) {
 			t.Fatalf("intercom command help missing %q:\n%s", want, out)
 		}
+	}
+}
+
+func TestIntercomCommandSurfacePlansReverseETLWithoutExecuting(t *testing.T) {
+	root := t.TempDir()
+	t.Setenv("PM_INTERCOM_ACCESS_TOKEN", "test-token")
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "intercom-local",
+		"--connector", "intercom",
+		"--config", "base_url=https://api.intercom.test",
+		"--from-env", "access_token=PM_INTERCOM_ACCESS_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"intercom", "contact", "create",
+		"--credential", "intercom-local",
+		"--email", "ada@example.test",
+		"--preview",
+		"--root", root,
+		"--json",
+	}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("intercom contact create code = %d stderr=%s stdout=%s", code, stderr.String(), stdout.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{`"kind": "ConnectorCommandWritePlan"`, `"connector_command": "contact create"`, `"action": "create_contact"`, `"approval_required": true`, `"write_preview"`} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("planned Intercom command output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+		}
+	}
+	if strings.Contains(out, "test-token") || strings.Contains(out, "approval_token") || strings.Contains(out, "connector_command_record") {
+		t.Fatalf("plan JSON leaked secret, approval token, or raw command payload:\n%s", out)
 	}
 }
 

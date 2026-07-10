@@ -16,7 +16,7 @@ func TestIntercomAPISurfaceFullCoverage(t *testing.T) {
 		OperationLedgerVersion int `json:"operation_ledger_version"`
 		Endpoints              []struct {
 			Method    string             `json:"method"`
-			CoveredBy map[string]string  `json:"covered_by"`
+			CoveredBy map[string]any     `json:"covered_by"`
 			Excluded  map[string]any     `json:"excluded"`
 			Operation *intercomOperation `json:"operation"`
 		} `json:"endpoints"`
@@ -43,12 +43,12 @@ func TestIntercomAPISurfaceFullCoverage(t *testing.T) {
 			covered++
 			coveredByMethod[ep.Method]++
 			for model, value := range ep.CoveredBy {
-				if value == "" {
+				if isEmptyCoverageValue(value) {
 					continue
 				}
 				coverageModels[model]++
 			}
-			if stream := ep.CoveredBy["stream"]; stream != "" {
+			if stream, _ := ep.CoveredBy["stream"].(string); stream != "" {
 				coveredStreams[stream]++
 			}
 		} else {
@@ -109,6 +109,17 @@ func TestIntercomAPISurfaceFullCoverage(t *testing.T) {
 		if coveredStreams[stream] == 0 {
 			t.Fatalf("required stream %q was not represented; streams=%+v", stream, coveredStreams)
 		}
+	}
+}
+
+func isEmptyCoverageValue(value any) bool {
+	switch v := value.(type) {
+	case string:
+		return v == ""
+	case []any:
+		return len(v) == 0
+	default:
+		return value == nil
 	}
 }
 

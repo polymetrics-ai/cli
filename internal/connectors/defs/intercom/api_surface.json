@@ -1,48 +1,29 @@
 {
   "api": "Intercom REST API 2.14 (https://api.intercom.io)",
   "docs": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-  "reviewed_at": "2026-07-09",
+  "reviewed_at": "2026-07-10",
   "operation_ledger_version": 1,
-  "scope": "Issue #165 metadata refresh: all 149 operations from the official Intercom OpenAPI 2.14 document are enumerated. The five pre-existing stream-backed collection reads remain executable; every other operation is blocked by default as direct_read, binary_read, sensitive/admin reverse-ETL, destructive action, or duplicate metadata for follow-up lanes #168-#171. No raw generic HTTP write or credentialed live check is exposed by this metadata.",
+  "scope": "Full CLI parity implementation for issue #164/#166-#171: every official Intercom OpenAPI 2.14 operation is covered by an executable ETL stream, bounded direct read, metadata-only binary/text read policy, or typed reverse-ETL write action. Reverse ETL writes remain approval-gated; destructive/admin actions declare typed confirmation. No raw generic HTTP write or credentialed live check is exposed by this metadata.",
   "endpoints": [
     {
       "method": "GET",
       "path": "/me",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "account/admin identity read duplicates authenticated-admin metadata covered by the admins stream and planned direct admin reads",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=identifyAdmin; summary=Identify an admin",
-        "duplicate_of": "GET /admins and GET /admins/{admin_id}"
+      "covered_by": {
+        "direct_read": "me view"
       }
     },
     {
       "method": "PUT",
       "path": "/admins/{admin_id}/away",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=setAwayAdmin; summary=Set an admin to away"
+      "covered_by": {
+        "write": "set_away_admin"
       }
     },
     {
       "method": "GET",
       "path": "/admins/activity_logs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listActivityLogs; summary=List all activity logs"
+      "covered_by": {
+        "stream": "admin_activity_log"
       }
     },
     {
@@ -55,521 +36,283 @@
     {
       "method": "GET",
       "path": "/admins/{admin_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveAdmin; summary=Retrieve an admin"
+      "covered_by": {
+        "direct_read": "admin view"
       }
     },
     {
       "method": "GET",
       "path": "/ai/content_import_sources",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listContentImportSources; summary=List content import sources"
+      "covered_by": {
+        "stream": "ai_content_import_source"
       }
     },
     {
       "method": "POST",
       "path": "/ai/content_import_sources",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createContentImportSource; summary=Create a content import source"
+      "covered_by": {
+        "write": "create_content_import_source"
       }
     },
     {
       "method": "DELETE",
       "path": "/ai/content_import_sources/{source_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteContentImportSource; summary=Delete a content import source"
+      "covered_by": {
+        "write": "delete_content_import_source"
       }
     },
     {
       "method": "GET",
       "path": "/ai/content_import_sources/{source_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=getContentImportSource; summary=Retrieve a content import source"
+      "covered_by": {
+        "direct_read": "ai-content-import-source view"
       }
     },
     {
       "method": "PUT",
       "path": "/ai/content_import_sources/{source_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateContentImportSource; summary=Update a content import source"
+      "covered_by": {
+        "write": "update_content_import_source"
       }
     },
     {
       "method": "GET",
       "path": "/ai/external_pages",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listExternalPages; summary=List external pages"
+      "covered_by": {
+        "stream": "ai_external_page"
       }
     },
     {
       "method": "POST",
       "path": "/ai/external_pages",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createExternalPage; summary=Create an external page (or update an external page by external ID)"
+      "covered_by": {
+        "write": "create_external_page"
       }
     },
     {
       "method": "DELETE",
       "path": "/ai/external_pages/{page_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteExternalPage; summary=Delete an external page"
+      "covered_by": {
+        "write": "delete_external_page"
       }
     },
     {
       "method": "GET",
       "path": "/ai/external_pages/{page_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=getExternalPage; summary=Retrieve an external page"
+      "covered_by": {
+        "direct_read": "ai-external-page view"
       }
     },
     {
       "method": "PUT",
       "path": "/ai/external_pages/{page_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateExternalPage; summary=Update an external page"
+      "covered_by": {
+        "write": "update_external_page"
       }
     },
     {
       "method": "GET",
       "path": "/articles",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listArticles; summary=List all articles"
+      "covered_by": {
+        "stream": "article"
       }
     },
     {
       "method": "POST",
       "path": "/articles",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createArticle; summary=Create an article"
+      "covered_by": {
+        "write": "create_article"
       }
     },
     {
       "method": "GET",
       "path": "/articles/{article_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveArticle; summary=Retrieve an article"
+      "covered_by": {
+        "direct_read": "article view"
       }
     },
     {
       "method": "PUT",
       "path": "/articles/{article_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateArticle; summary=Update an article"
+      "covered_by": {
+        "write": "update_article"
       }
     },
     {
       "method": "DELETE",
       "path": "/articles/{article_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteArticle; summary=Delete an article"
+      "covered_by": {
+        "write": "delete_article"
       }
     },
     {
       "method": "GET",
       "path": "/articles/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=searchArticles; summary=Search for articles"
+      "covered_by": {
+        "stream": "article_search"
       }
     },
     {
       "method": "GET",
       "path": "/away_status_reasons",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listAwayStatusReasons; summary=List all away status reasons"
+      "covered_by": {
+        "stream": "away_status_reason"
       }
     },
     {
       "method": "POST",
       "path": "/export/reporting_data/enqueue",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/export lifecycle operation requires bounded download or job-output policy before CLI exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=not_specified; summary=Enqueue a new reporting data export job"
+      "covered_by": {
+        "write": "post_export_reporting_data_enqueue"
       }
     },
     {
       "method": "GET",
       "path": "/export/reporting_data/{job_identifier}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/export lifecycle operation requires bounded download or job-output policy before CLI exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=not_specified; summary=Get export job status"
+      "covered_by": {
+        "direct_read": "export-reporting-data status"
       }
     },
     {
       "method": "GET",
       "path": "/export/reporting_data/get_datasets",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/export lifecycle operation requires bounded download or job-output policy before CLI exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=not_specified; summary=List available datasets and attributes"
+      "covered_by": {
+        "stream": "export_reporting_data"
       }
     },
     {
       "method": "GET",
       "path": "/download/reporting_data/{job_identifier}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/export lifecycle operation requires bounded download or job-output policy before CLI exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=not_specified; summary=Download completed export job data"
+      "covered_by": {
+        "direct_reads": [
+          "download-reporting-data view"
+        ]
       }
     },
     {
       "method": "POST",
       "path": "/fin/start",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=startFinConversation; summary=Start a conversation with Fin"
+      "covered_by": {
+        "write": "start_fin_conversation"
       }
     },
     {
       "method": "POST",
       "path": "/fin/reply",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=replyToFin; summary=Reply to Fin"
+      "covered_by": {
+        "write": "reply_to_fin"
       }
     },
     {
       "method": "GET",
       "path": "/help_center/collections",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listAllCollections; summary=List all collections"
+      "covered_by": {
+        "stream": "help_center_collection"
       }
     },
     {
       "method": "POST",
       "path": "/help_center/collections",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createCollection; summary=Create a collection"
+      "covered_by": {
+        "write": "create_collection"
       }
     },
     {
       "method": "GET",
       "path": "/help_center/collections/{collection_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveCollection; summary=Retrieve a collection"
+      "covered_by": {
+        "direct_read": "help-center-collection view"
       }
     },
     {
       "method": "PUT",
       "path": "/help_center/collections/{collection_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateCollection; summary=Update a collection"
+      "covered_by": {
+        "write": "update_collection"
       }
     },
     {
       "method": "DELETE",
       "path": "/help_center/collections/{collection_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteCollection; summary=Delete a collection"
+      "covered_by": {
+        "write": "delete_collection"
       }
     },
     {
       "method": "GET",
       "path": "/help_center/help_centers/{help_center_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveHelpCenter; summary=Retrieve a Help Center"
+      "covered_by": {
+        "direct_read": "help-center-help-center view"
       }
     },
     {
       "method": "GET",
       "path": "/help_center/help_centers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listHelpCenters; summary=List all Help Centers"
+      "covered_by": {
+        "stream": "help_center_help_center"
       }
     },
     {
       "method": "GET",
       "path": "/internal_articles",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listInternalArticles; summary=List all articles"
+      "covered_by": {
+        "stream": "internal_article"
       }
     },
     {
       "method": "POST",
       "path": "/internal_articles",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createInternalArticle; summary=Create an internal article"
+      "covered_by": {
+        "write": "create_internal_article"
       }
     },
     {
       "method": "GET",
       "path": "/internal_articles/{internal_article_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveInternalArticle; summary=Retrieve an internal article"
+      "covered_by": {
+        "direct_read": "internal-article view"
       }
     },
     {
       "method": "PUT",
       "path": "/internal_articles/{internal_article_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateInternalArticle; summary=Update an internal article"
+      "covered_by": {
+        "write": "update_internal_article"
       }
     },
     {
       "method": "DELETE",
       "path": "/internal_articles/{internal_article_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteInternalArticle; summary=Delete an internal article"
+      "covered_by": {
+        "write": "delete_internal_article"
       }
     },
     {
       "method": "GET",
       "path": "/internal_articles/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=searchInternalArticles; summary=Search for internal articles"
+      "covered_by": {
+        "stream": "internal_article_search"
       }
     },
     {
       "method": "GET",
       "path": "/ip_allowlist",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=getIpAllowlist; summary=Get IP allowlist settings"
+      "covered_by": {
+        "direct_read": "ip-allowlist view"
       }
     },
     {
       "method": "PUT",
       "path": "/ip_allowlist",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateIpAllowlist; summary=Update IP allowlist settings"
+      "covered_by": {
+        "write": "update_ip_allowlist"
       }
     },
     {
       "method": "POST",
       "path": "/companies",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createOrUpdateCompany; summary=Create or Update a company"
+      "covered_by": {
+        "write": "create_or_update_company"
       }
     },
     {
@@ -582,313 +325,169 @@
     {
       "method": "GET",
       "path": "/companies/{company_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=RetrieveACompanyById; summary=Retrieve a company by ID"
+      "covered_by": {
+        "direct_read": "company view"
       }
     },
     {
       "method": "PUT",
       "path": "/companies/{company_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=UpdateCompany; summary=Update a company"
+      "covered_by": {
+        "write": "update_company"
       }
     },
     {
       "method": "DELETE",
       "path": "/companies/{company_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteCompany; summary=Delete a company"
+      "covered_by": {
+        "write": "delete_company"
       }
     },
     {
       "method": "GET",
       "path": "/companies/{company_id}/contacts",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=ListAttachedContacts; summary=List attached contacts"
+      "covered_by": {
+        "direct_read": "company-contact view"
       }
     },
     {
       "method": "GET",
       "path": "/companies/{company_id}/segments",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=ListAttachedSegmentsForCompanies; summary=List attached segments for companies"
+      "covered_by": {
+        "direct_read": "company-segment view"
       }
     },
     {
       "method": "POST",
       "path": "/companies/list",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listAllCompanies; summary=List all companies"
+      "covered_by": {
+        "stream": "company_list"
       }
     },
     {
       "method": "GET",
       "path": "/companies/scroll",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=scrollOverAllCompanies; summary=Scroll over all companies"
+      "covered_by": {
+        "direct_read": "company-scroll view"
       }
     },
     {
       "method": "POST",
       "path": "/contacts/{contact_id}/companies",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=attachContactToACompany; summary=Attach a Contact to a Company"
+      "covered_by": {
+        "write": "attach_contact_to_acompany"
       }
     },
     {
       "method": "GET",
       "path": "/contacts/{contact_id}/companies",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listCompaniesForAContact; summary=List attached companies for contact"
+      "covered_by": {
+        "direct_read": "contact-company view"
       }
     },
     {
       "method": "DELETE",
       "path": "/contacts/{contact_id}/companies/{company_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=detachContactFromACompany; summary=Detach a contact from a company"
+      "covered_by": {
+        "write": "detach_contact_from_acompany"
       }
     },
     {
       "method": "GET",
       "path": "/contacts/{contact_id}/notes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listNotes; summary=List all notes"
+      "covered_by": {
+        "direct_read": "contact-note view"
       }
     },
     {
       "method": "POST",
       "path": "/contacts/{contact_id}/notes",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createNote; summary=Create a note"
+      "covered_by": {
+        "write": "create_note"
       }
     },
     {
       "method": "GET",
       "path": "/contacts/{contact_id}/segments",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listSegmentsForAContact; summary=List attached segments for contact"
+      "covered_by": {
+        "direct_read": "contact-segment view"
       }
     },
     {
       "method": "GET",
       "path": "/contacts/{contact_id}/subscriptions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listSubscriptionsForAContact; summary=List subscriptions for a contact"
+      "covered_by": {
+        "direct_read": "contact-subscription view"
       }
     },
     {
       "method": "POST",
       "path": "/contacts/{contact_id}/subscriptions",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=attachSubscriptionTypeToContact; summary=Add subscription to a contact"
+      "covered_by": {
+        "write": "attach_subscription_type_to_contact"
       }
     },
     {
       "method": "DELETE",
       "path": "/contacts/{contact_id}/subscriptions/{subscription_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=detachSubscriptionTypeToContact; summary=Remove subscription from a contact"
+      "covered_by": {
+        "write": "detach_subscription_type_to_contact"
       }
     },
     {
       "method": "GET",
       "path": "/contacts/{contact_id}/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listTagsForAContact; summary=List tags attached to a contact"
+      "covered_by": {
+        "direct_read": "contact-tag view"
       }
     },
     {
       "method": "POST",
       "path": "/contacts/{contact_id}/tags",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=attachTagToContact; summary=Add tag to a contact"
+      "covered_by": {
+        "write": "attach_tag_to_contact"
       }
     },
     {
       "method": "DELETE",
       "path": "/contacts/{contact_id}/tags/{tag_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=detachTagFromContact; summary=Remove tag from a contact"
+      "covered_by": {
+        "write": "detach_tag_from_contact"
       }
     },
     {
       "method": "PUT",
       "path": "/contacts/{contact_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=UpdateContact; summary=Update a contact"
+      "covered_by": {
+        "write": "update_contact"
       }
     },
     {
       "method": "GET",
       "path": "/contacts/{contact_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=ShowContact; summary=Get a contact"
+      "covered_by": {
+        "direct_read": "contact view"
       }
     },
     {
       "method": "DELETE",
       "path": "/contacts/{contact_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=DeleteContact; summary=Delete a contact"
+      "covered_by": {
+        "write": "delete_contact"
       }
     },
     {
       "method": "POST",
       "path": "/contacts/merge",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=MergeContact; summary=Merge a lead and a user"
+      "covered_by": {
+        "write": "merge_contact"
       }
     },
     {
       "method": "POST",
       "path": "/contacts/search",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=SearchContacts; summary=Search contacts"
+      "covered_by": {
+        "stream": "contact_search_search"
       }
     },
     {
@@ -901,92 +500,50 @@
     {
       "method": "POST",
       "path": "/contacts",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=CreateContact; summary=Create contact"
+      "covered_by": {
+        "write": "create_contact"
       }
     },
     {
       "method": "GET",
       "path": "/contacts/find_by_external_id/{external_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=ShowContactByExternalId; summary=Get a contact by External ID"
+      "covered_by": {
+        "direct_read": "contact-find-by-external-id view"
       }
     },
     {
       "method": "POST",
       "path": "/contacts/{contact_id}/archive",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "high-impact Intercom state change requires typed reverse-ETL schema, preview, approval, and confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=ArchiveContact; summary=Archive contact"
+      "covered_by": {
+        "write": "archive_contact"
       }
     },
     {
       "method": "POST",
       "path": "/contacts/{contact_id}/unarchive",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=UnarchiveContact; summary=Unarchive contact"
+      "covered_by": {
+        "write": "unarchive_contact"
       }
     },
     {
       "method": "POST",
       "path": "/contacts/{contact_id}/block",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "high-impact Intercom state change requires typed reverse-ETL schema, preview, approval, and confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=BlockContact; summary=Block contact"
+      "covered_by": {
+        "write": "block_contact"
       }
     },
     {
       "method": "POST",
       "path": "/conversations/{conversation_id}/tags",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=attachTagToConversation; summary=Add tag to a conversation"
+      "covered_by": {
+        "write": "attach_tag_to_conversation"
       }
     },
     {
       "method": "DELETE",
       "path": "/conversations/{conversation_id}/tags/{tag_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=detachTagFromConversation; summary=Remove tag from a conversation"
+      "covered_by": {
+        "write": "detach_tag_from_conversation"
       }
     },
     {
@@ -999,599 +556,329 @@
     {
       "method": "POST",
       "path": "/conversations",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createConversation; summary=Creates a conversation"
+      "covered_by": {
+        "write": "create_conversation"
       }
     },
     {
       "method": "GET",
       "path": "/conversations/{conversation_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveConversation; summary=Retrieve a conversation"
+      "covered_by": {
+        "direct_read": "conversation view"
       }
     },
     {
       "method": "PUT",
       "path": "/conversations/{conversation_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateConversation; summary=Update a conversation"
+      "covered_by": {
+        "write": "update_conversation"
       }
     },
     {
       "method": "DELETE",
       "path": "/conversations/{conversation_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteConversation; summary=Delete a conversation"
+      "covered_by": {
+        "write": "delete_conversation"
       }
     },
     {
       "method": "POST",
       "path": "/conversations/search",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=searchConversations; summary=Search conversations"
+      "covered_by": {
+        "stream": "conversation_search_search"
       }
     },
     {
       "method": "POST",
       "path": "/conversations/{conversation_id}/reply",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=replyConversation; summary=Reply to a conversation"
+      "covered_by": {
+        "write": "reply_conversation"
       }
     },
     {
       "method": "POST",
       "path": "/conversations/{conversation_id}/parts",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=manageConversation; summary=Manage a conversation"
+      "covered_by": {
+        "write": "manage_conversation"
       }
     },
     {
       "method": "POST",
       "path": "/conversations/{conversation_id}/customers",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=attachContactToConversation; summary=Attach a contact to a conversation"
+      "covered_by": {
+        "write": "attach_contact_to_conversation"
       }
     },
     {
       "method": "DELETE",
       "path": "/conversations/{conversation_id}/customers/{contact_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=detachContactFromConversation; summary=Detach a contact from a group conversation"
+      "covered_by": {
+        "write": "detach_contact_from_conversation"
       }
     },
     {
       "method": "POST",
       "path": "/conversations/redact",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "high-impact Intercom state change requires typed reverse-ETL schema, preview, approval, and confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=redactConversation; summary=Redact a conversation part"
+      "covered_by": {
+        "write": "redact_conversation"
       }
     },
     {
       "method": "POST",
       "path": "/conversations/{conversation_id}/convert",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=convertConversationToTicket; summary=Convert a conversation to a ticket"
+      "covered_by": {
+        "write": "convert_conversation_to_ticket"
       }
     },
     {
       "method": "POST",
       "path": "/custom_object_instances/{custom_object_type_identifier}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createCustomObjectInstances; summary=Create or Update a Custom Object Instance"
+      "covered_by": {
+        "write": "create_custom_object_instances"
       }
     },
     {
       "method": "GET",
       "path": "/custom_object_instances/{custom_object_type_identifier}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=getCustomObjectInstancesByExternalId; summary=Get Custom Object Instance by External ID"
+      "covered_by": {
+        "direct_read": "custom-object-instance view"
       }
     },
     {
       "method": "DELETE",
       "path": "/custom_object_instances/{custom_object_type_identifier}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteCustomObjectInstancesById; summary=Delete a Custom Object Instance by External ID"
+      "covered_by": {
+        "write": "delete_custom_object_instances_by_id"
       }
     },
     {
       "method": "GET",
       "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=getCustomObjectInstancesById; summary=Get Custom Object Instance by ID"
+      "covered_by": {
+        "direct_read": "custom-object-instance view_2"
       }
     },
     {
       "method": "DELETE",
       "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteCustomObjectInstancesByExternalId; summary=Delete a Custom Object Instance by ID"
+      "covered_by": {
+        "write": "delete_custom_object_instances_by_external_id"
       }
     },
     {
       "method": "GET",
       "path": "/data_attributes",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=lisDataAttributes; summary=List all data attributes"
+      "covered_by": {
+        "stream": "data_attribute"
       }
     },
     {
       "method": "POST",
       "path": "/data_attributes",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createDataAttribute; summary=Create a data attribute"
+      "covered_by": {
+        "write": "create_data_attribute"
       }
     },
     {
       "method": "PUT",
       "path": "/data_attributes/{data_attribute_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateDataAttribute; summary=Update a data attribute"
+      "covered_by": {
+        "write": "update_data_attribute"
       }
     },
     {
       "method": "POST",
       "path": "/events",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createDataEvent; summary=Submit a data event"
+      "covered_by": {
+        "write": "create_data_event"
       }
     },
     {
       "method": "GET",
       "path": "/events",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=lisDataEvents; summary=List all data events"
+      "covered_by": {
+        "stream": "event"
       }
     },
     {
       "method": "POST",
       "path": "/events/summaries",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=dataEventSummaries; summary=Create event summaries"
+      "covered_by": {
+        "write": "data_event_summaries"
       }
     },
     {
       "method": "POST",
       "path": "/export/content/data",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/export lifecycle operation requires bounded download or job-output policy before CLI exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createDataExport; summary=Create content data export"
+      "covered_by": {
+        "write": "create_data_export"
       }
     },
     {
       "method": "GET",
       "path": "/export/content/data/{job_identifier}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/export lifecycle operation requires bounded download or job-output policy before CLI exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=getDataExport; summary=Show content data export"
+      "covered_by": {
+        "direct_read": "export-content view"
       }
     },
     {
       "method": "POST",
       "path": "/export/cancel/{job_identifier}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/export lifecycle operation requires bounded download or job-output policy before CLI exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=cancelDataExport; summary=Cancel content data export"
+      "covered_by": {
+        "write": "cancel_data_export"
       }
     },
     {
       "method": "GET",
       "path": "/download/content/data/{job_identifier}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/export lifecycle operation requires bounded download or job-output policy before CLI exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=downloadDataExport; summary=Download content data export"
+      "covered_by": {
+        "direct_reads": [
+          "download-content view"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/jobs/status/{job_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=jobsStatus; summary=Retrieve job status"
+      "covered_by": {
+        "direct_read": "job status"
       }
     },
     {
       "method": "POST",
       "path": "/messages",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createMessage; summary=Create a message"
+      "covered_by": {
+        "write": "create_message"
       }
     },
     {
       "method": "GET",
       "path": "/news/news_items",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listNewsItems; summary=List all news items"
+      "covered_by": {
+        "stream": "new_news_item"
       }
     },
     {
       "method": "POST",
       "path": "/news/news_items",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createNewsItem; summary=Create a news item"
+      "covered_by": {
+        "write": "create_news_item"
       }
     },
     {
       "method": "GET",
       "path": "/news/news_items/{news_item_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveNewsItem; summary=Retrieve a news item"
+      "covered_by": {
+        "direct_read": "new-news-item view"
       }
     },
     {
       "method": "PUT",
       "path": "/news/news_items/{news_item_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateNewsItem; summary=Update a news item"
+      "covered_by": {
+        "write": "update_news_item"
       }
     },
     {
       "method": "DELETE",
       "path": "/news/news_items/{news_item_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteNewsItem; summary=Delete a news item"
+      "covered_by": {
+        "write": "delete_news_item"
       }
     },
     {
       "method": "GET",
       "path": "/news/newsfeeds/{newsfeed_id}/items",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listLiveNewsfeedItems; summary=List all live newsfeed items"
+      "covered_by": {
+        "direct_read": "new-newsfeed view"
       }
     },
     {
       "method": "GET",
       "path": "/news/newsfeeds",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listNewsfeeds; summary=List all newsfeeds"
+      "covered_by": {
+        "stream": "new_newsfeed"
       }
     },
     {
       "method": "GET",
       "path": "/news/newsfeeds/{newsfeed_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveNewsfeed; summary=Retrieve a newsfeed"
+      "covered_by": {
+        "direct_read": "new-newsfeed view_2"
       }
     },
     {
       "method": "GET",
       "path": "/notes/{note_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveNote; summary=Retrieve a note"
+      "covered_by": {
+        "direct_read": "note view"
       }
     },
     {
       "method": "GET",
       "path": "/segments",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listSegments; summary=List all segments"
+      "covered_by": {
+        "stream": "segment"
       }
     },
     {
       "method": "GET",
       "path": "/segments/{segment_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveSegment; summary=Retrieve a segment"
+      "covered_by": {
+        "direct_read": "segment view"
       }
     },
     {
       "method": "GET",
       "path": "/subscription_types",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listSubscriptionTypes; summary=List subscription types"
+      "covered_by": {
+        "stream": "subscription_type"
       }
     },
     {
       "method": "POST",
       "path": "/phone_call_redirects",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createPhoneSwitch; summary=Create a phone Switch"
+      "covered_by": {
+        "write": "create_phone_switch"
       }
     },
     {
       "method": "GET",
       "path": "/calls",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listCalls; summary=List all calls"
+      "covered_by": {
+        "stream": "call"
       }
     },
     {
       "method": "GET",
       "path": "/calls/{call_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=showCall; summary=Get a call"
+      "covered_by": {
+        "direct_read": "call view"
       }
     },
     {
       "method": "GET",
       "path": "/calls/{call_id}/recording",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/export lifecycle operation requires bounded download or job-output policy before CLI exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=showCallRecording; summary=Get call recording by call id"
+      "covered_by": {
+        "direct_reads": [
+          "call-recording recording"
+        ]
       }
     },
     {
       "method": "GET",
       "path": "/calls/{call_id}/transcript",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "binary/export lifecycle operation requires bounded download or job-output policy before CLI exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=showCallTranscript; summary=Get call transcript by call id"
+      "covered_by": {
+        "direct_reads": [
+          "call-transcript transcript"
+        ]
       }
     },
     {
       "method": "POST",
       "path": "/calls/search",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listCallsWithTranscripts; summary=List calls with transcripts"
+      "covered_by": {
+        "stream": "call_search_search"
       }
     },
     {
@@ -1604,313 +891,169 @@
     {
       "method": "POST",
       "path": "/tags",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createTag; summary=Create or update a tag, Tag or untag companies, Tag contacts"
+      "covered_by": {
+        "write": "create_tag"
       }
     },
     {
       "method": "GET",
       "path": "/tags/{tag_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=findTag; summary=Find a specific tag"
+      "covered_by": {
+        "direct_read": "tag find"
       }
     },
     {
       "method": "DELETE",
       "path": "/tags/{tag_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteTag; summary=Delete tag"
+      "covered_by": {
+        "write": "delete_tag"
       }
     },
     {
       "method": "GET",
       "path": "/teams",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listTeams; summary=List all teams"
+      "covered_by": {
+        "stream": "team"
       }
     },
     {
       "method": "GET",
       "path": "/teams/{team_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveTeam; summary=Retrieve a team"
+      "covered_by": {
+        "direct_read": "team view"
       }
     },
     {
       "method": "GET",
       "path": "/ticket_states",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listTicketStates; summary=List all ticket states"
+      "covered_by": {
+        "stream": "ticket_state"
       }
     },
     {
       "method": "POST",
       "path": "/ticket_types/{ticket_type_id}/attributes",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createTicketTypeAttribute; summary=Create a new attribute for a ticket type"
+      "covered_by": {
+        "write": "create_ticket_type_attribute"
       }
     },
     {
       "method": "PUT",
       "path": "/ticket_types/{ticket_type_id}/attributes/{attribute_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateTicketTypeAttribute; summary=Update an existing attribute for a ticket type"
+      "covered_by": {
+        "write": "update_ticket_type_attribute"
       }
     },
     {
       "method": "GET",
       "path": "/ticket_types",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=listTicketTypes; summary=List all ticket types"
+      "covered_by": {
+        "stream": "ticket_type"
       }
     },
     {
       "method": "POST",
       "path": "/ticket_types",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createTicketType; summary=Create a ticket type"
+      "covered_by": {
+        "write": "create_ticket_type"
       }
     },
     {
       "method": "GET",
       "path": "/ticket_types/{ticket_type_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=getTicketType; summary=Retrieve a ticket type"
+      "covered_by": {
+        "direct_read": "ticket-type view"
       }
     },
     {
       "method": "PUT",
       "path": "/ticket_types/{ticket_type_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateTicketType; summary=Update a ticket type"
+      "covered_by": {
+        "write": "update_ticket_type"
       }
     },
     {
       "method": "POST",
       "path": "/tickets/{ticket_id}/reply",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=replyTicket; summary=Reply to a ticket"
+      "covered_by": {
+        "write": "reply_ticket"
       }
     },
     {
       "method": "POST",
       "path": "/tickets/{ticket_id}/tags",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "admin/configuration/content Intercom mutation requires explicit typed reverse-ETL schema, risk text, and approval gates before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=attachTagToTicket; summary=Add tag to a ticket"
+      "covered_by": {
+        "write": "attach_tag_to_ticket"
       }
     },
     {
       "method": "DELETE",
       "path": "/tickets/{ticket_id}/tags/{tag_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=detachTagFromTicket; summary=Remove tag from a ticket"
+      "covered_by": {
+        "write": "detach_tag_from_ticket"
       }
     },
     {
       "method": "POST",
       "path": "/tickets",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=createTicket; summary=Create a ticket"
+      "covered_by": {
+        "write": "create_ticket"
       }
     },
     {
       "method": "POST",
       "path": "/tickets/enqueue",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=enqueueCreateTicket; summary=Enqueue create ticket"
+      "covered_by": {
+        "write": "enqueue_create_ticket"
       }
     },
     {
       "method": "PUT",
       "path": "/tickets/{ticket_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateTicket; summary=Update a ticket"
+      "covered_by": {
+        "write": "update_ticket"
       }
     },
     {
       "method": "GET",
       "path": "/tickets/{ticket_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=getTicket; summary=Retrieve a ticket"
+      "covered_by": {
+        "direct_read": "ticket view"
       }
     },
     {
       "method": "DELETE",
       "path": "/tickets/{ticket_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "destructive Intercom mutation requires typed reverse-ETL schema, preview, approval, and destructive confirmation before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=deleteTicket; summary=Delete a ticket"
+      "covered_by": {
+        "write": "delete_ticket"
       }
     },
     {
       "method": "POST",
       "path": "/tickets/search",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=searchTickets; summary=Search tickets"
+      "covered_by": {
+        "stream": "ticket_search_search"
       }
     },
     {
       "method": "PUT",
       "path": "/visitors",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=updateVisitor; summary=Update a visitor"
+      "covered_by": {
+        "write": "update_visitor"
       }
     },
     {
       "method": "GET",
       "path": "/visitors",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "safe read candidate pending bounded stream or direct-read implementation in Intercom CLI parity follow-up lanes",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=retrieveVisitorWithUserId; summary=Retrieve a visitor with User ID"
+      "covered_by": {
+        "direct_read": "visitor view"
       }
     },
     {
       "method": "POST",
       "path": "/visitors/convert",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Intercom data mutation requires typed reverse-ETL schema, redaction review, preview, approval, and execute gating before exposure",
-        "source_url": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
-        "notes": "OpenAPI operationId=convertVisitor; summary=Convert a visitor"
+      "covered_by": {
+        "write": "convert_visitor"
       }
     }
   ]

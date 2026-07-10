@@ -21,3 +21,8 @@ Pending. No production edits before this ledger and the verification checklist a
 - `go test ./internal/connectors/commandrunner -run TestRunImplementedIntercomJSONDirectReadCommand -count=1` failed as expected: `json_response` output policy is not yet supported.
 - `go test ./internal/cli -run TestIntercomConnectorCommand -count=1` failed as expected: bare `pm intercom` reports missing command path and `contact view --help` is still planned/blocked.
 - `go test ./internal/connectors/engine -run 'TestDirectRead(JSONResponse|TextResponse|BinaryMetadata)' -count=1` initially caught missing test hook args; fixed test harness and remains expected to fail until policies are implemented.
+
+
+## Green evidence: 2026-07-10
+
+- Covered by combined #166-#171 red/green loop. Relevant targeted tests and broad gates passed; see `.planning/phases/issue-166-171-intercom-complete-implementation/TDD-LEDGER.md`.

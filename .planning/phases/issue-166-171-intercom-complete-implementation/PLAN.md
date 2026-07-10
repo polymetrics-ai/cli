@@ -67,13 +67,23 @@ Complete Intercom connector CLI parity for the official Intercom OpenAPI 2.14 su
    - Add typed write actions for official POST/PUT/DELETE mutations with path fields, JSON/body field schemas, risk text, and destructive confirmation where needed.
    - Add CLI metadata for each write command; verify `pm intercom ... --preview --json` only creates/stages a plan.
 
+## Implementation status (2026-07-10)
+
+- Complete Intercom API surface now has 149 CLI command entries covering all 149 official operations.
+- Stream coverage expanded to 31 stream/direct collection operations with passthrough schemas where official response shapes are broad.
+- Direct-read coverage uses bounded `json_response`, `text_response`, and `binary_metadata` policies rather than raw file writes.
+- Reverse ETL coverage uses 77 typed write actions with schemas, risk text, approval requirements, and destructive/admin confirmation metadata.
+- Runtime help parity is implemented for `pm intercom`, `pm help intercom`, and `pm intercom <resource> <action> --help`.
+- Docs/website parity added: `docs/cli/intercom.md` and `website/content/docs/intercom-cli-surface.mdx`.
+- Local verification passed; see `TDD-LEDGER.md` and `VERIFICATION.md`.
+
 ## Commit checkpoints
 
-- Plan checkpoint before production edits.
-- Red-test checkpoint when feasible.
-- Green implementation checkpoint.
-- Docs/help parity checkpoint.
-- Verification/review-route checkpoint.
+- [x] Plan checkpoint before production edits.
+- [x] Red-test checkpoint when feasible.
+- [x] Green implementation checkpoint.
+- [x] Docs/help parity checkpoint.
+- [x] Verification/review-route checkpoint pending PR/review routing after commit/push.
 
 ## Human gates
 

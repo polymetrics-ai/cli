@@ -36,3 +36,13 @@
 - [ ] No generic raw HTTP/SQL/shell write surface.
 - [ ] Reverse ETL writes stay plan -> preview -> approval -> execute.
 - [ ] Destructive/admin writes declare risk and confirmation policy.
+
+
+## Local verification: 2026-07-10
+
+- [x] Targeted package tests for Intercom command surface/engine/commandrunner/connectorgen/conformance passed.
+- [x] `go vet ./...` passed.
+- [x] `go test ./... -timeout=20m` passed.
+- [x] `go build ./cmd/pm` passed.
+- [x] `make verify` passed.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` passed with 547 connectors and 0 findings.

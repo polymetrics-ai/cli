@@ -17,7 +17,7 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi",
-    "status": "worker_in_progress"
+    "status": "local_verified_pending_pr"
   },
   "ready_queue": [
     {
@@ -33,7 +33,7 @@
     },
     {
       "number": 168,
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "dependencies": [
         165
       ],
@@ -45,7 +45,7 @@
     },
     {
       "number": 166,
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "dependencies": [
         165
       ],
@@ -59,7 +59,7 @@
     },
     {
       "number": 167,
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "dependencies": [
         165,
         168
@@ -74,7 +74,7 @@
     },
     {
       "number": 169,
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "dependencies": [
         165,
         168
@@ -88,7 +88,7 @@
     },
     {
       "number": 170,
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "dependencies": [
         168,
         169
@@ -102,7 +102,7 @@
     },
     {
       "number": 171,
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "dependencies": [
         168,
         170
@@ -170,7 +170,7 @@
       "branch": "feat/166-171-intercom-complete-implementation",
       "pr_url": "pending",
       "worker": "pi-coordinator-inline",
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -182,11 +182,11 @@
         ".planning/phases/issue-166-intercom-help-renderer"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
-      "verification": "pending",
+      "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
-        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "status": "pending_pr",
+        "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
         "fallback_route": "none"
       }
     },
@@ -196,7 +196,7 @@
       "branch": "feat/166-171-intercom-complete-implementation",
       "pr_url": "pending",
       "worker": "pi-coordinator-inline",
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -208,11 +208,11 @@
         ".planning/phases/issue-167-intercom-stream-runner"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
-      "verification": "pending",
+      "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
-        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "status": "pending_pr",
+        "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
         "fallback_route": "none"
       }
     },
@@ -222,7 +222,7 @@
       "branch": "feat/166-171-intercom-complete-implementation",
       "pr_url": "pending",
       "worker": "pi-coordinator-inline",
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -234,11 +234,11 @@
         ".planning/phases/issue-168-intercom-operation-ledger"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
-      "verification": "pending",
+      "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
-        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "status": "pending_pr",
+        "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
         "fallback_route": "none"
       }
     },
@@ -248,7 +248,7 @@
       "branch": "feat/166-171-intercom-complete-implementation",
       "pr_url": "pending",
       "worker": "pi-coordinator-inline",
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -260,11 +260,11 @@
         ".planning/phases/issue-169-intercom-direct-read"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
-      "verification": "pending",
+      "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
-        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "status": "pending_pr",
+        "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
         "fallback_route": "none"
       }
     },
@@ -274,7 +274,7 @@
       "branch": "feat/166-171-intercom-complete-implementation",
       "pr_url": "pending",
       "worker": "pi-coordinator-inline",
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -286,11 +286,11 @@
         ".planning/phases/issue-170-intercom-advanced-query-binary"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
-      "verification": "pending",
+      "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
-        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "status": "pending_pr",
+        "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
         "fallback_route": "none"
       }
     },
@@ -300,7 +300,7 @@
       "branch": "feat/166-171-intercom-complete-implementation",
       "pr_url": "pending",
       "worker": "pi-coordinator-inline",
-      "status": "worker_in_progress",
+      "status": "local_verified_pending_pr",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -312,11 +312,11 @@
         ".planning/phases/issue-171-intercom-sensitive-admin-policy"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
-      "verification": "pending",
+      "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending",
-        "coverage_route": "sub_pr_or_parent_pr_fallback",
+        "status": "pending_pr",
+        "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
         "fallback_route": "none"
       }
     }
@@ -331,5 +331,5 @@
     "production deployment",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T00:00:00Z"
+  "updated_at": "2026-07-10T07:45:00Z"
 }

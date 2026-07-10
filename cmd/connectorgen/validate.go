@@ -102,6 +102,9 @@ var surfaceOperationRisks = map[string]bool{
 var directReadOutputPolicies = map[string]bool{
 	"github_contents_file_metadata": true,
 	"github_contents_directory":     true,
+	"json_response":                 true,
+	"text_response":                 true,
+	"binary_metadata":               true,
 }
 
 var sourceRequiredOperationModels = map[string]bool{
@@ -388,6 +391,14 @@ func checkInterpolations(b engine.Bundle) []Finding {
 				})
 			}
 		}
+		if len(s.Body) > 0 {
+			if err := engine.ResolveCheckGraphQLVariables(s.Body, specKeys); err != nil {
+				findings = append(findings, Finding{
+					Connector: b.Name, File: "streams.json", Rule: ruleInterpolationUnresolved,
+					Message: fmt.Sprintf("stream %q body: %v", s.Name, err),
+				})
+			}
+		}
 		for _, v := range s.ComputedFields {
 			check("streams.json", v)
 		}
@@ -401,6 +412,9 @@ func checkInterpolations(b engine.Bundle) []Finding {
 	}
 	for _, w := range b.Writes {
 		check("writes.json", w.Path)
+		for _, v := range w.Query {
+			check("writes.json", v)
+		}
 		if w.GraphQL != nil {
 			if err := engine.ResolveCheckGraphQLVariables(w.GraphQL.Variables, specKeys); err != nil {
 				findings = append(findings, Finding{
