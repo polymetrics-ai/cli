@@ -40,7 +40,7 @@ and file command groups. It also preserves safety labels such as `availability=p
 | Intent | Runtime rule |
 |---|---|
 | `etl` | Runs an implemented Freshchat stream through a saved credential, bounded by `--limit`. |
-| `reverse_etl` | Creates an approval-gated reverse plan; execution still requires preview and approval. |
+| `reverse_etl` | Creates an approval-gated reverse plan; destructive, admin, and sensitive actions also carry typed confirmation challenges. |
 | `direct_read` | `user fetch` runs the bounded Freshchat `POST /users/fetch` ids-array body policy; no generic POST body command is exposed. |
 | `direct_write` | File/image upload commands carry typed `file_upload` operation metadata with `max_bytes`, but execution is blocked until a bounded multipart executor exists. |
 
@@ -66,5 +66,5 @@ identifier with `--config` until the direct-read slice adds typed path flags.
 | Gap | Follow-up |
 |---|---|
 | Multipart file and image upload execution | Typed `file_upload` metadata exists; executor implementation remains blocked until a future bounded multipart runtime slice. |
-| Sensitive/destructive admin policy refinement | #187. |
+| Sensitive/admin write execution | Metadata now requires typed confirmation; live execution remains approval-gated and was not exercised by parity work. |
 | Website/generated help parity completion | Parent #180 tracks the remaining waves. |

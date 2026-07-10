@@ -117,6 +117,7 @@
         "additionalProperties": true,
         "minProperties": 2
       },
+      "confirm": "sensitive",
       "risk": "sends a message into an existing Freshchat conversation"
     },
     {
@@ -136,6 +137,7 @@
         },
         "additionalProperties": true
       },
+      "confirm": "admin",
       "risk": "creates a Freshchat agent account"
     },
     {
@@ -158,6 +160,7 @@
         "additionalProperties": true,
         "minProperties": 2
       },
+      "confirm": "admin",
       "risk": "updates an existing Freshchat agent"
     },
     {
@@ -175,6 +178,7 @@
         },
         "additionalProperties": true
       },
+      "confirm": "admin",
       "risk": "updates an agent's Freshchat availability status"
     },
     {
@@ -209,6 +213,7 @@
         "additionalProperties": true,
         "minProperties": 1
       },
+      "confirm": "sensitive",
       "risk": "sends an outbound WhatsApp message through Freshchat"
     },
     {
@@ -227,6 +232,7 @@
         },
         "additionalProperties": true
       },
+      "confirm": "sensitive",
       "risk": "requests generation of a Freshchat raw report extract"
     },
     {

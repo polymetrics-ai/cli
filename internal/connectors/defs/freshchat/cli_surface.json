@@ -281,7 +281,7 @@
       "write": "send_conversation_message",
       "source_url": "https://developers.freshchat.com/api/",
       "risk": "Sends a visible message into an existing Freshchat conversation.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute and sensitive confirmation.",
       "notes": "The write action supports structured message_parts records; full command flag mapping for nested message payloads is deferred.",
       "api_surface": [
         { "method": "POST", "path": "/conversations/{conversation_id}/messages" }
@@ -350,7 +350,7 @@
       "write": "create_agent",
       "source_url": "https://developers.freshchat.com/api/",
       "risk": "Creates a Freshchat agent account.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute and admin confirmation.",
       "flags": [
         { "name": "email", "type": "string", "summary": "Agent email address.", "maps_to": "record.email" },
         { "name": "first-name", "type": "string", "summary": "Agent first name.", "maps_to": "record.first_name" },
@@ -370,7 +370,7 @@
       "write": "update_agent",
       "source_url": "https://developers.freshchat.com/api/",
       "risk": "Updates an existing Freshchat agent.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute and admin confirmation.",
       "flags": [
         { "name": "agent-id", "type": "string", "summary": "Freshchat agent id.", "maps_to": "record.agent_id" },
         { "name": "first-name", "type": "string", "summary": "Agent first name.", "maps_to": "record.first_name" },
@@ -391,7 +391,7 @@
       "write": "update_agent_status",
       "source_url": "https://developers.freshchat.com/api/",
       "risk": "Updates an agent's Freshchat availability status.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute and admin confirmation.",
       "flags": [
         { "name": "agent-id", "type": "string", "summary": "Freshchat agent id.", "maps_to": "record.agent_id" },
         { "name": "status", "type": "string", "summary": "Freshchat availability status.", "maps_to": "record.status" }
@@ -460,7 +460,7 @@
       "write": "send_outbound_whatsapp_message",
       "source_url": "https://developers.freshchat.com/api/",
       "risk": "Sends an outbound WhatsApp message through Freshchat.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute and sensitive confirmation.",
       "notes": "The write action supports structured from/to/template records; full command flag mapping for nested WhatsApp payloads is deferred.",
       "api_surface": [
         { "method": "POST", "path": "/outbound-messages/whatsapp" }
@@ -486,7 +486,7 @@
       "write": "extract_report",
       "source_url": "https://developers.freshchat.com/api/",
       "risk": "Requests generation of a Freshchat raw report extract.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute and sensitive confirmation.",
       "flags": [
         { "name": "start", "type": "string", "summary": "Report start timestamp.", "maps_to": "record.start" },
         { "name": "end", "type": "string", "summary": "Report end timestamp.", "maps_to": "record.end" },
@@ -563,7 +563,7 @@
     },
     {
       "name": "freshchat-writes",
-      "summary": "Freshchat writes remain reverse ETL plan, preview, approval, execute operations; destructive deletes require confirmation."
+      "summary": "Freshchat writes remain reverse ETL plan, preview, approval, execute operations; destructive deletes, admin changes, and sensitive message/report actions require typed confirmation."
     }
   ]
 }

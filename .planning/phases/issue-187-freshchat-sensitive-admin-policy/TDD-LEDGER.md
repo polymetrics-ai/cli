@@ -17,4 +17,33 @@ Extend confirmation vocabulary, add Freshchat confirmations, and update docs/gen
 
 ## Verification ledger
 
-Pending.
+Red evidence:
+
+```bash
+gofmt -w cmd/connectorgen/freshchat_api_surface_test.go internal/connectors/commandrunner/runner_test.go
+go test ./cmd/connectorgen -run TestFreshchatSensitiveAdminWritesRequireTypedConfirmation
+```
+
+Initial failure: Freshchat sensitive/admin writes did not declare the expected confirmation challenge (`extract_report` first reported empty confirmation; other sensitive/admin writes were also missing).
+
+Green focused gates:
+
+```bash
+go test ./cmd/connectorgen -run 'TestValidate_CLISurface|TestFreshchatSensitiveAdminWritesRequireTypedConfirmation'
+go test ./internal/connectors/commandrunner -run TestFreshchatSensitiveAdminWriteCommandsCarryConfirmationChallenges
+go run ./cmd/connectorgen validate internal/connectors/defs
+```
+
+Results: pass; connectorgen reported `547 connector(s) checked, 0 findings`.
+
+Full gates pass:
+
+```bash
+cd website && pnpm run gen:website-data
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+```

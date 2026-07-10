@@ -385,7 +385,7 @@ type WriteAction struct {
 	RecordSchema json.RawMessage     `json:"record_schema"`
 	Delete       *DeleteSpec         `json:"delete,omitempty"`
 	Risk         string              `json:"risk"`
-	Confirm      string              `json:"confirm,omitempty"` // "" | "destructive"
+	Confirm      string              `json:"confirm,omitempty"` // "" | "destructive" | "admin" | "sensitive"
 	Hook         string              `json:"hook,omitempty"`
 }
 
