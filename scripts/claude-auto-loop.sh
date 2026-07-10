@@ -32,11 +32,22 @@
 set -euo pipefail
 
 CLAUDE_BIN="${CLAUDE_BIN:-claude}"
-CLAUDE_ARGS="${CLAUDE_ARGS:---output-format text}"
+# Default includes a permission posture so a headless `claude -p` can actually write its
+# verdict/state files. Without one, every turn produces no verdict and the loop no-ops. For a
+# fully unattended run that also needs bash (gh/make/pi), export
+# CLAUDE_ARGS="--output-format text --dangerously-skip-permissions".
+CLAUDE_ARGS="${CLAUDE_ARGS:---output-format text --permission-mode acceptEdits}"
 MAX_ITERATIONS="${MAX_ITERATIONS:-300}"
 MAX_REVERTS="${MAX_REVERTS:-6}"
+MAX_NO_VERDICT="${MAX_NO_VERDICT:-3}"          # consecutive no-verdict turns before HALT (footgun guard)
 MAX_MINUTES="${MAX_MINUTES:-0}"
 COOLDOWN_SECONDS="${COOLDOWN_SECONDS:-4}"
+
+# Fail fast on the most common footgun: no permission posture => headless claude can't write files.
+case " $CLAUDE_ARGS " in
+  *" --permission-mode "*|*" --dangerously-skip-permissions "*) : ;;
+  *) echo "WARN: CLAUDE_ARGS has no permission posture; headless 'claude -p' can't write files. Add --permission-mode acceptEdits (or --dangerously-skip-permissions for fully unattended)." >&2 ;;
+esac
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE_DIR="$REPO_ROOT/.planning/auto-loop"
@@ -79,18 +90,36 @@ $extra" >>"$LOG_FILE" 2>&1 || rc=$?
   return $rc
 }
 
-checkpoint() { # $1=turn — snapshot the run ledger (portable). ORCHESTRATION-STATE ledgers are
-  # rebuilt from ground truth by the reconciler on replay, so RUN.json is the anchor we restore.
+checkpoint() { # $1=turn — snapshot the run ledger + the worktree HEAD SHA (the fork point).
   local d="$CKPT_DIR/$1"; mkdir -p "$d"
   [[ -f "$RUN_JSON" ]] && cp "$RUN_JSON" "$d/RUN.json" 2>/dev/null || true
+  git -C "$REPO_ROOT" rev-parse HEAD > "$d/HEAD.sha" 2>/dev/null || true
   echo "$1" > "$CKPT_DIR/LAST_GOOD"
 }
-restore_checkpoint() { # restores RUN.json from the last good checkpoint
+restore_checkpoint() { # Restore the run ledger to the last PROCEED checkpoint AND hand the
+  # orchestrator an explicit cleanup task for the diverged commits. The validator never rewrites
+  # pushed git history itself (shepherd-validator.md); it records the good fork-point SHA and the
+  # current (bad) SHA in REVERT-CLEANUP.json, and the next RECONCILE resets local-only divergence
+  # or reverts-forward pushed commits per its own gates. Reverting RUN.json alone is not enough —
+  # this is what makes REVERT actually undo the bad step rather than re-derive forward from it.
   local last; last="$(cat "$CKPT_DIR/LAST_GOOD" 2>/dev/null || echo "")"
-  [[ -n "$last" && -f "$CKPT_DIR/$last/RUN.json" ]] && cp "$CKPT_DIR/$last/RUN.json" "$RUN_JSON" && log "reverted RUN.json to checkpoint $last" || log "no checkpoint to revert to"
+  local good_sha cur_sha; cur_sha="$(git -C "$REPO_ROOT" rev-parse HEAD 2>/dev/null || echo "")"
+  if [[ -n "$last" && -f "$CKPT_DIR/$last/RUN.json" ]]; then
+    cp "$CKPT_DIR/$last/RUN.json" "$RUN_JSON"
+    good_sha="$(cat "$CKPT_DIR/$last/HEAD.sha" 2>/dev/null || echo "")"
+    python3 - "$STATE_DIR/REVERT-CLEANUP.json" "$good_sha" "$cur_sha" "$last" <<'PY' 2>/dev/null || true
+import json,sys
+json.dump({"good_fork_sha":sys.argv[2],"diverged_head_sha":sys.argv[3],"checkpoint":sys.argv[4],
+           "instruction":"REVERT: reset local-only commits after good_fork_sha, or revert-forward pushed commits per your gates; never force-push. Then replay the stage."},
+          open(sys.argv[1],"w"),indent=2)
+PY
+    log "reverted to checkpoint $last (fork ${good_sha:0:8}); wrote REVERT-CLEANUP.json for orchestrator to undo diverged commits ${cur_sha:0:8}"
+  else
+    log "no checkpoint to revert to"
+  fi
 }
 
-START_EPOCH="$(date +%s)"; reverts=0; correction=""
+START_EPOCH="$(date +%s)"; reverts=0; no_verdict=0; correction=""
 for (( i=1; i<=MAX_ITERATIONS; i++ )); do
   if (( MAX_MINUTES > 0 )) && (( ( $(date +%s) - START_EPOCH ) / 60 >= MAX_MINUTES )); then
     log "STOP: wall-clock cap ${MAX_MINUTES}m (resumable via --resume)"; exit 3
@@ -112,14 +141,21 @@ VALIDATOR CORRECTION (apply first): $correction}" \
   log "turn $i: verdict=${verdict:-NONE} step_score=${score:-?} — ${reason:-}"
 
   case "$verdict" in
-    PROCEED) checkpoint "$i" ;;
-    RETRY)   correction="$(json_field "$VERDICT_JSON" correction)"; log "turn $i: RETRY — $correction" ;;
+    PROCEED) no_verdict=0; checkpoint "$i" ;;
+    RETRY)   no_verdict=0; correction="$(json_field "$VERDICT_JSON" correction)"; log "turn $i: RETRY — $correction" ;;
     REVERT)
-      reverts=$((reverts+1))
+      no_verdict=0; reverts=$((reverts+1))
       if (( reverts > MAX_REVERTS )); then log "HALT: MAX_REVERTS=$MAX_REVERTS exceeded"; exit 4; fi
       restore_checkpoint; correction="$(json_field "$VERDICT_JSON" correction)"; log "turn $i: REVERT #$reverts — $correction" ;;
     HALT)    log "HALT: validator hard-stop — ${reason:-}"; exit 4 ;;
-    *)       log "turn $i: no verdict; treating as RETRY (validator must emit a verdict)"; correction="Emit a VALIDATOR-VERDICT.json with a verdict and cited evidence." ;;
+    *)
+      no_verdict=$((no_verdict+1))
+      if (( no_verdict >= MAX_NO_VERDICT )); then
+        log "HALT: validator produced no VALIDATOR-VERDICT.json for $no_verdict consecutive turns. Most likely CLAUDE_ARGS lacks a permission posture so headless 'claude -p' can't write files — set --permission-mode acceptEdits (or --dangerously-skip-permissions), verify 'claude -p' is logged in, then --resume."
+        exit 4
+      fi
+      log "turn $i: no verdict ($no_verdict/$MAX_NO_VERDICT); retrying"
+      correction="Emit a VALIDATOR-VERDICT.json with a verdict and cited evidence." ;;
   esac
 
   terminal="$(json_field "$RUN_JSON" terminal)"; stage="$(json_field "$RUN_JSON" stage)"

@@ -63,13 +63,22 @@ The loop's durable state IS the reversible trace — no new instrumentation need
 
 ## Checkpoints, revert, and replay (Shepherd-style)
 
-- After every `PROCEED`, the driver records a checkpoint: the current parent/sub branch SHAs + a copy
-  of `RUN.json`/`ORCHESTRATION-STATE.json` under `.planning/auto-loop/checkpoints/<turn>/`.
-- `REVERT` restores the last checkpoint's **local** state snapshot and re-dispatches the stage (a
-  counterfactual replay from the fork point). Because every stage is idempotent and every slice is a
-  committed node, replay never double-applies and never loses a good earlier slice.
-- The validator never rewrites **pushed** git history or merges/force-pushes — revert is a local
-  state restore + stage re-run. Anything requiring history surgery is a `HALT` for human.
+- After every `PROCEED`, the driver records a checkpoint under `.planning/auto-loop/checkpoints/<turn>/`:
+  a copy of `RUN.json` plus `HEAD.sha` (the worktree HEAD — the **fork point**). `ORCHESTRATION-STATE`
+  ledgers are not copied; the reconciler rebuilds them from ground truth on replay, and `RUN.json` +
+  the fork SHA are the anchors.
+- `REVERT` does two things, because restoring bookkeeping alone would not undo the bad step (the next
+  RECONCILE re-derives forward from ground truth):
+  1. restores `RUN.json` to the last `PROCEED` checkpoint, and
+  2. writes `.planning/auto-loop/REVERT-CLEANUP.json` = `{ good_fork_sha, diverged_head_sha, instruction }`.
+     The next orchestrator turn reads it during RECONCILE and **actually undoes the diverged commits**:
+     `git reset` for **local-only** (unpushed) commits after the fork point, or a **revert-forward**
+     commit for already-pushed ones — per its own gates. Then it replays the stage from the fork point.
+- The **validator itself never** rewrites git history, force-pushes, or merges. Reverting real
+  side-effects is delegated to the orchestrator (which owns branch/PR state); anything that would need
+  history surgery on a shared/pushed branch, or that the orchestrator can't safely undo, is a `HALT`
+  for human. Because every stage is idempotent and every slice is a committed node, the replay after
+  cleanup never double-applies and never loses a good earlier slice.
 
 ## VALIDATION.jsonl entry (one per orchestrator turn)
 
