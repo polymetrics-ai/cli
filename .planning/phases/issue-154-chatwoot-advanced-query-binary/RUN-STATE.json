@@ -1,0 +1,22 @@
+{
+  "issue": 154,
+  "parentIssue": 148,
+  "branch": "feat/154-chatwoot-advanced-query-binary",
+  "baseBranch": "feat/148-chatwoot-cli-parity",
+  "status": "planned",
+  "gsd": {
+    "adapter": "scripts/gsd",
+    "programmingLoop": "manual_fallback",
+    "reason": "scripts/gsd prompt programming-loop returned unknown GSD command; planning/TDD/verification artifacts are maintained manually"
+  },
+  "verificationPassed": false,
+  "targetedVerificationPassed": false,
+  "reviewStatus": "not_started",
+  "events": [
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "planned",
+      "detail": "Created #154 GSD/TDD/verification artifacts before production edits."
+    }
+  ]
+}
