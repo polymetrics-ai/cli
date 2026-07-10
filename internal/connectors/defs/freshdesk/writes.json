@@ -1,0 +1,2070 @@
+{
+  "actions": [
+    {
+      "name": "delete_admin_groups_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/groups/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a Group (DELETE /admin/groups/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_admin_skills_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/skills/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a Skill (DELETE /admin/skills/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_admin_ticket_fields_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/ticket_fields/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a Ticket Field (DELETE /admin/ticket_fields/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_admin_ticket_fields_id_sections_section_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/ticket_fields/{{ record.id }}/sections/{{ record.section_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "section_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "section_id"
+        ]
+      },
+      "risk": "Freshdesk Delete a section (DELETE /admin/ticket_fields/{id}/sections/{section_id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id",
+        "section_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_agents_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/agents/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete an Agent (DELETE /agents/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_attachments_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/attachments/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete an attachment (DELETE /attachments/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_companies_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/companies/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a Company (DELETE /companies/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_company_field_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/company_field/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a company field (DELETE /company_field/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_contact_field_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contact_field/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a contact field (DELETE /contact_field/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_contacts_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Soft Delete a Contact (DELETE /contacts/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_contacts_id_hard_delete",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/contacts/{{ record.id }}/hard_delete",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Permanently Delete a Contact (DELETE /contacts/{id}/hard_delete); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_conversations_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/conversations/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a conversation (DELETE /conversations/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_custom_objects_schemas_schema_id_records_record_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/custom_objects/schemas/{{ record.schema_id }}/records/{{ record.record_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "schema_id": {
+            "type": "string"
+          },
+          "record_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "schema_id",
+          "record_id"
+        ]
+      },
+      "risk": "Freshdesk Delete A Record (DELETE /custom_objects/schemas/{schema_id}/records/{record_id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "schema_id",
+        "record_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_discussions_categories_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/discussions/categories/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/categories/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_discussions_comments_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/discussions/comments/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/comments/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_discussions_forums_forum_id_follow",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/discussions/forums/{{ record.forum_id }}/follow?user_id={{ record.user_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "forum_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "forum_id",
+          "user_id"
+        ]
+      },
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/forums/{forum_id}/follow?user_id={user_id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "forum_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_discussions_forums_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/discussions/forums/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/forums/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_discussions_topics_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/discussions/topics/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/topics/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_discussions_topics_topic_id_follow",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/discussions/topics/{{ record.topic_id }}/follow?user_id={{ record.user_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "topic_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "topic_id",
+          "user_id"
+        ]
+      },
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /discussions/topics/{topic_id}/follow?user_id={user_id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "topic_id",
+        "user_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_email_mailboxes_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/email/mailboxes/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete an Email Mailbox (DELETE /email/mailboxes/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_groups_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/groups/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a Group (DELETE /groups/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_solutions_articles_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/solutions/articles/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /solutions/articles/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_solutions_categories_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/solutions/categories/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /solutions/categories/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_solutions_folders_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/solutions/folders/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Get details of Canned Responses in a Folder (DELETE /solutions/folders/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_ticket_forms_form_id_fields_field_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ticket-forms/{{ record.form_id }}/fields/{{ record.field_id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "form_id": {
+            "type": "string"
+          },
+          "field_id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "form_id",
+          "field_id"
+        ]
+      },
+      "risk": "Freshdesk Delete a Ticket Form's Field (DELETE /ticket-forms/{form_id}/fields/{field_id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "form_id",
+        "field_id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_ticket_forms_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ticket-forms/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a Ticket Form (DELETE /ticket-forms/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_tickets_archived_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/archived/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk List All Satisfaction Ratings of a Ticket (DELETE /tickets/archived/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_tickets_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a Ticket (DELETE /tickets/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_tickets_id_accesses",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.id }}/accesses",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk List All Satisfaction Ratings of a Ticket (DELETE /tickets/{id}/accesses); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_tickets_id_summary",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/tickets/{{ record.id }}/summary",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk List All Satisfaction Ratings of a Ticket (DELETE /tickets/{id}/summary); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_time_entries_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/time_entries/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Delete a Time Entry (DELETE /time_entries/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_companies",
+      "kind": "create",
+      "method": "POST",
+      "path": "/companies",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "custom_fields": {
+            "type": "object",
+            "description": "Key value pairs containing the names and values of custom fields. Only dates in the format YYYY-MM-DD are accepted as input for custom date fields. Read more here"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the company"
+          },
+          "domains": {
+            "type": "array",
+            "description": "Domains of the company. Email addresses of contacts that contain this domain will be associated with that company automatically."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the company"
+          },
+          "note": {
+            "type": "string",
+            "description": "Any specific note about the company"
+          },
+          "health_score": {
+            "type": "string",
+            "description": "The strength of your relationship with the company"
+          },
+          "account_tier": {
+            "type": "string",
+            "description": "Classification based on how much value the company brings to your business"
+          },
+          "renewal_date": {
+            "type": "string",
+            "description": "Date when your contract or relationship with the company is due for renewal"
+          },
+          "industry": {
+            "type": "string",
+            "description": "The industry the company serves in"
+          },
+          "lookup_parameter": {
+            "type": "string",
+            "description": "This attribute for companies can only be set if Custom Objects feature is enabled. The value can either be in the form of the display_id (record id) or primary_field_value (user defined record value). The default value is display_id."
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Freshdesk Create a Company (POST /companies); requires reverse ETL plan, preview, approval, and execute.",
+      "body_type": "json",
+      "body_fields": [
+        "custom_fields",
+        "description",
+        "domains",
+        "name",
+        "note",
+        "health_score",
+        "account_tier",
+        "renewal_date",
+        "industry",
+        "lookup_parameter"
+      ]
+    },
+    {
+      "name": "post_contacts",
+      "kind": "create",
+      "method": "POST",
+      "path": "/contacts",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the contact"
+          },
+          "email": {
+            "type": "string",
+            "description": "Primary email address of the contact. If you want to associate additional email(s) with this contact, use the other_emails attribute."
+          },
+          "phone": {
+            "type": "string",
+            "description": "Telephone number of the contact"
+          },
+          "mobile": {
+            "type": "string",
+            "description": "Mobile number of the contact"
+          },
+          "twitter_id": {
+            "type": "string",
+            "description": "Twitter handle of the contact"
+          },
+          "social_handler": {
+            "type": "array",
+            "description": "Social handles of Contact. Up to 10 values can be defined. Valid Facebook, Instagram and Twitter (X) handles supported."
+          },
+          "unique_external_id": {
+            "type": "string",
+            "description": "External ID of the contact"
+          },
+          "other_emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Additional emails associated with the contact"
+          },
+          "company_id": {
+            "type": "integer",
+            "description": "ID of the primary company to which this contact belongs"
+          },
+          "view_all_tickets": {
+            "type": "boolean",
+            "description": "Set to true if the contact can see all the tickets that are associated with the company to which he belong"
+          },
+          "other_companies": {
+            "type": "array",
+            "description": "Additional companies associated with the contact. This attribute can only be set if the Multiple Companies feature is enabled (Estate plan and above)"
+          },
+          "address": {
+            "type": "string",
+            "description": "Address of the contact."
+          },
+          "avatar": {
+            "type": "object",
+            "description": "Avatar image of the contact The maximum file size is 5MB and the supported file types are .jpg, .jpeg, .jpe, and .png"
+          },
+          "custom_fields": {
+            "type": "object",
+            "description": "Key value pairs containing the name and value of the custom field. Only dates in the format YYYY-MM-DD are accepted as input for custom date fields. Read more here"
+          },
+          "description": {
+            "type": "string",
+            "description": "A small description of the contact"
+          },
+          "job_title": {
+            "type": "string",
+            "description": "Job title of the contact"
+          },
+          "language": {
+            "type": "string",
+            "description": "Language of the contact. Default language is \"en\" . This attribute can only be set if the Multiple Language feature is enabled (Garden plan and above)"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags associated with this contact"
+          },
+          "time_zone": {
+            "type": "string",
+            "description": "Time zone of the contact. Default value is the time zone of the domain . This attribute can only be set if the Multiple Time Zone feature is enabled (Garden plan and above)"
+          },
+          "lookup_parameter": {
+            "type": "string",
+            "description": "This attribute for contacts can only be set if the Custom Objects feature is enabled. The value can either be in the form of the display_id (record id) or primary_field_value (user defined record value). The default value is display_id."
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Freshdesk Create a Contact (POST /contacts); requires reverse ETL plan, preview, approval, and execute.",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "email",
+        "phone",
+        "mobile",
+        "twitter_id",
+        "social_handler",
+        "unique_external_id",
+        "other_emails",
+        "company_id",
+        "view_all_tickets",
+        "other_companies",
+        "address",
+        "avatar",
+        "custom_fields",
+        "description",
+        "job_title",
+        "language",
+        "tags",
+        "time_zone",
+        "lookup_parameter"
+      ]
+    },
+    {
+      "name": "post_contacts_export",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/contacts/export",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "fields": {
+            "type": "object",
+            "description": "Fields of the contacts to be exported"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Freshdesk Contact Export (POST /contacts/export); requires reverse ETL plan, preview, approval, and execute.",
+      "body_type": "json",
+      "body_fields": [
+        "fields"
+      ]
+    },
+    {
+      "name": "post_contacts_merge",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/contacts/merge",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "primary_contact_id": {
+            "type": "integer",
+            "description": "ID of the primary contact"
+          },
+          "secondary_contact_ids": {
+            "type": "array",
+            "description": "IDs of the secondary contacts"
+          },
+          "contact": {
+            "type": "object",
+            "description": "Contains attributes that need to be updated in the primary contact during merge (optional)"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Freshdesk Merge Contacts (POST /contacts/merge); requires reverse ETL plan, preview, approval, and execute.",
+      "body_type": "json",
+      "body_fields": [
+        "primary_contact_id",
+        "secondary_contact_ids",
+        "contact"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_tickets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the requester"
+          },
+          "requester_id": {
+            "type": "integer",
+            "description": "User ID of the requester. For existing contacts, the requester_id can be passed instead of the requester's email."
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the requester. If no contact exists with this email address in Freshdesk, it will be added as a new contact."
+          },
+          "facebook_id": {
+            "type": "string",
+            "description": "Facebook ID of the requester. A contact should exist with this facebook_id in Freshdesk."
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number of the requester. If no contact exists with this phone number in Freshdesk, it will be added as a new contact. If the phone number is set and the email address is not, then the name attribute is mandatory."
+          },
+          "twitter_id": {
+            "type": "string",
+            "description": "Twitter handle of the requester. If no contact exists with this handle in Freshdesk, it will be added as a new contact."
+          },
+          "unique_external_id": {
+            "type": "string",
+            "description": "External ID of the requester. If no contact exists with this external ID in Freshdesk, they will be added as a new contact."
+          },
+          "subject": {
+            "type": "string",
+            "description": "Subject of the ticket. The default Value is null."
+          },
+          "type": {
+            "type": "string",
+            "description": "Helps categorize the ticket according to the different kinds of issues your support team deals with. The default Value is null."
+          },
+          "status": {
+            "type": "integer",
+            "description": "Status of the ticket. The default Value is 2."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Priority of the ticket. The default value is 1."
+          },
+          "description": {
+            "type": "string",
+            "description": "HTML content of the ticket."
+          },
+          "responder_id": {
+            "type": "integer",
+            "description": "ID of the agent to whom the ticket has been assigned"
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Ticket attachments. The total size of these attachments cannot exceed 20MB."
+          },
+          "cc_emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Email address added in the 'cc' field of the incoming ticket email"
+          },
+          "custom_fields": {
+            "type": "object",
+            "description": "Key value pairs containing the names and values of custom fields. Read more here"
+          },
+          "due_by": {
+            "type": "string",
+            "description": "The response will be \"null\" unless values are provided in the payload. The due_by value is set within a few seconds of ticket creation."
+          },
+          "email_config_id": {
+            "type": "integer",
+            "description": "ID of email config which is used for this ticket. (i.e., support@yourcompany.com/sales@yourcompany.com) If product_id is given and email_config_id is not given, product's primary email_config_id will be set"
+          },
+          "fr_due_by": {
+            "type": "string",
+            "description": "The response will be \"null\" unless values are provided in the payload. The fr_due_by value is set within a few seconds of ticket creation."
+          },
+          "group_id": {
+            "type": "integer",
+            "description": "ID of the group to which the ticket has been assigned. The default value is the ID of the group that is associated with the given email_config_id"
+          },
+          "parent_id": {
+            "type": "integer",
+            "description": "ID of the parent ticket that this ticket should be linked to. When passing this field, the current ticket actioned upon will be converted to a child ticket."
+          },
+          "product_id": {
+            "type": "integer",
+            "description": "ID of the product to which the ticket is associated. It will be ignored if the email_config_id attribute is set in the request."
+          },
+          "source": {
+            "type": "integer",
+            "description": "The channel through which the ticket was created. The default value is 2."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags that have been associated with the ticket"
+          },
+          "company_id": {
+            "type": "integer",
+            "description": "Company ID of the requester. This attribute can only be set if the Multiple Companies feature is enabled (Estate plan and above)"
+          },
+          "internal_agent_id": {
+            "type": "integer",
+            "description": "ID of the internal agent which the ticket should be assigned with"
+          },
+          "internal_group_id": {
+            "type": "integer",
+            "description": "ID of the internal group to which the ticket should be assigned with"
+          },
+          "lookup_parameter": {
+            "type": "string",
+            "description": "This attribute for tickets can only be set if Custom Objects is enabled and a lookup field has been added under ticket fields.The value can either be in the form of the display_id (record id) or primary_field_value (user defined record valu"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Freshdesk Create a Ticket (POST /tickets); requires reverse ETL plan, preview, approval, and execute.",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "requester_id",
+        "email",
+        "facebook_id",
+        "phone",
+        "twitter_id",
+        "unique_external_id",
+        "subject",
+        "type",
+        "status",
+        "priority",
+        "description",
+        "responder_id",
+        "attachments",
+        "cc_emails",
+        "custom_fields",
+        "due_by",
+        "email_config_id",
+        "fr_due_by",
+        "group_id",
+        "parent_id",
+        "product_id",
+        "source",
+        "tags",
+        "company_id",
+        "internal_agent_id",
+        "internal_group_id",
+        "lookup_parameter"
+      ]
+    },
+    {
+      "name": "post_tickets_bulk_delete",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/tickets/bulk_delete",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "bulk_action": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Freshdesk Delete Multiple Tickets (POST /tickets/bulk_delete); requires reverse ETL plan, preview, approval, and execute.",
+      "body_type": "json",
+      "body_fields": [
+        "bulk_action"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "post_tickets_bulk_update",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/tickets/bulk_update",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "bulk_action": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Freshdesk Update Multiple Tickets (POST /tickets/bulk_update); requires reverse ETL plan, preview, approval, and execute.",
+      "body_type": "json",
+      "body_fields": [
+        "bulk_action"
+      ]
+    },
+    {
+      "name": "post_tickets_outbound_email",
+      "kind": "create",
+      "method": "POST",
+      "path": "/tickets/outbound_email",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the requester"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the requester. If no contact exists with this email address in Freshdesk, it will be added as a new contact."
+          },
+          "subject": {
+            "type": "string",
+            "description": "Subject of the ticket. The default Value is null."
+          },
+          "type": {
+            "type": "string",
+            "description": "Helps categorize the ticket according to the different kinds of issues your support team deals with. The default Value is null."
+          },
+          "status": {
+            "type": "integer",
+            "description": "Status of the ticket. The default Value is 5."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Priority of the ticket. The default value is 1."
+          },
+          "description": {
+            "type": "string",
+            "description": "HTML content of the ticket."
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Ticket attachments. The total size of these attachments cannot exceed 20MB."
+          },
+          "custom_fields": {
+            "type": "object",
+            "description": "Key value pairs containing the names and values of custom fields. Read more here"
+          },
+          "due_by": {
+            "type": "string",
+            "description": "The response will be \"null\" unless values are provided in the payload. The due_by value is set within a few seconds of ticket creation."
+          },
+          "email_config_id": {
+            "type": "integer",
+            "description": "ID of email config which is used for this ticket. (i.e., support@yourcompany.com/sales@yourcompany.com)"
+          },
+          "fr_due_by": {
+            "type": "string",
+            "description": "The response will be \"null\" unless values are provided in the payload. The fr_due_by value is set within a few seconds of ticket creation."
+          },
+          "group_id": {
+            "type": "integer",
+            "description": "ID of the group to which the ticket has been assigned. The default value is the ID of the group that is associated with the given email_config_id"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags that have been associated with the ticket"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Freshdesk Create an Outbound Email (POST /tickets/outbound_email); requires reverse ETL plan, preview, approval, and execute.",
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "email",
+        "subject",
+        "type",
+        "status",
+        "priority",
+        "description",
+        "attachments",
+        "custom_fields",
+        "due_by",
+        "email_config_id",
+        "fr_due_by",
+        "group_id",
+        "tags"
+      ]
+    },
+    {
+      "name": "post_tickets_id_forward",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/tickets/{{ record.id }}/forward",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "to_emails": {
+            "type": "array"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Freshdesk Forward a ticket (POST /tickets/{id}/forward); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "body",
+        "to_emails"
+      ]
+    },
+    {
+      "name": "put_agents_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/agents/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "occasional": {
+            "type": "boolean",
+            "description": "Set to true if this is an occasional agent (true => occasional, false => full-time)"
+          },
+          "signature": {
+            "type": "string",
+            "description": "Signature of the agent in HTML format"
+          },
+          "ticket_scope": {
+            "type": "integer",
+            "description": "Ticket permission of the agent (1 -> Global Access, 2 -> Group Access, 3 -> Restricted Access). Current logged in agent can't update his/her ticket_scope"
+          },
+          "skill_ids": {
+            "type": "array",
+            "description": "Skill ids associated with the agent"
+          },
+          "group_ids": {
+            "type": "array",
+            "description": "Group IDs associated with the agent"
+          },
+          "contribution_group_ids": {
+            "type": "array",
+            "description": "IDs of groups that the agent has view-only access to, if the ticket_scope of the agent is 2"
+          },
+          "role_ids": {
+            "type": "array",
+            "description": "Role IDs associated with the agent. At least one role should be associated with the agent. Current logged in agent can't update his/her role_ids (Role IDs should be corresponding to the type of agents. For example: Ticket collaborator for c"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the Agent."
+          },
+          "language": {
+            "type": "string",
+            "description": "Language of the Agent. Default language is \"en\""
+          },
+          "time_zone": {
+            "type": "string",
+            "description": "Time zone of the Agent. Default value is time zone of the domain"
+          },
+          "focus_mode": {
+            "type": "boolean",
+            "description": "Focus mode of the agent. Default value is true"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Freshdesk Update an Agent (PUT /agents/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "occasional",
+        "signature",
+        "ticket_scope",
+        "skill_ids",
+        "group_ids",
+        "contribution_group_ids",
+        "role_ids",
+        "email",
+        "language",
+        "time_zone",
+        "focus_mode"
+      ]
+    },
+    {
+      "name": "put_companies_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/companies/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "object",
+            "description": "Key value pairs containing the names and values of custom fields. Only dates in the format YYYY-MM-DD are accepted as input for custom date fields. Read more here"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the company"
+          },
+          "domains": {
+            "type": "array",
+            "description": "Domains of the company. Email addresses of contacts that contain this domain will be associated with that company automatically."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the company"
+          },
+          "note": {
+            "type": "string",
+            "description": "Any specific note about the company"
+          },
+          "health_score": {
+            "type": "string",
+            "description": "The strength of your relationship with the company"
+          },
+          "account_tier": {
+            "type": "string",
+            "description": "Classification based on how much value the company brings to your business"
+          },
+          "renewal_date": {
+            "type": "string",
+            "description": "Date when your contract or relationship with the company is due for renewal"
+          },
+          "industry": {
+            "type": "string",
+            "description": "The industry the company serves in"
+          },
+          "lookup_parameter": {
+            "type": "string",
+            "description": "This attribute for companies can only be set if Custom Objects feature is enabled. The value can either be in the form of the display_id (record id) or primary_field_value (user defined record value). The default value is display_id."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Freshdesk Update a Company (PUT /companies/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "custom_fields",
+        "description",
+        "domains",
+        "name",
+        "note",
+        "health_score",
+        "account_tier",
+        "renewal_date",
+        "industry",
+        "lookup_parameter"
+      ]
+    },
+    {
+      "name": "put_contacts_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/contacts/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the contact"
+          },
+          "email": {
+            "type": "string",
+            "description": "Primary email address of the contact. If you want to associate additional email(s) with this contact, use the other_emails attribute."
+          },
+          "phone": {
+            "type": "string",
+            "description": "Telephone number of the contact"
+          },
+          "mobile": {
+            "type": "string",
+            "description": "Mobile number of the contact"
+          },
+          "twitter_id": {
+            "type": "string",
+            "description": "Twitter handle of the contact"
+          },
+          "social_handler": {
+            "type": "array",
+            "description": "Social handles of Contact. Up to 10 values can be defined. Valid Facebook, Instagram and Twitter (X) handles supported."
+          },
+          "unique_external_id": {
+            "type": "string",
+            "description": "External ID of the contact"
+          },
+          "other_emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Additional emails associated with the contact"
+          },
+          "company_id": {
+            "type": "integer",
+            "description": "ID of the primary company to which this contact belongs"
+          },
+          "view_all_tickets": {
+            "type": "boolean",
+            "description": "Set to true if the contact can see all the tickets that are associated with the company to which he belong"
+          },
+          "other_companies": {
+            "type": "array",
+            "description": "Additional companies associated with the contact. This attribute can only be updated if the Multiple Companies feature is enabled (Estate plan and above)"
+          },
+          "address": {
+            "type": "string",
+            "description": "Address of the contact."
+          },
+          "avatar": {
+            "type": "object",
+            "description": "Avatar image of the contact The maximum file size is 5MB and the supported file types are .jpg, .jpeg, .jpe, and .png"
+          },
+          "custom_fields": {
+            "type": "object",
+            "description": "Key value pairs containing the name and value of the custom field. Only dates in the format YYYY-MM-DD are accepted as input for custom date fields. Read more here"
+          },
+          "description": {
+            "type": "string",
+            "description": "A small description of the contact"
+          },
+          "job_title": {
+            "type": "string",
+            "description": "Job title of the contact"
+          },
+          "language": {
+            "type": "string",
+            "description": "Language of the contact. Default language is \"en\" . This attribute can only be updated if the Multiple Language feature is enabled (Garden plan and above)"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags associated with this contact"
+          },
+          "time_zone": {
+            "type": "string",
+            "description": "Time zone of the contact. Default value is the time zone of the domain . This attribute can only be updated if the Multiple Time Zone feature is enabled (Garden plan and above)"
+          },
+          "lookup_parameter": {
+            "type": "string",
+            "description": "This attribute for contacts can only be set if the Custom Objects feature is enabled. The value can either be in the form of the display_id (record id) or primary_field_value (user defined record value). The default value is display_id."
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Freshdesk Update a Contact (PUT /contacts/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "email",
+        "phone",
+        "mobile",
+        "twitter_id",
+        "social_handler",
+        "unique_external_id",
+        "other_emails",
+        "company_id",
+        "view_all_tickets",
+        "other_companies",
+        "address",
+        "avatar",
+        "custom_fields",
+        "description",
+        "job_title",
+        "language",
+        "tags",
+        "time_zone",
+        "lookup_parameter"
+      ]
+    },
+    {
+      "name": "put_contacts_id_make_agent",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/contacts/{{ record.id }}/make_agent",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "occasional": {
+            "type": "boolean",
+            "description": "Set to true if this is an occasional agent (true => occasional, false => full-time)"
+          },
+          "signature": {
+            "type": "string",
+            "description": "Signature of the agent in HTML format"
+          },
+          "ticket_scope": {
+            "type": "integer",
+            "description": "Ticket permission of the agent (1 -> Global Access, 2 -> Group Access, 3 -> Restricted Access). Current logged in agent can't update his/her ticket_scope"
+          },
+          "skill_ids": {
+            "type": "array",
+            "description": "Skill ids associated with the agent"
+          },
+          "group_ids": {
+            "type": "array",
+            "description": "Group IDs associated with the agent"
+          },
+          "contribution_group_ids": {
+            "type": "array",
+            "description": "IDs of groups that the agent has view-only access to, if the ticket_scope of the agent is 2"
+          },
+          "role_ids": {
+            "type": "array",
+            "description": "Role IDs associated with the agent. At least one role should be associated with the agent. Current logged in agent can't update his/her role_ids (Role IDs should be corresponding to the type of agents. For example: Ticket collaborator for c"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of Agent (support_agent -> Support Agent, field_agent -> Field Agent, collaborator -> Collaborator) By default, agent will be converted to a Support Agent"
+          },
+          "focus_mode": {
+            "type": "boolean",
+            "description": "Focus mode of the agent. Default value is true"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Freshdesk Make Agent (PUT /contacts/{id}/make_agent); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "occasional",
+        "signature",
+        "ticket_scope",
+        "skill_ids",
+        "group_ids",
+        "contribution_group_ids",
+        "role_ids",
+        "type",
+        "focus_mode"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "put_contacts_id_restore",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/contacts/{{ record.id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Restore a Contact (PUT /contacts/{id}/restore); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "put_groups_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/groups/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "agent_ids": {
+            "type": "array",
+            "description": "Array of agent user ids separated by comma (' , '). Instructions on getting the agent's user ID"
+          },
+          "auto_ticket_assign": {
+            "type": "integer",
+            "description": "Describes the automatic ticket assignment type. Will not be supported if your Freshdesk account is not on a plan that supports automatic ticket assignment. The accepted values are 0 and 1. To set other assignment types to a group, use Admin"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the group"
+          },
+          "escalate_to": {
+            "type": "integer",
+            "description": "The user to whom the escalation email is sent of a ticket is unassigned. To create/update escalate_to with 'none' provide the value 'null' in the request"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the group"
+          },
+          "unassigned_for": {
+            "type": "string",
+            "description": "The time after which an escalation email will be sent if a ticket remains unassigned. The accepted values are \"30m\" for 30 minutes, \"1h\" for 1 hour, \"2h\" for 2 hour, \"4h\" for 4 hour, \"8h\" for 8 hour, \"12h\" for 12 hour, \"1d\" for 1 day, \"2d\" "
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Freshdesk Update a Group (PUT /groups/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "agent_ids",
+        "auto_ticket_assign",
+        "description",
+        "escalate_to",
+        "name",
+        "unassigned_for"
+      ]
+    },
+    {
+      "name": "put_tickets_merge",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/tickets/merge",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "primary_id": {
+            "type": "integer"
+          },
+          "ticket_ids": {
+            "type": "array"
+          },
+          "convert_recepients_to_cc": {
+            "type": "boolean"
+          },
+          "note_in_primary": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "minProperties": 1
+      },
+      "risk": "Freshdesk Ticket Merge API (PUT /tickets/merge); requires reverse ETL plan, preview, approval, and execute.",
+      "body_type": "json",
+      "body_fields": [
+        "primary_id",
+        "ticket_ids",
+        "convert_recepients_to_cc",
+        "note_in_primary"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "put_tickets_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/tickets/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the requester"
+          },
+          "requester_id": {
+            "type": "integer",
+            "description": "User ID of the requester. For existing contacts, the requester_id can be passed instead of the requester's email."
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the requester. If no contact exists with this email address in Freshdesk, it will be added as a new contact."
+          },
+          "facebook_id": {
+            "type": "string",
+            "description": "Facebook ID of the requester. A contact should exist with this facebook_id in Freshdesk."
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number of the requester. If no contact exists with this phone number in Freshdesk, it will be added as a new contact. If the phone number is set and the email address is not, then the name attribute is mandatory."
+          },
+          "twitter_id": {
+            "type": "string",
+            "description": "Twitter handle of the requester. If no contact exists with this handle in Freshdesk, it will be added as a new contact."
+          },
+          "unique_external_id": {
+            "type": "string",
+            "description": "External ID of the requester. If no contact exists with this external ID in Freshdesk, they will be added as a new contact."
+          },
+          "subject": {
+            "type": "string",
+            "description": "Subject of the ticket. The default Value is null."
+          },
+          "type": {
+            "type": "string",
+            "description": "Helps categorize the ticket according to the different kinds of issues your support team deals with. The default Value is null."
+          },
+          "status": {
+            "type": "integer",
+            "description": "Status of the ticket. The default Value is 2."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Priority of the ticket. The default value is 1."
+          },
+          "description": {
+            "type": "string",
+            "description": "HTML content of the ticket."
+          },
+          "responder_id": {
+            "type": "integer",
+            "description": "ID of the agent to whom the ticket has been assigned"
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Ticket attachments. The total size of these attachments cannot exceed 20MB."
+          },
+          "custom_fields": {
+            "type": "object",
+            "description": "Key value pairs containing the names and values of custom fields. Read more here"
+          },
+          "due_by": {
+            "type": "string",
+            "description": "If your account is created after 25th Aug '25, it may have the latest version of SLAs. In that case, the due_by value is recalculated within a few seconds of a ticket update. The due_by field in the response displays the value prior to the "
+          },
+          "email_config_id": {
+            "type": "integer",
+            "description": "ID of email config which is used for this ticket. (i.e., support@yourcompany.com/sales@yourcompany.com) If the product_id is changed and the current email_config_id doesn't belong to that product, then this value will be automatically updat"
+          },
+          "fr_due_by": {
+            "type": "string",
+            "description": "If your account is created after 25th Aug '25, it may have the latest version of SLAs. In that case, the fr_due_by value is recalculated within a few seconds of a ticket update. The fr_due_by field in the response displays the value prior t"
+          },
+          "group_id": {
+            "type": "integer",
+            "description": "ID of the group to which the ticket has been assigned. The default value is the ID of the group that is associated with the given email_config_id"
+          },
+          "parent_id": {
+            "type": "integer",
+            "description": "ID of the parent ticket that this ticket should be linked to. When passing this field, the current ticket actioned upon will be converted to a child ticket."
+          },
+          "product_id": {
+            "type": "integer",
+            "description": "ID of the product to which the ticket is associated."
+          },
+          "source": {
+            "type": "integer",
+            "description": "The channel through which the ticket was created. The default value is 2."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags that have been associated with the ticket"
+          },
+          "company_id": {
+            "type": "integer",
+            "description": "Company ID of the requester. This attribute can only be updated if the Multiple Companies feature is enabled (Estate plan and above)"
+          },
+          "internal_agent_id": {
+            "type": "integer",
+            "description": "ID of the internal agent which the ticket should be assigned with"
+          },
+          "internal_group_id": {
+            "type": "integer",
+            "description": "ID of the internal group to which the ticket should be assigned with"
+          },
+          "lookup_parameter": {
+            "type": "string",
+            "description": "This attribute for tickets can only be set if Custom Objects is enabled and a lookup field has been added under ticket fields.The value can either be in the form of the display_id (record id) or primary_field_value (user defined record valu"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Freshdesk Update a Ticket (PUT /tickets/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "name",
+        "requester_id",
+        "email",
+        "facebook_id",
+        "phone",
+        "twitter_id",
+        "unique_external_id",
+        "subject",
+        "type",
+        "status",
+        "priority",
+        "description",
+        "responder_id",
+        "attachments",
+        "custom_fields",
+        "due_by",
+        "email_config_id",
+        "fr_due_by",
+        "group_id",
+        "parent_id",
+        "product_id",
+        "source",
+        "tags",
+        "company_id",
+        "internal_agent_id",
+        "internal_group_id",
+        "lookup_parameter"
+      ]
+    },
+    {
+      "name": "put_tickets_id_restore",
+      "kind": "custom",
+      "method": "PUT",
+      "path": "/tickets/{{ record.id }}/restore",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ]
+      },
+      "risk": "Freshdesk Restore a Ticket (PUT /tickets/{id}/restore); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none"
+    },
+    {
+      "name": "put_time_entries_id",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/time_entries/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "agent_id": {
+            "type": "integer",
+            "description": "The agent to whom this time-entry is associated. One agent can have only one timer running. Everything else will be stopped if new timer is on for an agent"
+          },
+          "billable": {
+            "type": "boolean",
+            "description": "Set as true if the entry is billable. Default value is true"
+          },
+          "executed_at": {
+            "type": "string",
+            "description": "Time at which this time-entry id added/created"
+          },
+          "note": {
+            "type": "string",
+            "description": "Description on this time-entry"
+          },
+          "start_time": {
+            "type": "string",
+            "description": "The time at which the time-entry is added or the time of the last invoked \"start-timer\" action using a toggle"
+          },
+          "time_spent": {
+            "type": "string",
+            "description": "The number of hours (in hh:mm format). Used to set the total time_spent"
+          },
+          "timer_running": {
+            "type": "boolean",
+            "description": "Indicates if the timer is running"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "minProperties": 2
+      },
+      "risk": "Freshdesk Update a Time Entry (PUT /time_entries/{id}); requires reverse ETL plan, preview, approval, and execute.",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "agent_id",
+        "billable",
+        "executed_at",
+        "note",
+        "start_time",
+        "time_spent",
+        "timer_running"
+      ]
+    }
+  ]
+}

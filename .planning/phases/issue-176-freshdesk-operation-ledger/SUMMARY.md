@@ -1,15 +1,19 @@
 # Summary: Freshdesk Full Operation Implementation
 
-Status: planned; red baseline captured.
+Status: implemented safe-operation coverage slice; local targeted verification passed.
 
 ## Current State
 
 - Freshdesk has 170 inventoried operation rows.
-- Only 5 are currently executable via stream coverage.
-- 165 remain blocked-by-default operation metadata.
+- 168 rows are now executable through fixed surfaces:
+  - 5 ETL stream rows.
+  - 109 bounded JSON direct-read command rows.
+  - 54 JSON-expressible mutation rows covered by 50 named reverse-ETL write actions (duplicate method/path rows share one action).
+- 2 rows remain blocked by design:
+  - `POST /contacts/imports` requires CSV multipart file upload.
+  - custom-object record filtering requires dynamic provider-specific query parameter names.
 
 ## Next
 
-- Add generic bounded JSON direct-read policy with red/green tests.
-- Convert Freshdesk GET rows to stream/direct-read coverage.
-- Add named write actions for mutation rows without creating raw write escape hatches.
+- Run broader repo gates (`go vet`, `go test ./... -timeout 20m`, `go build ./cmd/pm`, `make verify`) before handoff.
+- Future #178 work can add typed `file_upload` and dynamic-query policies to remove the two remaining safe blockers without exposing raw payload/query escape hatches.

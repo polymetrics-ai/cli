@@ -172,7 +172,7 @@
 - [freshbooks](freshbooks/MANUAL.md): Reads FreshBooks clients, invoices, expenses, payments, and items through the FreshBooks accounting REST API.
 - [freshcaller](freshcaller/MANUAL.md): Reads Freshcaller calls, agents, teams, and phone numbers through the Freshcaller REST API.
 - [freshchat](freshchat/MANUAL.md): Reads Freshchat account, user, conversation, agent, group, channel, role, outbound, report, metrics, and business-hours data through the Freshchat v2 REST API; writes Freshchat users, conversations, agents, outbound messages, reports, and CSAT ratings.
-- [freshdesk](freshdesk/MANUAL.md): Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2.
+- [freshdesk](freshdesk/MANUAL.md): Reads Freshdesk support resources and exposes fixed Freshdesk REST API v2 operations through streams, bounded JSON direct reads, and gated reverse-ETL write actions.
 - [freshsales](freshsales/MANUAL.md): Reads Freshsales (Freshworks CRM) contacts, sales accounts, deals, and leads through the Freshsales REST API.
 - [freshservice](freshservice/MANUAL.md): Reads and writes documented Freshservice REST API v2 resources, preserving legacy ticket, agent, requester, asset, and problem stream projections.
 - [front](front/MANUAL.md): Reads Front contacts, conversations, inboxes, tags, teammates, and channels through the Front Core REST API.

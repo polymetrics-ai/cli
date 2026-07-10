@@ -168,7 +168,7 @@
 | `freshbooks` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | FreshBooks | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.freshbooks.com/api/start) | bundle definition |
 | `freshcaller` | [`icons/freshcaller.svg`](../icons/freshcaller.svg) | Freshcaller | `api` | beta | check, catalog, read | 4 | 0 | [Documentation](https://developers.freshcaller.com/api/) | bundle definition |
 | `freshchat` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Freshchat | `api` | ga | check, catalog, read, write | 18 | 13 | [Documentation](https://developers.freshchat.com/api/) | bundle definition |
-| `freshdesk` | [`icons/freshdesk.svg`](../icons/freshdesk.svg) | Freshdesk | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developers.freshdesk.com/api/#change_log) | bundle definition |
+| `freshdesk` | [`icons/freshdesk.svg`](../icons/freshdesk.svg) | Freshdesk | `api` | ga | check, catalog, read, write | 5 | 50 | [Documentation](https://developers.freshdesk.com/api/) | bundle definition |
 | `freshsales` | [`icons/freshsales.svg`](../icons/freshsales.svg) | Freshsales | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://freshsales.io/api-docs) | bundle definition |
 | `freshservice` | [`icons/freshservice.svg`](../icons/freshservice.svg) | Freshservice | `api` | ga | check, catalog, read, write | 197 | 263 | [Documentation](https://api.freshservice.com/) | bundle definition |
 | `front` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Front | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](https://dev.frontapp.com/reference/introduction) | bundle definition |

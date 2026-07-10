@@ -37,7 +37,25 @@ go test ./cmd/connectorgen -run 'TestValidate_CLISurfaceImplementedDirectReadGen
 
 Result: all passed after adding `output_policy: "json"` support to command runner, engine direct reads, connectorgen validation, and CLI surface schema.
 
+Freshdesk operation conversion green checks:
+
+```bash
+go test ./cmd/connectorgen -run Freshdesk -count=1
+go run ./cmd/connectorgen validate internal/connectors/defs --json
+go test ./internal/connectors/conformance -run 'TestConformance/freshdesk' -count=1
+go test ./internal/connectors/commandrunner -run DirectRead -count=1
+go test ./internal/connectors/engine -run DirectRead -count=1
+go test ./cmd/connectorgen -run 'CLISurface|Freshdesk' -count=1
+go test ./cmd/connectorgen ./internal/connectors/engine ./internal/connectors/commandrunner
+/tmp/pm docs validate --connectors-dir docs/connectors
+```
+
+Result: all passed. Freshdesk coverage is now 168 executable endpoint rows and 2 blocked-safe operation rows (`POST /contacts/imports` CSV multipart upload, custom-object dynamic query filter). Command surface has 5 ETL streams, 109 bounded JSON direct reads, and 50 reverse-ETL write commands/actions.
+
+Broader gates also passed: `go vet ./...`, `go test ./... -timeout 20m`, `go build ./cmd/pm`, and `make verify`.
+
 ## Refactor Notes
 
 - Do not mark a write implemented unless it has a named write action and reverse-ETL gates.
 - Do not add raw `payload` body escape hatches or generic HTTP command execution.
+- Two endpoints remain blocked because implementing them safely requires new typed file-upload / dynamic-query policies rather than raw payload/query escape hatches.
