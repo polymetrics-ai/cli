@@ -1,0 +1,38 @@
+{
+  "phase": "issue-186-freshchat-advanced-query-binary",
+  "issue": 186,
+  "parent_issue": 180,
+  "status": "implemented_full_green",
+  "gsd": {
+    "plan_phase_command": "scripts/gsd prompt plan-phase issue-186-freshchat-advanced-query-binary --skip-research",
+    "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-186-freshchat-advanced-query-binary --dry-run",
+    "programming_loop_result": "unavailable_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": true,
+  "verificationBlocker": "",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-10T00:30:00Z",
+      "cycle": "issue-plan",
+      "decision": "local_critical_path",
+      "reason": "Issue #186 is unblocked by #185 integration; Pi subagent tool is unavailable, so run locally on a stacked branch.",
+      "issue_numbers": [186]
+    },
+    {
+      "timestamp": "2026-07-10T00:45:00Z",
+      "cycle": "red-green",
+      "decision": "focused_green",
+      "reason": "Added typed Freshchat file_upload operation metadata, fail-closed upload command wiring, docs updates, and focused gates pass.",
+      "issue_numbers": [186]
+    },
+    {
+      "timestamp": "2026-07-10T01:08:00Z",
+      "cycle": "verification",
+      "decision": "full_green",
+      "reason": "Full local gates pass without credentialed Freshchat calls, local file reads, or multipart upload execution.",
+      "issue_numbers": [186]
+    }
+  ],
+  "updated_at": "2026-07-10T01:08:00Z"
+}

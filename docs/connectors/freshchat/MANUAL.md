@@ -210,8 +210,8 @@ COMMAND SURFACE
     metrics historical - Read Freshchat historical metrics [intent=etl availability=implemented stream=historical_metrics]; notes: Requires metrics_metric, metrics_start, and metrics_end in connector config.
     metrics instant - Read Freshchat instant metrics [intent=etl availability=implemented stream=instant_metrics]; notes: Requires metrics_metric in connector config.
   File Commands
-    file upload - Upload a Freshchat file [intent=direct_write availability=excluded]; notes: Requires multipart/binary upload policy and is tracked by issue #186; no raw upload command is exposed.
-    image upload - Upload a Freshchat image [intent=direct_write availability=excluded]; notes: Requires multipart/binary upload policy and is tracked by issue #186; no raw upload command is exposed.
+    file upload - Upload a Freshchat file [intent=direct_write availability=unsupported_local unsupported local workflow]; notes: Typed file_upload operation metadata declares the Freshchat endpoint and max_bytes policy, but execution remains blocked until a bounded multipart executor exists; no raw upload command is exposed.
+    image upload - Upload a Freshchat image [intent=direct_write availability=unsupported_local unsupported local workflow]; notes: Typed file_upload operation metadata declares the Freshchat endpoint and max_bytes policy, but execution remains blocked until a bounded multipart executor exists; no raw upload command is exposed.
   Help topics:
     freshchat - Freshchat command metadata maps account, user, conversation, agent, directory, outbound, report, and metrics APIs to safe connector intents.
     freshchat-writes - Freshchat writes remain reverse ETL plan, preview, approval, execute operations; destructive deletes require confirmation.
