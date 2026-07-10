@@ -147,16 +147,17 @@ integrated and verified.
 
 ## Runtimes: two ways to drive this loop
 
-The stage machine, durable state, and reconciler above are runtime-agnostic. Two drivers implement them:
+The stage machine, durable state, and reconciler above are runtime-agnostic. The supported driver is:
 
-- **Pi-orchestrated** (`scripts/pi-auto-loop.sh` + `.pi/prompts/pm-auto-loop.md`): a Pi session
-  (Claude) is the orchestrator and dispatches Pi subagents per role. Requires Pi's `anthropic`
-  provider (subscription "extra usage") or OpenRouter for the Claude roles.
 - **Claude-orchestrated + Shepherd validator** (`scripts/claude-auto-loop.sh` +
   `.agents/agentic-delivery/prompts/claude-orchestrator.md`): the first-party Claude Code CLI
-  (`claude -p`, subscription-backed, no third-party gate) is the orchestrator and does the Claude-role
-  work with full repo context; it dispatches **Codex** (`pi --model openai-codex/gpt-5.5`) for
-  implementation. This driver adds a **supervisor layer** — see below.
+  (`claude -p`) is the orchestrator and does the Claude-role work with full repo context, billed to
+  your **Claude subscription** (flat-rate — no per-token third-party spend). It dispatches **Codex**
+  (`pi --model openai-codex/gpt-5.5`, your ChatGPT subscription) for implementation. This driver adds
+  a **supervisor layer** — see below.
+
+The Claude roles run **only** on the first-party `claude` CLI (your subscription). Do not route them
+through any pay-per-token third-party gateway.
 
 ## Validator layer (Shepherd supervisor meta-agent)
 
