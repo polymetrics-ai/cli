@@ -64,6 +64,13 @@ apply it before anything else.
 - Never push to `main`; never merge a parent PR to `main`; never mark human-ready without the gate.
 - Never request/print/store/invent secrets. Never add deps, change token scopes, run destructive
   external actions, deploy, or weaken gates without a human gate.
+- Credentials PRE-PROVISIONED in the loop environment (e.g. a connector API key exported before the
+  run) are standing operator authorization for transient, env-only, read-only use (introspection);
+  check presence with `[ -n "$VAR" ]` before declaring a secret_change gate. Printing, storing, or
+  committing the value remains forbidden.
+- When you set a terminal state, `RUN.json.terminal` MUST be one of the plain strings
+  `human_gate | done | blocked | budget` — the driver string-matches it and cannot parse an object.
+  Put structured gate detail (reason, options) in `ORCHESTRATION-STATE.json` and the GitHub issue.
 - Never resolve a review thread before every finding has a written disposition.
 
 Advance exactly one stage, then end the turn. Do not loop internally — the driver re-invokes you.
