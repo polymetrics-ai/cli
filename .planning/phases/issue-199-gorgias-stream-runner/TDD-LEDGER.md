@@ -43,7 +43,17 @@ Results:
 - Gorgias conformance test passed.
 - Diff whitespace check passed.
 
+## Broad verification evidence
+
+Final broad gate command:
+
+```bash
+gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify
+```
+
+Result: passed. `make verify` included docs validation, smoke test, golangci-lint, and `go run ./cmd/connectorgen validate internal/connectors/defs` with 547 connector(s), 0 findings.
+
 ## Refactor notes
 
-- Declarative JSON/schema/fixture changes should not alter write behavior.
-- Go test additions require `gofmt -w cmd internal` before final verification.
+- Declarative JSON/schema/fixture changes did not alter write behavior.
+- `gofmt -w cmd internal` ran after Go test edits; no tracked changes remained after final broad verification.
