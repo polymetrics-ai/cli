@@ -27,9 +27,10 @@ git status --short --branch
 git diff -- .planning/phases/issue-180-freshchat-cli-parity
 ```
 
-## Required local verification before final parent handoff
+## Final parent local verification
 
 ```bash
+cd website && pnpm run gen:website-data
 gofmt -w cmd internal
 go vet ./...
 go test ./...
@@ -37,6 +38,16 @@ go build ./cmd/pm
 make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
+
+Results:
+
+- Website data generation: pass and generated files clean.
+- `gofmt -w cmd internal`: pass.
+- `go vet ./...`: pass.
+- `go test ./...`: pass.
+- `go build ./cmd/pm`: pass.
+- `make verify`: pass, including docs validation and `golangci-lint` connector scopes.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
 
 ## Focused verification for issue #181
 
@@ -68,5 +79,6 @@ rg -n "freshchat|Freshchat" docs/cli website internal/connectors/defs/freshchat
 - #183: local focused/full gates passed; PR #247 CI passed; merged to parent as fd49739a. CodeRabbit skipped stacked review; parent review coverage remains pending.
 - #185: local focused/full gates passed; PR #248 CI passed; merged to parent as 31f3382e. CodeRabbit skipped stacked review; parent review coverage remains pending.
 - #186: local focused/full gates passed; PR #250 CI passed; merged to parent as 9b6ba32d. CodeRabbit skipped stacked review; parent review coverage remains pending.
+- #187: local focused/full gates passed; PR #251 CI passed; merged to parent as 639f88c0. CodeRabbit skipped stacked review; parent review coverage remains pending.
 
 Do not run credentialed `pm freshchat ...` commands or reverse ETL execution.

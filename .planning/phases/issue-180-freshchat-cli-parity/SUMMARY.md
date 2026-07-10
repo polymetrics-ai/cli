@@ -1,6 +1,6 @@
 # Summary — Issue #180 Freshchat CLI parity parent
 
-Status: parent orchestration active; #181/#182/#183/#184/#185/#186 merged with parent CodeRabbit coverage pending.
+Status: all #181/#182/#183/#184/#185/#186/#187 slices merged; final local parent gates pass; parent CodeRabbit coverage pending.
 
 ## Completed in this checkpoint
 
@@ -15,15 +15,16 @@ Status: parent orchestration active; #181/#182/#183/#184/#185/#186 merged with p
 - Completed local #183 slice, opened stacked PR https://github.com/polymetrics-ai/cli/pull/247, and squash-merged it to `feat/180-freshchat-cli-parity` as fd49739a after CI passed.
 - Completed local #185 slice, opened stacked PR https://github.com/polymetrics-ai/cli/pull/248, and squash-merged it to `feat/180-freshchat-cli-parity` as 31f3382e after CI passed.
 - Completed local #186 slice, opened stacked PR https://github.com/polymetrics-ai/cli/pull/250, and squash-merged it to `feat/180-freshchat-cli-parity` as 9b6ba32d after CI passed.
+- Completed local #187 slice, opened stacked PR https://github.com/polymetrics-ai/cli/pull/251, and squash-merged it to `feat/180-freshchat-cli-parity` as 639f88c0 after CI passed.
 
 ## Current blockers
 
 - `scripts/gsd prompt programming-loop ...` is unavailable in the registry; manual programming-loop fallback is recorded.
 - Pi `subagent` tool is unavailable in this harness, so no mutating workers were spawned. Decision: `not_spawned_runtime_capability_missing`.
-- Parent PR is draft pending remaining sub-issue integration and final verification; CodeRabbit skipped parent review while draft, so #181/#182/#183/#184/#185/#186 automated review coverage remains pending.
+- Parent PR is pending automated review coverage; CodeRabbit skipped prior parent/stacked reviews while draft or non-default-base, so #181/#182/#183/#184/#185/#186/#187 automated review coverage remains pending until parent PR #226 receives coverage or an approved fallback is recorded.
 
 ## Next
 
-1. Continue the remaining Freshchat parity slice (#187 sensitive/admin policy) on a stacked branch.
-2. Keep #181/#182/#183/#184/#185/#186 marked review-pending until parent PR #226 is ready for CodeRabbit or an approved fallback is recorded.
-3. Do not mark parent PR human-ready until every integrated sub-issue has automated review coverage or a recorded fallback.
+1. Mark parent PR #226 ready for review after pushing final verification artifacts.
+2. Wait for CodeRabbit coverage on parent PR #226 (or record approved fallback) before marking sub-issues review-complete.
+3. Do not merge parent PR to `main`; final parent PR remains human-gated.

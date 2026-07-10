@@ -24,7 +24,21 @@ GSD programming-loop registry command is unavailable (`scripts/gsd: unknown GSD 
 - #184: operation-ledger validation must fail first for missing/incorrect operation classifications.
 - #185: complete; direct-read tests failed first for unsupported Freshchat bounded JSON direct-read policy, then passed after `freshchat_users_fetch` policy/metadata/docs/conformance updates.
 - #186: complete; upload operation-policy tests failed first for missing Freshchat typed `file_upload` operation metadata, then passed after operations/docs/fail-closed command wiring.
-- #187: sensitive/admin policy tests must fail first for missing redaction/approval/typed confirmation classifications.
+- #187: complete; confirmation policy tests failed first for missing Freshchat admin/sensitive write confirmations, then passed after metadata/schema/docs updates.
+
+## Parent final verification
+
+Final parent local gates pass after all sub-issue merges:
+
+```bash
+cd website && pnpm run gen:website-data
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+```
 
 ## Safety notes
 
