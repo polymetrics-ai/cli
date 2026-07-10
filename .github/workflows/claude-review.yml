@@ -42,8 +42,14 @@ permissions:
   id-token: write
 
 concurrency:
+  # Keyed per PR. cancel-in-progress MUST stay false: this workflow triggers on every comment
+  # event, and a review posts many comments (inline + summary), as do the agent's disposition
+  # replies. With cancel-in-progress: true, each of those comment events spawns a run that lands
+  # in this same group and CANCELS the in-progress review before it can finish — so the review
+  # effectively cancels itself the moment it starts commenting. false lets the running review
+  # complete; the non-@claude comment runs just queue behind it and no-op via the job `if:` gate.
   group: claude-review-${{ github.event.pull_request.number || github.event.issue.number }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   # ───────────────────────────────────────────────────────────────────────────
