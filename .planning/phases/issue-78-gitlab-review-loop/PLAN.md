@@ -30,7 +30,7 @@ Issues: #78, #83-#89
 
 ## Ordered review-loop plan
 
-1. Rebase `feat/78-gitlab-cli-parity` onto `origin/main` after fetching latest refs.
+1. Rebase `feat/78-gitlab-cli-parity` onto `origin/main` after fetching latest refs. ✅ no conflicts
 2. Resolve conflicts while preserving GitLab connector parity work:
    - `internal/connectors/defs/gitlab/**`
    - `docs/connectors/gitlab/**`
@@ -41,10 +41,10 @@ Issues: #78, #83-#89
    - `go build ./cmd/pm`
    - `go test -timeout 20m ./...`
    - `make connectorgen-validate`
-   - `golangci-lint run`
-   - `make verify` if time allows
+   - `golangci-lint run` (full-repo run currently blocked by unrelated pre-existing issues; `golangci-lint run --new-from-rev origin/main` passes)
+   - `make verify` if time allows ✅
    - CLI parity checks for root/help/connector leaf help/docs.
-4. Push rebased branch with `--force-with-lease` only after local gates pass.
+4. Push rebased branch with `--force-with-lease` only after local gates pass. Pending decision because full-repo `golangci-lint run` fails outside PR scope.
 5. Request one Claude review pass with `gh pr comment 127 --body "@claude review this PR"`.
 6. Collect inline and summary comments, triage every finding, and reply in-thread using the required disposition template.
 7. Implement accepted fixes only after disposition analysis, with tests and docs/website parity updates when behavior/docs change.

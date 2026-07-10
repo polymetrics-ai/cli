@@ -639,8 +639,8 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": connectorName + " " + strings.Join(path, " "), "manual": manual})
 		}
-		fmt.Fprint(stdout, manual)
-		return nil
+		_, err = fmt.Fprint(stdout, manual)
+		return err
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError
