@@ -22,6 +22,8 @@
 
 ## Remote/review
 
-- [ ] Push branch `feat/153-chatwoot-direct-read`.
-- [ ] Open stacked PR to `feat/148-chatwoot-cli-parity` with `Refs #153`.
-- [ ] Route CodeRabbit/parent fallback review if the non-default-base sub-PR is skipped.
+- [x] Push branch `feat/153-chatwoot-direct-read`.
+- [x] Open stacked PR #249 to `feat/148-chatwoot-cli-parity` with `Refs #153`.
+- [x] PR #249 remote checks passed.
+- [x] CodeRabbit skipped non-default base; parent PR #223 fallback review was requested after integration and replied `Review finished` with no inline findings returned by GitHub API.
+- [x] Parent PR #223 checks passed after #153 integration.
