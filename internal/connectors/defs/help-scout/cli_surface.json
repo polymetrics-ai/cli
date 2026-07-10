@@ -1,5 +1,5 @@
 {
-  "tagline": "Inspect and plan Help Scout Inbox API operations safely.",
+  "tagline": "Work with Help Scout Inbox API operations safely.",
   "usage": "pm help-scout <resource> <action> [flags]",
   "source_cli": {
     "name": "Help Scout Inbox API",
@@ -8,24 +8,134 @@
   },
   "groups": [
     {
-      "id": "core-records",
-      "title": "Core record streams",
-      "commands": ["conversation", "customer", "mailbox", "user"]
+      "id": "streams",
+      "title": "Stream-backed reads",
+      "commands": [
+        "conversation list",
+        "customer list",
+        "mailbox list",
+        "user list"
+      ]
     },
     {
       "id": "direct-reads",
-      "title": "Bounded direct reads planned for later lanes",
-      "commands": ["conversation view", "conversation thread list", "customer view", "mailbox saved-reply list", "tag list", "team list", "workflow list", "report"]
+      "title": "Bounded JSON direct reads",
+      "commands": [
+        "conversations attachments data get",
+        "conversations get",
+        "conversations threads list",
+        "customer properties list",
+        "customers address get",
+        "customers chats list",
+        "customers emails list",
+        "customers get",
+        "customers phones list",
+        "customers social profiles list",
+        "customers websites list",
+        "mailboxes fields list",
+        "mailboxes folders list",
+        "mailboxes get",
+        "mailboxes routing get",
+        "mailboxes saved replies get",
+        "mailboxes saved replies list",
+        "organizations conversations get",
+        "organizations customers get",
+        "organizations get",
+        "organizations list",
+        "organizations properties get",
+        "organizations properties list",
+        "ratings get",
+        "reports chat get",
+        "reports company customers helped get",
+        "reports company drilldown get",
+        "reports company get",
+        "reports conversations busy times get",
+        "reports conversations drilldown get",
+        "reports conversations fields drilldown get",
+        "reports conversations get",
+        "reports conversations new drilldown get",
+        "reports conversations new get",
+        "reports conversations received messages get",
+        "reports conversations volume by channel get",
+        "reports docs get",
+        "reports email get",
+        "reports happiness get",
+        "reports happiness ratings get",
+        "reports phone get",
+        "reports productivity first response time get",
+        "reports productivity get",
+        "reports productivity replies sent get",
+        "reports productivity resolution time get",
+        "reports productivity resolved get",
+        "reports productivity response time get",
+        "reports user chat get",
+        "reports user conversation history get",
+        "reports user customers helped get"
+      ]
     },
     {
       "id": "writes",
-      "title": "Approval-gated reverse ETL candidates",
-      "commands": ["conversation reply create", "conversation note create", "customer create", "customer update", "webhook create", "workflow run"]
+      "title": "Plan/preview/approval reverse ETL writes",
+      "commands": [
+        "conversations attachments delete",
+        "conversations threads attachments upload",
+        "conversations fields update",
+        "conversations snooze delete",
+        "conversations snooze update",
+        "conversations tags update",
+        "conversations threads schedule delete",
+        "conversations threads schedule publish",
+        "conversations threads schedule update",
+        "conversations chats create",
+        "conversations customer create",
+        "conversations notes create",
+        "conversations phones create",
+        "conversations reply create",
+        "conversations threads update",
+        "conversations create",
+        "conversations delete",
+        "conversations update",
+        "customers address create",
+        "customers address delete",
+        "customers address update",
+        "customers chats create",
+        "customers chats delete",
+        "customers chats update",
+        "customers emails create",
+        "customers emails delete",
+        "customers emails update",
+        "customers phones create",
+        "customers phones delete",
+        "customers phones update",
+        "customers social profiles create",
+        "customers social profiles delete",
+        "customers social profiles update",
+        "customers websites create",
+        "customers websites delete",
+        "customers websites update",
+        "customers create",
+        "customers delete",
+        "customers delete async",
+        "customers overwrite",
+        "customers update",
+        "mailboxes routing update",
+        "mailboxes saved replies create",
+        "mailboxes saved replies delete",
+        "mailboxes saved replies update",
+        "organizations properties create",
+        "organizations properties delete",
+        "organizations properties remove",
+        "organizations properties set",
+        "organizations properties update"
+      ]
     },
     {
-      "id": "blocked",
-      "title": "Blocked by default until a policy lane implements safeguards",
-      "commands": ["attachment download", "customer delete", "user create", "user delete", "team member update"]
+      "id": "binary",
+      "title": "Bounded binary/raw payload operations",
+      "commands": [
+        "conversations attachments file download",
+        "conversations threads original source get"
+      ]
     }
   ],
   "global_flags": [
@@ -39,6 +149,16 @@
       "type": "string",
       "summary": "Use a saved Help Scout connector credential.",
       "maps_to": "connection"
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Preview a reverse-ETL write plan without executing it."
+    },
+    {
+      "name": "confirm",
+      "type": "string",
+      "summary": "Typed confirmation required for destructive/sensitive Help Scout write execution."
     }
   ],
   "commands": [
@@ -57,8 +177,15 @@
           "maps_to": "config.start_date"
         }
       ],
-      "examples": ["pm help-scout conversation list --connection help-scout-prod --json"],
-      "api_surface": [{ "method": "GET", "path": "/v2/conversations" }]
+      "examples": [
+        "pm help-scout conversation list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations"
+        }
+      ]
     },
     {
       "path": "customer list",
@@ -75,8 +202,15 @@
           "maps_to": "config.start_date"
         }
       ],
-      "examples": ["pm help-scout customer list --connection help-scout-prod --json"],
-      "api_surface": [{ "method": "GET", "path": "/v2/customers" }]
+      "examples": [
+        "pm help-scout customer list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers"
+        }
+      ]
     },
     {
       "path": "mailbox list",
@@ -84,9 +218,17 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "mailboxes",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/mailboxes/list/",
-      "examples": ["pm help-scout mailbox list --connection help-scout-prod --json"],
-      "api_surface": [{ "method": "GET", "path": "/v2/mailboxes" }]
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout mailbox list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes"
+        }
+      ]
     },
     {
       "path": "user list",
@@ -95,190 +237,5280 @@
       "availability": "implemented",
       "stream": "users",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/list/",
-      "examples": ["pm help-scout user list --connection help-scout-prod --json"],
-      "api_surface": [{ "method": "GET", "path": "/v2/users" }]
+      "flags": [],
+      "examples": [
+        "pm help-scout user list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
+      ]
     },
     {
-      "path": "conversation view",
-      "summary": "View one conversation.",
+      "path": "conversations attachments file download",
+      "summary": "Download Attachment File",
       "intent": "direct_read",
-      "availability": "planned",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get/",
-      "notes": "Planned for #217 as a bounded direct read; not executable in this metadata slice."
-    },
-    {
-      "path": "conversation thread list",
-      "summary": "List threads for one conversation.",
-      "intent": "direct_read",
-      "availability": "planned",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list/",
-      "notes": "Planned for #217 as a bounded direct read."
-    },
-    {
-      "path": "attachment download",
-      "summary": "Download or inspect a conversation attachment.",
-      "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
+      "operation": "help-scout.v2.conversations.conversation-id.attachments.attachment-id.file.get",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
-      "notes": "Binary payload; blocked until #218 adds a bounded binary/output policy."
+      "risk": "Binary/raw message retrieval is bounded by operation metadata and remains feature-gated until binary execution policy is enabled.",
+      "notes": "Operation-backed binary command; no raw unbounded download is exposed."
     },
     {
-      "path": "customer view",
-      "summary": "View one customer.",
+      "path": "conversations attachments data get",
+      "summary": "Get Attachment Data",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-data/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "path.conversation_id"
+        },
+        {
+          "name": "attachment-id",
+          "type": "string",
+          "summary": "Attachment Id path parameter.",
+          "maps_to": "path.attachment_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations attachments data get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations/{conversation_id}/attachments/{attachment_id}/data"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "conversations threads original source get",
+      "summary": "Get Thread Original Source / Get Thread Original Source (RFC 822)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "help-scout.v2.conversations.conversation-id.threads.thread-id.original-source.get",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/thread-source-json/",
+      "risk": "Binary/raw message retrieval is bounded by operation metadata and remains feature-gated until binary execution policy is enabled.",
+      "notes": "Operation-backed binary command; no raw unbounded download is exposed."
+    },
+    {
+      "path": "conversations threads list",
+      "summary": "List Threads",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "path.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations threads list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations/{conversation_id}/threads"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "v3 conversations threads list",
+      "summary": "List Threads (v3)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "path.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout v3 conversations threads list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/conversations/{conversation_id}/threads"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "conversations get",
+      "summary": "Get Conversation",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "path.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations/{conversation_id}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "v3 conversations get",
+      "summary": "Get Conversation (v3)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "path.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout v3 conversations get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/conversations/{conversation_id}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "customers address get",
+      "summary": "Get Address",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/get/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "path.customer_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers address get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customer_id}/address"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "customers chats list",
+      "summary": "List Chats Handles",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/list/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "path.customer_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers chats list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customer_id}/chats"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "customers emails list",
+      "summary": "List Emails",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/list/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "path.customer_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers emails list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customer_id}/emails"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "customers phones list",
+      "summary": "List Phones",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/list/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "path.customer_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers phones list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customer_id}/phones"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "customers social profiles list",
+      "summary": "List Social Profiles",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/list/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "path.customer_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers social profiles list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customer_id}/social-profiles"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "customers websites list",
+      "summary": "List Websites",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/list/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "path.customer_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers websites list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customer_id}/websites"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "customers get",
+      "summary": "Get Customer",
+      "intent": "direct_read",
+      "availability": "implemented",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/get/",
-      "notes": "Planned for #217 as a bounded direct read."
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "path.customer_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customers/{customer_id}"
+        }
+      ],
+      "output_policy": "json"
     },
     {
-      "path": "mailbox saved-reply list",
-      "summary": "List saved replies for a mailbox.",
+      "path": "v3 customers list",
+      "summary": "List Customers (v3)",
       "intent": "direct_read",
-      "availability": "planned",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/mailboxes/saved-replies/list/",
-      "notes": "Planned for direct-read or stream classification after operation-ledger review."
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
+      "flags": [],
+      "examples": [
+        "pm help-scout v3 customers list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/customers"
+        }
+      ],
+      "output_policy": "json"
     },
     {
-      "path": "tag list",
-      "summary": "List Help Scout tags.",
+      "path": "mailboxes routing get",
+      "summary": "Get Routing configuration",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-get/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Mailbox Id path parameter.",
+          "maps_to": "path.mailbox_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes routing get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailbox_id}/routing"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "mailboxes saved replies get",
+      "summary": "Get Saved Reply",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-get/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Mailbox Id path parameter.",
+          "maps_to": "path.mailbox_id"
+        },
+        {
+          "name": "saved-reply-id",
+          "type": "string",
+          "summary": "Saved Reply Id path parameter.",
+          "maps_to": "path.saved_reply_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes saved replies get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailbox_id}/saved-replies/{saved_reply_id}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "mailboxes saved replies list",
+      "summary": "List Saved Replies",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-list/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Mailbox Id path parameter.",
+          "maps_to": "path.mailbox_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes saved replies list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailbox_id}/saved-replies"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "mailboxes get",
+      "summary": "Get Inbox",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/get/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Mailbox Id path parameter.",
+          "maps_to": "path.mailbox_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailbox_id}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "mailboxes fields list",
+      "summary": "List Inbox Custom Fields",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-fields/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Mailbox Id path parameter.",
+          "maps_to": "path.mailbox_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes fields list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailbox_id}/fields"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "mailboxes folders list",
+      "summary": "List Inbox Folders",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-folders/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Mailbox Id path parameter.",
+          "maps_to": "path.mailbox_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes folders list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/mailboxes/{mailbox_id}/folders"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "organizations get",
+      "summary": "Get Organization by ID",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Organization Id path parameter.",
+          "maps_to": "path.organization_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/{organization_id}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "organizations properties get",
+      "summary": "Get Organization Property Definition",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/get/",
+      "flags": [
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Property Slug path parameter.",
+          "maps_to": "path.property_slug"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations properties get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/properties/{property_slug}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "organizations properties list",
+      "summary": "List Organization Property Definitions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout organizations properties list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/properties"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "organizations conversations get",
+      "summary": "Get Organization Conversations",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-conversations/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Organization Id path parameter.",
+          "maps_to": "path.organization_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations conversations get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/{organization_id}/conversations"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "organizations customers get",
+      "summary": "Get Organization Customers",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-customers/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Organization Id path parameter.",
+          "maps_to": "path.organization_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations customers get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations/{organization_id}/customers"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "organizations list",
+      "summary": "List Organizations",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout organizations list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/organizations"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "customer properties list",
+      "summary": "List Customer Property Definitions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout customer properties list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/customer-properties"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "ratings get",
+      "summary": "Get Satisfaction Rating",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/ratings/get/",
+      "flags": [
+        {
+          "name": "rating-id",
+          "type": "string",
+          "summary": "Rating Id path parameter.",
+          "maps_to": "path.rating_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout ratings get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/ratings/{rating_id}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports company get",
+      "summary": "Company Overall Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-overall/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports company get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/company"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports company customers helped get",
+      "summary": "Company Customers Helped",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-customers-helped/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports company customers helped get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/company/customers-helped"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports company drilldown get",
+      "summary": "Company Drilldown",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-drilldown/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports company drilldown get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/company/drilldown"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports conversations get",
+      "summary": "Conversations - Overall Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-overall/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports conversations get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/conversations"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports conversations volume by channel get",
+      "summary": "All Channels - Volumes by Channel",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-volume-by-channel/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports conversations volume by channel get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/conversations/volume-by-channel"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports conversations busy times get",
+      "summary": "Conversations - Busiest Time of Day",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-busy-times/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports conversations busy times get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/conversations/busy-times"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports conversations drilldown get",
+      "summary": "Conversations - Drilldown",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-drilldown/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports conversations drilldown get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/conversations/drilldown"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports conversations fields drilldown get",
+      "summary": "Conversations - Drilldown by Field",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-field-drilldown/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports conversations fields drilldown get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/conversations/fields-drilldown"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports conversations new get",
+      "summary": "Conversations - New Conversations",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports conversations new get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/conversations/new"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports conversations new drilldown get",
+      "summary": "Conversations - New Conversations Drilldown",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new-drilldown/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports conversations new drilldown get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/conversations/new-drilldown"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports conversations received messages get",
+      "summary": "Conversations - Received Messages Statistics",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-received-messages/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports conversations received messages get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/conversations/received-messages"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports docs get",
+      "summary": "Docs Overall Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/docs/reports-docs-overall/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports docs get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/docs"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports happiness get",
+      "summary": "Happiness Overall Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-overall/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports happiness get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/happiness"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports happiness ratings get",
+      "summary": "Happiness Ratings Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-ratings/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports happiness ratings get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/happiness/ratings"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports productivity get",
+      "summary": "Productivity Overall Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-overall/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports productivity get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/productivity"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports productivity first response time get",
+      "summary": "Productivity - First Response Time",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-first-response-time/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports productivity first response time get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/productivity/first-response-time"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports productivity replies sent get",
+      "summary": "Productivity - Replies Sent",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-replies-sent/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports productivity replies sent get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/productivity/replies-sent"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports productivity resolution time get",
+      "summary": "Productivity - Resolution Time",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolution-time/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports productivity resolution time get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/productivity/resolution-time"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports productivity resolved get",
+      "summary": "Productivity - Resolved",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolved/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports productivity resolved get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/productivity/resolved"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports productivity response time get",
+      "summary": "Productivity - Response Time",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-respose-time/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports productivity response time get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/productivity/response-time"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports user get",
+      "summary": "User/Team Overall Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports user get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/user"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports user conversation history get",
+      "summary": "User Conversation History",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-conversation-history/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports user conversation history get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/user/conversation-history"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports user customers helped get",
+      "summary": "User Customers Helped",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-customer-helped/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports user customers helped get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/user/customers-helped"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports user drilldown get",
+      "summary": "User Drill-down",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-drilldown/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports user drilldown get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/user/drilldown"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports user happiness get",
+      "summary": "User Happiness",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports user happiness get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/user/happiness"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports user ratings get",
+      "summary": "User Happiness drilldown",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness-drilldown/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports user ratings get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/user/ratings"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports user replies get",
+      "summary": "User Replies",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-replies/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports user replies get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/user/replies"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports user resolutions get",
+      "summary": "User Resolutions",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-resolutions/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports user resolutions get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/user/resolutions"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports user chat get",
+      "summary": "User/Team Chat Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-chat/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports user chat get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/user/chat"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports chat get",
+      "summary": "Chat Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/chat/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports chat get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/chat"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports email get",
+      "summary": "Email Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/email/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports email get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/email"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "reports phone get",
+      "summary": "Phone Report",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/phone/",
+      "flags": [
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `start`.",
+          "maps_to": "query.start"
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `end`.",
+          "maps_to": "query.end"
+        },
+        {
+          "name": "mailboxes",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `mailboxes`.",
+          "maps_to": "query.mailboxes"
+        },
+        {
+          "name": "users",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `users`.",
+          "maps_to": "query.users"
+        },
+        {
+          "name": "tags",
+          "type": "string",
+          "summary": "Optional Help Scout report query parameter `tags`.",
+          "maps_to": "query.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout reports phone get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/phone"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "v3 system users get",
+      "summary": "Get System User",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
+      "flags": [
+        {
+          "name": "system-user-id",
+          "type": "string",
+          "summary": "System User Id path parameter.",
+          "maps_to": "path.system_user_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout v3 system users get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/system-users/{system_user_id}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "v3 system users list",
+      "summary": "List System Users",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
+      "flags": [],
+      "examples": [
+        "pm help-scout v3 system users list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/system-users"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "tags get",
+      "summary": "Get Tag by ID",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/get/",
+      "flags": [
+        {
+          "name": "tag-id",
+          "type": "string",
+          "summary": "Tag Id path parameter.",
+          "maps_to": "path.tag_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout tags get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tags/{tag_id}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "tags list",
+      "summary": "List Tags",
+      "intent": "direct_read",
+      "availability": "implemented",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/list/",
-      "notes": "Candidate stream or direct read; #216 owns final operation classification."
+      "flags": [],
+      "examples": [
+        "pm help-scout tags list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tags"
+        }
+      ],
+      "output_policy": "json"
     },
     {
-      "path": "team list",
-      "summary": "List Help Scout teams.",
+      "path": "teams members list",
+      "summary": "List Team Members",
       "intent": "direct_read",
-      "availability": "planned",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list/",
-      "notes": "Candidate stream or direct read; #216 owns final operation classification."
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-team-members/",
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "string",
+          "summary": "Team Id path parameter.",
+          "maps_to": "path.team_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout teams members list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/teams/{team_id}/members"
+        }
+      ],
+      "output_policy": "json"
     },
     {
-      "path": "workflow list",
-      "summary": "List Help Scout workflows.",
+      "path": "teams list",
+      "summary": "List Teams",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-teams/",
+      "flags": [],
+      "examples": [
+        "pm help-scout teams list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/teams"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "users conversation reassignment get",
+      "summary": "Get Conversation Reassignment configuration",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation%20reassignment/get/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "User Id path parameter.",
+          "maps_to": "path.user_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout users conversation reassignment get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{user_id}/conversation-reassignment"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "users status get",
+      "summary": "Get user status",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/get/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "User Id path parameter.",
+          "maps_to": "path.user_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout users status get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{user_id}/status"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "users status list",
+      "summary": "List users statuses",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout users status list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/status"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "users me get",
+      "summary": "Get Resource Owner",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/me/",
+      "flags": [],
+      "examples": [
+        "pm help-scout users me get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/me"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "users get",
+      "summary": "Get User",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/get/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "User Id path parameter.",
+          "maps_to": "path.user_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout users get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users/{user_id}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "webhooks get",
+      "summary": "Get Webhook",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/get/",
+      "flags": [
+        {
+          "name": "webhook-id",
+          "type": "string",
+          "summary": "Webhook Id path parameter.",
+          "maps_to": "path.webhook_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout webhooks get --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/webhooks/{webhook_id}"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "webhooks list",
+      "summary": "List Webhooks",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/list/",
+      "flags": [],
+      "examples": [
+        "pm help-scout webhooks list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/webhooks"
+        }
+      ],
+      "output_policy": "json"
+    },
+    {
+      "path": "workflows list",
+      "summary": "List Workflows",
+      "intent": "direct_read",
+      "availability": "implemented",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/list/",
-      "notes": "Candidate stream or direct read; #216 owns final operation classification."
+      "flags": [],
+      "examples": [
+        "pm help-scout workflows list --connection help-scout-prod --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workflows"
+        }
+      ],
+      "output_policy": "json"
     },
     {
-      "path": "report company",
-      "summary": "Read company-level report metrics.",
-      "intent": "direct_read",
-      "availability": "planned",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/overall/",
-      "notes": "Report endpoints require provider-specific query/body support and bounded output policy in #218."
-    },
-    {
-      "path": "conversation reply create",
-      "summary": "Create a reply thread on a conversation.",
+      "path": "conversations attachments delete",
+      "summary": "Delete Attachment",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/reply/",
-      "risk": "Sends a visible customer-support reply through Help Scout.",
-      "approval": "Must be implemented only as a typed reverse-ETL action with plan, preview, approval, and execute.",
-      "notes": "No runtime write action is declared in this slice."
+      "availability": "implemented",
+      "write": "delete_attachment",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/delete/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "attachment-id",
+          "type": "string",
+          "summary": "Attachment Id path parameter.",
+          "maps_to": "record.attachment_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations attachments delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/conversations/{conversation_id}/attachments/{attachment_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
     },
     {
-      "path": "conversation note create",
-      "summary": "Create an internal note on a conversation.",
+      "path": "conversations threads attachments upload",
+      "summary": "Upload Attachment",
       "intent": "reverse_etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "write": "upload_attachment",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/create/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Thread Id path parameter.",
+          "maps_to": "record.thread_id"
+        },
+        {
+          "name": "fileName",
+          "type": "string",
+          "summary": "Help Scout request field `fileName`.",
+          "maps_to": "record.fileName"
+        },
+        {
+          "name": "mimeType",
+          "type": "string",
+          "summary": "Help Scout request field `mimeType`.",
+          "maps_to": "record.mimeType"
+        },
+        {
+          "name": "data",
+          "type": "string",
+          "summary": "Help Scout request field `data`.",
+          "maps_to": "record.data"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations threads attachments upload --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/attachments"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations fields update",
+      "summary": "Update Custom Fields",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_custom_fields",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/custom_fields/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations fields update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/conversations/{conversation_id}/fields"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations snooze delete",
+      "summary": "Delete Snooze",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_snooze",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/delete/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations snooze delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/conversations/{conversation_id}/snooze"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations snooze update",
+      "summary": "Update Snooze",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_snooze",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "snoozedUntil",
+          "type": "string",
+          "summary": "Help Scout request field `snoozedUntil`.",
+          "maps_to": "record.snoozedUntil"
+        },
+        {
+          "name": "unsnoozeOnCustomerReply",
+          "type": "boolean",
+          "summary": "Help Scout request field `unsnoozeOnCustomerReply`.",
+          "maps_to": "record.unsnoozeOnCustomerReply"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations snooze update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/conversations/{conversation_id}/snooze"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations tags update",
+      "summary": "Update Tags",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tags",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/tags/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Help Scout request field `tags`.",
+          "maps_to": "record.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations tags update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/conversations/{conversation_id}/tags"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations threads schedule delete",
+      "summary": "Delete Thread Schedule",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_thread_schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/delete/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Thread Id path parameter.",
+          "maps_to": "record.thread_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations threads schedule delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/schedule"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations threads schedule publish",
+      "summary": "Publish Thread Schedule",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "publish_thread_schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/publish/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Thread Id path parameter.",
+          "maps_to": "record.thread_id"
+        },
+        {
+          "name": "op",
+          "type": "string",
+          "summary": "Help Scout request field `op`.",
+          "maps_to": "record.op"
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "summary": "Help Scout request field `path`.",
+          "maps_to": "record.path"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations threads schedule publish --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/schedule"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations threads schedule update",
+      "summary": "Update Thread Schedule",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_thread_schedule",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Thread Id path parameter.",
+          "maps_to": "record.thread_id"
+        },
+        {
+          "name": "scheduledFor",
+          "type": "string",
+          "summary": "Help Scout request field `scheduledFor`.",
+          "maps_to": "record.scheduledFor"
+        },
+        {
+          "name": "unscheduleOnCustomerReply",
+          "type": "boolean",
+          "summary": "Help Scout request field `unscheduleOnCustomerReply`.",
+          "maps_to": "record.unscheduleOnCustomerReply"
+        },
+        {
+          "name": "sendAsCreator",
+          "type": "boolean",
+          "summary": "Help Scout request field `sendAsCreator`.",
+          "maps_to": "record.sendAsCreator"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations threads schedule update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/schedule"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations chats create",
+      "summary": "Create Chat Thread",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_chat_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/chat/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Help Scout request field `text`.",
+          "maps_to": "record.text"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations chats create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversation_id}/chats"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations customer create",
+      "summary": "Create Customer Thread",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_customer_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/customer/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Help Scout request field `text`.",
+          "maps_to": "record.text"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations customer create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversation_id}/customer"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations notes create",
+      "summary": "Create Note",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_note",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/note/",
-      "risk": "Adds internal support context to a Help Scout conversation.",
-      "approval": "Must be implemented only as a typed reverse-ETL action with plan, preview, approval, and execute.",
-      "notes": "No runtime write action is declared in this slice."
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Help Scout request field `text`.",
+          "maps_to": "record.text"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations notes create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversation_id}/notes"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
     },
     {
-      "path": "customer create",
-      "summary": "Create a Help Scout customer.",
+      "path": "conversations phones create",
+      "summary": "Create Phone Thread",
       "intent": "reverse_etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "write": "create_phone_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/phone/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Help Scout request field `text`.",
+          "maps_to": "record.text"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations phones create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversation_id}/phones"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations reply create",
+      "summary": "Create Reply Thread",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_reply_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/reply/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Help Scout request field `text`.",
+          "maps_to": "record.text"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations reply create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversation_id}/reply"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations threads update",
+      "summary": "Update Thread",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_thread",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "thread-id",
+          "type": "string",
+          "summary": "Thread Id path parameter.",
+          "maps_to": "record.thread_id"
+        },
+        {
+          "name": "op",
+          "type": "string",
+          "summary": "Help Scout request field `op`.",
+          "maps_to": "record.op"
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "summary": "Help Scout request field `path`.",
+          "maps_to": "record.path"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations threads update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/conversations/{conversation_id}/threads/{thread_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations create",
+      "summary": "Create Conversation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/create/",
+      "flags": [
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Help Scout request field `subject`.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "mailboxId",
+          "type": "integer",
+          "summary": "Help Scout request field `mailboxId`.",
+          "maps_to": "record.mailboxId"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Help Scout request field `status`.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "createdAt",
+          "type": "string",
+          "summary": "Help Scout request field `createdAt`.",
+          "maps_to": "record.createdAt"
+        },
+        {
+          "name": "tags",
+          "type": "string_array",
+          "summary": "Help Scout request field `tags`.",
+          "maps_to": "record.tags"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations delete",
+      "summary": "Delete Conversation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/delete/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/conversations/{conversation_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "conversations update",
+      "summary": "Update Conversation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_conversation",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/update/",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Conversation Id path parameter.",
+          "maps_to": "record.conversation_id"
+        },
+        {
+          "name": "op",
+          "type": "string",
+          "summary": "Help Scout request field `op`.",
+          "maps_to": "record.op"
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "summary": "Help Scout request field `path`.",
+          "maps_to": "record.path"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout conversations update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/conversations/{conversation_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers address create",
+      "summary": "Create Address",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "city",
+          "type": "string",
+          "summary": "Help Scout request field `city`.",
+          "maps_to": "record.city"
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "summary": "Help Scout request field `state`.",
+          "maps_to": "record.state"
+        },
+        {
+          "name": "postalCode",
+          "type": "string",
+          "summary": "Help Scout request field `postalCode`.",
+          "maps_to": "record.postalCode"
+        },
+        {
+          "name": "country",
+          "type": "string",
+          "summary": "Help Scout request field `country`.",
+          "maps_to": "record.country"
+        },
+        {
+          "name": "lines",
+          "type": "string_array",
+          "summary": "Help Scout request field `lines`.",
+          "maps_to": "record.lines"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers address create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customer_id}/address"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers address delete",
+      "summary": "Delete Address",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers address delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customer_id}/address"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers address update",
+      "summary": "Update Address",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_address",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "city",
+          "type": "string",
+          "summary": "Help Scout request field `city`.",
+          "maps_to": "record.city"
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "summary": "Help Scout request field `state`.",
+          "maps_to": "record.state"
+        },
+        {
+          "name": "postalCode",
+          "type": "string",
+          "summary": "Help Scout request field `postalCode`.",
+          "maps_to": "record.postalCode"
+        },
+        {
+          "name": "country",
+          "type": "string",
+          "summary": "Help Scout request field `country`.",
+          "maps_to": "record.country"
+        },
+        {
+          "name": "lines",
+          "type": "string_array",
+          "summary": "Help Scout request field `lines`.",
+          "maps_to": "record.lines"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers address update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customer_id}/address"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers chats create",
+      "summary": "Create Chat Handle",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_chat_handle",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers chats create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customer_id}/chats"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers chats delete",
+      "summary": "Delete Chat Handle",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_chat_handle",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "chat-id",
+          "type": "string",
+          "summary": "Chat Id path parameter.",
+          "maps_to": "record.chat_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers chats delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customer_id}/chats/{chat_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers chats update",
+      "summary": "Update Chat Handles",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_chat_handles",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "chat-id",
+          "type": "string",
+          "summary": "Chat Id path parameter.",
+          "maps_to": "record.chat_id"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers chats update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customer_id}/chats/{chat_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers emails create",
+      "summary": "Create Email",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers emails create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customer_id}/emails"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers emails delete",
+      "summary": "Delete Email",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "email-id",
+          "type": "string",
+          "summary": "Email Id path parameter.",
+          "maps_to": "record.email_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers emails delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customer_id}/emails/{email_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers emails update",
+      "summary": "Update Email",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_email",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "email-id",
+          "type": "string",
+          "summary": "Email Id path parameter.",
+          "maps_to": "record.email_id"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers emails update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customer_id}/emails/{email_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers phones create",
+      "summary": "Create Phone",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers phones create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customer_id}/phones"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers phones delete",
+      "summary": "Delete Phone",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "phone-id",
+          "type": "string",
+          "summary": "Phone Id path parameter.",
+          "maps_to": "record.phone_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers phones delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customer_id}/phones/{phone_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers phones update",
+      "summary": "Update Phone",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_phone",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "phone-id",
+          "type": "string",
+          "summary": "Phone Id path parameter.",
+          "maps_to": "record.phone_id"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers phones update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customer_id}/phones/{phone_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers social profiles create",
+      "summary": "Create Social Profile",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_social_profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers social profiles create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customer_id}/social-profiles"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers social profiles delete",
+      "summary": "Delete Social Profile",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_social_profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "social-profile-id",
+          "type": "string",
+          "summary": "Social Profile Id path parameter.",
+          "maps_to": "record.social_profile_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers social profiles delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customer_id}/social-profiles/{social_profile_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers social profiles update",
+      "summary": "Update Social Profile",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_social_profile",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "social-profile-id",
+          "type": "string",
+          "summary": "Social Profile Id path parameter.",
+          "maps_to": "record.social_profile_id"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers social profiles update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customer_id}/social-profiles/{social_profile_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers websites create",
+      "summary": "Create Website",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/create/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers websites create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers/{customer_id}/websites"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers websites delete",
+      "summary": "Delete Website",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/delete/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Website Id path parameter.",
+          "maps_to": "record.website_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers websites delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customer_id}/websites/{website_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers websites update",
+      "summary": "Update Website",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_website",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "website-id",
+          "type": "string",
+          "summary": "Website Id path parameter.",
+          "maps_to": "record.website_id"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers websites update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customer_id}/websites/{website_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers create",
+      "summary": "Create Customer",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_customer",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/create/",
-      "risk": "Creates customer profile data in Help Scout.",
-      "approval": "Must be implemented only as a typed reverse-ETL action with plan, preview, approval, and execute.",
-      "notes": "No runtime write action is declared in this slice."
+      "flags": [
+        {
+          "name": "firstName",
+          "type": "string",
+          "summary": "Help Scout request field `firstName`.",
+          "maps_to": "record.firstName"
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "summary": "Help Scout request field `lastName`.",
+          "maps_to": "record.lastName"
+        },
+        {
+          "name": "photoUrl",
+          "type": "string",
+          "summary": "Help Scout request field `photoUrl`.",
+          "maps_to": "record.photoUrl"
+        },
+        {
+          "name": "photoType",
+          "type": "string",
+          "summary": "Help Scout request field `photoType`.",
+          "maps_to": "record.photoType"
+        },
+        {
+          "name": "jobTitle",
+          "type": "string",
+          "summary": "Help Scout request field `jobTitle`.",
+          "maps_to": "record.jobTitle"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "summary": "Help Scout request field `location`.",
+          "maps_to": "record.location"
+        },
+        {
+          "name": "background",
+          "type": "string",
+          "summary": "Help Scout request field `background`.",
+          "maps_to": "record.background"
+        },
+        {
+          "name": "age",
+          "type": "string",
+          "summary": "Help Scout request field `age`.",
+          "maps_to": "record.age"
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "summary": "Help Scout request field `gender`.",
+          "maps_to": "record.gender"
+        },
+        {
+          "name": "organization",
+          "type": "string",
+          "summary": "Help Scout request field `organization`.",
+          "maps_to": "record.organization"
+        },
+        {
+          "name": "organizationId",
+          "type": "integer",
+          "summary": "Help Scout request field `organizationId`.",
+          "maps_to": "record.organizationId"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customers"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
     },
     {
-      "path": "customer update",
-      "summary": "Update a Help Scout customer.",
+      "path": "customers delete",
+      "summary": "Delete Customer",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/update/",
-      "risk": "Mutates customer profile data in Help Scout.",
-      "approval": "Must be implemented only as a typed reverse-ETL action with plan, preview, approval, and execute.",
-      "notes": "No runtime write action is declared in this slice."
-    },
-    {
-      "path": "customer delete",
-      "summary": "Delete a Help Scout customer.",
-      "intent": "reverse_etl",
-      "availability": "unsafe_or_disallowed",
+      "availability": "implemented",
+      "write": "delete_customer",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete/",
-      "risk": "Deletes customer data from Help Scout.",
-      "approval": "Would require destructive typed confirmation and human approval if ever implemented.",
-      "notes": "Blocked by default; #219 owns destructive/admin policy decisions."
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customer_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
     },
     {
-      "path": "webhook create",
-      "summary": "Create a Help Scout webhook.",
+      "path": "customers delete async",
+      "summary": "Delete Customer Asynchronously",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/create/",
-      "risk": "Creates an outbound webhook configuration that can send Help Scout event data to another URL.",
-      "approval": "Must require typed schema, URL validation, preview, approval, and execute.",
-      "notes": "No runtime write action is declared in this slice."
+      "availability": "implemented",
+      "write": "delete_customer_asynchronously",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete-async/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers delete async --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customers/{customer_id}?async=true"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
     },
     {
-      "path": "workflow run",
-      "summary": "Run a Help Scout manual workflow.",
+      "path": "customers overwrite",
+      "summary": "Overwrite Customer",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/run/",
-      "risk": "Triggers provider-side workflow automation.",
-      "approval": "Must require plan, preview, approval, and execute.",
-      "notes": "No runtime write action is declared in this slice."
+      "availability": "implemented",
+      "write": "overwrite_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/overwrite/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "firstName",
+          "type": "string",
+          "summary": "Help Scout request field `firstName`.",
+          "maps_to": "record.firstName"
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "summary": "Help Scout request field `lastName`.",
+          "maps_to": "record.lastName"
+        },
+        {
+          "name": "photoUrl",
+          "type": "string",
+          "summary": "Help Scout request field `photoUrl`.",
+          "maps_to": "record.photoUrl"
+        },
+        {
+          "name": "photoType",
+          "type": "string",
+          "summary": "Help Scout request field `photoType`.",
+          "maps_to": "record.photoType"
+        },
+        {
+          "name": "jobTitle",
+          "type": "string",
+          "summary": "Help Scout request field `jobTitle`.",
+          "maps_to": "record.jobTitle"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "summary": "Help Scout request field `location`.",
+          "maps_to": "record.location"
+        },
+        {
+          "name": "background",
+          "type": "string",
+          "summary": "Help Scout request field `background`.",
+          "maps_to": "record.background"
+        },
+        {
+          "name": "age",
+          "type": "string",
+          "summary": "Help Scout request field `age`.",
+          "maps_to": "record.age"
+        },
+        {
+          "name": "gender",
+          "type": "string",
+          "summary": "Help Scout request field `gender`.",
+          "maps_to": "record.gender"
+        },
+        {
+          "name": "organization",
+          "type": "string",
+          "summary": "Help Scout request field `organization`.",
+          "maps_to": "record.organization"
+        },
+        {
+          "name": "organizationId",
+          "type": "integer",
+          "summary": "Help Scout request field `organizationId`.",
+          "maps_to": "record.organizationId"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers overwrite --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/customers/{customer_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
     },
     {
-      "path": "team member update",
-      "summary": "Update Help Scout team membership.",
+      "path": "customers update",
+      "summary": "Update Customer",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/members/update/",
-      "risk": "Administrative membership change.",
-      "approval": "Requires typed schema, preflight, preview, approval, and execute.",
-      "notes": "No runtime write action is declared in this slice."
+      "availability": "implemented",
+      "write": "update_customer",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "op",
+          "type": "string",
+          "summary": "Help Scout request field `op`.",
+          "maps_to": "record.op"
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "summary": "Help Scout request field `path`.",
+          "maps_to": "record.path"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/customers/{customer_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
     },
     {
-      "path": "user create",
-      "summary": "Create a Help Scout user.",
+      "path": "mailboxes routing update",
+      "summary": "Update Routing configuration",
       "intent": "reverse_etl",
-      "availability": "planned",
+      "availability": "implemented",
+      "write": "update_routing_configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-update/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Mailbox Id path parameter.",
+          "maps_to": "record.mailbox_id"
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "summary": "Help Scout request field `state`.",
+          "maps_to": "record.state"
+        },
+        {
+          "name": "assignmentLimit",
+          "type": "integer",
+          "summary": "Help Scout request field `assignmentLimit`.",
+          "maps_to": "record.assignmentLimit"
+        },
+        {
+          "name": "assignmentMethod",
+          "type": "string",
+          "summary": "Help Scout request field `assignmentMethod`.",
+          "maps_to": "record.assignmentMethod"
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes routing update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/mailboxes/{mailbox_id}/routing"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "mailboxes saved replies create",
+      "summary": "Create Saved Reply",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_saved_reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-create/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Mailbox Id path parameter.",
+          "maps_to": "record.mailbox_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Help Scout request field `name`.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Help Scout request field `text`.",
+          "maps_to": "record.text"
+        },
+        {
+          "name": "chatText",
+          "type": "string",
+          "summary": "Help Scout request field `chatText`.",
+          "maps_to": "record.chatText"
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes saved replies create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/mailboxes/{mailbox_id}/saved-replies"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "mailboxes saved replies delete",
+      "summary": "Delete Saved Reply",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_saved_reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-delete/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Mailbox Id path parameter.",
+          "maps_to": "record.mailbox_id"
+        },
+        {
+          "name": "saved-reply-id",
+          "type": "string",
+          "summary": "Saved Reply Id path parameter.",
+          "maps_to": "record.saved_reply_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes saved replies delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/mailboxes/{mailbox_id}/saved-replies/{saved_reply_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "mailboxes saved replies update",
+      "summary": "Update Saved Reply",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_saved_reply",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-update/",
+      "flags": [
+        {
+          "name": "mailbox-id",
+          "type": "string",
+          "summary": "Mailbox Id path parameter.",
+          "maps_to": "record.mailbox_id"
+        },
+        {
+          "name": "saved-reply-id",
+          "type": "string",
+          "summary": "Saved Reply Id path parameter.",
+          "maps_to": "record.saved_reply_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Help Scout request field `name`.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Help Scout request field `text`.",
+          "maps_to": "record.text"
+        },
+        {
+          "name": "chatText",
+          "type": "string",
+          "summary": "Help Scout request field `chatText`.",
+          "maps_to": "record.chatText"
+        }
+      ],
+      "examples": [
+        "pm help-scout mailboxes saved replies update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/mailboxes/{mailbox_id}/saved-replies/{saved_reply_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "organizations properties create",
+      "summary": "Create Organization Property Definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_organization_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/create/",
+      "flags": [
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Help Scout request field `slug`.",
+          "maps_to": "record.slug"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Help Scout request field `name`.",
+          "maps_to": "record.name"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations properties create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/organizations/properties"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "organizations properties delete",
+      "summary": "Delete Organization Property Definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/delete/",
+      "flags": [
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Property Slug path parameter.",
+          "maps_to": "record.property_slug"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations properties delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/organizations/properties/{property_slug}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "organizations properties remove",
+      "summary": "Remove Organization Property Value",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_organization_property_value",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/remove-value/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Organization Id path parameter.",
+          "maps_to": "record.organization_id"
+        },
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Property Slug path parameter.",
+          "maps_to": "record.property_slug"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations properties remove --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/organizations/{organization_id}/properties/{property_slug}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "organizations properties set",
+      "summary": "Set Organization Property Value",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_organization_property_value",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/set-value/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Organization Id path parameter.",
+          "maps_to": "record.organization_id"
+        },
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Property Slug path parameter.",
+          "maps_to": "record.property_slug"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations properties set --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/organizations/{organization_id}/properties/{property_slug}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "organizations properties update",
+      "summary": "Update Organization Property Definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_organization_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/update/",
+      "flags": [
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Property Slug path parameter.",
+          "maps_to": "record.property_slug"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Help Scout request field `name`.",
+          "maps_to": "record.name"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations properties update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/organizations/properties/{property_slug}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "organizations create",
+      "summary": "Create Organization",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_organization",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/create/",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Help Scout request field `name`.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "domain",
+          "type": "string",
+          "summary": "Help Scout request field `domain`.",
+          "maps_to": "record.domain"
+        },
+        {
+          "name": "website",
+          "type": "string",
+          "summary": "Help Scout request field `website`.",
+          "maps_to": "record.website"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Help Scout request field `description`.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "summary": "Help Scout request field `location`.",
+          "maps_to": "record.location"
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "summary": "Help Scout request field `note`.",
+          "maps_to": "record.note"
+        },
+        {
+          "name": "phones",
+          "type": "string_array",
+          "summary": "Help Scout request field `phones`.",
+          "maps_to": "record.phones"
+        },
+        {
+          "name": "brandColor",
+          "type": "string",
+          "summary": "Help Scout request field `brandColor`.",
+          "maps_to": "record.brandColor"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/organizations"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "organizations delete",
+      "summary": "Delete Organization by ID",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_organization_by_id",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/delete/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Organization Id path parameter.",
+          "maps_to": "record.organization_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/organizations/{organization_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "organizations update",
+      "summary": "Update Organization",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_organization",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/update/",
+      "flags": [
+        {
+          "name": "organization-id",
+          "type": "string",
+          "summary": "Organization Id path parameter.",
+          "maps_to": "record.organization_id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Help Scout request field `name`.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "website",
+          "type": "string",
+          "summary": "Help Scout request field `website`.",
+          "maps_to": "record.website"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Help Scout request field `description`.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "summary": "Help Scout request field `location`.",
+          "maps_to": "record.location"
+        },
+        {
+          "name": "brandColor",
+          "type": "string",
+          "summary": "Help Scout request field `brandColor`.",
+          "maps_to": "record.brandColor"
+        },
+        {
+          "name": "note",
+          "type": "string",
+          "summary": "Help Scout request field `note`.",
+          "maps_to": "record.note"
+        },
+        {
+          "name": "phones",
+          "type": "string_array",
+          "summary": "Help Scout request field `phones`.",
+          "maps_to": "record.phones"
+        },
+        {
+          "name": "domains",
+          "type": "string_array",
+          "summary": "Help Scout request field `domains`.",
+          "maps_to": "record.domains"
+        }
+      ],
+      "examples": [
+        "pm help-scout organizations update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/organizations/{organization_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customer properties create",
+      "summary": "Create Customer Property Definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_customer_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/create/",
+      "flags": [
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Help Scout request field `type`.",
+          "maps_to": "record.type"
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "summary": "Help Scout request field `slug`.",
+          "maps_to": "record.slug"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Help Scout request field `name`.",
+          "maps_to": "record.name"
+        }
+      ],
+      "examples": [
+        "pm help-scout customer properties create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/customer-properties"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customer properties delete",
+      "summary": "Delete Customer Property Definition",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_customer_property_definition",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/delete/",
+      "flags": [
+        {
+          "name": "property-slug",
+          "type": "string",
+          "summary": "Property Slug path parameter.",
+          "maps_to": "record.property_slug"
+        }
+      ],
+      "examples": [
+        "pm help-scout customer properties delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/customer-properties/{property_slug}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "customers properties update",
+      "summary": "Update Customer Properties",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_customer_properties",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/update/",
+      "flags": [
+        {
+          "name": "customer-id",
+          "type": "string",
+          "summary": "Customer Id path parameter.",
+          "maps_to": "record.customer_id"
+        },
+        {
+          "name": "op",
+          "type": "string",
+          "summary": "Help Scout request field `op`.",
+          "maps_to": "record.op"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "summary": "Help Scout request field `path`.",
+          "maps_to": "record.path"
+        }
+      ],
+      "examples": [
+        "pm help-scout customers properties update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/customers/{customer_id}/properties"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "teams members update",
+      "summary": "Update Team Members",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_team_members",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/update-team-members/",
+      "flags": [
+        {
+          "name": "team-id",
+          "type": "string",
+          "summary": "Team Id path parameter.",
+          "maps_to": "record.team_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout teams members update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/teams/{team_id}/members"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "users conversation reassignment update",
+      "summary": "Update Conversation Reassignment configuration",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_conversation_reassignment_configuration",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation%20reassignment/update/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "User Id path parameter.",
+          "maps_to": "record.user_id"
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "summary": "Help Scout request field `enabled`.",
+          "maps_to": "record.enabled"
+        }
+      ],
+      "examples": [
+        "pm help-scout users conversation reassignment update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/users/{user_id}/conversation-reassignment"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "users status set",
+      "summary": "Set user status",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_user_status",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/set/",
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "User Id path parameter.",
+          "maps_to": "record.user_id"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Help Scout request field `status`.",
+          "maps_to": "record.status"
+        }
+      ],
+      "examples": [
+        "pm help-scout users status set --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/users/{user_id}/status"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "users create",
+      "summary": "Create User",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/create/",
-      "risk": "Administrative user provisioning.",
-      "approval": "Requires typed schema, preflight, preview, approval, and execute.",
-      "notes": "No runtime write action is declared in this slice."
+      "flags": [
+        {
+          "name": "firstName",
+          "type": "string",
+          "summary": "Help Scout request field `firstName`.",
+          "maps_to": "record.firstName"
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "summary": "Help Scout request field `lastName`.",
+          "maps_to": "record.lastName"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Help Scout request field `email`.",
+          "maps_to": "record.email"
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Help Scout request field `role`.",
+          "maps_to": "record.role"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "Help Scout request field `timezone`.",
+          "maps_to": "record.timezone"
+        },
+        {
+          "name": "jobTitle",
+          "type": "string",
+          "summary": "Help Scout request field `jobTitle`.",
+          "maps_to": "record.jobTitle"
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "summary": "Help Scout request field `phone`.",
+          "maps_to": "record.phone"
+        },
+        {
+          "name": "sendInvite",
+          "type": "boolean",
+          "summary": "Help Scout request field `sendInvite`.",
+          "maps_to": "record.sendInvite"
+        }
+      ],
+      "examples": [
+        "pm help-scout users create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/users"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
     },
     {
-      "path": "user delete",
-      "summary": "Delete a Help Scout user.",
+      "path": "users delete",
+      "summary": "Delete User",
       "intent": "reverse_etl",
-      "availability": "unsafe_or_disallowed",
+      "availability": "implemented",
+      "write": "delete_user",
       "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/delete/",
-      "risk": "Destructive user removal.",
-      "approval": "Would require destructive typed confirmation and human approval if ever implemented.",
-      "notes": "Blocked by default; #219 owns destructive/admin policy decisions."
+      "flags": [
+        {
+          "name": "user-id",
+          "type": "string",
+          "summary": "User Id path parameter.",
+          "maps_to": "record.user_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout users delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/users/{user_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "webhooks create",
+      "summary": "Create Webhook",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/create/",
+      "flags": [
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Help Scout request field `url`.",
+          "maps_to": "record.url"
+        },
+        {
+          "name": "events",
+          "type": "string_array",
+          "summary": "Help Scout request field `events`.",
+          "maps_to": "record.events"
+        },
+        {
+          "name": "secret",
+          "type": "string",
+          "summary": "Help Scout request field `secret`.",
+          "maps_to": "record.secret"
+        },
+        {
+          "name": "payloadVersion",
+          "type": "string",
+          "summary": "Help Scout request field `payloadVersion`.",
+          "maps_to": "record.payloadVersion"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Help Scout request field `label`.",
+          "maps_to": "record.label"
+        }
+      ],
+      "examples": [
+        "pm help-scout webhooks create --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/webhooks"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "webhooks delete",
+      "summary": "Delete Webhook",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/delete/",
+      "flags": [
+        {
+          "name": "webhook-id",
+          "type": "string",
+          "summary": "Webhook Id path parameter.",
+          "maps_to": "record.webhook_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout webhooks delete --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "Deletes Help Scout data or configuration.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "webhooks update",
+      "summary": "Update Webhook",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/update/",
+      "flags": [
+        {
+          "name": "webhook-id",
+          "type": "string",
+          "summary": "Webhook Id path parameter.",
+          "maps_to": "record.webhook_id"
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Help Scout request field `url`.",
+          "maps_to": "record.url"
+        },
+        {
+          "name": "events",
+          "type": "string_array",
+          "summary": "Help Scout request field `events`.",
+          "maps_to": "record.events"
+        },
+        {
+          "name": "secret",
+          "type": "string",
+          "summary": "Help Scout request field `secret`.",
+          "maps_to": "record.secret"
+        },
+        {
+          "name": "payloadVersion",
+          "type": "string",
+          "summary": "Help Scout request field `payloadVersion`.",
+          "maps_to": "record.payloadVersion"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Help Scout request field `label`.",
+          "maps_to": "record.label"
+        }
+      ],
+      "examples": [
+        "pm help-scout webhooks update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "workflows run",
+      "summary": "Run Manual Workflows",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "run_manual_workflows",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/run/",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "summary": "Workflow Id path parameter.",
+          "maps_to": "record.workflow_id"
+        }
+      ],
+      "examples": [
+        "pm help-scout workflows run --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/workflows/{workflow_id}/run"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
+    },
+    {
+      "path": "workflows update",
+      "summary": "Update workflow status",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_workflow_status",
+      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/update/",
+      "flags": [
+        {
+          "name": "workflow-id",
+          "type": "string",
+          "summary": "Workflow Id path parameter.",
+          "maps_to": "record.workflow_id"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "summary": "Help Scout request field `value`.",
+          "maps_to": "record.value"
+        },
+        {
+          "name": "op",
+          "type": "string",
+          "summary": "Help Scout request field `op`.",
+          "maps_to": "record.op"
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "summary": "Help Scout request field `path`.",
+          "maps_to": "record.path"
+        }
+      ],
+      "examples": [
+        "pm help-scout workflows update --connection help-scout-prod --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/workflows/{workflow_id}"
+        }
+      ],
+      "risk": "Mutates Help Scout customer, conversation, or mailbox data.",
+      "approval": "Requires connector command plan, preview, approval token, and --confirm destructive before execution."
     }
   ],
   "help_topics": [
     {
-      "name": "help-scout-auth",
-      "summary": "Configure Help Scout OAuth2 client credentials from environment variables or stdin; never put secrets in prompt text."
+      "name": "safety",
+      "summary": "Help Scout writes require plan, preview, approval token, and typed confirmation before execution."
     },
     {
-      "name": "help-scout-writes",
-      "summary": "Help Scout write candidates are metadata-only until typed reverse-ETL schemas and approval policies are implemented."
+      "name": "binary",
+      "summary": "Binary/raw payload endpoints are bounded operation metadata and are not exposed as unbounded downloads."
     }
   ]
 }

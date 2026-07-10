@@ -1,9 +1,9 @@
 {
   "api": "Help Scout Inbox API",
   "docs": "https://developer.helpscout.com/mailbox-api/",
-  "reviewed_at": "2026-07-09",
+  "reviewed_at": "2026-07-10",
   "operation_ledger_version": 1,
-  "scope": "Official Inbox API endpoint inventory from docs navigation. Current executable coverage remains the existing stream-backed reads for conversations, customers, mailboxes, and users; all other documented operations are tracked as blocked-by-default direct-read, binary, reverse-ETL, admin, or destructive operation rows for follow-up lanes #216-#219.",
+  "scope": "Official Inbox API endpoint inventory from docs navigation. All non-binary JSON GET endpoints are covered by implemented bounded direct-read commands or existing streams; non-binary mutation endpoints are covered by typed reverse-ETL write actions; binary/raw payload endpoints are represented by bounded binary operation metadata and remain blocked by default until a safe binary executor is enabled.",
   "endpoints": [
     {
       "method": "GET",
@@ -15,13 +15,8 @@
     {
       "method": "DELETE",
       "path": "/v2/conversations/{conversation_id}/attachments/{attachment_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/delete/"
+      "covered_by": {
+        "write": "delete_attachment"
       }
     },
     {
@@ -32,176 +27,106 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Binary or raw-message retrieval needs bounded download/output policy before CLI exposure.",
+        "reason": "Binary or raw-message retrieval is represented by bounded binary operation metadata; no unbounded raw download is exposed by connector commands.",
         "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/"
       }
     },
     {
       "method": "GET",
       "path": "/v2/conversations/{conversation_id}/attachments/{attachment_id}/data",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-data/"
+      "covered_by": {
+        "direct_read": "conversations attachments data get"
       }
     },
     {
       "method": "POST",
       "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/attachments",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/create/"
+      "covered_by": {
+        "write": "upload_attachment"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/conversations/{conversation_id}/fields",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/custom_fields/update/"
+      "covered_by": {
+        "write": "update_custom_fields"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/conversations/{conversation_id}/snooze",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/delete/"
+      "covered_by": {
+        "write": "delete_snooze"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/conversations/{conversation_id}/snooze",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/snooze/update/"
+      "covered_by": {
+        "write": "update_snooze"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/conversations/{conversation_id}/tags",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/tags/update/"
+      "covered_by": {
+        "write": "update_tags"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/schedule",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/delete/"
+      "covered_by": {
+        "write": "delete_thread_schedule"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/schedule",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/publish/"
+      "covered_by": {
+        "write": "publish_thread_schedule"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/conversations/{conversation_id}/threads/{thread_id}/schedule",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/schedule/update/"
+      "covered_by": {
+        "write": "update_thread_schedule"
       }
     },
     {
       "method": "POST",
       "path": "/v2/conversations/{conversation_id}/chats",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/chat/"
+      "covered_by": {
+        "write": "create_chat_thread"
       }
     },
     {
       "method": "POST",
       "path": "/v2/conversations/{conversation_id}/customer",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/customer/"
+      "covered_by": {
+        "write": "create_customer_thread"
       }
     },
     {
       "method": "POST",
       "path": "/v2/conversations/{conversation_id}/notes",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/note/"
+      "covered_by": {
+        "write": "create_note"
       }
     },
     {
       "method": "POST",
       "path": "/v2/conversations/{conversation_id}/phones",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/phone/"
+      "covered_by": {
+        "write": "create_phone_thread"
       }
     },
     {
       "method": "POST",
       "path": "/v2/conversations/{conversation_id}/reply",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/reply/"
+      "covered_by": {
+        "write": "create_reply_thread"
       }
     },
     {
@@ -212,105 +137,64 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Binary or raw-message retrieval needs bounded download/output policy before CLI exposure.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/thread-source-json/",
-        "notes": "Also documented as: Get Thread Original Source (RFC 822)"
+        "reason": "Binary or raw-message retrieval is represented by bounded binary operation metadata; no unbounded raw download is exposed by connector commands.",
+        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/thread-source-json/"
       }
     },
     {
       "method": "GET",
       "path": "/v2/conversations/{conversation_id}/threads",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list/"
+      "covered_by": {
+        "direct_read": "conversations threads list"
       }
     },
     {
       "method": "GET",
       "path": "/v3/conversations/{conversation_id}/threads",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/"
+      "covered_by": {
+        "direct_read": "v3 conversations threads list"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/conversations/{conversation_id}/threads/{thread_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/update/"
+      "covered_by": {
+        "write": "update_thread"
       }
     },
     {
       "method": "POST",
       "path": "/v2/conversations",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/create/"
+      "covered_by": {
+        "write": "create_conversation"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/conversations/{conversation_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/delete/"
+      "covered_by": {
+        "write": "delete_conversation"
       }
     },
     {
       "method": "GET",
       "path": "/v2/conversations/{conversation_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get/"
+      "covered_by": {
+        "direct_read": "conversations get"
       }
     },
     {
       "method": "GET",
       "path": "/v3/conversations/{conversation_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/"
+      "covered_by": {
+        "direct_read": "v3 conversations get"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/conversations/{conversation_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/update/"
+      "covered_by": {
+        "write": "update_conversation"
       }
     },
     {
@@ -323,493 +207,288 @@
     {
       "method": "POST",
       "path": "/v2/customers/{customer_id}/address",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/create/"
+      "covered_by": {
+        "write": "create_address"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/customers/{customer_id}/address",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/delete/"
+      "covered_by": {
+        "write": "delete_address"
       }
     },
     {
       "method": "GET",
       "path": "/v2/customers/{customer_id}/address",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/get/"
+      "covered_by": {
+        "direct_read": "customers address get"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/customers/{customer_id}/address",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/update/"
+      "covered_by": {
+        "write": "update_address"
       }
     },
     {
       "method": "POST",
       "path": "/v2/customers/{customer_id}/chats",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/create/"
+      "covered_by": {
+        "write": "create_chat_handle"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/customers/{customer_id}/chats/{chat_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/delete/"
+      "covered_by": {
+        "write": "delete_chat_handle"
       }
     },
     {
       "method": "GET",
       "path": "/v2/customers/{customer_id}/chats",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/list/"
+      "covered_by": {
+        "direct_read": "customers chats list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/customers/{customer_id}/chats/{chat_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/update/"
+      "covered_by": {
+        "write": "update_chat_handles"
       }
     },
     {
       "method": "POST",
       "path": "/v2/customers/{customer_id}/emails",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/create/"
+      "covered_by": {
+        "write": "create_email"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/customers/{customer_id}/emails/{email_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/delete/"
+      "covered_by": {
+        "write": "delete_email"
       }
     },
     {
       "method": "GET",
       "path": "/v2/customers/{customer_id}/emails",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/list/"
+      "covered_by": {
+        "direct_read": "customers emails list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/customers/{customer_id}/emails/{email_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/update/"
+      "covered_by": {
+        "write": "update_email"
       }
     },
     {
       "method": "POST",
       "path": "/v2/customers/{customer_id}/phones",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/create/"
+      "covered_by": {
+        "write": "create_phone"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/customers/{customer_id}/phones/{phone_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/delete/"
+      "covered_by": {
+        "write": "delete_phone"
       }
     },
     {
       "method": "GET",
       "path": "/v2/customers/{customer_id}/phones",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/list/"
+      "covered_by": {
+        "direct_read": "customers phones list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/customers/{customer_id}/phones/{phone_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/update/"
+      "covered_by": {
+        "write": "update_phone"
       }
     },
     {
       "method": "POST",
       "path": "/v2/customers/{customer_id}/social-profiles",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/create/"
+      "covered_by": {
+        "write": "create_social_profile"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/customers/{customer_id}/social-profiles/{social_profile_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/delete/"
+      "covered_by": {
+        "write": "delete_social_profile"
       }
     },
     {
       "method": "GET",
       "path": "/v2/customers/{customer_id}/social-profiles",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/list/"
+      "covered_by": {
+        "direct_read": "customers social profiles list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/customers/{customer_id}/social-profiles/{social_profile_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/update/"
+      "covered_by": {
+        "write": "update_social_profile"
       }
     },
     {
       "method": "POST",
       "path": "/v2/customers/{customer_id}/websites",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/create/"
+      "covered_by": {
+        "write": "create_website"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/customers/{customer_id}/websites/{website_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/delete/"
+      "covered_by": {
+        "write": "delete_website"
       }
     },
     {
       "method": "GET",
       "path": "/v2/customers/{customer_id}/websites",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/list/"
+      "covered_by": {
+        "direct_read": "customers websites list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/customers/{customer_id}/websites/{website_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/update/"
+      "covered_by": {
+        "write": "update_website"
       }
     },
     {
       "method": "POST",
       "path": "/v2/customers",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/create/"
+      "covered_by": {
+        "write": "create_customer"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/customers/{customer_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete/"
+      "covered_by": {
+        "write": "delete_customer"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/customers/{customer_id}?async=true",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/delete-async/"
+      "covered_by": {
+        "write": "delete_customer_asynchronously"
       }
     },
     {
       "method": "GET",
       "path": "/v2/customers/{customer_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/get/"
+      "covered_by": {
+        "direct_read": "customers get"
       }
     },
     {
       "method": "GET",
       "path": "/v3/customers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/"
+      "covered_by": {
+        "direct_read": "v3 customers list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/customers/{customer_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/overwrite/"
+      "covered_by": {
+        "write": "overwrite_customer"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/customers/{customer_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/update/"
+      "covered_by": {
+        "write": "update_customer"
       }
     },
     {
       "method": "GET",
       "path": "/v2/mailboxes/{mailbox_id}/routing",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-get/"
+      "covered_by": {
+        "direct_read": "mailboxes routing get"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/mailboxes/{mailbox_id}/routing",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-update/"
+      "covered_by": {
+        "write": "update_routing_configuration"
       }
     },
     {
       "method": "POST",
       "path": "/v2/mailboxes/{mailbox_id}/saved-replies",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-create/"
+      "covered_by": {
+        "write": "create_saved_reply"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/mailboxes/{mailbox_id}/saved-replies/{saved_reply_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-delete/"
+      "covered_by": {
+        "write": "delete_saved_reply"
       }
     },
     {
       "method": "GET",
       "path": "/v2/mailboxes/{mailbox_id}/saved-replies/{saved_reply_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-get/"
+      "covered_by": {
+        "direct_read": "mailboxes saved replies get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/mailboxes/{mailbox_id}/saved-replies",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-list/"
+      "covered_by": {
+        "direct_read": "mailboxes saved replies list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/mailboxes/{mailbox_id}/saved-replies/{saved_reply_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-update/"
+      "covered_by": {
+        "write": "update_saved_reply"
       }
     },
     {
       "method": "GET",
       "path": "/v2/mailboxes/{mailbox_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/get/"
+      "covered_by": {
+        "direct_read": "mailboxes get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/mailboxes/{mailbox_id}/fields",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-fields/"
+      "covered_by": {
+        "direct_read": "mailboxes fields list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/mailboxes/{mailbox_id}/folders",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-folders/"
+      "covered_by": {
+        "direct_read": "mailboxes folders list"
       }
     },
     {
@@ -822,697 +501,407 @@
     {
       "method": "GET",
       "path": "/v2/organizations/{organization_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get/"
+      "covered_by": {
+        "direct_read": "organizations get"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations/properties",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/create/"
+      "covered_by": {
+        "write": "create_organization_property_definition"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/properties/{property_slug}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/delete/"
+      "covered_by": {
+        "write": "delete_organization_property_definition"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/properties/{property_slug}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/get/"
+      "covered_by": {
+        "direct_read": "organizations properties get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/properties",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/list/"
+      "covered_by": {
+        "direct_read": "organizations properties list"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{organization_id}/properties/{property_slug}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/remove-value/"
+      "covered_by": {
+        "write": "remove_organization_property_value"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{organization_id}/properties/{property_slug}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/set-value/"
+      "covered_by": {
+        "write": "set_organization_property_value"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/properties/{property_slug}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/update/"
+      "covered_by": {
+        "write": "update_organization_property_definition"
       }
     },
     {
       "method": "POST",
       "path": "/v2/organizations",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/create/"
+      "covered_by": {
+        "write": "create_organization"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/organizations/{organization_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/delete/"
+      "covered_by": {
+        "write": "delete_organization_by_id"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{organization_id}/conversations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-conversations/"
+      "covered_by": {
+        "direct_read": "organizations conversations get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations/{organization_id}/customers",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-customers/"
+      "covered_by": {
+        "direct_read": "organizations customers get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/organizations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/list/"
+      "covered_by": {
+        "direct_read": "organizations list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/organizations/{organization_id}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Mutates customer or conversation data; requires a typed reverse-ETL action with plan, preview, approval, and execute gates.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/update/"
+      "covered_by": {
+        "write": "update_organization"
       }
     },
     {
       "method": "POST",
       "path": "/v2/customer-properties",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/create/"
+      "covered_by": {
+        "write": "create_customer_property_definition"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/customer-properties/{property_slug}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/delete/"
+      "covered_by": {
+        "write": "delete_customer_property_definition"
       }
     },
     {
       "method": "GET",
       "path": "/v2/customer-properties",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/list/"
+      "covered_by": {
+        "direct_read": "customer properties list"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/customers/{customer_id}/properties",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/update/"
+      "covered_by": {
+        "write": "update_customer_properties"
       }
     },
     {
       "method": "GET",
       "path": "/v2/ratings/{rating_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/ratings/get/"
+      "covered_by": {
+        "direct_read": "ratings get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/company",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-overall/"
+      "covered_by": {
+        "direct_read": "reports company get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/company/customers-helped",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-customers-helped/"
+      "covered_by": {
+        "direct_read": "reports company customers helped get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/company/drilldown",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-drilldown/"
+      "covered_by": {
+        "direct_read": "reports company drilldown get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/conversations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-overall/"
+      "covered_by": {
+        "direct_read": "reports conversations get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/conversations/volume-by-channel",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-volume-by-channel/"
+      "covered_by": {
+        "direct_read": "reports conversations volume by channel get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/conversations/busy-times",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-busy-times/"
+      "covered_by": {
+        "direct_read": "reports conversations busy times get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/conversations/drilldown",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-drilldown/"
+      "covered_by": {
+        "direct_read": "reports conversations drilldown get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/conversations/fields-drilldown",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-field-drilldown/"
+      "covered_by": {
+        "direct_read": "reports conversations fields drilldown get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/conversations/new",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new/"
+      "covered_by": {
+        "direct_read": "reports conversations new get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/conversations/new-drilldown",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new-drilldown/"
+      "covered_by": {
+        "direct_read": "reports conversations new drilldown get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/conversations/received-messages",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-received-messages/"
+      "covered_by": {
+        "direct_read": "reports conversations received messages get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/docs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/docs/reports-docs-overall/"
+      "covered_by": {
+        "direct_read": "reports docs get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/happiness",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-overall/"
+      "covered_by": {
+        "direct_read": "reports happiness get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/happiness/ratings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-ratings/"
+      "covered_by": {
+        "direct_read": "reports happiness ratings get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/productivity",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-overall/"
+      "covered_by": {
+        "direct_read": "reports productivity get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/productivity/first-response-time",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-first-response-time/"
+      "covered_by": {
+        "direct_read": "reports productivity first response time get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/productivity/replies-sent",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-replies-sent/"
+      "covered_by": {
+        "direct_read": "reports productivity replies sent get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/productivity/resolution-time",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolution-time/"
+      "covered_by": {
+        "direct_read": "reports productivity resolution time get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/productivity/resolved",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolved/"
+      "covered_by": {
+        "direct_read": "reports productivity resolved get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/productivity/response-time",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-respose-time/"
+      "covered_by": {
+        "direct_read": "reports productivity response time get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/user",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user/"
+      "covered_by": {
+        "direct_read": "reports user get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/user/conversation-history",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-conversation-history/"
+      "covered_by": {
+        "direct_read": "reports user conversation history get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/user/customers-helped",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-customer-helped/"
+      "covered_by": {
+        "direct_read": "reports user customers helped get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/user/drilldown",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-drilldown/"
+      "covered_by": {
+        "direct_read": "reports user drilldown get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/user/happiness",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness/"
+      "covered_by": {
+        "direct_read": "reports user happiness get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/user/ratings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness-drilldown/"
+      "covered_by": {
+        "direct_read": "reports user ratings get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/user/replies",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-replies/"
+      "covered_by": {
+        "direct_read": "reports user replies get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/user/resolutions",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-resolutions/"
+      "covered_by": {
+        "direct_read": "reports user resolutions get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/user/chat",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-chat/"
+      "covered_by": {
+        "direct_read": "reports user chat get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/chat",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/chat/"
+      "covered_by": {
+        "direct_read": "reports chat get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/email",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/email/"
+      "covered_by": {
+        "direct_read": "reports email get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/reports/phone",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/phone/"
+      "covered_by": {
+        "direct_read": "reports phone get"
       }
     },
     {
       "method": "GET",
       "path": "/v3/system-users/{system_user_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/"
+      "covered_by": {
+        "direct_read": "v3 system users get"
       }
     },
     {
       "method": "GET",
       "path": "/v3/system-users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/"
+      "covered_by": {
+        "direct_read": "v3 system users list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/tags/{tag_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/get/"
+      "covered_by": {
+        "direct_read": "tags get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/list/"
+      "covered_by": {
+        "direct_read": "tags list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/teams/{team_id}/members",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-team-members/"
+      "covered_by": {
+        "direct_read": "teams members list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/teams",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-teams/"
+      "covered_by": {
+        "direct_read": "teams list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/teams/{team_id}/members",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/update-team-members/"
+      "covered_by": {
+        "write": "update_team_members"
       }
     },
     {
@@ -1525,205 +914,120 @@
     {
       "method": "GET",
       "path": "/v2/users/{user_id}/conversation-reassignment",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation%20reassignment/get/"
+      "covered_by": {
+        "direct_read": "users conversation reassignment get"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/users/{user_id}/conversation-reassignment",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation%20reassignment/update/"
+      "covered_by": {
+        "write": "update_conversation_reassignment_configuration"
       }
     },
     {
       "method": "GET",
       "path": "/v2/users/{user_id}/status",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/get/"
+      "covered_by": {
+        "direct_read": "users status get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/users/status",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/list/"
+      "covered_by": {
+        "direct_read": "users status list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/users/{user_id}/status",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/set/"
+      "covered_by": {
+        "write": "set_user_status"
       }
     },
     {
       "method": "POST",
       "path": "/v2/users",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/create/"
+      "covered_by": {
+        "write": "create_user"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/users/{user_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/delete/"
+      "covered_by": {
+        "write": "delete_user"
       }
     },
     {
       "method": "GET",
       "path": "/v2/users/me",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/me/"
+      "covered_by": {
+        "direct_read": "users me get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/users/{user_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/get/"
+      "covered_by": {
+        "direct_read": "users get"
       }
     },
     {
       "method": "POST",
       "path": "/v2/webhooks",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/create/"
+      "covered_by": {
+        "write": "create_webhook"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/webhooks/{webhook_id}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Deletes Help Scout data or configuration; implement only as a typed reverse-ETL action with destructive confirmation.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/delete/"
+      "covered_by": {
+        "write": "delete_webhook"
       }
     },
     {
       "method": "GET",
       "path": "/v2/webhooks/{webhook_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/get/"
+      "covered_by": {
+        "direct_read": "webhooks get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/webhooks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/list/"
+      "covered_by": {
+        "direct_read": "webhooks list"
       }
     },
     {
       "method": "PUT",
       "path": "/v2/webhooks/{webhook_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/update/"
+      "covered_by": {
+        "write": "update_webhook"
       }
     },
     {
       "method": "GET",
       "path": "/v2/workflows",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Safe read candidate, but not implemented in this slice; requires bounded direct-read command metadata.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/list/"
+      "covered_by": {
+        "direct_read": "workflows list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/workflows/{workflow_id}/run",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/run/"
+      "covered_by": {
+        "write": "run_manual_workflows"
       }
     },
     {
       "method": "PATCH",
       "path": "/v2/workflows/{workflow_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Administrative Help Scout mutation; requires typed schema, preflight, redaction, and approval before execution.",
-        "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/update/"
+      "covered_by": {
+        "write": "update_workflow_status"
       }
     }
   ]

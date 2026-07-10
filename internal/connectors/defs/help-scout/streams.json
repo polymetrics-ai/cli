@@ -17,55 +17,85 @@
       "start_page": 1,
       "page_size": 50
     },
-    "check": { "method": "GET", "path": "/mailboxes" },
+    "check": {
+      "method": "GET",
+      "path": "/v2/mailboxes"
+    },
     "error_map": [
-      { "status": 401, "hint": "help-scout client_id/client_secret is missing or invalid; re-run pm credentials add help-scout" },
-      { "status": 429, "class": "rate_limited", "hint": "help-scout rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "help-scout client_id/client_secret is missing or invalid; re-run pm credentials add help-scout"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "help-scout rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "conversations",
-      "path": "/conversations",
+      "path": "/v2/conversations",
       "query": {
         "sortField": "modifiedAt",
         "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "modifiedSince": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "_embedded.conversations" },
+      "records": {
+        "path": "_embedded.conversations"
+      },
       "schema": "schemas/conversations.json"
     },
     {
       "name": "customers",
-      "path": "/customers",
+      "path": "/v2/customers",
       "query": {
         "sortField": "modifiedAt",
         "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "modifiedSince": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "_embedded.customers" },
+      "records": {
+        "path": "_embedded.customers"
+      },
       "schema": "schemas/customers.json"
     },
     {
       "name": "mailboxes",
-      "path": "/mailboxes",
+      "path": "/v2/mailboxes",
       "query": {
         "sortField": "modifiedAt",
         "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "modifiedSince": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "_embedded.mailboxes" },
+      "records": {
+        "path": "_embedded.mailboxes"
+      },
       "schema": "schemas/mailboxes.json"
     },
     {
       "name": "users",
-      "path": "/users",
+      "path": "/v2/users",
       "query": {
         "sortField": "modifiedAt",
         "sortOrder": "asc",
-        "modifiedSince": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "modifiedSince": {
+          "template": "{{ config.start_date }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "_embedded.users" },
+      "records": {
+        "path": "_embedded.users"
+      },
       "schema": "schemas/users.json"
     }
   ]

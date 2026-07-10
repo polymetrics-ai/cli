@@ -1,25 +1,26 @@
 {
   "name": "help-scout",
   "display_name": "Help Scout",
-  "description": "Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.",
+  "description": "Reads, directly inspects, and plans typed Help Scout Inbox API operations through the Mailbox API using OAuth2 client-credentials authentication.",
   "integration_type": "api",
   "docs_url": "https://developer.helpscout.com/mailbox-api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
     "read": "external Help Scout API read of conversation, customer, mailbox, and user data",
-    "write": "documented Help Scout mutations are tracked as blocked-by-default operation metadata until typed reverse-ETL actions and approval policies are implemented",
-    "approval": "no runtime writes are executable in this slice; future reverse-ETL writes must use plan, preview, approval, and execute"
+    "write": "typed Help Scout mutations are available only through reverse ETL plan, preview, approval token, and typed destructive confirmation gates",
+    "approval": "reverse ETL writes require plan, preview, approval token, and --confirm destructive before execution"
   },
   "conformance": {
     "skip_dynamic": true,

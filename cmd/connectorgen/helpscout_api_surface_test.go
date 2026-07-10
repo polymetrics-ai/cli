@@ -89,7 +89,7 @@ func TestHelpScoutAllOperationsCovered(t *testing.T) {
 
 	for _, cmd := range cli.Commands {
 		switch {
-		case cmd.Availability == "implemented" && cmd.Intent == "direct_read":
+		case cmd.Availability == "implemented" && cmd.Intent == "direct_read" && cmd.Operation == "":
 			implementedDirectReads++
 			if cmd.OutputPolicy != "json" {
 				t.Fatalf("direct_read command %q output_policy = %q, want json", cmd.Path, cmd.OutputPolicy)
