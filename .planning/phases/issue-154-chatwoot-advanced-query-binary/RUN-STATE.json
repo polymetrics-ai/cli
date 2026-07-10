@@ -3,7 +3,7 @@
   "parentIssue": 148,
   "branch": "feat/154-chatwoot-advanced-query-binary",
   "baseBranch": "feat/148-chatwoot-cli-parity",
-  "status": "pr_open_remote_pending",
+  "status": "integrated_parent_review_pending",
   "gsd": {
     "adapter": "scripts/gsd",
     "programmingLoop": "manual_fallback",
@@ -42,8 +42,14 @@
       "timestamp": "2026-07-10T00:00:00Z",
       "event": "pr_opened",
       "detail": "Opened stacked PR #255 from feat/154-chatwoot-advanced-query-binary to feat/148-chatwoot-cli-parity. Remote checks pending."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "integrated_parent",
+      "detail": "PR #255 remote checks passed and was squash-merged into parent branch as commit 10f58f0b. CodeRabbit skipped the sub-PR because the base is non-default; parent PR fallback review pending."
     }
   ],
   "pr": 255,
-  "prUrl": "https://github.com/polymetrics-ai/cli/pull/255"
+  "prUrl": "https://github.com/polymetrics-ai/cli/pull/255",
+  "mergeCommit": "10f58f0b"
 }

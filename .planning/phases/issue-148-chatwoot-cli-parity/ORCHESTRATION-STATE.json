@@ -110,7 +110,7 @@
     },
     {
       "number": 154,
-      "status": "pr_open_remote_pending",
+      "status": "integrated_parent_review_pending",
       "dependencies": [
         149,
         152
@@ -127,7 +127,7 @@
         "website/lib/connectors.catalog.data.generated.json",
         ".planning/phases/issue-154-chatwoot-advanced-query-binary"
       ],
-      "decision": "remote_checks_pending"
+      "decision": "parent_review_pending"
     },
     {
       "number": 155,
@@ -258,11 +258,11 @@
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
-      "decision": "remote_checks_pending",
+      "decision": "parent_review_pending",
       "issue_numbers": [
         154
       ],
-      "reason": "PR #255 opened for issue #154; remote checks and automated review routing pending."
+      "reason": "PR #255 remote checks passed and was squash-merged into parent commit 10f58f0b; CodeRabbit skipped the sub-PR due non-default base, so parent PR #223 fallback review is pending."
     }
   ],
   "subissues": [
@@ -418,7 +418,7 @@
       "branch": "feat/154-chatwoot-advanced-query-binary",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/255",
       "worker": "coordinator-local-critical-path",
-      "status": "pr_open_remote_pending",
+      "status": "integrated_parent_review_pending",
       "write_scope": [
         "internal/connectors/engine/direct_read.go",
         "internal/connectors/engine/direct_read_test.go",
@@ -432,15 +432,15 @@
         ".planning/phases/issue-154-chatwoot-advanced-query-binary"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "targeted checks plus gofmt, go vet, go test ./..., go build ./cmd/pm, and make verify passed; PR pending",
+      "verification": "local full gates and PR #255 remote checks passed; squash-merged as 10f58f0b; parent review pending",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "remote_checks_pending",
+        "status": "sub_pr_skipped_parent_review_pending",
         "head_sha": "85f1c9919327755df2a8de20d33045fd6b420d73",
-        "reviewed_range": "pending",
+        "reviewed_range": "pending parent PR #223 fallback review for commit 10f58f0b",
         "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
         "fallback_route": "none",
-        "disposition_summary": "pending",
+        "disposition_summary": "CodeRabbit skipped PR #255 (non-default base); parent fallback pending.",
         "disposition_url": "pending"
       }
     }

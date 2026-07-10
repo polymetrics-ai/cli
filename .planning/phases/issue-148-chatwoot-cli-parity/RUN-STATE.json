@@ -125,9 +125,14 @@
       "cycle": "issue-154-full-verification",
       "decision": "sub_pr_pending",
       "reason": "Issue #154 passed gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify."
+    },
+    {
+      "cycle": "issue-154-integration",
+      "decision": "integrated_parent_review_pending",
+      "reason": "PR #255 remote checks passed and was squash-merged into parent commit 10f58f0b. CodeRabbit skipped the non-default-base sub-PR, so parent PR #223 fallback review is pending."
     }
   ],
   "verificationPassed": false,
-  "verificationStatus": "#149, #150, #151, #152, and #153 integrated into parent; #154 full local verification passed on a stacked branch; parent branch final verification pending after remaining sub-issues",
+  "verificationStatus": "#149, #150, #151, #152, #153, and #154 integrated into parent; parent review pending for #154; parent branch final verification pending after remaining sub-issues",
   "updated_at": "2026-07-10T00:00:00Z"
 }
