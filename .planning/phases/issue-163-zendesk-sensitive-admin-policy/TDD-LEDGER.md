@@ -3,7 +3,7 @@
 ## Cycle 1 — reverse-ETL write coverage
 
 - Red target: Zendesk bundle exposes 295 non-deprecated write actions/commands, including 85 destructive confirmations.
-- Red evidence: pending.
+- Red evidence: `go test ./internal/connectors/engine -run 'ZendeskWrite' -count=1` failed with `Zendesk write actions = 0, want 295`.
 - Green implementation: pending.
 
 ## Manual GSD fallback

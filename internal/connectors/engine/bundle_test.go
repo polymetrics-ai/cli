@@ -1010,6 +1010,54 @@ func TestBundleLoadZendeskOperationLedger(t *testing.T) {
 	}
 }
 
+func TestBundleLoadZendeskWriteCommandCoverage(t *testing.T) {
+	b, err := Load(os.DirFS("../defs"), "zendesk")
+	if err != nil {
+		t.Fatalf("Load(defs dir, zendesk): %v", err)
+	}
+	if got, want := len(b.Writes), 295; got != want {
+		t.Fatalf("Zendesk write actions = %d, want %d", got, want)
+	}
+	writeCommands := map[string]CLICommand{}
+	for _, cmd := range b.CLISurface.Commands {
+		if cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && cmd.Write != "" {
+			writeCommands[cmd.Path] = cmd
+		}
+	}
+	if got, want := len(writeCommands), 295; got != want {
+		t.Fatalf("Zendesk reverse-ETL commands = %d, want %d", got, want)
+	}
+	writes := map[string]WriteAction{}
+	destructive := 0
+	for _, action := range b.Writes {
+		writes[action.Name] = action
+		if action.Confirm == "destructive" {
+			destructive++
+		}
+	}
+	if destructive != 85 {
+		t.Fatalf("destructive Zendesk write actions = %d, want 85", destructive)
+	}
+	coveredWrites := map[string]bool{}
+	for _, ep := range b.Surface.Endpoints {
+		if ep.CoveredBy == nil || ep.CoveredBy.Write == "" {
+			continue
+		}
+		if _, ok := writes[ep.CoveredBy.Write]; !ok {
+			t.Fatalf("endpoint %s %s references unknown write %q", ep.Method, ep.Path, ep.CoveredBy.Write)
+		}
+		coveredWrites[ep.CoveredBy.Write] = true
+	}
+	for _, cmd := range writeCommands {
+		if _, ok := writes[cmd.Write]; !ok {
+			t.Fatalf("command %q references unknown write %q", cmd.Path, cmd.Write)
+		}
+		if !coveredWrites[cmd.Write] {
+			t.Fatalf("write command %q action %q has no api_surface coverage", cmd.Path, cmd.Write)
+		}
+	}
+}
+
 func TestBundleLoadZendeskStreamCommandCoverage(t *testing.T) {
 	b, err := Load(os.DirFS("../defs"), "zendesk")
 	if err != nil {
