@@ -145,9 +145,14 @@
       "cycle": "issue-155-targeted-verification",
       "decision": "sub_pr_pending_full_gates_pending",
       "reason": "Issue #155 sensitive/admin/destructive implementation passed targeted engine/commandrunner/connectorgen/conformance/bundleregistry/docs/website checks."
+    },
+    {
+      "cycle": "issue-155-full-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #155 passed gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify."
     }
   ],
   "verificationPassed": false,
-  "verificationStatus": "#149, #150, #151, #152, #153, and #154 integrated into parent; #155 targeted verification passed on a stacked branch; parent branch final verification pending after remaining sub-issues",
+  "verificationStatus": "#149, #150, #151, #152, #153, and #154 integrated into parent; #155 full local verification passed on a stacked branch; parent branch final verification pending after #155 integration",
   "updated_at": "2026-07-10T00:00:00Z"
 }

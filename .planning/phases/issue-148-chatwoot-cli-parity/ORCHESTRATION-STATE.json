@@ -131,7 +131,7 @@
     },
     {
       "number": 155,
-      "status": "implemented_targeted_verified",
+      "status": "full_verified",
       "dependencies": [
         149,
         152
@@ -152,7 +152,7 @@
         "website/tests/api/connector-data.test.ts",
         ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
       ],
-      "decision": "sub_pr_pending_full_gates_pending"
+      "decision": "sub_pr_pending"
     }
   ],
   "spawn_decisions": [
@@ -276,11 +276,11 @@
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
-      "decision": "sub_pr_pending_full_gates_pending",
+      "decision": "sub_pr_pending",
       "issue_numbers": [
         155
       ],
-      "reason": "Issue #155 implementation and targeted verification completed locally on feat/155-chatwoot-sensitive-admin-policy; full gates, stacked PR, remote checks, and review routing remain pending."
+      "reason": "Issue #155 implementation passed targeted checks and full local gates on feat/155-chatwoot-sensitive-admin-policy; stacked PR, remote checks, and review routing remain pending."
     }
   ],
   "subissues": [
@@ -468,7 +468,7 @@
       "branch": "feat/155-chatwoot-sensitive-admin-policy",
       "pr_url": "pending",
       "worker": "coordinator-local-critical-path",
-      "status": "implemented_targeted_verified",
+      "status": "full_verified",
       "write_scope": [
         "internal/connectors/defs/chatwoot/api_surface.json",
         "internal/connectors/defs/chatwoot/cli_surface.json",
@@ -486,7 +486,7 @@
         ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "targeted checks passed; full gates pending before PR",
+      "verification": "targeted checks plus gofmt, go vet, go test ./..., go build ./cmd/pm, and make verify passed; PR pending",
       "automated_review": {
         "primary_route": "coderabbit_auto",
         "status": "not_started_pr_pending",

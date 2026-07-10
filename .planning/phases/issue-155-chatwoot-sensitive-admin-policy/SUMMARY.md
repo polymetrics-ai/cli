@@ -1,6 +1,6 @@
 # Summary — Issue #155 Chatwoot sensitive/admin/destructive policy
 
-Status: implemented with targeted verification; full handoff gates pending.
+Status: full verified; stacked PR pending.
 
 Completed slice:
 
@@ -10,4 +10,4 @@ Completed slice:
 - Destructive actions include `confirm: destructive` metadata and stay behind reverse ETL plan → preview → approval → execute.
 - Updated Chatwoot API/CLI surface, writes, docs/manual/skill, website data, and tests.
 
-Targeted verification passed; see `VERIFICATION.md`.
+Verification passed: targeted checks plus `gofmt -w cmd internal`, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify`.
