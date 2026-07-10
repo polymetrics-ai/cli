@@ -93,6 +93,25 @@ LOOP_CMD=/pm-connector-loop scripts/pi-auto-loop.sh "twenty (Twenty CRM, https:/
 scripts/pi-auto-loop.sh --resume        # continue the current run after a stop
 ```
 
+### Claude-orchestrated driver + Shepherd validator (recommended)
+
+Uses the first-party **Claude Code CLI** (`claude -p`, subscription-backed — no third-party "extra
+usage" gate) as the orchestrator and **Codex** (`pi --model openai-codex/gpt-5.5`) for
+implementation, with an independent **Shepherd supervisor** scoring every step (revert + replay on a
+bad step). See `.agents/agentic-delivery/workflows/shepherd-validator.md`.
+
+```bash
+export SEARXNG_BASE=http://localhost:8888
+# headless autonomy needs a permission posture; safest is acceptEdits, fully unattended is skip:
+export CLAUDE_ARGS="--output-format text --permission-mode acceptEdits"
+scripts/claude-auto-loop.sh "twenty (Twenty CRM, https://twenty.com, GraphQL + REST) — full all-ops CLI parity"
+scripts/claude-auto-loop.sh --resume
+```
+
+The validator writes `.planning/auto-loop/VALIDATION.jsonl` (per-step scores) and
+`VALIDATOR-VERDICT.json` (the driver acts on `PROCEED`/`RETRY`/`REVERT`/`HALT`). Requires the local
+`claude` CLI to be logged in (`claude -p "ok"` should work).
+
 Model routing is per-agent in `.pi/agents/*.md` (Claude Opus for `pm-planner`/`pm-verifier`/
 `pm-reviewer`/`pm-claude-review-disposition`; Claude Sonnet for `pm-web-researcher`; Codex gpt-5.5
 xhigh for `pm-gsd-worker`/`pm-issue-creator`). Confirm the exact model IDs your subscriptions expose
