@@ -38,6 +38,8 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 - `go test ./... -timeout=20m` passed.
 - `go build ./cmd/pm` passed.
 - `make verify` passed, including `go run ./cmd/connectorgen validate internal/connectors/defs` with 547 connectors and 0 findings.
+- Stacked PR #257 CI passed and was squash-merged into parent at `8362291f`.
+- Parent PR #220 was marked ready for review after #257 integration; parent CI passed (`verify`, website, CodeQL, govulncheck, dependency review, linked issue, branch/title, GSD workflow evidence). CodeRabbit review response is pending after manual request.
 
 ## Runtime / Credentials
 
