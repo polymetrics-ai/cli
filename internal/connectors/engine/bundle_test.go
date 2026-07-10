@@ -1010,6 +1010,47 @@ func TestBundleLoadZendeskOperationLedger(t *testing.T) {
 	}
 }
 
+func TestBundleLoadZendeskStreamCommandCoverage(t *testing.T) {
+	b, err := Load(os.DirFS("../defs"), "zendesk")
+	if err != nil {
+		t.Fatalf("Load(defs dir, zendesk): %v", err)
+	}
+	if got, wantMin := len(b.Streams), 90; got < wantMin {
+		t.Fatalf("Zendesk streams = %d, want at least %d", got, wantMin)
+	}
+	streamCommands := map[string]CLICommand{}
+	for _, cmd := range b.CLISurface.Commands {
+		if cmd.Intent == "etl" && cmd.Availability == "implemented" && cmd.Stream != "" {
+			streamCommands[cmd.Path] = cmd
+		}
+	}
+	if got, wantMin := len(streamCommands), 90; got < wantMin {
+		t.Fatalf("Zendesk stream-backed commands = %d, want at least %d", got, wantMin)
+	}
+	streams := map[string]bool{}
+	for _, stream := range b.Streams {
+		streams[stream.Name] = true
+	}
+	coveredStreams := map[string]bool{}
+	for _, ep := range b.Surface.Endpoints {
+		if ep.CoveredBy == nil || ep.CoveredBy.Stream == "" {
+			continue
+		}
+		if !streams[ep.CoveredBy.Stream] {
+			t.Fatalf("endpoint %s %s references unknown stream %q", ep.Method, ep.Path, ep.CoveredBy.Stream)
+		}
+		coveredStreams[ep.CoveredBy.Stream] = true
+	}
+	for _, cmd := range streamCommands {
+		if !streams[cmd.Stream] {
+			t.Fatalf("command %q references unknown stream %q", cmd.Path, cmd.Stream)
+		}
+		if !coveredStreams[cmd.Stream] {
+			t.Fatalf("stream command %q stream %q has no api_surface coverage", cmd.Path, cmd.Stream)
+		}
+	}
+}
+
 func TestBundleLoadZendeskDirectReadCommandCoverage(t *testing.T) {
 	b, err := Load(os.DirFS("../defs"), "zendesk")
 	if err != nil {

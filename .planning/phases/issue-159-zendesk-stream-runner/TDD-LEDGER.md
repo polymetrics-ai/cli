@@ -3,7 +3,7 @@
 ## Cycle 1 — stream-backed collection coverage
 
 - Red target: Zendesk bundle exposes at least 90 stream-backed commands and each referenced stream covers an API surface row.
-- Red evidence: pending.
+- Red evidence: `go test ./internal/connectors/engine -run 'ZendeskStream' -count=1` failed with `Zendesk streams = 0, want at least 90`.
 - Green implementation: pending.
 
 ## Manual GSD fallback
