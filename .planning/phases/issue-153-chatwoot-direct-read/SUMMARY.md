@@ -1,6 +1,6 @@
 # Summary — Issue #153 Chatwoot direct read
 
-Status: implemented with targeted verification; full handoff gates pending.
+Status: implemented and fully verified locally; stacked PR pending.
 
 Completed slice:
 
@@ -10,4 +10,4 @@ Completed slice:
 - Updated Chatwoot API/CLI surface coverage, operation-ledger counts, docs/manual/website data, and tests.
 - Reports, audit logs, public inbox reads, binary/file endpoints, and sensitive/admin/destructive operations remain blocked for later slices.
 
-Targeted verification passed; see `VERIFICATION.md`.
+Targeted checks and full handoff gates passed; see `VERIFICATION.md`.

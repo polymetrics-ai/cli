@@ -14,11 +14,11 @@
 
 ## Full gates
 
-- [ ] `gofmt -w cmd internal`
-- [ ] `go vet ./...`
-- [ ] `go test ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make verify`
+- [x] `gofmt -w cmd internal`
+- [x] `go vet ./...`
+- [x] `go test ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`
 
 ## Remote/review
 

@@ -104,7 +104,12 @@
     {
       "cycle": "issue-153-targeted-verification",
       "decision": "sub_pr_pending_full_gates_pending",
-      "reason": "Issue #153 direct-read implementation passed targeted engine/commandrunner/CLI/connectorgen/conformance/docs/website checks; full gates, stacked PR, remote checks, and review routing remain pending."
+      "reason": "Issue #153 direct-read implementation passed targeted engine/commandrunner/CLI/connectorgen/conformance/docs/website checks."
+    },
+    {
+      "cycle": "issue-153-full-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #153 passed gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify; stacked PR, remote checks, and review routing remain pending."
     }
   ],
   "verificationPassed": false,
