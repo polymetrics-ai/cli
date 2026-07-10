@@ -119,8 +119,8 @@ scripts/gsd prompt programming-loop init --phase <phase> --dry-run
 
 ## Review Integrations
 
-- CodeRabbit automatic review is primary for PR review.
-- Copilot review is fallback-only when CodeRabbit is blocked, skipped, unavailable, disabled, paused, or rate-limited.
+- Claude automatic review is primary for PR review.
+- Copilot review is fallback-only when Claude is blocked, skipped, unavailable, disabled, paused, or rate-limited.
 - Human approval remains required for parent PR merge to `main` and other human gates.
 
 ---

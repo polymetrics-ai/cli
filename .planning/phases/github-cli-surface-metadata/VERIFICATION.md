@@ -40,8 +40,8 @@ make verify
 
 ## Review Loop Notes
 
-- CodeRabbit PR #48 produced one actionable finding: CLI-surface endpoint-reference validation was
+- Claude PR #48 produced one actionable finding: CLI-surface endpoint-reference validation was
   skipped when `api_surface.json` existed but had zero endpoints.
 - Fixed with a red/green regression and the validator guard change.
-- Stacked PR review routing was hardened in `.agents/agentic-delivery/` so skipped CodeRabbit
+- Stacked PR review routing was hardened in `.agents/agentic-delivery/` so skipped Claude
   statuses on non-`main` bases are not treated as review completion.

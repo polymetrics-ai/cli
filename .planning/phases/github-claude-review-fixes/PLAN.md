@@ -1,4 +1,4 @@
-# GitHub CodeRabbit Review Fixes
+# GitHub Claude Review Fixes
 
 ## Objective
 

@@ -37,7 +37,7 @@ review command or requesting Copilot backup review.
   - Use an empty commit when the roadmap already exists and any file change would be noise.
   - Example: `git commit --allow-empty -m "chore(agentic): open parent orchestration pr"`.
   - The seed commit exists only to create the reviewable parent PR thread, checks surface, and
-    CodeRabbit/GitHub review target.
+    Claude/GitHub review target.
 - A missing parent PR is a workflow blocker for stacked sub-issues. Do not treat a sub-PR as
   complete when there is no parent PR to carry the main-branch review, final verification, and human
   approval gate.
@@ -80,23 +80,23 @@ keywords for PRs targeting the default branch.
 5. Follow the issue-to-PR contract and test-first loop.
 6. Open the sub-PR against the parent branch with `Refs #<sub-issue>` and `Refs #<parent-issue>`.
 7. Run targeted verification and broader issue verification.
-8. Run the CodeRabbit review loop and reply to every actionable finding with a disposition. Use
+8. Run the Claude review loop and reply to every actionable finding with a disposition. Use
    automatic review whenever the PR is non-draft and targets a reviewed base branch. Use manual
-   review commands only under the fallback conditions in `workflows/coderabbit-review-loop.md`.
-   If CodeRabbit is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
+   review commands only under the fallback conditions in `workflows/claude-review-loop.md`.
+   If Claude is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
    blocking progress, request GitHub Copilot review once as backup when enabled.
 9. Commit and push green sub-issue slices to the sub-issue branch after local green gates. Never
    push to `main`; stop only when a human gate is triggered.
-10. If CodeRabbit skips the sub-PR because the base branch is not `main`, record that skip as a
+10. If Claude skips the sub-PR because the base branch is not `main`, record that skip as a
     review-routing event, not as approval. The sub-PR may be integrated into the parent branch only
-    when the parent PR exists and the orchestrator observes CodeRabbit review, or records an
+    when the parent PR exists and the orchestrator observes Claude review, or records an
     allowed fallback route, on the parent PR commit range that includes the sub-issue.
 11. Merge the sub-PR into the parent branch without human approval only if every automated gate is
     green, automated review coverage is satisfied through the sub-PR, parent-PR fallback, or
     recorded Copilot/human fallback, and no human gate is triggered.
 12. After merging a sub-PR into the parent branch, push the parent branch and update the parent
     PR's integrated-subissue list. If the parent PR is non-draft and targets `main`, wait for
-    automatic CodeRabbit review. If the parent PR is draft or automatic review is skipped, record
+    automatic Claude review. If the parent PR is draft or automatic review is skipped, record
     coverage as pending or use the fallback rules in
     `workflows/automated-review-routing-loop.md`.
 13. Comment on the sub-issue with the merged sub-PR, commit, verification, automated review coverage
@@ -109,9 +109,9 @@ keywords for PRs targeting the default branch.
 1. Keep the parent PR draft while sub-issues are still landing into the parent branch.
 2. Rebase or merge `main` into the parent branch at planned checkpoints.
 3. After all required sub-issues are integrated, run full verification from the parent issue.
-4. Observe automatic CodeRabbit review on the parent PR after each integrated sub-issue batch when
+4. Observe automatic Claude review on the parent PR after each integrated sub-issue batch when
    the parent PR is non-draft and targets `main`. Manual review commands are fallback-only.
-5. Resolve all automated review comments using the CodeRabbit review loop.
+5. Resolve all automated review comments using the Claude review loop.
 6. Mark the parent PR ready for human review.
 7. Human approval is required before merging the parent PR into `main`.
 
@@ -123,8 +123,8 @@ sub-PR does not cross a human gate. Agents must stop instead of merging when:
 - the sub-PR touches auth, secrets, dependencies, destructive external actions, production deploys,
   quality gates, generic write tools, or reverse ETL execution
 - automated review has unresolved actionable comments
-- CodeRabbit review was skipped for the sub-PR and no parent-PR review fallback has been created
-- CodeRabbit is rate-limited and no Copilot or human fallback route has been recorded
+- Claude review was skipped for the sub-PR and no parent-PR review fallback has been created
+- Claude is rate-limited and no Copilot or human fallback route has been recorded
 - CI is failing or unavailable without a documented infrastructure reason
 - the PR changes files outside the sub-issue scope
 - the parent branch owner marks the parent issue blocked

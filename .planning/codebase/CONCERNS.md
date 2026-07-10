@@ -12,7 +12,7 @@
 6. **Agent drift** — reusable agents and subagents must use the repo-local official GSD Pi adapter instead of stale Claude-local or manual-only command assumptions.
 7. **Planning scope creep** — issue #122 must not edit `cmd/`, `internal/`, or `.planning/phases/**` in this refresh.
 8. **CLI docs drift** — CLI feature work can leave runtime help, bare namespace behavior, `docs/cli/**`, website docs, and generated help/manual artifacts out of sync unless parity is required in the GSD plan and PR verification.
-9. **Review coverage** — CodeRabbit skip/rate-limit/disabled states are blockers or require documented fallback, not approvals.
+9. **Review coverage** — Claude skip/rate-limit/disabled states are blockers or require documented fallback, not approvals.
 
 ## Human Gates
 

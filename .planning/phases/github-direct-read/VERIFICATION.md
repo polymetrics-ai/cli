@@ -20,4 +20,4 @@
 
 - A broader multi-package test command including all of `internal/cli` was stopped after it entered
   the known slow schedule-test path. Targeted GitHub command-surface CLI coverage passed.
-- Parent PR #49 CodeRabbit review remained pending with no new comments while this slice started.
+- Parent PR #49 Claude review remained pending with no new comments while this slice started.

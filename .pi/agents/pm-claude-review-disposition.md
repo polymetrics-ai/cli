@@ -1,6 +1,6 @@
 ---
-name: pm-coderabbit-disposition
-description: Read-only review disposition planner for CodeRabbit and Copilot comments.
+name: pm-claude-review-disposition
+description: Read-only review disposition planner for Claude and Copilot comments.
 tools: read, grep, find, ls
 thinking: high
 ---
@@ -11,7 +11,7 @@ Read:
 
 - `AGENTS.md`
 - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
-- `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
+- `.agents/agentic-delivery/workflows/claude-review-loop.md`
 - `.agents/agentic-delivery/contracts/code-review-disposition-template.md`
 
 The parent orchestrator provides the review comments/records in the task. Inspect them and

@@ -47,9 +47,9 @@
 | Connectorgen validate | passed | `go run ./cmd/connectorgen validate internal/connectors/defs --json` | 547 connectors checked, 0 findings. |
 | Pi prompt placeholders | passed | `grep -R '{{task}}\|{{target}}' .pi/prompts/` | No unsupported placeholders remain. |
 | next-env.d.ts untracked | passed | `git ls-files website/next-env.d.ts` | Removed from index. |
-| CodeRabbit disposition | resolved | PR #74 review threads | 14 inline threads replied + 11 outside-diff items in top-level comment; `@coderabbitai resolve` executed and CodeRabbit resolved all threads. |
+| Claude disposition | resolved | PR #74 review threads | 14 inline threads replied + 11 outside-diff items in top-level comment; `@claude resolve` executed and Claude resolved all threads. |
 | Full `make verify` | blocked | `make verify` | Did not exit 0. Local run timed out at 5 min; CI verify job failed at 12m on the certify package 10m timeout (`TestWriteStagesLedgerWrittenBeforeCreate`), a pre-existing flaky/borderline test unrelated to this PR (base certify package 298s vs 299s here). Per gate-integrity rule in `gsd-universal-runtime-loop.md`, a timeout is not verification completion; `verificationPassed` is false until a full `make verify` exits 0. |
 
 ## Final Local Gate Summary
 
-Focused local gates pass; CodeRabbit review threads are resolved. Full `make verify` did not exit 0: CI verify failed on the pre-existing flaky certify-package timeout, unrelated to this PR's diff. Per the gate-integrity rule, `verificationPassed` is false until a full `make verify` exits 0 in CI. Re-run CI before merge; if the certify package times out again, the test harness needs a timeout bump or the certify runner needs LoadAll caching (out of scope for this PR).
+Focused local gates pass; Claude review threads are resolved. Full `make verify` did not exit 0: CI verify failed on the pre-existing flaky certify-package timeout, unrelated to this PR's diff. Per the gate-integrity rule, `verificationPassed` is false until a full `make verify` exits 0 in CI. Re-run CI before merge; if the certify package times out again, the test harness needs a timeout bump or the certify runner needs LoadAll caching (out of scope for this PR).

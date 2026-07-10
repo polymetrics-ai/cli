@@ -18,7 +18,7 @@
 - `scripts/tdd-gate.mjs` was not present.
 - Manual loop is recorded in `PLAN.md`; behavior-adding subissues must still start with red tests.
 
-### CodeRabbit review-fix slice
+### Claude review-fix slice
 
 - Accepted with modification: CLI command `stream`/`write` mutual exclusivity is enforced in
   `connectorgen validate` because this repo's minimal schema compiler does not implement draft-07

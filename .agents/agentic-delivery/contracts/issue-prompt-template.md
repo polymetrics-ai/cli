@@ -17,8 +17,8 @@ Load required Go/design skills:
 For CLI command, flag, output, connector surface, or help-topic changes, use:
 `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`
 
-Follow the post-implementation CodeRabbit review loop:
-`.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
+Follow the post-implementation Claude review loop:
+`.agents/agentic-delivery/workflows/claude-review-loop.md`
 
 Choose the automated review route before posting review commands:
 `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
@@ -77,17 +77,17 @@ Before merge:
   generated help/manual artifacts, and tests are updated or explicitly marked not applicable
 - commit and push coherent green slices to the active issue/PR branch after local green gates;
   never push to `main`
-- observe automatic CodeRabbit review after implementation when the PR is non-draft and targets
+- observe automatic Claude review after implementation when the PR is non-draft and targets
   `main`; do not post manual review commands unless the documented fallback conditions apply
-- confirm CodeRabbit actually reviewed the relevant commits, or record the parent PR, Copilot, or
+- confirm Claude actually reviewed the relevant commits, or record the parent PR, Copilot, or
   human fallback route for stacked sub-PRs
-- if CodeRabbit is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
+- if Claude is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
   blocking progress, request GitHub Copilot review once as backup when it is enabled
-- reply to every actionable CodeRabbit or Copilot item with accepted, accepted_with_modification,
+- reply to every actionable Claude or Copilot item with accepted, accepted_with_modification,
   declined, deferred, or needs_human
 - rerun verification after accepted fixes
-- ensure accepted fix commits are CodeRabbit-reviewed; wait for automatic incremental review when
-  active, and use manual `@coderabbitai review` only when automatic review is paused, disabled,
+- ensure accepted fix commits are Claude-reviewed; wait for automatic incremental review when
+  active, and use manual `@claude review` only when automatic review is paused, disabled,
   skipped, rate-limit retry is due, or the automatic pause threshold was reached
 - merge sub-PRs into parent branches only when all automated gates pass and no human gate is
   triggered

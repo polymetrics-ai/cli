@@ -40,14 +40,15 @@ docs: update install guide
 
 ## Automated Review
 
-<!-- For non-draft PRs targeting main, wait for CodeRabbit's automatic review instead of posting a
-manual review command. For fix commits, wait for automatic incremental review when active. Use
-manual @coderabbitai review/full review only when automatic review is paused, disabled, skipped,
-rate-limit retry is due, or the auto-pause threshold was reached. If CodeRabbit is rate-limited,
-skipped, disabled, paused, or unavailable and review coverage is blocking progress, request GitHub
-Copilot review once as backup when enabled. For every actionable CodeRabbit or Copilot item, reply
-with Accepted, Accepted with modification, Declined, Deferred, or Needs human, plus the reason and
-evidence. Copilot review is not approval. -->
+<!-- For non-draft PRs targeting main from a trusted author, Claude reviews automatically on open,
+reopen, or ready-for-review, so wait for that instead of posting a manual review command. For new
+unreviewed commits (for example, fix commits), request one more pass with a single @claude review;
+do not comment @claude review after every push. If the automatic review did not run (for example,
+an untrusted or first-time author), a maintainer must invoke @claude review. If a Claude run errors
+or its quota is exhausted and review coverage is blocking progress, re-invoke @claude review or
+request GitHub Copilot review once as backup when enabled. For every actionable Claude or Copilot
+item, reply with Accepted, Accepted with modification, Declined, Deferred, or Needs human, plus the
+reason and evidence. Copilot review is not approval. -->
 
 - Primary route:
 - Fallback route:
@@ -63,7 +64,7 @@ evidence. Copilot review is not approval. -->
 
 - [ ] Tests or docs updated for behavior changes
 - [ ] `make verify` passes locally, or the skipped checks are explained
-- [ ] CodeRabbit automatic review completed, Copilot fallback was justified, or review blocker was recorded
+- [ ] Claude automatic review completed, Copilot fallback was justified, or review blocker was recorded
 - [ ] Every actionable automated review finding has a reasoned disposition reply
 - [ ] Sub-PR merge into parent branch is allowed by the stacked workflow, or this PR targets `main`
 - [ ] Branch name follows `<type>/<description>` such as `feat/new-connector` or `fix/api-pagination`

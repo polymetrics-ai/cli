@@ -26,7 +26,7 @@
 2. Keep `.planning/phases/**` unchanged in this refresh.
 3. Require future implementation agents to run official GSD command prompts before production edits.
 4. Start connector fanout only after inventory reconciliation is generated and reviewed.
-5. Route PR review through CodeRabbit automatic review, with Copilot fallback only under documented blocker conditions.
+5. Route PR review through Claude automatic review, with Copilot fallback only under documented blocker conditions.
 
 ---
 *Research refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter.*

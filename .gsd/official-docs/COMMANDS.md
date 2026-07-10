@@ -1436,7 +1436,7 @@ Reviewers are prompted to verify the plan's claims against the actual repository
 | `--gemini` | Include Gemini CLI review |
 | `--claude` | Include Claude CLI review (separate session) |
 | `--codex` | Include Codex CLI review |
-| `--coderabbit` | Include CodeRabbit review |
+| `--claude` | Include Claude review |
 | `--opencode` | Include OpenCode review (via GitHub Copilot) |
 | `--qwen` | Include Qwen Code review (Alibaba Qwen models) |
 | `--cursor` | Include Cursor agent review |

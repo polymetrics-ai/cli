@@ -64,7 +64,7 @@ Useful prompt templates:
   Example: `/pm-orchestrate 42` (parent issue number) or `/pm-orchestrate https://github.com/polymetrics-ai/cli/issues/42`.
 - `/pm-gsd-loop`: issue-first GSD/TDD implementation loop.
   Example: `/pm-gsd-loop 40` or `/pm-gsd-loop "add DraftIssue to ListProjectItems"`.
-- `/pm-review-loop`: CodeRabbit/Copilot review disposition loop.
+- `/pm-review-loop`: Claude/Copilot review disposition loop.
   Example: `/pm-review-loop 74` (PR number) or `/pm-review-loop feat/40-github-projects-discussions`.
 
 ### Non-interactive (CI / parent-PR review coverage)
