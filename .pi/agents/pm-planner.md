@@ -36,6 +36,17 @@ Write the decomposition to the phase planning area (`.planning/phases/<phase>/PL
 parent roadmap the prompt names). Do not call `gh` — issue creation is the Codex issue-creator's
 job. Return the structured decomposition in your handoff so the orchestrator can pass it on.
 
+**Connector parent-plan (when a research doc exists at `.planning/auto-loop/RESEARCH/<name>/`):**
+Read the API-surface research doc first. Emit **exactly the 7 standard parity sub-issues** — surface-metadata,
+help-renderer, stream-runner, operation-ledger, direct-read, advanced-query/binary, sensitive/admin —
+following `.agents/agentic-delivery/contracts/parent-issue-roadmap-template.md` and the write-scope map
+in `.agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md`. Map **every** research
+endpoint into an `api_surface.json` row (every read → stream/`direct_read`; every write verb → a writes
+action) with its `source_url` and `execution_model`, and into the matching `cli_surface.json` command.
+**Fail loudly** — do not produce a plan — if any research endpoint is left unclassified or the research
+doc's coverage self-check is not `complete`. The three cross-slice files (`api_surface.json`,
+`cli_surface.json`, `docs.md`) are coordinator-reconciled; mark their slices to run stacked/serial.
+
 ## Mode: task-plan
 For one sub-issue, produce its `PLAN.md`: the minimal green slices, the TDD ledger seed
 (`TDD-LEDGER.md` red-evidence expectations), the verification checklist (`VERIFICATION.md`

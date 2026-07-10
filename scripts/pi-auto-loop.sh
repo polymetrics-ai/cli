@@ -22,6 +22,11 @@
 #   CONTINUE_SESSION=1                        # 1 = `pi -c` (cheaper), fall back to fresh reconcile
 #   COOLDOWN_SECONDS=5
 #   PI_EXTRA_FLAGS=""                         # extra flags passed to every pi invocation
+#   LOOP_CMD=/pm-auto-loop                    # set to /pm-connector-loop for connector runs
+#
+# For connector work, also export SEARXNG_BASE (and its token if the instance is proxied) so the
+# pm-web-researcher subagent can query the audited searxng connector via `pm`. This driver passes
+# the ambient environment through to pi, so exporting SEARXNG_BASE before launch is sufficient.
 set -euo pipefail
 
 PI_BIN="${PI_BIN:-pi}"
@@ -32,6 +37,7 @@ MAX_MINUTES="${MAX_MINUTES:-0}"
 CONTINUE_SESSION="${CONTINUE_SESSION:-1}"
 COOLDOWN_SECONDS="${COOLDOWN_SECONDS:-5}"
 PI_EXTRA_FLAGS="${PI_EXTRA_FLAGS:-}"
+LOOP_CMD="${LOOP_CMD:-/pm-auto-loop}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE_DIR="$REPO_ROOT/.planning/auto-loop"
@@ -82,7 +88,7 @@ run_pi() { # $1 = "fresh" | "continue"
     # shellcheck disable=SC2086
     "$PI_BIN" -p --model "$ORCH_MODEL" --tools "$PI_TOOLS" --approve \
       --agentScope both --confirmProjectAgents false $PI_EXTRA_FLAGS \
-      "/pm-auto-loop $PROBLEM" \
+      "$LOOP_CMD $PROBLEM" \
       >>"$LOG_FILE" 2>&1 || rc=$?
   fi
   return $rc

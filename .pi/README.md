@@ -67,10 +67,17 @@ Useful prompt templates:
 - `/pm-review-loop`: Claude/Copilot review disposition loop.
   Example: `/pm-review-loop 74` (PR number) or `/pm-review-loop feat/40-github-projects-discussions`.
 - `/pm-auto-loop`: fully automated, resumable multi-model delivery loop — Claude Opus 4.8
-  plans/verifies/reviews, Codex gpt-5.5 xhigh implements. Given one problem prompt it plans the
-  parent + sub-issues, creates issues, then runs plan→execute→verify→review→correct per task until
-  integrated. Example: `/pm-auto-loop "add full CLI parity for the Freshservice connector"`.
+  plans/verifies/reviews, Claude Sonnet researches, Codex gpt-5.5 xhigh implements. Given one problem
+  prompt it (researches if needed →) plans the parent + sub-issues, creates issues, opens the parent
+  draft PR and per-slice sub-PRs, then runs plan→execute→verify→review→correct per task until
+  integrated. Handles any task (`problem_type: implementation | connector`).
+  Example: `/pm-auto-loop "add a --since flag to pm connectors list"`.
   See `.agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md`.
+- `/pm-connector-loop`: connector specialization of the auto-loop — always runs the RESEARCH stage
+  (full provider API surface via `pm-web-researcher`) and the 7-slice all-ops CLI-parity decomposition.
+  Example: `/pm-connector-loop "twenty (Twenty CRM, https://twenty.com, GraphQL + REST)"`.
+  Export `SEARXNG_BASE` (and its token if proxied) first so research can query the audited `searxng`
+  connector via `pm`.
 
 ### Autonomous driver (unattended, resumable)
 
@@ -78,14 +85,20 @@ Run the loop unattended until it reaches a human gate; it resumes after any inte
 (including token exhaustion) by reconciling from durable state each turn:
 
 ```bash
-scripts/pi-auto-loop.sh "add full CLI parity for the Freshservice connector"
+# general task
+scripts/pi-auto-loop.sh "add a --since flag to pm connectors list"
+# connector (research + all-ops); set the connector loop + SearXNG first
+export SEARXNG_BASE=https://<your-searxng-host>
+LOOP_CMD=/pm-connector-loop scripts/pi-auto-loop.sh "twenty (Twenty CRM, https://twenty.com, GraphQL + REST)"
 scripts/pi-auto-loop.sh --resume        # continue the current run after a stop
 ```
 
 Model routing is per-agent in `.pi/agents/*.md` (Claude Opus for `pm-planner`/`pm-verifier`/
-`pm-reviewer`/`pm-claude-review-disposition`; Codex gpt-5.5 xhigh for `pm-gsd-worker`/
-`pm-issue-creator`). Confirm the exact model IDs your subscriptions expose with `/model`, then set
-them once in the agent frontmatter and in `scripts/pi-auto-loop.sh` (`ORCH_MODEL`).
+`pm-reviewer`/`pm-claude-review-disposition`; Claude Sonnet for `pm-web-researcher`; Codex gpt-5.5
+xhigh for `pm-gsd-worker`/`pm-issue-creator`). Confirm the exact model IDs your subscriptions expose
+with `/model`, then set them once in the agent frontmatter and in `scripts/pi-auto-loop.sh`
+(`ORCH_MODEL`). Connector research uses the repo's `searxng` connector through `pm` (audited path);
+export `SEARXNG_BASE` (+ token if proxied) before launching.
 
 ### Non-interactive (CI / parent-PR review coverage)
 
