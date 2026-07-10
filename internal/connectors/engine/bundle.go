@@ -579,11 +579,12 @@ type CLICommandGroup struct {
 
 // CLIFlag describes one command or global flag.
 type CLIFlag struct {
-	Name    string   `json:"name"`
-	Type    string   `json:"type"`
-	Summary string   `json:"summary,omitempty"`
-	Values  []string `json:"values,omitempty"`
-	MapsTo  string   `json:"maps_to,omitempty"`
+	Name     string   `json:"name"`
+	Type     string   `json:"type"`
+	Summary  string   `json:"summary,omitempty"`
+	Values   []string `json:"values,omitempty"`
+	MapsTo   string   `json:"maps_to,omitempty"`
+	MaxItems int      `json:"max_items,omitempty"`
 }
 
 // CLICommand is one provider-inspired command path.

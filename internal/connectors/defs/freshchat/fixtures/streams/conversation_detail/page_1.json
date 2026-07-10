@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/conversations/synthetic-conformance-value", "query": {} },
+  "request": {
+    "method": "GET",
+    "path": "/conversations/synthetic-conformance-value",
+    "query": {}
+  },
+  "read_query": {
+    "conversation_id": "synthetic-conformance-value"
+  },
   "response": {
     "status": 200,
     "body": {

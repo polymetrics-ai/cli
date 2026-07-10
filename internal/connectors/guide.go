@@ -159,6 +159,9 @@ func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 	if flag.MapsTo != "" {
 		parts = append(parts, "maps_to="+flag.MapsTo)
 	}
+	if flag.MaxItems > 0 {
+		parts = append(parts, fmt.Sprintf("max_items=%d", flag.MaxItems))
+	}
 	return strings.Join(parts, ": ")
 }
 

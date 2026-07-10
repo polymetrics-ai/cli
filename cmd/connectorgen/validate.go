@@ -99,28 +99,11 @@ var surfaceOperationRisks = map[string]bool{
 	"critical": true,
 }
 
-var directReadOutputPolicies = map[string]bool{
-	"github_contents_file_metadata": true,
-	"github_contents_directory":     true,
-	"freshchat_users_fetch":         true,
-}
-
 var sourceRequiredOperationModels = map[string]bool{
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
 	"destructive_action":    true,
 	"disallowed":            true,
-}
-
-func directReadMethodAllowed(method, outputPolicy string) bool {
-	switch outputPolicy {
-	case "github_contents_file_metadata", "github_contents_directory":
-		return method == "GET"
-	case "freshchat_users_fetch":
-		return method == "POST"
-	default:
-		return false
-	}
 }
 
 func implementedDirectReadCommand(b engine.Bundle, path string) (engine.CLICommand, bool) {
@@ -646,7 +629,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					})
 					continue
 				}
-				if cmd.Operation == "" && !directReadMethodAllowed(strings.ToUpper(ep.Method), cmd.OutputPolicy) {
+				if cmd.Operation == "" && !engine.DirectReadMethodAllowed(strings.ToUpper(ep.Method), cmd.OutputPolicy) {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
 						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read %q does not allow method %s with output_policy %q", i, ep.Method, ep.Path, directRead, strings.ToUpper(ep.Method), cmd.OutputPolicy),
@@ -932,7 +915,7 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 			})
 		}
 		for _, ep := range cmd.APISurface {
-			if !directReadMethodAllowed(strings.ToUpper(strings.TrimSpace(ep.Method)), cmd.OutputPolicy) {
+			if !engine.DirectReadMethodAllowed(strings.ToUpper(strings.TrimSpace(ep.Method)), cmd.OutputPolicy) {
 				findings = append(findings, Finding{
 					Connector: b.Name,
 					File:      "cli_surface.json",
@@ -949,7 +932,7 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 				})
 			}
 		}
-		if !directReadOutputPolicies[cmd.OutputPolicy] {
+		if !engine.DirectReadOutputPolicySupported(cmd.OutputPolicy) {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",

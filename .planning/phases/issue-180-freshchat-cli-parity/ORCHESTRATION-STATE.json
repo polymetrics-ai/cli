@@ -10,19 +10,19 @@
     "url": "https://github.com/polymetrics-ai/cli/pull/226",
     "base": "main",
     "head": "feat/180-freshchat-cli-parity",
-    "draft": true,
+    "draft": false,
     "state": "open"
   },
   "default_branch": "main",
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi-api-harness",
-    "status": "awaiting_parent_review_coverage"
+    "status": "review_fixes_green_incremental_review_pending"
   },
   "ready_queue": [
     {
       "number": 181,
-      "status": "integrated_parent_review_pending",
+      "status": "integrated_parent_incremental_review_pending",
       "dependencies": [
         "parent_pr_open"
       ],
@@ -35,7 +35,7 @@
     },
     {
       "number": 182,
-      "status": "integrated_parent_review_pending",
+      "status": "integrated_parent_incremental_review_pending",
       "dependencies": [
         181,
         184
@@ -51,7 +51,7 @@
     },
     {
       "number": 183,
-      "status": "integrated_parent_review_pending",
+      "status": "integrated_parent_incremental_review_pending",
       "dependencies": [
         181,
         184
@@ -65,7 +65,7 @@
     },
     {
       "number": 184,
-      "status": "integrated_parent_review_pending",
+      "status": "integrated_parent_incremental_review_pending",
       "dependencies": [
         181
       ],
@@ -79,7 +79,7 @@
     },
     {
       "number": 185,
-      "status": "integrated_parent_review_pending",
+      "status": "integrated_parent_incremental_review_pending",
       "dependencies": [
         181,
         184
@@ -91,7 +91,7 @@
     },
     {
       "number": 186,
-      "status": "integrated_parent_review_pending",
+      "status": "integrated_parent_incremental_review_pending",
       "dependencies": [
         184,
         185
@@ -103,7 +103,7 @@
     },
     {
       "number": 187,
-      "status": "integrated_parent_review_pending",
+      "status": "integrated_parent_incremental_review_pending",
       "dependencies": [
         184
       ],
@@ -185,6 +185,21 @@
         187
       ],
       "reason": "PR #251 CI passed and was squash-merged to parent branch as 639f88c0; CodeRabbit skipped the non-default-base stacked review, so automated review remains pending through parent PR coverage/fallback."
+    },
+    {
+      "timestamp": "2026-07-10T02:47:13Z",
+      "decision": "parent_coderabbit_findings_addressed_locally",
+      "issue_numbers": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187
+      ],
+      "reason": "Parent PR #226 CodeRabbit review completed with actionable findings. No subagent tool is available, so fixes were handled locally on feat/180-freshchat-cli-parity; full local gates now pass and incremental review is pending after push."
     }
   ],
   "subissues": [
@@ -352,5 +367,22 @@
     "destructive external actions",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T02:05:00Z"
+  "updated_at": "2026-07-10T02:47:13Z",
+  "parent_review": {
+    "primary_route": "coderabbit_automatic_then_manual_retry",
+    "status": "findings_addressed_incremental_review_pending",
+    "run_id": "321be408-2a1b-4ece-a55c-0e4333fc0b51",
+    "reviewed_range": "ae01c3f962fe089fc26e274fba1f9bbad540f7dd..c6d32aeb3a047e239e56f75b6a41523d81df0882",
+    "findings": {
+      "actionable_comments": 11,
+      "outside_diff_comments": 1,
+      "nitpicks": 1,
+      "premerge_warnings": [
+        "out_of_scope_parent_intent_false_positive",
+        "docstring_coverage_repo_baseline"
+      ]
+    },
+    "disposition_summary": "Addressed valid fixture read_query, max_items, upload max_bytes, redaction, shared direct-read helper, and docs/test findings. The api_key-only help-test suggestion was adjusted to block secret sample values while preserving documented secret field names.",
+    "local_verification": "website data generation, gofmt, go vet ./..., go test ./..., go build ./cmd/pm, make verify, connectorgen validate, and CLI/help/docs parity checks pass."
+  }
 }

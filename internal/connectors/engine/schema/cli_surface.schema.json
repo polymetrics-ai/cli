@@ -50,7 +50,8 @@
             "type": "array",
             "items": { "type": "string" }
           },
-          "maps_to": { "type": "string" }
+          "maps_to": { "type": "string" },
+          "max_items": { "type": "integer" }
         }
       }
     },
@@ -112,7 +113,8 @@
                   "type": "array",
                   "items": { "type": "string" }
                 },
-                "maps_to": { "type": "string" }
+                "maps_to": { "type": "string" },
+                "max_items": { "type": "integer" }
               }
             }
           },

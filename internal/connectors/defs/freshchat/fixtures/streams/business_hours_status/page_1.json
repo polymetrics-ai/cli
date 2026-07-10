@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/business-hours/within-bh", "query": {} },
+  "request": {
+    "method": "GET",
+    "path": "/business-hours/within-bh",
+    "query": {}
+  },
+  "read_query": {
+    "business_hours_group_id": "synthetic-conformance-value"
+  },
   "response": {
     "status": 200,
     "body": {

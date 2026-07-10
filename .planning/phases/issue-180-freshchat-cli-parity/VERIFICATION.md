@@ -71,6 +71,38 @@ go build ./cmd/pm
 rg -n "freshchat|Freshchat" docs/cli website internal/connectors/defs/freshchat
 ```
 
+## Parent CodeRabbit review-fix verification
+
+CodeRabbit parent PR #226 run `321be408-2a1b-4ece-a55c-0e4333fc0b51` completed against `ae01c3f962fe089fc26e274fba1f9bbad540f7dd..c6d32aeb3a047e239e56f75b6a41523d81df0882` and posted actionable findings. After review fixes:
+
+```bash
+cd website && pnpm run gen:website-data
+gofmt -w cmd internal
+go test ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/connectors/conformance ./internal/cli ./cmd/connectorgen
+go run ./cmd/connectorgen validate internal/connectors/defs
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+./pm help connectors
+./pm connectors
+./pm freshchat --help
+rg -n "Freshchat|freshchat|100-id|100 ids|users/fetch" docs/cli website/content/docs/freshchat-cli-surface.mdx website/lib/docs.generated.ts
+```
+
+Results:
+
+- Website data generation: pass.
+- Focused package tests: pass.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: pass, `547 connector(s) checked, 0 findings`.
+- `go vet ./...`: pass.
+- `go test ./...`: pass.
+- `go build ./cmd/pm`: pass.
+- `make verify`: pass, including docs validation, smoke flow, `golangci-lint`, and connectorgen validation.
+- CLI help/docs parity checks: pass (`./pm help connectors`, `./pm connectors`, `./pm freshchat --help`, docs/website grep).
+
+Incremental CodeRabbit review after pushing these fixes remains pending.
+
 ## Integrated sub-issue verification checkpoints
 
 - #181: local focused gates passed; PR #241 CI passed; merged to parent as ef7cfda1. CodeRabbit skipped stacked/draft review; parent review coverage remains pending.

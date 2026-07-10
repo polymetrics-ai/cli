@@ -2,7 +2,13 @@
   "request": {
     "method": "GET",
     "path": "/conversations/synthetic-conformance-value/messages",
-    "query": { "page": "1", "items_per_page": "50" }
+    "query": {
+      "page": "1",
+      "items_per_page": "50"
+    }
+  },
+  "read_query": {
+    "conversation_id": "synthetic-conformance-value"
   },
   "response": {
     "status": 200,

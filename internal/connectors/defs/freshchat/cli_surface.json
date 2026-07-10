@@ -111,10 +111,10 @@
       ],
       "output_policy": "freshchat_users_fetch",
       "flags": [
-        { "name": "id", "type": "string_array", "summary": "Freshchat user ids. Repeat or comma-separate to fetch multiple users.", "maps_to": "body.ids" }
+        { "name": "id", "type": "string_array", "summary": "Freshchat user ids. Repeat or comma-separate to fetch up to 100 users.", "maps_to": "body.ids", "max_items": 100 }
       ],
       "examples": ["pm freshchat user fetch --id user_123 --id user_456 --json"],
-      "notes": "Typed direct-read body support is limited to the Freshchat users/fetch ids array; this is not a raw HTTP POST escape hatch."
+      "notes": "Typed direct-read body support is limited to the Freshchat users/fetch ids array with Freshchat's 100-id API limit; this is not a raw HTTP POST escape hatch."
     },
     {
       "path": "user view",

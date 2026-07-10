@@ -86,6 +86,15 @@ Applies to all CLI-visible lanes. #182 completed the Freshchat command-surface h
 - [x] Generated help/manual artifacts handled for Freshchat command-surface help in #182.
 - [x] Tests cover metadata parsing/validation in #181 and help rendering in #182.
 
+## Parent review-fix checkpoint
+
+CodeRabbit reviewed parent PR #226 after it was marked ready and found actionable review items. The parent remains the active owner; because this harness still lacks a Pi subagent tool, review fixes were handled locally on `feat/180-freshchat-cli-parity` rather than spawning a worker. The review-fix plan is:
+
+1. Fix only still-valid findings and record partial dispositions for findings that conflict with intentional behavior (for example, secret field names may be documented, but secret values/sample tokens must not appear).
+2. Add or update regression tests for each behavior/policy fix.
+3. Regenerate website data and rerun full local gates.
+4. Push a coherent review-fix checkpoint and wait for incremental CodeRabbit coverage before resolving review comments or claiming review completion.
+
 ## Safety gates
 
 - No secrets in prompts, artifacts, logs, fixtures, or committed docs.

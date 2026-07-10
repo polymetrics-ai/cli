@@ -3,6 +3,7 @@ package commandrunner
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 	"testing"
 
@@ -780,7 +781,7 @@ func TestRunFreshchatUsersFetchDirectReadCommand(t *testing.T) {
 				},
 				OutputPolicy: "freshchat_users_fetch",
 				Flags: []connectors.CommandSurfaceFlag{
-					{Name: "id", Type: "string_array", MapsTo: "body.ids"},
+					{Name: "id", Type: "string_array", MapsTo: "body.ids", MaxItems: 100},
 				},
 			},
 		},
@@ -813,6 +814,46 @@ func TestRunFreshchatUsersFetchDirectReadCommand(t *testing.T) {
 	}
 	if connector.directReadReq.OutputPolicy != "freshchat_users_fetch" {
 		t.Fatalf("direct read output policy = %q, want freshchat_users_fetch", connector.directReadReq.OutputPolicy)
+	}
+}
+
+func TestRunFreshchatUsersFetchRejectsMoreThanMaxIDs(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "user fetch",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "POST", Path: "/users/fetch"},
+				},
+				OutputPolicy: "freshchat_users_fetch",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "id", Type: "string_array", MapsTo: "body.ids", MaxItems: 100},
+				},
+			},
+		},
+	}}
+
+	ids := make([]string, 101)
+	for i := range ids {
+		ids[i] = fmt.Sprintf("user_%03d", i+1)
+	}
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"user", "fetch"},
+		Flags: map[string][]string{"id": ids},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for rejected direct-read command")
+		return nil
+	})
+	if err == nil {
+		t.Fatal("Run error = nil, want max-items validation error")
+	}
+	if !strings.Contains(err.Error(), "max 100") {
+		t.Fatalf("Run error = %q, want max 100", err.Error())
+	}
+	if connector.directReadReq.Method != "" {
+		t.Fatalf("DirectRead was called despite oversized ids: %+v", connector.directReadReq)
 	}
 }
 

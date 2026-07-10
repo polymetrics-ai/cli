@@ -41,7 +41,7 @@ and file command groups. It also preserves safety labels such as `availability=p
 |---|---|
 | `etl` | Runs an implemented Freshchat stream through a saved credential, bounded by `--limit`. |
 | `reverse_etl` | Creates an approval-gated reverse plan; destructive, admin, and sensitive actions also carry typed confirmation challenges. |
-| `direct_read` | `user fetch` runs the bounded Freshchat `POST /users/fetch` ids-array body policy; no generic POST body command is exposed. |
+| `direct_read` | `user fetch` runs the bounded Freshchat `POST /users/fetch` ids-array body policy with Freshchat's 100-id limit; no generic POST body command is exposed. |
 | `direct_write` | File/image upload commands carry typed `file_upload` operation metadata with `max_bytes`, but execution is blocked until a bounded multipart executor exists. |
 
 <Callout type="warn">

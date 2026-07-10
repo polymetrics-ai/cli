@@ -385,11 +385,12 @@ func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.Comma
 
 func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 	return connectors.CommandSurfaceFlag{
-		Name:    flag.Name,
-		Type:    flag.Type,
-		Summary: flag.Summary,
-		Values:  append([]string(nil), flag.Values...),
-		MapsTo:  flag.MapsTo,
+		Name:     flag.Name,
+		Type:     flag.Type,
+		Summary:  flag.Summary,
+		Values:   append([]string(nil), flag.Values...),
+		MapsTo:   flag.MapsTo,
+		MaxItems: flag.MaxItems,
 	}
 }
 

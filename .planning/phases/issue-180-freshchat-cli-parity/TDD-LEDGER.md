@@ -26,6 +26,17 @@ GSD programming-loop registry command is unavailable (`scripts/gsd: unknown GSD 
 - #186: complete; upload operation-policy tests failed first for missing Freshchat typed `file_upload` operation metadata, then passed after operations/docs/fail-closed command wiring.
 - #187: complete; confirmation policy tests failed first for missing Freshchat admin/sensitive write confirmations, then passed after metadata/schema/docs updates.
 
+## Parent CodeRabbit review-fix TDD
+
+- Review-red evidence: CodeRabbit parent PR #226 run `321be408-2a1b-4ece-a55c-0e4333fc0b51` reported 11 actionable comments plus one nitpick against the integrated Freshchat range.
+- Regression coverage added/updated:
+  - `TestRunFreshchatUsersFetchRejectsMoreThanMaxIDs` for the Freshchat 100-id `users/fetch` cap.
+  - `TestDirectReadFreshchatUsersFetchPOST` now asserts top-level and nested sensitive response keys are redacted.
+  - `TestFreshchatParameterizedReplayFixturesDeclareReadQuery` and `TestReadRawRecordsWithReplayUsesFixtureReadQueryForConfigInput` cover parameterized replay inputs.
+  - `TestBundleLoadEmbeddedFreshchatCLISurface` and `TestBundleLoadEmbeddedFreshchatFileUploadOperations` assert `max_items=100` and exact `max_bytes=10485760` metadata.
+- Green evidence: focused package tests, full local gates, connectorgen validation, and CLI/docs parity checks pass after review fixes.
+- Disposition note: the `api_key`-only help-test suggestion was treated as partially valid because runtime help intentionally names secret fields without values; the test now rejects concrete sample/serialized secret markers while allowing documented `api_key (secret)` field names.
+
 ## Parent final verification
 
 Final parent local gates pass after all sub-issue merges:

@@ -1,5 +1,12 @@
 {
-  "request": { "method": "GET", "path": "/users/synthetic-conformance-value", "query": {} },
+  "request": {
+    "method": "GET",
+    "path": "/users/synthetic-conformance-value",
+    "query": {}
+  },
+  "read_query": {
+    "user_id": "synthetic-conformance-value"
+  },
   "response": {
     "status": 200,
     "body": {

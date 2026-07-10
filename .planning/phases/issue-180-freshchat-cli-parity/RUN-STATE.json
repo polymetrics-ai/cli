@@ -1,7 +1,7 @@
 {
   "phase": "issue-180-freshchat-cli-parity",
   "parent_issue": 180,
-  "status": "parent_local_full_green_review_pending",
+  "status": "parent_review_fixes_green_incremental_review_pending",
   "gsd": {
     "doctor": "pass",
     "verify_pi": "pass",
@@ -12,7 +12,7 @@
     "manual_fallback": true
   },
   "verificationPassed": false,
-  "verificationBlocker": "final local parent gates pass; parent CodeRabbit coverage and human gate remain pending",
+  "verificationBlocker": "review-fix local gates pass; incremental CodeRabbit review and human gate remain pending",
   "orchestrationDecisions": [
     {
       "timestamp": "2026-07-09T19:37:13Z",
@@ -197,7 +197,23 @@
         186,
         187
       ]
+    },
+    {
+      "timestamp": "2026-07-10T02:47:13Z",
+      "cycle": "parent-coderabbit-review-fixes",
+      "decision": "review_findings_addressed_green_incremental_review_pending",
+      "reason": "CodeRabbit reviewed parent PR #226 range ae01c3f..c6d32aeb and reported 11 actionable comments plus one nitpick; fixes were implemented locally with full gates passing, pending push and incremental CodeRabbit coverage.",
+      "issue_numbers": [
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187
+      ]
     }
   ],
-  "updated_at": "2026-07-10T02:05:00Z"
+  "updated_at": "2026-07-10T02:47:13Z"
 }

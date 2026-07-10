@@ -1,9 +1,24 @@
 {
-  "request": { "method": "GET", "path": "/conversations/fields", "query": {} },
+  "request": {
+    "method": "GET",
+    "path": "/conversations/fields",
+    "query": {}
+  },
+  "read_query": {},
   "response": {
     "status": 200,
     "body": [
-      { "name": "priority", "label": "Priority", "type": "dropdown", "required": false, "choices": ["low", "medium", "high"] }
+      {
+        "name": "priority",
+        "label": "Priority",
+        "type": "dropdown",
+        "required": false,
+        "choices": [
+          "low",
+          "medium",
+          "high"
+        ]
+      }
     ]
   }
 }

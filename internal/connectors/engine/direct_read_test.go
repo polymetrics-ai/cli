@@ -116,7 +116,7 @@ func TestDirectReadFreshchatUsersFetchPOST(t *testing.T) {
 			t.Fatalf("body ids = %q, want user_1,user_2", got)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"users":[{"id":"user_1"},{"id":"user_2"}]}`))
+		_, _ = w.Write([]byte(`{"token":"top-level-secret","users":[{"id":"user_1","api_key":"nested-secret"},{"id":"user_2"}]}`))
 	}))
 	defer srv.Close()
 
@@ -140,6 +140,16 @@ func TestDirectReadFreshchatUsersFetchPOST(t *testing.T) {
 	users, ok := body["users"].([]any)
 	if !ok || len(users) != 2 {
 		t.Fatalf("body users = %#v, want two users", body["users"])
+	}
+	if got := body["token"]; got != "***" {
+		t.Fatalf("top-level token = %#v, want redacted marker", got)
+	}
+	first, ok := users[0].(map[string]any)
+	if !ok {
+		t.Fatalf("first user type = %T, want object", users[0])
+	}
+	if got := first["api_key"]; got != "***" {
+		t.Fatalf("nested api_key = %#v, want redacted marker", got)
 	}
 }
 

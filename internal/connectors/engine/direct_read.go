@@ -32,7 +32,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		return connectors.DirectReadResult{}, err
 	}
 	method := strings.ToUpper(strings.TrimSpace(req.Method))
-	if !directReadMethodAllowed(method, req.OutputPolicy) {
+	if !DirectReadMethodAllowed(method, req.OutputPolicy) {
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read output policy %q does not allow method %s", req.OutputPolicy, method)
 	}
 	if method == http.MethodPost && len(req.Body) == 0 {
@@ -123,12 +123,23 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 	}
 }
 
-func directReadMethodAllowed(method, policy string) bool {
+// DirectReadOutputPolicySupported reports whether policy is implemented by the direct-read output gate.
+func DirectReadOutputPolicySupported(policy string) bool {
+	switch policy {
+	case directReadPolicyGitHubContentsFileMetadata, directReadPolicyGitHubContentsDirectory, directReadPolicyFreshchatUsersFetch:
+		return true
+	default:
+		return false
+	}
+}
+
+// DirectReadMethodAllowed reports whether policy permits method for a typed direct-read command.
+func DirectReadMethodAllowed(method, policy string) bool {
 	switch policy {
 	case directReadPolicyGitHubContentsFileMetadata, directReadPolicyGitHubContentsDirectory:
-		return method == http.MethodGet
+		return strings.EqualFold(method, http.MethodGet)
 	case directReadPolicyFreshchatUsersFetch:
-		return method == http.MethodPost
+		return strings.EqualFold(method, http.MethodPost)
 	default:
 		return false
 	}
@@ -164,16 +175,10 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 		if !ok {
 			return nil, fmt.Errorf("direct read output policy %q requires a response object", policy)
 		}
-		users, ok := obj["users"].([]any)
-		if !ok {
+		if _, ok := obj["users"].([]any); !ok {
 			return nil, fmt.Errorf("direct read output policy %q requires a users array", policy)
 		}
-		out := make(map[string]any, len(obj))
-		for k, v := range obj {
-			out[k] = redactSensitiveJSONValue(v)
-		}
-		out["users"] = redactSensitiveJSONValue(users)
-		return out, nil
+		return redactSensitiveJSONValue(obj), nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
 	}

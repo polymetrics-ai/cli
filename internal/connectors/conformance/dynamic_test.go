@@ -212,6 +212,49 @@ func TestReusableStreamReplayServerResetsBetweenStreams(t *testing.T) {
 	}
 }
 
+func TestReadRawRecordsWithReplayUsesFixtureReadQueryForConfigInput(t *testing.T) {
+	spec, err := engine.CompileSchema([]byte(`{
+		"type": "object",
+		"properties": {"widget_id": {"type": "string"}}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	b := engine.Bundle{
+		Name: "acme",
+		Spec: spec,
+		HTTP: engine.HTTPBase{URL: "http://placeholder.invalid"},
+		Streams: []engine.StreamSpec{
+			{
+				Name:    "widgets",
+				Path:    "/widgets/{{ config.widget_id }}",
+				Records: engine.RecordsSpec{Path: ".", SingleObject: true},
+			},
+		},
+		Fixtures: fstest.MapFS{
+			"streams/widgets/page_1.json": &fstest.MapFile{Data: []byte(`{
+				"request": {"method": "GET", "path": "/widgets/from-fixture", "query": {}},
+				"read_query": {"widget_id": "from-fixture"},
+				"response": {"status": 200, "body": {"id": "from-fixture"}}
+			}`)},
+		},
+	}
+
+	var records []map[string]any
+	replay := newReusableStreamReplayServer()
+	defer replay.Close()
+	err = readRawRecordsWithReplay(b, "widgets", nil, replay, func(raw map[string]any) error {
+		records = append(records, raw)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("readRawRecordsWithReplay: %v", err)
+	}
+	if len(records) != 1 || records[0]["id"] != "from-fixture" {
+		t.Fatalf("records = %+v, want fixture config-backed record", records)
+	}
+}
+
 func TestReadRawRecordsWithReplayUsesFixtureReadQuery(t *testing.T) {
 	b := engine.Bundle{
 		Name: "acme",

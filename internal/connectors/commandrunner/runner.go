@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -325,7 +326,7 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 	}
 	endpoint := cmd.APISurface[0]
 	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
-	if !isSupportedDirectReadMethod(method, cmd.OutputPolicy) {
+	if !engine.DirectReadMethodAllowed(method, cmd.OutputPolicy) {
 		return &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      cmd.Path,
@@ -343,7 +344,7 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 			Reason:       "direct_read commands must not reference an absolute URL",
 		}
 	}
-	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
+	if !engine.DirectReadOutputPolicySupported(cmd.OutputPolicy) {
 		return &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      cmd.Path,
@@ -353,26 +354,6 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 		}
 	}
 	return nil
-}
-
-func isSupportedDirectReadOutputPolicy(policy string) bool {
-	switch policy {
-	case "github_contents_file_metadata", "github_contents_directory", "freshchat_users_fetch":
-		return true
-	default:
-		return false
-	}
-}
-
-func isSupportedDirectReadMethod(method, policy string) bool {
-	switch policy {
-	case "github_contents_file_metadata", "github_contents_directory":
-		return method == http.MethodGet
-	case "freshchat_users_fetch":
-		return method == http.MethodPost
-	default:
-		return false
-	}
 }
 
 func commandPath(path []string) string {
@@ -633,6 +614,9 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 					out = append(out, item)
 				}
 			}
+		}
+		if flag.MaxItems > 0 && len(out) > flag.MaxItems {
+			return nil, fmt.Errorf("invalid --%s: got %d values, max %d", flag.Name, len(out), flag.MaxItems)
 		}
 		return out, nil
 	default:

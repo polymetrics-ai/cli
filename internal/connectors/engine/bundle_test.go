@@ -941,6 +941,9 @@ func TestBundleLoadEmbeddedFreshchatCLISurface(t *testing.T) {
 	if !cliSurfaceHasCommand(b.CLISurface, "user create", "reverse_etl", "", "create_user") {
 		t.Fatalf("Freshchat CLISurface missing implemented user create write command: %+v", b.CLISurface.Commands)
 	}
+	if got := cliSurfaceFlagMaxItems(b.CLISurface, "user fetch", "id"); got != 100 {
+		t.Fatalf("Freshchat user fetch --id max_items = %d, want 100", got)
+	}
 }
 
 func TestBundleLoadEmbeddedFreshchatFileUploadOperations(t *testing.T) {
@@ -963,8 +966,8 @@ func TestBundleLoadEmbeddedFreshchatFileUploadOperations(t *testing.T) {
 		if op.Kind != "file_upload" {
 			t.Fatalf("operation %s kind = %q, want file_upload", op.ID, op.Kind)
 		}
-		if op.File == nil || op.File.Direction != "upload" || op.File.Path != path || op.File.MaxBytes <= 0 {
-			t.Fatalf("operation %s file policy = %+v, want upload path %s with positive max_bytes", op.ID, op.File, path)
+		if op.File == nil || op.File.Direction != "upload" || op.File.Path != path || op.File.MaxBytes != 10485760 {
+			t.Fatalf("operation %s file policy = %+v, want upload path %s with max_bytes 10485760", op.ID, op.File, path)
 		}
 		if op.Approval == "" || op.Approval == "none" {
 			t.Fatalf("operation %s approval = %q, want explicit approval policy", op.ID, op.Approval)
@@ -984,6 +987,20 @@ func cliSurfaceHasCommand(surface *CLISurface, path, intent, stream, write strin
 		}
 	}
 	return false
+}
+
+func cliSurfaceFlagMaxItems(surface *CLISurface, path, flagName string) int {
+	for _, cmd := range surface.Commands {
+		if cmd.Path != path {
+			continue
+		}
+		for _, flag := range cmd.Flags {
+			if flag.Name == flagName {
+				return flag.MaxItems
+			}
+		}
+	}
+	return 0
 }
 
 func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {

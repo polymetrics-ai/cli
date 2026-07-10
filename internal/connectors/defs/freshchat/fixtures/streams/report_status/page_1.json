@@ -1,5 +1,13 @@
 {
-  "request": { "method": "GET", "path": "/reports/raw/synthetic-conformance-value", "query": {} },
+  "request": {
+    "method": "GET",
+    "path": "/reports/raw/synthetic-conformance-value",
+    "query": {}
+  },
+  "read_query": {
+    "report_id": "synthetic-conformance-value",
+    "report_status": "synthetic-conformance-value"
+  },
   "response": {
     "status": 200,
     "body": {

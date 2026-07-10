@@ -340,8 +340,10 @@ func TestFreshchatCommandSurfaceHelp(t *testing.T) {
 					t.Fatalf("Freshchat help output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
 				}
 			}
-			if strings.Contains(out, "api_key") && strings.Contains(out, "sample-token") {
-				t.Fatalf("Freshchat help appears to contain secret-shaped sample data:\n%s", out)
+			for _, marker := range []string{"sample-token", "api_key=sample", "api_key: sample", "\"api_key\":\""} {
+				if strings.Contains(out, marker) {
+					t.Fatalf("Freshchat help appears to contain secret-shaped sample data:\n%s", out)
+				}
 			}
 		})
 	}

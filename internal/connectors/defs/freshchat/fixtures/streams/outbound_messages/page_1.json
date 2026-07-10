@@ -2,7 +2,13 @@
   "request": {
     "method": "GET",
     "path": "/outbound-messages",
-    "query": { "page": "1", "items_per_page": "50" }
+    "query": {
+      "page": "1",
+      "items_per_page": "50"
+    }
+  },
+  "read_query": {
+    "outbound_request_id": "synthetic-conformance-value"
   },
   "response": {
     "status": 200,
