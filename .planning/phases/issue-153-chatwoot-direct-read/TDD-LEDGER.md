@@ -2,9 +2,9 @@
 
 | Cycle | Red test / evidence | Expected failure | Green change | Status |
 |---|---|---|---|---|
-| 1 | `go test ./internal/connectors/engine -run TestDirectReadBoundedJSONPolicyRedactsSecretKeys -count=1` | `bounded_json` output policy unsupported. | Add bounded JSON policy with recursive secret-key redaction. | planned |
-| 2 | `go test ./internal/connectors/engine -run TestDirectReadScopedBasePathEndpointDoesNotDuplicatePrefix -count=1` | Chatwoot-like direct read duplicates `/api/v1/accounts/{account_id}` when surface endpoint and base URL both include the account prefix. | Strip the already-resolved base path prefix before dispatching through the requester. | planned |
-| 3 | `go test ./internal/cli -run TestChatwootCommandSurfaceRunsDirectReadContactView -count=1` | Chatwoot direct-read command remains planned/blocked or lacks supported output policy. | Mark selected commands/endpoints implemented and covered by direct_read. | planned |
+| 1 | `go test ./internal/connectors/engine -run TestDirectReadBoundedJSONPolicyRedactsSecretKeys -count=1` | Captured red failure: `direct read output policy "bounded_json" is not supported`. | Added bounded JSON policy with recursive secret-key redaction. | passed |
+| 2 | `go test ./internal/connectors/engine -run TestDirectReadScopedBasePathEndpointDoesNotDuplicatePrefix -count=1` | Captured red failure: request path duplicated `/api/v1/accounts/{account_id}`. | Stripped the already-resolved base path prefix before dispatching through the requester. | passed |
+| 3 | `go test ./internal/cli -run TestChatwootCommandSurfaceRunsDirectReadContactView -count=1` | Chatwoot direct-read command would remain planned/blocked or lack supported output policy before metadata/policy changes. | Marked selected commands/endpoints implemented and covered by direct_read. | passed |
 
 ## Notes
 

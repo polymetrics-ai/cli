@@ -38,7 +38,7 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	statuses := map[string]int{}
 	uniquePaths := map[string]struct{}{}
 	covered, excluded, operations := 0, 0, 0
-	streamCovered, writeCovered := 0, 0
+	streamCovered, writeCovered, directReadCovered := 0, 0, 0
 	messageWriteCoversJSON := false
 	profileUpdateMentionsMultipartPolicy := false
 
@@ -64,6 +64,9 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 				if ep.Method == "POST" && ep.Path == "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages" && write == "send_message" {
 					messageWriteCoversJSON = true
 				}
+			}
+			if _, ok := ep.CoveredBy["direct_read"]; ok {
+				directReadCovered++
 			}
 		}
 		if ep.Operation != nil {
@@ -96,8 +99,8 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(uniquePaths) != 89 {
 		t.Fatalf("unique paths = %d, want 89", len(uniquePaths))
 	}
-	if covered != 13 {
-		t.Fatalf("covered endpoints = %d, want 13", covered)
+	if covered != 16 {
+		t.Fatalf("covered endpoints = %d, want 16", covered)
 	}
 	if streamCovered != 7 {
 		t.Fatalf("stream covered endpoints = %d, want 7", streamCovered)
@@ -105,8 +108,11 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if writeCovered != 6 {
 		t.Fatalf("write covered endpoints = %d, want 6", writeCovered)
 	}
-	if operations != 131 {
-		t.Fatalf("operation endpoints = %d, want 131", operations)
+	if directReadCovered != 3 {
+		t.Fatalf("direct read covered endpoints = %d, want 3", directReadCovered)
+	}
+	if operations != 128 {
+		t.Fatalf("operation endpoints = %d, want 128", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -125,13 +131,13 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"PUT":    2,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"GET":  7,
+		"GET":  10,
 		"POST": 5,
 		"PUT":  1,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE": 18,
-		"GET":    55,
+		"GET":    52,
 		"PATCH":  21,
 		"POST":   36,
 		"PUT":    1,
@@ -139,7 +145,7 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	assertStringIntMap(t, "models", models, map[string]int{
 		"admin_reverse_etl":     35,
 		"destructive_action":    19,
-		"direct_read":           53,
+		"direct_read":           50,
 		"disallowed":            4,
 		"duplicate":             1,
 		"sensitive_reverse_etl": 19,
@@ -148,9 +154,9 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"critical": 5,
 		"high":     61,
 		"low":      5,
-		"medium":   60,
+		"medium":   57,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 131,
+		"blocked": 128,
 	})
 }

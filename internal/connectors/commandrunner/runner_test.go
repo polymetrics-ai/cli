@@ -688,6 +688,45 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunImplementedBoundedJSONDirectReadCommand(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "contact search",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/api/v1/accounts/{account_id}/contacts/search"},
+				},
+				OutputPolicy: "bounded_json",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "q", Type: "string", MapsTo: "query.q"},
+				},
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"contact", "search"},
+		Flags: map[string][]string{"q": []string{"alice"}},
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"account_id": "1",
+		}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if connector.directReadReq.OutputPolicy != "bounded_json" {
+		t.Fatalf("direct read output policy = %q, want bounded_json", connector.directReadReq.OutputPolicy)
+	}
+	if connector.directReadReq.Query["q"] != "alice" {
+		t.Fatalf("direct read query = %v, want q=alice", connector.directReadReq.Query)
+	}
+}
+
 func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 	tests := []struct {
 		name     string

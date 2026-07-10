@@ -22,13 +22,15 @@ Status: in progress.
 - Requested parent PR #223 manual CodeRabbit review after #152 integration; CodeRabbit replied `Review finished` and GitHub returned no inline CodeRabbit findings.
 - Opened PR #246 for #151; remote checks passed, CodeRabbit skipped the non-default-base sub-PR, and the branch was squash-merged into the parent as `8a030090f2c505163a8df9b0bffe01b7fbf35c39`.
 - Requested parent PR #223 manual CodeRabbit review after #151 integration; CodeRabbit replied `Review finished` and GitHub returned no inline CodeRabbit findings. Parent PR #223 checks passed after integration.
+- Implemented #153 locally with targeted verification: bounded JSON direct-read output policy, scoped base-path handling, and selected Chatwoot `conversation view`, `contact view`, and `contact search` direct reads.
 
 ## Next
 
 1. Continue the next dependency-unblocked lane (#152 operation ledger, then #151/#153/#154/#155 as dependencies permit).
 2. Keep parent PR #223 draft until all sub-issues are integrated and the human gate is ready.
 3. Route automated review for each subsequent sub-PR and use parent PR coverage/fallback whenever non-default-base sub-PRs are skipped.
-4. Continue the next ready lane (#153 direct reads; #154/#155 remain available with care around overlapping files).
+4. Run #153 full handoff gates, open the stacked #153 PR, and route remote checks/review.
+5. Continue the next ready lane after #153 PR handoff (#154 advanced query/binary or #155 sensitive/admin policy).
 
 ## Safety
 

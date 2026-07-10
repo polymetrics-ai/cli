@@ -85,18 +85,28 @@
     },
     {
       "number": 153,
-      "status": "ready",
+      "status": "implemented_targeted_verified",
       "dependencies": [
         149,
         152
       ],
       "write_scope": [
+        "internal/connectors/engine/direct_read.go",
+        "internal/connectors/engine/direct_read_test.go",
+        "internal/connectors/commandrunner/runner.go",
+        "internal/connectors/commandrunner/runner_test.go",
+        "internal/cli/cli_test.go",
+        "cmd/connectorgen/validate.go",
+        "cmd/connectorgen/chatwoot_api_surface_test.go",
+        "internal/connectors/defs/chatwoot/api_surface.json",
         "internal/connectors/defs/chatwoot/cli_surface.json",
-        "internal/connectors/commandrunner",
-        "internal/cli",
+        "internal/connectors/defs/chatwoot/docs.md",
+        "docs/connectors/chatwoot",
+        "website/data/connectors.generated.json",
+        "website/lib/connectors.catalog.data.generated.json",
         ".planning/phases/issue-153-chatwoot-direct-read"
       ],
-      "decision": "not_spawned_runtime_capability_missing"
+      "decision": "sub_pr_pending_full_gates_pending"
     },
     {
       "number": 154,
@@ -223,6 +233,14 @@
         151
       ],
       "reason": "Parent PR #223 checks after #151 integration completed successfully: verify, govulncheck, Website checks/image, CodeQL, Dependency Review, branch-name, pr-title, require-linked-issue, and gsd-workflow-evidence."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "sub_pr_pending_full_gates_pending",
+      "issue_numbers": [
+        153
+      ],
+      "reason": "Issue #153 implementation and targeted verification completed locally on feat/153-chatwoot-direct-read; full gates, stacked PR, remote checks, and review routing remain pending."
     }
   ],
   "subissues": [
@@ -334,6 +352,42 @@
         "fallback_route": "none",
         "disposition_summary": "CodeRabbit skipped #246 because the base was non-default and skipped #223 automatic review because it is draft. After #246 was squash-merged to parent, manual @coderabbitai review was requested on #223 and CodeRabbit replied Review finished; no actionable inline findings were present.",
         "disposition_url": "https://github.com/polymetrics-ai/cli/pull/223#issuecomment-4930518437"
+      }
+    },
+    {
+      "number": 153,
+      "url": "https://github.com/polymetrics-ai/cli/issues/153",
+      "branch": "feat/153-chatwoot-direct-read",
+      "pr_url": "pending",
+      "worker": "coordinator-local-critical-path",
+      "status": "implemented_targeted_verified",
+      "write_scope": [
+        "internal/connectors/engine/direct_read.go",
+        "internal/connectors/engine/direct_read_test.go",
+        "internal/connectors/commandrunner/runner.go",
+        "internal/connectors/commandrunner/runner_test.go",
+        "internal/cli/cli_test.go",
+        "cmd/connectorgen/validate.go",
+        "cmd/connectorgen/chatwoot_api_surface_test.go",
+        "internal/connectors/defs/chatwoot/api_surface.json",
+        "internal/connectors/defs/chatwoot/cli_surface.json",
+        "internal/connectors/defs/chatwoot/docs.md",
+        "docs/connectors/chatwoot",
+        "website/data/connectors.generated.json",
+        "website/lib/connectors.catalog.data.generated.json",
+        ".planning/phases/issue-153-chatwoot-direct-read"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
+      "verification": "targeted checks passed; full gates pending before PR",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "not_started_pr_pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
       }
     }
   ],

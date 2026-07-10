@@ -100,6 +100,11 @@
       "cycle": "issue-151-integration",
       "decision": "integrated_parent_review_complete",
       "reason": "PR #246 remote checks passed, was squash-merged into parent commit 8a030090f2c505163a8df9b0bffe01b7fbf35c39, parent PR #223 manual CodeRabbit review replied Review finished with no inline findings returned by GitHub API, and parent PR checks passed after integration."
+    },
+    {
+      "cycle": "issue-153-targeted-verification",
+      "decision": "sub_pr_pending_full_gates_pending",
+      "reason": "Issue #153 direct-read implementation passed targeted engine/commandrunner/CLI/connectorgen/conformance/docs/website checks; full gates, stacked PR, remote checks, and review routing remain pending."
     }
   ],
   "verificationPassed": false,

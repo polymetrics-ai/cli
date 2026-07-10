@@ -97,12 +97,12 @@ COMMAND SURFACE
     --connection (string): Use a saved Chatwoot connector credential and account scope.; maps_to=connection
   Support Desk Commands
     conversation list - List account conversations [intent=etl availability=implemented stream=conversations]; flags: --status
-    conversation view - View one conversation [intent=direct_read availability=planned]; notes: Blocked until the direct-read slice adds typed GET execution with bounded output.; flags: --conversation-id
+    conversation view - View one conversation [intent=direct_read availability=implemented]; notes: Bounded direct read; response JSON is capped and secret-shaped keys are redacted.; flags: --conversation-id
     conversation create - Create a conversation [intent=reverse_etl availability=implemented write=create_conversation]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Creates a new Chatwoot conversation in the configured account and may become customer-visible through the inbox channel.; flags: --source-id, --inbox-id, --contact-id, --status
     conversation toggle-status - Change a conversation status [intent=reverse_etl availability=implemented write=toggle_conversation_status]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Changes a conversation's workflow status and can affect routing, reporting, and agent queues.; flags: --conversation-id, --status, --snoozed-until
     contact list - List contacts [intent=etl availability=implemented stream=contacts]
-    contact view - View one contact [intent=direct_read availability=planned]; notes: Blocked until the direct-read slice adds typed GET execution.; flags: --id
-    contact search - Search contacts [intent=direct_read availability=planned]; notes: Blocked until bounded query/direct-read support is implemented.; flags: --q
+    contact view - View one contact [intent=direct_read availability=implemented]; notes: Bounded direct read; response JSON is capped and secret-shaped keys are redacted.; flags: --id
+    contact search - Search contacts [intent=direct_read availability=implemented]; notes: Bounded query direct read; response JSON is capped and secret-shaped keys are redacted.; flags: --q
     contact create - Create a contact [intent=reverse_etl availability=implemented write=create_contact]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Creates a Chatwoot contact record; visible to agents and usable in conversations.; flags: --inbox-id, --name, --email, --phone-number
     contact update - Update a contact [intent=reverse_etl availability=implemented write=update_contact]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Mutates an existing Chatwoot contact profile; visible to agents and downstream automations.; flags: --id, --name, --email, --phone-number
     contact delete - Delete a contact [intent=reverse_etl availability=unsafe_or_disallowed]; approval: Blocked until a destructive typed reverse-ETL action with confirmation is approved.; risk: Deletes a contact record and can remove conversation context.; notes: No generic direct-write fallback is exposed.
@@ -126,7 +126,7 @@ COMMAND SURFACE
   Help topics:
     chatwoot-auth - Use a saved Chatwoot API access token; never pass token values in command text.
     chatwoot-writes - Chatwoot reverse ETL writes require plan, preview, approval, execute; destructive/admin operations remain blocked until typed policies exist.
-    chatwoot-direct-reads - Direct-read commands are planned for single-record, report, audit-log, and search endpoints with bounded output.
+    chatwoot-direct-reads - Direct-read commands are implemented for selected conversation/contact lookups with bounded JSON output; reports, audit logs, public inbox reads, and binary/file endpoints remain planned.
 
 EXAMPLES
   # Inspect as a manual

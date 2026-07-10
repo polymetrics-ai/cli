@@ -22,6 +22,7 @@ const (
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
+	directReadPolicyBoundedJSON                = "bounded_json"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -62,7 +63,8 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
-	resp, err := rt.Requester.DoLimited(ctx, method, resolvedPath, query, nil, maxBytes)
+	requestPath := directReadRequesterPath(rt.Requester.BaseURL, resolvedPath)
+	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, nil, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		msg := safety.RedactErrorText(err.Error())
@@ -112,6 +114,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
+	case directReadPolicyBoundedJSON:
+		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
@@ -142,9 +146,66 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 			out = append(out, item)
 		}
 		return out, nil
+	case directReadPolicyBoundedJSON:
+		return redactBoundedJSON(body), nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
+}
+
+func directReadRequesterPath(baseURL, resolvedPath string) string {
+	if strings.TrimSpace(resolvedPath) == "" {
+		return resolvedPath
+	}
+	u, err := url.Parse(baseURL)
+	if err != nil {
+		return resolvedPath
+	}
+	basePath := strings.TrimRight(u.Path, "/")
+	if basePath == "" {
+		return resolvedPath
+	}
+	path := "/" + strings.TrimLeft(resolvedPath, "/")
+	if path == basePath {
+		return "/"
+	}
+	if strings.HasPrefix(path, basePath+"/") {
+		return strings.TrimPrefix(path, basePath)
+	}
+	return resolvedPath
+}
+
+func redactBoundedJSON(body any) any {
+	switch v := body.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(v))
+		for key, value := range v {
+			if isSensitiveDirectReadJSONKey(key) {
+				out[key] = "***"
+				continue
+			}
+			out[key] = redactBoundedJSON(value)
+		}
+		return out
+	case []any:
+		out := make([]any, len(v))
+		for i, item := range v {
+			out[i] = redactBoundedJSON(item)
+		}
+		return out
+	default:
+		return body
+	}
+}
+
+func isSensitiveDirectReadJSONKey(key string) bool {
+	normalized := strings.ToLower(strings.ReplaceAll(key, "-", "_"))
+	for _, marker := range []string{"token", "secret", "password", "api_key", "access_token", "authorization", "private_key"} {
+		if strings.Contains(normalized, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 func redactGitHubContentsObject(in map[string]any) map[string]any {

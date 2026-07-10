@@ -509,6 +509,65 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	}
 }
 
+func TestChatwootCommandSurfaceRunsDirectReadContactView(t *testing.T) {
+	var gotPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		if r.Method != http.MethodGet {
+			t.Fatalf("method = %s, want GET", r.Method)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"payload":{"id":123,"name":"Fixture Contact","api_access_token":"redact-me"}}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	root := t.TempDir()
+	t.Setenv("PM_CHATWOOT_TOKEN", "synthetic-chatwoot-token")
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "chatwoot-local",
+		"--connector", "chatwoot",
+		"--config", "base_url=" + srv.URL,
+		"--config", "account_id=7",
+		"--from-env", "api_access_token=PM_CHATWOOT_TOKEN",
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"chatwoot", "contact", "view",
+		"--credential", "chatwoot-local",
+		"--id", "123",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/api/v1/accounts/7/contacts/123" {
+		t.Fatalf("request path = %q, want Chatwoot contact direct-read path", gotPath)
+	}
+
+	var env struct {
+		Kind     string         `json:"kind"`
+		Command  string         `json:"command"`
+		Method   string         `json:"method"`
+		Path     string         `json:"path"`
+		Status   int            `json:"status"`
+		Response map[string]any `json:"response"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &env); err != nil {
+		t.Fatalf("decode json: %v\n%s", err, stdout)
+	}
+	if env.Kind != "ConnectorCommandDirectRead" || env.Command != "contact view" || env.Method != "GET" || env.Status != http.StatusOK {
+		t.Fatalf("envelope = %+v, want Chatwoot contact direct-read result", env)
+	}
+	payload, ok := env.Response["payload"].(map[string]any)
+	if !ok {
+		t.Fatalf("response payload = %+v, want object", env.Response["payload"])
+	}
+	if payload["name"] != "Fixture Contact" || payload["api_access_token"] != "***" {
+		t.Fatalf("payload = %+v, want contact name and redacted token", payload)
+	}
+}
+
 func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 	root := t.TempDir()
 	runCLI(t, []string{"init", "--root", root, "--json"})

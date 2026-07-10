@@ -244,6 +244,99 @@ func TestDirectReadRejectsSensitiveRepositoryPathBeforeNetwork(t *testing.T) {
 	}
 }
 
+func TestDirectReadBoundedJSONPolicyRedactsSecretKeys(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"id": 123,
+			"name": "Fixture Contact",
+			"api_access_token": "must-not-leak",
+			"nested": {"password": "must-not-leak", "safe": "kept"},
+			"items": [{"token": "must-not-leak", "label": "kept"}]
+		}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/contacts/{id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/contacts/{id}",
+		PathParams:   map[string]string{"id": "123"},
+		OutputPolicy: "bounded_json",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	if body["api_access_token"] != "***" {
+		t.Fatalf("api_access_token = %v, want redacted marker", body["api_access_token"])
+	}
+	nested, ok := body["nested"].(map[string]any)
+	if !ok {
+		t.Fatalf("nested type = %T, want map", body["nested"])
+	}
+	if nested["password"] != "***" || nested["safe"] != "kept" {
+		t.Fatalf("nested = %+v, want password redacted and safe preserved", nested)
+	}
+	items, ok := body["items"].([]any)
+	if !ok || len(items) != 1 {
+		t.Fatalf("items = %+v, want one item", body["items"])
+	}
+	item, ok := items[0].(map[string]any)
+	if !ok {
+		t.Fatalf("item type = %T, want map", items[0])
+	}
+	if item["token"] != "***" || item["label"] != "kept" {
+		t.Fatalf("item = %+v, want token redacted and label preserved", item)
+	}
+}
+
+func TestDirectReadScopedBasePathEndpointDoesNotDuplicatePrefix(t *testing.T) {
+	var gotPath string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotPath = r.URL.Path
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"id":123,"name":"Fixture Contact","type":"file"}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "chatwoot",
+		HTTP: HTTPBase{URL: srv.URL + "/api/v1/accounts/{{ config.account_id }}"},
+		Surface: &APISurface{
+			OperationLedgerVersion: 1,
+			Endpoints: []SurfaceEndpoint{
+				{
+					Method: http.MethodGet,
+					Path:   "/api/v1/accounts/{account_id}/contacts/{id}",
+					CoveredBy: &SurfaceCoverage{
+						DirectRead: "contact view",
+					},
+				},
+			},
+		},
+	}
+	_, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method: http.MethodGet,
+		Path:   "/api/v1/accounts/{account_id}/contacts/{id}",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"account_id": "1",
+		}},
+		PathParams: map[string]string{
+			"id": "123",
+		},
+		OutputPolicy: "github_contents_file_metadata",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if gotPath != "/api/v1/accounts/1/contacts/123" {
+		t.Fatalf("request path = %q, want scoped Chatwoot contact path without duplicate account prefix", gotPath)
+	}
+}
+
 func TestDirectReadDirectoryPolicyRejectsFileResponse(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

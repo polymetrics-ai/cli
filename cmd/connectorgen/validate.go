@@ -102,6 +102,7 @@ var surfaceOperationRisks = map[string]bool{
 var directReadOutputPolicies = map[string]bool{
 	"github_contents_file_metadata": true,
 	"github_contents_directory":     true,
+	"bounded_json":                  true,
 }
 
 var sourceRequiredOperationModels = map[string]bool{

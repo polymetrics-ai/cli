@@ -68,8 +68,9 @@
       "path": "conversation view",
       "summary": "View one conversation",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developers.chatwoot.com/api-reference/conversations/conversation-details",
+      "output_policy": "bounded_json",
       "flags": [
         {
           "name": "conversation-id",
@@ -78,7 +79,11 @@
           "maps_to": "path.conversation_id"
         }
       ],
-      "notes": "Blocked until the direct-read slice adds typed GET execution with bounded output."
+      "examples": ["pm chatwoot conversation view --conversation-id 42 --json"],
+      "api_surface": [
+        { "method": "GET", "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}" }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
     },
     {
       "path": "conversation create",
@@ -226,8 +231,9 @@
       "path": "contact view",
       "summary": "View one contact",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developers.chatwoot.com/api-reference/contacts/show-contact",
+      "output_policy": "bounded_json",
       "flags": [
         {
           "name": "id",
@@ -236,14 +242,19 @@
           "maps_to": "path.id"
         }
       ],
-      "notes": "Blocked until the direct-read slice adds typed GET execution."
+      "examples": ["pm chatwoot contact view --id 123 --json"],
+      "api_surface": [
+        { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/{id}" }
+      ],
+      "notes": "Bounded direct read; response JSON is capped and secret-shaped keys are redacted."
     },
     {
       "path": "contact search",
       "summary": "Search contacts",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "source_url": "https://developers.chatwoot.com/api-reference/contacts/search-contacts",
+      "output_policy": "bounded_json",
       "flags": [
         {
           "name": "q",
@@ -252,7 +263,11 @@
           "maps_to": "query.q"
         }
       ],
-      "notes": "Blocked until bounded query/direct-read support is implemented."
+      "examples": ["pm chatwoot contact search --q alice --json"],
+      "api_surface": [
+        { "method": "GET", "path": "/api/v1/accounts/{account_id}/contacts/search" }
+      ],
+      "notes": "Bounded query direct read; response JSON is capped and secret-shaped keys are redacted."
     },
     {
       "path": "contact create",
@@ -505,7 +520,7 @@
     },
     {
       "name": "chatwoot-direct-reads",
-      "summary": "Direct-read commands are planned for single-record, report, audit-log, and search endpoints with bounded output."
+      "summary": "Direct-read commands are implemented for selected conversation/contact lookups with bounded JSON output; reports, audit logs, public inbox reads, and binary/file endpoints remain planned."
     }
   ]
 }
