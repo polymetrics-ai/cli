@@ -85,3 +85,102 @@ func TestFreshchatAPISurfaceOperationLedger(t *testing.T) {
 		"disallowed": 2,
 	})
 }
+
+func TestFreshchatBinaryUploadCommandsUseTypedOperations(t *testing.T) {
+	cliRaw, err := os.ReadFile("../../internal/connectors/defs/freshchat/cli_surface.json")
+	if err != nil {
+		t.Fatalf("read freshchat cli_surface.json: %v", err)
+	}
+	opRaw, err := os.ReadFile("../../internal/connectors/defs/freshchat/operations.json")
+	if err != nil {
+		t.Fatalf("read freshchat operations.json: %v", err)
+	}
+
+	var cliSurface struct {
+		Commands []struct {
+			Path         string `json:"path"`
+			Intent       string `json:"intent"`
+			Availability string `json:"availability"`
+			Operation    string `json:"operation"`
+			Notes        string `json:"notes"`
+		} `json:"commands"`
+	}
+	if err := json.Unmarshal(cliRaw, &cliSurface); err != nil {
+		t.Fatalf("unmarshal freshchat cli_surface.json: %v", err)
+	}
+	var operations struct {
+		Operations []struct {
+			ID       string `json:"id"`
+			Kind     string `json:"kind"`
+			Approval string `json:"approval"`
+			File     *struct {
+				Direction string `json:"direction"`
+				Path      string `json:"path"`
+				MaxBytes  int    `json:"max_bytes"`
+			} `json:"file"`
+		} `json:"operations"`
+	}
+	if err := json.Unmarshal(opRaw, &operations); err != nil {
+		t.Fatalf("unmarshal freshchat operations.json: %v", err)
+	}
+
+	ops := map[string]struct {
+		kind      string
+		path      string
+		maxBytes  int
+		approval  string
+		direction string
+	}{}
+	for _, op := range operations.Operations {
+		entry := struct {
+			kind      string
+			path      string
+			maxBytes  int
+			approval  string
+			direction string
+		}{kind: op.Kind, approval: op.Approval}
+		if op.File != nil {
+			entry.path = op.File.Path
+			entry.maxBytes = op.File.MaxBytes
+			entry.direction = op.File.Direction
+		}
+		ops[op.ID] = entry
+	}
+
+	want := map[string]struct {
+		operation string
+		path      string
+	}{
+		"file upload":  {operation: "freshchat.files.upload", path: "/files/upload"},
+		"image upload": {operation: "freshchat.images.upload", path: "/images/upload"},
+	}
+	for _, cmd := range cliSurface.Commands {
+		wantCmd, ok := want[cmd.Path]
+		if !ok {
+			continue
+		}
+		delete(want, cmd.Path)
+		if cmd.Intent != "direct_write" {
+			t.Fatalf("command %q intent = %q, want direct_write", cmd.Path, cmd.Intent)
+		}
+		if cmd.Availability != "unsupported_local" {
+			t.Fatalf("command %q availability = %q, want unsupported_local", cmd.Path, cmd.Availability)
+		}
+		if cmd.Operation != wantCmd.operation {
+			t.Fatalf("command %q operation = %q, want %q", cmd.Path, cmd.Operation, wantCmd.operation)
+		}
+		if cmd.Notes == "" {
+			t.Fatalf("command %q missing notes", cmd.Path)
+		}
+		op, ok := ops[cmd.Operation]
+		if !ok {
+			t.Fatalf("command %q references missing operation %q", cmd.Path, cmd.Operation)
+		}
+		if op.kind != "file_upload" || op.direction != "upload" || op.path != wantCmd.path || op.maxBytes <= 0 || op.approval == "" || op.approval == "none" {
+			t.Fatalf("operation %q policy = %+v, want upload path %s with approval", cmd.Operation, op, wantCmd.path)
+		}
+	}
+	if len(want) != 0 {
+		t.Fatalf("missing Freshchat upload commands: %+v", want)
+	}
+}

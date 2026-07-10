@@ -943,6 +943,40 @@ func TestBundleLoadEmbeddedFreshchatCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedFreshchatFileUploadOperations(t *testing.T) {
+	b, err := Load(defs.FS, "freshchat")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, freshchat): %v", err)
+	}
+
+	want := map[string]string{
+		"freshchat.files.upload":  "/files/upload",
+		"freshchat.images.upload": "/images/upload",
+	}
+	seen := map[string]bool{}
+	for _, op := range b.Operations {
+		path, ok := want[op.ID]
+		if !ok {
+			continue
+		}
+		seen[op.ID] = true
+		if op.Kind != "file_upload" {
+			t.Fatalf("operation %s kind = %q, want file_upload", op.ID, op.Kind)
+		}
+		if op.File == nil || op.File.Direction != "upload" || op.File.Path != path || op.File.MaxBytes <= 0 {
+			t.Fatalf("operation %s file policy = %+v, want upload path %s with positive max_bytes", op.ID, op.File, path)
+		}
+		if op.Approval == "" || op.Approval == "none" {
+			t.Fatalf("operation %s approval = %q, want explicit approval policy", op.ID, op.Approval)
+		}
+	}
+	for id := range want {
+		if !seen[id] {
+			t.Fatalf("Freshchat operations missing typed upload operation %s: %+v", id, b.Operations)
+		}
+	}
+}
+
 func cliSurfaceHasCommand(surface *CLISurface, path, intent, stream, write string) bool {
 	for _, cmd := range surface.Commands {
 		if cmd.Path == path && cmd.Intent == intent && cmd.Stream == stream && cmd.Write == write {
