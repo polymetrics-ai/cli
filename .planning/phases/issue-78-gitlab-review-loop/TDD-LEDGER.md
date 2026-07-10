@@ -33,6 +33,7 @@
 - Requested Claude review twice as instructed:
   - `gh pr comment 127 --body "@claude review this PR"` → run `29084800101`, cancelled.
   - Retry once → run `29084886661`, cancelled.
+- After the accepted group-metadata fix commit, requested the one additional fix-commit review pass permitted by the loop → run `29085553120`, cancelled.
 - Claude produced no inline review findings or summary review beyond "working" comments before cancellation.
 - Collected existing inline automated-review findings and posted disposition replies on all 9 existing threads.
 - Accepted the still-valid GitLab group metadata finding and removed multi-token local workflow group entries while retaining the individual unsupported local workflow commands.

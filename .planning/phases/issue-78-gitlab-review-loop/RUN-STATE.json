@@ -3,7 +3,7 @@
   "issue": 78,
   "parent_pr": 127,
   "branch": "feat/78-gitlab-cli-parity",
-  "status": "claude-review-blocked-after-retry-existing-findings-dispositioned",
+  "status": "claude-review-blocked-after-retry-and-fix-pass-existing-findings-dispositioned",
   "gsd_prompt": "scripts/gsd prompt code-review issue-78-gitlab-cli-parity-review --tdd",
   "missing_requested_doc": ".agents/agentic-delivery/workflows/claude-review-loop.md",
   "fallback_docs": [
@@ -17,18 +17,20 @@
   "claudeReview": {
     "requested": true,
     "runs": [
-      {"run_id": 29084800101, "conclusion": "cancelled"},
-      {"run_id": 29084886661, "conclusion": "cancelled"}
+      {"run_id": 29084800101, "conclusion": "cancelled", "purpose": "initial on-demand review"},
+      {"run_id": 29084886661, "conclusion": "cancelled", "purpose": "retry after initial cancellation"},
+      {"run_id": 29085553120, "conclusion": "cancelled", "purpose": "post-fix on-demand review"}
     ],
     "retry_used": true,
+    "post_fix_pass_used": true,
     "findings": 0,
-    "blocker": "Claude on-demand review cancelled twice before posting findings."
+    "blocker": "Claude on-demand review cancelled before posting findings on every attempt."
   },
   "reviewDispositions": {
     "existing_inline_threads": 9,
     "replied": 9,
     "accepted": 9,
-    "accepted_fix_commits_pending_push": true
+    "accepted_fix_commits_pushed": true
   },
   "orchestrationDecisions": [
     {
@@ -60,7 +62,12 @@
       "cycle": "claude-review",
       "decision": "not_spawned_review_blocked",
       "reason": "Claude review workflow cancelled twice; existing inline findings were dispositioned manually per template."
+    },
+    {
+      "cycle": "post-fix-claude-review",
+      "decision": "not_spawned_review_blocked",
+      "reason": "Post-fix Claude review workflow also cancelled before posting findings."
     }
   ],
-  "updated_at": "2026-07-10T10:25:00Z"
+  "updated_at": "2026-07-10T10:35:00Z"
 }
