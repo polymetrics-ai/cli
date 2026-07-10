@@ -1,0 +1,22 @@
+{
+  "phase": "issue-159-zendesk-stream-runner",
+  "issue": 159,
+  "parent_issue": 156,
+  "status": "planned",
+  "runtime": "pi",
+  "branch": "feat/159-zendesk-stream-runner",
+  "base_branch": "feat/161-zendesk-direct-read",
+  "gsd": {
+    "adapter": "scripts/gsd",
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json": "passed",
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-156-zendesk-complete-implementation --skip-research",
+    "programming_loop_prompt": "scripts/gsd prompt programming-loop init --phase issue-156-zendesk-complete-implementation --dry-run",
+    "programming_loop_status": "blocked_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationNotes": "Planning checkpoint only; no production edits yet.",
+  "updated_at": "2026-07-10T02:15:00Z"
+}
