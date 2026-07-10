@@ -22,6 +22,12 @@ apply it before anything else.
      advance until the coverage self-check is `complete` (0 unclassified endpoints, all source_urls).
    - PARENT_PLAN → write `PLAN.md` + the parent roadmap + the 7 parity sub-issues (connector) or
      task-appropriate slices (implementation); map every researched endpoint into api_surface/cli_surface.
+     Slice invariant (connector): EVERY slice must leave `internal/connectors/defs` loader-valid at
+     every commit — the bundle registry is embedded, so one invalid bundle breaks `go test ./...`
+     repo-wide. The loader requires `metadata.json`, `spec.json`, `docs.md`, and (unless
+     `capabilities.dynamic_schema` is true) `streams.json`. The FIRST slice therefore creates minimal
+     valid stubs for all loader-required files in its scope; later slices EDIT (never re-create) them.
+     Sequenced ownership of a shared file via the dependency DAG is fine; simultaneous ownership is not.
    - ISSUE_CREATE → create the parent + sub-issues with `gh` (idempotent; reuse existing).
    - PARENT_SETUP → create the parent branch from `main`; open the DRAFT parent PR → `main`.
    - VERIFY → run the gates (`make connectorgen-validate`, `make verify`, focused tests,
