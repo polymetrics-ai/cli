@@ -7,7 +7,7 @@ description: Zendesk connector knowledge and safe action guide.
 
 ## Purpose
 
-Metadata inventory for the official Zendesk Support API surface; executable streams, bounded direct reads, and reverse-ETL writes are mapped by the Zendesk CLI parity sub-issues.
+Operation ledger for the official Zendesk Support API surface; executable streams, bounded direct reads, and reverse-ETL writes are mapped by later Zendesk CLI parity sub-issues.
 
 ## Icon
 
@@ -34,8 +34,8 @@ Metadata inventory for the official Zendesk Support API surface; executable stre
 
 ## Security
 
-- read risk: metadata-only bundle in issue #157; later lanes enable safe ETL streams and bounded direct reads from the official Zendesk OAS
-- write risk: metadata-only bundle in issue #157; Zendesk mutations remain blocked until typed reverse-ETL schemas, approval text, redaction, and destructive confirmation are added
+- read risk: operation-ledger bundle in issue #160; later lanes enable safe ETL streams and bounded direct reads from the official Zendesk OAS
+- write risk: operation-ledger bundle in issue #160; Zendesk mutations remain blocked until typed reverse-ETL schemas, approval text, redaction, and destructive confirmation are added
 - approval: all external writes remain plan → preview → approval → execute and blocked in this slice
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 

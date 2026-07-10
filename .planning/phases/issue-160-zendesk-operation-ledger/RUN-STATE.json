@@ -2,7 +2,7 @@
   "phase": "issue-160-zendesk-operation-ledger",
   "issue": 160,
   "parent_issue": 156,
-  "status": "planned",
+  "status": "targeted_green",
   "runtime": "pi",
   "branch": "feat/160-zendesk-operation-ledger",
   "base_branch": "feat/157-zendesk-cli-surface-metadata",
@@ -18,6 +18,6 @@
     "manual_fallback": true
   },
   "verificationPassed": false,
-  "verificationNotes": "Planning checkpoint only; no production edits yet.",
-  "updated_at": "2026-07-10T00:00:00Z"
+  "verificationNotes": "Targeted engine/connectorgen/docs validation passed; broad handoff gates pending.",
+  "updated_at": "2026-07-10T00:45:00Z"
 }

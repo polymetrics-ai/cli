@@ -940,10 +940,10 @@ func TestBundleLoadEmbeddedZendeskCLISurface(t *testing.T) {
 	}
 }
 
-func TestBundleLoadEmbeddedZendeskOperationLedger(t *testing.T) {
-	b, err := Load(defs.FS, "zendesk")
+func TestBundleLoadZendeskOperationLedger(t *testing.T) {
+	b, err := Load(os.DirFS("../defs"), "zendesk")
 	if err != nil {
-		t.Fatalf("Load(defs.FS, zendesk): %v", err)
+		t.Fatalf("Load(defs dir, zendesk): %v", err)
 	}
 	if got, want := len(b.Operations), 617; got != want {
 		t.Fatalf("Zendesk Operations count = %d, want %d", got, want)
@@ -956,6 +956,7 @@ func TestBundleLoadEmbeddedZendeskOperationLedger(t *testing.T) {
 	}
 
 	opsByID := make(map[string]OperationSpec, len(b.Operations))
+	opsByEndpoint := make(map[string]OperationSpec, len(b.Operations))
 	for _, op := range b.Operations {
 		if op.ID == "" {
 			t.Fatalf("Zendesk operation with empty id: %+v", op)
@@ -964,35 +965,53 @@ func TestBundleLoadEmbeddedZendeskOperationLedger(t *testing.T) {
 			t.Fatalf("duplicate Zendesk operation id %q", op.ID)
 		}
 		opsByID[op.ID] = op
+		method, path := operationMethodPath(op)
+		if method == "" || path == "" {
+			t.Fatalf("Zendesk operation %q has no REST/binary endpoint", op.ID)
+		}
+		opsByEndpoint[method+" "+path] = op
 	}
 
 	for _, ep := range b.Surface.Endpoints {
-		if ep.Operation != nil && ep.Operation.Model == "deprecated" {
-			if ep.Excluded == nil || ep.Excluded.Category != "deprecated" {
-				t.Fatalf("deprecated endpoint %s %s missing deprecated exclusion", ep.Method, ep.Path)
+		if ep.CoveredBy != nil || ep.Excluded != nil {
+			t.Fatalf("endpoint %s %s uses executable/legacy classifier in operation-ledger slice", ep.Method, ep.Path)
+		}
+		if ep.Operation == nil {
+			t.Fatalf("endpoint %s %s has no blocked operation classifier", ep.Method, ep.Path)
+		}
+		op, ok := opsByEndpoint[strings.ToUpper(ep.Method)+" "+ep.Path]
+		if !ok {
+			t.Fatalf("endpoint %s %s has no matching operations.json entry", ep.Method, ep.Path)
+		}
+		switch ep.Operation.Model {
+		case "direct_read":
+			if op.Kind != "rest_read" {
+				t.Fatalf("endpoint %s %s operation kind = %q, want rest_read", ep.Method, ep.Path, op.Kind)
 			}
-			continue
-		}
-		if ep.Excluded != nil {
-			continue
-		}
-		if ep.CoveredBy == nil {
-			t.Fatalf("endpoint %s %s has no covered_by or excluded accounting", ep.Method, ep.Path)
-		}
-		refs := append([]string{}, ep.CoveredBy.DirectReads...)
-		for _, ref := range []string{ep.CoveredBy.Stream, ep.CoveredBy.Write, ep.CoveredBy.DirectRead} {
-			if ref != "" {
-				refs = append(refs, ref)
+		case "binary_read":
+			if op.Kind != "binary_download" {
+				t.Fatalf("endpoint %s %s operation kind = %q, want binary_download", ep.Method, ep.Path, op.Kind)
+			}
+		case "sensitive_reverse_etl", "destructive_action", "deprecated":
+			// Deprecated rows retain the HTTP operation kind for accounting but remain blocked.
+			if strings.EqualFold(ep.Method, "GET") && op.Kind != "rest_read" {
+				t.Fatalf("endpoint %s %s operation kind = %q, want rest_read", ep.Method, ep.Path, op.Kind)
+			}
+			if !strings.EqualFold(ep.Method, "GET") && op.Kind != "rest_write" {
+				t.Fatalf("endpoint %s %s operation kind = %q, want rest_write", ep.Method, ep.Path, op.Kind)
 			}
 		}
-		if len(refs) == 0 {
-			t.Fatalf("endpoint %s %s has empty covered_by accounting", ep.Method, ep.Path)
-		}
-		for _, ref := range refs {
-			if _, ok := opsByID[ref]; !ok {
-				t.Fatalf("endpoint %s %s references unknown operation %q", ep.Method, ep.Path, ref)
-			}
-		}
+	}
+}
+
+func operationMethodPath(op OperationSpec) (string, string) {
+	switch {
+	case op.REST != nil:
+		return strings.ToUpper(op.REST.Method), op.REST.Path
+	case op.Binary != nil:
+		return strings.ToUpper(op.Binary.Method), op.Binary.Path
+	default:
+		return "", ""
 	}
 }
 
