@@ -24,3 +24,9 @@
 - Mechanical lint cleanup completed without new dependencies or credentialed checks.
 - Final `golangci-lint run` passed with `0 issues`.
 - `make verify` passed.
+- Focused post-disposition checks passed:
+  - `go test ./internal/connectors/engine ./internal/cli -run 'GitLab|CommandSurface|Guide|Manual|LeafHelp' -count=1`
+  - `go run ./cmd/connectorgen validate internal/connectors/defs`
+  - `golangci-lint run`
+  - `go test -timeout 20m ./...`
+  - `make verify`

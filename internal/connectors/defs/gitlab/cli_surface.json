@@ -63,10 +63,7 @@
         "auth",
         "config",
         "alias",
-        "completion",
-        "repo clone",
-        "repo remote",
-        "repo prune"
+        "completion"
       ]
     },
     {

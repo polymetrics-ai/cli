@@ -26,3 +26,13 @@
 - `golangci-lint run` ✅ (`0 issues`)
 - `go vet ./...`, `go build ./cmd/pm`, `go test -timeout 20m ./...`, `make connectorgen-validate`, and `make verify` ✅
 - CLI parity checks and `cd website && pnpm run gen:website-data` ✅
+
+## Automated review loop evidence
+
+- Rebased push completed at `8d6e449c`.
+- Requested Claude review twice as instructed:
+  - `gh pr comment 127 --body "@claude review this PR"` → run `29084800101`, cancelled.
+  - Retry once → run `29084886661`, cancelled.
+- Claude produced no inline review findings or summary review beyond "working" comments before cancellation.
+- Collected existing inline automated-review findings and posted disposition replies on all 9 existing threads.
+- Accepted the still-valid GitLab group metadata finding and removed multi-token local workflow group entries while retaining the individual unsupported local workflow commands.
