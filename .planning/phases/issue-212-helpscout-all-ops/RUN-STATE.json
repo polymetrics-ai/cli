@@ -29,7 +29,7 @@
     "golang-documentation"
   ],
   "verificationPassed": false,
-  "verificationStatus": "focused tests, connector validation, docs validation, and website generation passed; website typecheck blocked by missing node_modules; full make verify pending",
+  "verificationStatus": "full local gate passed; website typecheck remains blocked by missing node_modules/tsc",
   "safety": {
     "credentialed_checks": false,
     "new_dependencies": false,
@@ -53,7 +53,12 @@
     { "command": "go run ./cmd/connectorgen validate internal/connectors/defs", "result": "pass" },
     { "command": "./pm docs validate --connectors-dir docs/connectors", "result": "pass" },
     { "command": "cd website && pnpm run gen:website-data", "result": "pass" },
-    { "command": "cd website && pnpm run typecheck", "result": "blocked", "reason": "tsc not found; website/node_modules missing" }
+    { "command": "cd website && pnpm run typecheck", "result": "blocked", "reason": "tsc not found; website/node_modules missing" },
+    { "command": "gofmt -w cmd internal", "result": "pass" },
+    { "command": "go vet ./...", "result": "pass" },
+    { "command": "go test ./...", "result": "pass" },
+    { "command": "go build ./cmd/pm", "result": "pass" },
+    { "command": "make verify", "result": "pass" }
   ],
   "updated_at": "2026-07-10T00:00:00Z"
 }

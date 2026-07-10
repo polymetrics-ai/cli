@@ -26,4 +26,4 @@ Status: implemented locally; full verification and PR/review routing pending.
 
 ## Verification
 
-Focused Go, connector validation, CLI help, docs validation, and website data generation passed. Website typecheck is blocked by missing `node_modules`/`tsc`. Full `make verify` gate pending.
+Focused Go, connector validation, CLI help, docs validation, website data generation, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` passed. Website typecheck is blocked by missing `node_modules`/`tsc`.

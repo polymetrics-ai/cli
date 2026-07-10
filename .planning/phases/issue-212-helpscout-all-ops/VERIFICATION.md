@@ -51,7 +51,7 @@ Results so far:
 - `cd website && pnpm run typecheck`: blocked because `tsc` is unavailable and `website/node_modules` is missing. No dependency install was run.
 - `rg -n "help-scout|Help Scout" docs/cli docs/connectors website`: passed; found updated generated Help Scout/catalog/website references.
 
-## Planned full gate before PR handoff
+## Full gate before PR handoff
 
 ```bash
 gofmt -w cmd internal
@@ -62,4 +62,4 @@ make verify
 go run ./cmd/connectorgen validate internal/connectors/defs
 ```
 
-Result: pending.
+Result: passed.
