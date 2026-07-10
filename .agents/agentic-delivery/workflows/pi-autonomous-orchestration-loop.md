@@ -144,3 +144,28 @@ The run ends only when: all sub-issues are `complete` and the parent reaches the
 ceiling is reached (`terminal: "budget"`, resumable). Success is not assumed from a missing error —
 it is asserted from `ORCHESTRATION-STATE.json` + GitHub + git agreeing that every sub-issue is
 integrated and verified.
+
+## Runtimes: two ways to drive this loop
+
+The stage machine, durable state, and reconciler above are runtime-agnostic. Two drivers implement them:
+
+- **Pi-orchestrated** (`scripts/pi-auto-loop.sh` + `.pi/prompts/pm-auto-loop.md`): a Pi session
+  (Claude) is the orchestrator and dispatches Pi subagents per role. Requires Pi's `anthropic`
+  provider (subscription "extra usage") or OpenRouter for the Claude roles.
+- **Claude-orchestrated + Shepherd validator** (`scripts/claude-auto-loop.sh` +
+  `.agents/agentic-delivery/prompts/claude-orchestrator.md`): the first-party Claude Code CLI
+  (`claude -p`, subscription-backed, no third-party gate) is the orchestrator and does the Claude-role
+  work with full repo context; it dispatches **Codex** (`pi --model openai-codex/gpt-5.5`) for
+  implementation. This driver adds a **supervisor layer** — see below.
+
+## Validator layer (Shepherd supervisor meta-agent)
+
+Above the orchestrator sits an independent **Shepherd-style validator** that judges whether the
+orchestration is running correctly, step by step — see
+`.agents/agentic-delivery/workflows/shepherd-validator.md`. After every orchestrator turn it scores
+the `(state, action)` transition 1–5 on six dimensions (Anthropic trajectory rubric, geometric mean),
+writes `VALIDATION.jsonl`, and emits a verdict — `PROCEED` / `RETRY` / `REVERT` (restore the last
+checkpoint and replay the stage from that fork point) / `HALT` (hard-gate breach → human). It is
+independent of the orchestrator (re-derives truth from git/gh/artifacts), so a hallucinating
+orchestrator cannot self-certify, and it is the layer that catches skipped gates, no-op loops, and
+parallel-worker write conflicts before they compound.
