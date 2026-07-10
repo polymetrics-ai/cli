@@ -18,6 +18,29 @@ handoff.
 - Common findings: write action with no `covered_by` entry in `api_surface.json`, schema mismatch,
   missing required file (`metadata.json`/`spec.json`/`streams.json`), unknown execution model.
 
+## Stacked intra-connector slice gate (intermediate sub-PRs only)
+
+When one connector rollout is decomposed into stacked slices (sub-PRs into a parent branch, e.g.
+foundation → schemas → reads → writes → deletes → CLI → fixtures/docs), a coverage-complete
+`api_surface.json` necessarily references streams/writes owned by not-yet-integrated slices. For
+those intermediate sub-PRs only, the connectorgen validate gate is staged:
+
+- The bundle must stay **loader-valid at every commit**: `metadata.json`, `spec.json`, `docs.md`
+  present (a stub refined by its owning slice is fine) and `streams.json` present and schema-valid
+  (`{"base": …, "streams": []}` is valid) unless `capabilities.dynamic_schema` is true. The defs
+  tree is embedded, so one invalid bundle breaks every package that loads the registry: `go build`,
+  `go vet ./...`, and repo-wide `go test ./...` must be green on every slice.
+- `connectorgen validate` findings are tolerated ONLY when every finding is rule
+  `surface_unknown_target` on this connector and each dangling `covered_by.stream` /
+  `covered_by.write` target is owned by a later slice per the parent plan's slice map. The sub-PR
+  body must state the tolerated finding count and the owning slice for each group. Any other
+  finding (any rule, any connector), any warning, or any `surface_incomplete` finding fails the
+  slice.
+- Every other gate in this document applies unchanged to every slice.
+- The final slice / parent-finalize gate is absolute: `findings: []` and `warnings: []` for the
+  full defs tree, plus `make verify`, smoke, and certify. The parent PR into `main` remains
+  human-gated and must never merge with tolerated findings outstanding.
+
 ## Secret-scan gate
 
 - No secret values, API tokens, OAuth tokens, PEM private keys, passwords, or bearer strings in
