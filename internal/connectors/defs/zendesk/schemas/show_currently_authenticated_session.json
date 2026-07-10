@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "show_currently_authenticated_session",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "authenticated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "last_seen_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ]
+}

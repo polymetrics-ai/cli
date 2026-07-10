@@ -35,5 +35,686 @@
       }
     ]
   },
-  "streams": []
+  "streams": [
+    {
+      "name": "list_activities",
+      "path": "/api/v2/activities",
+      "records": {
+        "path": "activities"
+      },
+      "schema": "schemas/list_activities.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_approval_requests",
+      "path": "/api/v2/approval_requests",
+      "records": {
+        "path": "approval_requests"
+      },
+      "schema": "schemas/list_approval_requests.json"
+    },
+    {
+      "name": "list_audit_logs",
+      "path": "/api/v2/audit_logs",
+      "records": {
+        "path": "audit_logs"
+      },
+      "schema": "schemas/list_audit_logs.json"
+    },
+    {
+      "name": "list_automations",
+      "path": "/api/v2/automations",
+      "records": {
+        "path": "automations"
+      },
+      "schema": "schemas/list_automations.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_active_automations",
+      "path": "/api/v2/automations/active",
+      "records": {
+        "path": "automations"
+      },
+      "schema": "schemas/list_active_automations.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "search_automations",
+      "path": "/api/v2/automations/search",
+      "records": {
+        "path": "automations"
+      },
+      "schema": "schemas/search_automations.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_brand_agents",
+      "path": "/api/v2/brand_agents",
+      "records": {
+        "path": "brand_agents"
+      },
+      "schema": "schemas/list_brand_agents.json"
+    },
+    {
+      "name": "list_monitored_twitter_handles",
+      "path": "/api/v2/channels/twitter/monitored_twitter_handles",
+      "records": {
+        "path": "monitored_twitter_handles"
+      },
+      "schema": "schemas/list_monitored_twitter_handles.json"
+    },
+    {
+      "name": "list_custom_objects",
+      "path": "/api/v2/custom_objects",
+      "records": {
+        "path": "custom_objects"
+      },
+      "schema": "schemas/list_custom_objects.json"
+    },
+    {
+      "name": "list_custom_roles",
+      "path": "/api/v2/custom_roles",
+      "records": {
+        "path": "custom_roles"
+      },
+      "schema": "schemas/list_custom_roles.json"
+    },
+    {
+      "name": "list_custom_statuses",
+      "path": "/api/v2/custom_statuses",
+      "records": {
+        "path": "custom_statuses"
+      },
+      "schema": "schemas/list_custom_statuses.json"
+    },
+    {
+      "name": "list_deleted_users",
+      "path": "/api/v2/deleted_users",
+      "records": {
+        "path": "deleted_users"
+      },
+      "schema": "schemas/list_deleted_users.json"
+    },
+    {
+      "name": "list_deletion_schedules",
+      "path": "/api/v2/deletion_schedules",
+      "records": {
+        "path": "deletion_schedules"
+      },
+      "schema": "schemas/list_deletion_schedules.json"
+    },
+    {
+      "name": "list_email_notifications",
+      "path": "/api/v2/email_notifications",
+      "records": {
+        "path": "email_notifications"
+      },
+      "schema": "schemas/list_email_notifications.json"
+    },
+    {
+      "name": "list_group_memberships",
+      "path": "/api/v2/group_memberships",
+      "records": {
+        "path": "group_memberships"
+      },
+      "schema": "schemas/list_group_memberships.json"
+    },
+    {
+      "name": "list_assignable_group_memberships",
+      "path": "/api/v2/group_memberships/assignable",
+      "records": {
+        "path": "group_memberships"
+      },
+      "schema": "schemas/list_assignable_group_memberships.json"
+    },
+    {
+      "name": "list_group_sla_policies",
+      "path": "/api/v2/group_slas/policies",
+      "records": {
+        "path": "group_sla_policies"
+      },
+      "schema": "schemas/list_group_sla_policies.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_groups",
+      "path": "/api/v2/groups",
+      "records": {
+        "path": "groups"
+      },
+      "schema": "schemas/list_groups.json"
+    },
+    {
+      "name": "list_assignable_groups",
+      "path": "/api/v2/groups/assignable",
+      "records": {
+        "path": "groups"
+      },
+      "schema": "schemas/list_assignable_groups.json"
+    },
+    {
+      "name": "list_itam_asset_types",
+      "path": "/api/v2/it_asset_management/asset_types",
+      "records": {
+        "path": "asset_types"
+      },
+      "schema": "schemas/list_itam_asset_types.json"
+    },
+    {
+      "name": "list_itam_assets",
+      "path": "/api/v2/it_asset_management/assets",
+      "records": {
+        "path": "assets"
+      },
+      "schema": "schemas/list_itam_assets.json"
+    },
+    {
+      "name": "list_itam_statuses",
+      "path": "/api/v2/it_asset_management/statuses",
+      "records": {
+        "path": "statuses"
+      },
+      "schema": "schemas/list_itam_statuses.json"
+    },
+    {
+      "name": "list_job_statuses",
+      "path": "/api/v2/job_statuses",
+      "records": {
+        "path": "job_statuses"
+      },
+      "schema": "schemas/list_job_statuses.json"
+    },
+    {
+      "name": "list_locales",
+      "path": "/api/v2/locales",
+      "records": {
+        "path": "locales"
+      },
+      "schema": "schemas/list_locales.json"
+    },
+    {
+      "name": "list_locales_for_agent",
+      "path": "/api/v2/locales/agent",
+      "records": {
+        "path": "locales"
+      },
+      "schema": "schemas/list_locales_for_agent.json"
+    },
+    {
+      "name": "list_available_public_locales",
+      "path": "/api/v2/locales/public",
+      "records": {
+        "path": "locales"
+      },
+      "schema": "schemas/list_available_public_locales.json"
+    },
+    {
+      "name": "list_o_auth_clients",
+      "path": "/api/v2/oauth/clients",
+      "records": {
+        "path": "clients"
+      },
+      "schema": "schemas/list_o_auth_clients.json"
+    },
+    {
+      "name": "list_global_o_auth_clients",
+      "path": "/api/v2/oauth/global_clients",
+      "records": {
+        "path": "global_clients"
+      },
+      "schema": "schemas/list_global_o_auth_clients.json"
+    },
+    {
+      "name": "global_o_auth_clients_token_summary",
+      "path": "/api/v2/oauth/global_clients/token_summary",
+      "records": {
+        "path": "global_clients"
+      },
+      "schema": "schemas/global_o_auth_clients_token_summary.json"
+    },
+    {
+      "name": "list_o_auth_tokens",
+      "path": "/api/v2/oauth/tokens",
+      "records": {
+        "path": "tokens"
+      },
+      "schema": "schemas/list_o_auth_tokens.json"
+    },
+    {
+      "name": "list_organization_memberships",
+      "path": "/api/v2/organization_memberships",
+      "records": {
+        "path": "organization_memberships"
+      },
+      "schema": "schemas/list_organization_memberships.json"
+    },
+    {
+      "name": "list_organizations",
+      "path": "/api/v2/organizations",
+      "records": {
+        "path": "organizations"
+      },
+      "schema": "schemas/list_organizations.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "autocomplete_organizations",
+      "path": "/api/v2/organizations/autocomplete",
+      "records": {
+        "path": "organizations"
+      },
+      "schema": "schemas/autocomplete_organizations.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "search_organizations",
+      "path": "/api/v2/organizations/search",
+      "records": {
+        "path": "organizations"
+      },
+      "schema": "schemas/search_organizations.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "show_many_organizations",
+      "path": "/api/v2/organizations/show_many",
+      "records": {
+        "path": "organizations"
+      },
+      "schema": "schemas/show_many_organizations.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_queues",
+      "path": "/api/v2/queues",
+      "records": {
+        "path": "queues"
+      },
+      "schema": "schemas/list_queues.json"
+    },
+    {
+      "name": "list_support_addresses",
+      "path": "/api/v2/recipient_addresses",
+      "records": {
+        "path": "recipient_addresses"
+      },
+      "schema": "schemas/list_support_addresses.json"
+    },
+    {
+      "name": "list_remote_authentications",
+      "path": "/api/v2/remote_authentications",
+      "records": {
+        "path": "remote_authentications"
+      },
+      "schema": "schemas/list_remote_authentications.json"
+    },
+    {
+      "name": "list_requests",
+      "path": "/api/v2/requests",
+      "records": {
+        "path": "requests"
+      },
+      "schema": "schemas/list_requests.json"
+    },
+    {
+      "name": "list_ccd_requests",
+      "path": "/api/v2/requests/ccd",
+      "records": {
+        "path": "requests"
+      },
+      "schema": "schemas/list_ccd_requests.json"
+    },
+    {
+      "name": "list_open_requests",
+      "path": "/api/v2/requests/open",
+      "records": {
+        "path": "requests"
+      },
+      "schema": "schemas/list_open_requests.json"
+    },
+    {
+      "name": "search_requests",
+      "path": "/api/v2/requests/search",
+      "records": {
+        "path": "requests"
+      },
+      "schema": "schemas/search_requests.json"
+    },
+    {
+      "name": "list_solved_requests",
+      "path": "/api/v2/requests/solved",
+      "records": {
+        "path": "requests"
+      },
+      "schema": "schemas/list_solved_requests.json"
+    },
+    {
+      "name": "list_resource_collections",
+      "path": "/api/v2/resource_collections",
+      "records": {
+        "path": "resource_collections"
+      },
+      "schema": "schemas/list_resource_collections.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_account_attributes",
+      "path": "/api/v2/routing/attributes",
+      "records": {
+        "path": "attributes"
+      },
+      "schema": "schemas/list_account_attributes.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_satisfaction_ratings",
+      "path": "/api/v2/satisfaction_ratings",
+      "records": {
+        "path": "satisfaction_ratings"
+      },
+      "schema": "schemas/list_satisfaction_ratings.json"
+    },
+    {
+      "name": "list_satisfaction_rating_reasons",
+      "path": "/api/v2/satisfaction_reasons",
+      "records": {
+        "path": "reasons"
+      },
+      "schema": "schemas/list_satisfaction_rating_reasons.json"
+    },
+    {
+      "name": "list_saved_searches",
+      "path": "/api/v2/saved_searches",
+      "records": {
+        "path": "saved_searches"
+      },
+      "schema": "schemas/list_saved_searches.json"
+    },
+    {
+      "name": "list_sessions",
+      "path": "/api/v2/sessions",
+      "records": {
+        "path": "sessions"
+      },
+      "schema": "schemas/list_sessions.json"
+    },
+    {
+      "name": "list_sharing_agreements",
+      "path": "/api/v2/sharing_agreements",
+      "records": {
+        "path": "sharing_agreements"
+      },
+      "schema": "schemas/list_sharing_agreements.json"
+    },
+    {
+      "name": "list_sla_policies",
+      "path": "/api/v2/slas/policies",
+      "records": {
+        "path": "sla_policies"
+      },
+      "schema": "schemas/list_sla_policies.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_suspended_tickets",
+      "path": "/api/v2/suspended_tickets",
+      "records": {
+        "path": "suspended_tickets"
+      },
+      "schema": "schemas/list_suspended_tickets.json"
+    },
+    {
+      "name": "list_tags",
+      "path": "/api/v2/tags",
+      "records": {
+        "path": "tags"
+      },
+      "schema": "schemas/list_tags.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_target_failures",
+      "path": "/api/v2/target_failures",
+      "records": {
+        "path": "target_failures"
+      },
+      "schema": "schemas/list_target_failures.json"
+    },
+    {
+      "name": "list_task_list_templates",
+      "path": "/api/v2/task_list_templates",
+      "records": {
+        "path": "task_list_templates"
+      },
+      "schema": "schemas/list_task_list_templates.json"
+    },
+    {
+      "name": "list_ticket_fields",
+      "path": "/api/v2/ticket_fields",
+      "records": {
+        "path": "ticket_fields"
+      },
+      "schema": "schemas/list_ticket_fields.json"
+    },
+    {
+      "name": "show_many_ticket_fields",
+      "path": "/api/v2/ticket_fields/show_many",
+      "records": {
+        "path": "ticket_fields"
+      },
+      "schema": "schemas/show_many_ticket_fields.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_ticket_form_statuses",
+      "path": "/api/v2/ticket_form_statuses",
+      "records": {
+        "path": "ticket_form_statuses"
+      },
+      "schema": "schemas/list_ticket_form_statuses.json"
+    },
+    {
+      "name": "list_ticket_forms",
+      "path": "/api/v2/ticket_forms",
+      "records": {
+        "path": "ticket_forms"
+      },
+      "schema": "schemas/list_ticket_forms.json"
+    },
+    {
+      "name": "list_tickets",
+      "path": "/api/v2/tickets",
+      "records": {
+        "path": "tickets"
+      },
+      "schema": "schemas/list_tickets.json"
+    },
+    {
+      "name": "list_recent_tickets",
+      "path": "/api/v2/tickets/recent",
+      "records": {
+        "path": "tickets"
+      },
+      "schema": "schemas/list_recent_tickets.json"
+    },
+    {
+      "name": "tickets_show_many",
+      "path": "/api/v2/tickets/show_many",
+      "records": {
+        "path": "tickets"
+      },
+      "schema": "schemas/tickets_show_many.json"
+    },
+    {
+      "name": "list_triggers",
+      "path": "/api/v2/triggers",
+      "records": {
+        "path": "triggers"
+      },
+      "schema": "schemas/list_triggers.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_active_triggers",
+      "path": "/api/v2/triggers/active",
+      "records": {
+        "path": "triggers"
+      },
+      "schema": "schemas/list_active_triggers.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "search_triggers",
+      "path": "/api/v2/triggers/search",
+      "records": {
+        "path": "triggers"
+      },
+      "schema": "schemas/search_triggers.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_current_user_o_auth_clients",
+      "path": "/api/v2/users/me/oauth/clients",
+      "records": {
+        "path": "clients"
+      },
+      "schema": "schemas/list_current_user_o_auth_clients.json"
+    },
+    {
+      "name": "show_currently_authenticated_session",
+      "path": "/api/v2/users/me/session",
+      "records": {
+        "path": "session"
+      },
+      "schema": "schemas/show_currently_authenticated_session.json"
+    },
+    {
+      "name": "list_views",
+      "path": "/api/v2/views",
+      "records": {
+        "path": "views"
+      },
+      "schema": "schemas/list_views.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_active_views",
+      "path": "/api/v2/views/active",
+      "records": {
+        "path": "views"
+      },
+      "schema": "schemas/list_active_views.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    },
+    {
+      "name": "list_compact_views",
+      "path": "/api/v2/views/compact",
+      "records": {
+        "path": "views"
+      },
+      "schema": "schemas/list_compact_views.json",
+      "pagination": {
+        "type": "next_url",
+        "next_url_path": "next_page",
+        "allow_cross_host": false,
+        "page_size": 100
+      }
+    }
+  ]
 }

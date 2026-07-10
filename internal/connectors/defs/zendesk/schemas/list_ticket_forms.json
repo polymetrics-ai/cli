@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_ticket_forms",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "active": {
+      "type": "boolean"
+    },
+    "agent_conditions": {
+      "type": "array",
+      "items": {}
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "default": {
+      "type": "boolean"
+    },
+    "deleted_at": {
+      "type": "string"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "end_user_conditions": {
+      "type": "array",
+      "items": {}
+    },
+    "end_user_visible": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "in_all_brands": {
+      "type": "boolean"
+    },
+    "name": {
+      "type": "string"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "raw_display_name": {
+      "type": "string"
+    },
+    "raw_name": {
+      "type": "string"
+    },
+    "restricted_brand_ids": {
+      "type": "array",
+      "items": {}
+    },
+    "ticket_field_ids": {
+      "type": "array",
+      "items": {}
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

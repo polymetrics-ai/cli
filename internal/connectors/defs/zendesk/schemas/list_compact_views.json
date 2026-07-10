@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_compact_views",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "active": {
+      "type": "boolean"
+    },
+    "conditions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "default": {
+      "type": "boolean"
+    },
+    "description": {
+      "type": "string"
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "id": {
+      "type": "integer"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "restriction": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "title": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

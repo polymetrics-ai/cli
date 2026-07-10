@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_saved_searches",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "created_at": {
+      "type": "string"
+    },
+    "filters": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "query": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "ticket",
+        "user",
+        "organization",
+        "side_conversation",
+        "article"
+      ]
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

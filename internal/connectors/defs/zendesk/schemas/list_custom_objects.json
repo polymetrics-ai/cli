@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_custom_objects",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "allows_attachments": {
+      "type": "boolean"
+    },
+    "allows_photos": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "created_by_user_id": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "include_in_list_view": {
+      "type": "boolean"
+    },
+    "key": {
+      "type": "string"
+    },
+    "raw_description": {
+      "type": "string"
+    },
+    "raw_title": {
+      "type": "string"
+    },
+    "raw_title_pluralized": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "title_pluralized": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "updated_by_user_id": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "url"
+  ],
+  "required": [
+    "url"
+  ],
+  "x-cursor-field": "updated_at"
+}

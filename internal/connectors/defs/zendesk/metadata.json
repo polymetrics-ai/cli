@@ -1,7 +1,7 @@
 {
   "name": "zendesk",
   "display_name": "Zendesk",
-  "description": "Operation ledger for the official Zendesk Support API surface; executable streams, bounded direct reads, and reverse-ETL writes are mapped by later Zendesk CLI parity sub-issues.",
+  "description": "Operation ledger and typed read surface for the official Zendesk Support API; stream-backed reads and bounded direct reads are enabled while binary and write lanes remain gated.",
   "integration_type": "api",
   "docs_url": "https://developer.zendesk.com/api-reference/",
   "release_stage": "alpha",
@@ -17,7 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "bounded direct-read JSON commands are enabled for 282 typed GET operations; ETL streams and binary downloads are still gated by later Zendesk lanes",
+    "read": "bounded ETL streams are enabled for 70 top-level collection reads and bounded direct-read JSON commands remain enabled for typed GET operations; binary downloads are still gated by later Zendesk lanes",
     "write": "operation-ledger bundle in issue #160; Zendesk mutations remain blocked until typed reverse-ETL schemas, approval text, redaction, and destructive confirmation are added",
     "approval": "all external writes remain plan \u2192 preview \u2192 approval \u2192 execute and blocked in this slice"
   }

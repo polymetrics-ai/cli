@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_approval_requests",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "assignee_group": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "assignee_user": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "clarification_flow_messages": {
+      "type": "array",
+      "items": {}
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "created_by_user": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "decided_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "decisions": {
+      "type": "array",
+      "items": {}
+    },
+    "id": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "origination_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "API_ORIGINATION",
+        "UI_ORIGINATION",
+        "TRIGGER_ORIGINATION",
+        "DATA_IMPORTER_ORIGINATION",
+        "TEMPLATE_ORIGINATION",
+        "ACTION_FLOW_ORIGINATION",
+        "UNKNOWN_ORIGINATION"
+      ]
+    },
+    "status": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "ticket_id": {
+      "type": "integer"
+    },
+    "withdrawn_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "created_at"
+}

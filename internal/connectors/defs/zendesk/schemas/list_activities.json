@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_activities",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "actor": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "actor_id": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "object": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "title": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "user": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "user_id": {
+      "type": "integer"
+    },
+    "verb": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

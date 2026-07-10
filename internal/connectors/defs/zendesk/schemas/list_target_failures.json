@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_target_failures",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "consecutive_failure_count": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "raw_request": {
+      "type": "string"
+    },
+    "raw_response": {
+      "type": "string"
+    },
+    "status_code": {
+      "type": "integer"
+    },
+    "target_name": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "created_at"
+}

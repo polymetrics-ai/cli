@@ -1,5 +1,5 @@
 {
-  "tagline": "Work with Zendesk Support API metadata from the command line.",
+  "tagline": "Work with Zendesk Support API streams and typed reads from the command line.",
   "usage": "pm zendesk <command> [flags]",
   "source_cli": {
     "name": "Zendesk API reference",
@@ -211,11 +211,10 @@
     {
       "path": "read list-activities",
       "summary": "List Activities",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListActivities",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -232,7 +231,9 @@
           "summary": "A comma-separated list of sideloads to include. Supported values: `fields_metadata`.",
           "maps_to": "query.include"
         }
-      ]
+      ],
+      "stream": "list_activities",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-activity",
@@ -281,11 +282,10 @@
     {
       "path": "read list-approval-requests",
       "summary": "List Approval Requests",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListApprovalRequests",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -326,16 +326,17 @@
           "summary": "Cursor for pagination. Fetch records after this cursor",
           "maps_to": "query.after_cursor"
         }
-      ]
+      ],
+      "stream": "list_approval_requests",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-audit-logs",
       "summary": "List Audit Logs",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListAuditLogs",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -400,7 +401,9 @@
           "summary": "Cursor pagination only. Sort audit logs. Default is `sort=-created_at`",
           "maps_to": "query.sort"
         }
-      ]
+      ],
+      "stream": "list_audit_logs",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-audit-log",
@@ -449,11 +452,10 @@
     {
       "path": "read list-automations",
       "summary": "List Automations",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListAutomations",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -462,7 +464,9 @@
       ],
       "examples": [
         "pm zendesk read list-automations --json"
-      ]
+      ],
+      "stream": "list_automations",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-automation",
@@ -493,11 +497,10 @@
     {
       "path": "read list-active-automations",
       "summary": "List Active Automations",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListActiveAutomations",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -506,16 +509,17 @@
       ],
       "examples": [
         "pm zendesk read list-active-automations --json"
-      ]
+      ],
+      "stream": "list_active_automations",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read search-automations",
       "summary": "Search Automations",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS SearchAutomations",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -524,16 +528,17 @@
       ],
       "examples": [
         "pm zendesk read search-automations --json"
-      ]
+      ],
+      "stream": "search_automations",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-brand-agents",
       "summary": "List Brand Agent Memberships",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListBrandAgents",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -542,7 +547,9 @@
       ],
       "examples": [
         "pm zendesk read list-brand-agents --json"
-      ]
+      ],
+      "stream": "list_brand_agents",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-brand-agent-by-id",
@@ -713,11 +720,10 @@
     {
       "path": "read list-monitored-twitter-handles",
       "summary": "List Monitored X Handles",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListMonitoredTwitterHandles",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -726,7 +732,9 @@
       ],
       "examples": [
         "pm zendesk read list-monitored-twitter-handles --json"
-      ]
+      ],
+      "stream": "list_monitored_twitter_handles",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-monitored-twitter-handle",
@@ -789,11 +797,10 @@
     {
       "path": "read list-custom-objects",
       "summary": "List Custom Objects",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListCustomObjects",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -810,7 +817,9 @@
           "summary": "Include UI path in the response",
           "maps_to": "query.include_ui_path"
         }
-      ]
+      ],
+      "stream": "list_custom_objects",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-custom-object",
@@ -1519,11 +1528,10 @@
     {
       "path": "read list-custom-roles",
       "summary": "List Custom Roles",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListCustomRoles",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -1532,7 +1540,9 @@
       ],
       "examples": [
         "pm zendesk read list-custom-roles --json"
-      ]
+      ],
+      "stream": "list_custom_roles",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-custom-role-by-id",
@@ -1563,11 +1573,10 @@
     {
       "path": "read list-custom-statuses",
       "summary": "List Custom Ticket Statuses",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListCustomStatuses",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -1596,7 +1605,9 @@
           "summary": "If true, show only default custom ticket statuses. If false, show only non-default custom ticket statuses. If the filter is not used, show all custom ticket statuses",
           "maps_to": "query.default"
         }
-      ]
+      ],
+      "stream": "list_custom_statuses",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-custom-status",
@@ -1627,11 +1638,10 @@
     {
       "path": "read list-deleted-users",
       "summary": "List Deleted Users",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListDeletedUsers",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -1640,7 +1650,9 @@
       ],
       "examples": [
         "pm zendesk read list-deleted-users --json"
-      ]
+      ],
+      "stream": "list_deleted_users",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-deleted-user",
@@ -1689,11 +1701,10 @@
     {
       "path": "read list-deletion-schedules",
       "summary": "List Deletion Schedules",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListDeletionSchedules",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -1702,7 +1713,9 @@
       ],
       "examples": [
         "pm zendesk read list-deletion-schedules --json"
-      ]
+      ],
+      "stream": "list_deletion_schedules",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read get-deletion-schedule",
@@ -1733,11 +1746,10 @@
     {
       "path": "read list-email-notifications",
       "summary": "List Email Notifications",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListEmailNotifications",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -1746,7 +1758,9 @@
       ],
       "examples": [
         "pm zendesk read list-email-notifications --json"
-      ]
+      ],
+      "stream": "list_email_notifications",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-email-notification",
@@ -1863,11 +1877,10 @@
     {
       "path": "read list-group-memberships",
       "summary": "List Memberships",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListGroupMemberships",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -1876,7 +1889,9 @@
       ],
       "examples": [
         "pm zendesk read list-group-memberships --json"
-      ]
+      ],
+      "stream": "list_group_memberships",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-group-membership-by-id",
@@ -1907,11 +1922,10 @@
     {
       "path": "read list-assignable-group-memberships",
       "summary": "List Assignable Memberships",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListAssignableGroupMemberships",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -1920,16 +1934,17 @@
       ],
       "examples": [
         "pm zendesk read list-assignable-group-memberships --json"
-      ]
+      ],
+      "stream": "list_assignable_group_memberships",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-group-sla-policies",
       "summary": "List Group SLA Policies",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListGroupSLAPolicies",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -1938,7 +1953,9 @@
       ],
       "examples": [
         "pm zendesk read list-group-sla-policies --json"
-      ]
+      ],
+      "stream": "list_group_sla_policies",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-group-sla-policy",
@@ -1987,11 +2004,10 @@
     {
       "path": "read list-groups",
       "summary": "List Groups",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListGroups",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2000,7 +2016,9 @@
       ],
       "examples": [
         "pm zendesk read list-groups --json"
-      ]
+      ],
+      "stream": "list_groups",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-group-by-id",
@@ -2135,11 +2153,10 @@
     {
       "path": "read list-assignable-groups",
       "summary": "List Assignable Groups",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListAssignableGroups",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2148,7 +2165,9 @@
       ],
       "examples": [
         "pm zendesk read list-assignable-groups --json"
-      ]
+      ],
+      "stream": "list_assignable_groups",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read count-groups",
@@ -2171,11 +2190,10 @@
     {
       "path": "read list-itam-asset-types",
       "summary": "List Asset Types",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListItamAssetTypes",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2184,7 +2202,9 @@
       ],
       "examples": [
         "pm zendesk read list-itam-asset-types --json"
-      ]
+      ],
+      "stream": "list_itam_asset_types",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-itam-asset-type",
@@ -2273,11 +2293,10 @@
     {
       "path": "read list-itam-assets",
       "summary": "List Assets",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListItamAssets",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2300,7 +2319,9 @@
           "summary": "Optional comma-separated list of external ids to filter assets by. If one or more external ids are specified, only matching assets are returned. The external ids must be unique and are case sensitive.",
           "maps_to": "query.filter[external_ids]"
         }
-      ]
+      ],
+      "stream": "list_itam_assets",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-itam-asset",
@@ -2425,11 +2446,10 @@
     {
       "path": "read list-itam-statuses",
       "summary": "List Asset Statuses",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListItamStatuses",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2438,7 +2458,9 @@
       ],
       "examples": [
         "pm zendesk read list-itam-statuses --json"
-      ]
+      ],
+      "stream": "list_itam_statuses",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-itam-status",
@@ -2469,11 +2491,10 @@
     {
       "path": "read list-job-statuses",
       "summary": "List Job Statuses",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListJobStatuses",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2482,7 +2503,9 @@
       ],
       "examples": [
         "pm zendesk read list-job-statuses --json"
-      ]
+      ],
+      "stream": "list_job_statuses",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-job-status",
@@ -2539,11 +2562,10 @@
     {
       "path": "read list-locales",
       "summary": "List Locales",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListLocales",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2552,7 +2574,9 @@
       ],
       "examples": [
         "pm zendesk read list-locales --json"
-      ]
+      ],
+      "stream": "list_locales",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-locale-by-id",
@@ -2583,11 +2607,10 @@
     {
       "path": "read list-locales-for-agent",
       "summary": "List Locales for Agent",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListLocalesForAgent",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2596,7 +2619,9 @@
       ],
       "examples": [
         "pm zendesk read list-locales-for-agent --json"
-      ]
+      ],
+      "stream": "list_locales_for_agent",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-current-locale",
@@ -2637,11 +2662,10 @@
     {
       "path": "read list-available-public-locales",
       "summary": "List Available Public Locales",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListAvailablePublicLocales",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2650,7 +2674,9 @@
       ],
       "examples": [
         "pm zendesk read list-available-public-locales --json"
-      ]
+      ],
+      "stream": "list_available_public_locales",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-macros",
@@ -2847,11 +2873,10 @@
     {
       "path": "read list-o-auth-clients",
       "summary": "List Clients",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListOAuthClients",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2860,7 +2885,9 @@
       ],
       "examples": [
         "pm zendesk read list-o-auth-clients --json"
-      ]
+      ],
+      "stream": "list_o_auth_clients",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-client",
@@ -2891,11 +2918,10 @@
     {
       "path": "read list-global-o-auth-clients",
       "summary": "List Global OAuth Clients",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListGlobalOAuthClients",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2904,7 +2930,9 @@
       ],
       "examples": [
         "pm zendesk read list-global-o-auth-clients --json"
-      ]
+      ],
+      "stream": "list_global_o_auth_clients",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-global-client",
@@ -2935,11 +2963,10 @@
     {
       "path": "read global-o-auth-clients-token-summary",
       "summary": "Show Token summary for Global OAuth Clients",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS GlobalOAuthClientsTokenSummary",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2948,16 +2975,17 @@
       ],
       "examples": [
         "pm zendesk read global-o-auth-clients-token-summary --json"
-      ]
+      ],
+      "stream": "global_o_auth_clients_token_summary",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-o-auth-tokens",
       "summary": "List Tokens",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListOAuthTokens",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -2966,7 +2994,9 @@
       ],
       "examples": [
         "pm zendesk read list-o-auth-tokens --json"
-      ]
+      ],
+      "stream": "list_o_auth_tokens",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-token",
@@ -3067,11 +3097,10 @@
     {
       "path": "read list-organization-memberships",
       "summary": "List Memberships",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListOrganizationMemberships",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3080,7 +3109,9 @@
       ],
       "examples": [
         "pm zendesk read list-organization-memberships --json"
-      ]
+      ],
+      "stream": "list_organization_memberships",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-organization-membership-by-id",
@@ -3181,11 +3212,10 @@
     {
       "path": "read list-organizations",
       "summary": "List Organizations",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListOrganizations",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3194,7 +3224,9 @@
       ],
       "examples": [
         "pm zendesk read list-organizations --json"
-      ]
+      ],
+      "stream": "list_organizations",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-organization",
@@ -3503,11 +3535,10 @@
     {
       "path": "read autocomplete-organizations",
       "summary": "Autocomplete Organizations",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS AutocompleteOrganizations",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3516,7 +3547,9 @@
       ],
       "examples": [
         "pm zendesk read autocomplete-organizations --json"
-      ]
+      ],
+      "stream": "autocomplete_organizations",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read count-organizations",
@@ -3539,11 +3572,10 @@
     {
       "path": "read search-organizations",
       "summary": "Search Organizations",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS SearchOrganizations",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3552,16 +3584,17 @@
       ],
       "examples": [
         "pm zendesk read search-organizations --json"
-      ]
+      ],
+      "stream": "search_organizations",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-many-organizations",
       "summary": "Show Many Organizations",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ShowManyOrganizations",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3570,7 +3603,9 @@
       ],
       "examples": [
         "pm zendesk read show-many-organizations --json"
-      ]
+      ],
+      "stream": "show_many_organizations",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-ticket-problems",
@@ -3593,11 +3628,10 @@
     {
       "path": "read list-queues",
       "summary": "List queues",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListQueues",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3606,7 +3640,9 @@
       ],
       "examples": [
         "pm zendesk read list-queues --json"
-      ]
+      ],
+      "stream": "list_queues",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-queue-by-id",
@@ -3655,11 +3691,10 @@
     {
       "path": "read list-support-addresses",
       "summary": "List Support Addresses",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListSupportAddresses",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3668,7 +3703,9 @@
       ],
       "examples": [
         "pm zendesk read list-support-addresses --json"
-      ]
+      ],
+      "stream": "list_support_addresses",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-support-address",
@@ -3731,11 +3768,10 @@
     {
       "path": "read list-remote-authentications",
       "summary": "List Remote Authentications",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListRemoteAuthentications",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3752,16 +3788,17 @@
           "summary": "When brand separation is enabled, scopes the remote authentications to the specified brand.",
           "maps_to": "query.brand_id"
         }
-      ]
+      ],
+      "stream": "list_remote_authentications",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-requests",
       "summary": "List Requests",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListRequests",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3784,7 +3821,9 @@
           "summary": "One of \"asc\", \"desc\". Defaults to \"asc\"",
           "maps_to": "query.sort_order"
         }
-      ]
+      ],
+      "stream": "list_requests",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-request",
@@ -3885,11 +3924,10 @@
     {
       "path": "read list-ccd-requests",
       "summary": "List CCD Requests",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListCCDRequests",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3912,16 +3950,17 @@
           "summary": "One of \"asc\", \"desc\". Defaults to \"asc\"",
           "maps_to": "query.sort_order"
         }
-      ]
+      ],
+      "stream": "list_ccd_requests",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-open-requests",
       "summary": "List Open Requests",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListOpenRequests",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3944,16 +3983,17 @@
           "summary": "One of \"asc\", \"desc\". Defaults to \"asc\"",
           "maps_to": "query.sort_order"
         }
-      ]
+      ],
+      "stream": "list_open_requests",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read search-requests",
       "summary": "Search Requests",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS SearchRequests",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -3970,16 +4010,17 @@
           "summary": "The syntax and matching logic for the string is detailed in the [Zendesk Support search reference](https://support.zendesk.com/hc/en-us/articles/4408886879258). See also [Query basics](/api-reference/ticketing/ticket-...",
           "maps_to": "query.query"
         }
-      ]
+      ],
+      "stream": "search_requests",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-solved-requests",
       "summary": "List Solved Requests",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListSolvedRequests",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4002,16 +4043,17 @@
           "summary": "One of \"asc\", \"desc\". Defaults to \"asc\"",
           "maps_to": "query.sort_order"
         }
-      ]
+      ],
+      "stream": "list_solved_requests",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-resource-collections",
       "summary": "List Resource Collections",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListResourceCollections",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4020,7 +4062,9 @@
       ],
       "examples": [
         "pm zendesk read list-resource-collections --json"
-      ]
+      ],
+      "stream": "list_resource_collections",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read retrieve-resource-collection",
@@ -4121,11 +4165,10 @@
     {
       "path": "read list-account-attributes",
       "summary": "List Account Attributes",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListAccountAttributes",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4134,7 +4177,9 @@
       ],
       "examples": [
         "pm zendesk read list-account-attributes --json"
-      ]
+      ],
+      "stream": "list_account_attributes",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-attribute",
@@ -4293,11 +4338,10 @@
     {
       "path": "read list-satisfaction-ratings",
       "summary": "List Satisfaction Ratings",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListSatisfactionRatings",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4306,7 +4350,9 @@
       ],
       "examples": [
         "pm zendesk read list-satisfaction-ratings --json"
-      ]
+      ],
+      "stream": "list_satisfaction_ratings",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-satisfaction-rating",
@@ -4355,11 +4401,10 @@
     {
       "path": "read list-satisfaction-rating-reasons",
       "summary": "List Reasons for Satisfaction Rating",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListSatisfactionRatingReasons",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4368,7 +4413,9 @@
       ],
       "examples": [
         "pm zendesk read list-satisfaction-rating-reasons --json"
-      ]
+      ],
+      "stream": "list_satisfaction_rating_reasons",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-satisfaction-ratings",
@@ -4399,11 +4446,10 @@
     {
       "path": "read list-saved-searches",
       "summary": "List Saved Searches",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListSavedSearches",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4412,7 +4458,9 @@
       ],
       "examples": [
         "pm zendesk read list-saved-searches --json"
-      ]
+      ],
+      "stream": "list_saved_searches",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read count-search-results",
@@ -4469,11 +4517,10 @@
     {
       "path": "read list-sessions",
       "summary": "List Sessions",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListSessions",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4482,16 +4529,17 @@
       ],
       "examples": [
         "pm zendesk read list-sessions --json"
-      ]
+      ],
+      "stream": "list_sessions",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-sharing-agreements",
       "summary": "List Sharing Agreements",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListSharingAgreements",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4500,7 +4548,9 @@
       ],
       "examples": [
         "pm zendesk read list-sharing-agreements --json"
-      ]
+      ],
+      "stream": "list_sharing_agreements",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-sharing-agreement",
@@ -4531,11 +4581,10 @@
     {
       "path": "read list-sla-policies",
       "summary": "List SLA Policies",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListSLAPolicies",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4544,7 +4593,9 @@
       ],
       "examples": [
         "pm zendesk read list-sla-policies --json"
-      ]
+      ],
+      "stream": "list_sla_policies",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-sla-policy",
@@ -4593,11 +4644,10 @@
     {
       "path": "read list-suspended-tickets",
       "summary": "List Suspended Tickets",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListSuspendedTickets",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4606,7 +4656,9 @@
       ],
       "examples": [
         "pm zendesk read list-suspended-tickets --json"
-      ]
+      ],
+      "stream": "list_suspended_tickets",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-suspended-tickets",
@@ -4637,11 +4689,10 @@
     {
       "path": "read list-tags",
       "summary": "List Tags",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListTags",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4650,7 +4701,9 @@
       ],
       "examples": [
         "pm zendesk read list-tags --json"
-      ]
+      ],
+      "stream": "list_tags",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read count-tags",
@@ -4673,11 +4726,10 @@
     {
       "path": "read list-target-failures",
       "summary": "List Target Failures",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListTargetFailures",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4686,7 +4738,9 @@
       ],
       "examples": [
         "pm zendesk read list-target-failures --json"
-      ]
+      ],
+      "stream": "list_target_failures",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-target-failure",
@@ -4761,11 +4815,10 @@
     {
       "path": "read list-task-list-templates",
       "summary": "List Task List Templates",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListTaskListTemplates",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4774,7 +4827,9 @@
       ],
       "examples": [
         "pm zendesk read list-task-list-templates --json"
-      ]
+      ],
+      "stream": "list_task_list_templates",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-task-list-template",
@@ -4831,11 +4886,10 @@
     {
       "path": "read list-ticket-fields",
       "summary": "List Ticket Fields",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListTicketFields",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -4858,7 +4912,9 @@
           "summary": "Displays the `creator_user_id` and `creator_app_name` properties. If the ticket field is created  by an app, `creator_app_name` is the name of the app and `creator_user_id` is `-1`. If the ticket field  is not created...",
           "maps_to": "query.creator"
         }
-      ]
+      ],
+      "stream": "list_ticket_fields",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-ticketfield",
@@ -4965,11 +5021,10 @@
     {
       "path": "read show-many-ticket-fields",
       "summary": "Show Many Ticket Fields",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ShowManyTicketFields",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -5004,16 +5059,17 @@
           "summary": "If true, excludes sub-selection options from dropdown fields in the response.",
           "maps_to": "query.exclude_sub_selection_options"
         }
-      ]
+      ],
+      "stream": "show_many_ticket_fields",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-ticket-form-statuses",
       "summary": "List Ticket Form Statuses",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListTicketFormStatuses",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -5036,7 +5092,9 @@
           "summary": "Additional filter criteria",
           "maps_to": "query.filter"
         }
-      ]
+      ],
+      "stream": "list_ticket_form_statuses",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-many-ticket-form-statuses",
@@ -5067,11 +5125,10 @@
     {
       "path": "read list-ticket-forms",
       "summary": "List Ticket Forms",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListTicketForms",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -5123,7 +5180,9 @@
           "summary": "Locale to use for the ticket form names. If not specified, the default locale is used.",
           "maps_to": "query.locale"
         }
-      ]
+      ],
+      "stream": "list_ticket_forms",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-ticket-form",
@@ -5256,11 +5315,10 @@
     {
       "path": "read list-tickets",
       "summary": "List Tickets",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListTickets",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -5283,7 +5341,9 @@
           "summary": "Unix epoch time to filter tickets. Only tickets created or updated after this time are returned. Example: `?start_time=1332034771`",
           "maps_to": "query.start_time"
         }
-      ]
+      ],
+      "stream": "list_tickets",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-ticket",
@@ -5674,11 +5734,10 @@
     {
       "path": "read list-recent-tickets",
       "summary": "List Recent Tickets",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListRecentTickets",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -5687,16 +5746,17 @@
       ],
       "examples": [
         "pm zendesk read list-recent-tickets --json"
-      ]
+      ],
+      "stream": "list_recent_tickets",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read tickets-show-many",
       "summary": "Show Multiple Tickets",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS TicketsShowMany",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -5713,7 +5773,9 @@
           "summary": "A comma-separated list of sideloads to include.",
           "maps_to": "query.include"
         }
-      ]
+      ],
+      "stream": "tickets_show_many",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-trigger-categories",
@@ -5795,11 +5857,10 @@
     {
       "path": "read list-triggers",
       "summary": "List Ticket Triggers",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListTriggers",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -5808,7 +5869,9 @@
       ],
       "examples": [
         "pm zendesk read list-triggers --json"
-      ]
+      ],
+      "stream": "list_triggers",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read get-trigger",
@@ -5897,11 +5960,10 @@
     {
       "path": "read list-active-triggers",
       "summary": "List Active Ticket Triggers",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListActiveTriggers",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -5910,7 +5972,9 @@
       ],
       "examples": [
         "pm zendesk read list-active-triggers --json"
-      ]
+      ],
+      "stream": "list_active_triggers",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-trigger-action-condition-definitions",
@@ -5933,11 +5997,10 @@
     {
       "path": "read search-triggers",
       "summary": "Search Ticket Triggers",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS SearchTriggers",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -5946,7 +6009,9 @@
       ],
       "examples": [
         "pm zendesk read search-triggers --json"
-      ]
+      ],
+      "stream": "search_triggers",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-user-fields",
@@ -7011,11 +7076,10 @@
     {
       "path": "read list-current-user-o-auth-clients",
       "summary": "List Current User's Clients",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListCurrentUserOAuthClients",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -7024,16 +7088,17 @@
       ],
       "examples": [
         "pm zendesk read list-current-user-o-auth-clients --json"
-      ]
+      ],
+      "stream": "list_current_user_o_auth_clients",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-currently-authenticated-session",
       "summary": "Show the Currently Authenticated Session",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ShowCurrentlyAuthenticatedSession",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -7042,7 +7107,9 @@
       ],
       "examples": [
         "pm zendesk read show-currently-authenticated-session --json"
-      ]
+      ],
+      "stream": "show_currently_authenticated_session",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read renew-current-session",
@@ -7165,11 +7232,10 @@
     {
       "path": "read list-views",
       "summary": "List Views",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListViews",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -7216,7 +7282,9 @@
           "summary": "The sort_order parameter used with offset pagination. One of \"asc\" or \"desc\". Defaults to \"asc\" for alphabetical and position sort, \"desc\" for all others",
           "maps_to": "query.sort_order"
         }
-      ]
+      ],
+      "stream": "list_views",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read show-view",
@@ -7311,11 +7379,10 @@
     {
       "path": "read list-active-views",
       "summary": "List Active Views",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListActiveViews",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -7350,16 +7417,17 @@
           "summary": "One of \"asc\" or \"desc\". Defaults to \"asc\" for alphabetical and position sort, \"desc\" for all others",
           "maps_to": "query.sort_order"
         }
-      ]
+      ],
+      "stream": "list_active_views",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read list-compact-views",
       "summary": "List Views - Compact",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "implemented",
       "source_cli_path": "Zendesk OAS ListCompactViews",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "output_policy": "json",
       "api_surface": [
         {
           "method": "GET",
@@ -7368,7 +7436,9 @@
       ],
       "examples": [
         "pm zendesk read list-compact-views --json"
-      ]
+      ],
+      "stream": "list_compact_views",
+      "notes": "Stream-backed Zendesk collection read generated from the official OAS."
     },
     {
       "path": "read count-views",

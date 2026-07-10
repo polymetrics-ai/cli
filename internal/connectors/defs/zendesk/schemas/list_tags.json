@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_tags",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "count": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "name"
+  ],
+  "required": [
+    "name"
+  ]
+}

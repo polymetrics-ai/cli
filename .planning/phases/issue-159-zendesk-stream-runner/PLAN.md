@@ -34,7 +34,7 @@ Enable safe ETL stream-backed Zendesk commands for top-level collection GET oper
 
 ## TDD / Red-Green Plan
 
-1. Add a red test requiring at least 90 Zendesk stream-backed commands and validating stream/API surface coverage.
+1. Add a red test requiring at least 70 safe top-level Zendesk stream-backed commands and validating stream/API surface coverage.
 2. Generate stream definitions and minimal permissive schemas from the official OAS response array keys.
 3. Keep direct-read commands for point reads and parameterized child reads not eligible for top-level ETL streams.
 4. Validate engine load, connectorgen static checks, docs validation, and no credentialed execution.

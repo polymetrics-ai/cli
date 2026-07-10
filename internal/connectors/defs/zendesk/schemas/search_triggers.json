@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "search_triggers",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "actions": {
+      "type": "array",
+      "items": {}
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "all": {
+      "type": "array",
+      "items": {}
+    },
+    "any": {
+      "type": "array",
+      "items": {}
+    },
+    "brand_id": {
+      "type": "integer"
+    },
+    "category": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "category_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "conditions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "default": {
+      "type": "boolean"
+    },
+    "description": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "raw_title": {
+      "type": "string"
+    },
+    "restriction": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "title": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

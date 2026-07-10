@@ -17,7 +17,14 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 
 ## Results
 
-Pending.
+Targeted checks passed:
+
+- `go test ./internal/connectors/engine -run 'ZendeskStream|ZendeskDirectRead|ZendeskOperationLedger' -count=1`
+- `go test ./cmd/connectorgen -run 'CLISurface|Surface|Schema' -count=1`
+- `go run ./cmd/connectorgen validate internal/connectors/defs` — 548 connector(s) checked, 0 findings.
+- `./pm docs validate --connectors-dir docs/connectors`
+
+Broad handoff checks are pending.
 
 ## Safety verification
 

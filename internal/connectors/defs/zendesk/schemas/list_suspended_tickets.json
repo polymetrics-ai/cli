@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_suspended_tickets",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "attachments": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {}
+    },
+    "author": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "brand_id": {
+      "type": "integer"
+    },
+    "cause": {
+      "type": "string"
+    },
+    "cause_id": {
+      "type": "integer"
+    },
+    "content": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "error_messages": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {}
+    },
+    "id": {
+      "type": "integer"
+    },
+    "message_id": {
+      "type": "string"
+    },
+    "recipient": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "ticket_id": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "via": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

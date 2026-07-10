@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_remote_authentications",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "agent": {
+      "type": "boolean"
+    },
+    "agent_primary": {
+      "type": "boolean"
+    },
+    "auth_flow": {
+      "type": "string",
+      "enum": [
+        "PKCE",
+        "authorization_code"
+      ]
+    },
+    "auth_mode": {
+      "type": "integer",
+      "enum": [
+        2,
+        3,
+        4
+      ]
+    },
+    "auth_mode_name": {
+      "type": "string",
+      "enum": [
+        "saml",
+        "jwt",
+        "oidc"
+      ]
+    },
+    "auth_url": {
+      "type": "string"
+    },
+    "auto_discovery": {
+      "type": "boolean"
+    },
+    "brand_id": {
+      "type": "integer"
+    },
+    "can_display_button_to_end_users": {
+      "type": "boolean"
+    },
+    "can_display_button_to_team_members": {
+      "type": "boolean"
+    },
+    "client_id": {
+      "type": "string"
+    },
+    "end_user": {
+      "type": "boolean"
+    },
+    "end_user_primary": {
+      "type": "boolean"
+    },
+    "fingerprint": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "ip_ranges": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_active": {
+      "type": "boolean"
+    },
+    "issuer_url": {
+      "type": "string"
+    },
+    "jwks_url": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "masked_client_secret": {
+      "type": "string"
+    },
+    "masked_secret": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "integer"
+    },
+    "remote_login_url": {
+      "type": "string"
+    },
+    "remote_logout_url": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "token_url": {
+      "type": "string"
+    },
+    "update_external_ids": {
+      "type": "boolean"
+    },
+    "user_info_url": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ]
+}

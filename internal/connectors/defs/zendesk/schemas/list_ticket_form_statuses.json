@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_ticket_form_statuses",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "custom_status_id": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "string"
+    },
+    "ticket_form_id": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ]
+}

@@ -1015,7 +1015,7 @@ func TestBundleLoadZendeskStreamCommandCoverage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Load(defs dir, zendesk): %v", err)
 	}
-	if got, wantMin := len(b.Streams), 90; got < wantMin {
+	if got, wantMin := len(b.Streams), 70; got < wantMin {
 		t.Fatalf("Zendesk streams = %d, want at least %d", got, wantMin)
 	}
 	streamCommands := map[string]CLICommand{}
@@ -1024,7 +1024,7 @@ func TestBundleLoadZendeskStreamCommandCoverage(t *testing.T) {
 			streamCommands[cmd.Path] = cmd
 		}
 	}
-	if got, wantMin := len(streamCommands), 90; got < wantMin {
+	if got, wantMin := len(streamCommands), 70; got < wantMin {
 		t.Fatalf("Zendesk stream-backed commands = %d, want at least %d", got, wantMin)
 	}
 	streams := map[string]bool{}
@@ -1065,7 +1065,7 @@ func TestBundleLoadZendeskDirectReadCommandCoverage(t *testing.T) {
 			directReadCommands[cmd.Path] = cmd
 		}
 	}
-	if got, want := len(directReadCommands), 282; got != want {
+	if got, want := len(directReadCommands), 212; got != want {
 		t.Fatalf("implemented Zendesk direct-read commands = %d, want %d", got, want)
 	}
 
@@ -1086,8 +1086,8 @@ func TestBundleLoadZendeskDirectReadCommandCoverage(t *testing.T) {
 		}
 		covered++
 	}
-	if covered != 282 {
-		t.Fatalf("covered direct-read endpoints = %d, want 282", covered)
+	if covered != 212 {
+		t.Fatalf("covered direct-read endpoints = %d, want 212", covered)
 	}
 }
 

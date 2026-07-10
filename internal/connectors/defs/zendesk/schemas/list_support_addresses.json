@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_support_addresses",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "brand_id": {
+      "type": "integer"
+    },
+    "cname_status": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "verified",
+        "failed"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "default": {
+      "type": "boolean"
+    },
+    "dns_results": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "failed"
+      ]
+    },
+    "domain_verification_code": {
+      "type": "string"
+    },
+    "domain_verification_status": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "verified",
+        "failed"
+      ]
+    },
+    "email": {
+      "type": "string"
+    },
+    "forwarding_status": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "waiting",
+        "verified",
+        "failed"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "spf_status": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "verified",
+        "failed"
+      ]
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

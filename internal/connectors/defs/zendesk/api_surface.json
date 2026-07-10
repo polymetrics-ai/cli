@@ -3,7 +3,7 @@
   "docs": "https://developer.zendesk.com/zendesk/oas.yaml",
   "reviewed_at": "2026-07-09",
   "operation_ledger_version": 1,
-  "scope": "Issue #161 direct-read lane: 282 safe JSON GET operations are exposed as typed, bounded direct-read commands; remaining operations stay blocked as operation-ledger rows until stream, binary, and reverse-ETL lanes enable them.",
+  "scope": "Issue #159 stream lane: top-level Zendesk collection GET operations with object-array JSON responses are exposed as bounded ETL streams; point reads, binary reads, and writes remain direct-read or blocked by later lanes.",
   "endpoints": [
     {
       "method": "GET",
@@ -76,7 +76,7 @@
       "method": "GET",
       "path": "/api/v2/activities",
       "covered_by": {
-        "direct_read": "read list-activities"
+        "stream": "list_activities"
       }
     },
     {
@@ -136,7 +136,7 @@
       "method": "GET",
       "path": "/api/v2/approval_requests",
       "covered_by": {
-        "direct_read": "read list-approval-requests"
+        "stream": "list_approval_requests"
       }
     },
     {
@@ -195,7 +195,7 @@
       "method": "GET",
       "path": "/api/v2/audit_logs",
       "covered_by": {
-        "direct_read": "read list-audit-logs"
+        "stream": "list_audit_logs"
       }
     },
     {
@@ -242,7 +242,7 @@
       "method": "GET",
       "path": "/api/v2/automations",
       "covered_by": {
-        "direct_read": "read list-automations"
+        "stream": "list_automations"
       }
     },
     {
@@ -295,7 +295,7 @@
       "method": "GET",
       "path": "/api/v2/automations/active",
       "covered_by": {
-        "direct_read": "read list-active-automations"
+        "stream": "list_active_automations"
       }
     },
     {
@@ -315,7 +315,7 @@
       "method": "GET",
       "path": "/api/v2/automations/search",
       "covered_by": {
-        "direct_read": "read search-automations"
+        "stream": "search_automations"
       }
     },
     {
@@ -374,7 +374,7 @@
       "method": "GET",
       "path": "/api/v2/brand_agents",
       "covered_by": {
-        "direct_read": "read list-brand-agents"
+        "stream": "list_brand_agents"
       }
     },
     {
@@ -501,7 +501,7 @@
       "method": "GET",
       "path": "/api/v2/channels/twitter/monitored_twitter_handles",
       "covered_by": {
-        "direct_read": "read list-monitored-twitter-handles"
+        "stream": "list_monitored_twitter_handles"
       }
     },
     {
@@ -613,7 +613,7 @@
       "method": "GET",
       "path": "/api/v2/custom_objects",
       "covered_by": {
-        "direct_read": "read list-custom-objects"
+        "stream": "list_custom_objects"
       }
     },
     {
@@ -1131,7 +1131,7 @@
       "method": "GET",
       "path": "/api/v2/custom_roles",
       "covered_by": {
-        "direct_read": "read list-custom-roles"
+        "stream": "list_custom_roles"
       }
     },
     {
@@ -1197,7 +1197,7 @@
       "method": "GET",
       "path": "/api/v2/custom_statuses",
       "covered_by": {
-        "direct_read": "read list-custom-statuses"
+        "stream": "list_custom_statuses"
       }
     },
     {
@@ -1328,7 +1328,7 @@
       "method": "GET",
       "path": "/api/v2/deleted_users",
       "covered_by": {
-        "direct_read": "read list-deleted-users"
+        "stream": "list_deleted_users"
       }
     },
     {
@@ -1362,7 +1362,7 @@
       "method": "GET",
       "path": "/api/v2/deletion_schedules",
       "covered_by": {
-        "direct_read": "read list-deletion-schedules"
+        "stream": "list_deletion_schedules"
       }
     },
     {
@@ -1584,7 +1584,7 @@
       "method": "GET",
       "path": "/api/v2/email_notifications",
       "covered_by": {
-        "direct_read": "read list-email-notifications"
+        "stream": "list_email_notifications"
       }
     },
     {
@@ -1671,7 +1671,7 @@
       "method": "GET",
       "path": "/api/v2/group_memberships",
       "covered_by": {
-        "direct_read": "read list-group-memberships"
+        "stream": "list_group_memberships"
       }
     },
     {
@@ -1711,7 +1711,7 @@
       "method": "GET",
       "path": "/api/v2/group_memberships/assignable",
       "covered_by": {
-        "direct_read": "read list-assignable-group-memberships"
+        "stream": "list_assignable_group_memberships"
       }
     },
     {
@@ -1744,7 +1744,7 @@
       "method": "GET",
       "path": "/api/v2/group_slas/policies",
       "covered_by": {
-        "direct_read": "read list-group-sla-policies"
+        "stream": "list_group_sla_policies"
       }
     },
     {
@@ -1817,7 +1817,7 @@
       "method": "GET",
       "path": "/api/v2/groups",
       "covered_by": {
-        "direct_read": "read list-groups"
+        "stream": "list_groups"
       }
     },
     {
@@ -1898,7 +1898,7 @@
       "method": "GET",
       "path": "/api/v2/groups/assignable",
       "covered_by": {
-        "direct_read": "read list-assignable-groups"
+        "stream": "list_assignable_groups"
       }
     },
     {
@@ -2094,7 +2094,7 @@
       "method": "GET",
       "path": "/api/v2/it_asset_management/asset_types",
       "covered_by": {
-        "direct_read": "read list-itam-asset-types"
+        "stream": "list_itam_asset_types"
       }
     },
     {
@@ -2200,7 +2200,7 @@
       "method": "GET",
       "path": "/api/v2/it_asset_management/assets",
       "covered_by": {
-        "direct_read": "read list-itam-assets"
+        "stream": "list_itam_assets"
       }
     },
     {
@@ -2339,7 +2339,7 @@
       "method": "GET",
       "path": "/api/v2/it_asset_management/statuses",
       "covered_by": {
-        "direct_read": "read list-itam-statuses"
+        "stream": "list_itam_statuses"
       }
     },
     {
@@ -2353,7 +2353,7 @@
       "method": "GET",
       "path": "/api/v2/job_statuses",
       "covered_by": {
-        "direct_read": "read list-job-statuses"
+        "stream": "list_job_statuses"
       }
     },
     {
@@ -2374,7 +2374,7 @@
       "method": "GET",
       "path": "/api/v2/locales",
       "covered_by": {
-        "direct_read": "read list-locales"
+        "stream": "list_locales"
       }
     },
     {
@@ -2388,7 +2388,7 @@
       "method": "GET",
       "path": "/api/v2/locales/agent",
       "covered_by": {
-        "direct_read": "read list-locales-for-agent"
+        "stream": "list_locales_for_agent"
       }
     },
     {
@@ -2409,7 +2409,7 @@
       "method": "GET",
       "path": "/api/v2/locales/public",
       "covered_by": {
-        "direct_read": "read list-available-public-locales"
+        "stream": "list_available_public_locales"
       }
     },
     {
@@ -2596,7 +2596,7 @@
       "method": "GET",
       "path": "/api/v2/oauth/clients",
       "covered_by": {
-        "direct_read": "read list-o-auth-clients"
+        "stream": "list_o_auth_clients"
       }
     },
     {
@@ -2662,7 +2662,7 @@
       "method": "GET",
       "path": "/api/v2/oauth/global_clients",
       "covered_by": {
-        "direct_read": "read list-global-o-auth-clients"
+        "stream": "list_global_o_auth_clients"
       }
     },
     {
@@ -2676,14 +2676,14 @@
       "method": "GET",
       "path": "/api/v2/oauth/global_clients/token_summary",
       "covered_by": {
-        "direct_read": "read global-o-auth-clients-token-summary"
+        "stream": "global_o_auth_clients_token_summary"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/oauth/tokens",
       "covered_by": {
-        "direct_read": "read list-o-auth-tokens"
+        "stream": "list_o_auth_tokens"
       }
     },
     {
@@ -2809,7 +2809,7 @@
       "method": "GET",
       "path": "/api/v2/organization_memberships",
       "covered_by": {
-        "direct_read": "read list-organization-memberships"
+        "stream": "list_organization_memberships"
       }
     },
     {
@@ -2922,7 +2922,7 @@
       "method": "GET",
       "path": "/api/v2/organizations",
       "covered_by": {
-        "direct_read": "read list-organizations"
+        "stream": "list_organizations"
       }
     },
     {
@@ -3097,7 +3097,7 @@
       "method": "GET",
       "path": "/api/v2/organizations/autocomplete",
       "covered_by": {
-        "direct_read": "read autocomplete-organizations"
+        "stream": "autocomplete_organizations"
       }
     },
     {
@@ -3150,14 +3150,14 @@
       "method": "GET",
       "path": "/api/v2/organizations/search",
       "covered_by": {
-        "direct_read": "read search-organizations"
+        "stream": "search_organizations"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/organizations/show_many",
       "covered_by": {
-        "direct_read": "read show-many-organizations"
+        "stream": "show_many_organizations"
       }
     },
     {
@@ -3210,7 +3210,7 @@
       "method": "GET",
       "path": "/api/v2/queues",
       "covered_by": {
-        "direct_read": "read list-queues"
+        "stream": "list_queues"
       }
     },
     {
@@ -3283,7 +3283,7 @@
       "method": "GET",
       "path": "/api/v2/recipient_addresses",
       "covered_by": {
-        "direct_read": "read list-support-addresses"
+        "stream": "list_support_addresses"
       }
     },
     {
@@ -3356,14 +3356,14 @@
       "method": "GET",
       "path": "/api/v2/remote_authentications",
       "covered_by": {
-        "direct_read": "read list-remote-authentications"
+        "stream": "list_remote_authentications"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/requests",
       "covered_by": {
-        "direct_read": "read list-requests"
+        "stream": "list_requests"
       }
     },
     {
@@ -3417,35 +3417,35 @@
       "method": "GET",
       "path": "/api/v2/requests/ccd",
       "covered_by": {
-        "direct_read": "read list-ccd-requests"
+        "stream": "list_ccd_requests"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/requests/open",
       "covered_by": {
-        "direct_read": "read list-open-requests"
+        "stream": "list_open_requests"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/requests/search",
       "covered_by": {
-        "direct_read": "read search-requests"
+        "stream": "search_requests"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/requests/solved",
       "covered_by": {
-        "direct_read": "read list-solved-requests"
+        "stream": "list_solved_requests"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/resource_collections",
       "covered_by": {
-        "direct_read": "read list-resource-collections"
+        "stream": "list_resource_collections"
       }
     },
     {
@@ -3538,7 +3538,7 @@
       "method": "GET",
       "path": "/api/v2/routing/attributes",
       "covered_by": {
-        "direct_read": "read list-account-attributes"
+        "stream": "list_account_attributes"
       }
     },
     {
@@ -3678,7 +3678,7 @@
       "method": "GET",
       "path": "/api/v2/satisfaction_ratings",
       "covered_by": {
-        "direct_read": "read list-satisfaction-ratings"
+        "stream": "list_satisfaction_ratings"
       }
     },
     {
@@ -3699,7 +3699,7 @@
       "method": "GET",
       "path": "/api/v2/satisfaction_reasons",
       "covered_by": {
-        "direct_read": "read list-satisfaction-rating-reasons"
+        "stream": "list_satisfaction_rating_reasons"
       }
     },
     {
@@ -3713,7 +3713,7 @@
       "method": "GET",
       "path": "/api/v2/saved_searches",
       "covered_by": {
-        "direct_read": "read list-saved-searches"
+        "stream": "list_saved_searches"
       }
     },
     {
@@ -3799,14 +3799,14 @@
       "method": "GET",
       "path": "/api/v2/sessions",
       "covered_by": {
-        "direct_read": "read list-sessions"
+        "stream": "list_sessions"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/sharing_agreements",
       "covered_by": {
-        "direct_read": "read list-sharing-agreements"
+        "stream": "list_sharing_agreements"
       }
     },
     {
@@ -3885,7 +3885,7 @@
       "method": "GET",
       "path": "/api/v2/slas/policies",
       "covered_by": {
-        "direct_read": "read list-sla-policies"
+        "stream": "list_sla_policies"
       }
     },
     {
@@ -3958,7 +3958,7 @@
       "method": "GET",
       "path": "/api/v2/suspended_tickets",
       "covered_by": {
-        "direct_read": "read list-suspended-tickets"
+        "stream": "list_suspended_tickets"
       }
     },
     {
@@ -4063,7 +4063,7 @@
       "method": "GET",
       "path": "/api/v2/tags",
       "covered_by": {
-        "direct_read": "read list-tags"
+        "stream": "list_tags"
       }
     },
     {
@@ -4077,7 +4077,7 @@
       "method": "GET",
       "path": "/api/v2/target_failures",
       "covered_by": {
-        "direct_read": "read list-target-failures"
+        "stream": "list_target_failures"
       }
     },
     {
@@ -4144,7 +4144,7 @@
       "method": "GET",
       "path": "/api/v2/task_list_templates",
       "covered_by": {
-        "direct_read": "read list-task-list-templates"
+        "stream": "list_task_list_templates"
       }
     },
     {
@@ -4256,7 +4256,7 @@
       "method": "GET",
       "path": "/api/v2/ticket_fields",
       "covered_by": {
-        "direct_read": "read list-ticket-fields"
+        "stream": "list_ticket_fields"
       }
     },
     {
@@ -4369,14 +4369,14 @@
       "method": "GET",
       "path": "/api/v2/ticket_fields/show_many",
       "covered_by": {
-        "direct_read": "read show-many-ticket-fields"
+        "stream": "show_many_ticket_fields"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/ticket_form_statuses",
       "covered_by": {
-        "direct_read": "read list-ticket-form-statuses"
+        "stream": "list_ticket_form_statuses"
       }
     },
     {
@@ -4390,7 +4390,7 @@
       "method": "GET",
       "path": "/api/v2/ticket_forms",
       "covered_by": {
-        "direct_read": "read list-ticket-forms"
+        "stream": "list_ticket_forms"
       }
     },
     {
@@ -4568,7 +4568,7 @@
       "method": "GET",
       "path": "/api/v2/tickets",
       "covered_by": {
-        "direct_read": "read list-tickets"
+        "stream": "list_tickets"
       }
     },
     {
@@ -4959,14 +4959,14 @@
       "method": "GET",
       "path": "/api/v2/tickets/recent",
       "covered_by": {
-        "direct_read": "read list-recent-tickets"
+        "stream": "list_recent_tickets"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/tickets/show_many",
       "covered_by": {
-        "direct_read": "read tickets-show-many"
+        "stream": "tickets_show_many"
       }
     },
     {
@@ -5052,7 +5052,7 @@
       "method": "GET",
       "path": "/api/v2/triggers",
       "covered_by": {
-        "direct_read": "read list-triggers"
+        "stream": "list_triggers"
       }
     },
     {
@@ -5119,7 +5119,7 @@
       "method": "GET",
       "path": "/api/v2/triggers/active",
       "covered_by": {
-        "direct_read": "read list-active-triggers"
+        "stream": "list_active_triggers"
       }
     },
     {
@@ -5159,7 +5159,7 @@
       "method": "GET",
       "path": "/api/v2/triggers/search",
       "covered_by": {
-        "direct_read": "read search-triggers"
+        "stream": "search_triggers"
       }
     },
     {
@@ -5971,14 +5971,14 @@
       "method": "GET",
       "path": "/api/v2/users/me/oauth/clients",
       "covered_by": {
-        "direct_read": "read list-current-user-o-auth-clients"
+        "stream": "list_current_user_o_auth_clients"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/users/me/session",
       "covered_by": {
-        "direct_read": "read show-currently-authenticated-session"
+        "stream": "show_currently_authenticated_session"
       }
     },
     {
@@ -6052,7 +6052,7 @@
       "method": "GET",
       "path": "/api/v2/views",
       "covered_by": {
-        "direct_read": "read list-views"
+        "stream": "list_views"
       }
     },
     {
@@ -6145,14 +6145,14 @@
       "method": "GET",
       "path": "/api/v2/views/active",
       "covered_by": {
-        "direct_read": "read list-active-views"
+        "stream": "list_active_views"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/views/compact",
       "covered_by": {
-        "direct_read": "read list-compact-views"
+        "stream": "list_compact_views"
       }
     },
     {

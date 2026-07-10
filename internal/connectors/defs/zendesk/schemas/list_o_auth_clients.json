@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_o_auth_clients",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "company": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "global": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "identifier": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "logo_url": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "redirect_uri": {
+      "type": "array",
+      "items": {}
+    },
+    "secret": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

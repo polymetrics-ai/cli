@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_task_list_templates",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "created_at": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean"
+    },
+    "is_required": {
+      "type": "boolean"
+    },
+    "name": {
+      "type": "string"
+    },
+    "task_count": {
+      "type": "integer"
+    },
+    "tasks": {
+      "type": "array",
+      "items": {}
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

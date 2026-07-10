@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_custom_statuses",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "active": {
+      "type": "boolean"
+    },
+    "agent_label": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "default": {
+      "type": "boolean"
+    },
+    "description": {
+      "type": "string"
+    },
+    "end_user_description": {
+      "type": "string"
+    },
+    "end_user_label": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "raw_agent_label": {
+      "type": "string"
+    },
+    "raw_description": {
+      "type": "string"
+    },
+    "raw_end_user_description": {
+      "type": "string"
+    },
+    "raw_end_user_label": {
+      "type": "string"
+    },
+    "status_category": {
+      "type": "string",
+      "enum": [
+        "new",
+        "open",
+        "pending",
+        "hold",
+        "solved"
+      ]
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

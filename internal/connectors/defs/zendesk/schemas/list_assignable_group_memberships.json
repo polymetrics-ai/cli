@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_assignable_group_memberships",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "created_at": {
+      "type": "string"
+    },
+    "default": {
+      "type": "boolean"
+    },
+    "group_id": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_itam_assets",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "asset_tag": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "asset_type_id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "custom_field_values": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "external_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "location_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "manufacturer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "organization_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "purchase_cost": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "purchase_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "serial_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status_id": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "vendor": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "warranty_expiration": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

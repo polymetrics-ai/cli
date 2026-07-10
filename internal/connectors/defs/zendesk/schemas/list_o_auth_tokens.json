@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_o_auth_tokens",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "client_id": {
+      "type": "integer"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "expires_at": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "refresh_token": {
+      "type": "string"
+    },
+    "refresh_token_expires_at": {
+      "type": "string"
+    },
+    "scopes": {
+      "type": "array",
+      "items": {}
+    },
+    "token": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "used_at": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "integer"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "created_at"
+}

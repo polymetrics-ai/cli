@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "autocomplete_organizations",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "created_at": {
+      "type": "string"
+    },
+    "details": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "domain_names": {
+      "type": "array",
+      "items": {}
+    },
+    "external_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "organization_fields": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "shared_comments": {
+      "type": "boolean"
+    },
+    "shared_tickets": {
+      "type": "boolean"
+    },
+    "tags": {
+      "type": "array",
+      "items": {}
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

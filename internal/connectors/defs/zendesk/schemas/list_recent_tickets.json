@@ -1,0 +1,327 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_recent_tickets",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "additional_collaborators": {
+      "type": "array",
+      "items": {}
+    },
+    "allow_attachments": {
+      "type": "boolean"
+    },
+    "allow_channelback": {
+      "type": "boolean"
+    },
+    "assignee_email": {
+      "type": "string"
+    },
+    "assignee_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "attribute_value_ids": {
+      "type": "array",
+      "items": {}
+    },
+    "brand_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "collaborator_ids": {
+      "type": "array",
+      "items": {}
+    },
+    "collaborators": {
+      "type": "array",
+      "items": {}
+    },
+    "comment": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "custom_fields": {
+      "type": "array",
+      "items": {}
+    },
+    "custom_status_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "due_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "email_cc_ids": {
+      "type": "array",
+      "items": {}
+    },
+    "email_ccs": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {}
+    },
+    "encoded_id": {
+      "type": "string"
+    },
+    "external_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fields": {
+      "type": "array",
+      "items": {}
+    },
+    "follower_ids": {
+      "type": "array",
+      "items": {}
+    },
+    "followers": {
+      "type": "array",
+      "items": {}
+    },
+    "followup_ids": {
+      "type": "array",
+      "items": {}
+    },
+    "forum_topic_id": {
+      "type": "integer"
+    },
+    "from_messaging_channel": {
+      "type": "boolean"
+    },
+    "generated_timestamp": {
+      "type": "integer"
+    },
+    "group_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "has_incidents": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "is_public": {
+      "type": "boolean"
+    },
+    "macro_id": {
+      "type": "integer"
+    },
+    "macro_ids": {
+      "type": "array",
+      "items": {}
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "organization_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "origin_zrn": {
+      "type": "string"
+    },
+    "priority": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "urgent",
+        "high",
+        "normal",
+        "low"
+      ]
+    },
+    "problem_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "raw_subject": {
+      "type": "string"
+    },
+    "recipient": {
+      "type": "string"
+    },
+    "requester": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "requester_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "safe_update": {
+      "type": "boolean"
+    },
+    "satisfaction_probability": {
+      "type": "number"
+    },
+    "satisfaction_rating": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "sharing_agreement_ids": {
+      "type": "array",
+      "items": {}
+    },
+    "sharing_agreements": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "open",
+        "pending",
+        "hold",
+        "solved",
+        "closed"
+      ]
+    },
+    "subject": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "submitter_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "support_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "agent",
+        "ai_agent"
+      ]
+    },
+    "suspended_ticket_id": {
+      "type": "integer"
+    },
+    "suspension_type_id": {
+      "type": "integer"
+    },
+    "system_metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "tags": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "tde_workspace": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "ticket_form_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "tpe_voice_comment": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "problem",
+        "incident",
+        "question",
+        "task"
+      ]
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "updated_stamp": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "via": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "via_followup_source_id": {
+      "type": "integer"
+    },
+    "via_id": {
+      "type": "integer"
+    },
+    "voice_comment": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

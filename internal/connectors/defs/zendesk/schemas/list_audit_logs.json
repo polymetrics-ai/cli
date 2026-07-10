@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_audit_logs",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "action": {
+      "type": "string"
+    },
+    "action_label": {
+      "type": "string"
+    },
+    "actor_id": {
+      "type": "integer"
+    },
+    "actor_name": {
+      "type": "string"
+    },
+    "change_description": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "ip_address": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "integer"
+    },
+    "source_label": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "created_at"
+}

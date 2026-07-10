@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_deleted_users",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "active": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "locale": {
+      "type": "string"
+    },
+    "locale_id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "organization_id": {
+      "type": "integer"
+    },
+    "phone": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "photo": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "role": {
+      "type": "string"
+    },
+    "separation": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "shared_phone_number": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "time_zone": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

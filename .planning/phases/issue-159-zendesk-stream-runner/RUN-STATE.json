@@ -2,7 +2,7 @@
   "phase": "issue-159-zendesk-stream-runner",
   "issue": 159,
   "parent_issue": 156,
-  "status": "planned",
+  "status": "targeted_green",
   "runtime": "pi",
   "branch": "feat/159-zendesk-stream-runner",
   "base_branch": "feat/161-zendesk-direct-read",
@@ -17,6 +17,6 @@
     "manual_fallback": true
   },
   "verificationPassed": false,
-  "verificationNotes": "Planning checkpoint only; no production edits yet.",
-  "updated_at": "2026-07-10T02:15:00Z"
+  "verificationNotes": "Targeted engine/connectorgen/docs validation passed; broad handoff gates pending.",
+  "updated_at": "2026-07-10T03:00:00Z"
 }

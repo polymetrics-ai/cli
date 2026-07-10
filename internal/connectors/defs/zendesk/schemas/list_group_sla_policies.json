@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_group_sla_policies",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "created_at": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "filter": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "id": {
+      "type": "string"
+    },
+    "policy_metrics": {
+      "type": "array",
+      "items": {}
+    },
+    "position": {
+      "type": "integer"
+    },
+    "title": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

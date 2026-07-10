@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_monitored_twitter_handles",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "allow_reply": {
+      "type": "boolean"
+    },
+    "avatar_url": {
+      "type": "string"
+    },
+    "brand_id": {
+      "type": "integer"
+    },
+    "can_reply": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "screen_name": {
+      "type": "string"
+    },
+    "twitter_user_id": {
+      "type": "integer"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

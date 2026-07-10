@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_automations",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "actions": {
+      "type": "array",
+      "items": {}
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "conditions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "default": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "raw_title": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

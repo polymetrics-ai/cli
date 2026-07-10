@@ -7,7 +7,7 @@ description: Zendesk connector knowledge and safe action guide.
 
 ## Purpose
 
-Operation ledger for the official Zendesk Support API surface; executable streams, bounded direct reads, and reverse-ETL writes are mapped by later Zendesk CLI parity sub-issues.
+Operation ledger and typed read surface for the official Zendesk Support API; stream-backed reads and bounded direct reads are enabled while binary and write lanes remain gated.
 
 ## Icon
 
@@ -32,16 +32,295 @@ Operation ledger for the official Zendesk Support API surface; executable stream
 - api_token (secret)
 - email (secret)
 
+## ETL Streams
+
+- list_activities:
+  - primary key: id
+  - cursor: updated_at
+  - fields: actor(), actor_id(), created_at(), id(), object(), target(), title(), updated_at(), url(), user(), user_id(), verb()
+- list_approval_requests:
+  - primary key: id
+  - cursor: created_at
+  - fields: assignee_group(), assignee_user(), clarification_flow_messages(), created_at(), created_by_user(), decided_at(), decisions(), id(), message(), origination_type(), status(), subject(), ticket_id(), withdrawn_reason()
+- list_audit_logs:
+  - primary key: id
+  - cursor: created_at
+  - fields: action(), action_label(), actor_id(), actor_name(), change_description(), created_at(), id(), ip_address(), source_id(), source_label(), source_type(), url()
+- list_automations:
+  - primary key: id
+  - cursor: updated_at
+  - fields: actions(), active(), conditions(), created_at(), default(), id(), position(), raw_title(), title(), updated_at()
+- list_active_automations:
+  - primary key: id
+  - cursor: updated_at
+  - fields: actions(), active(), conditions(), created_at(), default(), id(), position(), raw_title(), title(), updated_at()
+- search_automations:
+  - primary key: id
+  - cursor: updated_at
+  - fields: actions(), active(), conditions(), created_at(), default(), id(), position(), raw_title(), title(), updated_at()
+- list_brand_agents:
+  - primary key: id
+  - cursor: updated_at
+  - fields: brand_id(), created_at(), id(), updated_at(), url(), user_id()
+- list_monitored_twitter_handles:
+  - primary key: id
+  - cursor: updated_at
+  - fields: allow_reply(), avatar_url(), brand_id(), can_reply(), created_at(), id(), name(), screen_name(), twitter_user_id(), updated_at()
+- list_custom_objects:
+  - primary key: url
+  - cursor: updated_at
+  - fields: allows_attachments(), allows_photos(), created_at(), created_by_user_id(), description(), include_in_list_view(), key(), raw_description(), raw_title(), raw_title_pluralized(), title(), title_pluralized(), updated_at(), updated_by_user_id(), url()
+- list_custom_roles:
+  - primary key: id
+  - cursor: updated_at
+  - fields: configuration(), created_at(), description(), id(), name(), role_type(), team_member_count(), updated_at()
+- list_custom_statuses:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), agent_label(), created_at(), default(), description(), end_user_description(), end_user_label(), id(), raw_agent_label(), raw_description(), raw_end_user_description(), raw_end_user_label(), status_category(), updated_at()
+- list_deleted_users:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), created_at(), email(), id(), locale(), locale_id(), name(), organization_id(), phone(), photo(), role(), separation(), shared_phone_number(), time_zone(), updated_at(), url()
+- list_deletion_schedules:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), conditions(), created_at(), default(), description(), id(), object(), title(), updated_at(), url()
+- list_email_notifications:
+  - primary key: url
+  - cursor: updated_at
+  - fields: comment_id(), created_at(), email_id(), message_id(), notification_id(), recipients(), ticket_id(), updated_at(), url()
+- list_group_memberships:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), default(), group_id(), id(), updated_at(), url(), user_id()
+- list_assignable_group_memberships:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), default(), group_id(), id(), updated_at(), url(), user_id()
+- list_group_sla_policies:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), description(), filter(), id(), policy_metrics(), position(), title(), updated_at(), url()
+- list_groups:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), default(), deleted(), description(), id(), is_public(), name(), updated_at(), url()
+- list_assignable_groups:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), default(), deleted(), description(), id(), is_public(), name(), updated_at(), url()
+- list_itam_asset_types:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), created_by_user_id(), description(), external_id(), field_keys(), hierarchy_depth(), id(), is_standard(), name(), parent_id(), updated_at(), updated_by_user_id(), url()
+- list_itam_assets:
+  - primary key: id
+  - cursor: updated_at
+  - fields: asset_tag(), asset_type_id(), created_at(), custom_field_values(), external_id(), id(), location_id(), manufacturer(), model(), name(), notes(), organization_id(), purchase_cost(), purchase_date(), serial_number(), status_id(), updated_at(), url(), user_id(), vendor(), warranty_expiration()
+- list_itam_statuses:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), external_id(), id(), name(), updated_at(), url()
+- list_job_statuses:
+  - primary key: id
+  - fields: id(), job_type(), message(), progress(), results(), status(), total(), url()
+- list_locales:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), id(), locale(), name(), updated_at(), url()
+- list_locales_for_agent:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), id(), locale(), name(), updated_at(), url()
+- list_available_public_locales:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), id(), locale(), name(), updated_at(), url()
+- list_o_auth_clients:
+  - primary key: id
+  - cursor: updated_at
+  - fields: company(), created_at(), description(), global(), id(), identifier(), kind(), logo_url(), name(), redirect_uri(), secret(), updated_at(), url(), user_id()
+- list_global_o_auth_clients:
+  - primary key: id
+  - fields: company(), description(), id(), identifier(), kind(), logo_url(), name()
+- global_o_auth_clients_token_summary:
+  - primary key: id
+  - fields: id(), last_used_at(), tokens_count()
+- list_o_auth_tokens:
+  - primary key: id
+  - cursor: created_at
+  - fields: client_id(), created_at(), expires_at(), id(), refresh_token(), refresh_token_expires_at(), scopes(), token(), url(), used_at(), user_id()
+- list_organization_memberships:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), default(), id(), organization_id(), organization_name(), updated_at(), url(), user_id(), view_tickets()
+- list_organizations:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), details(), domain_names(), external_id(), group_id(), id(), name(), notes(), organization_fields(), shared_comments(), shared_tickets(), tags(), updated_at(), url()
+- autocomplete_organizations:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), details(), domain_names(), external_id(), group_id(), id(), name(), notes(), organization_fields(), shared_comments(), shared_tickets(), tags(), updated_at(), url()
+- search_organizations:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), details(), domain_names(), external_id(), group_id(), id(), name(), notes(), organization_fields(), shared_comments(), shared_tickets(), tags(), updated_at(), url()
+- show_many_organizations:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), details(), domain_names(), external_id(), group_id(), id(), name(), notes(), organization_fields(), shared_comments(), shared_tickets(), tags(), updated_at(), url()
+- list_queues:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), definition(), description(), id(), name(), order(), primary_groups(), priority(), secondary_groups(), updated_at(), url()
+- list_support_addresses:
+  - primary key: id
+  - cursor: updated_at
+  - fields: brand_id(), cname_status(), created_at(), default(), dns_results(), domain_verification_code(), domain_verification_status(), email(), forwarding_status(), id(), name(), spf_status(), updated_at()
+- list_remote_authentications:
+  - primary key: id
+  - fields: agent(), agent_primary(), auth_flow(), auth_mode(), auth_mode_name(), auth_url(), auto_discovery(), brand_id(), can_display_button_to_end_users(), can_display_button_to_team_members(), client_id(), end_user(), end_user_primary(), fingerprint(), id(), ip_ranges(), is_active(), issuer_url(), jwks_url(), label(), masked_client_secret(), masked_secret(), name(), priority(), remote_login_url(), remote_logout_url(), scope(), token_url(), update_external_ids(), user_info_url()
+- list_requests:
+  - primary key: id
+  - cursor: updated_at
+  - fields: assignee_id(), can_be_solved_by_me(), collaborator_ids(), created_at(), custom_fields(), custom_status_id(), description(), due_at(), email_cc_ids(), followup_source_id(), group_id(), id(), is_public(), organization_id(), priority(), recipient(), requester_id(), solved(), status(), subject(), ticket_form_id(), type(), updated_at(), url(), via()
+- list_ccd_requests:
+  - primary key: id
+  - cursor: updated_at
+  - fields: assignee_id(), can_be_solved_by_me(), collaborator_ids(), created_at(), custom_fields(), custom_status_id(), description(), due_at(), email_cc_ids(), followup_source_id(), group_id(), id(), is_public(), organization_id(), priority(), recipient(), requester_id(), solved(), status(), subject(), ticket_form_id(), type(), updated_at(), url(), via()
+- list_open_requests:
+  - primary key: id
+  - cursor: updated_at
+  - fields: assignee_id(), can_be_solved_by_me(), collaborator_ids(), created_at(), custom_fields(), custom_status_id(), description(), due_at(), email_cc_ids(), followup_source_id(), group_id(), id(), is_public(), organization_id(), priority(), recipient(), requester_id(), solved(), status(), subject(), ticket_form_id(), type(), updated_at(), url(), via()
+- search_requests:
+  - primary key: id
+  - cursor: updated_at
+  - fields: assignee_id(), can_be_solved_by_me(), collaborator_ids(), created_at(), custom_fields(), custom_status_id(), description(), due_at(), email_cc_ids(), followup_source_id(), group_id(), id(), is_public(), organization_id(), priority(), recipient(), requester_id(), solved(), status(), subject(), ticket_form_id(), type(), updated_at(), url(), via()
+- list_solved_requests:
+  - primary key: id
+  - cursor: updated_at
+  - fields: assignee_id(), can_be_solved_by_me(), collaborator_ids(), created_at(), custom_fields(), custom_status_id(), description(), due_at(), email_cc_ids(), followup_source_id(), group_id(), id(), is_public(), organization_id(), priority(), recipient(), requester_id(), solved(), status(), subject(), ticket_form_id(), type(), updated_at(), url(), via()
+- list_resource_collections:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), id(), resources(), updated_at()
+- list_account_attributes:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), id(), name(), updated_at(), url()
+- list_satisfaction_ratings:
+  - primary key: id
+  - cursor: updated_at
+  - fields: assignee_id(), comment(), created_at(), group_id(), id(), reason(), reason_code(), reason_id(), requester_id(), score(), ticket_id(), updated_at(), url()
+- list_satisfaction_rating_reasons:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), deleted_at(), id(), raw_value(), reason_code(), updated_at(), url(), value()
+- list_saved_searches:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), filters(), id(), name(), query(), type(), updated_at()
+- list_sessions:
+  - primary key: id
+  - fields: authenticated_at(), id(), last_seen_at(), url(), user_id()
+- list_sharing_agreements:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), id(), name(), partner_name(), remote_subdomain(), status(), type(), updated_at(), url()
+- list_sla_policies:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), description(), filter(), id(), policy_metrics(), position(), title(), updated_at(), url()
+- list_suspended_tickets:
+  - primary key: id
+  - cursor: updated_at
+  - fields: attachments(), author(), brand_id(), cause(), cause_id(), content(), created_at(), error_messages(), id(), message_id(), recipient(), subject(), ticket_id(), updated_at(), url(), via()
+- list_tags:
+  - primary key: name
+  - fields: count(), name()
+- list_target_failures:
+  - primary key: id
+  - cursor: created_at
+  - fields: consecutive_failure_count(), created_at(), id(), raw_request(), raw_response(), status_code(), target_name(), url()
+- list_task_list_templates:
+  - primary key: id
+  - cursor: updated_at
+  - fields: created_at(), description(), id(), is_active(), is_required(), name(), task_count(), tasks(), updated_at(), url()
+- list_ticket_fields:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), agent_can_edit(), agent_description(), collapsed_for_agents(), created_at(), creator_app_name(), creator_user_id(), custom_field_options(), custom_statuses(), description(), editable_in_portal(), id(), position(), raw_description(), raw_title(), raw_title_in_portal(), regexp_for_validation(), relationship_filter(), relationship_target_type(), removable(), required(), required_in_portal(), sub_type_id(), system_field_options(), tag(), title(), title_in_portal(), type(), updated_at(), url(), visible_in_portal()
+- show_many_ticket_fields:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), agent_can_edit(), agent_description(), collapsed_for_agents(), created_at(), creator_app_name(), creator_user_id(), custom_field_options(), custom_statuses(), description(), editable_in_portal(), id(), position(), raw_description(), raw_title(), raw_title_in_portal(), regexp_for_validation(), relationship_filter(), relationship_target_type(), removable(), required(), required_in_portal(), sub_type_id(), system_field_options(), tag(), title(), title_in_portal(), type(), updated_at(), url(), visible_in_portal()
+- list_ticket_form_statuses:
+  - primary key: id
+  - fields: custom_status_id(), id(), ticket_form_id()
+- list_ticket_forms:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), agent_conditions(), created_at(), default(), deleted_at(), display_name(), end_user_conditions(), end_user_visible(), id(), in_all_brands(), name(), position(), raw_display_name(), raw_name(), restricted_brand_ids(), ticket_field_ids(), updated_at(), url()
+- list_tickets:
+  - primary key: id
+  - cursor: updated_at
+  - fields: additional_collaborators(), allow_attachments(), allow_channelback(), assignee_email(), assignee_id(), attribute_value_ids(), brand_id(), collaborator_ids(), collaborators(), comment(), created_at(), custom_fields(), custom_status_id(), description(), due_at(), email_cc_ids(), email_ccs(), encoded_id(), external_id(), fields(), follower_ids(), followers(), followup_ids(), forum_topic_id(), from_messaging_channel(), generated_timestamp(), group_id(), has_incidents(), id(), is_public(), macro_id(), macro_ids(), metadata(), organization_id(), origin_zrn(), priority(), problem_id(), raw_subject(), recipient(), requester(), requester_id(), safe_update(), satisfaction_probability(), satisfaction_rating(), sharing_agreement_ids(), sharing_agreements(), status(), subject(), submitter_id(), support_type(), suspended_ticket_id(), suspension_type_id(), system_metadata(), tags(), tde_workspace(), ticket_form_id(), tpe_voice_comment(), type(), updated_at(), updated_stamp(), url(), via(), via_followup_source_id(), via_id(), voice_comment()
+- list_recent_tickets:
+  - primary key: id
+  - cursor: updated_at
+  - fields: additional_collaborators(), allow_attachments(), allow_channelback(), assignee_email(), assignee_id(), attribute_value_ids(), brand_id(), collaborator_ids(), collaborators(), comment(), created_at(), custom_fields(), custom_status_id(), description(), due_at(), email_cc_ids(), email_ccs(), encoded_id(), external_id(), fields(), follower_ids(), followers(), followup_ids(), forum_topic_id(), from_messaging_channel(), generated_timestamp(), group_id(), has_incidents(), id(), is_public(), macro_id(), macro_ids(), metadata(), organization_id(), origin_zrn(), priority(), problem_id(), raw_subject(), recipient(), requester(), requester_id(), safe_update(), satisfaction_probability(), satisfaction_rating(), sharing_agreement_ids(), sharing_agreements(), status(), subject(), submitter_id(), support_type(), suspended_ticket_id(), suspension_type_id(), system_metadata(), tags(), tde_workspace(), ticket_form_id(), tpe_voice_comment(), type(), updated_at(), updated_stamp(), url(), via(), via_followup_source_id(), via_id(), voice_comment()
+- tickets_show_many:
+  - primary key: id
+  - cursor: updated_at
+  - fields: additional_collaborators(), allow_attachments(), allow_channelback(), assignee_email(), assignee_id(), attribute_value_ids(), brand_id(), collaborator_ids(), collaborators(), comment(), created_at(), custom_fields(), custom_status_id(), description(), due_at(), email_cc_ids(), email_ccs(), encoded_id(), external_id(), fields(), follower_ids(), followers(), followup_ids(), forum_topic_id(), from_messaging_channel(), generated_timestamp(), group_id(), has_incidents(), id(), is_public(), macro_id(), macro_ids(), metadata(), organization_id(), origin_zrn(), priority(), problem_id(), raw_subject(), recipient(), requester(), requester_id(), safe_update(), satisfaction_probability(), satisfaction_rating(), sharing_agreement_ids(), sharing_agreements(), status(), subject(), submitter_id(), support_type(), suspended_ticket_id(), suspension_type_id(), system_metadata(), tags(), tde_workspace(), ticket_form_id(), tpe_voice_comment(), type(), updated_at(), updated_stamp(), url(), via(), via_followup_source_id(), via_id(), voice_comment()
+- list_triggers:
+  - primary key: id
+  - cursor: updated_at
+  - fields: actions(), active(), all(), any(), brand_id(), category(), category_id(), conditions(), created_at(), default(), description(), id(), position(), raw_title(), restriction(), title(), updated_at(), url()
+- list_active_triggers:
+  - primary key: id
+  - cursor: updated_at
+  - fields: actions(), active(), all(), any(), brand_id(), category(), category_id(), conditions(), created_at(), default(), description(), id(), position(), raw_title(), restriction(), title(), updated_at(), url()
+- search_triggers:
+  - primary key: id
+  - cursor: updated_at
+  - fields: actions(), active(), all(), any(), brand_id(), category(), category_id(), conditions(), created_at(), default(), description(), id(), position(), raw_title(), restriction(), title(), updated_at(), url()
+- list_current_user_o_auth_clients:
+  - primary key: id
+  - cursor: updated_at
+  - fields: company(), created_at(), description(), global(), id(), identifier(), kind(), logo_url(), name(), redirect_uri(), secret(), updated_at(), url(), user_id()
+- show_currently_authenticated_session:
+  - primary key: id
+  - fields: authenticated_at(), id(), last_seen_at(), url(), user_id()
+- list_views:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), conditions(), created_at(), default(), description(), execution(), id(), position(), restriction(), title(), updated_at()
+- list_active_views:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), conditions(), created_at(), default(), description(), execution(), id(), position(), restriction(), title(), updated_at()
+- list_compact_views:
+  - primary key: id
+  - cursor: updated_at
+  - fields: active(), conditions(), created_at(), default(), description(), execution(), id(), position(), restriction(), title(), updated_at()
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+
 ## Security
 
-- read risk: bounded direct-read JSON commands are enabled for 282 typed GET operations; ETL streams and binary downloads are still gated by later Zendesk lanes
+- read risk: bounded ETL streams are enabled for 70 top-level collection reads and bounded direct-read JSON commands remain enabled for typed GET operations; binary downloads are still gated by later Zendesk lanes
 - write risk: operation-ledger bundle in issue #160; Zendesk mutations remain blocked until typed reverse-ETL schemas, approval text, redaction, and destructive confirmation are added
 - approval: all external writes remain plan → preview → approval → execute and blocked in this slice
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface
 
-- Work with Zendesk Support API metadata from the command line.
+- Work with Zendesk Support API streams and typed reads from the command line.
 - Usage: pm zendesk <command> [flags]
 - Source CLI: Zendesk API reference (https://developer.zendesk.com/zendesk/oas.yaml)
 - Global flags:
@@ -53,28 +332,28 @@ Operation ledger for the official Zendesk Support API surface; executable stream
   - read get-account-email-settings - Show Email Settings [intent=direct_read availability=implemented]
   - read show-account-settings - Show Settings [intent=direct_read availability=implemented]; flags: --authenticity_token
   - read verify-subdomain-availability - Verify Subdomain Availability [intent=direct_read availability=implemented]; flags: --subdomain
-  - read list-activities - List Activities [intent=direct_read availability=implemented]; flags: --include
+  - read list-activities - List Activities [intent=etl availability=implemented stream=list_activities]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --include
   - read show-activity - Show Activity [intent=direct_read availability=implemented]; flags: --activity_id
   - read count-activities - Count Activities [intent=direct_read availability=implemented]
-  - read list-approval-requests - List Approval Requests [intent=direct_read availability=implemented]; flags: --filter-status, --filter-assignee_user_id, --filter-assignee_group_id, --before_cursor, --after_cursor
-  - read list-audit-logs - List Audit Logs [intent=direct_read availability=implemented]; flags: --filter-source_type, --filter-source_id, --filter-actor_id, --filter-ip_address, --filter-created_at, --filter-action, --sort_by, --sort_order, --sort
+  - read list-approval-requests - List Approval Requests [intent=etl availability=implemented stream=list_approval_requests]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --filter-status, --filter-assignee_user_id, --filter-assignee_group_id, --before_cursor, --after_cursor
+  - read list-audit-logs - List Audit Logs [intent=etl availability=implemented stream=list_audit_logs]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --filter-source_type, --filter-source_id, --filter-actor_id, --filter-ip_address, --filter-created_at, --filter-action, --sort_by, --sort_order, --sort
   - read show-audit-log - Show Audit Log [intent=direct_read availability=implemented]; flags: --audit_log_id
   - read autocomplete-tags - Search Tags [intent=direct_read availability=implemented]
-  - read list-automations - List Automations [intent=direct_read availability=implemented]
+  - read list-automations - List Automations [intent=etl availability=implemented stream=list_automations]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-automation - Show Automation [intent=direct_read availability=implemented]; flags: --automation_id
-  - read list-active-automations - List Active Automations [intent=direct_read availability=implemented]
-  - read search-automations - Search Automations [intent=direct_read availability=implemented]
-  - read list-brand-agents - List Brand Agent Memberships [intent=direct_read availability=implemented]
+  - read list-active-automations - List Active Automations [intent=etl availability=implemented stream=list_active_automations]; notes: Stream-backed Zendesk collection read generated from the official OAS.
+  - read search-automations - Search Automations [intent=etl availability=implemented stream=search_automations]; notes: Stream-backed Zendesk collection read generated from the official OAS.
+  - read list-brand-agents - List Brand Agent Memberships [intent=etl availability=implemented stream=list_brand_agents]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-brand-agent-by-id - Show Brand Agent Membership [intent=direct_read availability=implemented]; flags: --brand_agent_id
   - read list-brands - List Brands [intent=direct_read availability=implemented]; flags: --page, --per_page, --assignable_from, --include_deleted
   - read show-brand - Show a Brand [intent=direct_read availability=implemented]; flags: --brand_id
   - read list-brand-agents-by-brand - List Agents By Brand [intent=direct_read availability=implemented]; flags: --brand_id
   - read check-host-mapping-validity-for-existing-brand - Check Host Mapping Validity for an Existing Brand [intent=direct_read availability=implemented]; flags: --brand_id
   - read check-host-mapping-validity - Check Host Mapping Validity [intent=direct_read availability=implemented]
-  - read list-monitored-twitter-handles - List Monitored X Handles [intent=direct_read availability=implemented]
+  - read list-monitored-twitter-handles - List Monitored X Handles [intent=etl availability=implemented stream=list_monitored_twitter_handles]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-monitored-twitter-handle - Show Monitored X Handle [intent=direct_read availability=implemented]; flags: --monitored_twitter_handle_id
   - read getting-twicket-status - List Ticket statuses [intent=direct_read availability=implemented]; flags: --comment_id, --ids
-  - read list-custom-objects - List Custom Objects [intent=direct_read availability=implemented]; flags: --include_ui_path
+  - read list-custom-objects - List Custom Objects [intent=etl availability=implemented stream=list_custom_objects]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --include_ui_path
   - read show-custom-object - Show Custom Object [intent=direct_read availability=implemented]; flags: --custom_object_key, --include_permissions_metadata, --include_ui_path
   - read list-access-rules - List Access Rules [intent=direct_read availability=implemented]; flags: --custom_object_key
   - read show-access-rule - Show Access Rule [intent=direct_read availability=implemented]; flags: --custom_object_key, --id
@@ -96,54 +375,54 @@ Operation ledger for the official Zendesk Support API surface; executable stream
   - read search-object-triggers - Search Object Triggers [intent=direct_read availability=implemented]; flags: --custom_object_key
   - read custom-objects-limit - Custom Objects Limit [intent=direct_read availability=implemented]
   - read custom-object-records-limit - Custom Object Records Limit [intent=direct_read availability=implemented]
-  - read list-custom-roles - List Custom Roles [intent=direct_read availability=implemented]
+  - read list-custom-roles - List Custom Roles [intent=etl availability=implemented stream=list_custom_roles]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-custom-role-by-id - Show Custom Role [intent=direct_read availability=implemented]; flags: --custom_role_id
-  - read list-custom-statuses - List Custom Ticket Statuses [intent=direct_read availability=implemented]; flags: --status_categories, --active, --default
+  - read list-custom-statuses - List Custom Ticket Statuses [intent=etl availability=implemented stream=list_custom_statuses]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --status_categories, --active, --default
   - read show-custom-status - Show Custom Ticket Status [intent=direct_read availability=implemented]; flags: --custom_status_id
-  - read list-deleted-users - List Deleted Users [intent=direct_read availability=implemented]
+  - read list-deleted-users - List Deleted Users [intent=etl availability=implemented stream=list_deleted_users]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-deleted-user - Show Deleted User [intent=direct_read availability=implemented]; flags: --deleted_user_id
   - read count-deleted-users - Count Deleted Users [intent=direct_read availability=implemented]
-  - read list-deletion-schedules - List Deletion Schedules [intent=direct_read availability=implemented]
+  - read list-deletion-schedules - List Deletion Schedules [intent=etl availability=implemented stream=list_deletion_schedules]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read get-deletion-schedule - Get Deletion Schedule [intent=direct_read availability=implemented]; flags: --deletion_schedule_id
-  - read list-email-notifications - List Email Notifications [intent=direct_read availability=implemented]
+  - read list-email-notifications - List Email Notifications [intent=etl availability=implemented stream=list_email_notifications]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-email-notification - Show Email Notification [intent=direct_read availability=implemented]; flags: --notification_id
   - read show-many-email-notifications - Show Many Email Notifications [intent=direct_read availability=implemented]
   - read list-end-user-identities - List End User Identities [intent=direct_read availability=implemented]; flags: --user_id, --type
   - read show-end-user-identity - Show End User Identity [intent=direct_read availability=implemented]; flags: --user_id, --user_identity_id
-  - read list-group-memberships - List Memberships [intent=direct_read availability=implemented]
+  - read list-group-memberships - List Memberships [intent=etl availability=implemented stream=list_group_memberships]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-group-membership-by-id - Show Membership [intent=direct_read availability=implemented]; flags: --group_membership_id
-  - read list-assignable-group-memberships - List Assignable Memberships [intent=direct_read availability=implemented]
-  - read list-group-sla-policies - List Group SLA Policies [intent=direct_read availability=implemented]
+  - read list-assignable-group-memberships - List Assignable Memberships [intent=etl availability=implemented stream=list_assignable_group_memberships]; notes: Stream-backed Zendesk collection read generated from the official OAS.
+  - read list-group-sla-policies - List Group SLA Policies [intent=etl availability=implemented stream=list_group_sla_policies]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-group-sla-policy - Show Group SLA Policy [intent=direct_read availability=implemented]; flags: --group_sla_policy_id
   - read retrieve-group-sla-policy-filter-definition-items - Retrieve Supported Filter Definition Items [intent=direct_read availability=implemented]
-  - read list-groups - List Groups [intent=direct_read availability=implemented]
+  - read list-groups - List Groups [intent=etl availability=implemented stream=list_groups]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-group-by-id - Show Group [intent=direct_read availability=implemented]; flags: --group_id
   - read list-group-memberships-by-group - List Memberships By Group [intent=direct_read availability=implemented]; flags: --group_id
   - read list-assignable-group-memberships-by-group - List Assignable Memberships By Group [intent=direct_read availability=implemented]; flags: --group_id
   - read list-group-users - List Users By Group [intent=direct_read availability=implemented]; flags: --group_id
   - read count-group-users - Count Users By Group [intent=direct_read availability=implemented]; flags: --group_id
-  - read list-assignable-groups - List Assignable Groups [intent=direct_read availability=implemented]
+  - read list-assignable-groups - List Assignable Groups [intent=etl availability=implemented stream=list_assignable_groups]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read count-groups - Count Groups [intent=direct_read availability=implemented]
-  - read list-itam-asset-types - List Asset Types [intent=direct_read availability=implemented]
+  - read list-itam-asset-types - List Asset Types [intent=etl availability=implemented stream=list_itam_asset_types]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-itam-asset-type - Show Asset Type [intent=direct_read availability=implemented]; flags: --asset_type_id
   - read list-itam-asset-type-fields - List Asset Fields [intent=direct_read availability=implemented]; flags: --asset_type_id
   - read show-itam-asset-type-field - Show Asset Field [intent=direct_read availability=implemented]; flags: --asset_type_id, --asset_type_field_id
-  - read list-itam-assets - List Assets [intent=direct_read availability=implemented]; flags: --filter-ids, --filter-external_ids
+  - read list-itam-assets - List Assets [intent=etl availability=implemented stream=list_itam_assets]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --filter-ids, --filter-external_ids
   - read show-itam-asset - Show Asset [intent=direct_read availability=implemented]; flags: --asset_id
   - read search-itam-assets - Search Assets [intent=direct_read availability=implemented]; flags: --query, --sort, --page-before, --page-after, --page-size
   - read list-itam-locations - List Asset Locations [intent=direct_read availability=implemented]
   - read show-itam-location - Show Asset Location [intent=direct_read availability=implemented]; flags: --location_id
-  - read list-itam-statuses - List Asset Statuses [intent=direct_read availability=implemented]
+  - read list-itam-statuses - List Asset Statuses [intent=etl availability=implemented stream=list_itam_statuses]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-itam-status - Show Asset Status [intent=direct_read availability=implemented]; flags: --status_id
-  - read list-job-statuses - List Job Statuses [intent=direct_read availability=implemented]
+  - read list-job-statuses - List Job Statuses [intent=etl availability=implemented stream=list_job_statuses]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-job-status - Show Job Status [intent=direct_read availability=implemented]; flags: --job_status_id
   - read show-many-job-statuses - Show Many Job Statuses [intent=direct_read availability=implemented]; flags: --ids
-  - read list-locales - List Locales [intent=direct_read availability=implemented]
+  - read list-locales - List Locales [intent=etl availability=implemented stream=list_locales]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-locale-by-id - Show Locale [intent=direct_read availability=implemented]; flags: --locale_id
-  - read list-locales-for-agent - List Locales for Agent [intent=direct_read availability=implemented]
+  - read list-locales-for-agent - List Locales for Agent [intent=etl availability=implemented stream=list_locales_for_agent]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-current-locale - Show Current Locale [intent=direct_read availability=implemented]
   - read detect-best-locale - Detect Best Language for User [intent=direct_read availability=implemented]
-  - read list-available-public-locales - List Available Public Locales [intent=direct_read availability=implemented]
+  - read list-available-public-locales - List Available Public Locales [intent=etl availability=implemented stream=list_available_public_locales]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read list-macros - List Macros [intent=direct_read availability=implemented]
   - read show-macro - Show Macro [intent=direct_read availability=implemented]; flags: --macro_id
   - read show-changes-to-ticket - Show Changes to Ticket [intent=direct_read availability=implemented]; flags: --macro_id, --normalize_comment
@@ -153,22 +432,22 @@ Operation ledger for the official Zendesk Support API surface; executable stream
   - read list-macro-action-definitions - List Macro Action Definitions [intent=direct_read availability=implemented]
   - read show-derived-macro - Show Macro Replica [intent=direct_read availability=implemented]; flags: --ticket_id
   - read search-macro - Search Macros [intent=direct_read availability=implemented]
-  - read list-o-auth-clients - List Clients [intent=direct_read availability=implemented]
+  - read list-o-auth-clients - List Clients [intent=etl availability=implemented stream=list_o_auth_clients]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-client - Show Client [intent=direct_read availability=implemented]; flags: --oauth_client_id
-  - read list-global-o-auth-clients - List Global OAuth Clients [intent=direct_read availability=implemented]
+  - read list-global-o-auth-clients - List Global OAuth Clients [intent=etl availability=implemented stream=list_global_o_auth_clients]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-global-client - Show Global OAuth Client [intent=direct_read availability=implemented]; flags: --global_client_id
-  - read global-o-auth-clients-token-summary - Show Token summary for Global OAuth Clients [intent=direct_read availability=implemented]
-  - read list-o-auth-tokens - List Tokens [intent=direct_read availability=implemented]
+  - read global-o-auth-clients-token-summary - Show Token summary for Global OAuth Clients [intent=etl availability=implemented stream=global_o_auth_clients_token_summary]; notes: Stream-backed Zendesk collection read generated from the official OAS.
+  - read list-o-auth-tokens - List Tokens [intent=etl availability=implemented stream=list_o_auth_tokens]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-token - Show Token [intent=direct_read availability=implemented]; flags: --oauth_token_id
   - read show-current-token - Show Current Token [intent=direct_read availability=implemented]
   - read list-organization-fields - List Organization Fields [intent=direct_read availability=implemented]; flags: --resolve_dc
   - read show-organization-field - Show Organization Field [intent=direct_read availability=implemented]; flags: --organization_field_id
-  - read list-organization-memberships - List Memberships [intent=direct_read availability=implemented]
+  - read list-organization-memberships - List Memberships [intent=etl availability=implemented stream=list_organization_memberships]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-organization-membership-by-id - Show Membership [intent=direct_read availability=implemented]; flags: --organization_membership_id
   - read show-organization-merge - Show Organization Merge [intent=direct_read availability=implemented]; flags: --organization_merge_id
   - read list-organization-subscriptions - List Organization Subscriptions [intent=direct_read availability=implemented]
   - read show-organization-subscription - Show Organization Subscription [intent=direct_read availability=implemented]; flags: --organization_subscription_id
-  - read list-organizations - List Organizations [intent=direct_read availability=implemented]
+  - read list-organizations - List Organizations [intent=etl availability=implemented stream=list_organizations]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-organization - Show Organization [intent=direct_read availability=implemented]; flags: --organization_id, --include
   - read list-organization-merges - List Organization Merges [intent=direct_read availability=implemented]; flags: --organization_id
   - read list-organization-memberships-by-organization - List Organization Memberships by Organization [intent=direct_read availability=implemented]; flags: --organization_id
@@ -180,76 +459,76 @@ Operation ledger for the official Zendesk Support API surface; executable stream
   - read count-organization-tickets - Count Organization Tickets [intent=direct_read availability=implemented]; flags: --organization_id
   - read list-organization-users - List Organization Users [intent=direct_read availability=implemented]; flags: --organization_id
   - read count-organization-users - Count Organization Users [intent=direct_read availability=implemented]; flags: --organization_id
-  - read autocomplete-organizations - Autocomplete Organizations [intent=direct_read availability=implemented]
+  - read autocomplete-organizations - Autocomplete Organizations [intent=etl availability=implemented stream=autocomplete_organizations]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read count-organizations - Count Organizations [intent=direct_read availability=implemented]
-  - read search-organizations - Search Organizations [intent=direct_read availability=implemented]
-  - read show-many-organizations - Show Many Organizations [intent=direct_read availability=implemented]
+  - read search-organizations - Search Organizations [intent=etl availability=implemented stream=search_organizations]; notes: Stream-backed Zendesk collection read generated from the official OAS.
+  - read show-many-organizations - Show Many Organizations [intent=etl availability=implemented stream=show_many_organizations]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read list-ticket-problems - List Ticket Problems [intent=direct_read availability=implemented]
-  - read list-queues - List queues [intent=direct_read availability=implemented]
+  - read list-queues - List queues [intent=etl availability=implemented stream=list_queues]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-queue-by-id - Show Queue [intent=direct_read availability=implemented]; flags: --queue_id
   - read list-queue-definitions - List Queue Definitions [intent=direct_read availability=implemented]
-  - read list-support-addresses - List Support Addresses [intent=direct_read availability=implemented]
+  - read list-support-addresses - List Support Addresses [intent=etl availability=implemented stream=list_support_addresses]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-support-address - Show Support Address [intent=direct_read availability=implemented]; flags: --support_address_id
   - read get-relationship-filter-definitions - Filter Definitions [intent=direct_read availability=implemented]; flags: --target_type, --source_type
-  - read list-remote-authentications - List Remote Authentications [intent=direct_read availability=implemented]; flags: --brand_id
-  - read list-requests - List Requests [intent=direct_read availability=implemented]; flags: --sort_by, --sort_order
+  - read list-remote-authentications - List Remote Authentications [intent=etl availability=implemented stream=list_remote_authentications]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --brand_id
+  - read list-requests - List Requests [intent=etl availability=implemented stream=list_requests]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --sort_by, --sort_order
   - read show-request - Show Request [intent=direct_read availability=implemented]; flags: --request_id
   - read list-comments - Listing Comments [intent=direct_read availability=implemented]; flags: --request_id, --since, --role
   - read show-comment - Getting Comments [intent=direct_read availability=implemented]; flags: --request_id, --ticket_comment_id
-  - read list-ccd-requests - List CCD Requests [intent=direct_read availability=implemented]; flags: --sort_by, --sort_order
-  - read list-open-requests - List Open Requests [intent=direct_read availability=implemented]; flags: --sort_by, --sort_order
-  - read search-requests - Search Requests [intent=direct_read availability=implemented]; flags: --query
-  - read list-solved-requests - List Solved Requests [intent=direct_read availability=implemented]; flags: --sort_by, --sort_order
-  - read list-resource-collections - List Resource Collections [intent=direct_read availability=implemented]
+  - read list-ccd-requests - List CCD Requests [intent=etl availability=implemented stream=list_ccd_requests]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --sort_by, --sort_order
+  - read list-open-requests - List Open Requests [intent=etl availability=implemented stream=list_open_requests]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --sort_by, --sort_order
+  - read search-requests - Search Requests [intent=etl availability=implemented stream=search_requests]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --query
+  - read list-solved-requests - List Solved Requests [intent=etl availability=implemented stream=list_solved_requests]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --sort_by, --sort_order
+  - read list-resource-collections - List Resource Collections [intent=etl availability=implemented stream=list_resource_collections]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read retrieve-resource-collection - Show Resource Collection [intent=direct_read availability=implemented]; flags: --resource_collection_id
   - read list-a-gent-attribute-values - List Agent Attribute Values [intent=direct_read availability=implemented]; flags: --user_id
   - read list-many-agents-attribute-values - List Attribute Values for Many Agents [intent=direct_read availability=implemented]; flags: --filter-agent_ids, --page-before, --page-after, --page-size
-  - read list-account-attributes - List Account Attributes [intent=direct_read availability=implemented]
+  - read list-account-attributes - List Account Attributes [intent=etl availability=implemented stream=list_account_attributes]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-attribute - Show Attribute [intent=direct_read availability=implemented]; flags: --attribute_id
   - read list-attribute-values - List Attribute Values for an Attribute [intent=direct_read availability=implemented]; flags: --attribute_id
   - read show-attribute-value - Show Attribute Value [intent=direct_read availability=implemented]; flags: --attribute_id, --attribute_value_id
   - read list-routing-attribute-definitions - List Routing Attribute Definitions [intent=direct_read availability=implemented]
   - read list-tickets-fullfilled-by-user - List Tickets Fulfilled by a User [intent=direct_read availability=implemented]; flags: --ticket_ids
   - read list-ticket-attribute-values - List Ticket Attribute Values [intent=direct_read availability=implemented]; flags: --ticket_id
-  - read list-satisfaction-ratings - List Satisfaction Ratings [intent=direct_read availability=implemented]
+  - read list-satisfaction-ratings - List Satisfaction Ratings [intent=etl availability=implemented stream=list_satisfaction_ratings]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-satisfaction-rating - Show Satisfaction Rating [intent=direct_read availability=implemented]; flags: --satisfaction_rating_id
   - read count-satisfaction-ratings - Count Satisfaction Ratings [intent=direct_read availability=implemented]
-  - read list-satisfaction-rating-reasons - List Reasons for Satisfaction Rating [intent=direct_read availability=implemented]
+  - read list-satisfaction-rating-reasons - List Reasons for Satisfaction Rating [intent=etl availability=implemented stream=list_satisfaction_rating_reasons]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-satisfaction-ratings - Show Reason for Satisfaction Rating [intent=direct_read availability=implemented]; flags: --satisfaction_reason_id
-  - read list-saved-searches - List Saved Searches [intent=direct_read availability=implemented]
+  - read list-saved-searches - List Saved Searches [intent=etl availability=implemented stream=list_saved_searches]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read count-search-results - Show Results Count [intent=direct_read availability=implemented]; flags: --query
   - read show-security-settings - Show Security Settings [intent=direct_read availability=implemented]; flags: --brand_id
-  - read list-sessions - List Sessions [intent=direct_read availability=implemented]
-  - read list-sharing-agreements - List Sharing Agreements [intent=direct_read availability=implemented]
+  - read list-sessions - List Sessions [intent=etl availability=implemented stream=list_sessions]; notes: Stream-backed Zendesk collection read generated from the official OAS.
+  - read list-sharing-agreements - List Sharing Agreements [intent=etl availability=implemented stream=list_sharing_agreements]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-sharing-agreement - Show a Sharing Agreement [intent=direct_read availability=implemented]; flags: --sharing_agreement_id
-  - read list-sla-policies - List SLA Policies [intent=direct_read availability=implemented]
+  - read list-sla-policies - List SLA Policies [intent=etl availability=implemented stream=list_sla_policies]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-sla-policy - Show SLA Policy [intent=direct_read availability=implemented]; flags: --sla_policy_id
   - read retrieve-sla-policy-filter-definition-items - Retrieve Supported Filter Definition Items [intent=direct_read availability=implemented]
-  - read list-suspended-tickets - List Suspended Tickets [intent=direct_read availability=implemented]
+  - read list-suspended-tickets - List Suspended Tickets [intent=etl availability=implemented stream=list_suspended_tickets]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-suspended-tickets - Show Suspended Ticket [intent=direct_read availability=implemented]; flags: --id
-  - read list-tags - List Tags [intent=direct_read availability=implemented]
+  - read list-tags - List Tags [intent=etl availability=implemented stream=list_tags]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read count-tags - Count Tags [intent=direct_read availability=implemented]
-  - read list-target-failures - List Target Failures [intent=direct_read availability=implemented]
+  - read list-target-failures - List Target Failures [intent=etl availability=implemented stream=list_target_failures]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-target-failure - Show Target Failure [intent=direct_read availability=implemented]; flags: --target_failure_id
   - read list-targets - List Targets [intent=direct_read availability=implemented]
   - read show-target - Show Target [intent=direct_read availability=implemented]; flags: --target_id
-  - read list-task-list-templates - List Task List Templates [intent=direct_read availability=implemented]
+  - read list-task-list-templates - List Task List Templates [intent=etl availability=implemented stream=list_task_list_templates]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read show-task-list-template - Show Task List Template [intent=direct_read availability=implemented]; flags: --task_list_template_id
   - read get-tasks-by-task-list-template-id - Get Tasks by Task List Template Id [intent=direct_read availability=implemented]; flags: --task_list_template_id
-  - read list-ticket-fields - List Ticket Fields [intent=direct_read availability=implemented]; flags: --locale, --creator
+  - read list-ticket-fields - List Ticket Fields [intent=etl availability=implemented stream=list_ticket_fields]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --locale, --creator
   - read show-ticketfield - Show Ticket Field [intent=direct_read availability=implemented]; flags: --ticket_field_id
   - read list-ticket-field-options - List Ticket Field Options [intent=direct_read availability=implemented]; flags: --ticket_field_id
   - read show-ticket-field-option - Show Ticket Field Option [intent=direct_read availability=implemented]; flags: --ticket_field_id, --ticket_field_option_id
   - read count-ticket-fields - Count Ticket Fields [intent=direct_read availability=implemented]
-  - read show-many-ticket-fields - Show Many Ticket Fields [intent=direct_read availability=implemented]; flags: --ids, --keys, --creator, --exclude_sub_selection_options
-  - read list-ticket-form-statuses - List Ticket Form Statuses [intent=direct_read availability=implemented]; flags: --ticket_form_id, --filter
+  - read show-many-ticket-fields - Show Many Ticket Fields [intent=etl availability=implemented stream=show_many_ticket_fields]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --ids, --keys, --creator, --exclude_sub_selection_options
+  - read list-ticket-form-statuses - List Ticket Form Statuses [intent=etl availability=implemented stream=list_ticket_form_statuses]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --ticket_form_id, --filter
   - read show-many-ticket-form-statuses - Show Many Ticket Form Statuses [intent=direct_read availability=implemented]; flags: --ids
-  - read list-ticket-forms - List Ticket Forms [intent=direct_read availability=implemented]; flags: --active, --end_user_visible, --fallback_to_default, --form_type, --associated_to_brand, --locale
+  - read list-ticket-forms - List Ticket Forms [intent=etl availability=implemented stream=list_ticket_forms]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --active, --end_user_visible, --fallback_to_default, --form_type, --associated_to_brand, --locale
   - read show-ticket-form - Show Ticket Form [intent=direct_read availability=implemented]; flags: --ticket_form_id
   - read ticket-form-ticket-form-statuses - List Ticket Form Statuses of a Ticket Form [intent=direct_read availability=implemented]; flags: --ticket_form_id
   - read show-many-ticket-forms - Show Many Ticket Forms [intent=direct_read availability=implemented]; flags: --ids, --active, --end_user_visible, --fallback_to_default, --associated_to_brand
   - read show-ticket-metrics - Show Ticket Metrics [intent=direct_read availability=implemented]; flags: --ticket_metric_id
-  - read list-tickets - List Tickets [intent=direct_read availability=implemented]; flags: --external_id, --start_time
+  - read list-tickets - List Tickets [intent=etl availability=implemented stream=list_tickets]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --external_id, --start_time
   - read show-ticket - Show Ticket [intent=direct_read availability=implemented]; flags: --ticket_id, --reduced_payload_size, --remove_duplicate_fields
   - read show-ticket-audit - Show Audit [intent=direct_read availability=implemented]; flags: --ticket_id, --ticket_audit_id
   - read count-audits-for-ticket - Count Audits for a Ticket [intent=direct_read availability=implemented]; flags: --ticket_id
@@ -264,17 +543,17 @@ Operation ledger for the official Zendesk Support API surface; executable stream
   - read list-resource-tags - List Resource Tags [intent=direct_read availability=implemented]; flags: --ticket_id
   - read show-task-list - Show Task List [intent=direct_read availability=implemented]; flags: --ticket_id
   - read count-tickets - Count Tickets [intent=direct_read availability=implemented]
-  - read list-recent-tickets - List Recent Tickets [intent=direct_read availability=implemented]
-  - read tickets-show-many - Show Multiple Tickets [intent=direct_read availability=implemented]; flags: --include
+  - read list-recent-tickets - List Recent Tickets [intent=etl availability=implemented stream=list_recent_tickets]; notes: Stream-backed Zendesk collection read generated from the official OAS.
+  - read tickets-show-many - Show Multiple Tickets [intent=etl availability=implemented stream=tickets_show_many]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --include
   - read list-trigger-categories - List Ticket Trigger Categories [intent=direct_read availability=implemented]; flags: --page, --sort, --include
   - read show-trigger-category-by-id - Show Ticket Trigger Category [intent=direct_read availability=implemented]; flags: --trigger_category_id
-  - read list-triggers - List Ticket Triggers [intent=direct_read availability=implemented]
+  - read list-triggers - List Ticket Triggers [intent=etl availability=implemented stream=list_triggers]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read get-trigger - Show Ticket Trigger [intent=direct_read availability=implemented]; flags: --trigger_id
   - read list-trigger-revisions - List Ticket Trigger Revisions [intent=direct_read availability=implemented]; flags: --trigger_id
   - read trigger-revision - Show Ticket Trigger Revision [intent=direct_read availability=implemented]; flags: --trigger_id, --trigger_revision_id
-  - read list-active-triggers - List Active Ticket Triggers [intent=direct_read availability=implemented]
+  - read list-active-triggers - List Active Ticket Triggers [intent=etl availability=implemented stream=list_active_triggers]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read list-trigger-action-condition-definitions - List Ticket Trigger Action and Condition Definitions [intent=direct_read availability=implemented]
-  - read search-triggers - Search Ticket Triggers [intent=direct_read availability=implemented]
+  - read search-triggers - Search Ticket Triggers [intent=etl availability=implemented stream=search_triggers]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read list-user-fields - List User Fields [intent=direct_read availability=implemented]; flags: --resolve_dc
   - read show-user-field - Show User Field [intent=direct_read availability=implemented]; flags: --user_field_id
   - read list-user-field-options - List User Field Options [intent=direct_read availability=implemented]; flags: --user_field_id
@@ -312,18 +591,18 @@ Operation ledger for the official Zendesk Support API surface; executable stream
   - read autocomplete-users - Autocomplete Users [intent=direct_read availability=implemented]; flags: --name, --phone, --filter, --per_page, --brand_id
   - read count-users - Count Users [intent=direct_read availability=implemented]; flags: --brand_id
   - read show-current-user - Show Self [intent=direct_read availability=implemented]
-  - read list-current-user-o-auth-clients - List Current User's Clients [intent=direct_read availability=implemented]
-  - read show-currently-authenticated-session - Show the Currently Authenticated Session [intent=direct_read availability=implemented]
+  - read list-current-user-o-auth-clients - List Current User's Clients [intent=etl availability=implemented stream=list_current_user_o_auth_clients]; notes: Stream-backed Zendesk collection read generated from the official OAS.
+  - read show-currently-authenticated-session - Show the Currently Authenticated Session [intent=etl availability=implemented stream=show_currently_authenticated_session]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read renew-current-session - Renew the current session [intent=direct_read availability=implemented]
   - read show-current-user-settings - Show Current User Settings [intent=direct_read availability=implemented]
   - read search-users - Search Users [intent=direct_read availability=implemented]; flags: --query, --external_id, --brand_id
   - read show-many-users - Show Many Users [intent=direct_read availability=implemented]; flags: --ids, --external_ids, --include_deleted, --brand_id
-  - read list-views - List Views [intent=direct_read availability=implemented]; flags: --access, --active, --group_id, --sort, --sort_by, --sort_order
+  - read list-views - List Views [intent=etl availability=implemented stream=list_views]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --access, --active, --group_id, --sort, --sort_by, --sort_order
   - read show-view - Show View [intent=direct_read availability=implemented]; flags: --view_id
   - read get-view-count - Count Tickets in View [intent=direct_read availability=implemented]; flags: --view_id
   - read list-tickets-from-view - List Tickets From a View [intent=direct_read availability=implemented]; flags: --view_id, --sort_by, --sort_order
-  - read list-active-views - List Active Views [intent=direct_read availability=implemented]; flags: --access, --group_id, --sort_by, --sort_order
-  - read list-compact-views - List Views - Compact [intent=direct_read availability=implemented]
+  - read list-active-views - List Active Views [intent=etl availability=implemented stream=list_active_views]; notes: Stream-backed Zendesk collection read generated from the official OAS.; flags: --access, --group_id, --sort_by, --sort_order
+  - read list-compact-views - List Views - Compact [intent=etl availability=implemented stream=list_compact_views]; notes: Stream-backed Zendesk collection read generated from the official OAS.
   - read count-views - Count Views [intent=direct_read availability=implemented]
   - read get-view-counts - Count Tickets in Views [intent=direct_read availability=implemented]; flags: --ids
   - read list-view-definitions - List View Filter Definitions [intent=direct_read availability=implemented]

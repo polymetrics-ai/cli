@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "show_many_ticket_fields",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "active": {
+      "type": "boolean"
+    },
+    "agent_can_edit": {
+      "type": "boolean"
+    },
+    "agent_description": {
+      "type": "string"
+    },
+    "collapsed_for_agents": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "creator_app_name": {
+      "type": "string"
+    },
+    "creator_user_id": {
+      "type": "integer"
+    },
+    "custom_field_options": {
+      "type": "array",
+      "items": {}
+    },
+    "custom_statuses": {
+      "type": "array",
+      "items": {}
+    },
+    "description": {
+      "type": "string"
+    },
+    "editable_in_portal": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "raw_description": {
+      "type": "string"
+    },
+    "raw_title": {
+      "type": "string"
+    },
+    "raw_title_in_portal": {
+      "type": "string"
+    },
+    "regexp_for_validation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "relationship_filter": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "relationship_target_type": {
+      "type": "string"
+    },
+    "removable": {
+      "type": "boolean"
+    },
+    "required": {
+      "type": "boolean"
+    },
+    "required_in_portal": {
+      "type": "boolean"
+    },
+    "sub_type_id": {
+      "type": "integer"
+    },
+    "system_field_options": {
+      "type": "array",
+      "items": {}
+    },
+    "tag": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "title_in_portal": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "visible_in_portal": {
+      "type": "boolean"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
+  "x-cursor-field": "updated_at"
+}

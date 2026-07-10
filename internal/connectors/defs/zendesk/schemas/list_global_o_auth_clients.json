@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_global_o_auth_clients",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "company": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "identifier": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "logo_url": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ]
+}
