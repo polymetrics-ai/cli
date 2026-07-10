@@ -1,0 +1,23 @@
+{
+  "phase": "issue-160-zendesk-operation-ledger",
+  "issue": 160,
+  "parent_issue": 156,
+  "status": "planned",
+  "runtime": "pi",
+  "branch": "feat/160-zendesk-operation-ledger",
+  "base_branch": "feat/157-zendesk-cli-surface-metadata",
+  "gsd": {
+    "adapter": "scripts/gsd",
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json": "passed",
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-156-zendesk-complete-implementation --skip-research",
+    "execute_prompt": "scripts/gsd prompt execute-phase issue-160-zendesk-operation-ledger --plan 1",
+    "programming_loop_prompt": "scripts/gsd prompt programming-loop init --phase issue-156-zendesk-complete-implementation --dry-run",
+    "programming_loop_status": "blocked_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationNotes": "Planning checkpoint only; no production edits yet.",
+  "updated_at": "2026-07-10T00:00:00Z"
+}
