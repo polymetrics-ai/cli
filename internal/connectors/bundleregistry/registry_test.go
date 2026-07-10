@@ -125,9 +125,9 @@ func TestChatwootGuideIncludesCLISurfaceHelp(t *testing.T) {
 		"intent=reverse_etl availability=implemented write=send_message",
 		"approval: reverse ETL writes require plan, preview, approval, execute",
 		"agent list - List account agents",
-		"account update - Update account settings",
-		"platform account create - Create a platform account",
-		"availability=unsafe_or_disallowed",
+		"account update - Admin Chatwoot account update",
+		"platform account create - Admin Chatwoot platform account create",
+		"conversation message delete - Destructive Chatwoot conversation message delete",
 		"--json (boolean): Write machine-readable JSON output.",
 		"--connection (string): Use a saved Chatwoot connector credential and account scope; maps_to=connection",
 	} {

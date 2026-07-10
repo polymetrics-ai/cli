@@ -99,8 +99,8 @@ describe('connector data route', () => {
           commands: expect.arrayContaining(['conversation', 'contact', 'message']),
         }),
         expect.objectContaining({
-          title: 'Blocked Admin And Configuration Commands',
-          commands: expect.arrayContaining(['account', 'automation', 'webhook']),
+          title: 'Admin And Configuration Commands',
+          commands: expect.arrayContaining(['account', 'automation', 'webhook', 'platform']),
         }),
       ]),
       commands: expect.arrayContaining([
@@ -119,7 +119,8 @@ describe('connector data route', () => {
         expect.objectContaining({
           path: 'platform account create',
           intent: 'reverse_etl',
-          availability: 'unsafe_or_disallowed',
+          availability: 'implemented',
+          write: 'create_platform_account',
         }),
       ]),
     });

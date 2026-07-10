@@ -40,7 +40,7 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	covered, excluded, operations := 0, 0, 0
 	streamCovered, writeCovered, directReadCovered := 0, 0, 0
 	messageWriteCoversJSON := false
-	profileUpdateMentionsMultipartPolicy := false
+	profileUpdateCovered := false
 
 	for i, ep := range surface.Endpoints {
 		totalByMethod[ep.Method]++
@@ -63,6 +63,9 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 				writeCovered++
 				if ep.Method == "POST" && ep.Path == "/api/v1/accounts/{account_id}/conversations/{conversation_id}/messages" && write == "send_message" {
 					messageWriteCoversJSON = true
+				}
+				if ep.Method == "PUT" && ep.Path == "/api/v1/profile" && write == "update_profile" {
+					profileUpdateCovered = true
 				}
 			}
 			if _, ok := ep.CoveredBy["direct_read"]; ok {
@@ -87,9 +90,6 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 			if ep.Operation.Model == "duplicate" && ep.Operation.DuplicateOf == "" {
 				t.Fatalf("endpoint %d duplicate operation is missing duplicate_of", i)
 			}
-			if ep.Method == "PUT" && ep.Path == "/api/v1/profile" && ep.Operation.Model == "sensitive_reverse_etl" && ep.Operation.Notes == "Multipart avatar/profile updates require the later bounded binary/file policy before any file-bearing action is exposed." {
-				profileUpdateMentionsMultipartPolicy = true
-			}
 		}
 	}
 
@@ -99,20 +99,20 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(uniquePaths) != 89 {
 		t.Fatalf("unique paths = %d, want 89", len(uniquePaths))
 	}
-	if covered != 66 {
-		t.Fatalf("covered endpoints = %d, want 66", covered)
+	if covered != 139 {
+		t.Fatalf("covered endpoints = %d, want 139", covered)
 	}
 	if streamCovered != 7 {
 		t.Fatalf("stream covered endpoints = %d, want 7", streamCovered)
 	}
-	if writeCovered != 6 {
-		t.Fatalf("write covered endpoints = %d, want 6", writeCovered)
+	if writeCovered != 79 {
+		t.Fatalf("write covered endpoints = %d, want 79", writeCovered)
 	}
 	if directReadCovered != 53 {
 		t.Fatalf("direct read covered endpoints = %d, want 53", directReadCovered)
 	}
-	if operations != 78 {
-		t.Fatalf("operation endpoints = %d, want 78", operations)
+	if operations != 5 {
+		t.Fatalf("operation endpoints = %d, want 5", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -120,8 +120,8 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if !messageWriteCoversJSON {
 		t.Fatal("send_message JSON write coverage is missing from POST conversation messages")
 	}
-	if !profileUpdateMentionsMultipartPolicy {
-		t.Fatal("PUT /api/v1/profile must record the blocked multipart avatar/profile policy")
+	if !profileUpdateCovered {
+		t.Fatal("PUT /api/v1/profile must be covered by the typed update_profile write action")
 	}
 	assertStringIntMap(t, "totalByMethod", totalByMethod, map[string]int{
 		"DELETE": 18,
@@ -131,31 +131,24 @@ func TestChatwootAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"PUT":    2,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"GET":  60,
-		"POST": 5,
-		"PUT":  1,
+		"DELETE": 18,
+		"GET":    60,
+		"PATCH":  21,
+		"POST":   38,
+		"PUT":    2,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
-		"DELETE": 18,
-		"GET":    2,
-		"PATCH":  21,
-		"POST":   36,
-		"PUT":    1,
+		"GET":  2,
+		"POST": 3,
 	})
 	assertStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":     35,
-		"destructive_action":    19,
-		"disallowed":            4,
-		"duplicate":             1,
-		"sensitive_reverse_etl": 19,
+		"disallowed": 4,
+		"duplicate":  1,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"critical": 5,
-		"high":     55,
-		"low":      5,
-		"medium":   13,
+		"low": 5,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 78,
+		"blocked": 5,
 	})
 }

@@ -108,16 +108,15 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 - Batch defaults: read_page_size=15.
 - The official Swagger inventory currently accounts for 144 operations across 89 paths: GET 62,
   POST 41, PATCH 21, DELETE 18, PUT 2.
-- Executable coverage in this slice includes 7 stream-backed endpoints, 6 write-backed endpoints,
-  and 53 bounded direct-read endpoints covering the official Chatwoot GET surface except the
-  duplicate/disallowed rows. The remaining official operations are blocked-by-default operation
-  metadata: admin_reverse_etl=35, sensitive_reverse_etl=19, destructive_action=19, disallowed=4,
-  duplicate=1.
+- Executable coverage in this slice includes 7 stream-backed endpoints, 79 write-backed endpoints,
+  and 53 bounded direct-read endpoints. Only duplicate/disallowed official rows remain
+  blocked-by-default operation metadata: disallowed=4, duplicate=1.
 - Direct-read commands for reports, audit logs, public inbox resources, Platform API lookups, and
   other search/filter endpoints use fixed command metadata with bounded JSON output and recursive
   secret-key redaction; they do not expose an arbitrary URL/path or raw HTTP escape hatch.
-- Admin/configuration and destructive operations are not blanket-excluded. They remain blocked until
-  later slices add named reverse-ETL actions with exact schemas, risk text, preview, approval, and
-  typed confirmation where required.
-- Message attachment and profile/avatar multipart variants are not implemented by the current JSON
-  write actions; they require the later binary/file policy slice.
+- Admin/configuration and destructive operations are covered by named reverse-ETL actions with
+  fixed endpoints, record schemas, risk text, preview/approval gates, and destructive confirmation
+  metadata where required.
+- Message attachment and profile/avatar multipart file-upload variants are not exposed as raw file
+  flags; JSON-compatible typed fields are covered and any future binary upload support must use a
+  dedicated bounded binary/file policy.

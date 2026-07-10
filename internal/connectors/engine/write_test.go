@@ -69,6 +69,39 @@ func (c *capturedRequest) json() map[string]any {
 	return m
 }
 
+func TestWriteRootRelativeEndpointUsesConfiguredOrigin(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"ok":true}`)
+	b := Bundle{
+		Name: "chatwoot",
+		HTTP: HTTPBase{URL: srv.URL + "/api/v1/accounts/{{ config.account_id }}"},
+		Writes: []WriteAction{
+			{
+				Name:       "platform_update_account",
+				Kind:       "update",
+				Method:     http.MethodPatch,
+				Path:       "/platform/api/v1/accounts/{{ record.account_id }}",
+				PathFields: []string{"account_id"},
+				Risk:       "high",
+			},
+		},
+	}
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "platform_update_account",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"account_id": "1",
+		}},
+	}, []connectors.Record{
+		{"account_id": "7", "name": "Support"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if cap.path != "/platform/api/v1/accounts/7" {
+		t.Fatalf("request path = %q, want root-relative platform path on configured origin", cap.path)
+	}
+}
+
 // --- body construction: json default (record minus path_fields) ---
 
 func TestWriteJSONBodyDefaultExcludesPathFields(t *testing.T) {
