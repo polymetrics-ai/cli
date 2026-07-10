@@ -3,7 +3,11 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "basic", "username": "{{ config.username }}", "password": "{{ secrets.password }}" }
+      {
+        "mode": "basic",
+        "username": "{{ config.username }}",
+        "password": "{{ secrets.password }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
@@ -13,42 +17,447 @@
     "check": {
       "method": "GET",
       "path": "/tickets",
-      "query": { "limit": "1" }
+      "query": {
+        "limit": "1"
+      }
     },
     "error_map": [
-      { "status": 401, "hint": "gorgias username/password is missing or invalid; re-run pm credentials add gorgias" },
-      { "status": 403, "hint": "gorgias account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "gorgias rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "gorgias username/password is missing or invalid; re-run pm credentials add gorgias"
+      },
+      {
+        "status": 403,
+        "hint": "gorgias account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "gorgias rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "tickets",
       "path": "/tickets",
-      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "data" },
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/tickets.json"
     },
     {
       "name": "customers",
       "path": "/customers",
-      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "data" },
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/customers.json"
     },
     {
       "name": "messages",
       "path": "/messages",
-      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "data" },
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/messages.json"
     },
     {
       "name": "satisfaction_surveys",
       "path": "/satisfaction-surveys",
-      "query": { "limit": { "template": "{{ config.page_size }}", "default": "100" } },
-      "records": { "path": "data" },
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/satisfaction_surveys.json"
+    },
+    {
+      "name": "account_settings",
+      "path": "/account/settings",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/account_settings.json"
+    },
+    {
+      "name": "custom_fields",
+      "path": "/custom-fields",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/custom_fields.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/events.json"
+    },
+    {
+      "name": "integrations",
+      "path": "/integrations",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/integrations.json"
+    },
+    {
+      "name": "jobs",
+      "path": "/jobs",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/jobs.json"
+    },
+    {
+      "name": "macros",
+      "path": "/macros",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/macros.json"
+    },
+    {
+      "name": "metric_cards",
+      "path": "/metric-cards",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/metric_cards.json"
+    },
+    {
+      "name": "rules",
+      "path": "/rules",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/rules.json"
+    },
+    {
+      "name": "tags",
+      "path": "/tags",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "users",
+      "path": "/users",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/users.json"
+    },
+    {
+      "name": "views",
+      "path": "/views",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/views.json"
+    },
+    {
+      "name": "voice_calls",
+      "path": "/phone/voice-calls",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/voice_calls.json"
+    },
+    {
+      "name": "voice_call_events",
+      "path": "/phone/voice-call-events",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/voice_call_events.json"
+    },
+    {
+      "name": "widgets",
+      "path": "/widgets",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/widgets.json"
+    },
+    {
+      "name": "customer_custom_fields",
+      "path": "/customers/{{ fanout.id }}/custom-fields",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/customer_custom_fields.json",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/customers",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "customer_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "fan_out-driven stream: the id-listing preliminary request has no single fixed request path for dynamic conformance replay; static validation checks the fan_out path interpolation and fixture replay covers the request sequence."
+      }
+    },
+    {
+      "name": "ticket_custom_fields",
+      "path": "/tickets/{{ fanout.id }}/custom-fields",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/ticket_custom_fields.json",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/tickets",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "ticket_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "fan_out-driven stream: the id-listing preliminary request has no single fixed request path for dynamic conformance replay; static validation checks the fan_out path interpolation and fixture replay covers the request sequence."
+      }
+    },
+    {
+      "name": "ticket_tags",
+      "path": "/tickets/{{ fanout.id }}/tags",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/ticket_tags.json",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/tickets",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "ticket_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "fan_out-driven stream: the id-listing preliminary request has no single fixed request path for dynamic conformance replay; static validation checks the fan_out path interpolation and fixture replay covers the request sequence."
+      }
+    },
+    {
+      "name": "ticket_messages",
+      "path": "/tickets/{{ fanout.id }}/messages",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/ticket_messages.json",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/tickets",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "ticket_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "fan_out-driven stream: the id-listing preliminary request has no single fixed request path for dynamic conformance replay; static validation checks the fan_out path interpolation and fixture replay covers the request sequence."
+      }
+    },
+    {
+      "name": "view_items",
+      "path": "/views/{{ fanout.id }}/items",
+      "query": {
+        "limit": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/view_items.json",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/views",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "view_id"
+      },
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "fan_out-driven stream: the id-listing preliminary request has no single fixed request path for dynamic conformance replay; static validation checks the fan_out path interpolation and fixture replay covers the request sequence."
+      }
     }
   ]
 }

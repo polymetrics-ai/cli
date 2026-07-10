@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/custom-fields",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 101,
+          "object_type": "Ticket",
+          "label": "Fixture custom field",
+          "required": false,
+          "created_datetime": "2026-01-01T00:00:00Z",
+          "updated_datetime": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

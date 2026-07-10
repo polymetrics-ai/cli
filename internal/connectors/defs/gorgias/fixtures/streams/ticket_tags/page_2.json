@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/tickets/1/tags",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 701,
+          "name": "fixture-tag",
+          "description": "Fixture tag",
+          "created_datetime": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

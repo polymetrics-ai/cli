@@ -3,7 +3,7 @@
   "docs": "https://developers.gorgias.com/reference; https://developers.gorgias.com/llms.txt",
   "reviewed_at": "2026-07-10",
   "operation_ledger_version": 1,
-  "scope": "issue #200 operation ledger: all 114 public Gorgias operations captured from llms.txt-linked ReadMe/OpenAPI pages are accounted for. Only the four existing read streams are executable; all other direct-read, binary/file, reverse-ETL, admin, destructive, and product-scope operations remain blocked metadata until their dedicated implementation lanes add typed behavior and safety gates.",
+  "scope": "issue #199 stream runner: all 114 public Gorgias operations remain accounted for; 24 safe list/read-sweep GET endpoints are executable as ETL streams, while detail direct reads, binary/file operations, advanced POST queries, reverse-ETL, admin, destructive, and product-scope operations remain blocked metadata until their dedicated lanes add typed behavior and safety gates.",
   "endpoints": [
     {
       "method": "GET",
@@ -21,14 +21,8 @@
     {
       "method": "GET",
       "path": "/account/settings",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "List settings is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-account-settings.md",
-        "notes": "operation_id: list-account-settings"
+      "covered_by": {
+        "stream": "account_settings"
       }
     },
     {
@@ -106,14 +100,8 @@
     {
       "method": "GET",
       "path": "/customers/{customer_id}/custom-fields",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "List customer field values is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-customer-custom-fields-values.md",
-        "notes": "operation_id: list-customer-custom-fields-values"
+      "covered_by": {
+        "stream": "customer_custom_fields"
       }
     },
     {
@@ -210,14 +198,8 @@
     {
       "method": "GET",
       "path": "/custom-fields",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "List custom fields is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-custom-fields.md",
-        "notes": "operation_id: list-custom-fields"
+      "covered_by": {
+        "stream": "custom_fields"
       }
     },
     {
@@ -275,14 +257,8 @@
     {
       "method": "GET",
       "path": "/events",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "List events is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-events.md",
-        "notes": "operation_id: list-events"
+      "covered_by": {
+        "stream": "events"
       }
     },
     {
@@ -327,14 +303,8 @@
     {
       "method": "GET",
       "path": "/integrations",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "List integrations is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-integrations.md",
-        "notes": "operation_id: list-integrations"
+      "covered_by": {
+        "stream": "integrations"
       }
     },
     {
@@ -392,14 +362,8 @@
     {
       "method": "GET",
       "path": "/jobs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "List jobs is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-jobs.md",
-        "notes": "operation_id: list-jobs"
+      "covered_by": {
+        "stream": "jobs"
       }
     },
     {
@@ -457,14 +421,8 @@
     {
       "method": "GET",
       "path": "/macros",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "List macros is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-macros.md",
-        "notes": "operation_id: list-macros"
+      "covered_by": {
+        "stream": "macros"
       }
     },
     {
@@ -561,14 +519,8 @@
     {
       "method": "GET",
       "path": "/metric-cards",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "Search metric cards is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/search-metric-cards.md",
-        "notes": "operation_id: search-metric-cards"
+      "covered_by": {
+        "stream": "metric_cards"
       }
     },
     {
@@ -587,14 +539,8 @@
     {
       "method": "GET",
       "path": "/rules",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "List rules is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-rules.md",
-        "notes": "operation_id: list-rules"
+      "covered_by": {
+        "stream": "rules"
       }
     },
     {
@@ -763,14 +709,8 @@
     {
       "method": "GET",
       "path": "/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "List tags is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-tags.md",
-        "notes": "operation_id: list-tags"
+      "covered_by": {
+        "stream": "tags"
       }
     },
     {
@@ -841,14 +781,8 @@
     {
       "method": "GET",
       "path": "/teams",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "List teams is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-teams.md",
-        "notes": "operation_id: list-teams"
+      "covered_by": {
+        "stream": "teams"
       }
     },
     {
@@ -965,14 +899,8 @@
     {
       "method": "GET",
       "path": "/tickets/{ticket_id}/custom-fields",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "List ticket field values is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-ticket-custom-fields.md",
-        "notes": "operation_id: list-ticket-custom-fields"
+      "covered_by": {
+        "stream": "ticket_custom_fields"
       }
     },
     {
@@ -1056,14 +984,8 @@
     {
       "method": "GET",
       "path": "/tickets/{ticket_id}/tags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "List ticket tags is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-ticket-tags.md",
-        "notes": "operation_id: list-ticket-tags"
+      "covered_by": {
+        "stream": "ticket_tags"
       }
     },
     {
@@ -1076,14 +998,8 @@
     {
       "method": "GET",
       "path": "/tickets/{ticket_id}/messages",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "List messages of a ticket is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-ticket-messages.md",
-        "notes": "operation_id: list-ticket-messages"
+      "covered_by": {
+        "stream": "ticket_messages"
       }
     },
     {
@@ -1141,14 +1057,8 @@
     {
       "method": "GET",
       "path": "/users",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "List users is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-users.md",
-        "notes": "operation_id: list-users"
+      "covered_by": {
+        "stream": "users"
       }
     },
     {
@@ -1206,14 +1116,8 @@
     {
       "method": "GET",
       "path": "/views",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "List views is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-views.md",
-        "notes": "operation_id: list-views"
+      "covered_by": {
+        "stream": "views"
       }
     },
     {
@@ -1271,14 +1175,8 @@
     {
       "method": "GET",
       "path": "/views/{view_id}/items",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "List view's items is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-view-items.md",
-        "notes": "operation_id: list-view-items"
+      "covered_by": {
+        "stream": "view_items"
       }
     },
     {
@@ -1297,14 +1195,8 @@
     {
       "method": "GET",
       "path": "/phone/voice-calls",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "List voice calls is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-voice-calls.md",
-        "notes": "operation_id: list-voice-calls"
+      "covered_by": {
+        "stream": "voice_calls"
       }
     },
     {
@@ -1362,14 +1254,8 @@
     {
       "method": "GET",
       "path": "/phone/voice-call-events",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "List voice call events is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-voice-call-events.md",
-        "notes": "operation_id: list-voice-call-events"
+      "covered_by": {
+        "stream": "voice_call_events"
       }
     },
     {
@@ -1388,14 +1274,8 @@
     {
       "method": "GET",
       "path": "/widgets",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "List widgets is a read-style operation, but this slice only accounts for the surface; it remains blocked until a typed direct-read or stream implementation is added.",
-        "source_url": "https://developers.gorgias.com/reference/list-widgets.md",
-        "notes": "operation_id: list-widgets"
+      "covered_by": {
+        "stream": "widgets"
       }
     },
     {
