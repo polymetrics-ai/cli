@@ -1,0 +1,38 @@
+apiVersion: polymetrics.ai/connector-research/v1
+kind: ConnectorResearchSchema
+description: >
+  Machine-readable shape of RESEARCH.json produced by pm-web-researcher during the RESEARCH stage
+  for a connector task. The reconciler and pm-planner read this to confirm the provider API surface
+  is fully classified before planning. See connector-research-doc-template.md for the human form.
+
+root:
+  required: [connector, provider, endpoints, writes, coverage, complete]
+
+provider:
+  required: [name, docs_root, base_urls, api_styles, auth]
+  api_styles_values: [rest, graphql]
+  auth_required: [scheme]
+  auth_scheme_values: [bearer, oauth2, api-key, app]
+
+endpoint:                       # one per read operation
+  required: [object, method, path_or_op, pagination, execution_model, source_url]
+  pagination_values: [none, page, offset, cursor, link, graphql_pageinfo]
+  execution_model_values: [stream_read, direct_read, graphql_query, binary_transfer, excluded]
+
+write:                          # one per write verb
+  required: [action, method, path, risk_tier, execution_model, source_url]
+  risk_tier_values: [normal, sensitive, admin, destructive]
+  execution_model_values: [reverse_etl, sensitive_reverse_etl, admin_reverse_etl, destructive_admin, excluded]
+
+coverage:
+  required: [read_endpoints_found, write_verbs_found, unclassified_endpoints, all_source_urls_present]
+  gate:
+    # PARENT_PLAN must not start unless BOTH hold:
+    - unclassified_endpoints == 0
+    - all_source_urls_present == true
+
+complete:
+  type: boolean
+  description: >
+    true only when the full documented surface was confirmed. When false, RESEARCH resumes; the
+    orchestrator never advances to PARENT_PLAN on an incomplete research doc.
