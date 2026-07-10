@@ -108,11 +108,12 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 - Batch defaults: read_page_size=15.
 - The official Swagger inventory currently accounts for 144 operations across 89 paths: GET 62,
   POST 41, PATCH 21, DELETE 18, PUT 2.
-- Executable coverage in this slice remains 7 stream-backed endpoints and 6 write-backed endpoints.
-  The remaining official operations are blocked-by-default operation metadata: direct_read=53,
+- Executable coverage in this slice includes 7 stream-backed endpoints, 6 write-backed endpoints,
+  and 3 bounded direct-read endpoints (`conversation view`, `contact view`, `contact search`). The
+  remaining official operations are blocked-by-default operation metadata: direct_read=50,
   admin_reverse_etl=35, sensitive_reverse_etl=19, destructive_action=19, disallowed=4, duplicate=1.
-- Direct-read commands for single records, search/filter endpoints, reports, audit logs, and public
-  inbox resources are planned but not executable until typed bounded output policies exist.
+- Additional direct-read commands for reports, audit logs, public inbox resources, and other
+  search/filter endpoints remain planned until typed bounds, pagination, and redaction policies exist.
 - Admin/configuration and destructive operations are not blanket-excluded. They remain blocked until
   later slices add named reverse-ETL actions with exact schemas, risk text, preview, approval, and
   typed confirmation where required.

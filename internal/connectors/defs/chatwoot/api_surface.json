@@ -299,23 +299,15 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/contacts/search",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "contact search"
       }
     },
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/contacts/{id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "contact view"
       }
     },
     {
@@ -434,12 +426,8 @@
     {
       "method": "GET",
       "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "bounded direct-read candidate; blocked until Chatwoot direct-read commands implement typed parameters, pagination bounds, and redacted JSON output."
+      "covered_by": {
+        "direct_read": "conversation view"
       }
     },
     {
