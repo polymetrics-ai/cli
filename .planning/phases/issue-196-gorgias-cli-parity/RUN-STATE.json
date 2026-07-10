@@ -99,8 +99,17 @@
         203
       ],
       "reason": "Sub-PR #267 green and squash-merged into parent branch; #199/#202/#203 are now unblocked, while automated review coverage for #200 remains pending parent PR fallback."
+    },
+    {
+      "timestamp": "2026-07-10T10:30:00Z",
+      "cycle": "issue-199-sub-pr-open",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        199
+      ],
+      "reason": "Expanded Gorgias stream coverage to 24 streams with red/green TDD evidence, passed local gates, and opened sub-PR #268 to the parent branch."
     }
   ],
   "verificationPassed": false,
-  "verificationBlocker": "automated review coverage pending for #197/#200 because stacked PR review was skipped/absent and draft parent PR CodeRabbit coverage is pending/skipped"
+  "verificationBlocker": "sub-PR #268 automated review/check coverage pending; parent fallback review still pending for provisionally integrated #197/#200"
 }
