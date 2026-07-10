@@ -129,7 +129,7 @@ func TestChatwootGuideIncludesCLISurfaceHelp(t *testing.T) {
 		"platform account create - Create a platform account",
 		"availability=unsafe_or_disallowed",
 		"--json (boolean): Write machine-readable JSON output.",
-		"--connection (string): Use a saved Chatwoot connector credential and account scope.; maps_to=connection",
+		"--connection (string): Use a saved Chatwoot connector credential and account scope; maps_to=connection",
 	} {
 		if !strings.Contains(manual, want) {
 			t.Fatalf("Chatwoot manual missing %q:\n%s", want, manual)

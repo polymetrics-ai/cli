@@ -135,6 +135,11 @@
       "cycle": "issue-154-parent-review-fix",
       "decision": "review_fix_pending_push",
       "reason": "Parent PR fallback CodeRabbit review replied Review finished. Existing actionable findings were dispositioned: valid comment/doc grammar findings fixed; stale cli_surface line reference is no longer applicable to current metadata."
+    },
+    {
+      "cycle": "issue-154-parent-verify-fix",
+      "decision": "remote_verify_fix_pending_push",
+      "reason": "Parent PR verify failed because the Chatwoot guide test still expected the old generated --connection punctuation; updated the test expectation and targeted tests passed."
     }
   ],
   "verificationPassed": false,
