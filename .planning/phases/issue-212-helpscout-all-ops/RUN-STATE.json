@@ -1,0 +1,41 @@
+{
+  "phase": "issue-212-helpscout-all-ops",
+  "issue": 212,
+  "status": "planned",
+  "branch": "feat/212-helpscout-all-ops",
+  "base_branch": "feat/213-helpscout-cli-surface-metadata",
+  "parent_branch": "feat/212-helpscout-cli-parity",
+  "parent_pr": "https://github.com/polymetrics-ai/cli/pull/230",
+  "depends_on_sub_pr": "https://github.com/polymetrics-ai/cli/pull/236",
+  "gsd": {
+    "doctor": "passed",
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-212-helpscout-all-ops --skip-research --tdd",
+    "programming_loop": "unavailable: unknown GSD command: programming-loop",
+    "manual_fallback": true
+  },
+  "skills_loaded": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-spf13-cobra",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation"
+  ],
+  "verificationPassed": false,
+  "verificationStatus": "pending",
+  "safety": {
+    "credentialed_checks": false,
+    "new_dependencies": false,
+    "secrets_requested_or_stored": false,
+    "generic_write_tools": false,
+    "reverse_etl_execution": false
+  },
+  "updated_at": "2026-07-10T00:00:00Z"
+}
