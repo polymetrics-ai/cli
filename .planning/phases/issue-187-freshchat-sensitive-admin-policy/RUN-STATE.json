@@ -1,0 +1,24 @@
+{
+  "phase": "issue-187-freshchat-sensitive-admin-policy",
+  "issue": 187,
+  "parent_issue": 180,
+  "status": "planned",
+  "gsd": {
+    "plan_phase_command": "scripts/gsd prompt plan-phase issue-187-freshchat-sensitive-admin-policy --skip-research",
+    "programming_loop_command": "scripts/gsd prompt programming-loop init --phase issue-187-freshchat-sensitive-admin-policy --dry-run",
+    "programming_loop_result": "unavailable_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationBlocker": "not run yet",
+  "orchestrationDecisions": [
+    {
+      "timestamp": "2026-07-10T01:15:00Z",
+      "cycle": "issue-plan",
+      "decision": "local_critical_path",
+      "reason": "Issue #187 is the remaining parent parity slice; Pi subagent tool is unavailable, so run locally on a stacked branch.",
+      "issue_numbers": [187]
+    }
+  ],
+  "updated_at": "2026-07-10T01:15:00Z"
+}
