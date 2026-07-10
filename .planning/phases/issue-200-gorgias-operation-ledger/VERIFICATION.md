@@ -32,7 +32,11 @@ make verify
 
 ## Broader results
 
-Pending final broad gate run.
+- `gofmt -w cmd internal`: ran; no tracked changes remained.
+- `go vet ./...`: passed.
+- `go test ./...`: passed.
+- `go build ./cmd/pm`: passed.
+- `make verify`: passed, including docs validation, smoke test, golangci-lint, and `connectorgen validate`.
 
 ## CLI help/docs/website parity
 

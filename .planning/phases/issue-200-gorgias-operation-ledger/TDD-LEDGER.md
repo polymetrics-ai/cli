@@ -44,7 +44,17 @@ Results:
 - Gorgias conformance test passed.
 - Diff whitespace check passed.
 
+## Broad verification evidence
+
+Final broad gate command:
+
+```bash
+gofmt -w cmd internal && go vet ./... && go test ./... && go build ./cmd/pm && make verify
+```
+
+Result: passed. `make verify` included docs validation, smoke test, golangci-lint, and `go run ./cmd/connectorgen validate internal/connectors/defs` with 547 connector(s), 0 findings.
+
 ## Refactor notes
 
-- JSON-only ledger changes should not alter connector runtime behavior.
-- Go test additions require `gofmt -w cmd internal` before final verification.
+- JSON-only ledger changes did not alter connector runtime behavior.
+- `gofmt -w cmd internal` ran after adding the Go regression test; no tracked changes remained after the final broad gate.
