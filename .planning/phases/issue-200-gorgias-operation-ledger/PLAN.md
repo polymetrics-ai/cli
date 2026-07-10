@@ -51,7 +51,7 @@ Replace the partial Gorgias API surface with an operation ledger that accounts f
 
 ## Current baseline
 
-- Official captured operations: 114 (`GET:59`, `POST:17`, `PUT:22`, `DELETE:16`) from `.planning/phases/issue-197-gorgias-cli-surface-metadata/OFFICIAL-OPERATIONS.json`.
+- Official captured operations: 114 (`GET:46`, `POST:23`, `PUT:27`, `DELETE:18`) from `.planning/phases/issue-197-gorgias-cli-surface-metadata/OFFICIAL-OPERATIONS.json`; the #197 capture reconciled this with the older parent-issue method taxonomy.
 - Current `api_surface.json`: 11 rows, legacy `excluded` classifiers, no `operation_ledger_version`.
 - Existing executable streams: `tickets`, `customers`, `messages`, `satisfaction_surveys`.
 - Existing writes: none.

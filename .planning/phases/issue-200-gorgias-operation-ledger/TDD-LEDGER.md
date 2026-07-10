@@ -16,13 +16,13 @@ Branch: `feat/200-gorgias-operation-ledger`
 
 ## Red evidence
 
-Pending: add focused Gorgias operation-ledger regression test, then run:
+Added `cmd/connectorgen/gorgias_api_surface_test.go` with focused Gorgias operation-ledger invariants, then ran:
 
 ```bash
 go test ./cmd/connectorgen -run GorgiasAPISurfaceOperationLedger
 ```
 
-Expected initial failure: current `internal/connectors/defs/gorgias/api_surface.json` has 11 rows and no `operation_ledger_version`, while the official captured baseline has 114 operations.
+Initial result: failed as expected with `operation_ledger_version = 0, want 1`. Current `internal/connectors/defs/gorgias/api_surface.json` has 11 legacy rows and no operation ledger, while the official captured baseline has 114 operations.
 
 ## Green evidence
 
