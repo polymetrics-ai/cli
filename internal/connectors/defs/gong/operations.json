@@ -4,10 +4,10 @@
       "id": "gong.calls_media_upload",
       "kind": "rest_write",
       "summary": "Add call media (/v2/calls/{id}/media)",
-      "description": "Typed Gong mutation metadata for a request shape not supported by the declarative write executor in this slice.",
+      "description": "Typed Gong multipart media upload operation. Executable through the `upload_call_media` reverse-ETL write action; no generic upload command is exposed.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, approval, execute; blocked until multipart/array-body executor support is added",
+      "approval": "reverse ETL plan, preview, approval, execute; destructive confirmation required",
       "output_policy": "gong_bounded_input_redacted",
       "mutation_class": "update",
       "secret_sensitive": true,
@@ -348,10 +348,10 @@
       "id": "gong.meetings_integration_status",
       "kind": "rest_read",
       "summary": "Validate Gong meeting Integration (/v2/meetings/integration/status)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query operation with schema-gated JSON body and redacted bounded JSON output.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -369,7 +369,11 @@
                 "description": "String array of emails of users (max 100)"
               }
             }
-          }
+          },
+          "required": [
+            "emails"
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -377,10 +381,10 @@
       "id": "gong.flows_steps",
       "kind": "rest_read",
       "summary": "Get flow details and steps for one or more Engage flows (/v2/flows/steps)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query operation with schema-gated JSON body and redacted bounded JSON output.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -399,7 +403,11 @@
                 "description": "List of Engage Flow IDs to retrieve steps for. Maximum 20 flow IDs per request."
               }
             }
-          }
+          },
+          "required": [
+            "flowIds"
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -407,10 +415,10 @@
       "id": "gong.flows_prospects",
       "kind": "rest_read",
       "summary": "List prospects assigned flows (/v2/flows/prospects)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query operation with schema-gated JSON body and redacted bounded JSON output.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -437,7 +445,9 @@
                 "description": "Assigned flow instance IDs."
               }
             }
-          }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
         }
       }
     },
@@ -445,10 +455,10 @@
       "id": "gong.crm_upload_entity_schema",
       "kind": "rest_write",
       "summary": "Upload Object Schema (/v2/crm/entity-schema)",
-      "description": "Typed Gong mutation metadata for a request shape not supported by the declarative write executor in this slice.",
+      "description": "Typed Gong top-level JSON array CRM entity-schema upload operation. Executable through the `upload_crm_entity_schema` reverse-ETL write action for reviewed table mappings; no raw JSON CLI flag is exposed.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, approval, execute; blocked until multipart/array-body executor support is added",
+      "approval": "reverse ETL plan, preview, approval, execute; destructive confirmation required",
       "output_policy": "gong_bounded_input_redacted",
       "mutation_class": "create",
       "secret_sensitive": false,
@@ -479,10 +489,10 @@
       "id": "gong.crm_upload_entities",
       "kind": "rest_write",
       "summary": "Upload CRM objects (/v2/crm/entities)",
-      "description": "Typed Gong mutation metadata for a request shape not supported by the declarative write executor in this slice.",
+      "description": "Typed Gong multipart CRM entities upload operation. Executable through the `upload_crm_entities` reverse-ETL write action; no generic upload command is exposed.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, approval, execute; blocked until multipart/array-body executor support is added",
+      "approval": "reverse ETL plan, preview, approval, execute; destructive confirmation required",
       "output_policy": "gong_bounded_input_redacted",
       "mutation_class": "create",
       "secret_sensitive": true,

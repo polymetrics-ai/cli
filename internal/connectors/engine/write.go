@@ -6,11 +6,14 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/safety"
 )
 
 // httpErrorStatus extracts the HTTP status from err when it wraps a
@@ -64,15 +67,25 @@ func ValidateWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, r
 	if err != nil {
 		return err
 	}
-	if sch == nil {
-		return nil
-	}
 	for i, rec := range records {
-		if err := sch.Validate(map[string]any(rec)); err != nil {
+		if sch != nil {
+			if err := sch.Validate(map[string]any(rec)); err != nil {
+				return &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: err}
+			}
+		}
+		if err := validateWriteBody(action, rec); err != nil {
 			return &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: err}
 		}
 	}
 	return nil
+}
+
+func validateWriteBody(action WriteAction, rec connectors.Record) error {
+	if bodyTypeOf(action) != "json_array" || len(action.BodySchema) == 0 {
+		return nil
+	}
+	_, err := buildJSONArrayPayload(action, rec)
+	return err
 }
 
 // DryRunWrite validates every record and returns a staged-count preview
@@ -228,6 +241,20 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		}
 		_, err := rt.Requester.Do(ctx, method, path, nil, body)
 		return err
+	case "json_array":
+		payload, err := buildJSONArrayPayload(action, rec)
+		if err != nil {
+			return err
+		}
+		_, err = rt.Requester.Do(ctx, method, path, nil, payload)
+		return err
+	case "multipart":
+		form, err := buildMultipartPayload(action, rec, cfg)
+		if err != nil {
+			return err
+		}
+		_, err = rt.Requester.DoMultipart(ctx, method, path, nil, form)
+		return err
 	default: // "json" (default)
 		var body map[string]any
 		if len(action.BodyFields) > 0 {
@@ -278,6 +305,127 @@ func buildBodyFieldsPayload(rec connectors.Record, bodyFields []string) map[stri
 		}
 	}
 	return out
+}
+
+func buildJSONArrayPayload(action WriteAction, rec connectors.Record) (any, error) {
+	value, err := resolveRecordPathValue(map[string]any(rec), strings.Split(action.BodyField, "."))
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: resolve body_field %q: %w", action.Name, action.BodyField, err)
+	}
+	if len(action.BodySchema) > 0 {
+		sch, err := CompileSchema(action.BodySchema)
+		if err != nil {
+			return nil, fmt.Errorf("engine: write action %q: compile body_schema: %w", action.Name, err)
+		}
+		if err := sch.Validate(value); err != nil {
+			return nil, fmt.Errorf("engine: write action %q: body_schema: %w", action.Name, err)
+		}
+	}
+	return value, nil
+}
+
+func buildMultipartPayload(action WriteAction, rec connectors.Record, cfg connectors.RuntimeConfig) (connsdk.MultipartForm, error) {
+	if action.Multipart == nil {
+		return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart spec is required", action.Name)
+	}
+	form := connsdk.MultipartForm{Fields: map[string]string{}}
+	var total int64
+	for _, part := range action.Multipart.Parts {
+		value, err := resolveRecordPathValue(map[string]any(rec), strings.Split(part.Field, "."))
+		if err != nil {
+			if part.Required {
+				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart part %q: %w", action.Name, part.Name, err)
+			}
+			continue
+		}
+		if value == nil {
+			if part.Required {
+				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart part %q is required", action.Name, part.Name)
+			}
+			continue
+		}
+		switch part.Type {
+		case "field":
+			form.Fields[part.Name] = stringifyAny(value)
+		case "file":
+			path, ok := value.(string)
+			if !ok || strings.TrimSpace(path) == "" {
+				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart file part %q requires a file path string", action.Name, part.Name)
+			}
+			resolved, size, err := resolveMultipartFilePath(cfg.ProjectDir, path, part.MaxBytes)
+			if err != nil {
+				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart file part %q: %w", action.Name, part.Name, err)
+			}
+			total += size
+			if action.Multipart.MaxBytes > 0 && total > action.Multipart.MaxBytes {
+				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart payload too large: %d bytes exceeds limit %d", action.Name, total, action.Multipart.MaxBytes)
+			}
+			form.Files = append(form.Files, connsdk.MultipartFile{
+				FieldName:   part.Name,
+				Path:        resolved,
+				ContentType: part.ContentType,
+				MaxBytes:    part.MaxBytes,
+			})
+		default:
+			return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart part %q has unsupported type %q", action.Name, part.Name, part.Type)
+		}
+	}
+	return form, nil
+}
+
+func resolveMultipartFilePath(projectDir, raw string, maxBytes int64) (string, int64, error) {
+	if strings.TrimSpace(projectDir) == "" {
+		projectDir = "."
+	}
+	if err := safetyRejectLocalFilePath(projectDir, raw); err != nil {
+		return "", 0, err
+	}
+	rootAbs, err := filepath.Abs(projectDir)
+	if err != nil {
+		return "", 0, fmt.Errorf("resolve project root: %w", err)
+	}
+	if resolvedRoot, err := filepath.EvalSymlinks(rootAbs); err == nil {
+		rootAbs = resolvedRoot
+	}
+	var candidate string
+	if filepath.IsAbs(raw) {
+		candidate = filepath.Clean(raw)
+	} else {
+		candidate = filepath.Join(rootAbs, filepath.Clean(raw))
+	}
+	resolved, err := filepath.EvalSymlinks(candidate)
+	if err != nil {
+		return "", 0, err
+	}
+	if err := requireInsideRoot(rootAbs, resolved); err != nil {
+		return "", 0, err
+	}
+	info, err := os.Stat(resolved)
+	if err != nil {
+		return "", 0, err
+	}
+	if !info.Mode().IsRegular() {
+		return "", 0, fmt.Errorf("file must be a regular file")
+	}
+	if maxBytes > 0 && info.Size() > maxBytes {
+		return "", 0, fmt.Errorf("file too large: %d bytes exceeds limit %d", info.Size(), maxBytes)
+	}
+	return resolved, info.Size(), nil
+}
+
+func safetyRejectLocalFilePath(projectDir, raw string) error {
+	return safety.ValidateLocalWritePath(projectDir, raw, "multipart file path", false)
+}
+
+func requireInsideRoot(rootAbs, pathAbs string) error {
+	rel, err := filepath.Rel(rootAbs, pathAbs)
+	if err != nil {
+		return fmt.Errorf("compare multipart file path to project root: %w", err)
+	}
+	if rel == "." || (rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)) && !filepath.IsAbs(rel)) {
+		return nil
+	}
+	return fmt.Errorf("multipart file path outside the project root is not allowed")
 }
 
 // buildForm builds a url.Values form body from every record field not

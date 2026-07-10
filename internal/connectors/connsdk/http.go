@@ -6,8 +6,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
+	"net/textproto"
 	"net/url"
+	"os"
+	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -50,6 +55,25 @@ func (e *HTTPError) Error() string {
 // Requester performs JSON HTTP requests with auth, retry, and rate-limit handling.
 // The zero value is usable once Client/BaseURL are set; sensible defaults are
 // applied for the rest on first use.
+type MultipartForm struct {
+	Fields map[string]string
+	Files  []MultipartFile
+}
+
+type MultipartFile struct {
+	FieldName   string
+	Path        string
+	FileName    string
+	ContentType string
+	MaxBytes    int64
+}
+
+type requestBody struct {
+	Reader      io.Reader
+	ContentType string
+	Cleanup     func() error
+}
+
 type Requester struct {
 	// Client is the HTTP client. Defaults to a client with a 60s timeout.
 	Client *http.Client
@@ -210,10 +234,121 @@ func (r *Requester) DoForm(ctx context.Context, method, path string, query, form
 	return r.do(ctx, method, path, query, payload, contentType, defaultMaxResponseBody)
 }
 
+// DoMultipart performs an HTTP request with a multipart/form-data body. File
+// parts are opened for each retry attempt, so callers may use it with the same
+// retry policy as JSON/form requests without reusing a consumed reader.
+func (r *Requester) DoMultipart(ctx context.Context, method, path string, query url.Values, form MultipartForm) (*Response, error) {
+	if err := validateMultipartForm(form); err != nil {
+		return nil, err
+	}
+	return r.doWithBody(ctx, method, path, query, defaultMaxResponseBody, func() (*requestBody, error) {
+		return multipartBody(form)
+	})
+}
+
+func validateMultipartForm(form MultipartForm) error {
+	for i, file := range form.Files {
+		if strings.TrimSpace(file.FieldName) == "" {
+			return fmt.Errorf("multipart file %d field name is required", i)
+		}
+		if strings.TrimSpace(file.Path) == "" {
+			return fmt.Errorf("multipart file %q path is required", file.FieldName)
+		}
+		info, err := os.Stat(file.Path)
+		if err != nil {
+			return fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+		}
+		if !info.Mode().IsRegular() {
+			return fmt.Errorf("multipart file %q must be a regular file", file.FieldName)
+		}
+		if file.MaxBytes > 0 && info.Size() > file.MaxBytes {
+			return fmt.Errorf("multipart file %q too large: %d bytes exceeds limit %d", file.FieldName, info.Size(), file.MaxBytes)
+		}
+	}
+	return nil
+}
+
+func multipartBody(form MultipartForm) (*requestBody, error) {
+	pr, pw := io.Pipe()
+	mw := multipart.NewWriter(pw)
+	done := make(chan error, 1)
+	go func() {
+		err := writeMultipartForm(mw, form)
+		if closeErr := mw.Close(); err == nil {
+			err = closeErr
+		}
+		if err != nil {
+			_ = pw.CloseWithError(err)
+		} else {
+			_ = pw.Close()
+		}
+		done <- err
+	}()
+	return &requestBody{
+		Reader:      pr,
+		ContentType: mw.FormDataContentType(),
+		Cleanup: func() error {
+			_ = pr.Close()
+			return <-done
+		},
+	}, nil
+}
+
+func writeMultipartForm(mw *multipart.Writer, form MultipartForm) error {
+	keys := make([]string, 0, len(form.Fields))
+	for key := range form.Fields {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		if err := mw.WriteField(key, form.Fields[key]); err != nil {
+			return err
+		}
+	}
+	for _, file := range form.Files {
+		if err := writeMultipartFile(mw, file); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func writeMultipartFile(mw *multipart.Writer, file MultipartFile) error {
+	name := file.FileName
+	if strings.TrimSpace(name) == "" {
+		name = filepath.Base(file.Path)
+	}
+	header := make(textproto.MIMEHeader)
+	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name=%q; filename=%q`, file.FieldName, name))
+	if file.ContentType != "" {
+		header.Set("Content-Type", file.ContentType)
+	}
+	part, err := mw.CreatePart(header)
+	if err != nil {
+		return err
+	}
+	f, err := os.Open(file.Path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	_, err = io.Copy(part, f)
+	return err
+}
+
 // do is the shared request core for Do/DoForm. payload is the already-encoded
 // body (nil for none) and contentType is the Content-Type to set when a body is
 // present.
 func (r *Requester) do(ctx context.Context, method, path string, query url.Values, payload []byte, contentType string, maxBodyBytes int) (*Response, error) {
+	return r.doWithBody(ctx, method, path, query, maxBodyBytes, func() (*requestBody, error) {
+		if payload == nil {
+			return nil, nil
+		}
+		return &requestBody{Reader: bytes.NewReader(payload), ContentType: contentType}, nil
+	})
+}
+
+func (r *Requester) doWithBody(ctx context.Context, method, path string, query url.Values, maxBodyBytes int, bodyFactory func() (*requestBody, error)) (*Response, error) {
 	fullURL, err := r.resolveURL(path, query)
 	if err != nil {
 		return nil, err
@@ -229,24 +364,36 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 			return nil, err
 		}
 
+		body, err := bodyFactory()
+		if err != nil {
+			return nil, err
+		}
 		var reader io.Reader
-		if payload != nil {
-			reader = bytes.NewReader(payload)
+		var contentType string
+		if body != nil {
+			reader = body.Reader
+			contentType = body.ContentType
 		}
 		req, err := http.NewRequestWithContext(ctx, method, fullURL, reader)
 		if err != nil {
+			cleanupRequestBody(body)
 			return nil, fmt.Errorf("build request: %w", err)
 		}
-		r.applyHeaders(req, payload != nil, contentType)
+		r.applyHeaders(req, body != nil, contentType)
 		if r.Auth != nil {
 			if err := r.Auth.Apply(ctx, req); err != nil {
+				cleanupRequestBody(body)
 				return nil, fmt.Errorf("apply auth: %w", err)
 			}
 		}
 
 		resp, err := r.client().Do(req)
+		bodyErr := cleanupRequestBody(body)
 		if err != nil {
 			lastErr = fmt.Errorf("send request: %w", err)
+			if bodyErr != nil {
+				lastErr = fmt.Errorf("send request: %w", bodyErr)
+			}
 			if attempt < attempts-1 {
 				if werr := r.sleep(ctx, r.backoff(attempt, "")); werr != nil {
 					return nil, werr
@@ -254,6 +401,10 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 				continue
 			}
 			return nil, lastErr
+		}
+		if bodyErr != nil {
+			resp.Body.Close()
+			return nil, fmt.Errorf("send request body: %w", bodyErr)
 		}
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
@@ -277,6 +428,13 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 		lastErr = fmt.Errorf("request to %s failed after %d attempts", fullURL, attempts)
 	}
 	return nil, lastErr
+}
+
+func cleanupRequestBody(body *requestBody) error {
+	if body == nil || body.Cleanup == nil {
+		return nil
+	}
+	return body.Cleanup()
 }
 
 // DoJSON performs a request and decodes a successful response into out (which may

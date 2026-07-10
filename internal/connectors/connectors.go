@@ -99,6 +99,16 @@ type DirectReadRequest struct {
 	OutputPolicy string
 }
 
+type OperationDirectReadRequest struct {
+	Operation    string
+	Config       RuntimeConfig
+	PathParams   map[string]string
+	Query        map[string]string
+	Body         map[string]any
+	MaxBytes     int
+	OutputPolicy string
+}
+
 type DirectReadResult struct {
 	Connector string `json:"connector"`
 	Method    string `json:"method"`
@@ -109,6 +119,10 @@ type DirectReadResult struct {
 
 type DirectReader interface {
 	DirectRead(context.Context, DirectReadRequest) (DirectReadResult, error)
+}
+
+type OperationDirectReader interface {
+	OperationDirectRead(context.Context, OperationDirectReadRequest) (DirectReadResult, error)
 }
 
 var ErrReadLimitReached = errors.New("connector read limit reached")

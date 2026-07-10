@@ -1,7 +1,7 @@
 {
   "name": "gong",
   "display_name": "Gong",
-  "description": "Reads Gong users, calls, scorecards, settings, flows, and related public API resources; models Gong mutations as typed reverse-ETL actions.",
+  "description": "Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.",
   "integration_type": "api",
   "docs_url": "https://us-66463.app.gong.io/settings/api/documentation",
   "release_stage": "ga",
@@ -18,7 +18,7 @@
   },
   "risk": {
     "read": "external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and redacted",
-    "write": "typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, and data privacy erasure",
-    "approval": "reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive"
+    "write": "typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure",
+    "approval": "reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive; local file upload plans bind payload size/mtime identity"
   }
 }

@@ -84,11 +84,17 @@ Applies to later CLI-visible lanes (#141-#143, #145-#147). #144 is connector met
 - [x] `./pm connectors inspect gong`
 - [x] `./pm connectors inspect gong --json`
 
-## Engine-shape issues #252/#253/#254 pending gates
+## Engine-shape issues #252/#253/#254 gates
 
-- [ ] `go test ./internal/connectors/connsdk -run Multipart -count=1`
-- [ ] `go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1`
-- [ ] `go test ./internal/connectors/commandrunner -run 'OperationDirectRead|JSONArray|Multipart' -count=1`
-- [ ] `go test ./cmd/connectorgen -run 'Operation|Gong' -count=1`
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs`
-- [ ] `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
+- [x] `go test ./internal/connectors/connsdk -run Multipart -count=1`
+- [x] `go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1`
+- [x] `go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1`
+- [x] `go test ./internal/app -run PayloadIdentities -count=1`
+- [x] `go test ./cmd/connectorgen -run 'Operation|Gong' -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs`
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
+- [x] `go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs`
+- [x] `go test -timeout 20m ./...`
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`

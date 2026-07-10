@@ -10,11 +10,23 @@
 
 ## Green
 
-Pending implementation.
+- Added `connectors.OperationDirectReadRequest` / `OperationDirectReader` and engine `OperationDirectRead` for schema-gated `rest_read` GET/POST execution.
+- POST operation reads require connector-relative paths, `application/json`, positive `max_bytes`, declared `body_schema`, and supported output policy.
+- Commandrunner maps only connector-authored `path.*`, `query.*`, and `body.*` flags; unknown/raw `--body` remains blocked.
+- Gong now implements typed POST reads for `meetings integration-status`, `flows steps`, and `flows prospects`; broader arbitrary-filter POST reads remain planned until safe typed filters are authored.
+- Validator/conformance allow opt-in GET/POST direct-read coverage and reject unsafe implemented operation shapes.
+
+Evidence:
+- `go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1`
+- `go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1`
+- `go test ./cmd/connectorgen -run 'Operation|Gong' -count=1`
+- `go run ./cmd/connectorgen validate internal/connectors/defs`
+- `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
 
 ## Refactor
 
-Pending implementation.
+- Kept operation direct-read opt-in through explicit output policies and operation metadata, so existing operation ledger rows without output policies stay blocked.
+- Updated remaining planned Gong POST read-query blocker text from “executor missing” to “safe typed filter/body flags not yet authored.”
 
 ## Skills
 

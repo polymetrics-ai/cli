@@ -52,6 +52,13 @@ Implement a narrow, schema-gated operation direct-read path for POST read-query 
 4. Implement small operation direct-reader and validator support.
 5. Flip safe Gong POST read-query commands from `planned` to `implemented` only when typed inputs exist.
 
+
+## Implementation result
+
+- Added typed operation direct-read support for schema-gated `rest_read` GET/POST operations.
+- Added commandrunner `body.*` flag mapping while keeping unknown/raw body flags blocked.
+- Flipped only safe Gong POST read-query commands (`meetings integration-status`, `flows steps`, `flows prospects`) to implemented; broad arbitrary-filter POST reads remain planned.
+
 ## Verification
 
 - `go test ./internal/connectors/engine -run 'OperationDirectRead|DirectRead' -count=1`

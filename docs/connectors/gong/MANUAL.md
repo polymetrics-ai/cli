@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector gong [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Gong users, calls, scorecards, settings, flows, and related public API resources; models Gong mutations as typed reverse-ETL actions.
+  Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.
 
 ICON
   asset: icons/gong.svg
@@ -72,6 +72,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   add_call:
     endpoint: POST /calls
+    required fields: actualStart, clientUniqueId, direction, parties, primaryUser
     risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval
   create_permission_profile:
     endpoint: POST /permission-profile?workspaceId={{ record.workspaceId }}
@@ -83,7 +84,7 @@ REVERSE ETL ACTIONS
     risk: high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation
   update_meeting:
     endpoint: PUT /meetings/{meetingId}
-    required fields: meetingId
+    required fields: meetingId, endTime, invitees, organizerEmail, startTime
     risk: medium: mutates Gong API state; requires reverse ETL approval
   delete_meeting:
     endpoint: DELETE /meetings/{meetingId}
@@ -91,15 +92,19 @@ REVERSE ETL ACTIONS
     risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation
   content_viewed:
     endpoint: PUT /customer-engagement/content/viewed
+    required fields: contentId, contentTitle, contentUrl, eventTimestamp, reportingSystem
     risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval
   content_shared:
     endpoint: PUT /customer-engagement/content/shared
+    required fields: contentId, contentTitle, contentUrl, eventTimestamp, reportingSystem
     risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval
   custom_action:
     endpoint: PUT /customer-engagement/action
+    required fields: eventTimestamp, reportingSystem
     risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval
   register_crm_integration:
     endpoint: PUT /crm/integrations
+    required fields: name, ownerEmail
     risk: medium: mutates Gong API state; requires reverse ETL approval
   delete_crm_integration:
     endpoint: DELETE /crm/integrations?integrationId={{ record.integrationId }}&clientRequestId={{ record.clientRequestId }}
@@ -113,27 +118,35 @@ REVERSE ETL ACTIONS
     risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation
   create_meeting:
     endpoint: POST /meetings
+    required fields: endTime, invitees, organizerEmail, startTime
     risk: medium: mutates Gong API state; requires reverse ETL approval
   integration_settings:
     endpoint: POST /integration-settings
+    required fields: integrationTypeSettings
     risk: high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation
   unassign_flows_by_instance_id:
     endpoint: POST /flows/prospects/unassign-flows-by-instance-id
+    required fields: flowInstanceIds
     risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation
   unassign_flows_by_crm_id:
     endpoint: POST /flows/prospects/unassign-flows-by-crm-id
+    required fields: crmProspectId
     risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation
   submit_flow_prospects_bulk_assignment:
     endpoint: POST /flows/prospects/bulk-assignments
+    required fields: flowId, flowInstanceOwnerEmail, prospects
     risk: medium: mutates Gong API state; requires reverse ETL approval
   assign_prospects:
     endpoint: POST /flows/prospects/assign
+    required fields: crmProspectsIds, flowId, flowInstanceOwnerEmail
     risk: medium: mutates Gong API state; requires reverse ETL approval
   assign_prospects_cool_off_override:
     endpoint: POST /flows/prospects/assign/cool-off-override
+    required fields: crmProspectsIds, flowId, flowInstanceOwnerEmail
     risk: medium: mutates Gong API state; requires reverse ETL approval
   add_digital_interaction:
     endpoint: POST /digital-interaction
+    required fields: content, eventId, eventType, timestamp
     risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval
   purge_phone_number:
     endpoint: POST /data-privacy/erase-data-for-phone-number?phoneNumber={{ record.phoneNumber }}
@@ -145,13 +158,25 @@ REVERSE ETL ACTIONS
     risk: critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation
   update_task:
     endpoint: PATCH /tasks/{taskId}
-    required fields: taskId
+    required fields: taskId, userId
     risk: medium: mutates Gong API state; requires reverse ETL approval
+  upload_call_media:
+    endpoint: PUT /v2/calls/{{ record.id }}/media
+    required fields: id, media_file_path
+    risk: high: uploads call media from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval
+  upload_crm_entities:
+    endpoint: POST /v2/crm/entities
+    required fields: data_file_path
+    risk: high: uploads CRM data from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval
+  upload_crm_entity_schema:
+    endpoint: POST /v2/crm/entity-schema
+    required fields: selected_fields
+    risk: high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval
 
 SECURITY
   read risk: external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and redacted
-  write risk: typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, and data privacy erasure
-  approval: reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive
+  write risk: typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure
+  approval: reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive; local file upload plans bind payload size/mtime identity
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 COMMAND SURFACE
@@ -175,15 +200,15 @@ COMMAND SURFACE
     calls create - sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval [intent=reverse_etl availability=partial write=add_call]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --actualStart, --clientUniqueId, --direction, --parties, --primaryUser
     calls users-access add - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=add_calls_users_access]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.
     calls users-access delete - removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation [intent=reverse_etl availability=partial write=delete_calls_users_access]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.
-    calls extensive - Retrieve detailed call data by various filters (/v2/calls/extensive) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
-    calls users-access get - Retrieve users that have specific individual access to calls (/v2/calls/users-access) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
-    calls transcript - Retrieve transcripts of calls (/v2/calls/transcript) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
-    calls upload-media - Add call media (/v2/calls/{id}/media) [intent=reverse_etl availability=planned]; approval: reverse ETL plan -> preview -> approval -> execute; executor support for multipart/top-level array bodies is required before execution; risk: bounded sensitive/admin payload operation; typed schema and redaction policy are declared in operations.json; notes: No generic file upload or raw body command is exposed.
+    calls extensive - Retrieve detailed call data by various filters (/v2/calls/extensive) [intent=direct_read availability=planned]; approval: none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed; notes: Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed.
+    calls users-access get - Retrieve users that have specific individual access to calls (/v2/calls/users-access) [intent=direct_read availability=planned]; approval: none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed; notes: Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed.
+    calls transcript - Retrieve transcripts of calls (/v2/calls/transcript) [intent=direct_read availability=planned]; approval: none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed; notes: Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed.
+    calls upload-media - Add call media (/v2/calls/{id}/media) [intent=reverse_etl availability=implemented write=upload_call_media]; approval: reverse ETL plan -> preview -> approval -> execute; destructive confirmation required; risk: high: uploads call media from a bounded project-local file path; file path/content are redacted in plans; notes: Uses typed multipart write support; no generic upload command is exposed.; flags: --id, --media-file-path
   Users
     users list - List Gong users as ETL records. [intent=etl availability=implemented stream=users]
     users get - Retrieve user (/v2/users/{id}) [intent=direct_read availability=implemented]; risk: bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted; flags: --id
     users settings-history - Retrieve user settings history (/v2/users/{id}/settings-history) [intent=direct_read availability=implemented]; risk: bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted; flags: --id
-    users extensive - List users by filter (/v2/users/extensive) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
+    users extensive - List users by filter (/v2/users/extensive) [intent=direct_read availability=planned]; approval: none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed; notes: Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed.
   Scorecards
     scorecards list - List Gong scorecards as ETL records. [intent=etl availability=implemented stream=scorecards]
   Workspaces
@@ -204,23 +229,23 @@ COMMAND SURFACE
     crm request-status get - Get Request Status (/v2/crm/request-status) [intent=direct_read availability=implemented]; risk: bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted; flags: --integrationId, --clientRequestId
     crm integrations register - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=register_crm_integration]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --name, --ownerEmail
     crm integrations delete - removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation [intent=reverse_etl availability=partial write=delete_crm_integration]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --clientRequestId, --integrationId
-    crm upload-entities - Upload CRM objects (/v2/crm/entities) [intent=reverse_etl availability=planned]; approval: reverse ETL plan -> preview -> approval -> execute; executor support for multipart/top-level array bodies is required before execution; risk: bounded sensitive/admin payload operation; typed schema and redaction policy are declared in operations.json; notes: No generic file upload or raw body command is exposed.
-    crm upload-entity-schema - Upload Object Schema (/v2/crm/entity-schema) [intent=reverse_etl availability=planned]; approval: reverse ETL plan -> preview -> approval -> execute; executor support for multipart/top-level array bodies is required before execution; risk: bounded sensitive/admin payload operation; typed schema and redaction policy are declared in operations.json; notes: No generic file upload or raw body command is exposed.
+    crm upload-entities - Upload CRM objects (/v2/crm/entities) [intent=reverse_etl availability=implemented write=upload_crm_entities]; approval: reverse ETL plan -> preview -> approval -> execute; destructive confirmation required; risk: high: uploads CRM data from a bounded project-local file path; file path/content are redacted in plans; notes: Uses typed multipart write support; no generic upload command is exposed.; flags: --data-file-path
+    crm upload-entity-schema - Upload Object Schema (/v2/crm/entity-schema) [intent=reverse_etl availability=partial write=upload_crm_entity_schema]; approval: reverse ETL plan -> preview -> approval -> execute; destructive confirmation required; risk: high: uploads CRM entity schema as a top-level JSON array; no raw CLI body is exposed; notes: Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable.
   Meetings
     meetings update - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=update_meeting]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --endTime, --invitees, --meetingId, --organizerEmail, --startTime
     meetings delete - removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation [intent=reverse_etl availability=partial write=delete_meeting]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --meetingId
     meetings create - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=create_meeting]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --endTime, --invitees, --organizerEmail, --startTime
-    meetings integration-status - Validate Gong meeting Integration (/v2/meetings/integration/status) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
+    meetings integration-status - Validate Gong meeting Integration (/v2/meetings/integration/status) [intent=direct_read availability=implemented]; approval: none: read-only POST query with schema-gated body; risk: bounded POST read-query; sends only typed email array body fields and redacts sensitive response fields; notes: Executes through the typed operation direct-read engine; no raw body flag is exposed.; flags: --email
   Engagement
     engagement content-viewed - sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval [intent=reverse_etl availability=partial write=content_viewed]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --contentId, --contentTitle, --contentUrl, --eventTimestamp, --reportingSystem
     engagement content-shared - sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval [intent=reverse_etl availability=partial write=content_shared]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --contentId, --contentTitle, --contentUrl, --eventTimestamp, --reportingSystem
     engagement custom-action - sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval [intent=reverse_etl availability=partial write=custom_action]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --eventTimestamp, --reportingSystem
   Stats
-    stats interaction - Retrieve interaction stats for applicable users by date (/v2/stats/interaction) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
-    stats activity-scorecards - Retrieve answered scorecards for applicable reviewed users or scorecards for a date range (/v2/stats/activity/scorecards) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
-    stats activity-day-by-day - Retrieve daily activity for applicable users for a date range (/v2/stats/activity/day-by-day) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
-    stats activity-aggregate - Retrieve aggregated activity for defined users by date (/v2/stats/activity/aggregate) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
-    stats activity-aggregate-by-period - Retrieve aggregated activity for defined users by a date range with grouping in time periods (/v2/stats/activity/aggregate-by-period) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
+    stats interaction - Retrieve interaction stats for applicable users by date (/v2/stats/interaction) [intent=direct_read availability=planned]; approval: none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed; notes: Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed.
+    stats activity-scorecards - Retrieve answered scorecards for applicable reviewed users or scorecards for a date range (/v2/stats/activity/scorecards) [intent=direct_read availability=planned]; approval: none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed; notes: Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed.
+    stats activity-day-by-day - Retrieve daily activity for applicable users for a date range (/v2/stats/activity/day-by-day) [intent=direct_read availability=planned]; approval: none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed; notes: Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed.
+    stats activity-aggregate - Retrieve aggregated activity for defined users by date (/v2/stats/activity/aggregate) [intent=direct_read availability=planned]; approval: none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed; notes: Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed.
+    stats activity-aggregate-by-period - Retrieve aggregated activity for defined users by a date range with grouping in time periods (/v2/stats/activity/aggregate-by-period) [intent=direct_read availability=planned]; approval: none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed; notes: Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed.
   Engage Flows
     flows list - List Gong Engage flows as ETL records. [intent=etl availability=implemented stream=flows]
     flows folders list - List Gong Engage flow folders as ETL records. [intent=etl availability=implemented stream=flow_folders]
@@ -230,8 +255,8 @@ COMMAND SURFACE
     flows prospects bulk-assign - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=submit_flow_prospects_bulk_assignment]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --flowId, --flowInstanceOwnerEmail, --prospects
     flows prospects assign - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=assign_prospects]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --crmProspectsIds, --flowId, --flowInstanceOwnerEmail
     flows prospects assign-cool-off-override - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=assign_prospects_cool_off_override]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --crmProspectsIds, --flowId, --flowInstanceOwnerEmail
-    flows steps - Get flow details and steps for one or more Engage flows (/v2/flows/steps) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
-    flows prospects - List prospects assigned flows (/v2/flows/prospects) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
+    flows steps - Get flow details and steps for one or more Engage flows (/v2/flows/steps) [intent=direct_read availability=implemented]; approval: none: read-only POST query with schema-gated body; risk: bounded POST read-query; sends only typed flow ID array body fields and redacts sensitive response fields; notes: Executes through the typed operation direct-read engine; no raw body flag is exposed.; flags: --flow-id
+    flows prospects - List prospects assigned flows (/v2/flows/prospects) [intent=direct_read availability=implemented]; approval: none: read-only POST query with schema-gated body; risk: bounded POST read-query; sends only typed CRM prospect or flow instance ID arrays and redacts sensitive response fields; notes: Executes through the typed operation direct-read engine; no raw body flag is exposed.; flags: --crm-prospect-id, --flow-instance-id
   Library
     library folders list - List Gong library folders as ETL records. [intent=etl availability=implemented stream=library_folders]
     library folder-content list - List of calls in a specific folder (/v2/library/folder-content) [intent=direct_read availability=implemented]; risk: bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted; flags: --folderId
@@ -245,7 +270,7 @@ COMMAND SURFACE
     privacy erase-email - destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation [intent=reverse_etl availability=partial write=purge_email_address]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --emailAddress
   Tasks
     tasks update - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=update_task]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --taskId, --userId
-    tasks list - List user's tasks (/v2/tasks) [intent=direct_read availability=planned]; approval: none until executor support exists; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json; notes: Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone.
+    tasks list - List user's tasks (/v2/tasks) [intent=direct_read availability=planned]; approval: none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled; risk: bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed; notes: Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed.
   Digital Interactions
     digital-interaction create - sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval [intent=reverse_etl availability=partial write=add_digital_interaction]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --content, --eventId, --eventType, --timestamp
   Logs

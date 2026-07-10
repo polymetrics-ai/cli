@@ -51,9 +51,17 @@ Refactor:
 
 ## 2026-07-10 engine-shape issues #252/#253/#254
 
-Red plan:
-- #252: operation direct-read POST JSON body construction, schema validation, output redaction, commandrunner typed body mappings, validator safety.
-- #253: top-level JSON array write body shape, schema validation, preview redaction, validator safety.
-- #254: stdlib multipart request construction, local path/size safety, engine multipart writes, preview redaction, validator safety.
+Red:
+- #252: operation direct-read POST JSON body construction, schema validation, output redaction, commandrunner typed body mappings, and validator safety tests were added before engine/runner changes.
+- #253: top-level JSON array write body shape and schema-validation tests were added before write-body implementation.
+- #254: stdlib multipart request construction, retry-safe file reopening, local path/size safety, engine multipart writes, and preview redaction tests were added before multipart implementation.
 
-Green/refactor pending implementation.
+Green:
+- Added schema-gated `OperationDirectReader` execution for typed GET/POST `rest_read` operations and commandrunner `body.*` flag mapping without raw body flags.
+- Added `json_array` and `multipart` write body modes with meta-schema/validator coverage.
+- Added reverse-plan payload identity binding for local file uploads (path hash plus size/mtime) so file changes invalidate approvals before execution.
+- Implemented safe Gong commands for meetings integration status, flow steps/prospects POST reads, call media upload, CRM entities upload, and typed CRM entity-schema array writes.
+
+Refactor:
+- Remaining broad filter-shaped POST reads stay planned until safe typed filter flags are authored; blocker text now reflects command-specific mapping work rather than missing engine support.
+- Multipart and top-level array support remain reverse-ETL/write-record scoped; no generic upload/raw JSON command was introduced.

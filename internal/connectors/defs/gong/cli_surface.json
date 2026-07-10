@@ -1524,9 +1524,9 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "gong.calls_extensive",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed",
+      "approval": "none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled",
+      "notes": "Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed."
     },
     {
       "path": "calls users-access get",
@@ -1534,9 +1534,9 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "gong.calls_users_access_get",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed",
+      "approval": "none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled",
+      "notes": "Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed."
     },
     {
       "path": "users extensive",
@@ -1544,9 +1544,9 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "gong.users_extensive",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed",
+      "approval": "none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled",
+      "notes": "Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed."
     },
     {
       "path": "tasks list",
@@ -1554,9 +1554,9 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "gong.tasks_list",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed",
+      "approval": "none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled",
+      "notes": "Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed."
     },
     {
       "path": "stats interaction",
@@ -1564,9 +1564,9 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "gong.stats_interaction",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed",
+      "approval": "none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled",
+      "notes": "Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed."
     },
     {
       "path": "stats activity-scorecards",
@@ -1574,9 +1574,9 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "gong.stats_activity_scorecards",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed",
+      "approval": "none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled",
+      "notes": "Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed."
     },
     {
       "path": "stats activity-day-by-day",
@@ -1584,9 +1584,9 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "gong.stats_activity_day_by_day",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed",
+      "approval": "none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled",
+      "notes": "Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed."
     },
     {
       "path": "stats activity-aggregate",
@@ -1594,9 +1594,9 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "gong.stats_activity_aggregate",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed",
+      "approval": "none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled",
+      "notes": "Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed."
     },
     {
       "path": "stats activity-aggregate-by-period",
@@ -1604,39 +1604,72 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "gong.stats_activity_aggregate_by_period",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed",
+      "approval": "none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled",
+      "notes": "Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed."
     },
     {
       "path": "meetings integration-status",
       "summary": "Validate Gong meeting Integration (/v2/meetings/integration/status)",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "operation": "gong.meetings_integration_status",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded POST read-query; sends only typed email array body fields and redacts sensitive response fields",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed.",
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string_array",
+          "summary": "Email address to validate. Repeat or comma-separate; max 100 per Gong API.",
+          "maps_to": "body.emails"
+        }
+      ]
     },
     {
       "path": "flows steps",
       "summary": "Get flow details and steps for one or more Engage flows (/v2/flows/steps)",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "operation": "gong.flows_steps",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded POST read-query; sends only typed flow ID array body fields and redacts sensitive response fields",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed.",
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "flow-id",
+          "type": "string_array",
+          "summary": "Engage flow ID to retrieve steps for. Repeat or comma-separate; max 20 per Gong API.",
+          "maps_to": "body.flowIds"
+        }
+      ]
     },
     {
       "path": "flows prospects",
       "summary": "List prospects assigned flows (/v2/flows/prospects)",
       "intent": "direct_read",
-      "availability": "planned",
+      "availability": "implemented",
       "operation": "gong.flows_prospects",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded POST read-query; sends only typed CRM prospect or flow instance ID arrays and redacts sensitive response fields",
+      "approval": "none: read-only POST query with schema-gated body",
+      "notes": "Executes through the typed operation direct-read engine; no raw body flag is exposed.",
+      "output_policy": "json_redacted",
+      "flags": [
+        {
+          "name": "crm-prospect-id",
+          "type": "string_array",
+          "summary": "CRM prospect ID to query. Repeat or comma-separate.",
+          "maps_to": "body.crmProspectsIds"
+        },
+        {
+          "name": "flow-instance-id",
+          "type": "string_array",
+          "summary": "Assigned flow instance ID to query. Repeat or comma-separate.",
+          "maps_to": "body.flowInstanceIds"
+        }
+      ]
     },
     {
       "path": "calls transcript",
@@ -1644,39 +1677,61 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "gong.calls_transcript",
-      "risk": "bounded read-query planned; typed request body schema is declared in operations.json",
-      "approval": "none until executor support exists; no mutation is modeled",
-      "notes": "Blocked by operation executor support for fixed JSON POST read-query bodies, not by endpoint sensitivity alone."
+      "risk": "bounded read-query planned; typed request body schema is declared in operations.json, but raw filter bodies are not exposed",
+      "approval": "none: read-only POST query remains unavailable until safe typed body flags are authored; no mutation is modeled",
+      "notes": "Blocked until connector-authored safe filter/body flags are selected for this operation; the typed POST read-query engine exists but raw request bodies remain disallowed."
     },
     {
       "path": "calls upload-media",
       "summary": "Add call media (/v2/calls/{id}/media)",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "gong.calls_media_upload",
-      "risk": "bounded sensitive/admin payload operation; typed schema and redaction policy are declared in operations.json",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; executor support for multipart/top-level array bodies is required before execution",
-      "notes": "No generic file upload or raw body command is exposed."
+      "availability": "implemented",
+      "risk": "high: uploads call media from a bounded project-local file path; file path/content are redacted in plans",
+      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
+      "notes": "Uses typed multipart write support; no generic upload command is exposed.",
+      "write": "upload_call_media",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Gong call ID whose media should be uploaded.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "media-file-path",
+          "type": "string",
+          "summary": "Project-relative media file path to upload.",
+          "maps_to": "record.media_file_path"
+        }
+      ]
     },
     {
       "path": "crm upload-entities",
       "summary": "Upload CRM objects (/v2/crm/entities)",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "gong.crm_upload_entities",
-      "risk": "bounded sensitive/admin payload operation; typed schema and redaction policy are declared in operations.json",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; executor support for multipart/top-level array bodies is required before execution",
-      "notes": "No generic file upload or raw body command is exposed."
+      "availability": "implemented",
+      "risk": "high: uploads CRM data from a bounded project-local file path; file path/content are redacted in plans",
+      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
+      "notes": "Uses typed multipart write support; no generic upload command is exposed.",
+      "write": "upload_crm_entities",
+      "flags": [
+        {
+          "name": "data-file-path",
+          "type": "string",
+          "summary": "Project-relative CRM data file path to upload.",
+          "maps_to": "record.data_file_path"
+        }
+      ]
     },
     {
       "path": "crm upload-entity-schema",
       "summary": "Upload Object Schema (/v2/crm/entity-schema)",
       "intent": "reverse_etl",
-      "availability": "planned",
-      "operation": "gong.crm_upload_entity_schema",
-      "risk": "bounded sensitive/admin payload operation; typed schema and redaction policy are declared in operations.json",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; executor support for multipart/top-level array bodies is required before execution",
-      "notes": "No generic file upload or raw body command is exposed."
+      "availability": "partial",
+      "risk": "high: uploads CRM entity schema as a top-level JSON array; no raw CLI body is exposed",
+      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
+      "notes": "Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable.",
+      "write": "upload_crm_entity_schema"
     }
   ],
   "help_topics": [

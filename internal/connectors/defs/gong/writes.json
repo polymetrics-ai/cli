@@ -1629,6 +1629,114 @@
       "path_fields": [
         "taskId"
       ]
+    },
+    {
+      "name": "upload_call_media",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/v2/calls/{{ record.id }}/media",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 1610612736,
+        "parts": [
+          {
+            "name": "mediaFile",
+            "type": "file",
+            "field": "media_file_path",
+            "required": true,
+            "max_bytes": 1610612736
+          }
+        ]
+      },
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "media_file_path"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "media_file_path": {
+            "type": "string",
+            "description": "Project-relative path to the Gong call media file."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: uploads call media from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
+      "confirm": "destructive"
+    },
+    {
+      "name": "upload_crm_entities",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/crm/entities",
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 209715200,
+        "parts": [
+          {
+            "name": "dataFile",
+            "type": "file",
+            "field": "data_file_path",
+            "required": true,
+            "max_bytes": 209715200
+          }
+        ]
+      },
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "data_file_path"
+        ],
+        "properties": {
+          "data_file_path": {
+            "type": "string",
+            "description": "Project-relative path to the Gong CRM data upload file."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: uploads CRM data from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
+      "confirm": "destructive"
+    },
+    {
+      "name": "upload_crm_entity_schema",
+      "kind": "create",
+      "method": "POST",
+      "path": "/v2/crm/entity-schema",
+      "body_type": "json_array",
+      "body_field": "selected_fields",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "selected_fields"
+        ],
+        "properties": {
+          "selected_fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval",
+      "confirm": "destructive"
     }
   ]
 }

@@ -16,16 +16,18 @@
 
 gsd-core, golang-how-to, golang-cli, golang-design-patterns, golang-structs-interfaces, golang-error-handling, golang-security, golang-safety, golang-testing, golang-documentation
 
-## 2026-07-10 engine-support planning ledger (analysis only)
+## 2026-07-10 engine-support implementation ledger (#252/#253/#254)
 
-No production code was changed in this slice. Planned fail-first coverage before any executor implementation:
-
-Red tests to add first:
-- `internal/connectors/engine`: non-GraphQL stream/read fixed bodies are honored where explicitly declared, and operation-backed POST read-query sends a connector-authored JSON body, validates it against `rest.body_schema`, enforces response max bytes, and applies `json_redacted`.
+Red:
+- `internal/connectors/engine`: operation-backed POST read-query sends a connector-authored JSON body, validates `rest.body_schema`, enforces response max bytes, and applies `json_redacted`.
 - `internal/connectors/commandrunner`: implemented operation-backed direct-read commands allow only typed `path.*`, `query.*`, and `body.*` mappings; unknown/raw body flags stay blocked.
-- `internal/connectors/engine`: `body_type=json_array` writes marshal the selected record/file value as a top-level JSON array, not as an object wrapper, and reject schema mismatches.
-- `internal/connectors/connsdk`: multipart requests stream bounded file parts with auth/default headers and correct `Content-Type` boundary; too-large, missing, traversal, and symlink/unsafe paths fail before network send.
-- `internal/connectors/engine`: multipart write preview redacts file/path/content-like fields and binds approval to payload metadata.
-- `cmd/connectorgen`: validator rejects implemented commands for unsupported operation shapes, raw body mappings, missing body schemas/templates, missing max-byte caps, and unsupported content types.
-- Gong fixture/definition tests: blocked operations only become implemented after typed filters/parts/body schemas are present and docs/help parity is updated.
+- `internal/connectors/engine`: `body_type=json_array` writes marshal the selected record value as a top-level JSON array and reject schema mismatches before network send.
+- `internal/connectors/connsdk`: multipart requests stream bounded file parts with auth/default headers, correct `Content-Type` boundary, and retry-safe file reopening; too-large paths fail before network send.
+- `internal/connectors/engine`: multipart write support enforces project-root path safety, symlink escape prevention, and byte caps.
+- `cmd/connectorgen`: validator rejects implemented commands for unsupported operation shapes, raw body mappings, missing body schemas, missing max-byte caps, and unsupported content types.
+
+Green:
+- Implemented operation direct-read, top-level JSON array writes, and bounded multipart writes without raw body/upload escape hatches.
+- Flipped only safe Gong engine-shape commands; broad arbitrary-filter POST reads remain planned until safe typed filter flags are authored.
+- Docs/manual/skill/website generated artifacts were updated.
 

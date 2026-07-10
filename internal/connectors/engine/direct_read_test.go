@@ -311,6 +311,75 @@ func TestDirectReadJSONRedactedPolicyRedactsSensitiveFieldsRecursively(t *testin
 	}
 }
 
+func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
+	var sawBody map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", r.Method)
+		}
+		if r.URL.Path != "/v2/meetings/integration/status" {
+			t.Fatalf("path = %s, want /v2/meetings/integration/status", r.URL.Path)
+		}
+		if r.Header.Get("Content-Type") != "application/json" {
+			t.Fatalf("Content-Type = %q, want application/json", r.Header.Get("Content-Type"))
+		}
+		if err := json.NewDecoder(r.Body).Decode(&sawBody); err != nil {
+			t.Fatalf("decode request body: %v", err)
+		}
+		_, _ = w.Write([]byte(`{"ok":true,"apiToken":"secret-token"}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "gong",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:           "gong.meetings_integration_status",
+			Kind:         "rest_read",
+			Summary:      "Validate meeting integration",
+			Risk:         "medium",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/v2/meetings/integration/status",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","required":["emails"],"properties":{"emails":{"type":"array","items":{"type":"string"}}},"additionalProperties":false}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: http.MethodPost,
+			Path:   "/v2/meetings/integration/status",
+			Operation: &SurfaceOperation{
+				Model:            "direct_read",
+				Status:           "blocked",
+				Risk:             "medium",
+				BlockedByDefault: true,
+				Reason:           "typed operation metadata",
+			},
+		}}},
+	}
+
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation:    "gong.meetings_integration_status",
+		Config:       connectors.RuntimeConfig{},
+		Body:         map[string]any{"emails": []any{"ada@example.com"}},
+		MaxBytes:     1024,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if emails, ok := sawBody["emails"].([]any); !ok || len(emails) != 1 || emails[0] != "ada@example.com" {
+		t.Fatalf("request body = %+v, want emails array", sawBody)
+	}
+	body := result.Body.(map[string]any)
+	if _, ok := body["apiToken"]; ok || body["apiToken_redacted"] != true {
+		t.Fatalf("response body = %+v, want apiToken redacted", body)
+	}
+}
+
 func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/v2/calls/call-1" {

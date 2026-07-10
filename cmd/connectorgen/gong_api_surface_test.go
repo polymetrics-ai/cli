@@ -71,11 +71,11 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 	if len(surface.Endpoints) != 67 {
 		t.Fatalf("endpoints = %d, want 67", len(surface.Endpoints))
 	}
-	if covered != 51 {
-		t.Fatalf("covered endpoints = %d, want 51", covered)
+	if covered != 57 {
+		t.Fatalf("covered endpoints = %d, want 57", covered)
 	}
-	if operations != 16 {
-		t.Fatalf("operation endpoints = %d, want 16", operations)
+	if operations != 10 {
+		t.Fatalf("operation endpoints = %d, want 10", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -91,17 +91,14 @@ func TestGongAPISurfaceOperationLedger(t *testing.T) {
 		"DELETE": 3,
 		"GET":    28,
 		"PATCH":  1,
-		"POST":   12,
-		"PUT":    7,
+		"POST":   17,
+		"PUT":    8,
 	})
 	assertGongStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
-		"POST": 15,
-		"PUT":  1,
+		"POST": 10,
 	})
 	assertGongStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":     1,
-		"direct_read":           13,
-		"sensitive_reverse_etl": 2,
+		"direct_read": 10,
 	})
 
 	for _, key := range []string{

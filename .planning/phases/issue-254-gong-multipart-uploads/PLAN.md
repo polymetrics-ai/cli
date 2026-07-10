@@ -42,6 +42,13 @@ Add bounded, typed multipart upload support for connector reverse-ETL actions wh
 4. Implement streaming/reopenable multipart requester.
 5. Add validator and preview redaction rules.
 
+
+## Implementation result
+
+- Added stdlib `connsdk` multipart support and engine `body_type: multipart` write support.
+- Added project-root path validation, symlink escape prevention, per-file/total byte limits, retry-safe file reopening, and reverse-plan file identity binding (path hash plus size/mtime).
+- Flipped Gong call media and CRM entities uploads to typed implemented write commands without generic upload escape hatches.
+
 ## Verification
 
 - `go test ./internal/connectors/connsdk -run Multipart -count=1`

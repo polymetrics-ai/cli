@@ -90,6 +90,10 @@
                 "type": "object",
                 "additionalProperties": true
               },
+              "body": {
+                "type": "object",
+                "additionalProperties": true
+              },
               "body_schema": { "type": "object" }
             }
           },

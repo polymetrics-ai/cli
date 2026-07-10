@@ -621,10 +621,11 @@ func checkAPISurface(b engine.Bundle) []Finding {
 						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead),
 					})
 				}
-				if !strings.EqualFold(ep.Method, "GET") {
+				method := strings.ToUpper(strings.TrimSpace(ep.Method))
+				if method != "GET" && method != "POST" {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
-						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path),
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path),
 					})
 				}
 			}
@@ -745,6 +746,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 	var findings []Finding
 	for i, cmd := range b.CLISurface.Commands {
 		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
+		findings = append(findings, checkCLISurfaceOperationSafety(b, i, cmd, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
@@ -806,6 +808,69 @@ func checkCLISurfaceReferences(
 				Rule:      ruleCLISurfaceUnknownTarget,
 				Message:   fmt.Sprintf("command %d (%q) references unknown operation %q", i, cmd.Path, cmd.Operation),
 			})
+		}
+	}
+	return findings
+}
+
+func checkCLISurfaceOperationSafety(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	operations map[string]engine.OperationSpec,
+) []Finding {
+	if cmd.Availability != "implemented" || cmd.Operation == "" || strings.TrimSpace(cmd.OutputPolicy) == "" {
+		return nil
+	}
+	op, ok := operations[cmd.Operation]
+	if !ok {
+		return nil
+	}
+	if cmd.Intent != "direct_read" {
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented command %d (%q) references operation %q, but only direct_read rest_read operation execution is supported", i, cmd.Path, cmd.Operation),
+		}}
+	}
+	var findings []Finding
+	if op.Kind != "rest_read" || op.REST == nil {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must be rest_read", i, cmd.Path, cmd.Operation)})
+		return findings
+	}
+	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+	if method != "GET" && method != "POST" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must use GET or POST, got %s", i, cmd.Path, cmd.Operation, method)})
+	}
+	if isAbsoluteHTTPURL(op.REST.Path) {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must use connector-relative path", i, cmd.Path, cmd.Operation)})
+	}
+	if op.REST.MaxBytes <= 0 {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must declare positive rest.max_bytes", i, cmd.Path, cmd.Operation)})
+	}
+	if method == "POST" {
+		if !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare application/json content_type", i, cmd.Path, cmd.Operation)})
+		}
+		if len(op.REST.BodySchema) == 0 {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare body_schema", i, cmd.Path, cmd.Operation)})
+		}
+	}
+	if !directReadOutputPolicies[cmd.OutputPolicy] {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must declare a supported output_policy", i, cmd.Path, cmd.Operation)})
+	}
+	for _, flag := range cmd.Flags {
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		switch {
+		case strings.HasPrefix(mapsTo, "path."), strings.HasPrefix(mapsTo, "query."):
+			// allowed
+		case strings.HasPrefix(mapsTo, "body."):
+			if method != "POST" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to body for non-POST operation", i, cmd.Path, flag.Name)})
+			}
+		default:
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
 		}
 	}
 	return findings
@@ -1004,6 +1069,9 @@ func checkCLISurfaceEndpointCoverage(
 			continue
 		}
 		if state.excluded || state.operation != nil || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
+			if cmd.Operation != "" && state.operation != nil {
+				continue
+			}
 			if cmd.Intent == "direct_read" && directReadCoverageMatches(state.coveredBy, cmd.Path) {
 				continue
 			}

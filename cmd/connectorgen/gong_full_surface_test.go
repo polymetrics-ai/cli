@@ -50,7 +50,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		} `json:"operations"`
 	}](t, "../../internal/connectors/defs/gong/operations.json")
 
-	if got, want := len(writes.Actions), 23; got != want {
+	if got, want := len(writes.Actions), 26; got != want {
 		t.Fatalf("write actions = %d, want %d", got, want)
 	}
 	if got, want := len(ops.Operations), 16; got != want {
@@ -68,7 +68,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 			coverage["operation"]++
 		}
 	}
-	wantCoverage := map[string]int{"stream": 12, "direct_read": 16, "write": 23, "operation": 16}
+	wantCoverage := map[string]int{"stream": 12, "direct_read": 19, "write": 26, "operation": 10}
 	for key, want := range wantCoverage {
 		if got := coverage[key]; got != want {
 			t.Fatalf("coverage[%s] = %d, want %d (all coverage: %+v)", key, got, want, coverage)
@@ -93,7 +93,8 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		{path: "calls create", intent: "reverse_etl", availability: "partial", target: "add_call"},
 		{path: "privacy erase-phone", intent: "reverse_etl", availability: "partial", target: "purge_phone_number"},
 		{path: "calls extensive", intent: "direct_read", availability: "planned", target: "gong.calls_extensive"},
-		{path: "crm upload-entities", intent: "reverse_etl", availability: "planned", target: "gong.crm_upload_entities"},
+		{path: "meetings integration-status", intent: "direct_read", availability: "implemented", target: "json_redacted"},
+		{path: "crm upload-entities", intent: "reverse_etl", availability: "implemented", target: "upload_crm_entities"},
 	} {
 		cmd, ok := commandsByPath[tc.path]
 		if !ok {
@@ -115,7 +116,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 				t.Fatalf("command %q operation = %q, want %q", tc.path, cmd.operation, tc.target)
 			}
 		case "reverse_etl":
-			if tc.availability == "partial" && cmd.write != tc.target {
+			if (tc.availability == "partial" || tc.availability == "implemented") && cmd.write != tc.target {
 				t.Fatalf("command %q write = %q, want %q", tc.path, cmd.write, tc.target)
 			}
 			if tc.availability == "planned" && cmd.operation != tc.target {
@@ -128,7 +129,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	for _, action := range writes.Actions {
 		writesByName[action.Name] = struct{ kind, method, path, risk, confirm string }{action.Kind, action.Method, action.Path, action.Risk, action.Confirm}
 	}
-	for _, name := range []string{"add_call", "update_permission_profile", "delete_meeting", "integration_settings", "purge_phone_number", "update_task"} {
+	for _, name := range []string{"add_call", "update_permission_profile", "delete_meeting", "integration_settings", "purge_phone_number", "update_task", "upload_call_media", "upload_crm_entities", "upload_crm_entity_schema"} {
 		if _, ok := writesByName[name]; !ok {
 			t.Fatalf("missing write action %q", name)
 		}

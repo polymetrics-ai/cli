@@ -118,6 +118,14 @@ type PlanConnectorCommandRequest struct {
 	Preview    bool                `json:"preview,omitempty"`
 }
 
+type PayloadIdentity struct {
+	RecordIndex     int    `json:"record_index"`
+	Field           string `json:"field"`
+	PathHash        string `json:"path_hash"`
+	SizeBytes       int64  `json:"size_bytes"`
+	ModTimeUnixNano int64  `json:"mod_time_unix_nano"`
+}
+
 type ReversePlan struct {
 	ID                     string              `json:"id"`
 	Name                   string              `json:"name"`
@@ -132,6 +140,7 @@ type ReversePlan struct {
 	ConnectorCommand       string              `json:"connector_command,omitempty"`
 	ConnectorCommandPath   []string            `json:"connector_command_path,omitempty"`
 	ConnectorCommandRecord connectors.Record   `json:"connector_command_record,omitempty"`
+	PayloadIdentity        []PayloadIdentity   `json:"payload_identity,omitempty"`
 	ConfirmationChallenge  string              `json:"confirmation_challenge,omitempty"`
 	RecordCount            int                 `json:"record_count"`
 	Sample                 []connectors.Record `json:"sample,omitempty"`

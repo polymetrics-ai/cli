@@ -10,19 +10,20 @@ import (
 )
 
 type fakeConnector struct {
-	surface       *connectors.CommandSurface
-	manifest      connectors.Manifest
-	readReq       connectors.ReadRequest
-	directReadReq connectors.DirectReadRequest
-	validateReq   connectors.WriteRequest
-	dryRunReq     connectors.WriteRequest
-	writeReq      connectors.WriteRequest
-	writeRecords  []connectors.Record
-	validateErr   error
-	dryRunErr     error
-	writeErr      error
-	preview       connectors.WritePreview
-	writeResult   connectors.WriteResult
+	surface                *connectors.CommandSurface
+	manifest               connectors.Manifest
+	readReq                connectors.ReadRequest
+	directReadReq          connectors.DirectReadRequest
+	operationDirectReadReq connectors.OperationDirectReadRequest
+	validateReq            connectors.WriteRequest
+	dryRunReq              connectors.WriteRequest
+	writeReq               connectors.WriteRequest
+	writeRecords           []connectors.Record
+	validateErr            error
+	dryRunErr              error
+	writeErr               error
+	preview                connectors.WritePreview
+	writeResult            connectors.WriteResult
 }
 
 func (f *fakeConnector) Name() string { return "github" }
@@ -48,6 +49,16 @@ func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadR
 			"name": "README.md",
 			"type": "file",
 		},
+	}, nil
+}
+func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	f.operationDirectReadReq = req
+	return connectors.DirectReadResult{
+		Connector: "gong",
+		Method:    "POST",
+		Path:      "/v2/meetings/integration/status",
+		Status:    200,
+		Body:      map[string]any{"ok": true},
 	}, nil
 }
 func (f *fakeConnector) Write(_ context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
@@ -379,14 +390,18 @@ func TestBuildWriteCommandPreviewDryRunsAndRedactsSecretLikeFields(t *testing.T)
 	}
 }
 
-func TestRedactRecordRedactsDownloadAndContentLikeFields(t *testing.T) {
+func TestRedactRecordRedactsDownloadContentAndMultipartFileFields(t *testing.T) {
 	redacted := redactRecord(connectors.Record{
 		"downloadMediaUrl": "https://media.example.test/call.mp4",
 		"content":          "sensitive body",
+		"media_file_path":  "fixtures/call.mp4",
+		"data_file_path":   "fixtures/crm.csv",
 		"title":            "visible",
 	})
-	if redacted["downloadMediaUrl"] != "***" || redacted["content"] != "***" {
-		t.Fatalf("redacted record = %+v, want downloadMediaUrl and content redacted", redacted)
+	for _, key := range []string{"downloadMediaUrl", "content", "media_file_path", "data_file_path"} {
+		if redacted[key] != "***" {
+			t.Fatalf("redacted[%s] = %#v, want *** in %+v", key, redacted[key], redacted)
+		}
 	}
 	if redacted["title"] != "visible" {
 		t.Fatalf("redacted title = %v, want visible", redacted["title"])
@@ -473,7 +488,7 @@ func TestRunReverseETLRejectsMissingWriteAndUnsupportedFlagMapping(t *testing.T)
 	}
 }
 
-func TestRunImplementedOperationCommandIsFeatureGated(t *testing.T) {
+func TestRunImplementedOperationCommandRequiresTypedMetadata(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
 			{
@@ -496,9 +511,8 @@ func TestRunImplementedOperationCommandIsFeatureGated(t *testing.T) {
 	if !errors.As(err, &blocked) {
 		t.Fatalf("Run error type = %T, want BlockedCommandError", err)
 	}
-	if !strings.Contains(err.Error(), "operation github.projects.list") ||
-		!strings.Contains(err.Error(), "executor is not implemented") {
-		t.Fatalf("Run error = %q, want operation feature gate", err.Error())
+	if !strings.Contains(err.Error(), "operation direct_read commands require exactly one api_surface endpoint") {
+		t.Fatalf("Run error = %q, want typed operation metadata gate", err.Error())
 	}
 }
 
@@ -699,6 +713,99 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	}
 	if connector.directReadReq.OutputPolicy != "github_contents_file_metadata" {
 		t.Fatalf("direct read output policy = %q, want github_contents_file_metadata", connector.directReadReq.OutputPolicy)
+	}
+}
+
+func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "meetings integration-status",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "gong.meetings_integration_status",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "POST", Path: "/v2/meetings/integration/status"},
+				},
+				OutputPolicy: "json_redacted",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "email", Type: "string_array", MapsTo: "body.emails"},
+				},
+			},
+		},
+	}}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:  []string{"meetings", "integration-status"},
+		Flags: map[string][]string{"email": {"ada@example.com", "grace@example.com"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("DirectRead = nil, want result")
+	}
+	if connector.operationDirectReadReq.Operation != "gong.meetings_integration_status" {
+		t.Fatalf("operation = %q", connector.operationDirectReadReq.Operation)
+	}
+	emails, ok := connector.operationDirectReadReq.Body["emails"].([]string)
+	if !ok || len(emails) != 2 || emails[0] != "ada@example.com" || emails[1] != "grace@example.com" {
+		t.Fatalf("operation body = %#v, want typed emails", connector.operationDirectReadReq.Body)
+	}
+}
+
+func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
+	tests := []struct {
+		name    string
+		command connectors.CommandSurfaceCommand
+		flags   map[string][]string
+		want    string
+	}{
+		{
+			name: "unknown raw body flag",
+			command: connectors.CommandSurfaceCommand{
+				Path:         "meetings integration-status",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "gong.meetings_integration_status",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
+				OutputPolicy: "json_redacted",
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+			},
+			flags: map[string][]string{"body": {`{"emails":["ada@example.com"]}`}},
+			want:  "unknown flag",
+		},
+		{
+			name: "missing output policy keeps operation blocked",
+			command: connectors.CommandSurfaceCommand{
+				Path:         "meetings integration-status",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "gong.meetings_integration_status",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+			},
+			flags: map[string][]string{"email": {"ada@example.com"}},
+			want:  "output_policy",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{tt.command}}}
+			_, err := Run(context.Background(), connector, Request{Path: strings.Fields(tt.command.Path), Flags: tt.flags}, func(connectors.Record) error {
+				t.Fatal("emit called for rejected operation direct-read command")
+				return nil
+			})
+			if err == nil {
+				t.Fatal("Run error = nil, want rejection")
+			}
+			if !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Run error = %q, want %q", err.Error(), tt.want)
+			}
+		})
 	}
 }
 

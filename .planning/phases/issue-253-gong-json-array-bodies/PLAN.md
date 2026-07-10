@@ -41,6 +41,12 @@ Support top-level JSON array request bodies for typed reverse-ETL write actions 
 4. Add validator rules for implemented array commands.
 5. Keep Gong array operation blocked unless its schema/input contract is safe enough.
 
+
+## Implementation result
+
+- Added `body_type: json_array` write support with `body_field` and `body_schema` validation before network send.
+- Added Gong CRM entity-schema write metadata for schema-gated top-level arrays without a raw JSON CLI body flag.
+
 ## Verification
 
 - `go test ./internal/connectors/engine -run 'WriteJSONArray|Write' -count=1`

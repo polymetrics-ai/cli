@@ -228,7 +228,7 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
-	if cmd.Operation != "" {
+	if cmd.Operation != "" && !(cmd.Intent == "direct_read" && cmd.Availability == "implemented") {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      command,
@@ -236,6 +236,12 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 			Availability: cmd.Availability,
 			Reason:       fmt.Sprintf("operation %s executor is not implemented in this slice", cmd.Operation),
 		}
+	}
+	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Operation != "" {
+		if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, err
+		}
+		return cmd, command, nil
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
 		if err := validateDirectReadCommand(connector, cmd); err != nil {
@@ -259,6 +265,9 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 }
 
 func runDirectRead(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
+	if cmd.Operation != "" {
+		return runOperationDirectRead(ctx, connector, cmd, req)
+	}
 	if err := validateDirectReadCommand(connector, cmd); err != nil {
 		return Result{}, err
 	}
@@ -292,6 +301,46 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Command:    cmd.Path,
 		DirectRead: &direct,
 	}, nil
+}
+
+func runOperationDirectRead(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
+	reader, ok := connector.(connectors.OperationDirectReader)
+	if !ok {
+		return Result{}, &BlockedCommandError{
+			Connector:    connector.Name(),
+			Command:      cmd.Path,
+			Intent:       cmd.Intent,
+			Availability: cmd.Availability,
+			Reason:       "connector does not support operation direct reads",
+		}
+	}
+	if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
+		return Result{}, err
+	}
+	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
+	if err != nil {
+		return Result{}, err
+	}
+	maxBytes := req.MaxBytes
+	if maxBytes <= 0 {
+		maxBytes = MaxDirectReadBytes
+	}
+	if maxBytes > MaxDirectReadBytes {
+		maxBytes = MaxDirectReadBytes
+	}
+	direct, err := reader.OperationDirectRead(ctx, connectors.OperationDirectReadRequest{
+		Operation:    cmd.Operation,
+		Config:       req.Config,
+		PathParams:   pathParams,
+		Query:        query,
+		Body:         body,
+		MaxBytes:     maxBytes,
+		OutputPolicy: cmd.OutputPolicy,
+	})
+	if err != nil {
+		return Result{}, err
+	}
+	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
 }
 
 func validateDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
@@ -341,6 +390,29 @@ func validateDirectReadCommand(connector connectors.Connector, cmd connectors.Co
 			Availability: cmd.Availability,
 			Reason:       "direct_read commands require an explicit supported output_policy",
 		}
+	}
+	return nil
+}
+
+func validateOperationDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	if _, ok := connector.(connectors.OperationDirectReader); !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support operation direct reads"}
+	}
+	if strings.TrimSpace(cmd.Operation) == "" {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require operation"}
+	}
+	if len(cmd.APISurface) != 1 {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require exactly one api_surface endpoint"}
+	}
+	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
+	if method != http.MethodGet && method != http.MethodPost {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read commands require GET or POST api_surface endpoints, got %s", method)}
+	}
+	if isAbsoluteHTTPURL(cmd.APISurface[0].Path) {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands must not reference an absolute URL"}
+	}
+	if !isSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read commands require an explicit supported output_policy"}
 	}
 	return nil
 }
@@ -522,6 +594,91 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 		}
 	}
 	return pathParams, query, nil
+}
+
+func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, map[string]any, error) {
+	allowed := map[string]connectors.CommandSurfaceFlag{}
+	for _, flag := range cmd.Flags {
+		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
+			return nil, nil, nil, err
+		}
+		allowed[flag.Name] = flag
+	}
+
+	pathParams := map[string]string{}
+	query := map[string]string{}
+	body := map[string]any{}
+	for name, values := range flags {
+		if len(values) == 0 {
+			continue
+		}
+		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
+			return nil, nil, nil, err
+		}
+		flag, ok := allowed[name]
+		if !ok {
+			return nil, nil, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+		}
+		value, err := coerceFlagValue(flag, values)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+		switch {
+		case strings.HasPrefix(flag.MapsTo, "path."):
+			target := strings.TrimPrefix(flag.MapsTo, "path.")
+			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
+				return nil, nil, nil, err
+			}
+			pathParams[target] = stringifyCommandValue(value)
+		case strings.HasPrefix(flag.MapsTo, "query."):
+			target := strings.TrimPrefix(flag.MapsTo, "query.")
+			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
+				return nil, nil, nil, err
+			}
+			query[target] = stringifyCommandValue(value)
+		case strings.HasPrefix(flag.MapsTo, "body."):
+			target := strings.TrimPrefix(flag.MapsTo, "body.")
+			if err := setBodyValue(body, target, value); err != nil {
+				return nil, nil, nil, err
+			}
+		default:
+			return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
+		}
+	}
+	return pathParams, query, body, nil
+}
+
+func setBodyValue(body map[string]any, path string, value any) error {
+	parts := strings.Split(path, ".")
+	for _, part := range parts {
+		if err := safety.ValidateIdentifier(part, "body field"); err != nil {
+			return err
+		}
+	}
+	cur := body
+	for _, part := range parts[:len(parts)-1] {
+		next, ok := cur[part]
+		if !ok {
+			nested := map[string]any{}
+			cur[part] = nested
+			cur = nested
+			continue
+		}
+		nested, ok := next.(map[string]any)
+		if !ok {
+			return fmt.Errorf("body field %q conflicts with existing non-object value", path)
+		}
+		cur = nested
+	}
+	cur[parts[len(parts)-1]] = value
+	return nil
+}
+
+func stringifyCommandValue(value any) string {
+	if s, ok := value.(string); ok {
+		return s
+	}
+	return fmt.Sprint(value)
 }
 
 func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (connectors.Record, error) {

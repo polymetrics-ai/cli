@@ -2,8 +2,10 @@ package connsdk
 
 import (
 	"context"
+	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -210,6 +212,114 @@ func TestRequesterDoFormEncodesBodyAndAuth(t *testing.T) {
 	}
 	if sawBody != "a@example.com" {
 		t.Fatalf("form email = %q", sawBody)
+	}
+}
+
+func TestRequesterDoMultipartEncodesFileAndAuth(t *testing.T) {
+	dir := t.TempDir()
+	filePath := dir + "/payload.txt"
+	if err := os.WriteFile(filePath, []byte("hello multipart"), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	var sawAuth, sawField, sawFile string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sawAuth = r.Header.Get("Authorization")
+		if !strings.HasPrefix(r.Header.Get("Content-Type"), "multipart/form-data; boundary=") {
+			t.Fatalf("Content-Type = %q, want multipart boundary", r.Header.Get("Content-Type"))
+		}
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			t.Fatalf("ParseMultipartForm: %v", err)
+		}
+		sawField = r.MultipartForm.Value["source"][0]
+		fh := r.MultipartForm.File["mediaFile"][0]
+		f, err := fh.Open()
+		if err != nil {
+			t.Fatalf("Open part: %v", err)
+		}
+		defer f.Close()
+		raw, _ := io.ReadAll(f)
+		sawFile = string(raw)
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, Auth: Bearer("test-token"), Sleep: noSleep}
+	resp, err := r.DoMultipart(context.Background(), http.MethodPut, "/upload", nil, MultipartForm{
+		Fields: map[string]string{"source": "recorder"},
+		Files:  []MultipartFile{{FieldName: "mediaFile", Path: filePath, ContentType: "text/plain", MaxBytes: 1024}},
+	})
+	if err != nil {
+		t.Fatalf("DoMultipart error = %v", err)
+	}
+	if resp.Status != http.StatusOK {
+		t.Fatalf("status = %d", resp.Status)
+	}
+	if sawAuth != "Bearer test-token" || sawField != "recorder" || sawFile != "hello multipart" {
+		t.Fatalf("auth=%q field=%q file=%q", sawAuth, sawField, sawFile)
+	}
+}
+
+func TestRequesterDoMultipartRetriesWithReopenedFile(t *testing.T) {
+	dir := t.TempDir()
+	filePath := dir + "/payload.txt"
+	if err := os.WriteFile(filePath, []byte("retry payload"), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	var calls int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		call := atomic.AddInt32(&calls, 1)
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			t.Fatalf("ParseMultipartForm: %v", err)
+		}
+		fh := r.MultipartForm.File["mediaFile"][0]
+		f, err := fh.Open()
+		if err != nil {
+			t.Fatalf("Open part: %v", err)
+		}
+		raw, _ := io.ReadAll(f)
+		_ = f.Close()
+		if string(raw) != "retry payload" {
+			t.Fatalf("attempt %d file body = %q", call, string(raw))
+		}
+		if call == 1 {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, Sleep: noSleep, MaxRetries: 1}
+	_, err := r.DoMultipart(context.Background(), http.MethodPut, "/upload", nil, MultipartForm{
+		Files: []MultipartFile{{FieldName: "mediaFile", Path: filePath, MaxBytes: 1024}},
+	})
+	if err != nil {
+		t.Fatalf("DoMultipart error = %v", err)
+	}
+	if got := atomic.LoadInt32(&calls); got != 2 {
+		t.Fatalf("calls = %d, want 2", got)
+	}
+}
+
+func TestRequesterDoMultipartRejectsTooLargeFileBeforeSend(t *testing.T) {
+	dir := t.TempDir()
+	filePath := dir + "/payload.txt"
+	if err := os.WriteFile(filePath, []byte("too large"), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { hits++ }))
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, Sleep: noSleep}
+	_, err := r.DoMultipart(context.Background(), http.MethodPut, "/upload", nil, MultipartForm{
+		Files: []MultipartFile{{FieldName: "mediaFile", Path: filePath, MaxBytes: 4}},
+	})
+	if err == nil {
+		t.Fatalf("DoMultipart: want too-large error")
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want 0", hits)
 	}
 }
 
