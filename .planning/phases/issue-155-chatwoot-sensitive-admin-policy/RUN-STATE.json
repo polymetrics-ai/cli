@@ -3,7 +3,7 @@
   "parentIssue": 148,
   "branch": "feat/155-chatwoot-sensitive-admin-policy",
   "baseBranch": "feat/148-chatwoot-cli-parity",
-  "status": "full_verified_pr_pending",
+  "status": "pr_open_remote_pending",
   "gsd": {
     "adapter": "scripts/gsd",
     "programmingLoop": "manual_fallback",
@@ -37,6 +37,13 @@
       "timestamp": "2026-07-10T00:00:00Z",
       "event": "full_verification",
       "detail": "gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify passed."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "pr_opened",
+      "detail": "Opened stacked PR #264 from feat/155-chatwoot-sensitive-admin-policy to feat/148-chatwoot-cli-parity. Remote checks pending."
     }
-  ]
+  ],
+  "pr": 264,
+  "prUrl": "https://github.com/polymetrics-ai/cli/pull/264"
 }

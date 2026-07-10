@@ -131,7 +131,7 @@
     },
     {
       "number": 155,
-      "status": "full_verified",
+      "status": "pr_open_remote_pending",
       "dependencies": [
         149,
         152
@@ -152,7 +152,7 @@
         "website/tests/api/connector-data.test.ts",
         ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
       ],
-      "decision": "sub_pr_pending"
+      "decision": "remote_checks_pending"
     }
   ],
   "spawn_decisions": [
@@ -276,11 +276,11 @@
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
-      "decision": "sub_pr_pending",
+      "decision": "remote_checks_pending",
       "issue_numbers": [
         155
       ],
-      "reason": "Issue #155 implementation passed targeted checks and full local gates on feat/155-chatwoot-sensitive-admin-policy; stacked PR, remote checks, and review routing remain pending."
+      "reason": "PR #264 opened for issue #155; remote checks and automated review routing pending."
     }
   ],
   "subissues": [
@@ -466,9 +466,9 @@
       "number": 155,
       "url": "https://github.com/polymetrics-ai/cli/issues/155",
       "branch": "feat/155-chatwoot-sensitive-admin-policy",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/264",
       "worker": "coordinator-local-critical-path",
-      "status": "full_verified",
+      "status": "pr_open_remote_pending",
       "write_scope": [
         "internal/connectors/defs/chatwoot/api_surface.json",
         "internal/connectors/defs/chatwoot/cli_surface.json",
@@ -489,8 +489,8 @@
       "verification": "targeted checks plus gofmt, go vet, go test ./..., go build ./cmd/pm, and make verify passed; PR pending",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "not_started_pr_pending",
-        "head_sha": "pending",
+        "status": "remote_checks_pending",
+        "head_sha": "af119b39b9822ae248b2363663c36a1a9ad17008",
         "reviewed_range": "pending",
         "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
         "fallback_route": "none",
