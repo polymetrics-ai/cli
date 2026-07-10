@@ -70,4 +70,6 @@ Draft stacked PR: https://github.com/polymetrics-ai/cli/pull/258
 
 Base: `feat/213-helpscout-cli-surface-metadata` (#236). Head: `feat/212-helpscout-all-ops`.
 
-Initial CI status after opening: in progress.
+PR CI status after polling: green (`verify`, website checks/image, security, PR guard, conventions all success; website deploy skipped as expected).
+
+Automated review routing: CodeRabbit posted `Review skipped` because the PR is draft. This is not review coverage. Review blocker comment: https://github.com/polymetrics-ai/cli/pull/258#issuecomment-4933338552

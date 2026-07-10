@@ -50,7 +50,10 @@
     "base": "feat/213-helpscout-cli-surface-metadata",
     "head": "feat/212-helpscout-all-ops",
     "draft": true,
-    "stackedOn": "https://github.com/polymetrics-ai/cli/pull/236"
+    "stackedOn": "https://github.com/polymetrics-ai/cli/pull/236",
+    "ci": "green",
+    "reviewCoverage": "blocked: CodeRabbit skipped because PR is draft; stacked non-default-base review still required",
+    "reviewRoutingComment": "https://github.com/polymetrics-ai/cli/pull/258#issuecomment-4933338552"
   },
   "checks": [
     { "command": "go test ./internal/connectors/engine -run 'DirectRead|Operations|CLISurface'", "result": "pass" },

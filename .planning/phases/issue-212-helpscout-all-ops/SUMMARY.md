@@ -1,6 +1,6 @@
 # Summary: issue-212 Help Scout all operations
 
-Status: implemented locally with draft stacked PR open: https://github.com/polymetrics-ai/cli/pull/258 (base `feat/213-helpscout-cli-surface-metadata`, stacked on #236). Review routing/CI are pending.
+Status: implemented locally with draft stacked PR open: https://github.com/polymetrics-ai/cli/pull/258 (base `feat/213-helpscout-cli-surface-metadata`, stacked on #236). Local gates and PR CI are green. Automated review coverage is blocked because CodeRabbit skipped the draft PR; routing blocker recorded at https://github.com/polymetrics-ai/cli/pull/258#issuecomment-4933338552.
 
 ## Delivered
 
