@@ -66,5 +66,6 @@ rg -n "freshchat|Freshchat" docs/cli website internal/connectors/defs/freshchat
 - #184: local focused/full gates passed; PR #243 CI passed; merged to parent as fd359cfb. CodeRabbit skipped stacked/draft review; parent review coverage remains pending.
 - #182: local focused/full gates passed; PR #245 CI passed after regenerated website data was committed; merged to parent as f50a2298. CodeRabbit skipped stacked review; parent review coverage remains pending.
 - #183: local focused/full gates passed; PR #247 CI passed; merged to parent as fd49739a. CodeRabbit skipped stacked review; parent review coverage remains pending.
+- #185: local focused/full gates passed; PR #248 CI passed; merged to parent as 31f3382e. CodeRabbit skipped stacked review; parent review coverage remains pending.
 
 Do not run credentialed `pm freshchat ...` commands or reverse ETL execution.

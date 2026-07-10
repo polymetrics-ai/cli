@@ -49,7 +49,7 @@ No generic HTTP write, shell, SQL write, raw mutation, credential prompt, or cre
 | #182 | Help renderer/docs | #181 | help/docs renderer and docs surfaces | merged: `feat/182-freshchat-help-renderer` → f50a2298 |
 | #183 | Stream runner | #181/#184 | Freshchat streams/schemas/fixtures/runner tests | merged: `feat/183-freshchat-stream-runner` → fd49739a |
 | #184 | Operation ledger | #181 | Freshchat `api_surface.json`, operation ledger artifacts | merged: `feat/184-freshchat-operation-ledger` → fd359cfb |
-| #185 | Direct reads | #181/#184 | direct-read engine/metadata/tests | TBD |
+| #185 | Direct reads | #181/#184 | direct-read engine/metadata/tests | merged: `feat/185-freshchat-direct-read` → 31f3382e |
 | #186 | Advanced query/binary engine | #184/#185 | engine/query/binary policy metadata/tests | TBD |
 | #187 | Sensitive/admin policy | #184 | Freshchat writes/operations policy/tests | TBD |
 
