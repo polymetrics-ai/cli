@@ -50,6 +50,36 @@ func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
 	}
 }
 
+func TestDirectReadJSONResponseAllowsURITemplateQueryExpressions(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/v1/website/site_123/conversations/1" {
+			t.Fatalf("path = %s, want Crisp conversations path", r.URL.Path)
+		}
+		if got := r.URL.Query().Get("per_page"); got != "25" {
+			t.Fatalf("per_page query = %q, want 25", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"data":[{"session_id":"session_123"}]}`))
+	}))
+	defer srv.Close()
+
+	endpointPath := "/v1/website/{website_id}/conversations/{page_number}{?per_page}{&search_query}"
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, endpointPath), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         endpointPath,
+		Config:       connectors.RuntimeConfig{Config: map[string]string{"website_id": "site_123"}},
+		PathParams:   map[string]string{"page_number": "1"},
+		Query:        map[string]string{"per_page": "25"},
+		OutputPolicy: "json_response",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("status = %d, want 200", result.Status)
+	}
+}
+
 func TestDirectReadResolvesPathWithConfigDefaults(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/repos/octo/hello/contents/README.md" {

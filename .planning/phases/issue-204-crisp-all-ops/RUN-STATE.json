@@ -1,0 +1,10 @@
+{
+  "phase": "issue-204-crisp-all-ops",
+  "issue": 204,
+  "connector": "crisp",
+  "branch": "feat/204-crisp-all-ops",
+  "status": "verified",
+  "verificationPassed": true,
+  "verificationNotes": "Targeted direct-read policy tests, connectorgen validation, Crisp conformance, docs validate, all-ops inventory checks, and make verify passed. After CodeRabbit review fixes, docs validate, connectorgen validate, Crisp conformance, commandrunner/engine tests, and make verify passed again. No credentialed Crisp checks were run. Manual programming-loop fallback active because scripts/gsd prompt programming-loop is unavailable.",
+  "updatedAt": "2026-07-10T00:00:00Z"
+}
