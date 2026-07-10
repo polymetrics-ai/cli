@@ -131,7 +131,7 @@
     },
     {
       "number": 155,
-      "status": "pr_open_remote_pending",
+      "status": "remote_checks_passed_review_pending",
       "dependencies": [
         149,
         152
@@ -152,7 +152,7 @@
         "website/tests/api/connector-data.test.ts",
         ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
       ],
-      "decision": "remote_checks_pending"
+      "decision": "integrate_then_parent_review_fallback"
     }
   ],
   "spawn_decisions": [
@@ -276,11 +276,11 @@
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
-      "decision": "remote_checks_pending",
+      "decision": "integrate_then_parent_review_fallback",
       "issue_numbers": [
         155
       ],
-      "reason": "PR #264 opened for issue #155; remote checks and automated review routing pending."
+      "reason": "PR #264 remote checks passed and merge state is clean; CodeRabbit did not review the non-default-base PR, so parent PR #223 fallback review is required after squash integration."
     }
   ],
   "subissues": [
@@ -468,7 +468,7 @@
       "branch": "feat/155-chatwoot-sensitive-admin-policy",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/264",
       "worker": "coordinator-local-critical-path",
-      "status": "pr_open_remote_pending",
+      "status": "remote_checks_passed_review_pending",
       "write_scope": [
         "internal/connectors/defs/chatwoot/api_surface.json",
         "internal/connectors/defs/chatwoot/cli_surface.json",
@@ -486,10 +486,10 @@
         ".planning/phases/issue-155-chatwoot-sensitive-admin-policy"
       ],
       "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity",
-      "verification": "targeted checks plus gofmt, go vet, go test ./..., go build ./cmd/pm, and make verify passed; PR pending",
+      "verification": "PR #264 remote checks passed; parent CodeRabbit fallback pending after integration",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "remote_checks_pending",
+        "status": "parent_fallback_required_after_integration",
         "head_sha": "af119b39b9822ae248b2363663c36a1a9ad17008",
         "reviewed_range": "pending",
         "coverage_route": "sub_pr_then_parent_fallback_if_skipped",

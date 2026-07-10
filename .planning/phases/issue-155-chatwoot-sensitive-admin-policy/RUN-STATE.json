@@ -3,7 +3,7 @@
   "parentIssue": 148,
   "branch": "feat/155-chatwoot-sensitive-admin-policy",
   "baseBranch": "feat/148-chatwoot-cli-parity",
-  "status": "pr_open_remote_pending",
+  "status": "remote_checks_passed_review_pending",
   "gsd": {
     "adapter": "scripts/gsd",
     "programmingLoop": "manual_fallback",
@@ -42,6 +42,16 @@
       "timestamp": "2026-07-10T00:00:00Z",
       "event": "pr_opened",
       "detail": "Opened stacked PR #264 from feat/155-chatwoot-sensitive-admin-policy to feat/148-chatwoot-cli-parity. Remote checks pending."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "remote_checks_passed",
+      "detail": "PR #264 remote checks passed: gsd-workflow-evidence, require-linked-issue, branch-name, govulncheck, verify, Website checks, pr-title, CodeQL, Dependency Review; Website deploy skipped as expected."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "event": "automated_review_pending_parent_fallback",
+      "detail": "No CodeRabbit review/comment appeared on non-default-base PR #264; parent PR #223 fallback review is required after integration."
     }
   ],
   "pr": 264,
