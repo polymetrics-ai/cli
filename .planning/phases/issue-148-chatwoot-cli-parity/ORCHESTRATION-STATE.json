@@ -110,7 +110,7 @@
     },
     {
       "number": 154,
-      "status": "full_verified",
+      "status": "pr_open_remote_pending",
       "dependencies": [
         149,
         152
@@ -127,7 +127,7 @@
         "website/lib/connectors.catalog.data.generated.json",
         ".planning/phases/issue-154-chatwoot-advanced-query-binary"
       ],
-      "decision": "sub_pr_pending"
+      "decision": "remote_checks_pending"
     },
     {
       "number": 155,
@@ -258,11 +258,11 @@
     },
     {
       "timestamp": "2026-07-10T00:00:00Z",
-      "decision": "sub_pr_pending",
+      "decision": "remote_checks_pending",
       "issue_numbers": [
         154
       ],
-      "reason": "Issue #154 implementation passed targeted checks and full local gates on feat/154-chatwoot-advanced-query-binary; stacked PR, remote checks, and review routing remain pending."
+      "reason": "PR #255 opened for issue #154; remote checks and automated review routing pending."
     }
   ],
   "subissues": [
@@ -416,9 +416,9 @@
       "number": 154,
       "url": "https://github.com/polymetrics-ai/cli/issues/154",
       "branch": "feat/154-chatwoot-advanced-query-binary",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/255",
       "worker": "coordinator-local-critical-path",
-      "status": "full_verified",
+      "status": "pr_open_remote_pending",
       "write_scope": [
         "internal/connectors/engine/direct_read.go",
         "internal/connectors/engine/direct_read_test.go",
@@ -435,8 +435,8 @@
       "verification": "targeted checks plus gofmt, go vet, go test ./..., go build ./cmd/pm, and make verify passed; PR pending",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "not_started_pr_pending",
-        "head_sha": "pending",
+        "status": "remote_checks_pending",
+        "head_sha": "85f1c9919327755df2a8de20d33045fd6b420d73",
         "reviewed_range": "pending",
         "coverage_route": "sub_pr_then_parent_fallback_if_skipped",
         "fallback_route": "none",
