@@ -30,13 +30,23 @@ apply it before anything else.
      `code-review-disposition-template.md`.
    - INTEGRATE / PARENT_FINALIZE → merge sub-PR into the parent branch; stop at the human gate.
 3. **IMPLEMENTATION goes to Codex, not you.** For EXECUTE / CORRECT (writing production code), do NOT
-   write it yourself. Dispatch a Codex worker via bash, in the sub-issue's own worktree/cwd:
+   write it yourself. Dispatch a Codex worker via bash, in the sub-issue's own worktree/cwd.
+   The worker MUST outlive your `claude -p` turn, so dispatch it DETACHED (never via your
+   harness's background-task feature — those are killed when your session ends) and verify it is
+   alive before you end the turn:
    ```
-   pi -p --model openai-codex/gpt-5.5 --tools read,bash,edit,write,grep,find,ls --approve \
-     --agentScope both --confirmProjectAgents false \
-     "You are pm-gsd-worker. Implement <sub-issue> per its PLAN.md and .agents/connector-migration/
-      templates/connector-rollout-prompt.md. Commit per green slice; never push to main; return a handoff."
+   cd <sub-issue-worktree> && \
+   setsid nohup pi -p --model openai-codex/gpt-5.5 --tools read,bash,edit,write,grep,find,ls --approve \
+     "$(cat <task-dir>/CODEX-PROMPT.txt)" \
+     < /dev/null > <task-dir>/codex-worker.log 2>&1 &
+   echo $! > <task-dir>/codex-worker.pid
    ```
+   Then confirm liveness (`kill -0 $(cat <task-dir>/codex-worker.pid)` after ~15s; on macOS `setsid`
+   may be absent — plain `nohup … & disown` is fine). If the process is already dead, read
+   `codex-worker.log`, fix the invocation, and re-dispatch BEFORE recording `spawned`. Do not pass
+   flags not listed in `pi --help` (0.80.x has no `--agentScope`/`--confirmProjectAgents`; `--approve`
+   already trusts project-local files). Later turns reconcile the worker by PID file, log growth, and
+   commits on the sub-branch — a dead worker with no commits is re-dispatched from the fork SHA.
    (One worker per sub-issue, its own `cwd`; respect the ≤4-concurrent / disjoint-write-scope rules.)
 4. **Persist honestly.** Write the reconciled `RUN.json` + `ORCHESTRATION-STATE.json` for this
    transition, and append a one-line entry to `driver.log` describing exactly what you did (stage,
