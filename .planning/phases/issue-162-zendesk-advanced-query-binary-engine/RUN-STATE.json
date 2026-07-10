@@ -1,0 +1,20 @@
+{
+  "phase": "issue-162-zendesk-advanced-query-binary-engine",
+  "issue": 162,
+  "parent_issue": 156,
+  "status": "planned",
+  "runtime": "pi",
+  "branch": "feat/162-zendesk-advanced-query-binary-engine",
+  "base_branch": "feat/158-zendesk-help-renderer",
+  "gsd": {
+    "adapter": "scripts/gsd",
+    "doctor": "passed",
+    "verify_pi": "passed",
+    "list_json": "passed",
+    "programming_loop_status": "blocked_unknown_command",
+    "manual_fallback": true
+  },
+  "verificationPassed": false,
+  "verificationNotes": "Planning checkpoint only; no production edits yet.",
+  "updated_at": "2026-07-10T05:55:00Z"
+}
