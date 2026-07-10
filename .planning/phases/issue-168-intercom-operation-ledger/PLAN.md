@@ -84,4 +84,4 @@ Complete Intercom connector CLI parity for the official Intercom OpenAPI 2.14 su
 
 - Operation ledger implemented: all 149 official Intercom OpenAPI operations are covered by stream/direct-read/binary/text/write command metadata.
 - Combined branch `feat/166-171-intercom-complete-implementation` passed local gates; see sibling phase `issue-166-171-intercom-complete-implementation` for full TDD and verification evidence.
-- PR/review routing remains pending after commit/push.
+- Stacked PR #257 is open against the parent branch; CI/review routing pending.

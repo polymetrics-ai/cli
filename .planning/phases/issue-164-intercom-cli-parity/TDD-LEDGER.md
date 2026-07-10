@@ -26,7 +26,8 @@
   - Branch: `feat/166-171-intercom-complete-implementation`
   - Plan checkpoint commit: `b2ac74cd chore(intercom): plan complete CLI implementation`
   - Red-test checkpoint commit: `2299d0ab test(intercom): define complete CLI parity contracts`
-  - Green implementation/local verification completed on 2026-07-10; commit/PR pending.
+  - Green implementation commit: `bb382e48 feat(intercom): implement complete CLI command parity`.
+  - Stacked PR opened: https://github.com/polymetrics-ai/cli/pull/257.
   - Coverage: 149/149 official Intercom operations represented as stream, bounded direct read/text/binary metadata, or typed reverse-ETL write command.
   - Local broad gates passed: `go vet ./...`, `go test ./... -timeout=20m`, `go build ./cmd/pm`, `make verify`.
 

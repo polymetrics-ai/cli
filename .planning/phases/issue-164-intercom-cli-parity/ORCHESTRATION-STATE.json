@@ -17,7 +17,7 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi",
-    "status": "local_verified_pending_pr"
+    "status": "sub_pr_open_ci_pending"
   },
   "ready_queue": [
     {
@@ -33,7 +33,7 @@
     },
     {
       "number": 168,
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "dependencies": [
         165
       ],
@@ -45,7 +45,7 @@
     },
     {
       "number": 166,
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "dependencies": [
         165
       ],
@@ -59,7 +59,7 @@
     },
     {
       "number": 167,
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "dependencies": [
         165,
         168
@@ -74,7 +74,7 @@
     },
     {
       "number": 169,
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "dependencies": [
         165,
         168
@@ -88,7 +88,7 @@
     },
     {
       "number": 170,
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "dependencies": [
         168,
         169
@@ -102,7 +102,7 @@
     },
     {
       "number": 171,
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "dependencies": [
         168,
         170
@@ -168,9 +168,9 @@
       "number": 166,
       "url": "https://github.com/polymetrics-ai/cli/issues/166",
       "branch": "feat/166-171-intercom-complete-implementation",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
       "worker": "pi-coordinator-inline",
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -185,18 +185,19 @@
       "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending_pr",
+        "status": "pending_ci_or_skip",
         "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
-        "fallback_route": "none"
+        "fallback_route": "none",
+        "reviewed_range": "pending; PR #257 targets parent branch and may be skipped by CodeRabbit non-default-base policy"
       }
     },
     {
       "number": 167,
       "url": "https://github.com/polymetrics-ai/cli/issues/167",
       "branch": "feat/166-171-intercom-complete-implementation",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
       "worker": "pi-coordinator-inline",
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -211,18 +212,19 @@
       "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending_pr",
+        "status": "pending_ci_or_skip",
         "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
-        "fallback_route": "none"
+        "fallback_route": "none",
+        "reviewed_range": "pending; PR #257 targets parent branch and may be skipped by CodeRabbit non-default-base policy"
       }
     },
     {
       "number": 168,
       "url": "https://github.com/polymetrics-ai/cli/issues/168",
       "branch": "feat/166-171-intercom-complete-implementation",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
       "worker": "pi-coordinator-inline",
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -237,18 +239,19 @@
       "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending_pr",
+        "status": "pending_ci_or_skip",
         "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
-        "fallback_route": "none"
+        "fallback_route": "none",
+        "reviewed_range": "pending; PR #257 targets parent branch and may be skipped by CodeRabbit non-default-base policy"
       }
     },
     {
       "number": 169,
       "url": "https://github.com/polymetrics-ai/cli/issues/169",
       "branch": "feat/166-171-intercom-complete-implementation",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
       "worker": "pi-coordinator-inline",
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -263,18 +266,19 @@
       "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending_pr",
+        "status": "pending_ci_or_skip",
         "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
-        "fallback_route": "none"
+        "fallback_route": "none",
+        "reviewed_range": "pending; PR #257 targets parent branch and may be skipped by CodeRabbit non-default-base policy"
       }
     },
     {
       "number": 170,
       "url": "https://github.com/polymetrics-ai/cli/issues/170",
       "branch": "feat/166-171-intercom-complete-implementation",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
       "worker": "pi-coordinator-inline",
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -289,18 +293,19 @@
       "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending_pr",
+        "status": "pending_ci_or_skip",
         "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
-        "fallback_route": "none"
+        "fallback_route": "none",
+        "reviewed_range": "pending; PR #257 targets parent branch and may be skipped by CodeRabbit non-default-base policy"
       }
     },
     {
       "number": 171,
       "url": "https://github.com/polymetrics-ai/cli/issues/171",
       "branch": "feat/166-171-intercom-complete-implementation",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
       "worker": "pi-coordinator-inline",
-      "status": "local_verified_pending_pr",
+      "status": "pr_open_ci_pending",
       "write_scope": [
         "internal/connectors/defs/intercom",
         "internal/connectors/engine",
@@ -315,9 +320,10 @@
       "verification": "local verification passed: gofmt -w cmd internal; go vet ./...; go test ./... -timeout=20m; go build ./cmd/pm; make verify; connectorgen validate 547 connectors/0 findings",
       "automated_review": {
         "primary_route": "coderabbit_auto",
-        "status": "pending_pr",
+        "status": "pending_ci_or_skip",
         "coverage_route": "sub_pr_or_parent_pr_fallback_after_push",
-        "fallback_route": "none"
+        "fallback_route": "none",
+        "reviewed_range": "pending; PR #257 targets parent branch and may be skipped by CodeRabbit non-default-base policy"
       }
     }
   ],
@@ -331,5 +337,5 @@
     "production deployment",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T07:45:00Z"
+  "updated_at": "2026-07-10T07:55:00Z"
 }

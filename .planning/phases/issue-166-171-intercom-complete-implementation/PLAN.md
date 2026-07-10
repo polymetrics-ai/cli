@@ -1,7 +1,8 @@
 # GSD Plan: Intercom Complete CLI Implementation (#166-#171)
 
 Parent: #164 / PR #220  
-Branch: `feat/166-171-intercom-complete-implementation` from parent branch `feat/164-intercom-cli-parity`
+Branch: `feat/166-171-intercom-complete-implementation` from parent branch `feat/164-intercom-cli-parity`  
+Stacked PR: https://github.com/polymetrics-ai/cli/pull/257
 
 ## GSD command path
 
@@ -83,7 +84,7 @@ Complete Intercom connector CLI parity for the official Intercom OpenAPI 2.14 su
 - [x] Red-test checkpoint when feasible.
 - [x] Green implementation checkpoint.
 - [x] Docs/help parity checkpoint.
-- [x] Verification/review-route checkpoint pending PR/review routing after commit/push.
+- [x] Verification/review-route checkpoint: stacked PR #257 opened against parent branch; CI/review routing pending.
 
 ## Human gates
 

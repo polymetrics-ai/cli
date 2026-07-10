@@ -84,4 +84,4 @@ Complete Intercom connector CLI parity for the official Intercom OpenAPI 2.14 su
 
 - Direct reads implemented: bounded `json_response` direct-read policy and Intercom object/list read commands added.
 - Combined branch `feat/166-171-intercom-complete-implementation` passed local gates; see sibling phase `issue-166-171-intercom-complete-implementation` for full TDD and verification evidence.
-- PR/review routing remains pending after commit/push.
+- Stacked PR #257 is open against the parent branch; CI/review routing pending.
