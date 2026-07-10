@@ -940,6 +940,62 @@ func TestBundleLoadEmbeddedZendeskCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedZendeskOperationLedger(t *testing.T) {
+	b, err := Load(defs.FS, "zendesk")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, zendesk): %v", err)
+	}
+	if got, want := len(b.Operations), 617; got != want {
+		t.Fatalf("Zendesk Operations count = %d, want %d", got, want)
+	}
+	if b.Surface == nil {
+		t.Fatalf("Zendesk Surface is nil; defs.FS must embed api_surface.json")
+	}
+	if got, want := len(b.Surface.Endpoints), 617; got != want {
+		t.Fatalf("Zendesk api_surface endpoints = %d, want %d", got, want)
+	}
+
+	opsByID := make(map[string]OperationSpec, len(b.Operations))
+	for _, op := range b.Operations {
+		if op.ID == "" {
+			t.Fatalf("Zendesk operation with empty id: %+v", op)
+		}
+		if _, exists := opsByID[op.ID]; exists {
+			t.Fatalf("duplicate Zendesk operation id %q", op.ID)
+		}
+		opsByID[op.ID] = op
+	}
+
+	for _, ep := range b.Surface.Endpoints {
+		if ep.Operation != nil && ep.Operation.Model == "deprecated" {
+			if ep.Excluded == nil || ep.Excluded.Category != "deprecated" {
+				t.Fatalf("deprecated endpoint %s %s missing deprecated exclusion", ep.Method, ep.Path)
+			}
+			continue
+		}
+		if ep.Excluded != nil {
+			continue
+		}
+		if ep.CoveredBy == nil {
+			t.Fatalf("endpoint %s %s has no covered_by or excluded accounting", ep.Method, ep.Path)
+		}
+		refs := append([]string{}, ep.CoveredBy.DirectReads...)
+		for _, ref := range []string{ep.CoveredBy.Stream, ep.CoveredBy.Write, ep.CoveredBy.DirectRead} {
+			if ref != "" {
+				refs = append(refs, ref)
+			}
+		}
+		if len(refs) == 0 {
+			t.Fatalf("endpoint %s %s has empty covered_by accounting", ep.Method, ep.Path)
+		}
+		for _, ref := range refs {
+			if _, ok := opsByID[ref]; !ok {
+				t.Fatalf("endpoint %s %s references unknown operation %q", ep.Method, ep.Path, ref)
+			}
+		}
+	}
+}
+
 func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
