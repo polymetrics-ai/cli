@@ -27,7 +27,15 @@ Planned red tests before shared-code edits:
 
 ## Green Evidence
 
-Pending.
+Generic bounded JSON direct-read policy red→green:
+
+```bash
+go test ./internal/connectors/commandrunner -run 'TestRunImplementedDirectReadCommandAllowsGenericJSONPolicy' -count=1
+go test ./internal/connectors/engine -run 'TestDirectReadJSONPolicyPreservesJSONBody' -count=1
+go test ./cmd/connectorgen -run 'TestValidate_CLISurfaceImplementedDirectReadGenericJSONOutputPolicyPasses' -count=1
+```
+
+Result: all passed after adding `output_policy: "json"` support to command runner, engine direct reads, connectorgen validation, and CLI surface schema.
 
 ## Refactor Notes
 

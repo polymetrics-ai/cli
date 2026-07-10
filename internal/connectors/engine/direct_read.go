@@ -20,6 +20,7 @@ import (
 const (
 	defaultDirectReadMaxBytes                  = 1 << 20
 	defaultDirectReadTimeout                   = 30 * time.Second
+	directReadPolicyJSON                       = "json"
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
 )
@@ -107,6 +108,8 @@ func clampDirectReadMaxBytes(maxBytes int) int {
 
 func validateDirectReadOutputPolicy(policy string, pathParams map[string]string) error {
 	switch policy {
+	case directReadPolicyJSON:
+		return nil
 	case directReadPolicyGitHubContentsFileMetadata, directReadPolicyGitHubContentsDirectory:
 		if err := rejectSensitiveRepositoryPath(pathParams["path"]); err != nil {
 			return err
@@ -119,6 +122,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 
 func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 	switch policy {
+	case directReadPolicyJSON:
+		return body, nil
 	case directReadPolicyGitHubContentsFileMetadata:
 		obj, ok := body.(map[string]any)
 		if !ok {

@@ -231,6 +231,17 @@ func TestValidate_CLISurfaceImplementedDirectReadWithOutputPolicyPasses(t *testi
 	}
 }
 
+func TestValidate_CLISurfaceImplementedDirectReadGenericJSONOutputPolicyPasses(t *testing.T) {
+	cliSurface := strings.Replace(validDirectReadCLISurfaceJSON(), `"output_policy": "github_contents_file_metadata"`, `"output_policy": "json"`, 1)
+	report, err := validateDir(directReadCLISurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for generic JSON direct_read cli surface, got %+v", report.Findings)
+	}
+}
+
 func TestValidate_CLISurfaceImplementedDirectReadRejectsBlockedOperationLedgerEndpoint(t *testing.T) {
 	report, err := validateDir(directReadCLISurfaceBundleFSWithAPI(validDirectReadCLISurfaceJSON(), validOperationLedgerAPISurface()))
 	if err != nil {
