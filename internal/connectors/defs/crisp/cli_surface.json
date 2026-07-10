@@ -423,7 +423,7 @@
       "availability": "implemented",
       "source_url": "https://docs.crisp.chat/references/rest-api/v1/#submit-spam-conversation-decision",
       "notes": "Implemented as an explicit fixed-endpoint Crisp reverse-ETL action. Non-path record fields are sent as the JSON request body by the declarative engine.",
-      "risk": "medium risk Crisp mutation for 'Submits decision on spam conversation (this allows to accepts or rejects a spam). If rejected, a spam message will be gone forever. If accepted, it will get transformed into a regular conversation.'; requires reverse ETL plan, preview, and approval",
+      "risk": "high risk Crisp destructive mutation for 'Submits decision on spam conversation (this allows to accepts or rejects a spam). If rejected, a spam message will be gone forever. If accepted, it will get transformed into a regular conversation.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
       "approval": "Reverse ETL command execution requires plan, preview, approval token, and destructive confirmation when prompted.",
       "write": "submit_spam_conversation_decision",
       "api_surface": [
@@ -5012,7 +5012,7 @@
       "availability": "implemented",
       "source_url": "https://docs.crisp.chat/references/rest-api/v1/#roll-verify-key",
       "notes": "Implemented as an explicit fixed-endpoint Crisp reverse-ETL action. Non-path record fields are sent as the JSON request body by the declarative engine.",
-      "risk": "medium risk Crisp mutation for 'Rolls verify key. This requests a new keypair to be generated. Previous key will be invalidated.'; requires reverse ETL plan, preview, and approval",
+      "risk": "high risk Crisp destructive mutation for 'Rolls verify key. This requests a new keypair to be generated. Previous key will be invalidated.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
       "approval": "Reverse ETL command execution requires plan, preview, approval token, and destructive confirmation when prompted.",
       "write": "roll_verify_key",
       "api_surface": [

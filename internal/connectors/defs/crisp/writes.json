@@ -106,11 +106,12 @@
           }
         }
       },
-      "risk": "medium risk Crisp mutation for 'Submits decision on spam conversation (this allows to accepts or rejects a spam). If rejected, a spam message will be gone forever. If accepted, it will get transformed into a regular conversation.'; requires reverse ETL plan, preview, and approval",
+      "risk": "high risk Crisp destructive mutation for 'Submits decision on spam conversation (this allows to accepts or rejects a spam). If rejected, a spam message will be gone forever. If accepted, it will get transformed into a regular conversation.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
       "path_fields": [
         "spam_id"
       ],
-      "body_type": "json"
+      "body_type": "json",
+      "confirm": "destructive"
     },
     {
       "name": "create_new_conversation",
@@ -2703,8 +2704,9 @@
         "type": "object",
         "additionalProperties": true
       },
-      "risk": "medium risk Crisp mutation for 'Rolls verify key. This requests a new keypair to be generated. Previous key will be invalidated.'; requires reverse ETL plan, preview, and approval",
-      "body_type": "json"
+      "risk": "high risk Crisp destructive mutation for 'Rolls verify key. This requests a new keypair to be generated. Previous key will be invalidated.'; requires reverse ETL plan, preview, approval, and typed destructive confirmation",
+      "body_type": "json",
+      "confirm": "destructive"
     },
     {
       "name": "subscribe_website_plugin",

@@ -59,6 +59,18 @@ go run ./cmd/connectorgen validate internal/connectors/defs
 
 Result: pass.
 
+CodeRabbit review-fix verification after marking `submit_spam_conversation_decision` and `roll_verify_key` as destructive-confirmation actions:
+
+```bash
+./pm docs validate --connectors-dir docs/connectors
+go run ./cmd/connectorgen validate internal/connectors/defs
+go test ./internal/connectors/conformance -run 'TestConformance/crisp' -count=1
+go test ./internal/connectors/commandrunner ./internal/connectors/engine -count=1
+make verify
+```
+
+Result: pass.
+
 ## Current status
 
-All required local verification for this slice passed. No credentialed Crisp API checks were run.
+All required local verification for this slice passed after review fixes. No credentialed Crisp API checks were run.
