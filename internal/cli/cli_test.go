@@ -315,6 +315,34 @@ func TestRuntimeDoctorJSONDoesNotLeakPostgresPassword(t *testing.T) {
 	}
 }
 
+func TestIntercomConnectorCommandHelpRendersCommandSurface(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"intercom"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(intercom) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"NAME", "SYNOPSIS", "COMMANDS", "pm intercom", "contact list", "contact view", "reverse ETL writes require plan, preview, approval, execute"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("intercom help missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestIntercomConnectorCommandSubcommandHelpRendersFlags(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"intercom", "contact", "view", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(intercom contact view --help) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"NAME", "SYNOPSIS", "pm intercom contact view", "--contact-id", "direct_read", "json_response"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("intercom command help missing %q:\n%s", want, out)
+		}
+	}
+}
+
 func TestGitHubCommandSurfaceRunsStreamBackedIssueList(t *testing.T) {
 	var gotPath, gotState string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
