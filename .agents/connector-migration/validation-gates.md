@@ -30,12 +30,17 @@ those intermediate sub-PRs only, the connectorgen validate gate is staged:
   (`{"base": …, "streams": []}` is valid) unless `capabilities.dynamic_schema` is true. The defs
   tree is embedded, so one invalid bundle breaks every package that loads the registry: `go build`,
   `go vet ./...`, and repo-wide `go test ./...` must be green on every slice.
-- `connectorgen validate` findings are tolerated ONLY when every finding is rule
-  `surface_unknown_target` on this connector and each dangling `covered_by.stream` /
-  `covered_by.write` target is owned by a later slice per the parent plan's slice map. The sub-PR
-  body must state the tolerated finding count and the owning slice for each group. Any other
-  finding (any rule, any connector), any warning, or any `surface_incomplete` finding fails the
-  slice.
+- `api_surface.json` grows incrementally: each endpoint row lands in the SAME slice that declares
+  its covering stream/write (conformance `surface_complete` is bidirectional — rows over
+  undeclared streams fail it, as do declared streams without rows — so dangling references are
+  never a valid intermediate state). The foundation slice ships an empty-endpoints skeleton whose
+  `scope` note names the research doc as the source of truth; `connectorgen validate` must return
+  `findings: []` and `warnings: []` on EVERY slice.
+- Drift protection: every slice that adds endpoint rows must reconcile the manifest against the
+  research doc in its PR body — cumulative row count after the slice (e.g. reads → 56, +writes →
+  140, +deletes → 168) and zero rows for operations the research doc does not contain. The
+  parent-finalize gate fails if the final manifest row count differs from the research doc's
+  operation count.
 - Every other gate in this document applies unchanged to every slice.
 - The final slice / parent-finalize gate is absolute: `findings: []` and `warnings: []` for the
   full defs tree, plus `make verify`, smoke, and certify. The parent PR into `main` remains
