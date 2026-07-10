@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/views/1001/items",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1701,
+          "subject": "Fixture view item",
+          "status": "open",
+          "priority": "normal",
+          "created_datetime": "2026-01-01T00:00:00Z",
+          "updated_datetime": "2026-01-02T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

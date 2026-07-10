@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/account/settings",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "setting_fixture_1",
+          "type": "business_hours",
+          "data": {
+            "timezone": "UTC"
+          }
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

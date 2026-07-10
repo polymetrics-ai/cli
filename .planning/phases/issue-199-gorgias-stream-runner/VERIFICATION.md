@@ -14,7 +14,11 @@ git diff --check
 
 ## Focused results
 
-Pending.
+- `go test ./cmd/connectorgen -run 'Gorgias(APISurfaceOperationLedger|StreamRunner)'`: passed.
+- `jq empty internal/connectors/defs/gorgias/streams.json internal/connectors/defs/gorgias/api_surface.json internal/connectors/defs/gorgias/cli_surface.json internal/connectors/defs/gorgias/schemas/*.json`: passed.
+- `go run ./cmd/connectorgen validate internal/connectors/defs`: passed, 547 connector(s) checked, 0 findings.
+- `go test ./internal/connectors/conformance -run 'TestConformance/gorgias'`: passed.
+- `git diff --check`: passed.
 
 ## Broader commands
 

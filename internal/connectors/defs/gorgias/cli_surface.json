@@ -132,10 +132,19 @@
     {
       "path": "ticket tags list",
       "summary": "List tags on a ticket",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "etl",
+      "availability": "implemented",
       "source_url": "https://developers.gorgias.com/reference/list-ticket-tags.md",
-      "notes": "Planned as a bounded direct read or sub-resource stream; no raw HTTP passthrough is exposed."
+      "stream": "ticket_tags",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{ticket_id}/tags"
+        }
+      ],
+      "examples": [
+        "pm gorgias ticket tags list --json"
+      ]
     },
     {
       "path": "ticket tags set",
@@ -306,22 +315,52 @@
       "path": "setting list",
       "summary": "List account settings",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-account-settings.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-account-settings.md",
+      "stream": "account_settings",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/account/settings"
+        }
+      ],
+      "examples": [
+        "pm gorgias setting list --json"
+      ]
     },
     {
       "path": "custom-field list",
       "summary": "List custom fields",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-custom-fields.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-custom-fields.md",
+      "stream": "custom_fields",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom-fields"
+        }
+      ],
+      "examples": [
+        "pm gorgias custom-field list --json"
+      ]
     },
     {
       "path": "tag list",
       "summary": "List tags",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-tags.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-tags.md",
+      "stream": "tags",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ],
+      "examples": [
+        "pm gorgias tag list --json"
+      ]
     },
     {
       "path": "tag merge",
@@ -336,43 +375,103 @@
       "path": "team list",
       "summary": "List teams",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-teams.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-teams.md",
+      "stream": "teams",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams"
+        }
+      ],
+      "examples": [
+        "pm gorgias team list --json"
+      ]
     },
     {
       "path": "user list",
       "summary": "List users",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-users.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-users.md",
+      "stream": "users",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "examples": [
+        "pm gorgias user list --json"
+      ]
     },
     {
       "path": "view list",
       "summary": "List views",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-views.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-views.md",
+      "stream": "views",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/views"
+        }
+      ],
+      "examples": [
+        "pm gorgias view list --json"
+      ]
     },
     {
       "path": "macro list",
       "summary": "List macros",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-macros.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-macros.md",
+      "stream": "macros",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macros"
+        }
+      ],
+      "examples": [
+        "pm gorgias macro list --json"
+      ]
     },
     {
       "path": "rule list",
       "summary": "List rules",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-rules.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-rules.md",
+      "stream": "rules",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rules"
+        }
+      ],
+      "examples": [
+        "pm gorgias rule list --json"
+      ]
     },
     {
       "path": "event list",
       "summary": "List events",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-events.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-events.md",
+      "stream": "events",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ],
+      "examples": [
+        "pm gorgias event list --json"
+      ]
     },
     {
       "path": "statistic view",
@@ -393,24 +492,53 @@
     {
       "path": "metric-card search",
       "summary": "Search metric cards",
-      "intent": "direct_read",
-      "availability": "planned",
+      "intent": "etl",
+      "availability": "implemented",
       "source_url": "https://developers.gorgias.com/reference/search-metric-cards.md",
-      "notes": "Planned for bounded direct-read support."
+      "stream": "metric_cards",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/metric-cards"
+        }
+      ],
+      "examples": [
+        "pm gorgias metric-card search --json"
+      ]
     },
     {
       "path": "integration list",
       "summary": "List integrations",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-integrations.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-integrations.md",
+      "stream": "integrations",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/integrations"
+        }
+      ],
+      "examples": [
+        "pm gorgias integration list --json"
+      ]
     },
     {
       "path": "widget list",
       "summary": "List widgets",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-widgets.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-widgets.md",
+      "stream": "widgets",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/widgets"
+        }
+      ],
+      "examples": [
+        "pm gorgias widget list --json"
+      ]
     },
     {
       "path": "file upload",
@@ -433,8 +561,18 @@
       "path": "job list",
       "summary": "List jobs",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-jobs.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-jobs.md",
+      "stream": "jobs",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/jobs"
+        }
+      ],
+      "examples": [
+        "pm gorgias job list --json"
+      ]
     },
     {
       "path": "job cancel",
@@ -449,8 +587,18 @@
       "path": "voice-call list",
       "summary": "List voice calls",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-voice-calls.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-calls.md",
+      "stream": "voice_calls",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/phone/voice-calls"
+        }
+      ],
+      "examples": [
+        "pm gorgias voice-call list --json"
+      ]
     },
     {
       "path": "voice-call-recording list",
@@ -463,8 +611,18 @@
       "path": "voice-call-event list",
       "summary": "List voice call events",
       "intent": "etl",
-      "availability": "planned",
-      "source_url": "https://developers.gorgias.com/reference/list-voice-call-events.md"
+      "availability": "implemented",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-call-events.md",
+      "stream": "voice_call_events",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/phone/voice-call-events"
+        }
+      ],
+      "examples": [
+        "pm gorgias voice-call-event list --json"
+      ]
     },
     {
       "path": "search resources",

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/phone/voice-call-events",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": 1201,
+          "voice_call_id": 1101,
+          "event_type": "created",
+          "created_datetime": "2026-01-01T00:00:00Z"
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

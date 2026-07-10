@@ -1,17 +1,22 @@
 # Overview
 
-Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias
-REST API (read-only).
+Reads Gorgias helpdesk, customer, account configuration, analytics, integration, job, voice, and
+widget list resources through the Gorgias REST API (read-only).
 
-Readable streams: `tickets`, `customers`, `messages`, `satisfaction_surveys`.
+Readable streams: `tickets`, `customers`, `messages`, `satisfaction_surveys`, `account_settings`,
+`custom_fields`, `events`, `integrations`, `jobs`, `macros`, `metric_cards`, `rules`, `tags`,
+`teams`, `users`, `views`, `voice_calls`, `voice_call_events`, `widgets`,
+`customer_custom_fields`, `ticket_custom_fields`, `ticket_tags`, `ticket_messages`, and
+`view_items`.
 
 This connector is read-only; no write actions are declared.
 
 Service API documentation: https://developers.gorgias.com/reference.
 
-CLI surface metadata is present for provider-inspired Gorgias commands. Only the four stream-backed
-`list` commands are marked implemented in this slice; write, direct-read, binary/file, and
-sensitive/admin commands are planned for later issue lanes and are not exposed as raw API tools.
+CLI surface metadata is present for provider-inspired Gorgias commands. Stream-backed `list` and
+`search` commands are marked implemented only where they map to typed ETL streams; write,
+direct-read detail, binary/file, and sensitive/admin commands remain planned for later issue lanes
+and are not exposed as raw API tools.
 
 ## Auth setup
 
@@ -40,32 +45,54 @@ Connection checks call GET `/tickets` with query `limit`=`1`.
 ## Streams notes
 
 Default pagination: cursor pagination; cursor parameter `cursor`; next token from
-`meta.next_cursor`.
+`meta.next_cursor`. Stream requests send `limit` from `{{ config.page_size }}`, default `100`.
 
-- `tickets`: GET `/tickets` - records path `data`; query `limit` from template `{{ config.page_size
-  }}`, default `100`; cursor pagination; cursor parameter `cursor`; next token from
-  `meta.next_cursor`.
-- `customers`: GET `/customers` - records path `data`; query `limit` from template `{{
-  config.page_size }}`, default `100`; cursor pagination; cursor parameter `cursor`; next token from
-  `meta.next_cursor`.
-- `messages`: GET `/messages` - records path `data`; query `limit` from template `{{
-  config.page_size }}`, default `100`; cursor pagination; cursor parameter `cursor`; next token from
-  `meta.next_cursor`.
-- `satisfaction_surveys`: GET `/satisfaction-surveys` - records path `data`; query `limit` from
-  template `{{ config.page_size }}`, default `100`; cursor pagination; cursor parameter `cursor`;
-  next token from `meta.next_cursor`.
+Top-level streams:
+
+- `tickets`: GET `/tickets` - records path `data`.
+- `customers`: GET `/customers` - records path `data`.
+- `messages`: GET `/messages` - records path `data`.
+- `satisfaction_surveys`: GET `/satisfaction-surveys` - records path `data`.
+- `account_settings`: GET `/account/settings` - records path `data`.
+- `custom_fields`: GET `/custom-fields` - records path `data`.
+- `events`: GET `/events` - records path `data`.
+- `integrations`: GET `/integrations` - records path `data`.
+- `jobs`: GET `/jobs` - records path `data`.
+- `macros`: GET `/macros` - records path `data`.
+- `metric_cards`: GET `/metric-cards` - records path `data`.
+- `rules`: GET `/rules` - records path `data`.
+- `tags`: GET `/tags` - records path `data`.
+- `teams`: GET `/teams` - records path `data`.
+- `users`: GET `/users` - records path `data`.
+- `views`: GET `/views` - records path `data`.
+- `voice_calls`: GET `/phone/voice-calls` - records path `data`.
+- `voice_call_events`: GET `/phone/voice-call-events` - records path `data`.
+- `widgets`: GET `/widgets` - records path `data`.
+
+Fan-out streams:
+
+- `customer_custom_fields`: lists `/customers/{customer_id}/custom-fields` for customer IDs from
+  `customers` and stamps `customer_id`.
+- `ticket_custom_fields`: lists `/tickets/{ticket_id}/custom-fields` for ticket IDs from `tickets`
+  and stamps `ticket_id`.
+- `ticket_tags`: lists `/tickets/{ticket_id}/tags` for ticket IDs from `tickets` and stamps
+  `ticket_id`.
+- `ticket_messages`: lists `/tickets/{ticket_id}/messages` for ticket IDs from `tickets` and stamps
+  `ticket_id`.
+- `view_items`: lists `/views/{view_id}/items` for view IDs from `views` and stamps `view_id`.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Gorgias API read of helpdesk tickets,
-customers, messages, and satisfaction surveys.
+This connector is read-only. Read behavior: external Gorgias API reads of helpdesk, customer,
+account configuration, analytics, integration, job, voice, and widget list resources.
 
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API surface metadata now accounts for all 114 public operations captured from Gorgias `llms.txt`
-  plus linked ReadMe OpenAPI pages.
-- Executable API coverage remains limited to the 4 stream-backed endpoint groups listed above; the
-  other operation-ledger rows are blocked metadata and do not claim runtime parity.
-- Planned CLI entries in `cli_surface.json` are discovery/help metadata only until later lanes add
-  streams, direct reads, binary policies, or typed reverse-ETL actions.
+- API surface metadata accounts for all 114 public operations captured from Gorgias `llms.txt` plus
+  linked ReadMe OpenAPI pages.
+- Executable API coverage is limited to 24 stream-backed GET endpoints. Detail direct reads, binary
+  payloads, advanced POST query/report operations, reverse-ETL writes, admin mutations, destructive
+  actions, and product-scope operations remain blocked metadata until later lanes add typed support.
+- Fan-out is single-level only; endpoints requiring nested or caller-supplied IDs remain direct-read
+  or future-lane candidates rather than raw API passthroughs.

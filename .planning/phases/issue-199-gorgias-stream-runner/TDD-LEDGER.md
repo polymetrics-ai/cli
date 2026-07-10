@@ -25,7 +25,23 @@ Initial result: failed as expected because the current parent baseline exposes o
 
 ## Green evidence
 
-Pending implementation.
+Focused green commands after adding the 24-stream read sweep:
+
+```bash
+go test ./cmd/connectorgen -run 'Gorgias(APISurfaceOperationLedger|StreamRunner)'
+jq empty internal/connectors/defs/gorgias/streams.json internal/connectors/defs/gorgias/api_surface.json internal/connectors/defs/gorgias/cli_surface.json internal/connectors/defs/gorgias/schemas/*.json
+go run ./cmd/connectorgen validate internal/connectors/defs
+go test ./internal/connectors/conformance -run 'TestConformance/gorgias'
+git diff --check
+```
+
+Results:
+
+- Gorgias API ledger and stream-runner tests passed.
+- JSON parse checks passed.
+- Full connector definition validation passed: 547 connector(s) checked, 0 findings.
+- Gorgias conformance test passed.
+- Diff whitespace check passed.
 
 ## Refactor notes
 

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/metric-cards",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "slug": "fixture-card",
+          "title": "Fixture metric card",
+          "category": "support",
+          "status": "published",
+          "definition_revised_at": "2026-01-01T00:00:00Z",
+          "public": true
+        }
+      ],
+      "meta": {
+        "next_cursor": null
+      }
+    }
+  }
+}

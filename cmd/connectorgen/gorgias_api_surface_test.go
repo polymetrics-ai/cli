@@ -64,11 +64,11 @@ func TestGorgiasAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 114 {
 		t.Fatalf("endpoints = %d, want 114", len(surface.Endpoints))
 	}
-	if covered != 4 {
-		t.Fatalf("covered endpoints = %d, want 4", covered)
+	if covered != 24 {
+		t.Fatalf("covered endpoints = %d, want 24", covered)
 	}
-	if operations != 110 {
-		t.Fatalf("operation endpoints = %d, want 110", operations)
+	if operations != 90 {
+		t.Fatalf("operation endpoints = %d, want 90", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -80,11 +80,11 @@ func TestGorgiasAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"PUT":    27,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"GET": 4,
+		"GET": 24,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE": 18,
-		"GET":    42,
+		"GET":    22,
 		"POST":   23,
 		"PUT":    27,
 	})
@@ -92,7 +92,7 @@ func TestGorgiasAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"admin_reverse_etl":     27,
 		"binary_read":           5,
 		"destructive_action":    20,
-		"direct_read":           42,
+		"direct_read":           22,
 		"disallowed":            1,
 		"sensitive_reverse_etl": 15,
 	})
