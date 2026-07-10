@@ -86,11 +86,11 @@ field_contract:
       - fallback_route
       - disposition_summary
       - disposition_url
-    primary_route_values: [coderabbit_auto, coderabbit_auto_incremental, coderabbit_manual_fallback, copilot_backup, human, blocked]
+    primary_route_values: [claude_auto, claude_manual, claude_manual_fallback, copilot_backup, human, blocked]
     fallback_route_values: [copilot_backup, human, none]
     coverage_route_values: [sub_pr, parent_pr_fallback, copilot_backup, blocked]
     status_values: [pending, clean, comments_addressed, skipped, blocked]
-  coderabbit:
+  claude:
     deprecated_alias_for: automated_review
   human_gates:
     type: list

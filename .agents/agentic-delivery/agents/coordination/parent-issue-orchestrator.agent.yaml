@@ -11,7 +11,7 @@ metadata:
   - parent-issue
   - sub-issues
   - stacked-pr
-  - coderabbit
+  - claude
   - copilot
 role: orchestration
 objective: Drive a large parent issue from parent PR creation through worker execution, integrated review, and human-ready
@@ -45,7 +45,7 @@ inputs:
   - .agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md
   - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
   - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
-  - .agents/agentic-delivery/workflows/coderabbit-review-loop.md
+  - .agents/agentic-delivery/workflows/claude-review-loop.md
 outputs:
   required:
   - parent branch and parent PR URL
@@ -82,8 +82,8 @@ workflow:
 - receive_worker_handoffs
 - verify_sub_pr_scope_checks_and_review_route
 - merge_or_block_sub_prs_to_parent_branch
-- observe_parent_pr_coderabbit_coverage_or_record_fallback
-- route_copilot_backup_when_coderabbit_is_blocked
+- observe_parent_pr_claude_coverage_or_record_fallback
+- route_copilot_backup_when_claude_is_blocked
 - dispatch_automated_review_disposition_work
 - update_orchestration_state
 - run_final_parent_verification
@@ -107,10 +107,10 @@ merge_policy:
   parent_pr_target: main
   parent_pr_merge: human approval required
 coverage_policy:
-  coderabbit_required: true
+  claude_required: true
   skipped_review_is_approval: false
-  fallback: parent PR review coverage after provisional integration, then Copilot backup when CodeRabbit is rate-limited or
-    unavailable
+  fallback: parent PR review coverage after provisional integration, then Copilot backup when a Claude run errors, its quota is
+    exhausted, or Claude is otherwise unavailable
 guardrails:
   input:
   - parent PR must exist before sub-issue execution is considered ready
@@ -127,8 +127,8 @@ guardrails:
   output:
   - shared parent artifacts are orchestrator-owned
   - no closing keywords in sub-PRs targeting parent branches
-  - skipped CodeRabbit review status is not approval
-  - CodeRabbit rate-limit comments are blockers unless a fallback route is recorded
+  - skipped Claude review status is not approval
+  - Claude run failures or quota exhaustion are blockers unless a fallback route is recorded
   - Copilot backup review is not approval
   - parent PR review coverage is required for integrated batches skipped on sub-PRs
 verification:

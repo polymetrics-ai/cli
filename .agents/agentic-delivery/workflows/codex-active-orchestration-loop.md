@@ -20,7 +20,7 @@ orchestrator context and workers. This file is a Codex adapter for the runtime-g
    - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
    - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
    - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
-   - `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
+   - `.agents/agentic-delivery/workflows/claude-review-loop.md`
    - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
    - `.agents/skills/caveman/SKILL.md`
 4. Build ready queue from parent issue and orchestration state.
@@ -53,7 +53,7 @@ At every parent orchestration turn, write one of:
 - `not_spawned_human_gate`: human approval needed.
 - `not_spawned_isolation_missing`: safe worker worktree or working directory is unavailable.
 - `not_spawned_runtime_capability_missing`: subagent tooling unavailable.
-- `not_spawned_review_blocked`: CodeRabbit/Copilot/human review route blocks integration.
+- `not_spawned_review_blocked`: Claude/Copilot/human review route blocks integration.
 - `not_spawned_verification_blocked`: checks or local gates block integration.
 
 Missing this decision is a workflow defect.

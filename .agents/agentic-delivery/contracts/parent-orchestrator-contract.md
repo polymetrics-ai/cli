@@ -24,7 +24,7 @@ The orchestrator must also read:
 - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
-- `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`
+- `.agents/agentic-delivery/workflows/claude-review-loop.md`
 - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
 - `.agents/agentic-delivery/references/gsd-pi-adapter.md`
 - `.agents/agentic-delivery/references/required-skills-routing.md`
@@ -45,7 +45,7 @@ Triggers:
 - user references stacked PRs, parent branch, or parent PR
 - parent PR is missing or lacks review coverage
 - sub-PR merge arbitration is needed
-- CodeRabbit/Copilot review coverage gap blocks integration
+- Claude/Copilot review coverage gap blocks integration
 - remaining sub-issues are ready or need dependency scheduling
 
 ## Responsibilities
@@ -60,8 +60,8 @@ The orchestrator owns:
 - spawning or assigning worker agents with bounded prompts that name the `/gsd ...` or `scripts/gsd prompt ...` command path and required Go/design skills from `required-skills-routing.md`
 - receiving worker handoffs
 - deciding whether a sub-PR can merge into the parent branch
-- requesting or observing parent PR CodeRabbit coverage after integrated batches
-- routing Copilot backup review when CodeRabbit is blocked by rate limits or unavailability
+- requesting or observing parent PR Claude coverage after integrated batches
+- routing Copilot backup review when Claude is blocked by rate limits or unavailability
 - launching or assigning automated review disposition work
 - declaring final parent PR readiness for human approval
 
@@ -155,7 +155,7 @@ A sub-PR may merge into the parent branch only when:
 - no requested-changes review is open
 - no human gate is triggered
 
-If CodeRabbit skips a non-`main` sub-PR, merge into the parent branch is only provisional. The
+If Claude skips a non-`main` sub-PR, merge into the parent branch is only provisional. The
 orchestrator must observe automatic parent PR review, or record an allowed fallback route such as
 Copilot backup or human review, for the integrated commit range before marking that sub-issue
 review-complete.
@@ -173,8 +173,8 @@ For every sub-issue, record:
 - head branch
 - head SHA
 - reviewed commit or commit range
-- primary route: `coderabbit_auto`, `coderabbit_auto_incremental`,
-  `coderabbit_manual_fallback`, `copilot_backup`, `human`, or `blocked`
+- primary route: `claude_auto`, `claude_auto_incremental`,
+  `claude_manual_fallback`, `copilot_backup`, `human`, or `blocked`
 - coverage route: `sub_pr`, `parent_pr_fallback`, `copilot_backup`, or `blocked`
 - fallback route: `copilot_backup`, `human`, or `none`
 - review status: `pending`, `clean`, `comments_addressed`, `skipped`, or `blocked`

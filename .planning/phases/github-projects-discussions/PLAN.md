@@ -25,11 +25,11 @@
 
 ## Review-Fix + Pi Orchestration Hardening Slice
 
-CodeRabbit reviewed PR #74 and surfaced actionable comments. In parallel, a pi runtime audit
+Claude reviewed PR #74 and surfaced actionable comments. In parallel, a pi runtime audit
 found the `.pi/` orchestration config has broken prompt-template placeholders and read-only
 subagents that lose search tools. This slice addresses both.
 
-### CodeRabbit disposition
+### Claude disposition
 
 - Accept: comments that are still-valid defects or quick wins (contradictory agent guardrails,
   non-portable examples, missing test coverage, generated-file noise, schema gaps, metadata
@@ -44,7 +44,7 @@ subagents that lose search tools. This slice addresses both.
    - Fix `.pi/prompts/*.md` to use pi `$@`/`$1` placeholders instead of `{{task}}`/`{{target}}`.
    - Document `--tools read,bash,edit,write,grep,find,ls,subagent` launch requirement in `.pi/README.md`.
    - Add `agentScope`, `confirmProjectAgents`, and per-worker `cwd` guidance to `pm-orchestrate.md`.
-   - Harden `pm-coderabbit-disposition.md` tools (drop `bash` from read-only disposition planner).
+   - Harden `pm-claude-review-disposition.md` tools (drop `bash` from read-only disposition planner).
    - Create `.agents/agentic-delivery/workflows/pi-active-orchestration-loop.md` adapter.
 2. **Agentic-delivery comments**:
    - Fix `gsd-universal-runtime-loop.md` fallback token (`failed_runtime_capability` → `not_spawned_*`).
@@ -66,7 +66,7 @@ subagents that lose search tools. This slice addresses both.
 6. **Verification + push**:
    - Re-run local gates (`make verify`, focused tests).
    - Push coherent green slices to `feat/40-github-projects-discussions`.
-   - Wait for automatic CodeRabbit incremental review; do not spam manual review commands.
+   - Wait for automatic Claude incremental review; do not spam manual review commands.
 
 ## Spawn Decision
 

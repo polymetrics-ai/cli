@@ -9,7 +9,7 @@
     ".agents/agentic-delivery/README.md",
     ".agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md",
     ".agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md",
-    ".agents/agentic-delivery/workflows/coderabbit-review-loop.md"
+    ".agents/agentic-delivery/workflows/claude-review-loop.md"
   ],
   "watcher": {
     "ignore": [

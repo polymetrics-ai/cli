@@ -101,8 +101,8 @@ skills:
       - reverse-etl
   review_disposition:
     capabilities:
-      - CodeRabbit automatic/manual review mode selection
-      - Copilot backup review routing when CodeRabbit is blocked
+      - Claude automatic/manual review mode selection
+      - Copilot backup review routing when Claude is blocked
       - review comment triage
       - disposition replies
       - follow-up issue routing
@@ -120,7 +120,7 @@ skills:
       - go-engineering
     required_for:
       - cli-surface
-      - coderabbit-review
+      - claude-review
       - automated-review-routing
       - parent-roadmap
       - stacked-pr
@@ -208,9 +208,9 @@ task_types:
   review:
     required_skill_groups: [api_architecture, security_review, go_tdd, review_disposition]
     primary_agent: adversarial-review-agent
-  coderabbit-review:
+  claude-review:
     required_skill_groups: [github_planning, security_review, go_tdd, review_disposition]
-    primary_agent: coderabbit-disposition-agent
+    primary_agent: claude-review-disposition-agent
   automated-review-routing:
     required_skill_groups: [github_planning, security_review, review_disposition]
-    primary_agent: coderabbit-disposition-agent
+    primary_agent: claude-review-disposition-agent

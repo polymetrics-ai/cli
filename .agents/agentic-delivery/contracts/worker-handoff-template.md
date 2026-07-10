@@ -55,7 +55,7 @@ Result: <pass | fail | blocked>
 
 ## Automated Review
 
-- Primary route: <coderabbit_auto | coderabbit_auto_incremental | coderabbit_manual_fallback | copilot_backup | human>
+- Primary route: <claude_auto | claude_auto_incremental | claude_manual_fallback | copilot_backup | human>
 - Fallback route: <copilot_backup | human | none>
 - Coverage route: <sub_pr | parent_pr_fallback | copilot_backup | blocked>
 - Coverage status: <pending | clean | comments_addressed | skipped | blocked>
@@ -77,7 +77,7 @@ Result: <pass | fail | blocked>
 - Compact handoff prose is allowed, but exact commands, code, test output, security warnings,
   destructive-action warnings, ordered safety gates, and approval gates must remain exact and
   unambiguous.
-- Do not claim CodeRabbit approval from a skipped-review status.
+- Do not claim Claude approval from a skipped-review status.
 - Do not claim GitHub Copilot review as approval.
 - Use `provisional_parent_integration` when parent PR fallback coverage is still pending.
 - Name blockers explicitly instead of weakening verification.

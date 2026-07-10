@@ -13,7 +13,7 @@ docs/plans/universal-programming-loop-prd.md, .planning/phases/github-projects-d
 
 ## Actions Taken
 
-Defined phase tasks, acceptance criteria, and verification gates; added review-fix slice after CodeRabbit review.
+Defined phase tasks, acceptance criteria, and verification gates; added review-fix slice after Claude review.
 
 ## Commands Run
 

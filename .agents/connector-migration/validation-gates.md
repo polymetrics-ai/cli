@@ -58,7 +58,7 @@ handoff.
 
 ## Review gate
 
-- CodeRabbit auto-review where the base branch is `main`; for stacked sub-PRs into the parent
-  branch where CodeRabbit is disabled, the parent PR must receive review coverage for the
+- Claude auto-review where the base branch is `main`; for stacked sub-PRs into the parent
+  branch where Claude is disabled, the parent PR must receive review coverage for the
   integrated range before the slice is considered integrated (see
   `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`).

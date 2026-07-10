@@ -29,4 +29,4 @@ Status: completed.
 ## Review Route
 
 Stacked sub-PR should target `feat/44-github-cli-parity` and use automatic checks/review only. Do
-not manually trigger CodeRabbit.
+not manually trigger Claude.

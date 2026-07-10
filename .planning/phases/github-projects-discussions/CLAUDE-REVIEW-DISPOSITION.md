@@ -1,6 +1,6 @@
-# CodeRabbit PR #74 Review Disposition
+# Claude PR #74 Review Disposition
 
-Review source: `coderabbitai` on PR #74 (run ID `4e53a71c-2046-449b-aa01-cc0e3bb97d55`).
+Review source: `claude` on PR #74 (run ID `4e53a71c-2046-449b-aa01-cc0e3bb97d55`).
 
 ## Disposition legend
 
@@ -55,13 +55,13 @@ Review source: `coderabbitai` on PR #74 (run ID `4e53a71c-2046-449b-aa01-cc0e3bb
 
 ---
 
-## Additional issues found during review-fix (not from CodeRabbit)
+## Additional issues found during review-fix (not from Claude)
 
 | File | Finding | Classification | Reason / Change |
 |------|---------|----------------|-----------------|
 | `.pi/prompts/*.md` | Prompt templates use `{{task}}`/`{{target}}` placeholders, which pi does not substitute. | **accepted** | Replaced with pi-supported `$@`/`$1` syntax and added `argument-hint` frontmatter. |
 | `.pi/README.md` | Launch command does not enable `grep`/`find`/`ls`, so read-only subagents lose search tools. | **accepted** | Documented `pi --tools read,bash,edit,write,grep,find,ls,subagent --approve`. |
-| `.pi/agents/pm-coderabbit-disposition.md` | Agent requests `bash` but contract says it must not post/resolve/push changes. | **accepted** | Removed `bash`; agent is now read-only and the orchestrator provides review records in the task. |
+| `.pi/agents/pm-claude-review-disposition.md` | Agent requests `bash` but contract says it must not post/resolve/push changes. | **accepted** | Removed `bash`; agent is now read-only and the orchestrator provides review records in the task. |
 | `.pi/prompts/pm-orchestrate.md` | No `agentScope`, `confirmProjectAgents`, or per-worker `cwd` guidance. | **accepted** | Added Pi runtime constraints section covering scope, confirmation, isolation, concurrency caps, and tool allowlist. |
 | `.agents/agentic-delivery/workflows/pi-active-orchestration-loop.md` | Missing Pi-specific orchestration adapter. | **accepted** | Created adapter mirroring `codex-active-orchestration-loop.md` with concrete Pi limits and rules. |
 
@@ -69,14 +69,14 @@ Review source: `coderabbitai` on PR #74 (run ID `4e53a71c-2046-449b-aa01-cc0e3bb
 
 ## Deferred items
 
-None. All CodeRabbit findings and pi-runtime audit findings were addressed in this slice.
+None. All Claude findings and pi-runtime audit findings were addressed in this slice.
 
 ## Resolution
 
 - All 14 inline review threads received disposition replies using the project template.
 - All 11 outside-diff / review-body findings were dispositioned in a top-level PR comment.
-- CodeRabbit resolved all review threads on PR #74 after `@coderabbitai resolve`.
-- Approval is disabled in this repository's CodeRabbit configuration, so final merge approval remains a human gate.
+- Claude resolved all review threads on PR #74 after `@claude resolve`.
+- Approval is disabled in this repository's Claude configuration, so final merge approval remains a human gate.
 
 ## Verification
 

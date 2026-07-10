@@ -46,7 +46,7 @@
 
 ## Review-fix verification
 
-- ✅ CodeRabbit nitpick fixes:
+- ✅ Claude nitpick fixes:
   ```bash
   go test ./internal/app -run 'TestRunReverseETL.*Destructive' -count=1
   go test ./internal/app -count=1
@@ -56,5 +56,5 @@
 ## Notes
 
 - First full `go test ./...` attempt exposed `TestScheduleCLI_Remove` touching real crontab and hanging on local `crontab -`. The test was corrected to use existing `PM_CRONTAB_FILE` redirection; rerun passed.
-- CodeRabbit review completed for commits `a7a939d..6fc25820`; two nitpicks were accepted and fixed in a follow-up commit.
+- Claude review completed for commits `a7a939d..6fc25820`; two nitpicks were accepted and fixed in a follow-up commit.
 - No live GitHub credentials or external writes were used.
