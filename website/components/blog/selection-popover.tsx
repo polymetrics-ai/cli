@@ -151,12 +151,12 @@ export function SelectionPopover() {
     <div
       role="toolbar"
       aria-label="Annotate selection"
-      className="corner-box-corners annotation-popover-enter fixed z-50 flex border border-line-cta bg-surface-bg shadow-[4px_4px_0_0_#c0d6c8]"
+      className="corner-box-corners annotation-popover-enter fixed z-50 flex border border-line-cta bg-surface-bg shadow-[0_18px_60px_rgba(12,31,23,0.16)]"
       style={{ top, left }}
     >
       <button type="button" className={buttonCls} onClick={handleBookmark}>
         <Bookmark
-          className={`h-3.5 w-3.5 ${isDraftBookmarked ? 'fill-[#34d399] text-line-cta' : ''}`}
+          className={`h-3.5 w-3.5 ${isDraftBookmarked ? 'fill-surface-cta-primary text-line-cta' : ''}`}
           aria-hidden="true"
         />
         {isDraftBookmarked ? 'Saved' : 'Bookmark'}

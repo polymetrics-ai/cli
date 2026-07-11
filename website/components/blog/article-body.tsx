@@ -33,7 +33,7 @@ export function ArticleBody({
 
   return (
     <AnnotationsProvider slug={slug}>
-      <div ref={gridRef} className="relative grid gap-10 lg:grid-cols-[minmax(0,1fr)_14rem]">
+      <div ref={gridRef} className="relative grid gap-10 xl:grid-cols-[minmax(0,1fr)_14rem]">
         <div className="min-w-0" data-annotation-root>
           {sections.map((section, index) => (
             <section key={section.heading} id={sectionId(index)} className="mb-12 scroll-mt-24">
@@ -97,7 +97,7 @@ export function ArticleBody({
           ))}
         </div>
 
-        <aside className="lg:self-start">
+        <aside className="xl:self-start">
           <CornerBox className="p-4">
             <p className="font-mono text-[10px] uppercase tracking-widest text-text-disabled">
               Summary

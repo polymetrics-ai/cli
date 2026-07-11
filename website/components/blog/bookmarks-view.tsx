@@ -26,7 +26,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           <Bookmark className="h-3.5 w-3.5 text-line-cta" aria-hidden="true" />
           Private library
         </span>
-        <h1 className="mt-4 font-square text-[44px] font-semibold leading-[1] text-text-primary">
+        <h1 className="mt-4 font-analog text-[44px] leading-[1] text-text-primary">
           Bookmarks
         </h1>
         <p className="mt-4 max-w-[52ch] text-[14px] leading-relaxed text-text-tertiary">
@@ -141,7 +141,7 @@ export function BookmarksView() {
                     <CornerBox key={bookmark.id} hoverStripes className="group/bm relative">
                       <div className="flex items-start gap-3 p-3.5">
                         <Link href={`/blog/${slug}?b=${bookmark.id}`} className="min-w-0 flex-1">
-                          <blockquote className="line-clamp-2 border-l-2 border-[#34d399] bg-surface-1 px-3 py-1.5 text-[13px] italic leading-relaxed text-text-secondary">
+                          <blockquote className="line-clamp-2 border-l-2 border-surface-cta-primary bg-surface-1 px-3 py-1.5 text-[13px] italic leading-relaxed text-text-secondary">
                             {bookmark.anchor.exact}
                           </blockquote>
                           <span className="mt-2 block font-mono text-[10px] uppercase tracking-widest text-text-disabled">
@@ -152,7 +152,7 @@ export function BookmarksView() {
                           type="button"
                           aria-label="Remove bookmark"
                           onClick={() => void remove(bookmark.id)}
-                          className="shrink-0 border border-transparent p-1.5 text-text-disabled transition-colors hover:border-line-structure hover:text-[#b42318]"
+                          className="shrink-0 border border-transparent p-1.5 text-text-disabled transition-colors hover:border-line-structure hover:text-destructive"
                         >
                           <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                         </button>

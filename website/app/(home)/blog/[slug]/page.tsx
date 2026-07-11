@@ -3,8 +3,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Calendar, Clock } from 'lucide-react';
 import { BLOG_POSTS, blogUrl, getBlogPost } from '@/lib/blog';
-import { HomeSidebar } from '@/components/home/home-sidebar';
-import { OnPageTocAside } from '@/components/ui/on-page-toc';
 import { CornerBox } from '@/components/ui/corner-box';
 import { ArticleBody } from '@/components/blog/article-body';
 
@@ -49,14 +47,6 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound();
 
   const related = BLOG_POSTS.filter((item) => item.slug !== post.slug).slice(0, 2);
-  const tocItems = [
-    { id: 'article-overview', label: 'Overview' },
-    ...post.sections.map((section, index) => ({
-      id: sectionId(index),
-      label: section.heading,
-    })),
-    { id: 'read-next', label: 'Read next' },
-  ];
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -79,11 +69,8 @@ export default async function BlogPostPage({ params }: Props) {
   };
 
   return (
-    <div className="flex mx-auto w-full max-w-[95rem] overflow-clip">
-      <HomeSidebar />
-
-      <main className="flex-1 min-w-0 pattern-bg overflow-hidden pb-8 xl:px-5 2xl:px-10">
-        <article className="relative z-[1] mx-auto w-full px-4 py-12 sm:px-8 md:px-0 md:max-w-[680px] md:py-20 xl:max-w-[840px]">
+    <main className="mx-auto w-full max-w-[95rem] px-6 py-16 md:py-20">
+      <article className="mx-auto w-full max-w-[840px]">
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -111,7 +98,7 @@ export default async function BlogPostPage({ params }: Props) {
                 {post.readingTime}
               </span>
             </div>
-            <h1 className="max-w-[13ch] font-square text-[48px] font-semibold leading-[1] text-text-primary md:text-[76px]">
+            <h1 className="max-w-[13ch] font-analog text-[48px] leading-[1] text-text-primary md:text-[76px]">
               {post.title}
             </h1>
             <p className="mt-6 max-w-[72ch] text-[17px] leading-relaxed text-text-tertiary">
@@ -157,10 +144,7 @@ export default async function BlogPostPage({ params }: Props) {
               ))}
             </div>
           </footer>
-        </article>
-      </main>
-
-      <OnPageTocAside className="home-aside-panel" items={tocItems} />
-    </div>
+      </article>
+    </main>
   );
 }

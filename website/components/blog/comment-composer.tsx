@@ -39,7 +39,7 @@ export function CommentComposer() {
 
   return createPortal(
     <div
-      className="corner-box-corners annotation-popover-enter fixed z-50 border border-line-cta bg-surface-bg shadow-[4px_4px_0_0_#c0d6c8]"
+      className="corner-box-corners annotation-popover-enter fixed z-50 border border-line-cta bg-surface-bg shadow-[0_18px_60px_rgba(12,31,23,0.16)]"
       style={{ top, left, width: WIDTH }}
       role="dialog"
       aria-label="New note"
@@ -56,7 +56,7 @@ export function CommentComposer() {
     >
       <div className="border-b border-line-structure px-4 py-3">
         <p className="font-mono text-[10px] uppercase tracking-widest text-text-disabled">New note</p>
-        <blockquote className="mt-2 line-clamp-2 border-l-2 border-[#34d399] bg-surface-1 px-3 py-1.5 text-[13px] italic leading-relaxed text-text-tertiary">
+        <blockquote className="mt-2 line-clamp-2 border-l-2 border-surface-cta-primary bg-surface-1 px-3 py-1.5 text-[13px] italic leading-relaxed text-text-tertiary">
           {draft.anchor.exact}
         </blockquote>
       </div>
@@ -73,7 +73,7 @@ export function CommentComposer() {
         <div className="mt-2 flex items-center justify-between">
           <span
             className={`font-mono text-[10px] tracking-wider ${
-              remaining < 100 ? 'text-[--destructive]' : 'text-text-disabled'
+              remaining < 100 ? 'text-destructive' : 'text-text-disabled'
             }`}
           >
             {body.length}/{BODY_MAX}
