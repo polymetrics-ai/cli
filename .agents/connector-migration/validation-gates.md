@@ -41,6 +41,13 @@ those intermediate sub-PRs only, the connectorgen validate gate is staged:
   140, +deletes → 168) and zero rows for operations the research doc does not contain. The
   parent-finalize gate fails if the final manifest row count differs from the research doc's
   operation count.
+- Single-record GET (`/{id}`) endpoints are covered by the **same stream** as their list endpoint
+  (`covered_by {stream}` — identical record shape; every record retrievable via the stream). Do
+  NOT de-scope them into `excluded` entries and do NOT require `covered_by.direct_read` CLI
+  machinery for them — conformance only demands an implemented direct_read command when a row
+  explicitly uses `covered_by.direct_read`. A research doc labeling such endpoints
+  `direct_read` describes the provider's access pattern, not a distinct implementation obligation.
+  Changing a sub-issue's accepted operation scope is ALWAYS a human-gated decision.
 - Every other gate in this document applies unchanged to every slice.
 - The final slice / parent-finalize gate is absolute: `findings: []` and `warnings: []` for the
   full defs tree, plus `make verify`, smoke, and certify. The parent PR into `main` remains
