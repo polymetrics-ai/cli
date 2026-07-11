@@ -435,9 +435,9 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	}
 	var result etlExecutionResult
 	if materializer, ok := destination.(connectors.LocalWarehouseMaterializer); ok && materializer.MaterializesLocalWarehouse() {
-		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destRuntime, req.Stream, stream, mode, batchSize)
+		result, err = a.runWarehouseETL(ctx, runID, conn, source, sourceRuntime, destRuntime, req.Stream, stream, mode, batchSize, req.Limit)
 	} else {
-		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, req.Stream, stream, mode, batchSize)
+		result, err = a.runConnectorETL(ctx, runID, conn, source, sourceRuntime, destination, destRuntime, req.Stream, stream, mode, batchSize, req.Limit)
 	}
 	if err != nil {
 		return a.failRun(runID, err)
@@ -445,7 +445,7 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	return a.completeRun(runID, result)
 }
 
-func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize int) (etlExecutionResult, error) {
+func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection, source connectors.Connector, sourceRuntime connectors.RuntimeConfig, destination connectors.Connector, destRuntime connectors.RuntimeConfig, streamName string, stream StreamConfig, mode SyncMode, batchSize, limit int) (etlExecutionResult, error) {
 	if mode.IsDeduped() {
 		return etlExecutionResult{}, fmt.Errorf("sync mode %s requires the local warehouse destination in this dependency-free implementation", mode.Name)
 	}
@@ -508,7 +508,8 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 		Stream: streamName,
 		Config: readConfig,
 		State:  map[string]string{"cursor": prior.Cursor, "generation_id": strconv.FormatInt(generationID, 10)},
-	}, func(record connectors.Record) error {
+		Limit:  limit,
+	}, connectors.LimitEmitter(limit, func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
 		if stream.CursorField != "" {
@@ -537,8 +538,8 @@ func (a *App) runConnectorETL(ctx context.Context, runID string, conn Connection
 			return flush(false)
 		}
 		return nil
-	})
-	if err != nil {
+	}))
+	if err := connectors.IgnoreReadLimit(err); err != nil {
 		return result, err
 	}
 	if err := flush(true); err != nil {

@@ -355,6 +355,14 @@ func cliInfoFrom(res CLIResult) CLIStageInfo {
 	return CLIStageInfo{ArgvRedacted: res.ArgvRedacted, ExitCode: res.ExitCode, Kind: res.Kind}
 }
 
+func (rc *runContext) liveETLRunArgs(connection, stream string) []string {
+	args := []string{"etl", "run", "--connection", connection, "--stream", stream}
+	if rc.opts.Limit > 0 {
+		args = append(args, "--limit", fmt.Sprint(rc.opts.Limit))
+	}
+	return append(args, "--json")
+}
+
 func effectiveCredentialConfig(connector string, config map[string]string) map[string]string {
 	out := make(map[string]string, len(config)+1)
 	for k, v := range config {
@@ -969,7 +977,7 @@ func stageFullRefreshAppend(rc *runContext, rep *Report) error {
 	var capturePath string
 
 	stage := recordStage(rc, rep, "etl_full_refresh_append", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("etl", "run", "--connection", rc.liveConnectionName(), "--stream", stream, "--json")
+		res := rc.run(rc.liveETLRunArgs(rc.liveConnectionName(), stream)...)
 		passed, errMsg := assertKind(rc, "etl_full_refresh_append", res, "ETLRun", 0)
 		if !passed {
 			if liveStreamUnavailable(rc, res) {
@@ -1228,7 +1236,7 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 	})
 
 	stage := recordStage(rc, rep, "etl_incremental_append", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("etl", "run", "--connection", connName, "--stream", stream, "--json")
+		res := rc.run(rc.liveETLRunArgs(connName, stream)...)
 		passed, errMsg := assertKind(rc, "etl_incremental_append", res, "ETLRun", 0)
 		if !passed {
 			if liveStreamUnavailable(rc, res) {
@@ -1262,7 +1270,7 @@ func stageResume(rc *runContext, rep *Report) error {
 	stream := rc.streamName()
 
 	recordStage(rc, rep, "resume", 2, func() (bool, CLIStageInfo, string) {
-		res := rc.run("etl", "run", "--connection", rc.incrementalConnection, "--stream", stream, "--json")
+		res := rc.run(rc.liveETLRunArgs(rc.incrementalConnection, stream)...)
 		passed, errMsg := assertKind(rc, "resume", res, "ETLRun", 0)
 		if !passed {
 			return false, cliInfoFrom(res), errMsg

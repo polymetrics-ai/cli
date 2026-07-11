@@ -84,3 +84,37 @@
   - `cd website && pnpm run gen:website-data` rerun idempotency — PASS; `git diff --check` — PASS/no output.
 - Not run: `make verify` because `verify` includes `smoke-no-build`, which executes `./pm reverse run`; this correction forbids reverse ETL/destructive execution.
 - Safety: no `TWENTY_API_KEY`, no live `api.twenty.com`, placeholder env only for localhost certify, no reverse ETL/destructive external execution, no new deps.
+
+## Correction ledger — 2026-07-12 REVIEW-TURN65 / CORRECT-TURN66
+- Required reread complete: dispatch prompt, `AGENTS.md`, issue #284 body/acceptance, issue-agent contract, GSD universal runtime loop, GSD Pi adapter, required-skills routing, CLI help/docs/website parity, connector validation gates, S7 `PLAN.md`/`TDD-LEDGER.md`/`VERIFICATION.md`/`RUN-STATE.json`/`SUMMARY.md`, connector migration docs/design, REVIEW-TURN65/VERIFY-TURN64, worker handoff template.
+- GSD adapter: `scripts/gsd doctor` PASS; `scripts/gsd prompt programming-loop init --phase twenty-s7-fixtures-certify --dry-run` FAIL (`scripts/gsd: unknown GSD command: programming-loop`); manual fallback prompt captured with `scripts/gsd prompt gsd-quick "twenty S7 review correction TURN66 limit cap issue #284"`.
+- Skills loaded: `gsd-core`; `caveman`; go-implementation fallback and `go-rules.md`; `golang-how-to`; `golang-cli`; `golang-testing`; `golang-error-handling`; `golang-security`; `golang-safety`; `golang-design-patterns`; `golang-structs-interfaces`; `golang-context`; `golang-concurrency`; `golang-documentation`; `golang-lint`.
+- Rule notes: go-rules #1/#2/#5/#7 (checked/wrapped/lowercase errors), #15/#37/#38 (zero values and JSON contracts), #40-#43 (CLI stdout/stderr/JSON/help); `golang-testing` #1/#5 (named behavior tests); `golang-security` trust-boundary/no-secrets; `golang-safety` #2/#7; `golang-design-patterns` #20/#21 no new deps/testability; `golang-context` #1/#2 propagation; `golang-concurrency` #1/#7 cancellation-aware loops.
+- Planned red tests before production edits:
+  - app warehouse ETL: `RunETLRequest{Limit: 2}` caps source reads/loaded rows and forwards `ReadRequest.Limit`.
+  - app connector-destination ETL: same cap with non-warehouse destination and bounded batch writes.
+  - certify: live ETL stage argv for `--limit 7` includes `--limit 7` for `etl_full_refresh_append`, `etl_incremental_append`, and `resume`.
+- CLI parity note: no public help/docs change planned; `pm etl run --limit` is hidden/internal pass-through for certify safety, while `pm connectors certify --limit` remains documented/exposed.
+- Red evidence captured before production edits:
+  - `go test ./internal/app -run 'TestRunETLLimitCapsWarehouseRead|TestRunETLLimitCapsConnectorDestinationRead' -count=1` — FAIL/build failed: `unknown field Limit in struct literal of type RunETLRequest`.
+  - `go test ./internal/connectors/certify -run TestSourceStagesPassLimitToLiveETLRuns -count=1` — FAIL: `etl_full_refresh_append argv = "pm etl run --connection cert_live --stream customers --json --root ...", want --limit 1`.
+- Green implementation:
+  - `RunETLRequest.Limit` carries an optional cap through `pm etl run --limit` into app ETL.
+  - Warehouse and connector-destination ETL reads pass `ReadRequest.Limit`, wrap emitters with `connectors.LimitEmitter`, and treat `ErrReadLimitReached` as successful early stop via `connectors.IgnoreReadLimit` before final flush/checkpoint.
+  - Certify live ETL stages (`etl_full_refresh_append`, `etl_incremental_append`, `resume`) invoke `pm etl run ... --limit <Options.Limit>`; capture replay stages keep replaying the bounded capture.
+- Green evidence:
+  - `gofmt -l cmd internal` — PASS/clean.
+  - `go test ./internal/app -run 'TestRunETLLimitCapsWarehouseRead|TestRunETLLimitCapsConnectorDestinationRead' -count=1` — PASS: `ok polymetrics.ai/internal/app 2.394s`.
+  - `go test ./internal/connectors/certify -run TestSourceStagesPassLimitToLiveETLRuns -count=1` — PASS: `ok polymetrics.ai/internal/connectors/certify 16.365s`.
+  - `go test ./internal/app -run 'TestRunETLLimitCapsWarehouseRead|TestRunETLLimitCapsConnectorDestinationRead|TestRunETLWritesBoundedBatches' -count=1` — PASS: `ok polymetrics.ai/internal/app 3.461s`.
+  - `go test ./internal/connectors/certify -run 'TestSourceStagesPassLimitToLiveETLRuns|TestSourceStagesAgainstSample' -count=1` — PASS: `ok polymetrics.ai/internal/connectors/certify 31.688s`.
+  - `go test ./internal/app -count=1` — PASS: `ok polymetrics.ai/internal/app 17.506s`.
+  - `go run ./cmd/connectorgen validate internal/connectors/defs --json` — PASS: `findings=[]`, `warnings=[]`, `connectors_checked=548`.
+  - `go vet ./...` — PASS/no output.
+  - `go build ./cmd/pm` — PASS/no output.
+  - `go test ./...` — PASS (slow packages: `internal/cli 153.828s`, `internal/connectors/certify 362.625s`, `internal/app 17.344s`).
+  - `./pm help connectors certify` — PASS/exit 0 before localhost certify.
+  - Credential-free localhost `pm connectors certify twenty --limit 1` with placeholder env only — PASS: `.report.passed=true`, `read_records=1`, `stream=attachments`.
+  - `git diff --check` — PASS/no output; phase `RUN-STATE.json` parsed with `jq`.
+- Not run: `make verify` because `verify` includes `smoke-no-build`, which executes `./pm reverse run`; this correction forbids reverse ETL/destructive execution.
+- Safety: no `TWENTY_API_KEY`, no live `api.twenty.com`, placeholder env only for localhost certify, no reverse ETL/destructive external execution, no new deps.

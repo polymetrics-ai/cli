@@ -73,6 +73,7 @@ type RunETLRequest struct {
 	Connection string `json:"connection"`
 	Stream     string `json:"stream"`
 	BatchSize  int    `json:"batch_size,omitempty"`
+	Limit      int    `json:"limit,omitempty"`
 }
 
 type Run struct {

@@ -10,7 +10,8 @@ import (
 )
 
 type streamingSource struct {
-	total int
+	total    int
+	requests []connectors.ReadRequest
 }
 
 func (s *streamingSource) Name() string { return "streaming_source" }
@@ -33,6 +34,7 @@ func (s *streamingSource) Catalog(ctx context.Context, cfg connectors.RuntimeCon
 }
 
 func (s *streamingSource) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	s.requests = append(s.requests, req)
 	for i := 0; i < s.total; i++ {
 		if err := emit(connectors.Record{"id": i}); err != nil {
 			return err
@@ -77,7 +79,8 @@ func (d *batchDestination) Write(ctx context.Context, req connectors.WriteReques
 	return connectors.WriteResult{RecordsWritten: len(records)}, nil
 }
 
-func TestRunETLWritesBoundedBatches(t *testing.T) {
+func setupStreamingETLApp(t *testing.T, source *streamingSource, dest *batchDestination) (*App, string) {
+	t.Helper()
 	ctx := context.Background()
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
@@ -87,8 +90,6 @@ func TestRunETLWritesBoundedBatches(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	source := &streamingSource{total: 5}
-	dest := &batchDestination{}
 	registry := connectors.NewRegistry()
 	registry.Register(source)
 	registry.Register(dest)
@@ -110,8 +111,16 @@ func TestRunETLWritesBoundedBatches(t *testing.T) {
 	}); err != nil {
 		t.Fatal(err)
 	}
+	return a, "source_to_dest"
+}
 
-	run, err := a.RunETL(ctx, RunETLRequest{Connection: "source_to_dest", Stream: "records", BatchSize: 2})
+func TestRunETLWritesBoundedBatches(t *testing.T) {
+	ctx := context.Background()
+	source := &streamingSource{total: 5}
+	dest := &batchDestination{}
+	a, connection := setupStreamingETLApp(t, source, dest)
+
+	run, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 2})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -123,5 +132,32 @@ func TestRunETLWritesBoundedBatches(t *testing.T) {
 	}
 	if run.Checkpoint["records_read"] != "5" || run.Checkpoint["batches"] != "3" {
 		t.Fatalf("missing checkpoint metadata: %+v", run.Checkpoint)
+	}
+}
+
+func TestRunETLLimitCapsConnectorDestinationRead(t *testing.T) {
+	ctx := context.Background()
+	source := &streamingSource{total: 5}
+	dest := &batchDestination{}
+	a, connection := setupStreamingETLApp(t, source, dest)
+
+	run, err := a.RunETL(ctx, RunETLRequest{Connection: connection, Stream: "records", BatchSize: 10, Limit: 2})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(source.requests) != 1 {
+		t.Fatalf("source read requests = %d, want 1", len(source.requests))
+	}
+	if source.requests[0].Limit != 2 {
+		t.Fatalf("source ReadRequest.Limit = %d, want 2", source.requests[0].Limit)
+	}
+	if got, want := dest.batches, []int{2}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("destination batches = %v, want %v", got, want)
+	}
+	if run.RecordsRead != 2 || run.RecordsLoaded != 2 || run.BatchCount != 1 {
+		t.Fatalf("unexpected capped run counts: %+v", run)
+	}
+	if run.Checkpoint["records_read"] != "2" || run.Checkpoint["batches"] != "1" {
+		t.Fatalf("missing capped checkpoint metadata: %+v", run.Checkpoint)
 	}
 }

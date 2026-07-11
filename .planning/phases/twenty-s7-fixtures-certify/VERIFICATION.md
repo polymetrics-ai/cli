@@ -69,3 +69,23 @@ Status: corrective VERIFY-TURN59 pass in progress. Original S7 fixture gates wer
 - Temp certify workdirs created with placeholder env were removed.
 - No reverse ETL execution against Twenty; write fixtures are replay/capture request-shape only.
 - No new dependencies.
+
+## Correction checklist — 2026-07-12 REVIEW-TURN65 / CORRECT-TURN66
+- [x] `scripts/gsd doctor` — PASS; programming-loop dry-run unavailable, manual fallback recorded.
+- [x] Red focused tests for live ETL limit cap before production edits — FAIL/build and FAIL/missing `--limit` argv recorded in `TDD-LEDGER.md`.
+- [x] `./pm help connectors certify` before any `pm connectors certify` command — PASS/exit 0.
+- [x] `gofmt -w cmd internal` and `gofmt -l cmd internal` clean — PASS/no output.
+- [x] Focused app tests proving `RunETLRequest.Limit` caps warehouse and connector-destination reads — PASS: `ok polymetrics.ai/internal/app 2.394s`; broader focused app PASS `3.461s`; full app PASS `17.506s`.
+- [x] Focused certify test proving live ETL stages invoke `pm etl run ... --limit <N>` — PASS: `ok polymetrics.ai/internal/connectors/certify 16.365s`; broader focused certify PASS `31.688s`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs --json` with `findings=[]`, `warnings=[]` — PASS, `connectors_checked=548`.
+- [x] `go vet ./...` — PASS/no output.
+- [x] `go build ./cmd/pm` — PASS/no output.
+- [x] `go test ./...` — PASS (slow packages: `internal/cli 153.828s`, `internal/connectors/certify 362.625s`, `internal/app 17.344s`).
+- [x] Credential-free localhost `pm connectors certify twenty --limit 1` if safe; placeholder env only, no live `api.twenty.com` — PASS: `.report.passed=true`, `read_records=1`, `stream=attachments`.
+- [x] `git diff --check` and phase JSON parse — PASS/no output.
+- [ ] `make verify` only if feasible without reverse ETL; otherwise keep reverse-ETL safety blocker — NOT RUN; `verify` includes `smoke-no-build` executing `./pm reverse run`.
+
+## Safety notes — TURN66
+- No secrets or `TWENTY_API_KEY`; no live `api.twenty.com`.
+- No reverse ETL/destructive external execution.
+- No new dependencies; no quality-gate weakening.

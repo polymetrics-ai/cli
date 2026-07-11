@@ -28,3 +28,5 @@ Blocked/not run:
 - `make verify` not run because it executes `./pm reverse run` through `smoke-no-build`; correction forbids reverse ETL execution.
 
 Safety: no secrets, no live Twenty API, no reverse ETL execution, no new dependencies.
+
+TURN66 correction delivered: `pm connectors certify <name> --limit N` now passes `--limit` into live ETL stages, and app ETL enforces `RunETLRequest.Limit` for both warehouse and connector destinations with `LimitEmitter`/`IgnoreReadLimit`. Red app/certify tests failed before code; green gates include focused app/certify, full app, `go test ./...`, connectorgen validate, vet, build, gofmt, diff-check, and credential-free localhost `pm connectors certify twenty --limit 1` with `read_records=1`. `make verify` still not run because it executes reverse ETL smoke. Safety unchanged: no secrets, no live Twenty API, no reverse ETL, no deps.

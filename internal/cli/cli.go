@@ -579,10 +579,15 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		if err != nil {
 			return err
 		}
+		limit, err := parseIntFlag("limit", flags.first("limit"), 0)
+		if err != nil {
+			return err
+		}
 		run, err := a.RunETL(ctx, app.RunETLRequest{
 			Connection: flags.first("connection"),
 			Stream:     flags.first("stream"),
 			BatchSize:  batchSize,
+			Limit:      limit,
 		})
 		if err != nil {
 			return err
