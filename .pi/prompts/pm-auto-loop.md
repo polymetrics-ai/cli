@@ -100,3 +100,15 @@ reconciled `RUN.json`/`ORCHESTRATION-STATE.json` and stating the current stage p
 - Credentials PRE-PROVISIONED in the loop environment are standing operator authorization for
   transient, env-only, read-only use; check `[ -n "$VAR" ]` before declaring a secret_change gate.
   Printing, storing, or committing a secret value remains forbidden.
+
+## Condensed findings & trace discipline (context economy)
+
+- NEVER paste a full transcript, diff, or large file into your own context or a subagent prompt.
+  Subagents return condensed findings; durable detail goes to artifacts. Read
+  `.planning/auto-loop/trace/INDEX.md` first, then only the specific digests you need; the raw
+  session JSONL (path inside every digest) is layer 2, opened only when a digest is insufficient.
+- Every `subagent`/worker dispatch MUST carry the 4-field contract: **objective** (what done looks
+  like), **output format** (the handoff shape), **tool guidance** (which tools/sources to use),
+  **boundaries** (write scope, hard stops). The Shepherd scores dispatches against these fields.
+- After completing a turn's work, run `scripts/loop-trace.sh distill` so the turn's digest lands
+  in the trace store for the validator, the next RECONCILE, and the human.
