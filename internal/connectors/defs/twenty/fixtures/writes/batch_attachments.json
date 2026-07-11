@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/attachments"
+    "path": "/rest/batch/attachments",
+    "body_exact": [
+      {
+        "name": "Fixture name 1"
+      }
+    ]
   }
 }

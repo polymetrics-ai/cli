@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/rest/timelineActivities/delete_timeline_activities_fixture_id"
+    "path": "/rest/timelineActivities/delete_timeline_activities_fixture_id",
+    "no_body": true
   }
 }

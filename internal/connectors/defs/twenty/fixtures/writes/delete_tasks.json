@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/rest/tasks/delete_tasks_fixture_id"
+    "path": "/rest/tasks/delete_tasks_fixture_id",
+    "no_body": true
   }
 }

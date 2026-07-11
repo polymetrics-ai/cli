@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/calendarChannelEventAssociations"
+    "path": "/rest/batch/calendarChannelEventAssociations",
+    "body_exact": [
+      {
+        "calendarChannelId": "calendarChannelId_fixture_1"
+      }
+    ]
   }
 }

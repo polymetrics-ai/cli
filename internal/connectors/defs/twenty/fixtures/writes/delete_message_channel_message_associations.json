@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/rest/messageChannelMessageAssociations/delete_message_channel_message_associations_fixture_id"
+    "path": "/rest/messageChannelMessageAssociations/delete_message_channel_message_associations_fixture_id",
+    "no_body": true
   }
 }

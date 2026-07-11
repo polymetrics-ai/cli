@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/calendarEventParticipants"
+    "path": "/rest/batch/calendarEventParticipants",
+    "body_exact": [
+      {
+        "displayName": "Fixture displayName 1"
+      }
+    ]
   }
 }

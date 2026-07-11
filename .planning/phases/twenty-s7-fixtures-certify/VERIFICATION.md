@@ -46,6 +46,23 @@ Status: corrective VERIFY-TURN59 pass in progress. Original S7 fixture gates wer
 ## Not run
 - `make verify` — NOT RUN. Reason: `verify` depends on `smoke`, and `smoke-no-build` runs `./pm reverse run "$PLAN_ID" --approve "$APPROVAL"`; this correction forbids reverse ETL execution and destructive/write execution. Relied on focused local gates plus existing PR CI verify context.
 
+## Correction checklist — 2026-07-12 REVIEW-TURN62 / CORRECT-TURN63
+- [x] `./pm help connectors certify` before any `pm connectors certify` command — PASS; fresh `/tmp/twenty-s7-turn63-pm help connectors certify` also PASS.
+- [x] Red focused tests for F1-F3 before production edits — PASS/recorded in `TDD-LEDGER.md` (certify assertions failed; conformance build failed for missing exact/no-body support).
+- [x] `gofmt -w cmd internal` and `gofmt -l cmd internal` clean — PASS (`gofmt clean`).
+- [x] Focused certify tests covering no-`--stream` default and `fixture_conformance` Twenty execution — PASS: `ok polymetrics.ai/internal/connectors/certify 44.503s`.
+- [x] Focused conformance tests covering exact `body_exact`, top-level arrays, `no_body`, and Twenty batch/delete fixture assertions — PASS: `ok polymetrics.ai/internal/connectors/conformance 1.183s`.
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/twenty|TestTwentyFixturesCoverAllStreamsAndWrites' -count=1` — covered in conformance focused/package runs; full package PASS: `ok polymetrics.ai/internal/connectors/conformance 9.392s`.
+- [x] `go test ./internal/connectors/certify -count=1` — PASS: `ok polymetrics.ai/internal/connectors/certify 334.029s`.
+- [x] `go test ./...` — PASS (slow packages included `internal/cli 151.975s`, `internal/connectors/certify 340.621s`).
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs --json` with `findings=[]`, `warnings=[]` — PASS (`connectorgen findings=0 warnings=0`).
+- [x] `go vet ./...` — PASS/no output.
+- [x] `go build ./cmd/pm` — PASS/no output; fresh `/tmp/twenty-s7-turn63-pm` built for localhost certify.
+- [x] Credential-free localhost `pm connectors certify twenty` non-full and `--full --skip write` if safe; placeholder env only, no live `api.twenty.com` — PASS no `--stream`; both exit 0 with `.report.passed=true` and `fixture_conformance.passed=true`.
+- [x] Website generated data after `docs.md` change — PASS: `cd website && pnpm run gen:website-data`; rerun idempotent.
+- [x] `git diff --check` — PASS/no output.
+- [ ] `make verify` only if feasible without reverse ETL; otherwise keep blocker because `smoke-no-build` executes `./pm reverse run` — NOT RUN, safety blocker unchanged.
+
 ## Safety notes
 - No live Twenty API contacted.
 - No real credentials requested, printed, stored, or summarized.

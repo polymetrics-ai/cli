@@ -49,10 +49,11 @@ Stream fixtures mirror Twenty's `data.<object>` envelope and cursor-style `pageI
 Write fixtures exercise create, update, batch, and delete request construction against the replay
 capture server only; they do not execute live reverse ETL writes.
 
-Local conformance is fixture-backed and safe to run without secrets. Live `pm connectors certify
-twenty` remains credential-gated and currently needs certify-harness follow-up for Twenty's camelCase
-`updatedAt` cursor fields and longest stream names before it can be treated as a green live certificate.
-Reverse ETL still must follow plan, preview, approval, and execute before any live mutation.
+Local conformance is fixture-backed, runs without secrets, and is included in credential-free
+certification when the Twenty bundle fixtures are available. Live `pm connectors certify twenty`
+remains credential-gated for real Twenty tenants; use placeholder env values only with localhost
+fixture replay. Reverse ETL still must follow plan, preview, approval, and execute before any live
+mutation.
 
 ## Parity-deviation ledger
 

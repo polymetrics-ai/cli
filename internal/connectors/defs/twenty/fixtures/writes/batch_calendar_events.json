@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/calendarEvents"
+    "path": "/rest/batch/calendarEvents",
+    "body_exact": [
+      {
+        "callRecorderPreference": "Fixture callRecorderPreference 1"
+      }
+    ]
   }
 }

@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/rest/workspaceMembers/delete_workspace_members_fixture_id"
+    "path": "/rest/workspaceMembers/delete_workspace_members_fixture_id",
+    "no_body": true
   }
 }

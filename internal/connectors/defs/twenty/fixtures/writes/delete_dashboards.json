@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/rest/dashboards/delete_dashboards_fixture_id"
+    "path": "/rest/dashboards/delete_dashboards_fixture_id",
+    "no_body": true
   }
 }

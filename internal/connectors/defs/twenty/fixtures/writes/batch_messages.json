@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/messages"
+    "path": "/rest/batch/messages",
+    "body_exact": [
+      {
+        "deliveryStatus": "Fixture deliveryStatus 1"
+      }
+    ]
   }
 }

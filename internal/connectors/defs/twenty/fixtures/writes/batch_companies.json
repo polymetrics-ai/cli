@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/companies"
+    "path": "/rest/batch/companies",
+    "body_exact": [
+      {
+        "lastContactAt": "2026-01-01T00:00:01Z"
+      }
+    ]
   }
 }

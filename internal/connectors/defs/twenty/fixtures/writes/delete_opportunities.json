@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/rest/opportunities/delete_opportunities_fixture_id"
+    "path": "/rest/opportunities/delete_opportunities_fixture_id",
+    "no_body": true
   }
 }

@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/rest/calendarEvents/delete_calendar_events_fixture_id"
+    "path": "/rest/calendarEvents/delete_calendar_events_fixture_id",
+    "no_body": true
   }
 }

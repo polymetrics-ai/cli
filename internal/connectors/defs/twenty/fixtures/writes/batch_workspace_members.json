@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/workspaceMembers"
+    "path": "/rest/batch/workspaceMembers",
+    "body_exact": [
+      {
+        "accountOwnerForCompanies": {}
+      }
+    ]
   }
 }

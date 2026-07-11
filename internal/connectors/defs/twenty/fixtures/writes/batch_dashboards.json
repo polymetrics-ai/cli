@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/dashboards"
+    "path": "/rest/batch/dashboards",
+    "body_exact": [
+      {
+        "pageLayoutId": "pageLayoutId_fixture_1"
+      }
+    ]
   }
 }

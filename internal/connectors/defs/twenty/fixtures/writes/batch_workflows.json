@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/workflows"
+    "path": "/rest/batch/workflows",
+    "body_exact": [
+      {
+        "lastPublishedVersionId": "lastPublishedVersionId_fixture_1"
+      }
+    ]
   }
 }

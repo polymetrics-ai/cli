@@ -9,12 +9,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/fs"
 	"math/big"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"path"
+	"reflect"
 	"strconv"
 	"strings"
 	"sync"
@@ -798,7 +800,10 @@ func isAllDigitsForAssertion(s string) bool {
 // --- write fixture parsing -------------------------------------------------
 
 // writeFixture is fixtures/writes/<action>.json's shape (design §E.2):
-// {"record": {...}, "expect": {"method","path","body"}}.
+// {"record": {...}, "expect": {"method","path","body"}}. The legacy
+// expect.body field remains a subset object assertion; body_exact asserts an
+// exact decoded JSON body (including top-level arrays), and no_body asserts an
+// empty request body.
 type writeFixture struct {
 	Record   map[string]any   `json:"record"`
 	Expect   writeExpectation `json:"expect"`
@@ -806,9 +811,11 @@ type writeFixture struct {
 }
 
 type writeExpectation struct {
-	Method string         `json:"method"`
-	Path   string         `json:"path"`
-	Body   map[string]any `json:"body,omitempty"`
+	Method    string          `json:"method"`
+	Path      string          `json:"path"`
+	Body      map[string]any  `json:"body,omitempty"`
+	BodyExact json.RawMessage `json:"body_exact,omitempty"`
+	NoBody    bool            `json:"no_body,omitempty"`
 }
 
 // loadWriteFixture reads fixtures/writes/<action>.json.
@@ -833,18 +840,18 @@ func loadWriteFixture(fixtures fs.FS, action string) (writeFixture, error) {
 // capturedRequest is what a captureServer observed for the single write
 // request it received.
 type capturedRequest struct {
-	Method string
-	Path   string
-	Query  url.Values
-	Body   map[string]any
+	Method      string
+	Path        string
+	Query       url.Values
+	Body        any
+	BodyPresent bool
 }
 
 // compareWriteExpectation compares a capturedRequest against the fixture's
 // "expect" block and returns a non-empty mismatch description, or "" when
-// they match. Body comparison is a subset match (every key in expect.Body
-// must be present with an equal value in got.Body) since the engine may
-// include additional non-path_fields record data the fixture author didn't
-// bother spelling out for a DELETE/no-op-body action.
+// they match. The legacy expect.body object remains a subset match, while
+// expect.body_exact compares the decoded JSON body exactly and expect.no_body
+// proves body_type:none/delete requests sent no body at all.
 func compareWriteExpectation(got capturedRequest, want writeExpectation) string {
 	if want.Method != "" && !strings.EqualFold(got.Method, want.Method) {
 		return fmt.Sprintf("method = %q, want %q", got.Method, want.Method)
@@ -852,8 +859,33 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 	if want.Path != "" && got.Path != want.Path {
 		return fmt.Sprintf("path = %q, want %q", got.Path, want.Path)
 	}
+	if want.NoBody {
+		if got.BodyPresent {
+			return fmt.Sprintf("body = %s, want no body", formatJSONValue(got.Body))
+		}
+		return ""
+	}
+	if len(want.BodyExact) != 0 {
+		if !got.BodyPresent {
+			return fmt.Sprintf("body missing, want exact %s", string(want.BodyExact))
+		}
+		wantBody, err := decodeExactBody(want.BodyExact)
+		if err != nil {
+			return err.Error()
+		}
+		if !reflect.DeepEqual(got.Body, wantBody) {
+			return fmt.Sprintf("body = %s, want exact %s", formatJSONValue(got.Body), string(want.BodyExact))
+		}
+	}
+	if len(want.Body) == 0 {
+		return ""
+	}
+	gotBody, ok := got.Body.(map[string]any)
+	if !ok {
+		return fmt.Sprintf("body = %s, want object containing %v", formatJSONValue(got.Body), want.Body)
+	}
 	for k, wantVal := range want.Body {
-		gotVal, ok := got.Body[k]
+		gotVal, ok := gotBody[k]
 		if !ok {
 			return fmt.Sprintf("body missing key %q (want %v)", k, wantVal)
 		}
@@ -862,6 +894,27 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 		}
 	}
 	return ""
+}
+
+func decodeExactBody(raw json.RawMessage) (any, error) {
+	var body any
+	dec := json.NewDecoder(bytes.NewReader(raw))
+	dec.UseNumber()
+	if err := dec.Decode(&body); err != nil {
+		return nil, fmt.Errorf("body_exact: decode expected body: %w", err)
+	}
+	return body, nil
+}
+
+func formatJSONValue(v any) string {
+	if v == nil {
+		return "<empty>"
+	}
+	raw, err := json.Marshal(v)
+	if err != nil {
+		return fmt.Sprint(v)
+	}
+	return string(raw)
 }
 
 // --- capture / synthetic replay servers ------------------------------------
@@ -890,13 +943,19 @@ type captureServer struct {
 func newCaptureServer(resp *fixtureResponse) *captureServer {
 	cs := &captureServer{resp: resp}
 	cs.Server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var body map[string]any
-		dec := json.NewDecoder(r.Body)
-		dec.UseNumber()
-		_ = dec.Decode(&body) // a body-less request (e.g. DELETE) decodes to nil, not an error worth surfacing
+		rawBody, readErr := io.ReadAll(r.Body)
+		bodyPresent := len(bytes.TrimSpace(rawBody)) != 0
+		var body any
+		if readErr == nil && bodyPresent {
+			dec := json.NewDecoder(bytes.NewReader(rawBody))
+			dec.UseNumber()
+			if err := dec.Decode(&body); err != nil {
+				body = string(rawBody)
+			}
+		}
 
 		cs.mu.Lock()
-		cs.last = &capturedRequest{Method: r.Method, Path: r.URL.Path, Query: r.URL.Query(), Body: body}
+		cs.last = &capturedRequest{Method: r.Method, Path: r.URL.Path, Query: r.URL.Query(), Body: body, BodyPresent: bodyPresent}
 		resp := cs.resp
 		cs.mu.Unlock()
 

@@ -84,6 +84,33 @@ func TestFullSweepStreamSpecsFallbackToSelectedStream(t *testing.T) {
 	}
 }
 
+func TestStreamNameDefaultsToFirstCatalogCursorStream(t *testing.T) {
+	rc := &runContext{
+		opts: Options{Connector: "twenty"},
+		catalogStreamSpecs: []streamSpec{
+			{Name: "companies"},
+			{Name: "attachments", CursorField: "updatedAt"},
+			{Name: "people", CursorField: "updatedAt"},
+		},
+	}
+	if got := rc.streamName(); got != "attachments" {
+		t.Fatalf("streamName() = %q, want first catalog stream with cursor", got)
+	}
+}
+
+func TestStreamNameDefaultsToFirstCatalogStreamWhenNoCursor(t *testing.T) {
+	rc := &runContext{
+		opts: Options{Connector: "twenty"},
+		catalogStreamSpecs: []streamSpec{
+			{Name: "companies"},
+			{Name: "attachments"},
+		},
+	}
+	if got := rc.streamName(); got != "companies" {
+		t.Fatalf("streamName() = %q, want first catalog stream when no cursor exists", got)
+	}
+}
+
 func TestInspectStreamSpecsSeedBootstrapCursor(t *testing.T) {
 	envelope := map[string]any{
 		"manifest": map[string]any{

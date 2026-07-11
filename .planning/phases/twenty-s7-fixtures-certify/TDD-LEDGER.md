@@ -50,3 +50,37 @@
 - Corrective certify gates with `/tmp/twenty_fixture_all_server.py` serving Twenty checked-in stream fixtures on localhost, placeholder env only:
   - Non-full command exited 0 with `.report.passed=true`.
   - Full command `--full --skip write` exited 0 with `.report.passed=true`.
+
+## Correction ledger — 2026-07-12 REVIEW-TURN62 / CORRECT-TURN63
+- Required reread complete: dispatch prompt, `AGENTS.md`, issue #284 body/acceptance, issue-agent contract, GSD universal runtime loop, GSD Pi adapter, required-skills routing, CLI help/docs/website parity, connector validation gates, S7 `PLAN.md`/`TDD-LEDGER.md`/`VERIFICATION.md`/`RUN-STATE.json`/`SUMMARY.md`, connector migration conventions/design docs, REVIEW-TURN62/VERIFY-TURN61, worker handoff template.
+- GSD adapter: `scripts/gsd doctor` PASS; `scripts/gsd prompt programming-loop init --phase twenty-s7-fixtures-certify --dry-run` FAIL (`scripts/gsd: unknown GSD command: programming-loop`); fallback prompt captured with `scripts/gsd prompt gsd-quick "twenty S7 review correction F1 F2 F3 F4 issue #284"`.
+- Skills loaded: `gsd-core`; `caveman`; go-implementation fallback and `go-rules.md`; `golang-how-to`; `golang-cli`; `golang-testing`; `golang-error-handling`; `golang-security`; `golang-safety`; `golang-design-patterns`; `golang-structs-interfaces`; `golang-context`; `golang-concurrency`; `golang-documentation`.
+- Rule notes for this correction: go-rules #1/#2/#5/#7 (checked/wrapped/lowercase errors), #15/#37/#38 (zero-values and JSON contracts), #40-#43 (CLI stdout/stderr/JSON/help); `golang-testing` #1/#5 (named behavior tests); `golang-security` trust-boundary/no-secrets/path-safety; `golang-safety` #2/#7; `golang-design-patterns` #20/#21.
+- Planned red tests before production edits:
+  - F1: certify stream default picks first cursor stream from Twenty inspect/catalog specs when `Options.Stream` is empty.
+  - F2: conformance write fixture comparison fails without exact top-level array/no-body support and Twenty batch/delete fixtures prove exact request shape.
+  - F3: certify `fixture_conformance` runs and passes for Twenty instead of stale unconditional skip.
+- Red evidence captured before production edits:
+  - `./pm help connectors certify >/tmp/twenty-s7-turn63-help.txt && echo 'help exit=0'` — PASS/exit 0; no credentials read.
+  - `go test ./internal/connectors/certify -run 'TestStreamNameDefaultsToFirstCatalogCursorStream|TestStreamNameDefaultsToFirstCatalogStreamWhenNoCursor|TestFixtureConformanceRunsForTwentyBundle' -count=1` — FAIL: Twenty no-stream default got `"customers"`; `fixture_conformance` returned stale no-defs skip.
+  - `go test ./internal/connectors/conformance -run 'TestCompareWriteExpectationSupportsExactTopLevelArrayBody|TestCompareWriteExpectationSupportsExplicitNoBody|TestCompareWriteExpectationPreservesSubsetBody|TestTwentyBatchAndDeleteFixturesAssertExactBodies' -count=1` — FAIL/build failed: missing `BodyPresent`, `BodyExact`, and `NoBody` support.
+- Green implementation:
+  - F1: `streamName` now chooses first known catalog/manual stream with `CursorField`, else first known stream; hardcoded `issues`/`customers` fallback only when specs are unavailable.
+  - F2: conformance supports `expect.body_exact` exact decoded JSON bodies (including top-level arrays) and `expect.no_body`; legacy `expect.body` remains subset-map matching. Twenty `batch_*` fixtures assert top-level arrays; `delete_*` fixtures assert `no_body=true`.
+  - F3: `fixture_conformance` loads on-disk defs fixtures when present and runs `conformance.RunBundle`; missing bundle/fixtures are truthful skips; real conformance failures fail `Report.Passed`.
+  - F4: Twenty docs remove stale current-limit notes for `updatedAt` cursor / long stream names; live certification credential gate, local fixture conformance, and reverse ETL plan → preview → approval → execute remain documented.
+- Green evidence:
+  - `go test ./internal/connectors/certify -run 'TestStreamNameDefaultsToFirstCatalogCursorStream|TestStreamNameDefaultsToFirstCatalogStreamWhenNoCursor|TestFixtureConformanceRunsForTwentyBundle|TestFixtureConformanceFailureFailsReport|TestInspectStreamSpecsSeedBootstrapCursor|TestFullSweepArtifactNamesAreBoundedForLongStream|TestCatalogStreamSpecsFromStreams|TestFullSweepNamesAreStreamScoped|TestFullSweepSourceStagesAgainstSample|TestSourceStagesAgainstSample' -count=1` — PASS: `ok polymetrics.ai/internal/connectors/certify 44.503s`.
+  - `go test ./internal/connectors/conformance -run 'TestCompareWriteExpectationSupportsExactTopLevelArrayBody|TestCompareWriteExpectationSupportsExplicitNoBody|TestCompareWriteExpectationPreservesSubsetBody|TestTwentyBatchAndDeleteFixturesAssertExactBodies|TestConformance/twenty|TestTwentyFixturesCoverAllStreamsAndWrites|TestWriteRequestShape_MatchesExpectBlock|TestWriteRequestShape_MismatchFails' -count=1` — PASS: `ok polymetrics.ai/internal/connectors/conformance 1.183s`.
+  - `go test ./internal/connectors/conformance -count=1` — PASS: `ok polymetrics.ai/internal/connectors/conformance 9.392s`.
+  - `go test ./internal/connectors/certify -count=1` — PASS: `ok polymetrics.ai/internal/connectors/certify 334.029s`.
+  - `go test ./...` — PASS (slow packages included `internal/cli 151.975s`, `internal/connectors/certify 340.621s`).
+  - JSON parse for edited Twenty write fixtures and phase JSON — PASS.
+  - `go run ./cmd/connectorgen validate internal/connectors/defs --json` — PASS: `findings=[]`, `warnings=[]`.
+  - `go vet ./...` — PASS/no output; `go build ./cmd/pm` — PASS/no output; `gofmt -l cmd internal` clean.
+  - Fresh `/tmp/twenty-s7-turn63-pm help connectors certify` — PASS/exit 0.
+  - Credential-free localhost `pm connectors certify twenty` without `--stream` — PASS/exit 0, `.report.passed=true`, `fixture_conformance.passed=true`.
+  - Credential-free localhost `pm connectors certify twenty --full --skip write` without `--stream` — PASS/exit 0, `.report.passed=true`, `fixture_conformance.passed=true`.
+  - `cd website && pnpm run gen:website-data` rerun idempotency — PASS; `git diff --check` — PASS/no output.
+- Not run: `make verify` because `verify` includes `smoke-no-build`, which executes `./pm reverse run`; this correction forbids reverse ETL/destructive execution.
+- Safety: no `TWENTY_API_KEY`, no live `api.twenty.com`, placeholder env only for localhost certify, no reverse ETL/destructive external execution, no new deps.

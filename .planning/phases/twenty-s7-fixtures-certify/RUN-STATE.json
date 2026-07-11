@@ -5,12 +5,12 @@
   "branch": "feat/284-twenty-fixtures-certify",
   "base_parent_head": "23c2277d827da31e1c1629793c830a129eeb5e7e",
   "starting_head_for_correction": "2d909649899b0c26d0e9822af70232d4af26e89d",
-  "status": "local_corrective_gates_passed_pending_commit_push",
+  "status": "correct_turn63_local_gates_passed_pending_commit_push",
   "gsd": {
     "doctor": "passed",
     "list": "passed",
     "programming_loop": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
-    "fallback": "scripts/gsd prompt gsd-quick \"twenty S7 certify correction issue #284\""
+    "fallback": "scripts/gsd prompt gsd-quick \"twenty S7 review correction F1 F2 F3 F4 issue #284\""
   },
   "required_reading": {
     "issue_body": "gh issue view 284 --json number,title,state,body,url,labels",
@@ -29,7 +29,8 @@
     "golang-design-patterns",
     "golang-structs-interfaces",
     "golang-context",
-    "golang-concurrency"
+    "golang-concurrency",
+    "golang-documentation"
   ],
   "orchestrationDecisions": [
     {
@@ -56,6 +57,21 @@
       "cycle": "verify-turn59-correction-verify",
       "decision": "local_critical_path",
       "reason": "ran focused local gates and localhost credential-free certify gates inline"
+    },
+    {
+      "cycle": "review-turn62-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "single assigned correction on isolated issue branch; no recursive subagent tool in worker context"
+    },
+    {
+      "cycle": "review-turn62-correction-execute",
+      "decision": "local_critical_path",
+      "reason": "implemented F1-F4 inline within allowed write scope"
+    },
+    {
+      "cycle": "review-turn62-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "ran local correction gates only; no verify/review/integrate stage"
     }
   ],
   "redEvidence": [
@@ -64,39 +80,50 @@
     "2026-07-11 non-full localhost certify with placeholder env exited 2; etl_full_refresh_append got Error instead of ETLRun",
     "2026-07-11 kept-workdir manual etl run exited 1 with JSON error message: record is missing cursor field \"updated_at\"",
     "2026-07-11 full localhost certify --full --skip write exited 2; current run still blocked by cursor failure before long-path stage",
-    "2026-07-11 focused certify tests initially failed to build: undefined streamSpecsFromInspectEnvelope and missing bounded-name helpers"
+    "2026-07-11 focused certify tests initially failed to build: undefined streamSpecsFromInspectEnvelope and missing bounded-name helpers",
+    "./pm help connectors certify exited 0 before certify commands; no credentials read",
+    "go test ./internal/connectors/certify -run 'TestStreamNameDefaultsToFirstCatalogCursorStream|TestStreamNameDefaultsToFirstCatalogStreamWhenNoCursor|TestFixtureConformanceRunsForTwentyBundle' -count=1 failed: Twenty no-stream default returned \"customers\" and fixture_conformance used stale no-defs skip",
+    "go test ./internal/connectors/conformance -run 'TestCompareWriteExpectationSupportsExactTopLevelArrayBody|TestCompareWriteExpectationSupportsExplicitNoBody|TestCompareWriteExpectationPreservesSubsetBody|TestTwentyBatchAndDeleteFixturesAssertExactBodies' -count=1 failed to build: missing BodyPresent, BodyExact, NoBody support"
   ],
   "correctiveChanges": [
-    "stageManualJSON seeds stream specs from connectors inspect manifest.streams before bootstrap connection creation",
-    "safeName bounds stream-derived names with deterministic 8-hex hash suffix",
-    "full-sweep live/capture/incremental table names and capture filenames use bounded helpers"
+    "F1: streamName defaults to first known stream with cursor, else first known stream; connector hardcoded fallback only when inspect/catalog specs unavailable",
+    "F2: write fixture expectations support body_exact decoded JSON (arrays/objects/scalars) and no_body while preserving legacy subset body assertions; Twenty batch/delete fixtures updated",
+    "F3: fixture_conformance loads on-disk bundle fixtures when available and runs conformance for Twenty; only missing bundle/fixtures skip; real conformance failures fail Report.Passed",
+    "F4: Twenty docs remove stale updatedAt/long-stream-name certify limitations and keep live credential/reverse-ETL safety caveats"
   ],
   "greenEvidence": {
-    "focused_certify_new_tests": "passed: ok polymetrics.ai/internal/connectors/certify 0.525s",
-    "focused_certify_broader": "passed: ok polymetrics.ai/internal/connectors/certify 46.341s",
-    "focused_conformance": "passed: ok polymetrics.ai/internal/connectors/conformance 1.819s",
+    "focused_certify_turn63": "passed: ok polymetrics.ai/internal/connectors/certify 44.503s",
+    "focused_conformance_turn63": "passed: ok polymetrics.ai/internal/connectors/conformance 1.183s",
+    "conformance_package": "passed: ok polymetrics.ai/internal/connectors/conformance 9.392s",
+    "jq_json": "passed: edited Twenty write fixtures and phase JSON parsed",
     "connectorgen_validate_json": "passed: findings=0 warnings=0",
     "go_vet": "passed: no output",
     "go_build_pm": "passed: no output",
     "gofmt": "passed: gofmt -w cmd internal; gofmt -l cmd internal clean",
-    "non_full_certify_localhost": "passed: exit=0 report.passed=true",
-    "full_certify_localhost_skip_write": "passed: exit=0 report.passed=true"
+    "pm_help_connectors_certify": "passed: fresh /tmp pm help connectors certify exited 0",
+    "non_full_certify_localhost": "passed: exit=0 report.passed=true and fixture_conformance passed=true (no --stream)",
+    "full_certify_localhost_skip_write": "passed: exit=0 report.passed=true and fixture_conformance passed=true (no --stream)",
+    "website_generation": "passed: pnpm run gen:website-data idempotent after rerun",
+    "git_diff_check": "passed: no output",
+    "certify_package": "passed: ok polymetrics.ai/internal/connectors/certify 334.029s",
+    "go_test_all": "passed: go test ./... (internal/cli 151.975s; internal/connectors/certify 340.621s)"
   },
   "certify": {
     "credential_free_localhost_attempted": true,
-    "result": "green_after_correction",
-    "non_full_command": "PM_TWENTY_CERT_TOKEN=fixture_token_placeholder ./pm connectors certify twenty --stream attachments --limit 1 --config base_url=http://127.0.0.1:<local-port> --from-env api_key=PM_TWENTY_CERT_TOKEN --json",
-    "non_full_result": "exit 0; report.passed=true",
-    "full_command": "PM_TWENTY_CERT_TOKEN=fixture_token_placeholder ./pm connectors certify twenty --stream attachments --full --skip write --limit 1 --config base_url=http://127.0.0.1:<local-port> --from-env api_key=PM_TWENTY_CERT_TOKEN --json",
-    "full_result": "exit 0; report.passed=true",
-    "correction_scope": "internal/connectors/certify/** plus focused tests"
+    "result": "green_after_turn63_correction",
+    "non_full_command": "PM_TWENTY_CERT_TOKEN=fixture_token_placeholder /tmp/twenty-s7-turn63-pm connectors certify twenty --limit 1 --config base_url=http://127.0.0.1:<local-port> --from-env api_key=PM_TWENTY_CERT_TOKEN --json",
+    "non_full_result": "exit 0; report.passed=true; fixture_conformance passed=true",
+    "full_command": "PM_TWENTY_CERT_TOKEN=fixture_token_placeholder /tmp/twenty-s7-turn63-pm connectors certify twenty --full --skip write --limit 1 --config base_url=http://127.0.0.1:<local-port> --from-env api_key=PM_TWENTY_CERT_TOKEN --json",
+    "full_result": "exit 0; report.passed=true; fixture_conformance passed=true",
+    "correction_scope": "certify/conformance harness, Twenty write fixtures/docs, generated website data from Twenty docs"
   },
   "verificationPassed": false,
   "correctiveVerificationPassed": true,
-  "verificationStatus": "corrective_gates_green_make_verify_not_run_safety_blocker",
+  "verificationStatus": "turn63_corrective_gates_green_make_verify_not_run_safety_blocker",
   "makeVerify": "not run: verify depends on smoke-no-build, which executes ./pm reverse run; correction forbids reverse ETL execution",
   "no_secrets": true,
   "no_live_twenty_api": true,
   "no_reverse_etl_execution": true,
-  "no_new_dependencies": true
+  "no_new_dependencies": true,
+  "head_reviewed_for_turn63": "4b06439d36ac44f7ae506ad6c12358bd6a748d9e"
 }

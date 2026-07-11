@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/blocklists"
+    "path": "/rest/batch/blocklists",
+    "body_exact": [
+      {
+        "handle": "Fixture handle 1"
+      }
+    ]
   }
 }

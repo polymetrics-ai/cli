@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/notes"
+    "path": "/rest/batch/notes",
+    "body_exact": [
+      {
+        "bodyV2": "Fixture bodyV2 1"
+      }
+    ]
   }
 }

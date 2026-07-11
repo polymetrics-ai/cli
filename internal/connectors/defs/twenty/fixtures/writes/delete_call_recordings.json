@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/rest/callRecordings/delete_call_recordings_fixture_id"
+    "path": "/rest/callRecordings/delete_call_recordings_fixture_id",
+    "no_body": true
   }
 }

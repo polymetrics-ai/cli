@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/rest/attachments/delete_attachments_fixture_id"
+    "path": "/rest/attachments/delete_attachments_fixture_id",
+    "no_body": true
   }
 }

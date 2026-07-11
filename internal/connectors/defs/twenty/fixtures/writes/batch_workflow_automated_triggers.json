@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/workflowAutomatedTriggers"
+    "path": "/rest/batch/workflowAutomatedTriggers",
+    "body_exact": [
+      {
+        "settings": "Fixture settings 1"
+      }
+    ]
   }
 }

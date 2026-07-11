@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/messageThreads"
+    "path": "/rest/batch/messageThreads",
+    "body_exact": [
+      {
+        "subject": "Fixture subject 1"
+      }
+    ]
   }
 }

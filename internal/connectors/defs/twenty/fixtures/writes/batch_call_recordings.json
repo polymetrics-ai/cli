@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/callRecordings"
+    "path": "/rest/batch/callRecordings",
+    "body_exact": [
+      {
+        "applicationId": "applicationId_fixture_1"
+      }
+    ]
   }
 }

@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/messageListMembers"
+    "path": "/rest/batch/messageListMembers",
+    "body_exact": [
+      {
+        "position": 1
+      }
+    ]
   }
 }

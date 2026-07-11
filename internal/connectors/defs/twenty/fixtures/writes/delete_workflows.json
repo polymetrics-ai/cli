@@ -4,6 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/rest/workflows/delete_workflows_fixture_id"
+    "path": "/rest/workflows/delete_workflows_fixture_id",
+    "no_body": true
   }
 }

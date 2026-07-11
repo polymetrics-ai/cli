@@ -9,12 +9,19 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 	"time"
+
+	"polymetrics.ai/internal/connectors/conformance"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // credentialName / warehouseCredentialName / connection names used for every
@@ -29,14 +36,10 @@ const (
 	maxSafeNameLen          = 40
 )
 
-// noDefsBundleReason is recorded on the fixture_conformance stage: wave0 ships
-// zero defs bundles (internal/connectors/defs contains only defs.go until
-// Wave F golden migrations land), so every connector -- sample included --
-// has no bundle to check yet. This is a deliberate, documented skip: the real
-// Tier-0 fixture-conformance integration is a Wave F / V-21 concern and must
-// not import internal/connectors/conformance (owned by a parallel task) nor
-// internal/connectors/defs (whose tree is empty in wave0 regardless).
-const noDefsBundleReason = "skipped: no defs bundle (wave0 ships zero defs bundles; real Tier-0 fixture-conformance integration lands with golden migrations in Wave F / V-21)"
+const (
+	noDefsBundleReason = "skipped: no defs bundle for connector"
+	noFixturesReason   = "skipped: no fixture bundle for connector"
+)
 
 // sabotage lets a test flip the expected envelope kind for a named stage so
 // the pipeline can prove a stage failure surfaces correctly end-to-end
@@ -384,9 +387,9 @@ func liveStreamUnavailable(rc *runContext, res CLIResult) bool {
 }
 
 // streamName is the source stream certified: currentStream during --full
-// sweeps, Options.Stream when explicitly set, else "customers" (sample's first
-// stream with a cursor field, matching design §A command spec's default "first
-// stream with a cursor field, else first").
+// sweeps, Options.Stream when explicitly set, else the first known stream with
+// a cursor field, else the first known stream. Connector-specific fallbacks are
+// used only before inspect/catalog metadata is available.
 func (rc *runContext) streamName() string {
 	if rc.currentStream != "" {
 		return rc.currentStream
@@ -394,7 +397,24 @@ func (rc *runContext) streamName() string {
 	if rc.opts.Stream != "" {
 		return rc.opts.Stream
 	}
+	if name, ok := defaultStreamNameFromSpecs(rc.catalogStreamSpecs); ok {
+		return name
+	}
 	return defaultStreamName(rc.opts.Connector)
+}
+
+func defaultStreamNameFromSpecs(specs []streamSpec) (string, bool) {
+	for _, spec := range specs {
+		if spec.Name != "" && spec.CursorField != "" {
+			return spec.Name, true
+		}
+	}
+	for _, spec := range specs {
+		if spec.Name != "" {
+			return spec.Name, true
+		}
+	}
+	return "", false
 }
 
 func defaultStreamName(connector string) string {
@@ -652,14 +672,97 @@ func stagePreflight(rc *runContext, rep *Report) error {
 	return nil
 }
 
-// --- stage 1: fixture_conformance (skip-with-reason: wave0 has no bundles) ---
+// --- stage 1: fixture_conformance ---
 
 func stageFixtureConformance(rc *runContext, rep *Report) error {
 	stage := recordStage(rc, rep, "fixture_conformance", 0, func() (bool, CLIStageInfo, string) {
-		return false, CLIStageInfo{}, noDefsBundleReason
+		bundle, err := loadFixtureConformanceBundle(rc.opts.Connector)
+		if err != nil {
+			if errors.Is(err, fs.ErrNotExist) {
+				return false, CLIStageInfo{}, fmt.Sprintf("%s %q", noDefsBundleReason, rc.opts.Connector)
+			}
+			report := conformance.ReportFromLoadError(rc.opts.Connector, err)
+			return false, CLIStageInfo{}, conformanceFailureSummary(report)
+		}
+		if bundle.Fixtures == nil {
+			return false, CLIStageInfo{}, fmt.Sprintf("%s %q", noFixturesReason, rc.opts.Connector)
+		}
+		report := conformance.RunBundle(bundle)
+		if !report.Passed {
+			return false, CLIStageInfo{}, conformanceFailureSummary(report)
+		}
+		return true, CLIStageInfo{}, ""
 	})
 	_ = stage
 	return nil
+}
+
+func loadFixtureConformanceBundle(connector string) (engine.Bundle, error) {
+	for _, root := range fixtureConformanceDefsRoots() {
+		info, err := os.Stat(filepath.Join(root, connector))
+		if err != nil || !info.IsDir() {
+			continue
+		}
+		return engine.Load(os.DirFS(root), connector)
+	}
+	info, err := fs.Stat(defs.FS, connector)
+	if err != nil || !info.IsDir() {
+		return engine.Bundle{}, fmt.Errorf("load bundle %s: %w", connector, fs.ErrNotExist)
+	}
+	return engine.Load(defs.FS, connector)
+}
+
+func fixtureConformanceDefsRoots() []string {
+	seen := map[string]bool{}
+	var roots []string
+	add := func(root string) {
+		if root == "" {
+			return
+		}
+		root = filepath.Clean(root)
+		if seen[root] {
+			return
+		}
+		seen[root] = true
+		roots = append(roots, root)
+	}
+
+	if _, file, _, ok := runtime.Caller(0); ok {
+		add(filepath.Join(filepath.Dir(file), "..", "defs"))
+	}
+	if wd, err := os.Getwd(); err == nil {
+		for dir := wd; ; dir = filepath.Dir(dir) {
+			add(filepath.Join(dir, "internal", "connectors", "defs"))
+			parent := filepath.Dir(dir)
+			if parent == dir {
+				break
+			}
+		}
+	}
+	return roots
+}
+
+func conformanceFailureSummary(report conformance.Report) string {
+	failures := make([]string, 0)
+	for _, check := range report.Checks {
+		if check.Skipped || check.Passed {
+			continue
+		}
+		if check.Error != "" {
+			failures = append(failures, fmt.Sprintf("%s: %s", check.Name, check.Error))
+			continue
+		}
+		failures = append(failures, check.Name)
+	}
+	if len(failures) == 0 {
+		return "fixture_conformance: conformance failed"
+	}
+	const maxFailures = 5
+	if len(failures) > maxFailures {
+		remaining := len(failures) - maxFailures
+		failures = append(failures[:maxFailures], fmt.Sprintf("... %d more", remaining))
+	}
+	return "fixture_conformance: conformance failed: " + strings.Join(failures, "; ")
 }
 
 // --- stage 2: manual_json ---
@@ -1269,7 +1372,7 @@ func finalizeJSONContract(rep *Report) {
 	allKindsGood := true
 	for _, stage := range rep.Stages {
 		if stage.CLI.Kind == "" {
-			// fixture_conformance is a skip-only stage with no CLI call.
+			// fixture_conformance runs in-process and has no direct CLI call.
 			continue
 		}
 		checked++
@@ -1359,16 +1462,11 @@ func finalizeSecretRedaction(rc *runContext, rep *Report, secretValues []string)
 
 func allStagesPassed(stages []StageResult) bool {
 	for _, s := range stages {
-		if s.Name == "fixture_conformance" {
-			// A documented skip never fails the overall report.
-			continue
-		}
 		if !s.Passed && strings.HasPrefix(s.Error, "skipped: ") {
-			// A documented skip (e.g. Options.Write disabled, or no
-			// available write pairing) never fails the overall report,
-			// exactly like fixture_conformance above (design §A "no
-			// credential -> uncertified, never failed" applies analogously
-			// to an unavailable safe write path).
+			// A documented skip (e.g. unavailable fixture bundle,
+			// Options.Write disabled, or no available write pairing) never
+			// fails the overall report. A real fixture_conformance failure
+			// is not a skip and must fail certification.
 			continue
 		}
 		if !s.Passed {

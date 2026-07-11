@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/workflowVersions"
+    "path": "/rest/batch/workflowVersions",
+    "body_exact": [
+      {
+        "name": "Fixture name 1"
+      }
+    ]
   }
 }

@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/noteTargets"
+    "path": "/rest/batch/noteTargets",
+    "body_exact": [
+      {
+        "position": 1
+      }
+    ]
   }
 }

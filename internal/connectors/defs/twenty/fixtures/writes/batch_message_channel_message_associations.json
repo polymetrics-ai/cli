@@ -8,6 +8,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/rest/batch/messageChannelMessageAssociations"
+    "path": "/rest/batch/messageChannelMessageAssociations",
+    "body_exact": [
+      {
+        "direction": "Fixture direction 1"
+      }
+    ]
   }
 }
