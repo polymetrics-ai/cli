@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { DocsSearch } from '@/components/docs/docs-search';
+import { UserMenu } from '@/components/auth/user-menu';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -365,6 +366,8 @@ export function SiteNavbar() {
                 Get Demo
               </NavBtn>
             </div>
+
+            <UserMenu />
 
             {/* Mobile hamburger */}
             <button
