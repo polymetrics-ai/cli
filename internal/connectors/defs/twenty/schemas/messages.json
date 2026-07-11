@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Message",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "deliveryStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "headerMessageId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "isDraft": {
+      "type": "boolean"
+    },
+    "lastContactForCompanies": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastContactForOpportunities": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastContactForPeople": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "lastEmailForPeople": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "messageCampaign": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "messageChannelMessageAssociations": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "messageParticipants": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "messageThread": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "position": {
+      "type": "number"
+    },
+    "receivedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "searchVector": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subject": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "text": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    }
+  }
+}
