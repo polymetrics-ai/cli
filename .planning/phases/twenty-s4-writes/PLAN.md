@@ -79,14 +79,14 @@ Correction slices:
 3. Engine slice: add `WriteAction.BodyField` + schema support; for JSON writes only, use `rec[action.BodyField]` as raw payload and error if absent; keep `body_fields`, default JSON, form, graphql, and none behavior unchanged.
 4. Twenty slice: update all 28 `batch_` actions from `body_fields:["records"]` to `body_field:"records"`; preserve outer `record_schema.required == ["records"]` for validation/preview gates.
 5. Docs slice: update `docs/migration/conventions.md` write-body paragraph with action-scoped, schema-gated raw body-field support and Twenty bare-array example; do not expose generic/raw HTTP writes.
-6. Verification slice: required jq/Python/focused engine/connectorgen/conformance/focused packages/vet/build/gofmt/full tests/`scripts/verify-gsd-workflow 1a86cc1a` all passed locally; commit/push `fix(twenty): send batch records as raw array (Refs #281)` pending.
+6. Verification slice: required jq/Python/focused engine/connectorgen/conformance/focused packages/vet/build/gofmt/full tests/`scripts/verify-gsd-workflow 1a86cc1a` all passed locally; commit/push `fix(twenty): send batch records as raw array (Refs #281)` completed at `ccc3047f0202562de49c7c85d1e19d1c9a660c73`; re-review PASS.
 
 ## Original S4 slice plan
 
 1. Planning/red evidence slice (this artifact set): manual GSD fallback, preflight, red counts, safety plan.
 2. Derivation slice: generate `writes.json` from `streams.json` schema refs + S2 schemas + `FIELD-MANIFEST.json`; prune immutable/system fields exactly per S4 contract; fail if any object has zero writable fields.
 3. Surface slice: append 84 S4 rows to `api_surface.json` without row-level unknown keys; preserve 56 GET rows unchanged.
-4. Batch gate: local research marks `POST /rest/batch/{objects}` as reverse_etl with batch max 60 records/request from official docs. Model batch as one Polymetrics input record containing `records` array, using `body_fields:["records"]`; no aggregation, raw HTTP, credentials, or live execution.
+4. Batch gate (original, superseded by F1): local research marks `POST /rest/batch/{objects}` as reverse_etl with batch max 60 records/request from official docs. Initial model used one Polymetrics input record containing `records` array with `body_fields:["records"]`; review F1 corrected execution to action-scoped `body_field:"records"` so the wire body is the required bare array. No aggregation, generic raw HTTP, credentials, or live execution.
 5. Verify slice: jq parse/count/shape checks, connectorgen validate, twenty conformance, focused Go tests, gofmt/vet/build/full tests if feasible, `scripts/verify-gsd-workflow 1a86cc1a` after evidence committed.
 6. Delivery slice: commit `feat(twenty): add reverse ETL write actions (Refs #281)`, push worker branch, open stacked PR to parent branch with `Refs #281` and `Refs #277`.
 

@@ -382,7 +382,8 @@ ok  	polymetrics.ai/internal/worker	2.663s
 - Live Twenty credentials: NOT USED.
 - Raw HTTP / reverse ETL execution: NOT RUN.
 - DELETE/destructive actions: NOT ADDED.
-- Dependencies / Go / engine schema changes: NONE.
+- Dependencies: NONE.
+- Go / engine schema changes: F1 intentionally added the narrow declarative JSON `body_field` selector in `internal/connectors/engine/{bundle.go,write.go,write_test.go}` and `internal/connectors/engine/schema/writes.schema.json`; no generic raw HTTP tool exposed.
 
 ## GSD evidence gate
 

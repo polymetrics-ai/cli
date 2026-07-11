@@ -1,6 +1,6 @@
 # Twenty S4 writes summary (#281)
 
-Status: GREEN for PR #304 F1 review fix; commit/push pending.
+Status: GREEN for PR #304 F1 review fix; fix committed/pushed at `ccc3047f0202562de49c7c85d1e19d1c9a660c73` and re-reviewed PASS.
 
 Review fix F1 accepted:
 
@@ -12,8 +12,8 @@ Original delivered:
 
 - Created `internal/connectors/defs/twenty/writes.json` with 84 non-delete actions: 28 create, 28 update, 28 batch.
 - Updated `internal/connectors/defs/twenty/api_surface.json` to 140 rows: existing 56 GET rows + 56 POST + 28 PATCH; 84 `covered_by.write`; 0 DELETE.
-- Derived create/update/batch record schemas from S2 schemas and `FIELD-MANIFEST.json` after immutable/system pruning; `additionalProperties:false`; update schemas require `id` and `minProperties:2`; batch uses `records` array with `body_fields:["records"]`.
-- No write fixtures needed; conformance passed without S4 fixture edits.
+- Derived create/update/batch record schemas from S2 schemas and `FIELD-MANIFEST.json` after immutable/system pruning; `additionalProperties:false`; update schemas require `id` and `minProperties:2`; batch uses an outer `records` array for validation/preview and `body_field:"records"` so execution sends a bare top-level JSON array.
+- Added narrow engine/schema support for declarative JSON `body_field`; no write fixtures needed; conformance passed without S4 fixture edits.
 
 Evidence:
 
@@ -26,4 +26,4 @@ Evidence:
 
 Safety:
 
-- No live credentials, no raw HTTP, no reverse-ETL execution, no DELETE/destructive rows, no dependencies, no Go/engine/schema changes, no CLI/docs/website edits.
+- No live credentials, no generic raw HTTP tool, no reverse-ETL execution, no DELETE/destructive rows, no dependencies, and no CLI/help/website edits. The F1 fix intentionally changed the connector engine/write schema plus migration docs only to add action-scoped JSON `body_field` support.
