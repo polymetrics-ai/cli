@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Message Channel Message Association Message Folder",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "id": {
+      "type": "string"
+    },
+    "messageChannelMessageAssociation": {
+      "type": "object"
+    },
+    "messageFolderId": {
+      "type": "string"
+    },
+    "position": {
+      "type": "number"
+    },
+    "searchVector": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    }
+  }
+}

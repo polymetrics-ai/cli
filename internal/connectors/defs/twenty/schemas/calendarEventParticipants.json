@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Calendar event participant",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "updatedAt",
+  "properties": {
+    "calendarEvent": {
+      "type": "object"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "deletedAt": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "displayName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "handle": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "isOrganizer": {
+      "type": "boolean"
+    },
+    "person": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "position": {
+      "type": "number"
+    },
+    "responseStatus": {
+      "type": "string"
+    },
+    "searchVector": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedBy": {
+      "type": "object",
+      "properties": {
+        "source": {},
+        "workspaceMemberId": {},
+        "name": {},
+        "context": {}
+      }
+    },
+    "workspaceMember": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}
