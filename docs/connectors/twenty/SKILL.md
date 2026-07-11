@@ -549,7 +549,7 @@ Reads Twenty CRM companies, people, opportunities, notes, tasks, messages, calen
 
 - read risk: external Twenty CRM API read of CRM, messaging, calendar, workflow, and workspace-member data
 - write risk: creates, updates, batch-writes, and deletes records across all 28 Twenty CRM REST objects
-- approval: required for every update_<object>, batch_<object>, and delete_<object> action across the Twenty REST object surface; create_<object> actions require no approval (low-risk, non-destructive)
+- approval: required for every create_<object>, update_<object>, batch_<object>, and delete_<object> action across the Twenty REST object surface; delete_<object> actions additionally require typed --confirm destructive
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface

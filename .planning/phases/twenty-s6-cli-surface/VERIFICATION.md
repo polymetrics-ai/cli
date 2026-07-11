@@ -154,3 +154,22 @@ scripts/verify-gsd-workflow 62b8b46c
 - Reverse ETL execution: not run.
 - Destructive external actions: not executed.
 - New dependencies: none; `go.mod`/`go.sum` unchanged.
+
+## Review fix F1 verification
+
+F1 accepted: generated Twenty MANUAL/SKILL claimed `create_<object>` actions require no approval. This violated the reverse ETL safety contract.
+
+Fix: updated `internal/connectors/defs/twenty/metadata.json` risk.approval and regenerated/restored Twenty manual/skill wording so every create/update/batch/delete action requires plan/preview/approval/execute; delete actions additionally require typed `--confirm destructive`.
+
+Commands:
+
+```bash
+jq . internal/connectors/defs/twenty/metadata.json >/dev/null
+go run ./cmd/connectorgen validate internal/connectors/defs --json | jq '{findings,warnings,connectors_checked}'
+go test ./internal/cli -run 'TestTwentyConnector|TestDocsGenerateAndValidateConnectorDocs' -count=1
+./pm docs validate --connectors-dir docs/connectors
+(cd website && pnpm run gen:website-data >/tmp/s6-gen2.log && git diff --exit-code -- website/data website/lib website/public)
+scripts/verify-gsd-workflow 62b8b46c
+```
+
+Results: all passed; website generated data remained idempotent; no live credentials or reverse ETL execution.

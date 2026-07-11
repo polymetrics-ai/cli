@@ -6,7 +6,7 @@
   "branch": "feat/283-twenty-cli-surface",
   "baseBranch": "feat/277-twenty-connector-parity",
   "baseHead": "62b8b46cde85ae620591194467d3474fda2a1e8a",
-  "status": "green_local_gates_passed_committed_gsd_verified",
+  "status": "review_fix_f1_green_local_reverify_pending_push",
   "gsdMode": "manual_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase twenty-s6-cli-surface --dry-run",
   "gsdFallbackReason": "scripts/gsd: unknown GSD command: programming-loop",
@@ -28,6 +28,11 @@
       "cycle": "implementation",
       "decision": "local_critical_path",
       "reason": "One coherent local slice added cli_surface, help routing, docs, generated website data, and tests."
+    },
+    {
+      "cycle": "review-fix-f1",
+      "decision": "local_critical_path",
+      "reason": "Safety wording fix is localized to metadata/generated Twenty docs; no subagents needed."
     }
   ],
   "redEvidence": {
@@ -69,7 +74,8 @@
     "goTestAll": "passed",
     "docsValidate": "passed",
     "websiteIdempotenceSha256": "f9e24526e3b32d2560bf206e3420b8dab106622b5dfc00d229ac2df16685c861",
-    "gsdWorkflowVerify": "passed against 62b8b46c"
+    "gsdWorkflowVerify": "passed against 62b8b46c",
+    "reviewFixF1": "passed focused re-verification; approval wording corrected"
   },
   "safety": {
     "reverseETLExecution": "not_run",
@@ -80,5 +86,17 @@
     "rawHTTP": "not_used",
     "genericHTTPWriteTool": "not_exposed",
     "genericJSONWriteFlag": "not_exposed"
+  },
+  "reviewFix": {
+    "finding": "F1",
+    "status": "fixed_green_local",
+    "problem": "Generated Twenty manual/skill claimed create_<object> actions require no approval, violating reverse ETL safety contract.",
+    "fix": "Updated metadata risk.approval and regenerated Twenty MANUAL/SKILL wording: every create/update/batch/delete requires plan/preview/approval/execute; deletes additionally require typed --confirm destructive.",
+    "files": [
+      "internal/connectors/defs/twenty/metadata.json",
+      "docs/connectors/twenty/MANUAL.md",
+      "docs/connectors/twenty/SKILL.md"
+    ],
+    "verification": "metadata jq, connectorgen validate, focused CLI docs tests, docs validate, website idempotence, verify-gsd-workflow passed"
   }
 }

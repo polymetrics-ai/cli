@@ -1,6 +1,6 @@
 # Twenty S6 CLI surface + help/manual/website parity TDD ledger (#283)
 
-Status: GREEN_LOCAL_GATES_PASSED_COMMITTED_GSD_VERIFIED. Manual GSD fallback because `scripts/gsd prompt programming-loop init --phase twenty-s6-cli-surface --dry-run` is unavailable (`scripts/gsd: unknown GSD command: programming-loop`).
+Status: REVIEW_FIX_F1_ACCEPTED_METADATA_APPROVAL_CORRECTED. Manual GSD fallback because `scripts/gsd prompt programming-loop init --phase twenty-s6-cli-surface --dry-run` is unavailable (`scripts/gsd: unknown GSD command: programming-loop`).
 
 Loaded skills: `gsd-core`; fallback Go/docs/web skills `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-documentation`, `golang-spf13-cobra`, `frontend-design`, `web-design-guidelines`, `vercel-react-best-practices`; `caveman` for compact handoff. Repo-local `.pi/skills/go-implementation/SKILL.md` and `.pi/skills/ts-website/SKILL.md` missing (`ENOENT`). Skill rule anchors: CLI stdout/stderr + help behavior; testing rules 1/3/5; security threat model questions 1-3 + hardcoded secret rule; safety rules 2/4/6/10; error rules 1/2/7/9; docs concision/no invented context.
 
@@ -39,6 +39,7 @@ FAIL	polymetrics.ai/internal/cli
 | 4 | `pm twenty --help` failed via static manual lookup; focused Go test red. | Top-level connector `--help` renders manual and exits 0. | Reuses connector manual renderer. | GREEN |
 | 5 | Docs/manual/website lacked Twenty Command Surface. | Regenerated docs/connectors/manual/skill and website data. | Robust website diff hash unchanged after second generation. | GREEN |
 | 6 | Local gates incomplete. | Ran jq/Python/connectorgen/conformance/focused tests/vet/build/help/docs/website/full test gates. | `make verify` skipped due reverse ETL smoke target. | GREEN |
+| 7 | Review F1: generated manual/skill claimed `create_*` requires no approval. | Corrected Twenty metadata source and regenerated Twenty manual/skill approval wording to require plan/preview/approval/execute for every create/update/batch/delete action; deletes additionally require `--confirm destructive`. | Safety wording fix only; no live writes. | GREEN |
 
 ## Green evidence highlights
 
