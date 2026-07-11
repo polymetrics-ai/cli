@@ -61,12 +61,12 @@ PI_EXTRA_FLAGS="${PI_EXTRA_FLAGS:-}"
 LOOP_CMD="${LOOP_CMD:-/pm-auto-loop}"
 # Research: default SEARXNG_BASE from the shell's SEARXNG_URL (name mismatch guard) and export.
 SEARXNG_BASE="${SEARXNG_BASE:-${SEARXNG_URL:-}}"; export SEARXNG_BASE
-# Subagent observability: locally-patched pi-sub-agent records child sessions here (opt-in).
-PI_SUBAGENT_SESSION_DIR="${PI_SUBAGENT_SESSION_DIR:-$STATE_DIR/sessions}"; export PI_SUBAGENT_SESSION_DIR
 STALL_MINUTES="${STALL_MINUTES:-20}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE_DIR="$REPO_ROOT/.planning/auto-loop"
+# Subagent observability: locally-patched pi-sub-agent records child sessions here (opt-in).
+PI_SUBAGENT_SESSION_DIR="${PI_SUBAGENT_SESSION_DIR:-$STATE_DIR/sessions}"; export PI_SUBAGENT_SESSION_DIR
 CKPT_DIR="$STATE_DIR/checkpoints"
 RUN_JSON="$STATE_DIR/RUN.json"
 VERDICT_JSON="$STATE_DIR/VALIDATOR-VERDICT.json"
@@ -77,10 +77,15 @@ mkdir -p "$STATE_DIR" "$CKPT_DIR"
 
 log() { printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*" | tee -a "$LOG_FILE" >&2; }
 
-# --- preflight: the subagent tool must be installed (silently dropped otherwise) ------------
-if ! "$PI_BIN" list 2>/dev/null | grep -q "pi-sub-agent"; then
-  echo "FATAL: the pi 'subagent' tool is not installed, so .pi/agents/* cannot be spawned." >&2
-  echo "Run once:  $PI_BIN install npm:pi-sub-agent   — then retry." >&2
+# --- preflight: the subagent tool must be available (vendored extension OR installed package) ---
+# We vendor pi-sub-agent under .pi/extensions/ (records child sessions via PI_SUBAGENT_SESSION_DIR),
+# loaded through .pi/settings.json. Accept either the vendored extension or the npm package; fail
+# only if neither is present (subagent tool silently absent → .pi/agents/* cannot be spawned).
+if [[ ! -f "$REPO_ROOT/.pi/extensions/pi-sub-agent/index.ts" ]] \
+   && ! "$PI_BIN" list 2>/dev/null | grep -q "pi-sub-agent"; then
+  echo "FATAL: the pi 'subagent' tool is unavailable — no vendored .pi/extensions/pi-sub-agent and" >&2
+  echo "no installed package, so .pi/agents/* cannot be spawned. Restore the vendored extension or" >&2
+  echo "run:  $PI_BIN install npm:pi-sub-agent" >&2
   exit 2
 fi
 
