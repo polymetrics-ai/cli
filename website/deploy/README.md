@@ -41,6 +41,73 @@ Optional:
 - Variable `WEBSITE_PUBLIC_URL`: defaults to `https://cli.polymetrics.ai/`. Set to an empty value to skip the public URL check.
 - Variable `WEBSITE_ROLLOUT_TIMEOUT`: defaults to `120s`.
 
+## Database Sidecar And App Secrets
+
+Blog comments/bookmarks and sign-in use a Postgres sidecar next to the website
+container. One-time setup on the origin VPS (as the `deploy` user):
+
+1. Install the shared network and database Quadlets from this directory:
+
+   ```sh
+   cp cli-polymetrics.network cli-polymetrics-db.container ~/.config/containers/systemd/
+   ```
+
+2. Create the env files (mode `0600`) under `~/.config/cli-polymetrics/`:
+
+   `db.env`:
+
+   ```sh
+   POSTGRES_DB=website
+   POSTGRES_USER=website
+   POSTGRES_PASSWORD=<generated>
+   ```
+
+   `website.env`:
+
+   ```sh
+   DATABASE_URL=postgres://website:<generated>@cli-polymetrics-db:5432/website
+   BETTER_AUTH_SECRET=<openssl rand -hex 32>
+   BETTER_AUTH_URL=https://cli.polymetrics.ai
+   GITHUB_CLIENT_ID=...
+   GITHUB_CLIENT_SECRET=...
+   GOOGLE_CLIENT_ID=...
+   GOOGLE_CLIENT_SECRET=...
+   LINKEDIN_CLIENT_ID=...
+   LINKEDIN_CLIENT_SECRET=...
+   ADMIN_EMAILS=you@example.com
+   ```
+
+   Social providers are optional — sign-in offers whichever providers have
+   credentials configured.
+
+3. Add these lines to the website Quadlet
+   (`~/.config/containers/systemd/cli-polymetrics.container`). The deploy
+   script only rewrites `Image=`, so they survive every deploy and rollback:
+
+   ```ini
+   Network=cli-polymetrics.network
+   EnvironmentFile=%h/.config/cli-polymetrics/website.env
+   ```
+
+4. Reload and start:
+
+   ```sh
+   systemctl --user daemon-reload
+   systemctl --user start cli-polymetrics-db
+   systemctl --user restart cli-polymetrics
+   ```
+
+Schema migrations apply automatically on the website's first database request
+(advisory-locked, idempotent) — no deploy-pipeline step is needed.
+
+OAuth callback URLs to register on each provider:
+
+- Production: `https://cli.polymetrics.ai/api/auth/callback/{github,google,linkedin}`
+- Local dev: `http://localhost:3000/api/auth/callback/{github,google,linkedin}`
+
+Backups: `podman exec cli-polymetrics-db pg_dump -U website website > backup.sql`
+(cron it; the `cli-polymetrics-pgdata` volume holds the live data).
+
 ## GitLab Variables
 
 Required built-ins for GitLab Container Registry:
