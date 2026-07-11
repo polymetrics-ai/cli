@@ -6,7 +6,7 @@
   "branch": "feat/283-twenty-cli-surface",
   "baseBranch": "feat/277-twenty-connector-parity",
   "baseHead": "62b8b46cde85ae620591194467d3474fda2a1e8a",
-  "status": "review_fix_f3_numeric_flags_green_local_pending_push",
+  "status": "review_fix_f4_examples_green_local_pending_push",
   "gsdMode": "manual_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase twenty-s6-cli-surface --dry-run",
   "gsdFallbackReason": "scripts/gsd: unknown GSD command: programming-loop",
@@ -117,5 +117,10 @@
       "pm docs validate",
       "website gen idempotence"
     ]
+  },
+  "reviewFix4": {
+    "finding": "pm-reviewer blocking create/update examples omit required mutable record field",
+    "status": "fixed_green_local",
+    "fix": "Updated examples with mutable scalar flags; removed examples and added notes where no scalar CLI flags exist; regenerated Twenty docs and website data."
   }
 }

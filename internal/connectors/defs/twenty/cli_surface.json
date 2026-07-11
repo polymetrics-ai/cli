@@ -137,7 +137,7 @@
         }
       ],
       "examples": [
-        "pm twenty attachments create --preview --json"
+        "pm twenty attachments create --name fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -175,7 +175,7 @@
         }
       ],
       "examples": [
-        "pm twenty attachments update --id rec_fixture --preview --json"
+        "pm twenty attachments update --id rec_fixture --name fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -294,7 +294,7 @@
         }
       ],
       "examples": [
-        "pm twenty blocklists create --preview --json"
+        "pm twenty blocklists create --handle fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -332,7 +332,7 @@
         }
       ],
       "examples": [
-        "pm twenty blocklists update --id rec_fixture --preview --json"
+        "pm twenty blocklists update --id rec_fixture --handle fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -463,7 +463,7 @@
         }
       ],
       "examples": [
-        "pm twenty calendar-channel-event-associations create --preview --json"
+        "pm twenty calendar-channel-event-associations create --calendar-channel-id fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -513,7 +513,7 @@
         }
       ],
       "examples": [
-        "pm twenty calendar-channel-event-associations update --id rec_fixture --preview --json"
+        "pm twenty calendar-channel-event-associations update --id rec_fixture --calendar-channel-id fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -650,7 +650,7 @@
         }
       ],
       "examples": [
-        "pm twenty calendar-event-participants create --preview --json"
+        "pm twenty calendar-event-participants create --display-name fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -706,7 +706,7 @@
         }
       ],
       "examples": [
-        "pm twenty calendar-event-participants update --id rec_fixture --preview --json"
+        "pm twenty calendar-event-participants update --id rec_fixture --display-name fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -891,7 +891,7 @@
         }
       ],
       "examples": [
-        "pm twenty calendar-events create --preview --json"
+        "pm twenty calendar-events create --call-recorder-preference fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -995,7 +995,7 @@
         }
       ],
       "examples": [
-        "pm twenty calendar-events update --id rec_fixture --preview --json"
+        "pm twenty calendar-events update --id rec_fixture --call-recorder-preference fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -1168,7 +1168,7 @@
         }
       ],
       "examples": [
-        "pm twenty call-recordings create --preview --json"
+        "pm twenty call-recordings create --application-id fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -1260,7 +1260,7 @@
         }
       ],
       "examples": [
-        "pm twenty call-recordings update --id rec_fixture --preview --json"
+        "pm twenty call-recordings update --id rec_fixture --application-id fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -1511,7 +1511,7 @@
         }
       ],
       "examples": [
-        "pm twenty companies create --preview --json"
+        "pm twenty companies create --last-contact-at fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -1681,7 +1681,7 @@
         }
       ],
       "examples": [
-        "pm twenty companies update --id rec_fixture --preview --json"
+        "pm twenty companies update --id rec_fixture --last-contact-at fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -1806,7 +1806,7 @@
         }
       ],
       "examples": [
-        "pm twenty dashboards create --preview --json"
+        "pm twenty dashboards create --page-layout-id fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -1850,7 +1850,7 @@
         }
       ],
       "examples": [
-        "pm twenty dashboards update --id rec_fixture --preview --json"
+        "pm twenty dashboards update --id rec_fixture --page-layout-id fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -2017,7 +2017,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-campaigns create --preview --json"
+        "pm twenty message-campaigns create --body-template fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -2103,7 +2103,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-campaigns update --id rec_fixture --preview --json"
+        "pm twenty message-campaigns update --id rec_fixture --body-template fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -2222,7 +2222,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-channel-message-association-message-folders create --preview --json"
+        "pm twenty message-channel-message-association-message-folders create --message-folder-id fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -2260,7 +2260,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-channel-message-association-message-folders update --id rec_fixture --preview --json"
+        "pm twenty message-channel-message-association-message-folders update --id rec_fixture --message-folder-id fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -2397,7 +2397,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-channel-message-associations create --preview --json"
+        "pm twenty message-channel-message-associations create --direction fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -2453,7 +2453,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-channel-message-associations update --id rec_fixture --preview --json"
+        "pm twenty message-channel-message-associations update --id rec_fixture --direction fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -2566,7 +2566,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-list-members create --preview --json"
+        "pm twenty message-list-members create --position 1 --preview --json"
       ],
       "api_surface": [
         {
@@ -2598,7 +2598,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-list-members update --id rec_fixture --preview --json"
+        "pm twenty message-list-members update --id rec_fixture --position 1 --preview --json"
       ],
       "api_surface": [
         {
@@ -2717,7 +2717,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-lists create --preview --json"
+        "pm twenty message-lists create --name fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -2755,7 +2755,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-lists update --id rec_fixture --preview --json"
+        "pm twenty message-lists update --id rec_fixture --name fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -2886,7 +2886,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-participants create --preview --json"
+        "pm twenty message-participants create --display-name fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -2936,7 +2936,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-participants update --id rec_fixture --preview --json"
+        "pm twenty message-participants update --id rec_fixture --display-name fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -3055,7 +3055,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-threads create --preview --json"
+        "pm twenty message-threads create --position 1 --preview --json"
       ],
       "api_surface": [
         {
@@ -3093,7 +3093,7 @@
         }
       ],
       "examples": [
-        "pm twenty message-threads update --id rec_fixture --preview --json"
+        "pm twenty message-threads update --id rec_fixture --position 1 --preview --json"
       ],
       "api_surface": [
         {
@@ -3242,7 +3242,7 @@
         }
       ],
       "examples": [
-        "pm twenty messages create --preview --json"
+        "pm twenty messages create --delivery-status fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -3310,7 +3310,7 @@
         }
       ],
       "examples": [
-        "pm twenty messages update --id rec_fixture --preview --json"
+        "pm twenty messages update --id rec_fixture --delivery-status fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -3423,7 +3423,7 @@
         }
       ],
       "examples": [
-        "pm twenty note-targets create --preview --json"
+        "pm twenty note-targets create --position 1 --preview --json"
       ],
       "api_surface": [
         {
@@ -3455,7 +3455,7 @@
         }
       ],
       "examples": [
-        "pm twenty note-targets update --id rec_fixture --preview --json"
+        "pm twenty note-targets update --id rec_fixture --position 1 --preview --json"
       ],
       "api_surface": [
         {
@@ -3580,7 +3580,7 @@
         }
       ],
       "examples": [
-        "pm twenty notes create --preview --json"
+        "pm twenty notes create --body-v2 fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -3624,7 +3624,7 @@
         }
       ],
       "examples": [
-        "pm twenty notes update --id rec_fixture --preview --json"
+        "pm twenty notes update --id rec_fixture --body-v2 fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -3761,7 +3761,7 @@
         }
       ],
       "examples": [
-        "pm twenty opportunities create --preview --json"
+        "pm twenty opportunities create --close-date fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -3817,7 +3817,7 @@
         }
       ],
       "examples": [
-        "pm twenty opportunities update --id rec_fixture --preview --json"
+        "pm twenty opportunities update --id rec_fixture --close-date fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -4092,7 +4092,7 @@
         }
       ],
       "examples": [
-        "pm twenty people create --preview --json"
+        "pm twenty people create --avatar-url fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -4286,7 +4286,7 @@
         }
       ],
       "examples": [
-        "pm twenty people update --id rec_fixture --preview --json"
+        "pm twenty people update --id rec_fixture --avatar-url fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -4399,7 +4399,7 @@
         }
       ],
       "examples": [
-        "pm twenty task-targets create --preview --json"
+        "pm twenty task-targets create --position 1 --preview --json"
       ],
       "api_surface": [
         {
@@ -4431,7 +4431,7 @@
         }
       ],
       "examples": [
-        "pm twenty task-targets update --id rec_fixture --preview --json"
+        "pm twenty task-targets update --id rec_fixture --position 1 --preview --json"
       ],
       "api_surface": [
         {
@@ -4568,7 +4568,7 @@
         }
       ],
       "examples": [
-        "pm twenty tasks create --preview --json"
+        "pm twenty tasks create --body-v2 fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -4624,7 +4624,7 @@
         }
       ],
       "examples": [
-        "pm twenty tasks update --id rec_fixture --preview --json"
+        "pm twenty tasks update --id rec_fixture --body-v2 fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -4749,7 +4749,7 @@
         }
       ],
       "examples": [
-        "pm twenty timeline-activities create --preview --json"
+        "pm twenty timeline-activities create --happens-at fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -4793,7 +4793,7 @@
         }
       ],
       "examples": [
-        "pm twenty timeline-activities update --id rec_fixture --preview --json"
+        "pm twenty timeline-activities update --id rec_fixture --happens-at fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -4912,7 +4912,7 @@
         }
       ],
       "examples": [
-        "pm twenty workflow-automated-triggers create --preview --json"
+        "pm twenty workflow-automated-triggers create --position 1 --preview --json"
       ],
       "api_surface": [
         {
@@ -4950,7 +4950,7 @@
         }
       ],
       "examples": [
-        "pm twenty workflow-automated-triggers update --id rec_fixture --preview --json"
+        "pm twenty workflow-automated-triggers update --id rec_fixture --position 1 --preview --json"
       ],
       "api_surface": [
         {
@@ -5087,7 +5087,7 @@
         }
       ],
       "examples": [
-        "pm twenty workflow-runs create --preview --json"
+        "pm twenty workflow-runs create --ended-at fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -5143,7 +5143,7 @@
         }
       ],
       "examples": [
-        "pm twenty workflow-runs update --id rec_fixture --preview --json"
+        "pm twenty workflow-runs update --id rec_fixture --ended-at fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -5262,7 +5262,7 @@
         }
       ],
       "examples": [
-        "pm twenty workflow-versions create --preview --json"
+        "pm twenty workflow-versions create --name fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -5300,7 +5300,7 @@
         }
       ],
       "examples": [
-        "pm twenty workflow-versions update --id rec_fixture --preview --json"
+        "pm twenty workflow-versions update --id rec_fixture --name fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -5431,7 +5431,7 @@
         }
       ],
       "examples": [
-        "pm twenty workflows create --preview --json"
+        "pm twenty workflows create --last-published-version-id fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -5481,7 +5481,7 @@
         }
       ],
       "examples": [
-        "pm twenty workflows update --id rec_fixture --preview --json"
+        "pm twenty workflows update --id rec_fixture --last-published-version-id fixture --preview --json"
       ],
       "api_surface": [
         {
@@ -5586,15 +5586,13 @@
       "risk": "Creates a Twenty workspace members record through the REST API.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [],
-      "examples": [
-        "pm twenty workspace-members create --preview --json"
-      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/rest/workspaceMembers"
         }
-      ]
+      ],
+      "notes": "Write schema exposes nested object/array fields only; CLI scalar flag coercion is not exposed for this command, so use reverse ETL records rather than direct scalar flags."
     },
     {
       "path": "workspace-members update",
@@ -5612,15 +5610,13 @@
           "maps_to": "record.id"
         }
       ],
-      "examples": [
-        "pm twenty workspace-members update --id rec_fixture --preview --json"
-      ],
       "api_surface": [
         {
           "method": "PATCH",
           "path": "/rest/workspaceMembers/{id}"
         }
-      ]
+      ],
+      "notes": "Write schema exposes nested object/array fields only; CLI scalar flag coercion is not exposed for this command, so use reverse ETL records rather than direct scalar flags."
     },
     {
       "path": "workspace-members batch",

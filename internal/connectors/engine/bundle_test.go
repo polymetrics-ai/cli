@@ -959,6 +959,33 @@ func TestBundleLoadEmbeddedTwentyCLISurfaceCount(t *testing.T) {
 		if cmd.Availability == "unsupported_api" {
 			t.Fatalf("Twenty command %q uses unsupported_api availability", cmd.Path)
 		}
+		if cmd.Availability == "implemented" && (strings.HasPrefix(cmd.Write, "create_") || strings.HasPrefix(cmd.Write, "update_")) {
+			hasMutableFlagDefinition := false
+			for _, flag := range cmd.Flags {
+				if flag.Name != "id" {
+					hasMutableFlagDefinition = true
+					break
+				}
+			}
+			if !hasMutableFlagDefinition {
+				if len(cmd.Examples) > 0 {
+					t.Fatalf("Twenty command %q has examples despite no mutable scalar flags: %+v", cmd.Path, cmd.Examples)
+				}
+			} else if len(cmd.Examples) == 0 {
+				t.Fatalf("Twenty command %q has no examples", cmd.Path)
+			}
+			for _, example := range cmd.Examples {
+				hasMutableFlag := false
+				for _, flag := range cmd.Flags {
+					if flag.Name != "id" && strings.Contains(example, "--"+flag.Name) {
+						hasMutableFlag = true
+					}
+				}
+				if !hasMutableFlag {
+					t.Fatalf("Twenty command %q example %q omits a mutable record flag", cmd.Path, example)
+				}
+			}
+		}
 		for _, prefix := range []string{"create_", "update_", "delete_"} {
 			if strings.HasPrefix(cmd.Write, prefix) && cmd.Availability == "implemented" {
 				writePrefixes[prefix]++

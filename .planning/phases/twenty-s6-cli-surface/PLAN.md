@@ -74,3 +74,7 @@ go run ./cmd/pm connectors -> status=0; rendered connectors help
 ### Review fix F3 numeric scalar CLI flags
 
 Claude local review on head `46f49175` found an important non-blocking gap: Twenty create/update commands surfaced string, boolean, and string-array scalar fields, but silently omitted write-schema `number` scalar fields such as `position` and PDL/count metrics. Plan: add a typed `number` CLI flag kind, coerce it to JSON numbers in commandrunner, expose Twenty numeric scalar write fields as `number` flags (not raw JSON), update generated docs/website artifacts, and rerun focused gates.
+
+### Review fix F4 create/update example validity
+
+Project reviewer found Twenty create/update examples invalid against write schemas: create examples had no record field and update examples only had `--id`, while write schemas require at least one mutable field. Plan: keep regression coverage that every implemented Twenty create/update example includes a non-id typed flag when scalar flags exist, update examples to include a safe scalar flag, and remove examples with explanatory notes for workspace-members where no scalar flags are exposed.

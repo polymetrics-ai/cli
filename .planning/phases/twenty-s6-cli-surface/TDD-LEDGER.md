@@ -77,3 +77,13 @@ Claude local review on head `46f49175` found an important non-blocking gap: Twen
 - `go test ./internal/connectors/commandrunner -run TestBuildWriteCommandCoercesNumberFlag -count=1` passed.
 - `go test ./internal/connectors/engine -run TestBundleLoadEmbeddedTwentyCLISurfaceCount -count=1` passed.
 - Rejects non-finite values (`NaN`/`Inf`) for `number` flags so plans only carry JSON-safe finite numbers.
+
+
+#### F4 red test (create/update example validity)
+- Added regression coverage in `TestBundleLoadEmbeddedTwentyCLISurfaceCount` requiring implemented Twenty create/update examples to include a non-id mutable scalar flag when scalar flags exist.
+- Red check failed as expected before the example fix: `attachments create` example `pm twenty attachments create --preview --json` omitted a mutable record flag.
+
+#### F4 green implementation (valid create/update examples)
+- Updated implemented Twenty create/update examples with a mutable typed scalar flag where one is exposed (for example `--name fixture` or `--position 1`).
+- Removed examples and added notes for workspace-members create/update, whose write schema exposes nested object/array fields only and no scalar CLI flags.
+- `go test ./internal/connectors/engine -run TestBundleLoadEmbeddedTwentyCLISurfaceCount -count=1` now passes with regression coverage for example validity.

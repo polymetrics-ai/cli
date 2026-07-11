@@ -195,3 +195,15 @@ Fixed the `claude_local` important finding by adding a typed `number` CLI flag k
 - `go test ./...` → passed after F3 numeric flag changes.
 - `scripts/verify-gsd-workflow 62b8b46c` → passed after F3.
 - F3 finite-number guard added for `number` flags and covered by `TestBuildWriteCommandCoercesNumberFlag`.
+
+### Review fix F4 create/update example validity
+
+Fixed the `pm-reviewer` blocking example finding by updating Twenty create/update examples to include a mutable typed scalar flag where possible, and by removing examples plus adding notes for workspace-members create/update where only nested object/array record fields are exposed. Regenerated Twenty manual/skill and website generated data.
+
+F4 verification passed:
+- `go run ./cmd/connectorgen validate internal/connectors/defs --json | jq '{findings,warnings,connectors_checked}'` → `findings: []`, `warnings: []`, `connectors_checked: 548`.
+- `go test ./internal/connectors/commandrunner ./internal/connectors/engine ./internal/cli -run 'TestBuildWriteCommandCoercesNumberFlag|TestBundleLoadEmbeddedTwentyCLISurfaceCount|TestTwentyConnector|TestDocsGenerateAndValidateConnectorDocs|TestConnectorCatalog' -count=1` → all `ok`.
+- `go build ./cmd/pm` → passed.
+- `./pm docs validate --connectors-dir docs/connectors` → passed.
+- Website generation idempotence (`pnpm run gen:website-data` + `git diff --exit-code -- website/data website/lib website/public`) → passed.
+- `scripts/verify-gsd-workflow 62b8b46c` → passed.
