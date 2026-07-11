@@ -123,6 +123,15 @@ reconciled `RUN.json`/`ORCHESTRATION-STATE.json` and stating the current stage p
 - After completing a turn's work, run `scripts/loop-trace.sh distill` so the turn's digest lands
   in the trace store for the validator, the next RECONCILE, and the human.
 
+## INTEGRATE is a hard validation boundary
+
+INTEGRATE (merging a sub-PR into the parent branch) is irreversible and MUST be its own turn. Never
+merge in the same invocation as VERIFY or REVIEW. Sequence: VERIFY (turn, stop, Shepherd validates)
+→ REVIEW (turn, stop, Shepherd validates) → only if the review turn PROCEEDed, INTEGRATE (its own
+turn). The independent Shepherd must have PROCEEDed the REVIEW stage on the exact head SHA BEFORE
+you merge it — self-review by your subagents is not sufficient authorization to integrate. If the
+prior review turn has not been validated, do REVIEW this turn and stop; do not merge.
+
 ## End of turn
 
 After advancing ONE stage and persisting `RUN.json`/`ORCHESTRATION-STATE.json`, STOP. Your turn is
