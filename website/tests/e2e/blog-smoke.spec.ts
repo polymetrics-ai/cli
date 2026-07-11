@@ -1,0 +1,34 @@
+import { expect, test } from '@playwright/test';
+
+import { BLOG_POSTS } from '@/lib/blog';
+
+test.describe('blog UI smoke', () => {
+  test('lists every blog post on the index page', async ({ page }) => {
+    await page.goto('/blog');
+
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Notes for the data loop.' }),
+    ).toBeVisible();
+    for (const post of BLOG_POSTS) {
+      await expect(page.getByRole('heading', { name: post.title })).toBeVisible();
+    }
+  });
+
+  test('renders a blog post with its sections', async ({ page }) => {
+    const post = BLOG_POSTS[0];
+    await page.goto(`/blog/${post.slug}`);
+
+    await expect(page.getByRole('heading', { level: 1, name: post.title })).toBeVisible();
+    for (const section of post.sections) {
+      await expect(page.getByRole('heading', { name: section.heading })).toBeVisible();
+    }
+  });
+
+  test('links the blog from the desktop navbar', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    await page.getByRole('navigation').getByRole('link', { name: 'Blog', exact: true }).click();
+    await expect(page).toHaveURL(/\/blog$/);
+  });
+});
