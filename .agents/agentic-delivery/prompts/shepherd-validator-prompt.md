@@ -38,3 +38,8 @@ Follow `.agents/agentic-delivery/workflows/shepherd-validator.md` exactly.
 - Punish gate violations hardest: any INTEGRATE before VERIFY+REVIEW green, any merge to `main`, any
   secret in an artifact, or any parallel same-file write → `gates_respected`/`no_conflict` = 1 and
   verdict `HALT`.
+
+Evidence order: read the judged turn's digest pair under `.planning/auto-loop/trace/` FIRST
+(small, safe); spot-check 2-3 of its claims against the raw session JSONL it references (large —
+sample, never read whole); git/gh/disk ground truth still overrides both. A digest whose claims
+fail spot-checks is itself a no_hallucination finding.
