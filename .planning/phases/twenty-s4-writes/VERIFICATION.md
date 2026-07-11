@@ -1,6 +1,6 @@
 # Twenty S4 writes verification (#281)
 
-Status: GREEN for feasible local gates. `make verify` intentionally not run: `Makefile` target `smoke-no-build` executes `./pm reverse run ... --approve ...`; S4 safety forbids reverse-ETL execution.
+Status: GREEN for PR #304 F1 review fix. Prior S4 gates were green. `make verify` remains intentionally not run because `Makefile` target `smoke-no-build` executes `./pm reverse run ... --approve ...`; S4 safety forbids reverse-ETL execution.
 
 ## GSD adapter / manual fallback
 
@@ -33,7 +33,102 @@ writes.json missing (expected before S4)
 0
 ```
 
-## Local artifact gates
+## Review fix F1 required gates
+
+Planned exact commands:
+
+```bash
+jq . internal/connectors/defs/twenty/writes.json internal/connectors/engine/schema/writes.schema.json
+python3 - <<'PY'
+import json
+from pathlib import Path
+w=json.loads(Path('internal/connectors/defs/twenty/writes.json').read_text())
+b=[a for a in w['actions'] if a['name'].startswith('batch_')]
+assert len(b)==28
+assert all(a.get('body_field')=='records' for a in b)
+assert not any('body_fields' in a for a in b)
+assert all(a['record_schema']['required']==['records'] for a in b)
+print('batch body_field ok', len(b))
+PY
+go test ./internal/connectors/engine -run 'TestWrite.*BodyField|TestWriteRawBodyField' -count=1
+go run ./cmd/connectorgen validate internal/connectors/defs --json
+go test ./internal/connectors/conformance -run 'TestConformance/twenty' -count=1
+go test ./internal/connectors/defs ./internal/connectors/engine ./internal/connectors/conformance ./cmd/connectorgen -count=1
+go vet ./...
+go build ./cmd/pm
+gofmt -l cmd internal
+go test ./... -count=1
+scripts/verify-gsd-workflow 1a86cc1a
+```
+
+Red evidence captured before production implementation:
+
+```bash
+go test ./internal/connectors/engine -run 'TestWrite.*BodyField|TestWriteRawBodyField' -count=1
+```
+
+```text
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+internal/connectors/engine/write_test.go:209:3: unknown field BodyField in struct literal of type WriteAction
+internal/connectors/engine/write_test.go:255:3: unknown field BodyField in struct literal of type WriteAction
+FAIL	polymetrics.ai/internal/connectors/engine [build failed]
+FAIL
+```
+
+Green review-fix gate results:
+
+```text
+jq . internal/connectors/defs/twenty/writes.json internal/connectors/engine/schema/writes.schema.json >/dev/null
+# exit 0
+
+python batch shape check:
+batch body_field ok 28
+
+go test ./internal/connectors/engine -run 'TestWrite.*BodyField|TestWriteRawBodyField' -count=1
+ok  	polymetrics.ai/internal/connectors/engine	0.390s
+
+go run ./cmd/connectorgen validate internal/connectors/defs --json
+{
+  "findings": [],
+  "warnings": [],
+  "connectors_checked": 548
+}
+
+go test ./internal/connectors/conformance -run 'TestConformance/twenty' -count=1
+ok  	polymetrics.ai/internal/connectors/conformance	1.265s
+
+go test ./internal/connectors/defs ./internal/connectors/engine ./internal/connectors/conformance ./cmd/connectorgen -count=1
+ok  	polymetrics.ai/internal/connectors/defs	1.749s
+ok  	polymetrics.ai/internal/connectors/engine	1.152s
+ok  	polymetrics.ai/internal/connectors/conformance	10.059s
+ok  	polymetrics.ai/cmd/connectorgen	5.147s
+
+go vet ./...
+# no output; exit 0
+
+go build ./cmd/pm
+# no output; exit 0
+
+gofmt -l cmd internal
+# no output; exit 0
+
+go test ./... -count=1
+# all packages passed; slowest observed: internal/connectors/certify 371.909s, internal/cli 162.848s
+
+scripts/verify-gsd-workflow 1a86cc1a
+verify-gsd-workflow: implementation changes have GSD/TDD evidence against 1a86cc1a
+Implementation files changed:
+internal/connectors/defs/twenty/api_surface.json
+internal/connectors/defs/twenty/writes.json
+Evidence files changed:
+.planning/phases/twenty-s4-writes/PLAN.md
+.planning/phases/twenty-s4-writes/RUN-STATE.json
+.planning/phases/twenty-s4-writes/SUMMARY.md
+.planning/phases/twenty-s4-writes/TDD-LEDGER.md
+.planning/phases/twenty-s4-writes/VERIFICATION.md
+```
+
+## Original local artifact gates
 
 ```bash
 jq . internal/connectors/defs/twenty/writes.json internal/connectors/defs/twenty/api_surface.json >/dev/null

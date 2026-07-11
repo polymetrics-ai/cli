@@ -677,13 +677,19 @@ client-side" (see stripe's `docs.md`). Any key on `metadata.json.rate_limit` bey
 `requests_per_minute` (e.g. a `strategy` field) is not even a field on the Go type and is silently
 dropped — don't declare one.
 
-**Write body construction** (`write.go`): `body_type` is `"json"` (default), `"form"`, or
-`"none"`. Default body = every record field **except** those named in `path_fields` (the path
-already carries them, e.g. `{{ record.id }}` for an update). `body_fields` (if set) restricts the
-body to an explicit allow-list instead (used for delete-with-body actions). `"form"` builds a
-`url.Values` body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for
-deterministic encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body
-at all (pure path-parameterized mutation/delete).
+**Write body construction** (`write.go`): `body_type` is `"json"` (default), `"form"`,
+`"none"`, or `"graphql"`. Default JSON body = every record field **except** those named in
+`path_fields` (the path already carries them, e.g. `{{ record.id }}` for an update).
+`body_fields` (if set) restricts the JSON body to an explicit object allow-list instead (used for
+delete-with-body actions). `body_field` (singular, JSON only) sends one schema-validated record
+field as the raw request body itself rather than as an object wrapper — e.g. Twenty batch actions
+keep an outer input record `{records: [...]}` for `record_schema` validation and preview gating, but
+send the `records` array as the top-level JSON body required by `POST /rest/batch/{objects}`. A
+missing `body_field` key is a write error. This remains per-action declarative JSON, gated by the
+action's `record_schema`; it is not a generic/raw HTTP write tool. `"form"` builds a `url.Values`
+body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for deterministic
+encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body at all (pure
+path-parameterized mutation/delete).
 
 **Delete semantics**: `kind: "delete"` + `delete.missing_ok_status: [404, ...]` means those HTTP
 statuses on the delete request count as **written, not failed** (idempotent delete) — any other

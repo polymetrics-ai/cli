@@ -167,9 +167,6 @@
       "method": "POST",
       "path": "/rest/batch/attachments",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -250,7 +247,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty attachments records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty attachments records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_blocklists",
@@ -323,9 +321,6 @@
       "method": "POST",
       "path": "/rest/batch/blocklists",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -358,7 +353,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty blocklists records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty blocklists records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_calendar_channel_event_associations",
@@ -449,9 +445,6 @@
       "method": "POST",
       "path": "/rest/batch/calendarChannelEventAssociations",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -493,7 +486,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty calendar_channel_event_associations records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty calendar_channel_event_associations records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_calendar_event_participants",
@@ -614,9 +608,6 @@
       "method": "POST",
       "path": "/rest/batch/calendarEventParticipants",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -673,7 +664,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty calendar_event_participants records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty calendar_event_participants records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_calendar_events",
@@ -950,9 +942,6 @@
       "method": "POST",
       "path": "/rest/batch/calendarEvents",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -1087,7 +1076,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty calendar_events records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty calendar_events records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_call_recordings",
@@ -1304,9 +1294,6 @@
       "method": "POST",
       "path": "/rest/batch/callRecordings",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -1411,7 +1398,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty call_recordings records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty call_recordings records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_companies",
@@ -2078,9 +2066,6 @@
       "method": "POST",
       "path": "/rest/batch/companies",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -2410,7 +2395,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty companies records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty companies records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_dashboards",
@@ -2513,9 +2499,6 @@
       "method": "POST",
       "path": "/rest/batch/dashboards",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -2563,7 +2546,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty dashboards records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty dashboards records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_message_campaigns",
@@ -2766,9 +2750,6 @@
       "method": "POST",
       "path": "/rest/batch/messageCampaigns",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -2866,7 +2847,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty message_campaigns records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty message_campaigns records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_message_channel_message_association_message_folders",
@@ -2933,9 +2915,6 @@
       "method": "POST",
       "path": "/rest/batch/messageChannelMessageAssociationMessageFolders",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -2965,7 +2944,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty message_channel_message_association_message_folders records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty message_channel_message_association_message_folders records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_message_channel_message_associations",
@@ -3098,9 +3078,6 @@
       "method": "POST",
       "path": "/rest/batch/messageChannelMessageAssociations",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -3163,7 +3140,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty message_channel_message_associations records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty message_channel_message_associations records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_message_list_members",
@@ -3230,9 +3208,6 @@
       "method": "POST",
       "path": "/rest/batch/messageListMembers",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -3262,7 +3237,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty message_list_members records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty message_list_members records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_message_lists",
@@ -3365,9 +3341,6 @@
       "method": "POST",
       "path": "/rest/batch/messageLists",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -3415,7 +3388,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty message_lists records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty message_lists records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_message_participants",
@@ -3542,9 +3516,6 @@
       "method": "POST",
       "path": "/rest/batch/messageParticipants",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -3604,7 +3575,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty message_participants records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty message_participants records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_message_threads",
@@ -3695,9 +3667,6 @@
       "method": "POST",
       "path": "/rest/batch/messageThreads",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -3739,7 +3708,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty message_threads records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty message_threads records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_messages",
@@ -3958,9 +3928,6 @@
       "method": "POST",
       "path": "/rest/batch/messages",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -4066,7 +4033,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty messages records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty messages records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_note_targets",
@@ -4169,9 +4137,6 @@
       "method": "POST",
       "path": "/rest/batch/noteTargets",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -4219,7 +4184,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty note_targets records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty note_targets records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_notes",
@@ -4334,9 +4300,6 @@
       "method": "POST",
       "path": "/rest/batch/notes",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -4390,7 +4353,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty notes records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty notes records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_opportunities",
@@ -4619,9 +4583,6 @@
       "method": "POST",
       "path": "/rest/batch/opportunities",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -4732,7 +4693,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty opportunities records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty opportunities records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_people",
@@ -5547,9 +5509,6 @@
       "method": "POST",
       "path": "/rest/batch/people",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -5953,7 +5912,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty people records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty people records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_task_targets",
@@ -6056,9 +6016,6 @@
       "method": "POST",
       "path": "/rest/batch/taskTargets",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -6106,7 +6063,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty task_targets records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty task_targets records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_tasks",
@@ -6259,9 +6217,6 @@
       "method": "POST",
       "path": "/rest/batch/tasks",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -6334,7 +6289,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty tasks records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty tasks records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_timeline_activities",
@@ -6555,9 +6511,6 @@
       "method": "POST",
       "path": "/rest/batch/timelineActivities",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -6664,7 +6617,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty timeline_activities records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty timeline_activities records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_workflow_automated_triggers",
@@ -6733,9 +6687,6 @@
       "method": "POST",
       "path": "/rest/batch/workflowAutomatedTriggers",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -6766,7 +6717,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty workflow_automated_triggers records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty workflow_automated_triggers records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_workflow_runs",
@@ -6895,9 +6847,6 @@
       "method": "POST",
       "path": "/rest/batch/workflowRuns",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -6958,7 +6907,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty workflow_runs records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty workflow_runs records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_workflow_versions",
@@ -7059,9 +7009,6 @@
       "method": "POST",
       "path": "/rest/batch/workflowVersions",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -7108,7 +7055,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty workflow_versions records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty workflow_versions records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_workflows",
@@ -7235,9 +7183,6 @@
       "method": "POST",
       "path": "/rest/batch/workflows",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -7297,7 +7242,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty workflows records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty workflows records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     },
     {
       "name": "create_workspace_members",
@@ -7420,9 +7366,6 @@
       "method": "POST",
       "path": "/rest/batch/workspaceMembers",
       "body_type": "json",
-      "body_fields": [
-        "records"
-      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -7480,7 +7423,8 @@
           }
         }
       },
-      "risk": "bulk creates up to 60 Twenty workspace_members records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size"
+      "risk": "bulk creates up to 60 Twenty workspace_members records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
     }
   ]
 }
