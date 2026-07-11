@@ -277,6 +277,9 @@ function MobileMenu({ open, onOpenChange }: { open: boolean; onOpenChange: (open
             <Link href="/docs" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Docs</Link>
           </SheetClose>
           <SheetClose asChild>
+            <Link href="/blog" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Blog</Link>
+          </SheetClose>
+          <SheetClose asChild>
             <Link href="/changelog" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">Changelog</Link>
           </SheetClose>
           <a href="https://github.com/polymetrics-ai/cli" target="_blank" rel="noreferrer" className="py-2 font-sans text-[14px] font-medium text-text-secondary hover:text-text-primary transition-colors">GitHub</a>
@@ -336,6 +339,7 @@ export function SiteNavbar() {
             <div className="flex items-center justify-center gap-4">
               <ProductDropdown />
               <NavLink href="/docs">Docs</NavLink>
+              <NavLink href="/blog">Blog</NavLink>
               <NavLink href="/changelog">Changelog</NavLink>
               <NavLink href="https://github.com/polymetrics-ai/cli" external>GitHub</NavLink>
             </div>
