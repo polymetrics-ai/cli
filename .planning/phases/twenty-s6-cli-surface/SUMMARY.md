@@ -14,3 +14,9 @@ Status: REVIEW_FIX_F1_ACCEPTED_METADATA_APPROVAL_CORRECTED; local re-verificatio
 - Next: run focused re-verification, amend/push, and re-review PR #320.
 
 - Review fix F2: refreshed connector catalog/help count parity for Twenty (552 total / 548 declarative; catalog rows now show Twenty with 28 streams and 112 writes).
+
+### Review fix F3 numeric scalar CLI flags
+
+Claude local review on head `46f49175` found an important non-blocking gap: Twenty create/update commands surfaced string, boolean, and string-array scalar fields, but silently omitted write-schema `number` scalar fields such as `position` and PDL/count metrics. Plan: add a typed `number` CLI flag kind, coerce it to JSON numbers in commandrunner, expose Twenty numeric scalar write fields as `number` flags (not raw JSON), update generated docs/website artifacts, and rerun focused gates.
+
+- Review fix F3: resolved `claude_local` numeric scalar coverage gap by adding typed number flag support and exposing Twenty create/update number fields (`position`, PDL/count metrics); docs/website regenerated and focused gates passed.

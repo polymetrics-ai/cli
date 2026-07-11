@@ -6,7 +6,7 @@
   "branch": "feat/283-twenty-cli-surface",
   "baseBranch": "feat/277-twenty-connector-parity",
   "baseHead": "62b8b46cde85ae620591194467d3474fda2a1e8a",
-  "status": "review_fixes_f1_f2_green_local_pending_push",
+  "status": "review_fix_f3_numeric_flags_green_local_pending_push",
   "gsdMode": "manual_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase twenty-s6-cli-surface --dry-run",
   "gsdFallbackReason": "scripts/gsd: unknown GSD command: programming-loop",
@@ -105,5 +105,17 @@
     "status": "fixed_green_local",
     "problem": "Connector docs/help catalog artifacts omitted/staled Twenty counts and generated catalog metadata.",
     "fix": "Updated docs.go/docs/cli counts to 552/548; added Twenty to connector README/catalog markdown; replaced Twenty catalog JSON entry with 28 streams/112 writes; reverified docs validate and website idempotence."
+  },
+  "reviewFix3": {
+    "finding": "claude_local important numeric scalar flags",
+    "status": "fixed_green_local",
+    "fix": "Added cli_surface number flag type and commandrunner float coercion; exposed Twenty create/update number scalar fields as typed flags; regenerated Twenty docs and website data.",
+    "verification": [
+      "connectorgen validate all defs",
+      "focused commandrunner/engine/internal-cli tests",
+      "go build ./cmd/pm",
+      "pm docs validate",
+      "website gen idempotence"
+    ]
   }
 }

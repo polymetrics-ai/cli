@@ -70,3 +70,7 @@ go run ./cmd/pm connectors -> status=0; rendered connectors help
 - plan: `local_critical_path` — user instructed do not spawn subagents; worker owns one branch/cwd.
 - tdd-gate: `local_critical_path` — red validation captured before production edits.
 - implementation/review: `local_critical_path` — one coherent green slice on branch `feat/283-twenty-cli-surface`; push/PR after final commit.
+
+### Review fix F3 numeric scalar CLI flags
+
+Claude local review on head `46f49175` found an important non-blocking gap: Twenty create/update commands surfaced string, boolean, and string-array scalar fields, but silently omitted write-schema `number` scalar fields such as `position` and PDL/count metrics. Plan: add a typed `number` CLI flag kind, coerce it to JSON numbers in commandrunner, expose Twenty numeric scalar write fields as `number` flags (not raw JSON), update generated docs/website artifacts, and rerun focused gates.

@@ -62,3 +62,18 @@ go test -timeout 20m ./... -> ok
 - New dependencies: NONE; `go.mod`/`go.sum` unchanged.
 
 - Review fix F2: refreshed connector catalog/help count parity for Twenty (552 total / 548 declarative; catalog rows now show Twenty with 28 streams and 112 writes).
+
+### Review fix F3 numeric scalar CLI flags
+
+Claude local review on head `46f49175` found an important non-blocking gap: Twenty create/update commands surfaced string, boolean, and string-array scalar fields, but silently omitted write-schema `number` scalar fields such as `position` and PDL/count metrics. Plan: add a typed `number` CLI flag kind, coerce it to JSON numbers in commandrunner, expose Twenty numeric scalar write fields as `number` flags (not raw JSON), update generated docs/website artifacts, and rerun focused gates.
+
+#### F3 red tests (numeric scalar flags)
+- `go test ./internal/connectors/commandrunner -run TestBuildWriteCommandCoercesNumberFlag -count=1` failed as expected: `flag --estimate has unsupported type "number"`.
+- `go test ./internal/connectors/engine -run TestBundleLoadEmbeddedTwentyCLISurfaceCount -count=1` failed as expected: Twenty `attachments create` missing `--position` number flag mapped to `record.position`.
+
+#### F3 green implementation (numeric scalar flags)
+- Added typed `number` CLI flag support in `cli_surface.schema.json` and commandrunner coercion (`strconv.ParseFloat`).
+- Added Twenty numeric scalar flags for create/update write-schema `number` fields (`position`, PDL/count metrics) without adding generic JSON/raw write flags.
+- `go test ./internal/connectors/commandrunner -run TestBuildWriteCommandCoercesNumberFlag -count=1` passed.
+- `go test ./internal/connectors/engine -run TestBundleLoadEmbeddedTwentyCLISurfaceCount -count=1` passed.
+- Rejects non-finite values (`NaN`/`Inf`) for `number` flags so plans only carry JSON-safe finite numbers.

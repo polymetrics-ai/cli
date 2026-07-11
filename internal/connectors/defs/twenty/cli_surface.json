@@ -128,6 +128,12 @@
           "type": "string",
           "summary": "Top-level name field for the Twenty attachments record.",
           "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty attachments record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -160,6 +166,12 @@
           "type": "string",
           "summary": "Top-level name field for the Twenty attachments record.",
           "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty attachments record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -273,6 +285,12 @@
           "type": "string",
           "summary": "Top-level handle field for the Twenty blocklists record.",
           "maps_to": "record.handle"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty blocklists record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -305,6 +323,12 @@
           "type": "string",
           "summary": "Top-level handle field for the Twenty blocklists record.",
           "maps_to": "record.handle"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty blocklists record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -426,6 +450,12 @@
           "maps_to": "record.eventExternalId"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty calendar channel event associations record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "recurring-event-external-id",
           "type": "string",
           "summary": "Top-level recurring event external id field for the Twenty calendar channel event associations record.",
@@ -468,6 +498,12 @@
           "type": "string",
           "summary": "Top-level event external id field for the Twenty calendar channel event associations record.",
           "maps_to": "record.eventExternalId"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty calendar channel event associations record.",
+          "maps_to": "record.position"
         },
         {
           "name": "recurring-event-external-id",
@@ -601,6 +637,12 @@
           "maps_to": "record.isOrganizer"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty calendar event participants record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "response-status",
           "type": "string",
           "summary": "Top-level response status field for the Twenty calendar event participants record.",
@@ -649,6 +691,12 @@
           "type": "boolean",
           "summary": "Top-level is organizer field for the Twenty calendar event participants record.",
           "maps_to": "record.isOrganizer"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty calendar event participants record.",
+          "maps_to": "record.position"
         },
         {
           "name": "response-status",
@@ -824,6 +872,12 @@
           "maps_to": "record.location"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty calendar events record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "starts-at",
           "type": "string",
           "summary": "Top-level starts at field for the Twenty calendar events record.",
@@ -920,6 +974,12 @@
           "type": "string",
           "summary": "Top-level location field for the Twenty calendar events record.",
           "maps_to": "record.location"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty calendar events record.",
+          "maps_to": "record.position"
         },
         {
           "name": "starts-at",
@@ -1071,6 +1131,12 @@
           "maps_to": "record.externalRecordingId"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty call recordings record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "recording-request-status",
           "type": "string",
           "summary": "Top-level recording request status field for the Twenty call recordings record.",
@@ -1155,6 +1221,12 @@
           "type": "string",
           "summary": "Top-level external recording id field for the Twenty call recordings record.",
           "maps_to": "record.externalRecordingId"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty call recordings record.",
+          "maps_to": "record.position"
         },
         {
           "name": "recording-request-status",
@@ -1312,10 +1384,22 @@
           "maps_to": "record.pdlCompanyType"
         },
         {
+          "name": "pdl-employee-count",
+          "type": "number",
+          "summary": "Top-level pdl employee count numeric field for the Twenty companies record.",
+          "maps_to": "record.pdlEmployeeCount"
+        },
+        {
           "name": "pdl-enrichment-status",
           "type": "string",
           "summary": "Top-level pdl enrichment status field for the Twenty companies record.",
           "maps_to": "record.pdlEnrichmentStatus"
+        },
+        {
+          "name": "pdl-founded-year",
+          "type": "number",
+          "summary": "Top-level pdl founded year numeric field for the Twenty companies record.",
+          "maps_to": "record.pdlFoundedYear"
         },
         {
           "name": "pdl-funding-stages",
@@ -1396,6 +1480,12 @@
           "maps_to": "record.pdlMicExchange"
         },
         {
+          "name": "pdl-number-funding-rounds",
+          "type": "number",
+          "summary": "Top-level pdl number funding rounds numeric field for the Twenty companies record.",
+          "maps_to": "record.pdlNumberFundingRounds"
+        },
+        {
           "name": "pdl-size-range",
           "type": "string",
           "summary": "Top-level pdl size range field for the Twenty companies record.",
@@ -1412,6 +1502,12 @@
           "type": "string",
           "summary": "Top-level pdl ticker field for the Twenty companies record.",
           "maps_to": "record.pdlTicker"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty companies record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -1458,10 +1554,22 @@
           "maps_to": "record.pdlCompanyType"
         },
         {
+          "name": "pdl-employee-count",
+          "type": "number",
+          "summary": "Top-level pdl employee count numeric field for the Twenty companies record.",
+          "maps_to": "record.pdlEmployeeCount"
+        },
+        {
           "name": "pdl-enrichment-status",
           "type": "string",
           "summary": "Top-level pdl enrichment status field for the Twenty companies record.",
           "maps_to": "record.pdlEnrichmentStatus"
+        },
+        {
+          "name": "pdl-founded-year",
+          "type": "number",
+          "summary": "Top-level pdl founded year numeric field for the Twenty companies record.",
+          "maps_to": "record.pdlFoundedYear"
         },
         {
           "name": "pdl-funding-stages",
@@ -1542,6 +1650,12 @@
           "maps_to": "record.pdlMicExchange"
         },
         {
+          "name": "pdl-number-funding-rounds",
+          "type": "number",
+          "summary": "Top-level pdl number funding rounds numeric field for the Twenty companies record.",
+          "maps_to": "record.pdlNumberFundingRounds"
+        },
+        {
           "name": "pdl-size-range",
           "type": "string",
           "summary": "Top-level pdl size range field for the Twenty companies record.",
@@ -1558,6 +1672,12 @@
           "type": "string",
           "summary": "Top-level pdl ticker field for the Twenty companies record.",
           "maps_to": "record.pdlTicker"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty companies record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -1673,6 +1793,12 @@
           "maps_to": "record.pageLayoutId"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty dashboards record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "title",
           "type": "string",
           "summary": "Top-level title field for the Twenty dashboards record.",
@@ -1709,6 +1835,12 @@
           "type": "string",
           "summary": "Top-level page layout id field for the Twenty dashboards record.",
           "maps_to": "record.pageLayoutId"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty dashboards record.",
+          "maps_to": "record.position"
         },
         {
           "name": "title",
@@ -1830,10 +1962,40 @@
           "maps_to": "record.bodyTemplate"
         },
         {
+          "name": "bounced-count",
+          "type": "number",
+          "summary": "Top-level bounced count numeric field for the Twenty message campaigns record.",
+          "maps_to": "record.bouncedCount"
+        },
+        {
+          "name": "complained-count",
+          "type": "number",
+          "summary": "Top-level complained count numeric field for the Twenty message campaigns record.",
+          "maps_to": "record.complainedCount"
+        },
+        {
+          "name": "failed-count",
+          "type": "number",
+          "summary": "Top-level failed count numeric field for the Twenty message campaigns record.",
+          "maps_to": "record.failedCount"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message campaigns record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "sent-at",
           "type": "string",
           "summary": "Top-level sent at field for the Twenty message campaigns record.",
           "maps_to": "record.sentAt"
+        },
+        {
+          "name": "sent-count",
+          "type": "number",
+          "summary": "Top-level sent count numeric field for the Twenty message campaigns record.",
+          "maps_to": "record.sentCount"
         },
         {
           "name": "status",
@@ -1886,10 +2048,40 @@
           "maps_to": "record.bodyTemplate"
         },
         {
+          "name": "bounced-count",
+          "type": "number",
+          "summary": "Top-level bounced count numeric field for the Twenty message campaigns record.",
+          "maps_to": "record.bouncedCount"
+        },
+        {
+          "name": "complained-count",
+          "type": "number",
+          "summary": "Top-level complained count numeric field for the Twenty message campaigns record.",
+          "maps_to": "record.complainedCount"
+        },
+        {
+          "name": "failed-count",
+          "type": "number",
+          "summary": "Top-level failed count numeric field for the Twenty message campaigns record.",
+          "maps_to": "record.failedCount"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message campaigns record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "sent-at",
           "type": "string",
           "summary": "Top-level sent at field for the Twenty message campaigns record.",
           "maps_to": "record.sentAt"
+        },
+        {
+          "name": "sent-count",
+          "type": "number",
+          "summary": "Top-level sent count numeric field for the Twenty message campaigns record.",
+          "maps_to": "record.sentCount"
         },
         {
           "name": "status",
@@ -2021,6 +2213,12 @@
           "type": "string",
           "summary": "Top-level message folder id field for the Twenty message channel message association message folders record.",
           "maps_to": "record.messageFolderId"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message channel message association message folders record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -2053,6 +2251,12 @@
           "type": "string",
           "summary": "Top-level message folder id field for the Twenty message channel message association message folders record.",
           "maps_to": "record.messageFolderId"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message channel message association message folders record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -2184,6 +2388,12 @@
           "type": "string",
           "summary": "Top-level message thread external id field for the Twenty message channel message associations record.",
           "maps_to": "record.messageThreadExternalId"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message channel message associations record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -2234,6 +2444,12 @@
           "type": "string",
           "summary": "Top-level message thread external id field for the Twenty message channel message associations record.",
           "maps_to": "record.messageThreadExternalId"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message channel message associations record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -2341,7 +2557,14 @@
       "write": "create_message_list_members",
       "risk": "Creates a Twenty message list members record through the REST API.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message list members record.",
+          "maps_to": "record.position"
+        }
+      ],
       "examples": [
         "pm twenty message-list-members create --preview --json"
       ],
@@ -2366,6 +2589,12 @@
           "type": "string",
           "summary": "Twenty message list members record ID.",
           "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message list members record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -2479,6 +2708,12 @@
           "type": "string",
           "summary": "Top-level name field for the Twenty message lists record.",
           "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message lists record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -2511,6 +2746,12 @@
           "type": "string",
           "summary": "Top-level name field for the Twenty message lists record.",
           "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message lists record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -2632,6 +2873,12 @@
           "maps_to": "record.handle"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message participants record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "role",
           "type": "string",
           "summary": "Top-level role field for the Twenty message participants record.",
@@ -2674,6 +2921,12 @@
           "type": "string",
           "summary": "Top-level handle field for the Twenty message participants record.",
           "maps_to": "record.handle"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message participants record.",
+          "maps_to": "record.position"
         },
         {
           "name": "role",
@@ -2789,6 +3042,12 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message threads record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "subject",
           "type": "string",
           "summary": "Top-level subject field for the Twenty message threads record.",
@@ -2819,6 +3078,12 @@
           "type": "string",
           "summary": "Twenty message threads record ID.",
           "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty message threads record.",
+          "maps_to": "record.position"
         },
         {
           "name": "subject",
@@ -2952,6 +3217,12 @@
           "maps_to": "record.isDraft"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty messages record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "received-at",
           "type": "string",
           "summary": "Top-level received at field for the Twenty messages record.",
@@ -3012,6 +3283,12 @@
           "type": "boolean",
           "summary": "Top-level is draft field for the Twenty messages record.",
           "maps_to": "record.isDraft"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty messages record.",
+          "maps_to": "record.position"
         },
         {
           "name": "received-at",
@@ -3137,7 +3414,14 @@
       "write": "create_note_targets",
       "risk": "Creates a Twenty note targets record through the REST API.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty note targets record.",
+          "maps_to": "record.position"
+        }
+      ],
       "examples": [
         "pm twenty note-targets create --preview --json"
       ],
@@ -3162,6 +3446,12 @@
           "type": "string",
           "summary": "Twenty note targets record ID.",
           "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty note targets record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -3277,6 +3567,12 @@
           "maps_to": "record.bodyV2"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty notes record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "title",
           "type": "string",
           "summary": "Top-level title field for the Twenty notes record.",
@@ -3313,6 +3609,12 @@
           "type": "string",
           "summary": "Top-level body v2 field for the Twenty notes record.",
           "maps_to": "record.bodyV2"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty notes record.",
+          "maps_to": "record.position"
         },
         {
           "name": "title",
@@ -3446,6 +3748,12 @@
           "maps_to": "record.name"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty opportunities record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "stage",
           "type": "string",
           "summary": "Top-level stage field for the Twenty opportunities record.",
@@ -3494,6 +3802,12 @@
           "type": "string",
           "summary": "Top-level name field for the Twenty opportunities record.",
           "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty opportunities record.",
+          "maps_to": "record.position"
         },
         {
           "name": "stage",
@@ -3645,6 +3959,12 @@
           "maps_to": "record.pdlBirthDate"
         },
         {
+          "name": "pdl-birth-year",
+          "type": "number",
+          "summary": "Top-level pdl birth year numeric field for the Twenty people record.",
+          "maps_to": "record.pdlBirthYear"
+        },
+        {
           "name": "pdl-enrichment-status",
           "type": "string",
           "summary": "Top-level pdl enrichment status field for the Twenty people record.",
@@ -3717,6 +4037,18 @@
           "maps_to": "record.pdlLastEnrichedAt"
         },
         {
+          "name": "pdl-likelihood",
+          "type": "number",
+          "summary": "Top-level pdl likelihood numeric field for the Twenty people record.",
+          "maps_to": "record.pdlLikelihood"
+        },
+        {
+          "name": "pdl-linkedin-connections",
+          "type": "number",
+          "summary": "Top-level pdl linkedin connections numeric field for the Twenty people record.",
+          "maps_to": "record.pdlLinkedinConnections"
+        },
+        {
           "name": "pdl-linkedin-username",
           "type": "string",
           "summary": "Top-level pdl linkedin username field for the Twenty people record.",
@@ -3745,6 +4077,18 @@
           "type": "string",
           "summary": "Top-level pdl summary field for the Twenty people record.",
           "maps_to": "record.pdlSummary"
+        },
+        {
+          "name": "pdl-years-experience",
+          "type": "number",
+          "summary": "Top-level pdl years experience numeric field for the Twenty people record.",
+          "maps_to": "record.pdlYearsExperience"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty people record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -3809,6 +4153,12 @@
           "maps_to": "record.pdlBirthDate"
         },
         {
+          "name": "pdl-birth-year",
+          "type": "number",
+          "summary": "Top-level pdl birth year numeric field for the Twenty people record.",
+          "maps_to": "record.pdlBirthYear"
+        },
+        {
           "name": "pdl-enrichment-status",
           "type": "string",
           "summary": "Top-level pdl enrichment status field for the Twenty people record.",
@@ -3881,6 +4231,18 @@
           "maps_to": "record.pdlLastEnrichedAt"
         },
         {
+          "name": "pdl-likelihood",
+          "type": "number",
+          "summary": "Top-level pdl likelihood numeric field for the Twenty people record.",
+          "maps_to": "record.pdlLikelihood"
+        },
+        {
+          "name": "pdl-linkedin-connections",
+          "type": "number",
+          "summary": "Top-level pdl linkedin connections numeric field for the Twenty people record.",
+          "maps_to": "record.pdlLinkedinConnections"
+        },
+        {
           "name": "pdl-linkedin-username",
           "type": "string",
           "summary": "Top-level pdl linkedin username field for the Twenty people record.",
@@ -3909,6 +4271,18 @@
           "type": "string",
           "summary": "Top-level pdl summary field for the Twenty people record.",
           "maps_to": "record.pdlSummary"
+        },
+        {
+          "name": "pdl-years-experience",
+          "type": "number",
+          "summary": "Top-level pdl years experience numeric field for the Twenty people record.",
+          "maps_to": "record.pdlYearsExperience"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty people record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -4016,7 +4390,14 @@
       "write": "create_task_targets",
       "risk": "Creates a Twenty task targets record through the REST API.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty task targets record.",
+          "maps_to": "record.position"
+        }
+      ],
       "examples": [
         "pm twenty task-targets create --preview --json"
       ],
@@ -4041,6 +4422,12 @@
           "type": "string",
           "summary": "Twenty task targets record ID.",
           "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty task targets record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -4162,6 +4549,12 @@
           "maps_to": "record.dueAt"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty tasks record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "status",
           "type": "string",
           "summary": "Top-level status field for the Twenty tasks record.",
@@ -4210,6 +4603,12 @@
           "type": "string",
           "summary": "Top-level due at field for the Twenty tasks record.",
           "maps_to": "record.dueAt"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty tasks record.",
+          "maps_to": "record.position"
         },
         {
           "name": "status",
@@ -4341,6 +4740,12 @@
           "type": "string",
           "summary": "Top-level name field for the Twenty timeline activities record.",
           "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty timeline activities record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -4379,6 +4784,12 @@
           "type": "string",
           "summary": "Top-level name field for the Twenty timeline activities record.",
           "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty timeline activities record.",
+          "maps_to": "record.position"
         }
       ],
       "examples": [
@@ -4488,6 +4899,12 @@
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty workflow automated triggers record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "type",
           "type": "string",
           "summary": "Top-level type field for the Twenty workflow automated triggers record.",
@@ -4518,6 +4935,12 @@
           "type": "string",
           "summary": "Twenty workflow automated triggers record ID.",
           "maps_to": "record.id"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty workflow automated triggers record.",
+          "maps_to": "record.position"
         },
         {
           "name": "type",
@@ -4995,6 +5418,12 @@
           "maps_to": "record.name"
         },
         {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty workflows record.",
+          "maps_to": "record.position"
+        },
+        {
           "name": "statuses",
           "type": "string_array",
           "summary": "Top-level statuses field for the Twenty workflows record.",
@@ -5037,6 +5466,12 @@
           "type": "string",
           "summary": "Top-level name field for the Twenty workflows record.",
           "maps_to": "record.name"
+        },
+        {
+          "name": "position",
+          "type": "number",
+          "summary": "Top-level position numeric field for the Twenty workflows record.",
+          "maps_to": "record.position"
         },
         {
           "name": "statuses",

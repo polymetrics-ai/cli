@@ -938,6 +938,7 @@ func TestBundleLoadEmbeddedTwentyCLISurfaceCount(t *testing.T) {
 	verbs := map[string]int{}
 	intents := map[string]int{}
 	writePrefixes := map[string]int{}
+	attachmentsCreatePosition := false
 	for _, cmd := range b.CLISurface.Commands {
 		fields := strings.Fields(cmd.Path)
 		if len(fields) == 0 {
@@ -950,6 +951,9 @@ func TestBundleLoadEmbeddedTwentyCLISurfaceCount(t *testing.T) {
 			switch flag.Name {
 			case "data", "payload", "raw", "record", "records":
 				t.Fatalf("Twenty command %q exposes generic write flag --%s", cmd.Path, flag.Name)
+			}
+			if cmd.Path == "attachments create" && flag.Name == "position" && flag.Type == "number" && flag.MapsTo == "record.position" {
+				attachmentsCreatePosition = true
 			}
 		}
 		if cmd.Availability == "unsupported_api" {
@@ -974,6 +978,9 @@ func TestBundleLoadEmbeddedTwentyCLISurfaceCount(t *testing.T) {
 		if writePrefixes[prefix] != want {
 			t.Fatalf("Twenty %s write count = %d, want %d (all counts: %+v)", prefix, writePrefixes[prefix], want, writePrefixes)
 		}
+	}
+	if !attachmentsCreatePosition {
+		t.Fatalf("Twenty attachments create is missing --position number flag mapped to record.position")
 	}
 }
 

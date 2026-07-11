@@ -177,3 +177,21 @@ Results: all passed; website generated data remained idempotent; no live credent
 ### Review fix F2 catalog/help parity
 
 Reviewer found generated connector catalog/help artifacts still stale after F1. Fixed by updating runtime/static help counts (`552` total / `548` declarative), adding Twenty to `docs/connectors/README.md` and `docs/connectors/catalog/all-connectors.md`, and replacing the Twenty entry in `docs/connectors/catalog/all-connectors.json` with the generated 28-stream / 112-write metadata. Re-ran stale-text grep, connectorgen validate, focused CLI docs tests, `pm docs validate`, website idempotence, and `scripts/verify-gsd-workflow 62b8b46c`; all passed.
+
+### Review fix F3 numeric scalar CLI flags
+
+Claude local review on head `46f49175` found an important non-blocking gap: Twenty create/update commands surfaced string, boolean, and string-array scalar fields, but silently omitted write-schema `number` scalar fields such as `position` and PDL/count metrics. Plan: add a typed `number` CLI flag kind, coerce it to JSON numbers in commandrunner, expose Twenty numeric scalar write fields as `number` flags (not raw JSON), update generated docs/website artifacts, and rerun focused gates.
+
+### Review fix F3 numeric scalar flags
+
+Fixed the `claude_local` important finding by adding a typed `number` CLI flag kind/coercion and exposing Twenty create/update write-schema `number` scalar fields as typed flags. Updated Twenty generated manual/skill and website generated data. Verification passed:
+
+- `go run ./cmd/connectorgen validate internal/connectors/defs --json | jq '{findings,warnings,connectors_checked}'` → `findings: []`, `warnings: []`, `connectors_checked: 548`.
+- `go test ./internal/connectors/commandrunner ./internal/connectors/engine ./internal/cli -run 'TestBuildWriteCommandCoercesNumberFlag|TestBundleLoadEmbeddedTwentyCLISurfaceCount|TestTwentyConnector|TestDocsGenerateAndValidateConnectorDocs|TestConnectorCatalog' -count=1` → all `ok`.
+- `go build ./cmd/pm` → passed.
+- `./pm docs validate --connectors-dir docs/connectors` → passed.
+- `cd website && pnpm run gen:website-data` followed by `git diff --exit-code -- website/data website/lib website/public` → idempotent.
+
+- `go test ./...` → passed after F3 numeric flag changes.
+- `scripts/verify-gsd-workflow 62b8b46c` → passed after F3.
+- F3 finite-number guard added for `number` flags and covered by `TestBuildWriteCommandCoercesNumberFlag`.
