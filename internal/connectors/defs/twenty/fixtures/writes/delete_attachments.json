@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "delete_attachments_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/attachments/delete_attachments_fixture_id"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "records": [
+      {
+        "displayName": "Fixture displayName 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/calendarEventParticipants"
+  }
+}

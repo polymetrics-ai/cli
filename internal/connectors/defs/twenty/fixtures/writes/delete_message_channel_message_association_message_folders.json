@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "delete_message_channel_message_association_message_folders_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/messageChannelMessageAssociationMessageFolders/delete_message_channel_message_association_message_folders_fixture_id"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "records": [
+      {
+        "handle": "Fixture handle 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/blocklists"
+  }
+}

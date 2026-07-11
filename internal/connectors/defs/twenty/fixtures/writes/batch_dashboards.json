@@ -1,0 +1,13 @@
+{
+  "record": {
+    "records": [
+      {
+        "pageLayoutId": "pageLayoutId_fixture_1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/dashboards"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "delete_blocklists_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/blocklists/delete_blocklists_fixture_id"
+  }
+}

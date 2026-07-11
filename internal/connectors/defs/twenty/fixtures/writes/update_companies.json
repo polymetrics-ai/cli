@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_companies_fixture_id",
+    "lastContactAt": "2026-01-01T00:00:01Z"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/companies/update_companies_fixture_id",
+    "body": {
+      "lastContactAt": "2026-01-01T00:00:01Z"
+    }
+  }
+}

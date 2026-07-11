@@ -1,0 +1,13 @@
+{
+  "record": {
+    "records": [
+      {
+        "bodyV2": "Fixture bodyV2 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/tasks"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "records": [
+      {
+        "messageFolderId": "messageFolderId_fixture_1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/messageChannelMessageAssociationMessageFolders"
+  }
+}

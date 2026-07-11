@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "delete_message_lists_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/messageLists/delete_message_lists_fixture_id"
+  }
+}

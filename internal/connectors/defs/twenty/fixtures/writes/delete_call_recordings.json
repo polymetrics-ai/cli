@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "delete_call_recordings_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/callRecordings/delete_call_recordings_fixture_id"
+  }
+}

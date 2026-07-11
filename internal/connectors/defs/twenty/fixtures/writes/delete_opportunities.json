@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "delete_opportunities_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/opportunities/delete_opportunities_fixture_id"
+  }
+}

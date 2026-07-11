@@ -1,0 +1,13 @@
+{
+  "record": {
+    "records": [
+      {
+        "name": "Fixture name 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/messageLists"
+  }
+}

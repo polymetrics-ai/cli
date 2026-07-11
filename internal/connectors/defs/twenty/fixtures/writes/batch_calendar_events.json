@@ -1,0 +1,13 @@
+{
+  "record": {
+    "records": [
+      {
+        "callRecorderPreference": "Fixture callRecorderPreference 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/calendarEvents"
+  }
+}

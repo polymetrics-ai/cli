@@ -1,0 +1,13 @@
+{
+  "record": {
+    "records": [
+      {
+        "deliveryStatus": "Fixture deliveryStatus 1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/messages"
+  }
+}

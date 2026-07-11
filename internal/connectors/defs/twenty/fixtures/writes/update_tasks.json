@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_tasks_fixture_id",
+    "bodyV2": "Fixture bodyV2 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/tasks/update_tasks_fixture_id",
+    "body": {
+      "bodyV2": "Fixture bodyV2 1"
+    }
+  }
+}

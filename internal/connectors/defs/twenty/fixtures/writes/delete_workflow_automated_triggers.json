@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "delete_workflow_automated_triggers_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/workflowAutomatedTriggers/delete_workflow_automated_triggers_fixture_id"
+  }
+}

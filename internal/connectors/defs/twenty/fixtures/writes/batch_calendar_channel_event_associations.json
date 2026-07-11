@@ -1,0 +1,13 @@
+{
+  "record": {
+    "records": [
+      {
+        "calendarChannelId": "calendarChannelId_fixture_1"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/batch/calendarChannelEventAssociations"
+  }
+}

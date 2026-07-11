@@ -42,9 +42,30 @@ surface without credentials. Implemented list commands read ETL streams. Impleme
 and delete commands plan reverse ETL writes from commandrunner-safe scalar flags. Batch commands are
 marked partial until scalar CLI coercion for `records: []object` is approved.
 
+## Fixture conformance and certification
+
+S7 adds synthetic, credential-free replay fixtures for all 28 read streams and all 112 write actions.
+Stream fixtures mirror Twenty's `data.<object>` envelope and cursor-style `pageInfo` response shape.
+Write fixtures exercise create, update, batch, and delete request construction against the replay
+capture server only; they do not execute live reverse ETL writes.
+
+Local conformance is fixture-backed and safe to run without secrets. Live `pm connectors certify
+twenty` remains credential-gated and currently needs certify-harness follow-up for Twenty's camelCase
+`updatedAt` cursor fields and longest stream names before it can be treated as a green live certificate.
+Reverse ETL still must follow plan, preview, approval, and execute before any live mutation.
+
+## Parity-deviation ledger
+
+- None for the declarative REST object surface covered by this bundle: 28 streams and 112 write
+  actions have request-shape fixtures.
+- Generic JSON direct-read execution for get-by-id commands remains outside S6/S7 and is documented
+  as `planned` in `cli_surface.json` rather than exposed as an executable raw HTTP surface.
+- Batch write scalar CLI coercion remains intentionally deferred; use reverse ETL records with a
+  top-level `records` array instead of a raw JSON flag.
+
 ## Known limits
 
-- Generic JSON direct-read execution for get-by-id commands is not implemented in S6.
+- Generic JSON direct-read execution for get-by-id commands is not implemented in S6/S7.
 - Batch write execution through scalar CLI flags is deferred; use reverse ETL records with a
   top-level `records` array instead of a raw JSON flag.
 - No live Twenty credentials are required for connector inspection, help rendering, docs generation,

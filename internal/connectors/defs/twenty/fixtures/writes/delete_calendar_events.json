@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "delete_calendar_events_fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/calendarEvents/delete_calendar_events_fixture_id"
+  }
+}

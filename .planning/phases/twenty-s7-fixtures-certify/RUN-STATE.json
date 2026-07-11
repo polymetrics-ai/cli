@@ -1,0 +1,70 @@
+{
+  "issue": 284,
+  "parent_issue": 277,
+  "parent_pr": 285,
+  "branch": "feat/284-twenty-fixtures-certify",
+  "base_parent_head": "23c2277d827da31e1c1629793c830a129eeb5e7e",
+  "status": "ready_with_documented_certify_and_make_verify_blockers",
+  "gsd": {
+    "doctor": "passed",
+    "list": "passed",
+    "programming_loop": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "scripts/gsd prompt gsd-quick \"twenty S7 fixtures docs conformance certify issue #284\""
+  },
+  "required_reading": {
+    "issue_body": "gh issue view 284 --json number,title,state,body,url,labels",
+    "go_implementation_skill": "missing: .pi/skills/go-implementation/SKILL.md ENOENT"
+  },
+  "loaded_skills": [
+    "gsd-core",
+    "caveman",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-safety",
+    "golang-security",
+    "golang-documentation",
+    "golang-design-patterns",
+    "golang-structs-interfaces"
+  ],
+  "orchestrationDecisions": [
+    {
+      "cycle": "execute-reconcile",
+      "decision": "local_critical_path",
+      "reason": "isolated worker cwd/branch already assigned; worker has no recursive subagent tool"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "run local gates and document certify/make verify blockers without spawning"
+    }
+  ],
+  "redEvidence": "go test ./internal/connectors/conformance -run TestTwentyFixturesCoverAllStreamsAndWrites -count=1 failed with 139 missing/failing fixture checks before generated fixtures",
+  "greenEvidence": {
+    "json_parse": "passed",
+    "connectorgen_validate_json": "passed: findings=0 warnings=0",
+    "make_connectorgen_validate": "passed: 548 connector(s) checked, 0 findings",
+    "focused_conformance": "passed",
+    "go_vet": "passed",
+    "go_test_all": "passed",
+    "go_build_pm": "passed",
+    "docs_check_no_build": "passed",
+    "website_gen_idempotent": "passed",
+    "diff_check": "passed"
+  },
+  "certify": {
+    "credential_free_localhost_attempted": true,
+    "result": "blocked",
+    "non_full_failure": "exit 2: etl_full_refresh_append missing cursor field updated_at; certify bootstrap connection defaults before catalog discovers Twenty updatedAt",
+    "full_failure": "exit 2: surface/read/sync/flow/schedule passed; etl_full_refresh_overwrite_deduped failed with file name too long for message_channel_message_association_message_folders capture/raw path",
+    "requires_out_of_scope_fix": true
+  },
+  "verificationPassed": false,
+  "verificationStatus": "partial_green_certify_blocked_make_verify_not_run",
+  "makeVerify": "not run: depends on smoke-no-build, which executes ./pm reverse run; S7 forbids reverse ETL execution",
+  "no_secrets": true,
+  "no_live_twenty_api": true,
+  "no_reverse_etl_execution": true,
+  "no_new_dependencies": true
+}
