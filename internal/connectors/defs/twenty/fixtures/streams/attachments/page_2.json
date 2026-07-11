@@ -1,0 +1,25 @@
+{
+  "request": { "method": "GET", "path": "/rest/attachments", "query": { "starting_after": "attachment_fixture_cursor_1" } },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "attachments": [
+          {
+            "id": "attachment_fixture_2",
+            "createdAt": "2026-01-01T00:00:02Z",
+            "updatedAt": "2026-01-01T00:00:03Z",
+            "fileCategory": "attachment",
+            "fullPath": "fixtures/attachment_fixture_2.txt",
+            "name": "Attachment Fixture Two",
+            "position": 2
+          }
+        ]
+      },
+      "pageInfo": {
+        "endCursor": "attachment_fixture_cursor_2",
+        "hasNextPage": false
+      }
+    }
+  }
+}
