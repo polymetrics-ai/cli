@@ -17,6 +17,11 @@ Required reading before any edit:
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - the assigned issue body and its acceptance criteria
 - the phase `PLAN.md`, `TDD-LEDGER.md`, and `VERIFICATION.md` for the current phase
+- the implementation skill for your stack (per
+  `.agents/agentic-delivery/references/required-skills-routing.md`): Go work →
+  `.pi/skills/go-implementation/SKILL.md`; `website/**` TS work → `.pi/skills/ts-website/SKILL.md`;
+  website UI/UX → `.pi/skills/design-ui/SKILL.md`. Record loaded skills in the TDD ledger and cite
+  rule numbers in the handoff.
 
 Follow the GSD universal programming loop strictly:
 

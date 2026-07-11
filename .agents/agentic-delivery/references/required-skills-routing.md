@@ -4,6 +4,23 @@ Use this reference before assigning or executing repo-local agent work. It maps 
 
 For runtime, RLM, Pi agent, PostgreSQL, DragonflyDB/Redis, Temporal, Podman, or website documentation work, also read `.agents/agentic-delivery/references/runtime-rlm-website-integration.md`.
 
+## Runtime-portable repo skills (.pi/skills — available to BOTH Claude Code and pi workers)
+
+The `golang-*`, `vercel-*`, and design skills referenced below are Claude Code plugins and are
+NOT visible to pi/Codex workers. The pi loop's workers load the repo-local equivalents instead,
+by reading the SKILL.md paths directly:
+
+- Any Go implementation/review task → `.pi/skills/go-implementation/SKILL.md`
+  (+ `references/go-rules.md`: 46 cited rules — Uber/Google style, Go team, Cheney, Ardan Labs, clig.dev)
+- Any `website/**` TS/Next.js task → `.pi/skills/ts-website/SKILL.md`
+  (+ `references/ts-rules.md`: 40 cited rules — Next.js/Vercel, TkDodo, Epic React, Total TypeScript, Tailwind v4, Radix, Fumadocs, Playwright)
+- Any website UI/UX/styling task → `.pi/skills/design-ui/SKILL.md`
+  (+ `references/design-rules.md`: 35 cited rules — Web Interface Guidelines, Refactoring UI, WCAG 2.2, thoughtbot, Stripe-docs teardowns)
+
+Workers record which skills they loaded in the TDD ledger / handoff, and cite rule numbers in
+review findings and dispositions. Claude Code sessions may load these in addition to the plugin
+skills below.
+
 ## Always-on Go skill routing
 
 For any Go implementation, review, debugging, CLI, connector runtime, validation, or test task, load:
