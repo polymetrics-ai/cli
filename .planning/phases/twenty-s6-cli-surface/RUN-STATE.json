@@ -6,7 +6,7 @@
   "branch": "feat/283-twenty-cli-surface",
   "baseBranch": "feat/277-twenty-connector-parity",
   "baseHead": "62b8b46cde85ae620591194467d3474fda2a1e8a",
-  "status": "review_fix_f1_catalog_corrected_reverify_pending",
+  "status": "review_fixes_f1_f2_green_local_pending_push",
   "gsdMode": "manual_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase twenty-s6-cli-surface --dry-run",
   "gsdFallbackReason": "scripts/gsd: unknown GSD command: programming-loop",
@@ -99,5 +99,11 @@
       "docs/connectors/catalog/all-connectors.json"
     ],
     "verification": "metadata jq, connectorgen validate, focused CLI docs tests, docs validate, website idempotence, verify-gsd-workflow passed"
+  },
+  "reviewFix2": {
+    "finding": "F2",
+    "status": "fixed_green_local",
+    "problem": "Connector docs/help catalog artifacts omitted/staled Twenty counts and generated catalog metadata.",
+    "fix": "Updated docs.go/docs/cli counts to 552/548; added Twenty to connector README/catalog markdown; replaced Twenty catalog JSON entry with 28 streams/112 writes; reverified docs validate and website idempotence."
   }
 }

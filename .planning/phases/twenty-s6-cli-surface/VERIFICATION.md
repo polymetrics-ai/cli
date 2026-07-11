@@ -173,3 +173,7 @@ scripts/verify-gsd-workflow 62b8b46c
 ```
 
 Results: all passed; website generated data remained idempotent; no live credentials or reverse ETL execution.
+
+### Review fix F2 catalog/help parity
+
+Reviewer found generated connector catalog/help artifacts still stale after F1. Fixed by updating runtime/static help counts (`552` total / `548` declarative), adding Twenty to `docs/connectors/README.md` and `docs/connectors/catalog/all-connectors.md`, and replacing the Twenty entry in `docs/connectors/catalog/all-connectors.json` with the generated 28-stream / 112-write metadata. Re-ran stale-text grep, connectorgen validate, focused CLI docs tests, `pm docs validate`, website idempotence, and `scripts/verify-gsd-workflow 62b8b46c`; all passed.

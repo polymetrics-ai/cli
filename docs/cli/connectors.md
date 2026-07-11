@@ -38,7 +38,7 @@ CONNECTOR COMMAND SURFACES
 
 CATALOG
   The connector catalog is generated from local connector metadata. The current
-  runtime catalog has 551 bare-name entries: 547 declarative bundles plus the
+  runtime catalog has 552 bare-name entries: 548 declarative bundles plus the
   local sample, file, warehouse, and outbox primitives. Use --all or the catalog
   subcommand when an agent needs to discover the complete connector universe.
   Use --capability read, write, cdc, or query to filter by executable surface.

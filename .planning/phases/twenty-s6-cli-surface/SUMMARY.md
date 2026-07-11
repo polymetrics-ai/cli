@@ -12,3 +12,5 @@ Status: REVIEW_FIX_F1_ACCEPTED_METADATA_APPROVAL_CORRECTED; local re-verificatio
 - `make verify` skipped by safety because Makefile `smoke` executes `pm reverse run`.
 - GSD evidence gate: `scripts/verify-gsd-workflow 62b8b46c` passed after commit.
 - Next: run focused re-verification, amend/push, and re-review PR #320.
+
+- Review fix F2: refreshed connector catalog/help count parity for Twenty (552 total / 548 declarative; catalog rows now show Twenty with 28 streams and 112 writes).

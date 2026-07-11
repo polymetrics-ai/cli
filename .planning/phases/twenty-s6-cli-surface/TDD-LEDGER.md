@@ -60,3 +60,5 @@ go test -timeout 20m ./... -> ok
 - Destructive external actions: NOT EXECUTED; only command metadata/docs/help.
 - Generic HTTP/raw write tools: NOT EXPOSED.
 - New dependencies: NONE; `go.mod`/`go.sum` unchanged.
+
+- Review fix F2: refreshed connector catalog/help count parity for Twenty (552 total / 548 declarative; catalog rows now show Twenty with 28 streams and 112 writes).
