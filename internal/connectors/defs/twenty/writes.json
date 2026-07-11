@@ -1,0 +1,7430 @@
+{
+  "actions": [
+    {
+      "name": "create_attachments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/attachments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "targetCompany": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetDashboard": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetNote": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetOpportunity": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetPerson": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetTask": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetWorkflow": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty attachments record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_attachments",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/attachments/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "file": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "targetCompany": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetDashboard": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetNote": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetOpportunity": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetPerson": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetTask": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetWorkflow": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty attachments record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_attachments",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/attachments",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "file": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "targetCompany": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetDashboard": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetNote": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetOpportunity": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetPerson": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetTask": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetWorkflow": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty attachments records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_blocklists",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/blocklists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "workspaceMember": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "creates a Twenty blocklists record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_blocklists",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/blocklists/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "workspaceMember": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "updates an existing Twenty blocklists record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_blocklists",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/blocklists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "handle": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "workspaceMember": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty blocklists records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_calendar_channel_event_associations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/calendarChannelEventAssociations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "calendarChannelId": {
+            "type": "string"
+          },
+          "calendarEvent": {
+            "type": "object"
+          },
+          "eventExternalId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "recurringEventExternalId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty calendar_channel_event_associations record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_calendar_channel_event_associations",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/calendarChannelEventAssociations/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "calendarChannelId": {
+            "type": "string"
+          },
+          "calendarEvent": {
+            "type": "object"
+          },
+          "eventExternalId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "recurringEventExternalId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty calendar_channel_event_associations record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_calendar_channel_event_associations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/calendarChannelEventAssociations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "calendarChannelId": {
+                  "type": "string"
+                },
+                "calendarEvent": {
+                  "type": "object"
+                },
+                "eventExternalId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "recurringEventExternalId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty calendar_channel_event_associations records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_calendar_event_participants",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/calendarEventParticipants",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "calendarEvent": {
+            "type": "object"
+          },
+          "displayName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isOrganizer": {
+            "type": "boolean"
+          },
+          "person": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "responseStatus": {
+            "type": "string"
+          },
+          "workspaceMember": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty calendar_event_participants record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_calendar_event_participants",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/calendarEventParticipants/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "calendarEvent": {
+            "type": "object"
+          },
+          "displayName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isOrganizer": {
+            "type": "boolean"
+          },
+          "person": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "responseStatus": {
+            "type": "string"
+          },
+          "workspaceMember": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty calendar_event_participants record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_calendar_event_participants",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/calendarEventParticipants",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "calendarEvent": {
+                  "type": "object"
+                },
+                "displayName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "handle": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "isOrganizer": {
+                  "type": "boolean"
+                },
+                "person": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "responseStatus": {
+                  "type": "string"
+                },
+                "workspaceMember": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty calendar_event_participants records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_calendar_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/calendarEvents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "calendarChannelEventAssociations": {
+            "type": "object"
+          },
+          "calendarEventParticipants": {
+            "type": "object"
+          },
+          "callRecorderPreference": {
+            "type": "string"
+          },
+          "callRecordings": {
+            "type": "object"
+          },
+          "conferenceLink": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "conferenceSolution": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "endsAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "externalCreatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "externalUpdatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "iCalUid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isCanceled": {
+            "type": "boolean"
+          },
+          "isFullDay": {
+            "type": "boolean"
+          },
+          "lastContactForCompanies": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactForOpportunities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactForPeople": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastMeetingForPeople": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "location": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "startsAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty calendar_events record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_calendar_events",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/calendarEvents/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "calendarChannelEventAssociations": {
+            "type": "object"
+          },
+          "calendarEventParticipants": {
+            "type": "object"
+          },
+          "callRecorderPreference": {
+            "type": "string"
+          },
+          "callRecordings": {
+            "type": "object"
+          },
+          "conferenceLink": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "conferenceSolution": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "endsAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "externalCreatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "externalUpdatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "iCalUid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isCanceled": {
+            "type": "boolean"
+          },
+          "isFullDay": {
+            "type": "boolean"
+          },
+          "lastContactForCompanies": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactForOpportunities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactForPeople": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastMeetingForPeople": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "location": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "startsAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty calendar_events record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_calendar_events",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/calendarEvents",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "calendarChannelEventAssociations": {
+                  "type": "object"
+                },
+                "calendarEventParticipants": {
+                  "type": "object"
+                },
+                "callRecorderPreference": {
+                  "type": "string"
+                },
+                "callRecordings": {
+                  "type": "object"
+                },
+                "conferenceLink": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryLinkLabel": {},
+                    "primaryLinkUrl": {},
+                    "secondaryLinks": {}
+                  }
+                },
+                "conferenceSolution": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "endsAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "externalCreatedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "externalUpdatedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "iCalUid": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "isCanceled": {
+                  "type": "boolean"
+                },
+                "isFullDay": {
+                  "type": "boolean"
+                },
+                "lastContactForCompanies": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastContactForOpportunities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastContactForPeople": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastMeetingForPeople": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "location": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "startsAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty calendar_events records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_call_recordings",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/callRecordings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "applicationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "audio": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "calendarEvent": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "callRecorderFailureReason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "endedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "externalBotId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "externalRecordingId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "recordingRequestStatus": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string"
+          },
+          "summary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "transcript": {},
+          "video": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "risk": "creates a Twenty call_recordings record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_call_recordings",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/callRecordings/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "applicationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "audio": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "calendarEvent": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "callRecorderFailureReason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "endedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "externalBotId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "externalRecordingId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "recordingRequestStatus": {
+            "type": "string"
+          },
+          "startedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string"
+          },
+          "summary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "transcript": {},
+          "video": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "risk": "updates an existing Twenty call_recordings record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_call_recordings",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/callRecordings",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "applicationId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "audio": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "calendarEvent": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "callRecorderFailureReason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "endedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "externalBotId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "externalRecordingId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "recordingRequestStatus": {
+                  "type": "string"
+                },
+                "startedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "summary": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "transcript": {},
+                "video": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty call_recordings records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_companies",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/companies",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "accountOwner": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "address": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "addressStreet1": {},
+              "addressStreet2": {},
+              "addressCity": {},
+              "addressState": {},
+              "addressCountry": {},
+              "addressPostcode": {},
+              "addressLat": {},
+              "addressLng": {}
+            }
+          },
+          "annualRevenue": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "amountMicros": {},
+              "currencyCode": {}
+            }
+          },
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "domainName": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "lastContactAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lastContactItemCalendarEvent": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactItemMessage": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "linkedinLink": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "noteTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "opportunities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "pdlAffiliatedProfiles": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlAlternativeDomains": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlAlternativeNames": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlCompanyType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlEmployeeCount": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlEmployeeCountByCountry": {},
+          "pdlEnrichmentStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlFacebookUrl": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "pdlFoundedYear": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlFundingStages": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "pdlHeadline": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlIndustry": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlIndustryDetail": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLastEnrichedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "pdlLastFundingDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "pdlLatestFundingStage": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLegalName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLinkedinId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLocationContinent": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLocationMetro": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlMicExchange": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlNaics": {},
+          "pdlNumberFundingRounds": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlRawPayload": {},
+          "pdlSic": {},
+          "pdlSizeRange": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlSummary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlTags": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlTicker": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlTotalFunding": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "amountMicros": {},
+              "currencyCode": {}
+            }
+          },
+          "pdlTwitterUrl": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "people": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "taskTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty companies record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_companies",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/companies/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "accountOwner": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "address": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "addressStreet1": {},
+              "addressStreet2": {},
+              "addressCity": {},
+              "addressState": {},
+              "addressCountry": {},
+              "addressPostcode": {},
+              "addressLat": {},
+              "addressLng": {}
+            }
+          },
+          "annualRevenue": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "amountMicros": {},
+              "currencyCode": {}
+            }
+          },
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "domainName": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "lastContactAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lastContactItemCalendarEvent": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactItemMessage": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "linkedinLink": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "noteTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "opportunities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "pdlAffiliatedProfiles": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlAlternativeDomains": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlAlternativeNames": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlCompanyType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlEmployeeCount": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlEmployeeCountByCountry": {},
+          "pdlEnrichmentStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlFacebookUrl": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "pdlFoundedYear": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlFundingStages": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "pdlHeadline": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlIndustry": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlIndustryDetail": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLastEnrichedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "pdlLastFundingDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "pdlLatestFundingStage": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLegalName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLinkedinId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLocationContinent": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLocationMetro": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlMicExchange": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlNaics": {},
+          "pdlNumberFundingRounds": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlRawPayload": {},
+          "pdlSic": {},
+          "pdlSizeRange": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlSummary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlTags": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlTicker": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlTotalFunding": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "amountMicros": {},
+              "currencyCode": {}
+            }
+          },
+          "pdlTwitterUrl": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "people": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "taskTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty companies record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_companies",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/companies",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "accountOwner": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "address": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "addressStreet1": {},
+                    "addressStreet2": {},
+                    "addressCity": {},
+                    "addressState": {},
+                    "addressCountry": {},
+                    "addressPostcode": {},
+                    "addressLat": {},
+                    "addressLng": {}
+                  }
+                },
+                "annualRevenue": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "amountMicros": {},
+                    "currencyCode": {}
+                  }
+                },
+                "attachments": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "domainName": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryLinkLabel": {},
+                    "primaryLinkUrl": {},
+                    "secondaryLinks": {}
+                  }
+                },
+                "lastContactAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "lastContactItemCalendarEvent": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastContactItemMessage": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "linkedinLink": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryLinkLabel": {},
+                    "primaryLinkUrl": {},
+                    "secondaryLinks": {}
+                  }
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "noteTargets": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "opportunities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "pdlAffiliatedProfiles": {
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "pdlAlternativeDomains": {
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "pdlAlternativeNames": {
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "pdlCompanyType": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlEmployeeCount": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "pdlEmployeeCountByCountry": {},
+                "pdlEnrichmentStatus": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlFacebookUrl": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryLinkLabel": {},
+                    "primaryLinkUrl": {},
+                    "secondaryLinks": {}
+                  }
+                },
+                "pdlFoundedYear": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "pdlFundingStages": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "pdlHeadline": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlIndustry": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlIndustryDetail": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlLastEnrichedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "pdlLastFundingDate": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date"
+                },
+                "pdlLatestFundingStage": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlLegalName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlLinkedinId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlLocationContinent": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlLocationMetro": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlMicExchange": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlNaics": {},
+                "pdlNumberFundingRounds": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "pdlRawPayload": {},
+                "pdlSic": {},
+                "pdlSizeRange": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlSummary": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlTags": {
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "pdlTicker": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlTotalFunding": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "amountMicros": {},
+                    "currencyCode": {}
+                  }
+                },
+                "pdlTwitterUrl": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryLinkLabel": {},
+                    "primaryLinkUrl": {},
+                    "secondaryLinks": {}
+                  }
+                },
+                "people": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "taskTargets": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "timelineActivities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty companies records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_dashboards",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/dashboards",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "pageLayoutId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty dashboards record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_dashboards",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/dashboards/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "pageLayoutId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty dashboards record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_dashboards",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/dashboards",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "attachments": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "pageLayoutId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "timelineActivities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty dashboards records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_message_campaigns",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/messageCampaigns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "bodyTemplate": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bouncedCount": {
+            "type": "number"
+          },
+          "complainedCount": {
+            "type": "number"
+          },
+          "failedCount": {
+            "type": "number"
+          },
+          "fromAddress": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryEmail": {},
+              "additionalEmails": {}
+            }
+          },
+          "list": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messages": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "recipients": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "sentAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "sentCount": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "unsubscribeTopicId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty message_campaigns record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_message_campaigns",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/messageCampaigns/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "bodyTemplate": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bouncedCount": {
+            "type": "number"
+          },
+          "complainedCount": {
+            "type": "number"
+          },
+          "failedCount": {
+            "type": "number"
+          },
+          "fromAddress": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryEmail": {},
+              "additionalEmails": {}
+            }
+          },
+          "list": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messages": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "recipients": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "sentAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "sentCount": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "unsubscribeTopicId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty message_campaigns record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_message_campaigns",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/messageCampaigns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "bodyTemplate": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "bouncedCount": {
+                  "type": "number"
+                },
+                "complainedCount": {
+                  "type": "number"
+                },
+                "failedCount": {
+                  "type": "number"
+                },
+                "fromAddress": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryEmail": {},
+                    "additionalEmails": {}
+                  }
+                },
+                "list": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messages": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "recipients": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "sentAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "sentCount": {
+                  "type": "number"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "subject": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "timelineActivities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "unsubscribeTopicId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty message_campaigns records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_message_channel_message_association_message_folders",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/messageChannelMessageAssociationMessageFolders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "messageChannelMessageAssociation": {
+            "type": "object"
+          },
+          "messageFolderId": {
+            "type": "string"
+          },
+          "position": {
+            "type": "number"
+          }
+        }
+      },
+      "risk": "creates a Twenty message_channel_message_association_message_folders record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_message_channel_message_association_message_folders",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/messageChannelMessageAssociationMessageFolders/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "messageChannelMessageAssociation": {
+            "type": "object"
+          },
+          "messageFolderId": {
+            "type": "string"
+          },
+          "position": {
+            "type": "number"
+          }
+        }
+      },
+      "risk": "updates an existing Twenty message_channel_message_association_message_folders record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_message_channel_message_association_message_folders",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/messageChannelMessageAssociationMessageFolders",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "messageChannelMessageAssociation": {
+                  "type": "object"
+                },
+                "messageFolderId": {
+                  "type": "string"
+                },
+                "position": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty message_channel_message_association_message_folders records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_message_channel_message_associations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/messageChannelMessageAssociations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "direction": {
+            "type": "string"
+          },
+          "message": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageChannelId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "messageExternalId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "messageFolders": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageThread": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageThreadExternalId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          }
+        }
+      },
+      "risk": "creates a Twenty message_channel_message_associations record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_message_channel_message_associations",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/messageChannelMessageAssociations/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "string"
+          },
+          "message": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageChannelId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "messageExternalId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "messageFolders": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageThread": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageThreadExternalId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          }
+        }
+      },
+      "risk": "updates an existing Twenty message_channel_message_associations record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_message_channel_message_associations",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/messageChannelMessageAssociations",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "direction": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messageChannelId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "messageExternalId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "messageFolders": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messageThread": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messageThreadExternalId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty message_channel_message_associations records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_message_list_members",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/messageListMembers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "list": {
+            "type": "object"
+          },
+          "person": {
+            "type": "object"
+          },
+          "position": {
+            "type": "number"
+          }
+        }
+      },
+      "risk": "creates a Twenty message_list_members record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_message_list_members",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/messageListMembers/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "list": {
+            "type": "object"
+          },
+          "person": {
+            "type": "object"
+          },
+          "position": {
+            "type": "number"
+          }
+        }
+      },
+      "risk": "updates an existing Twenty message_list_members record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_message_list_members",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/messageListMembers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "list": {
+                  "type": "object"
+                },
+                "person": {
+                  "type": "object"
+                },
+                "position": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty message_list_members records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_message_lists",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/messageLists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "campaigns": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "members": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty message_lists record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_message_lists",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/messageLists/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "campaigns": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "members": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty message_lists record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_message_lists",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/messageLists",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "campaigns": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "members": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "timelineActivities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty message_lists records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_message_participants",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/messageParticipants",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "displayName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "message": {
+            "type": "object"
+          },
+          "messageCampaign": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "person": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "role": {
+            "type": "string"
+          },
+          "workspaceMember": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty message_participants record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_message_participants",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/messageParticipants/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "message": {
+            "type": "object"
+          },
+          "messageCampaign": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "person": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "role": {
+            "type": "string"
+          },
+          "workspaceMember": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty message_participants record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_message_participants",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/messageParticipants",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "displayName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "handle": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "message": {
+                  "type": "object"
+                },
+                "messageCampaign": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "person": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "workspaceMember": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty message_participants records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_message_threads",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/messageThreads",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "messageChannelMessageAssociations": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messages": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty message_threads record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_message_threads",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/messageThreads/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "messageChannelMessageAssociations": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messages": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty message_threads record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_message_threads",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/messageThreads",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "messageChannelMessageAssociations": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messages": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "subject": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty message_threads records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_messages",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "deliveryStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "headerMessageId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isDraft": {
+            "type": "boolean"
+          },
+          "lastContactForCompanies": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactForOpportunities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactForPeople": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastEmailForPeople": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageCampaign": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageChannelMessageAssociations": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageParticipants": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageThread": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "receivedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty messages record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_messages",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/messages/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "deliveryStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "headerMessageId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isDraft": {
+            "type": "boolean"
+          },
+          "lastContactForCompanies": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactForOpportunities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactForPeople": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastEmailForPeople": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageCampaign": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageChannelMessageAssociations": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageParticipants": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageThread": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "receivedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "text": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty messages record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_messages",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "deliveryStatus": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "headerMessageId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "isDraft": {
+                  "type": "boolean"
+                },
+                "lastContactForCompanies": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastContactForOpportunities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastContactForPeople": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastEmailForPeople": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messageCampaign": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messageChannelMessageAssociations": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messageParticipants": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messageThread": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "receivedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "subject": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "text": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty messages records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_note_targets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/noteTargets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "note": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "targetCompany": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetOpportunity": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetPerson": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty note_targets record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_note_targets",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/noteTargets/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "note": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "targetCompany": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetOpportunity": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetPerson": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty note_targets record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_note_targets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/noteTargets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "note": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "targetCompany": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetOpportunity": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetPerson": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty note_targets records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_notes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/notes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "bodyV2": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "noteTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty notes record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_notes",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/notes/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "bodyV2": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "noteTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty notes record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_notes",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/notes",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "attachments": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "bodyV2": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "noteTargets": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "timelineActivities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty notes records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_opportunities",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/opportunities",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "amount": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "amountMicros": {},
+              "currencyCode": {}
+            }
+          },
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "closeDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "company": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lastContactItemCalendarEvent": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactItemMessage": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "noteTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "owner": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "pointOfContact": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "taskTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty opportunities record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_opportunities",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/opportunities/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "amount": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "amountMicros": {},
+              "currencyCode": {}
+            }
+          },
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "closeDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "company": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lastContactItemCalendarEvent": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactItemMessage": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "noteTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "owner": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "pointOfContact": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "taskTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty opportunities record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_opportunities",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/opportunities",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "amount": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "amountMicros": {},
+                    "currencyCode": {}
+                  }
+                },
+                "attachments": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "closeDate": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "company": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastContactAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "lastContactItemCalendarEvent": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastContactItemMessage": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "noteTargets": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "owner": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "pointOfContact": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "stage": {
+                  "type": "string"
+                },
+                "taskTargets": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "timelineActivities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty opportunities records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_people",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/people",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "avatarFile": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "avatarUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "calendarEventParticipants": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "company": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "emails": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryEmail": {},
+              "additionalEmails": {}
+            }
+          },
+          "jobTitle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastContactAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lastContactBy": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactItemCalendarEvent": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactItemMessage": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastEmail": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastInboundAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lastMeeting": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastOutboundAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "linkedinLink": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "listMemberships": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageParticipants": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "firstName": {},
+              "lastName": {}
+            }
+          },
+          "noteTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "pdlBirthDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "pdlBirthYear": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlCertifications": {},
+          "pdlEducation": {},
+          "pdlEnrichmentStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlExperience": {},
+          "pdlFacebookUrl": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "pdlGithubUrl": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "pdlHeadline": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlIndustry": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlInferredSalary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlInterests": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlJobOnetCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlJobRole": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlJobStartDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "pdlJobSummary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlJobTitleClass": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlJobTitleSubRole": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLanguages": {},
+          "pdlLastEnrichedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "pdlLikelihood": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlLinkedinConnections": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlLinkedinUsername": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLocation": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "addressStreet1": {},
+              "addressStreet2": {},
+              "addressCity": {},
+              "addressState": {},
+              "addressCountry": {},
+              "addressPostcode": {},
+              "addressLat": {},
+              "addressLng": {}
+            }
+          },
+          "pdlLocationMetro": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlNameAliases": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlProfiles": {},
+          "pdlRawPayload": {},
+          "pdlSeniority": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "pdlSex": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlSkills": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlSummary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlTwitterUrl": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "pdlYearsExperience": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "phones": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryPhoneNumber": {},
+              "primaryPhoneCountryCode": {},
+              "primaryPhoneCallingCode": {},
+              "additionalPhones": {}
+            }
+          },
+          "pointOfContactForOpportunities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "taskTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty people record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_people",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/people/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "avatarFile": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object"
+            }
+          },
+          "avatarUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "calendarEventParticipants": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "company": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "emails": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryEmail": {},
+              "additionalEmails": {}
+            }
+          },
+          "jobTitle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastContactAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lastContactBy": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactItemCalendarEvent": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastContactItemMessage": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastEmail": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastInboundAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "lastMeeting": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "lastOutboundAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "linkedinLink": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "listMemberships": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageParticipants": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "firstName": {},
+              "lastName": {}
+            }
+          },
+          "noteTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "pdlBirthDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "pdlBirthYear": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlCertifications": {},
+          "pdlEducation": {},
+          "pdlEnrichmentStatus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlExperience": {},
+          "pdlFacebookUrl": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "pdlGithubUrl": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "pdlHeadline": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlIndustry": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlInferredSalary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlInterests": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlJobOnetCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlJobRole": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlJobStartDate": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "pdlJobSummary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlJobTitleClass": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlJobTitleSubRole": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLanguages": {},
+          "pdlLastEnrichedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "pdlLikelihood": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlLinkedinConnections": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pdlLinkedinUsername": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlLocation": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "addressStreet1": {},
+              "addressStreet2": {},
+              "addressCity": {},
+              "addressState": {},
+              "addressCountry": {},
+              "addressPostcode": {},
+              "addressLat": {},
+              "addressLng": {}
+            }
+          },
+          "pdlLocationMetro": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlNameAliases": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlProfiles": {},
+          "pdlRawPayload": {},
+          "pdlSeniority": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "pdlSex": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlSkills": {
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pdlSummary": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pdlTwitterUrl": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryLinkLabel": {},
+              "primaryLinkUrl": {},
+              "secondaryLinks": {}
+            }
+          },
+          "pdlYearsExperience": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "phones": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "primaryPhoneNumber": {},
+              "primaryPhoneCountryCode": {},
+              "primaryPhoneCallingCode": {},
+              "additionalPhones": {}
+            }
+          },
+          "pointOfContactForOpportunities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "taskTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty people record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_people",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/people",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "attachments": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "avatarFile": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "avatarUrl": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "calendarEventParticipants": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "company": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "emails": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryEmail": {},
+                    "additionalEmails": {}
+                  }
+                },
+                "jobTitle": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "lastContactAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "lastContactBy": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastContactItemCalendarEvent": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastContactItemMessage": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastEmail": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastInboundAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "lastMeeting": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "lastOutboundAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "linkedinLink": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryLinkLabel": {},
+                    "primaryLinkUrl": {},
+                    "secondaryLinks": {}
+                  }
+                },
+                "listMemberships": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messageParticipants": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "firstName": {},
+                    "lastName": {}
+                  }
+                },
+                "noteTargets": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "pdlBirthDate": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date"
+                },
+                "pdlBirthYear": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "pdlCertifications": {},
+                "pdlEducation": {},
+                "pdlEnrichmentStatus": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlExperience": {},
+                "pdlFacebookUrl": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryLinkLabel": {},
+                    "primaryLinkUrl": {},
+                    "secondaryLinks": {}
+                  }
+                },
+                "pdlGithubUrl": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryLinkLabel": {},
+                    "primaryLinkUrl": {},
+                    "secondaryLinks": {}
+                  }
+                },
+                "pdlHeadline": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlIndustry": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlInferredSalary": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlInterests": {
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "pdlJobOnetCode": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlJobRole": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlJobStartDate": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date"
+                },
+                "pdlJobSummary": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlJobTitleClass": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlJobTitleSubRole": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlLanguages": {},
+                "pdlLastEnrichedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "pdlLikelihood": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "pdlLinkedinConnections": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "pdlLinkedinUsername": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlLocation": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "addressStreet1": {},
+                    "addressStreet2": {},
+                    "addressCity": {},
+                    "addressState": {},
+                    "addressCountry": {},
+                    "addressPostcode": {},
+                    "addressLat": {},
+                    "addressLng": {}
+                  }
+                },
+                "pdlLocationMetro": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlNameAliases": {
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "pdlProfiles": {},
+                "pdlRawPayload": {},
+                "pdlSeniority": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "pdlSex": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlSkills": {
+                  "type": [
+                    "array",
+                    "null"
+                  ]
+                },
+                "pdlSummary": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "pdlTwitterUrl": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryLinkLabel": {},
+                    "primaryLinkUrl": {},
+                    "secondaryLinks": {}
+                  }
+                },
+                "pdlYearsExperience": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "phones": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "primaryPhoneNumber": {},
+                    "primaryPhoneCountryCode": {},
+                    "primaryPhoneCallingCode": {},
+                    "additionalPhones": {}
+                  }
+                },
+                "pointOfContactForOpportunities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "taskTargets": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "timelineActivities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty people records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_task_targets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/taskTargets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "position": {
+            "type": "number"
+          },
+          "targetCompany": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetOpportunity": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetPerson": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "task": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty task_targets record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_task_targets",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/taskTargets/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "position": {
+            "type": "number"
+          },
+          "targetCompany": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetOpportunity": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetPerson": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "task": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty task_targets record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_task_targets",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/taskTargets",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "position": {
+                  "type": "number"
+                },
+                "targetCompany": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetOpportunity": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetPerson": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "task": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty task_targets records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_tasks",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/tasks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "assignee": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "bodyV2": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dueAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "position": {
+            "type": "number"
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "taskTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty tasks record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_tasks",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/tasks/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "assignee": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "attachments": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "bodyV2": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dueAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "position": {
+            "type": "number"
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "taskTargets": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty tasks record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_tasks",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/tasks",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "assignee": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "attachments": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "bodyV2": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "dueAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "position": {
+                  "type": "number"
+                },
+                "status": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "taskTargets": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "timelineActivities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "title": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty tasks records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_timeline_activities",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/timelineActivities",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "happensAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "properties": {},
+          "targetCompany": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetDashboard": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetMessageCampaign": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetMessageList": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetNote": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetOpportunity": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetPerson": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetTask": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetWorkflow": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetWorkflowRun": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetWorkflowVersion": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "workspaceMember": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty timeline_activities record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_timeline_activities",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/timelineActivities/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "happensAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "properties": {},
+          "targetCompany": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetDashboard": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetMessageCampaign": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetMessageList": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetNote": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetOpportunity": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetPerson": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetTask": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetWorkflow": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetWorkflowRun": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "targetWorkflowVersion": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "workspaceMember": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty timeline_activities record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_timeline_activities",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/timelineActivities",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "happensAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "properties": {},
+                "targetCompany": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetDashboard": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetMessageCampaign": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetMessageList": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetNote": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetOpportunity": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetPerson": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetTask": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetWorkflow": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetWorkflowRun": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "targetWorkflowVersion": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "workspaceMember": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty timeline_activities records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_workflow_automated_triggers",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/workflowAutomatedTriggers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "position": {
+            "type": "number"
+          },
+          "settings": {},
+          "type": {
+            "type": "string"
+          },
+          "workflow": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "creates a Twenty workflow_automated_triggers record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_workflow_automated_triggers",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/workflowAutomatedTriggers/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "position": {
+            "type": "number"
+          },
+          "settings": {},
+          "type": {
+            "type": "string"
+          },
+          "workflow": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "updates an existing Twenty workflow_automated_triggers record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_workflow_automated_triggers",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/workflowAutomatedTriggers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "position": {
+                  "type": "number"
+                },
+                "settings": {},
+                "type": {
+                  "type": "string"
+                },
+                "workflow": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty workflow_automated_triggers records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_workflow_runs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/workflowRuns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "endedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "enqueuedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "startedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "state": {},
+          "status": {
+            "type": "string"
+          },
+          "timelineActivities": {
+            "type": "object"
+          },
+          "workflow": {
+            "type": "object"
+          },
+          "workflowVersion": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "creates a Twenty workflow_runs record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_workflow_runs",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/workflowRuns/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "endedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "enqueuedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "startedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "state": {},
+          "status": {
+            "type": "string"
+          },
+          "timelineActivities": {
+            "type": "object"
+          },
+          "workflow": {
+            "type": "object"
+          },
+          "workflowVersion": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "updates an existing Twenty workflow_runs record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_workflow_runs",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/workflowRuns",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "endedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "enqueuedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "startedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time"
+                },
+                "state": {},
+                "status": {
+                  "type": "string"
+                },
+                "timelineActivities": {
+                  "type": "object"
+                },
+                "workflow": {
+                  "type": "object"
+                },
+                "workflowVersion": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty workflow_runs records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_workflow_versions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/workflowVersions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "runs": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "steps": {},
+          "timelineActivities": {
+            "type": "object"
+          },
+          "trigger": {},
+          "workflow": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty workflow_versions record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_workflow_versions",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/workflowVersions/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "runs": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "steps": {},
+          "timelineActivities": {
+            "type": "object"
+          },
+          "trigger": {},
+          "workflow": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty workflow_versions record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_workflow_versions",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/workflowVersions",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "runs": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "status": {
+                  "type": "string"
+                },
+                "steps": {},
+                "timelineActivities": {
+                  "type": "object"
+                },
+                "trigger": {},
+                "workflow": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty workflow_versions records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_workflows",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/workflows",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "attachments": {
+            "type": "object"
+          },
+          "automatedTriggers": {
+            "type": "object"
+          },
+          "lastPublishedVersionId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "runs": {
+            "type": "object"
+          },
+          "statuses": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "timelineActivities": {
+            "type": "object"
+          },
+          "versions": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "creates a Twenty workflows record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_workflows",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/workflows/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "object"
+          },
+          "automatedTriggers": {
+            "type": "object"
+          },
+          "lastPublishedVersionId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "type": "number"
+          },
+          "runs": {
+            "type": "object"
+          },
+          "statuses": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "timelineActivities": {
+            "type": "object"
+          },
+          "versions": {
+            "type": "object"
+          }
+        }
+      },
+      "risk": "updates an existing Twenty workflows record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_workflows",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/workflows",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "attachments": {
+                  "type": "object"
+                },
+                "automatedTriggers": {
+                  "type": "object"
+                },
+                "lastPublishedVersionId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "type": "number"
+                },
+                "runs": {
+                  "type": "object"
+                },
+                "statuses": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "timelineActivities": {
+                  "type": "object"
+                },
+                "versions": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty workflows records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    },
+    {
+      "name": "create_workspace_members",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/workspaceMembers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "accountOwnerForCompanies": {
+            "type": "object"
+          },
+          "assignedTasks": {
+            "type": "object"
+          },
+          "blocklist": {
+            "type": "object"
+          },
+          "calendarEventParticipants": {
+            "type": "object"
+          },
+          "lastContactForPeople": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageParticipants": {
+            "type": "object"
+          },
+          "name": {
+            "type": "object",
+            "properties": {
+              "firstName": {},
+              "lastName": {}
+            }
+          },
+          "ownedOpportunities": {
+            "type": "object"
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Twenty workspace_members record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "update_workspace_members",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/rest/workspaceMembers/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "minProperties": 2,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "accountOwnerForCompanies": {
+            "type": "object"
+          },
+          "assignedTasks": {
+            "type": "object"
+          },
+          "blocklist": {
+            "type": "object"
+          },
+          "calendarEventParticipants": {
+            "type": "object"
+          },
+          "lastContactForPeople": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "messageParticipants": {
+            "type": "object"
+          },
+          "name": {
+            "type": "object",
+            "properties": {
+              "firstName": {},
+              "lastName": {}
+            }
+          },
+          "ownedOpportunities": {
+            "type": "object"
+          },
+          "timelineActivities": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "updates an existing Twenty workspace_members record; external mutation; reverse ETL plan, preview, approval, execute required"
+    },
+    {
+      "name": "batch_workspace_members",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rest/batch/workspaceMembers",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "records"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "records": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "accountOwnerForCompanies": {
+                  "type": "object"
+                },
+                "assignedTasks": {
+                  "type": "object"
+                },
+                "blocklist": {
+                  "type": "object"
+                },
+                "calendarEventParticipants": {
+                  "type": "object"
+                },
+                "lastContactForPeople": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "messageParticipants": {
+                  "type": "object"
+                },
+                "name": {
+                  "type": "object",
+                  "properties": {
+                    "firstName": {},
+                    "lastName": {}
+                  }
+                },
+                "ownedOpportunities": {
+                  "type": "object"
+                },
+                "timelineActivities": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "bulk creates up to 60 Twenty workspace_members records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
+      "body_field": "records"
+    }
+  ]
+}

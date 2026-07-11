@@ -1,0 +1,129 @@
+{
+  "phase": "twenty-s4-writes",
+  "issue": 281,
+  "parentIssue": 277,
+  "branch": "feat/281-twenty-writes",
+  "baseBranch": "feat/277-twenty-connector-parity",
+  "status": "green_review_fix_f1_re_reviewed_pass_artifacts_current",
+  "currentHeadBeforeReviewFix": "659e2e175cfc2d9442a7a18d3d85d37cac3babc4",
+  "reviewFixCommit": "ccc3047f0202562de49c7c85d1e19d1c9a660c73",
+  "gsdMode": "manual_fallback",
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase twenty-s4-writes --dry-run",
+  "gsdFallbackReason": "scripts/gsd: unknown GSD command: programming-loop",
+  "gsdReviewFixCommand": "scripts/gsd prompt gsd-quick \"S4 #281 PR #304 review-fix correction for Twenty batch body shape\"",
+  "spawnDecision": "local_critical_path",
+  "verificationPassed": true,
+  "verificationEquivalent": "all required PR #304 F1 local gates passed; make verify intentionally not run because its smoke target executes pm reverse run, which S4 safety forbids",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "User instructed do not spawn subagents; worker owns isolated branch/cwd and allowed S4 scope."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Initial red validation captured inline before production edits."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Generated writes.json and api_surface.json locally within S4 allowed scope."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Ran jq, connectorgen validate, conformance, focused packages, format, vet, build, and full tests locally; no subagents by instruction."
+    },
+    {
+      "cycle": "gsd-evidence",
+      "decision": "local_critical_path",
+      "reason": "scripts/verify-gsd-workflow 1a86cc1a passed after phase evidence commit."
+    },
+    {
+      "cycle": "review-fix-plan",
+      "decision": "local_critical_path",
+      "reason": "PR #304 F1 requires same-branch correction; user explicitly forbade subagents; planning artifacts updated before production edits."
+    },
+    {
+      "cycle": "review-fix-red-test",
+      "decision": "local_critical_path",
+      "reason": "Added focused engine test and captured failing build before production body_field implementation."
+    },
+    {
+      "cycle": "review-fix-execute",
+      "decision": "local_critical_path",
+      "reason": "Implemented body_field JSON payload support, migrated Twenty batch actions, and updated migration conventions locally."
+    },
+    {
+      "cycle": "review-fix-verify",
+      "decision": "local_critical_path",
+      "reason": "Required PR #304 F1 gates passed locally; no subagents by instruction."
+    }
+  ],
+  "redEvidence": {
+    "writes": "writes.json missing (expected before S4)",
+    "apiSurfaceTotal": 56,
+    "apiSurfaceGET": 56,
+    "apiSurfaceCoveredWrite": 0
+  },
+  "greenEvidence": {
+    "writesActions": 84,
+    "createActions": 28,
+    "updateActions": 28,
+    "batchActions": 28,
+    "deleteActions": 0,
+    "apiSurfaceTotal": 140,
+    "apiSurfaceGET": 56,
+    "apiSurfacePOST": 56,
+    "apiSurfacePATCH": 28,
+    "apiSurfaceDELETE": 0,
+    "apiSurfaceCoveredWrite": 84,
+    "connectorgenValidate": "findings=[], warnings=[]",
+    "twentyConformance": "ok",
+    "focusedPackages": "ok",
+    "goTestAll": "ok",
+    "gsdWorkflow": "ok"
+  },
+  "reviewFix": {
+    "finding": "F1",
+    "status": "accepted_fixed_green_local",
+    "sourceEvidence": [
+      "Twenty REST batch controller @Post('batch/*path') routes to createMany(request)",
+      "rest-api-create-many.handler parseRequestArgs returns data: request.body",
+      "CreateManyQueryArgs.data is Partial<ObjectRecord>[]",
+      "common-create-many-query-runner uses args.data.length and args.data.forEach"
+    ],
+    "problem": "batch actions using body_fields:[\"records\"] send an object wrapper instead of a bare JSON array",
+    "correction": "added WriteAction.body_field for JSON writes and updated Twenty batch actions to body_field:records while preserving record_schema.required records",
+    "redTest": {
+      "command": "go test ./internal/connectors/engine -run 'TestWrite.*BodyField|TestWriteRawBodyField' -count=1",
+      "result": "FAIL build failed: unknown field BodyField in struct literal of type WriteAction",
+      "capturedBeforeProductionImplementation": true
+    },
+    "greenGates": {
+      "jqWritesAndSchema": "exit 0",
+      "pythonBatchShape": "batch body_field ok 28",
+      "focusedBodyFieldTests": "ok polymetrics.ai/internal/connectors/engine 0.390s",
+      "connectorgenValidate": "findings=[], warnings=[], connectors_checked=548",
+      "twentyConformance": "ok polymetrics.ai/internal/connectors/conformance 1.265s",
+      "focusedPackages": "ok defs/engine/conformance/connectorgen",
+      "goVet": "exit 0 no output",
+      "goBuildPM": "exit 0 no output",
+      "gofmtList": "exit 0 no output",
+      "goTestAll": "exit 0 all packages passed",
+      "verifyGSDWorkflow": "exit 0"
+    }
+  },
+  "safety": {
+    "reverseETLExecution": "not_run",
+    "liveCredentials": "not_used",
+    "deleteActions": "not_added",
+    "newDependencies": "none",
+    "rawHTTP": "not_used",
+    "genericHTTPWriteTool": "not_exposed",
+    "makeVerify": "not_run_reverse_etl_smoke"
+  },
+  "reviewDecision": "PASS on ccc3047f; follow-up artifact cleanup committed with no code changes; PR checks to confirm final head",
+  "artifactCleanup": "committed_after_re_review_no_code_changes"
+}

@@ -229,17 +229,11 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		_, err := rt.Requester.Do(ctx, method, path, nil, body)
 		return err
 	default: // "json" (default)
-		var body map[string]any
-		if len(action.BodyFields) > 0 {
-			body = buildBodyFieldsPayload(rec, action.BodyFields)
-		} else {
-			body = buildJSONBody(rec, action.PathFields)
+		payload, err := buildJSONPayload(action, rec)
+		if err != nil {
+			return err
 		}
-		var payload any
-		if len(body) > 0 {
-			payload = body
-		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err = rt.Requester.Do(ctx, method, path, nil, payload)
 		return err
 	}
 }
@@ -249,6 +243,31 @@ func bodyTypeOf(action WriteAction) string {
 		return "json"
 	}
 	return action.BodyType
+}
+
+// buildJSONPayload returns the JSON request body for action. body_field is
+// an action-scoped raw payload selector: the named record field becomes the
+// request body itself, rather than an object field inside the body.
+func buildJSONPayload(action WriteAction, rec connectors.Record) (any, error) {
+	if action.BodyField != "" {
+		v, ok := rec[action.BodyField]
+		if !ok {
+			return nil, fmt.Errorf("engine: write action %q: body_field %q missing from record", action.Name, action.BodyField)
+		}
+		return v, nil
+	}
+	if len(action.BodyFields) > 0 {
+		body := buildBodyFieldsPayload(rec, action.BodyFields)
+		if len(body) == 0 {
+			return nil, nil
+		}
+		return body, nil
+	}
+	body := buildJSONBody(rec, action.PathFields)
+	if len(body) == 0 {
+		return nil, nil
+	}
+	return body, nil
 }
 
 // buildJSONBody returns every record field not consumed by path_fields
