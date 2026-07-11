@@ -41,6 +41,10 @@ those intermediate sub-PRs only, the connectorgen validate gate is staged:
   140, +deletes → 168) and zero rows for operations the research doc does not contain. The
   parent-finalize gate fails if the final manifest row count differs from the research doc's
   operation count.
+- Fixtures follow declaration: the conformance gate requires fixture pages as soon as a stream is
+  declared (`fixtures_present` / `read_fixture_nonempty`), so the slice that declares streams ships
+  their minimal fixture pages; the fixtures/certify slice refines and expands them. The same
+  first-declarer rule applies to any artifact a gate binds to at declaration time.
 - Single-record GET (`/{id}`) endpoints are covered by the **same stream** as their list endpoint
   (`covered_by {stream}` — identical record shape; every record retrievable via the stream). Do
   NOT de-scope them into `excluded` entries and do NOT require `covered_by.direct_read` CLI
