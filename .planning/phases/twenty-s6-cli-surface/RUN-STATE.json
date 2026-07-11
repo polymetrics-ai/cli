@@ -6,7 +6,7 @@
   "branch": "feat/283-twenty-cli-surface",
   "baseBranch": "feat/277-twenty-connector-parity",
   "baseHead": "62b8b46cde85ae620591194467d3474fda2a1e8a",
-  "status": "review_fix_f1_green_local_reverify_pending_push",
+  "status": "review_fix_f1_catalog_corrected_reverify_pending",
   "gsdMode": "manual_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase twenty-s6-cli-surface --dry-run",
   "gsdFallbackReason": "scripts/gsd: unknown GSD command: programming-loop",
@@ -89,13 +89,14 @@
   },
   "reviewFix": {
     "finding": "F1",
-    "status": "fixed_green_local",
+    "status": "fixed_catalog_pending_reverify",
     "problem": "Generated Twenty manual/skill claimed create_<object> actions require no approval, violating reverse ETL safety contract.",
-    "fix": "Updated metadata risk.approval and regenerated Twenty MANUAL/SKILL wording: every create/update/batch/delete requires plan/preview/approval/execute; deletes additionally require typed --confirm destructive.",
+    "fix": "Updated metadata risk.approval, Twenty MANUAL/SKILL, and docs connector catalog Twenty risk.approval: every create/update/batch/delete requires plan/preview/approval/execute; deletes additionally require typed --confirm destructive.",
     "files": [
       "internal/connectors/defs/twenty/metadata.json",
       "docs/connectors/twenty/MANUAL.md",
-      "docs/connectors/twenty/SKILL.md"
+      "docs/connectors/twenty/SKILL.md",
+      "docs/connectors/catalog/all-connectors.json"
     ],
     "verification": "metadata jq, connectorgen validate, focused CLI docs tests, docs validate, website idempotence, verify-gsd-workflow passed"
   }

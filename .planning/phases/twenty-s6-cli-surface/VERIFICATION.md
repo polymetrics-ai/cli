@@ -159,7 +159,7 @@ scripts/verify-gsd-workflow 62b8b46c
 
 F1 accepted: generated Twenty MANUAL/SKILL claimed `create_<object>` actions require no approval. This violated the reverse ETL safety contract.
 
-Fix: updated `internal/connectors/defs/twenty/metadata.json` risk.approval and regenerated/restored Twenty manual/skill wording so every create/update/batch/delete action requires plan/preview/approval/execute; delete actions additionally require typed `--confirm destructive`.
+Fix: updated `internal/connectors/defs/twenty/metadata.json` risk.approval, regenerated/restored Twenty manual/skill wording, and updated the generated connector catalog risk metadata so every create/update/batch/delete action requires plan/preview/approval/execute; delete actions additionally require typed `--confirm destructive`.
 
 Commands:
 

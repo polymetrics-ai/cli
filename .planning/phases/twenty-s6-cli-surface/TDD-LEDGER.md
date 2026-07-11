@@ -39,7 +39,7 @@ FAIL	polymetrics.ai/internal/cli
 | 4 | `pm twenty --help` failed via static manual lookup; focused Go test red. | Top-level connector `--help` renders manual and exits 0. | Reuses connector manual renderer. | GREEN |
 | 5 | Docs/manual/website lacked Twenty Command Surface. | Regenerated docs/connectors/manual/skill and website data. | Robust website diff hash unchanged after second generation. | GREEN |
 | 6 | Local gates incomplete. | Ran jq/Python/connectorgen/conformance/focused tests/vet/build/help/docs/website/full test gates. | `make verify` skipped due reverse ETL smoke target. | GREEN |
-| 7 | Review F1: generated manual/skill claimed `create_*` requires no approval. | Corrected Twenty metadata source and regenerated Twenty manual/skill approval wording to require plan/preview/approval/execute for every create/update/batch/delete action; deletes additionally require `--confirm destructive`. | Safety wording fix only; no live writes. | GREEN |
+| 7 | Review F1: generated manual/skill claimed `create_*` requires no approval. | Corrected Twenty metadata source, Twenty manual/skill, and connector catalog approval wording to require plan/preview/approval/execute for every create/update/batch/delete action; deletes additionally require `--confirm destructive`. | Safety wording fix only; no live writes. | GREEN |
 
 ## Green evidence highlights
 
