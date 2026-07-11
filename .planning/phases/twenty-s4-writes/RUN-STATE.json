@@ -1,0 +1,73 @@
+{
+  "phase": "twenty-s4-writes",
+  "issue": 281,
+  "parentIssue": 277,
+  "branch": "feat/281-twenty-writes",
+  "baseBranch": "feat/277-twenty-connector-parity",
+  "status": "green_local_post_commit_gsd_gate_passed",
+  "gsdMode": "manual_fallback",
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase twenty-s4-writes --dry-run",
+  "gsdFallbackReason": "scripts/gsd: unknown GSD command: programming-loop",
+  "spawnDecision": "local_critical_path",
+  "verificationPassed": true,
+  "verificationEquivalent": "all feasible S4 local gates passed; make verify intentionally not run because its smoke target executes pm reverse run, which S4 safety forbids",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "User instructed do not spawn subagents; worker owns isolated branch/cwd and allowed S4 scope."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Initial red validation captured inline before production edits."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Generated writes.json and api_surface.json locally within S4 allowed scope."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Ran jq, connectorgen validate, conformance, focused packages, format, vet, build, and full tests locally; no subagents by instruction."
+    },
+    {
+      "cycle": "gsd-evidence",
+      "decision": "local_critical_path",
+      "reason": "scripts/verify-gsd-workflow 1a86cc1a passed after phase evidence commit."
+    }
+  ],
+  "redEvidence": {
+    "writes": "writes.json missing (expected before S4)",
+    "apiSurfaceTotal": 56,
+    "apiSurfaceGET": 56,
+    "apiSurfaceCoveredWrite": 0
+  },
+  "greenEvidence": {
+    "writesActions": 84,
+    "createActions": 28,
+    "updateActions": 28,
+    "batchActions": 28,
+    "deleteActions": 0,
+    "apiSurfaceTotal": 140,
+    "apiSurfaceGET": 56,
+    "apiSurfacePOST": 56,
+    "apiSurfacePATCH": 28,
+    "apiSurfaceDELETE": 0,
+    "apiSurfaceCoveredWrite": 84,
+    "connectorgenValidate": "findings=[], warnings=[]",
+    "twentyConformance": "ok",
+    "focusedPackages": "ok",
+    "goTestAll": "ok",
+    "gsdWorkflow": "ok"
+  },
+  "safety": {
+    "reverseETLExecution": "not_run",
+    "liveCredentials": "not_used",
+    "deleteActions": "not_added",
+    "newDependencies": "none",
+    "rawHTTP": "not_used",
+    "makeVerify": "not_run_reverse_etl_smoke"
+  }
+}
