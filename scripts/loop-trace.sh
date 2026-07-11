@@ -145,26 +145,55 @@ PY
     ;;
 
   live)
-    f="$(newest_session)"; [[ -n "$f" ]] || { echo "no session" >&2; exit 1; }
-    echo "following $(basename "$f") — ^C to stop"
-    tail -n0 -f "$f" | while IFS= read -r line; do
-      echo "$line" | python3 -c "
-import json,sys
-try: e=json.load(sys.stdin)
-except Exception: sys.exit()
-t=(e.get('timestamp') or '')[11:19]
-if e.get('type')!='message': print(f'{t} [{e.get(\"type\")}]'); sys.exit()
-m=e['message']
-for c in (m.get('content') or []):
-    if not isinstance(c,dict): continue
-    k=c.get('type')
-    if k=='toolCall':
-        a=c.get('arguments') or {}
-        print(f\"{t} {c.get('name')}: {(a.get('command') or a.get('path') or a.get('agent') or '')[:120]}\")
-    elif k=='thinking': print(f\"{t} thinking: {(c.get('thinking') or '')[:100].strip()}\")
-    elif k=='text' and m.get('role')=='toolResult': print(f'{t} result: {len(c.get(\"text\") or \"\")}B')
-" 2>/dev/null
-    done ;;
+    echo "following ALL sessions in known dirs (orchestrator + subagents) — ^C to stop"
+    SESSION_DIRS="$(session_dirs | tr '\n' ':')" python3 - <<'PY'
+import json,os,time,glob
+dirs=[d for d in os.environ["SESSION_DIRS"].split(":") if d]
+offsets={}
+def tag(f): return os.path.basename(f)[11:19]+"/"+os.path.basename(f).split("_")[-1][:6]
+def digest(line):
+    try: e=json.loads(line)
+    except Exception: return None
+    t=(e.get("timestamp") or "")[11:19]
+    if e.get("type")=="session": return f"{t} ── NEW SESSION cwd=…/{e.get('cwd','').rsplit('/',1)[-1]}"
+    if e.get("type")!="message": return None
+    m=e["message"]
+    out=[]
+    for c in (m.get("content") or []):
+        if not isinstance(c,dict): continue
+        k=c.get("type")
+        if k=="toolCall":
+            a=c.get("arguments") or {}
+            out.append(f"{t} {c.get('name')}: {(a.get('command') or a.get('path') or a.get('agent') or json.dumps(a))[:110]}")
+        elif k=="thinking":
+            th=(c.get("thinking") or "").strip()
+            if th: out.append(f"{t} 💭 {th[:90]}")
+        elif k=="text" and m.get("role")=="toolResult":
+            out.append(f"{t} ← result {len(c.get('text') or '')}B")
+    return "\n".join(out) if out else None
+try:
+    while True:
+        files=[]
+        for d in dirs: files+=glob.glob(os.path.join(d,"*.jsonl"))
+        files=sorted(files,key=os.path.getmtime,reverse=True)[:6]
+        for f in files:
+            size=os.path.getsize(f)
+            off=offsets.get(f)
+            if off is None:
+                offsets[f]=size  # start at end for pre-existing files
+                continue
+            if size>off:
+                with open(f) as fh:
+                    fh.seek(off)
+                    for line in fh:
+                        d2=digest(line)
+                        if d2:
+                            for ln in d2.split("\n"): print(f"[{tag(f)}] {ln}",flush=True)
+                offsets[f]=size
+        time.sleep(2)
+except KeyboardInterrupt: pass
+PY
+    ;;
 
   turn)
     [[ -n "$ARG" ]] || { echo "usage: loop-trace turn <n>" >&2; exit 1; }
