@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/shadcn/ui/skeleton';
 import { useAnnotations } from '@/components/blog/annotations-provider';
+import { AuthorChip } from '@/components/blog/author-chip';
 import { relativeTime } from '@/components/blog/highlight-text';
 import type { CommentDto } from '@/components/blog/annotations-provider';
 import type { BlogSection } from '@/lib/blog';
@@ -57,17 +58,7 @@ function DeleteButton({ comment }: { comment: CommentDto }) {
 function AuthorRow({ comment, children }: { comment: CommentDto; children?: React.ReactNode }) {
   return (
     <div className="flex items-center gap-1.5">
-      {comment.author.image ? (
-        // eslint-disable-next-line @next/next/no-img-element -- OAuth avatar host varies
-        <img src={comment.author.image} alt="" width={14} height={14} className="h-3.5 w-3.5 border border-line-structure object-cover" />
-      ) : (
-        <span className="flex h-3.5 w-3.5 items-center justify-center border border-line-cta bg-surface-cta-primary font-mono text-[8px] font-bold text-line-cta">
-          {(comment.author.name[0] ?? '?').toUpperCase()}
-        </span>
-      )}
-      <span className="truncate text-[11px] font-medium text-text-secondary">
-        {comment.author.name}
-      </span>
+      <AuthorChip author={comment.author} />
       <span className="shrink-0 font-mono text-[9px] text-text-disabled">
         {relativeTime(comment.createdAt)}
       </span>

@@ -60,19 +60,28 @@ async function selectInBlock(page: Page, blockIndex: number, needle: string): Pr
   );
 }
 
+/** Better Auth's CSRF check requires an Origin once cookies are present. */
+function authHeaders(): Record<string, string> {
+  const base = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3000';
+  return { origin: new URL(base).origin };
+}
+
 async function signUp(page: Page, label: string): Promise<void> {
   const email = `e2e-${label}-${Date.now()}@example.com`;
   // Better Auth rate-limits the sign-up path; parallel workers signing up
   // simultaneously can trip it, so retry with a short backoff.
   for (let attempt = 0; attempt < 5; attempt++) {
     const response = await page.request.post('/api/auth/sign-up/email', {
+      headers: authHeaders(),
       data: { name: `E2E ${label}`, email, password: 'e2e-password-123' },
     });
     if (response.ok()) return;
-    if (response.status() !== 429) break;
+    if (response.status() !== 429) {
+      throw new Error(`sign-up failed for ${email}: ${response.status()} ${await response.text()}`);
+    }
     await page.waitForTimeout(3000);
   }
-  throw new Error(`sign-up failed for ${email}`);
+  throw new Error(`sign-up failed for ${email}: rate limited`);
 }
 
 test.describe('blog annotations', () => {
@@ -208,6 +217,58 @@ test.describe('blog annotations', () => {
     await card.getByRole('button', { name: 'Confirm' }).click();
     await expect(sheet.getByText(noteText)).toBeHidden();
     await expect(sheet.getByText(replyText)).toBeHidden();
+  });
+
+  test('profile previews gate details behind opt-in', async ({ page }) => {
+    // Author A opts in to a visible profile.
+    await signUp(page, 'profiled');
+    await page.goto(POST_PATH);
+    const noteText = `Preview root ${Date.now()}`;
+    await selectInBlock(page, 0, 'Most operational data work');
+    await page.getByRole('toolbar', { name: 'Annotate selection' }).getByRole('button', { name: 'Comment' }).click();
+    const composer = page.getByRole('dialog', { name: 'New note' });
+    await composer.getByRole('textbox').fill(noteText);
+    await composer.getByRole('button', { name: 'Post note' }).click();
+    await expect(page.locator('mark[data-annotation-mark]', { hasText: 'Most operational data work' })).toBeVisible();
+
+    await page.locator('header button[aria-label="Account menu"]').click();
+    await page.getByRole('menuitem', { name: 'Profile' }).click();
+    const dialog = page.getByRole('dialog', { name: 'How readers see you' });
+    await dialog.getByRole('checkbox').check();
+    await dialog.getByRole('button', { name: 'Save' }).click();
+    await expect(dialog).toBeHidden();
+
+    // Reader B (default private) replies, then inspects both chips.
+    await page.request.post('/api/auth/sign-out', { headers: authHeaders(), data: {} });
+    await signUp(page, 'privatereader');
+    await page.goto(POST_PATH);
+    await page.getByRole('button', { name: 'Open all notes' }).click();
+    const sheet = page.locator('[data-slot=sheet-content]');
+    const card = sheet.locator('div.corner-box-corners', { hasText: noteText }).first();
+    await card.getByRole('button', { name: 'Reply', exact: true }).click();
+    await card.getByRole('textbox').fill('replying as a private reader');
+    await card.getByRole('button', { name: 'Post reply' }).click();
+    await expect(card.locator('[data-reply-id]', { hasText: 'private reader' })).toBeVisible();
+
+    // Hover previews are transient; re-hover until the popover settles
+    // (parallel-worker load can re-render the sheet mid-hover).
+    const visiblePreview = page.locator('[data-author-preview="visible"]');
+    await expect(async () => {
+      await card.getByRole('button', { name: "View E2E profiled's profile" }).hover();
+      await expect(visiblePreview).toBeVisible({ timeout: 2000 });
+    }).toPass({ timeout: 20_000 });
+    await expect(visiblePreview.getByText(/Member since/)).toBeVisible();
+
+    // B's chip: default — dynamic placeholder. Park the pointer first so
+    // A's open preview doesn't sit in the hover path.
+    await page.mouse.move(10, 10);
+    await expect(visiblePreview).toBeHidden();
+    const privatePreview = page.locator('[data-author-preview="private"]');
+    await expect(async () => {
+      await card.getByRole('button', { name: "View E2E privatereader's profile" }).hover();
+      await expect(privatePreview).toBeVisible({ timeout: 2000 });
+    }).toPass({ timeout: 20_000 });
+    await expect(privatePreview.getByText('Profile private', { exact: true })).toBeVisible();
   });
 
   test('signed-out bookmarks page asks for sign-in', async ({ page }) => {

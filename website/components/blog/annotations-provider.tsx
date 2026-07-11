@@ -16,6 +16,21 @@ import type { Anchor, Resolution } from '@/lib/annotations/anchor';
 import { useSession } from '@/lib/auth-client';
 import { SignInDialog } from '@/components/auth/sign-in-dialog';
 
+export type AuthorProfileDto = {
+  memberSince: string;
+  noteCount: number;
+  profileUrl: string | null;
+  providerUsername: string | null;
+  providerProfileUrl: string | null;
+};
+
+export type AuthorDto = {
+  name: string;
+  image: string | null;
+  /** Present only when the author opted in to a visible profile. */
+  profile?: AuthorProfileDto | null;
+};
+
 export type CommentDto = {
   id: string;
   body: string;
@@ -23,7 +38,7 @@ export type CommentDto = {
   anchor: Anchor | null;
   parentId: string | null;
   createdAt: string;
-  author: { name: string; image: string | null };
+  author: AuthorDto;
   mine: boolean;
   /** True while an optimistic insert is awaiting the server. */
   pending?: boolean;

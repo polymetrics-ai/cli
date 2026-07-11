@@ -11,7 +11,20 @@ export type CommentRecord = {
   anchor: Anchor | null;
   parentId: string | null;
   createdAt: string;
-  author: { name: string; image: string | null };
+  author: {
+    name: string;
+    image: string | null;
+    /** Present only when the author opted in to a visible profile. */
+    profile: AuthorProfile | null;
+  };
+};
+
+export type AuthorProfile = {
+  memberSince: string;
+  noteCount: number;
+  profileUrl: string | null;
+  providerUsername: string | null;
+  providerProfileUrl: string | null;
 };
 
 type CommentRow = {
@@ -30,6 +43,12 @@ type CommentRow = {
   created_at: Date;
   author_name: string;
   author_image: string | null;
+  author_created_at: Date;
+  author_note_count: string;
+  profile_visible: boolean | null;
+  profile_url: string | null;
+  provider_username: string | null;
+  provider_profile_url: string | null;
 };
 
 function toRecord(row: CommentRow): CommentRecord {
@@ -58,7 +77,19 @@ function toRecord(row: CommentRow): CommentRecord {
     anchor,
     parentId: row.parent_id,
     createdAt: row.created_at.toISOString(),
-    author: { name: row.author_name, image: row.author_image },
+    author: {
+      name: row.author_name,
+      image: row.author_image,
+      profile: row.profile_visible
+        ? {
+            memberSince: row.author_created_at.toISOString(),
+            noteCount: Number(row.author_note_count),
+            profileUrl: row.profile_url,
+            providerUsername: row.provider_username,
+            providerProfileUrl: row.provider_profile_url,
+          }
+        : null,
+    },
   };
 }
 
@@ -66,9 +97,13 @@ const SELECT = `
   SELECT c.id, c.post_slug, c.user_id, c.body, c.parent_id,
          c.section_index, c.block_type, c.block_index,
          c.exact, c.prefix, c.suffix, c.start_offset, c.created_at,
-         u."name" AS author_name, u."image" AS author_image
+         u."name" AS author_name, u."image" AS author_image,
+         u."createdAt" AS author_created_at,
+         (SELECT COUNT(*) FROM comment c2 WHERE c2.user_id = c.user_id) AS author_note_count,
+         ps.profile_visible, ps.profile_url, ps.provider_username, ps.provider_profile_url
   FROM comment c
   JOIN "user" u ON u."id" = c.user_id
+  LEFT JOIN profile_settings ps ON ps.user_id = c.user_id
 `;
 
 export async function listCommentsBySlug(postSlug: string): Promise<CommentRecord[]> {
