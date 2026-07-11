@@ -1094,3 +1094,27 @@ html.dark,
     animation-iteration-count: 1 !important;
   }
 }
+
+/* ── Blog annotations (selection popover, highlights, composer) ─────── */
+@keyframes annotation-enter {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.annotation-popover-enter {
+  animation: annotation-enter 0.12s ease-out both;
+}
+
+@keyframes annotation-pending-pulse {
+  0%, 100% { background-color: rgb(52 211 153 / 0.12); }
+  50% { background-color: rgb(52 211 153 / 0.3); }
+}
+
+.annotation-pending {
+  animation: annotation-pending-pulse 1.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .annotation-popover-enter { animation: none; }
+  .annotation-pending { animation: none; }
+}

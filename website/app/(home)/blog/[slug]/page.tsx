@@ -6,6 +6,7 @@ import { BLOG_POSTS, blogUrl, getBlogPost } from '@/lib/blog';
 import { HomeSidebar } from '@/components/home/home-sidebar';
 import { OnPageTocAside } from '@/components/ui/on-page-toc';
 import { CornerBox } from '@/components/ui/corner-box';
+import { ArticleBody } from '@/components/blog/article-body';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -128,67 +129,7 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
           </header>
 
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_14rem]">
-            <div className="min-w-0">
-              {post.sections.map((section, index) => (
-                <section
-                  key={section.heading}
-                  id={sectionId(index)}
-                  className="mb-12 scroll-mt-24"
-                >
-                  <div className="mb-4 flex items-baseline gap-3 border-b border-line-structure pb-2">
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-text-disabled">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    <h2 className="font-square text-[20px] font-semibold leading-[1.25] text-text-primary">
-                      {section.heading}
-                    </h2>
-                  </div>
-
-                  <div className="flex flex-col gap-4">
-                    {section.body.map((paragraph) => (
-                      <p
-                        key={paragraph}
-                        className="text-[15px] leading-[1.75] text-text-tertiary"
-                      >
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
-
-                  {section.points ? (
-                    <ul className="mt-5 grid gap-2">
-                      {section.points.map((point) => (
-                        <li
-                          key={point}
-                          className="border-l border-line-cta bg-surface-1 px-4 py-2 text-[14px] leading-relaxed text-text-secondary"
-                        >
-                          {point}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-
-                  {section.code ? (
-                    <pre className="mt-5 overflow-x-auto border border-line-structure bg-[#101713] p-4 text-[13px] leading-relaxed text-emerald-100">
-                      <code>{section.code}</code>
-                    </pre>
-                  ) : null}
-                </section>
-              ))}
-            </div>
-
-            <aside className="lg:sticky lg:top-24 lg:self-start">
-              <CornerBox className="p-4">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-text-disabled">
-                  Summary
-                </p>
-                <p className="mt-3 text-[13px] leading-relaxed text-text-tertiary">
-                  {post.summary}
-                </p>
-              </CornerBox>
-            </aside>
-          </div>
+          <ArticleBody slug={post.slug} sections={post.sections} summary={post.summary} />
 
           <footer id="read-next" className="mt-8 border-t border-line-structure pt-8">
             <h2 className="font-square text-[16px] font-semibold text-text-primary">
