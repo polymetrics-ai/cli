@@ -7425,6 +7425,706 @@
       },
       "risk": "bulk creates up to 60 Twenty workspace_members records; external mutation; reverse ETL plan, preview, approval, execute required; Twenty enforces batch size",
       "body_field": "records"
+    },
+    {
+      "name": "delete_attachments",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/attachments/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_blocklists",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/blocklists/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_calendar_channel_event_associations",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/calendarChannelEventAssociations/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_calendar_event_participants",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/calendarEventParticipants/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_calendar_events",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/calendarEvents/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_call_recordings",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/callRecordings/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_companies",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/companies/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_dashboards",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/dashboards/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_message_campaigns",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/messageCampaigns/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_message_channel_message_association_message_folders",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/messageChannelMessageAssociationMessageFolders/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_message_channel_message_associations",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/messageChannelMessageAssociations/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_message_list_members",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/messageListMembers/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_message_lists",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/messageLists/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_message_participants",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/messageParticipants/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_message_threads",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/messageThreads/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_messages",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/messages/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_note_targets",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/noteTargets/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_notes",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/notes/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_opportunities",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/opportunities/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_people",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/people/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_task_targets",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/taskTargets/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_tasks",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/tasks/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_timeline_activities",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/timelineActivities/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_workflow_automated_triggers",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/workflowAutomatedTriggers/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_workflow_runs",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/workflowRuns/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_workflow_versions",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/workflowVersions/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_workflows",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/workflows/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_workspace_members",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rest/workspaceMembers/{{ record.id }}",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive external deletion; typed confirmation required",
+      "confirm": "destructive"
     }
   ]
 }

@@ -1,0 +1,117 @@
+{
+  "phase": "twenty-s5-deletes",
+  "issue": 282,
+  "parentIssue": 277,
+  "branch": "feat/282-twenty-deletes",
+  "baseBranch": "feat/277-twenty-connector-parity",
+  "baseHead": "bc014ef6b7b138eda1a492672a76ea577f78b695",
+  "status": "green_local_gsd_evidence_passed",
+  "gsdMode": "manual_fallback",
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase twenty-s5-deletes --dry-run",
+  "gsdFallbackReason": "scripts/gsd: unknown GSD command: programming-loop",
+  "spawnDecision": "local_critical_path",
+  "verificationPassed": true,
+  "verificationEquivalent": "declared S5 local gate suite passed: jq parse, corrected Python S5 assertions, connectorgen validate, Twenty conformance, focused packages, go vet, go build ./cmd/pm, gofmt -l, go test ./...; make verify intentionally not run because it executes pm reverse run, forbidden by S5 safety",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "User instructed do not spawn subagents; worker owns isolated branch/cwd and S5 scope."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Initial red validation captured inline before production edits; current writes/API counts fail S5 target."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Appended Twenty delete actions and API surface rows locally within allowed S5 scope."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Required local gates passed."
+    },
+    {
+      "cycle": "gsd-evidence",
+      "decision": "local_critical_path",
+      "reason": "Post-commit scripts/verify-gsd-workflow bc014ef6 passed."
+    }
+  ],
+  "correctedGateDecision": {
+    "preserveS4BatchKindCreate": true,
+    "expectedPostS5KindCounts": {
+      "create": 56,
+      "update": 28,
+      "delete": 28
+    },
+    "expectedPostS5NameCounts": {
+      "create_names": 28,
+      "update_names": 28,
+      "batch_names": 28,
+      "delete_names": 28
+    }
+  },
+  "redEvidence": {
+    "writesActions": 84,
+    "kindCounts": {
+      "create": 56,
+      "update": 28,
+      "delete": 0
+    },
+    "nameCounts": {
+      "create_names": 28,
+      "update_names": 28,
+      "batch_names": 28,
+      "delete_names": 0
+    },
+    "apiSurfaceRows": 140,
+    "apiSurfaceMethods": {
+      "GET": 56,
+      "POST": 56,
+      "PATCH": 28,
+      "DELETE": 0
+    }
+  },
+  "greenEvidence": {
+    "writesActions": 112,
+    "kindCounts": {
+      "create": 56,
+      "update": 28,
+      "delete": 28
+    },
+    "nameCounts": {
+      "create_names": 28,
+      "update_names": 28,
+      "batch_names": 28,
+      "delete_names": 28
+    },
+    "apiSurfaceRows": 168,
+    "apiSurfaceMethods": {
+      "GET": 56,
+      "POST": 56,
+      "PATCH": 28,
+      "DELETE": 28
+    },
+    "jq": "ok",
+    "pythonS5Gate": "s5 destructive deletes ok 28",
+    "connectorgenValidate": "findings=[], warnings=[], connectors_checked=548",
+    "twentyConformance": "ok polymetrics.ai/internal/connectors/conformance 1.256s",
+    "focusedPackages": "ok defs/engine/conformance/connectorgen",
+    "goVet": "exit 0 no output",
+    "goBuildPM": "exit 0 no output",
+    "gofmtList": "exit 0 no output",
+    "goTestAll": "exit 0 all packages passed; internal/connectors/certify 443.670s; internal/cli 187.716s",
+    "gsdWorkflow": "verify-gsd-workflow: implementation changes have GSD/TDD evidence against bc014ef6"
+  },
+  "safety": {
+    "reverseETLExecution": "not_run",
+    "liveCredentials": "not_used",
+    "destructiveExternalDeletes": "not_executed",
+    "newDependencies": "none",
+    "rawHTTP": "not_used",
+    "genericHTTPWriteTool": "not_exposed",
+    "makeVerify": "not_run_reverse_etl_smoke"
+  }
+}
