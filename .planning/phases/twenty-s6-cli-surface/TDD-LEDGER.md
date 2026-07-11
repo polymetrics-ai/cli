@@ -87,3 +87,7 @@ Claude local review on head `46f49175` found an important non-blocking gap: Twen
 - Updated implemented Twenty create/update examples with a mutable typed scalar flag where one is exposed (for example `--name fixture` or `--position 1`).
 - Removed examples and added notes for workspace-members create/update, whose write schema exposes nested object/array fields only and no scalar CLI flags.
 - `go test ./internal/connectors/engine -run TestBundleLoadEmbeddedTwentyCLISurfaceCount -count=1` now passes with regression coverage for example validity.
+
+#### F5 generated catalog parity
+- Verifier red: regenerated catalog differed from checked-in `docs/connectors/catalog/all-connectors.{md,json}` for GitHub counts (`33/67` checked in vs `37/231` generated).
+- Fix: updated only generated catalog files to match `go run ./cmd/pm docs generate` catalog output.

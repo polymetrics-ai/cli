@@ -180,7 +180,7 @@
 | `getlago` | [`icons/getlago.svg`](../icons/getlago.svg) | Lago | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://doc.getlago.com/api-reference/intro) | bundle definition |
 | `giphy` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Giphy | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.giphy.com/docs/api/) | bundle definition |
 | `gitbook` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | GitBook | `api` | ga | check, catalog, read, write | 185 | 170 | [Documentation](https://gitbook.com/docs/developers/gitbook-api/api-reference) | bundle definition |
-| `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 33 | 67 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
+| `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 37 | 231 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
 | `gitlab` | [`icons/gitlab.svg`](../icons/gitlab.svg) | GitLab | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.gitlab.com/ee/api/rest/) | bundle definition |
 | `glassfrog` | [`icons/glassfrog.svg`](../icons/glassfrog.svg) | GlassFrog | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY) | bundle definition |
 | `gmail` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Gmail | `api` | ga | check, catalog, read, write | 10 | 35 | [Documentation](https://developers.google.com/gmail/api/reference/rest) | bundle definition |

@@ -22,3 +22,5 @@ Claude local review on head `46f49175` found an important non-blocking gap: Twen
 - Review fix F3: resolved `claude_local` numeric scalar coverage gap by adding typed number flag support and exposing Twenty create/update number fields (`position`, PDL/count metrics); docs/website regenerated and focused gates passed.
 
 - Review fix F4: corrected invalid Twenty create/update examples so generated website/manual examples include mutable scalar flags, with workspace-members examples removed because no scalar flags are exposed.
+
+- Review fix F5: refreshed generated connector catalog GitHub counts/metadata to eliminate the remaining catalog-generator diff found by verifier while keeping non-catalog broad docs out of scope.

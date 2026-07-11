@@ -78,3 +78,7 @@ Claude local review on head `46f49175` found an important non-blocking gap: Twen
 ### Review fix F4 create/update example validity
 
 Project reviewer found Twenty create/update examples invalid against write schemas: create examples had no record field and update examples only had `--id`, while write schemas require at least one mutable field. Plan: keep regression coverage that every implemented Twenty create/update example includes a non-id typed flag when scalar flags exist, update examples to include a safe scalar flag, and remove examples with explanatory notes for workspace-members where no scalar flags are exposed.
+
+### Review fix F5 generated catalog parity
+
+Verifier found the generated connector catalog still differed from checked-in catalog output for the pre-existing GitHub bundle counts (`33/67` checked in vs `37/231` generated). Although not Twenty-specific, S6 already touches generated connector catalog parity, so update only `docs/connectors/catalog/all-connectors.{md,json}` to match generator output for GitHub as well as Twenty, then rerun docs/catalog checks.

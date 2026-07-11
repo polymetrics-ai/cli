@@ -207,3 +207,13 @@ F4 verification passed:
 - `./pm docs validate --connectors-dir docs/connectors` → passed.
 - Website generation idempotence (`pnpm run gen:website-data` + `git diff --exit-code -- website/data website/lib website/public`) → passed.
 - `scripts/verify-gsd-workflow 62b8b46c` → passed.
+
+### Review fix F5 generated catalog parity
+
+Fixed verifier's remaining generated catalog diff by updating `docs/connectors/catalog/all-connectors.md` and `.json` to match `go run ./cmd/pm docs generate` catalog output for the GitHub generated counts/metadata. Verification passed:
+
+- `go run ./cmd/connectorgen validate internal/connectors/defs --json | jq '{findings,warnings,connectors_checked}'` → `findings: []`, `warnings: []`, `connectors_checked: 548`.
+- `go test ./internal/connectors/engine ./internal/cli -run 'TestBundleLoadEmbeddedTwentyCLISurfaceCount|TestDocsGenerateAndValidateConnectorDocs|TestConnectorCatalog' -count=1` → all `ok`.
+- `./pm docs validate --connectors-dir docs/connectors` → passed.
+- Temp docs generation catalog compare (`diff -q docs/connectors/catalog/all-connectors.{md,json} $tmp/connectors/catalog/...`) → matched.
+- `scripts/verify-gsd-workflow 62b8b46c` → passed.
