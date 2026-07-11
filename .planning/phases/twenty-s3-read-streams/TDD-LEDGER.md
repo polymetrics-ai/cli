@@ -1,15 +1,18 @@
 # Twenty S3 read streams — TDD ledger
 
 Issue: #280
+PR: #290
 
 | Step | Red / validation target | Green evidence | Status |
 | --- | --- | --- | --- |
-| 1 | Focused bundle test should fail against S1 stub (`streams: []`) because Twenty has 0 streams. | `internal/connectors/engine/twenty_bundle_test.go` asserts 28 streams and passes after `streams.json` fill. | Green |
-| 2 | `api_surface.json` empty skeleton should not cover new streams. | 28 list rows with `covered_by.stream` match the 28 snake_case stream names. | Green |
-| 3 | Get-by-id endpoints cannot honestly use `covered_by.direct_read` because the engine has no generic direct-read output policy. | 28 get-by-id rows recorded as `excluded.category=out_of_scope` with engine-gap reason. | Green |
-| 4 | Cursor pagination and schema refs must be static-checked. | Focused test asserts cursor `starting_after`, token `pageInfo.endCursor`, stop `pageInfo.hasNextPage`, page size 60, and schema ref path for every stream. | Green |
-| 5 | Full connector validation must stay clean. | Worker reported `go run ./cmd/connectorgen validate` -> `548 connector(s) checked, 0 findings`; VERIFY stage will independently rerun. | Pending independent VERIFY |
+| 1 | Current `api_surface.json` failed full S3 invariant: `endpoints 56`, `covered_stream 28`, `excluded 28`, `direct_read 0`, then `AssertionError`. | Rewrote get-by-id rows to same-stream coverage; invariant now prints `endpoints 56`, `covered_stream 56`, `excluded 0`, `direct_read 0`. | Green |
+| 2 | `test ! -f internal/connectors/engine/twenty_bundle_test.go` exited 1, proving the unowned engine test was present before cleanup. | Deleted `internal/connectors/engine/twenty_bundle_test.go`; focused package tests pass without it. | Green |
+| 3 | Minimal fixtures must remain because conformance binds as soon as streams are declared. | Kept `fixtures/streams/attachments/page_1.json` and `page_2.json`; `go test ./internal/connectors/conformance -run 'TestConformance/twenty' -count=1` passed. | Green |
+| 4 | Full defs validation must stay clean with 56 stream-covered rows and existing streams. | `go run ./cmd/connectorgen validate internal/connectors/defs --json` returned `findings: []`, `warnings: []`, `connectors_checked: 548`. | Green |
+| 5 | Broad repo gates must stay green without the unowned engine test. | `go vet ./...`, `go test ./... -count=1`, `go build ./cmd/pm`, and `gofmt -l cmd internal` passed. | Green |
 
-## Red/green note
+## Notes
 
-The first Codex attempt self-blocked before a green commit because the initial task prompt incorrectly required camelCase stream names and generic direct-read coverage. The corrected prompt made the red condition explicit: generic direct-read is an engine gap, so get-by-id rows are excluded in this slice instead of implemented.
+- Turn36 operator decision resolved the previous fixture blocker: S3 keeps minimal fixtures; S7 #284 refines/expands later.
+- Red validation captured before production edits in this correction pass.
+- `make verify` not run because this task forbids reverse ETL execution and the Makefile `verify` target depends on `smoke`, which runs `./pm reverse run`.

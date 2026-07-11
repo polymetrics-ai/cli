@@ -2,7 +2,7 @@
   "api": "Twenty CRM REST API (https://api.twenty.com/rest)",
   "docs": "https://docs.twenty.com/developers/extend/api",
   "reviewed_at": "2026-07-10",
-  "scope": "S3 #280 adds the 28 stream_read list GET rows covered by Twenty read streams and records the 28 single-record get-by-id GET rows as excluded out_of_scope because generic direct_read JSON output is an engine capability gap. S4/#281 and S5/#282 will later add the write rows in sequenced DAG edits, never simultaneously.",
+  "scope": "S3 #280 declares the 28 Twenty REST read streams and covers both list GET /rest/<object> and same-record-shape get-by-id GET /rest/<object>/{id} rows with the same snake_case stream. S4/#281 and S5/#282 add write rows in sequenced DAG edits, never simultaneously.",
   "endpoints": [
     {
       "method": "GET",
@@ -14,9 +14,8 @@
     {
       "method": "GET",
       "path": "/rest/attachments/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "attachments"
       }
     },
     {
@@ -29,9 +28,8 @@
     {
       "method": "GET",
       "path": "/rest/blocklists/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "blocklists"
       }
     },
     {
@@ -44,9 +42,8 @@
     {
       "method": "GET",
       "path": "/rest/calendarChannelEventAssociations/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "calendar_channel_event_associations"
       }
     },
     {
@@ -59,9 +56,8 @@
     {
       "method": "GET",
       "path": "/rest/calendarEventParticipants/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "calendar_event_participants"
       }
     },
     {
@@ -74,9 +70,8 @@
     {
       "method": "GET",
       "path": "/rest/calendarEvents/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "calendar_events"
       }
     },
     {
@@ -89,9 +84,8 @@
     {
       "method": "GET",
       "path": "/rest/callRecordings/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "call_recordings"
       }
     },
     {
@@ -104,9 +98,8 @@
     {
       "method": "GET",
       "path": "/rest/companies/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "companies"
       }
     },
     {
@@ -119,9 +112,8 @@
     {
       "method": "GET",
       "path": "/rest/dashboards/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "dashboards"
       }
     },
     {
@@ -134,9 +126,8 @@
     {
       "method": "GET",
       "path": "/rest/messageCampaigns/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "message_campaigns"
       }
     },
     {
@@ -149,9 +140,8 @@
     {
       "method": "GET",
       "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "message_channel_message_association_message_folders"
       }
     },
     {
@@ -164,9 +154,8 @@
     {
       "method": "GET",
       "path": "/rest/messageChannelMessageAssociations/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "message_channel_message_associations"
       }
     },
     {
@@ -179,9 +168,8 @@
     {
       "method": "GET",
       "path": "/rest/messageListMembers/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "message_list_members"
       }
     },
     {
@@ -194,9 +182,8 @@
     {
       "method": "GET",
       "path": "/rest/messageLists/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "message_lists"
       }
     },
     {
@@ -209,9 +196,8 @@
     {
       "method": "GET",
       "path": "/rest/messageParticipants/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "message_participants"
       }
     },
     {
@@ -224,9 +210,8 @@
     {
       "method": "GET",
       "path": "/rest/messageThreads/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "message_threads"
       }
     },
     {
@@ -239,9 +224,8 @@
     {
       "method": "GET",
       "path": "/rest/messages/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "messages"
       }
     },
     {
@@ -254,9 +238,8 @@
     {
       "method": "GET",
       "path": "/rest/noteTargets/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "note_targets"
       }
     },
     {
@@ -269,9 +252,8 @@
     {
       "method": "GET",
       "path": "/rest/notes/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "notes"
       }
     },
     {
@@ -284,9 +266,8 @@
     {
       "method": "GET",
       "path": "/rest/opportunities/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "opportunities"
       }
     },
     {
@@ -299,9 +280,8 @@
     {
       "method": "GET",
       "path": "/rest/people/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "people"
       }
     },
     {
@@ -314,9 +294,8 @@
     {
       "method": "GET",
       "path": "/rest/taskTargets/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "task_targets"
       }
     },
     {
@@ -329,9 +308,8 @@
     {
       "method": "GET",
       "path": "/rest/tasks/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "tasks"
       }
     },
     {
@@ -344,9 +322,8 @@
     {
       "method": "GET",
       "path": "/rest/timelineActivities/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "timeline_activities"
       }
     },
     {
@@ -359,9 +336,8 @@
     {
       "method": "GET",
       "path": "/rest/workflowAutomatedTriggers/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "workflow_automated_triggers"
       }
     },
     {
@@ -374,9 +350,8 @@
     {
       "method": "GET",
       "path": "/rest/workflowRuns/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "workflow_runs"
       }
     },
     {
@@ -389,9 +364,8 @@
     {
       "method": "GET",
       "path": "/rest/workflowVersions/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "workflow_versions"
       }
     },
     {
@@ -404,9 +378,8 @@
     {
       "method": "GET",
       "path": "/rest/workflows/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "workflows"
       }
     },
     {
@@ -419,9 +392,8 @@
     {
       "method": "GET",
       "path": "/rest/workspaceMembers/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "single-record get-by-id requires a generic direct_read output_policy; the engine currently supports only github_contents_* policies (cmd/connectorgen/validate.go:102-105, internal/connectors/engine/direct_read.go:23-24). Deferred to a follow-up engine capability."
+      "covered_by": {
+        "stream": "workspace_members"
       }
     }
   ]
