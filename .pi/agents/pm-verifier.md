@@ -2,7 +2,7 @@
 name: pm-verifier
 description: Verification worker that runs focused checks and reports exact evidence.
 tools: read, grep, find, ls, bash
-model: anthropic/claude-opus-4-8
+model: openai-codex/gpt-5.5
 thinking: high
 ---
 

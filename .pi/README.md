@@ -121,16 +121,18 @@ export `SEARXNG_BASE` (+ token if proxied) before launching.
 
 ### Non-interactive (CI / parent-PR review coverage)
 
-For automated runs, load project agents with `agentScope` and explicit project-agent trust:
+For automated runs, install the subagent tool once (`pi install npm:pi-sub-agent`) and launch with
+`--approve` so project-local files are trusted:
 
 ```bash
 pi -p "Run the GSD verify cycle for phase github-projects-discussions" \
-  --tools read,bash,edit,write,grep,find,ls,subagent \
-  --agentScope both --confirmProjectAgents false
+  --tools read,bash,edit,write,grep,find,ls,subagent --approve
 ```
 
-Only set `--confirmProjectAgents false` after reviewing and trusting the agents under
-`.pi/agents/`.
+Project agents under `.pi/agents/` are included by passing `agentScope: "project"` or `"both"` in
+the `subagent` tool call (with `confirmProjectAgents: false` for non-interactive runs) — these are
+tool parameters, not CLI flags; pi 0.80.x has no `--agentScope`/`--confirmProjectAgents` options.
+Only run non-interactively after reviewing and trusting the agents under `.pi/agents/`.
 
 ### Compaction and retry
 

@@ -2,7 +2,7 @@
 name: pm-claude-review-disposition
 description: Read-only review disposition planner for Claude and Copilot comments.
 tools: read, grep, find, ls
-model: anthropic/claude-opus-4-8
+model: openai-codex/gpt-5.5
 thinking: high
 ---
 

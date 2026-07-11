@@ -40,3 +40,9 @@ Connector-specific expectations (everything else is inherited from pm-auto-loop)
 
 Env: set `SEARXNG_BASE` (and its token if proxied) before launching so `pm-web-researcher` can query
 the audited `searxng` connector.
+
+## Shepherd supervision
+
+When driven by `scripts/pi-shepherd-loop.sh`, the Shepherd supervision contract in
+`.pi/prompts/pm-auto-loop.md` applies verbatim (independent per-turn validation, `VALIDATOR
+CORRECTION` handling, plain-string `RUN.json.terminal`, pre-provisioned env-credential rule).
