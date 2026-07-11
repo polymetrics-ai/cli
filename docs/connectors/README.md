@@ -495,6 +495,7 @@
 - [trustpilot](trustpilot/MANUAL.md): Reads Trustpilot business-unit reviews, invitations, and business-unit profile metadata.
 - [tvmaze-schedule](tvmaze-schedule/MANUAL.md): Reads public TVmaze broadcast and web schedules without credentials.
 - [twelve-data](twelve-data/MANUAL.md): Reads Twelve Data time series, quotes, stocks, and forex pair reference data.
+- [twenty](twenty/MANUAL.md): Reads Twenty CRM companies, people, opportunities, notes, tasks, messages, calendar events, workflows, workspace members, and the rest of the 28-object workspace surface, and writes create/update/batch/delete mutations through the Twenty REST API.
 - [twilio](twilio/MANUAL.md): Reads and writes Twilio public REST API v2010 resources through declarative JSON bundle streams and typed write actions.
 - [twilio-taskrouter](twilio-taskrouter/MANUAL.md): Reads Twilio TaskRouter workers, tasks, activities, task queues, and workflows for a workspace.
 - [twitter](twitter/MANUAL.md): Reads tweets and their authors matching a search query from the Twitter (X) API v2 recent search endpoint using an App-only Bearer token.

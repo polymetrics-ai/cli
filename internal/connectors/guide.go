@@ -487,7 +487,7 @@ func streamSection(manifest Manifest) GuideSection {
 	}
 	lines := []string{}
 	for _, stream := range manifest.Streams {
-		lines = append(lines, stream.Name+": "+stream.Description)
+		lines = append(lines, nameWithOptionalDescription(stream.Name, stream.Description))
 		if len(stream.PrimaryKey) > 0 {
 			lines = append(lines, "  primary key: "+strings.Join(stream.PrimaryKey, ", "))
 		}
@@ -528,7 +528,7 @@ func writeActionSection(manifest Manifest) GuideSection {
 	}
 	lines := []string{}
 	for _, action := range manifest.WriteActions {
-		lines = append(lines, action.Name+": "+action.Description)
+		lines = append(lines, nameWithOptionalDescription(action.Name, action.Description))
 		if action.Method != "" || action.Path != "" {
 			lines = append(lines, "  endpoint: "+strings.TrimSpace(action.Method+" "+action.Path))
 		}
@@ -543,6 +543,14 @@ func writeActionSection(manifest Manifest) GuideSection {
 		}
 	}
 	return GuideSection{Title: "Reverse ETL Actions", Lines: lines}
+}
+
+func nameWithOptionalDescription(name, description string) string {
+	description = strings.TrimSpace(description)
+	if description == "" {
+		return name + ":"
+	}
+	return name + ": " + description
 }
 
 func paginationSection(manifest Manifest) GuideSection {

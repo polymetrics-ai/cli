@@ -184,6 +184,52 @@ func TestConnectorInspectHumanShowsManualNotRawJSON(t *testing.T) {
 	}
 }
 
+func TestTwentyConnectorHelpCommandsRenderManualWithoutCredentials(t *testing.T) {
+	tests := [][]string{
+		{"help", "twenty"},
+		{"twenty"},
+		{"twenty", "--help"},
+		{"connectors"},
+	}
+	for _, args := range tests {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr = %s", args, code, stderr.String())
+			}
+			out := stdout.String()
+			if len(args) == 1 && args[0] == "connectors" {
+				for _, want := range []string{"NAME", "pm connectors", "inspect connector definitions"} {
+					if !strings.Contains(out, want) {
+						t.Fatalf("connectors help missing %q:\n%s", want, out)
+					}
+				}
+				return
+			}
+			for _, want := range []string{"Twenty CRM", "COMMAND SURFACE", "companies list", "workspace-members delete", "delete_companies"} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("Twenty manual for %v missing %q:\n%s", args, want, out)
+				}
+			}
+			if strings.Contains(out, "invalid usage") || strings.Contains(stderr.String(), "invalid usage") {
+				t.Fatalf("help command returned usage output; stdout=%q stderr=%q", out, stderr.String())
+			}
+		})
+	}
+}
+
+func TestTwentyConnectorInvalidCommandStillErrors(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"twenty", "unknown-command"}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("Run(twenty unknown-command) code = 0 stdout = %s", stdout.String())
+	}
+	if !strings.Contains(stderr.String(), "unknown command") {
+		t.Fatalf("invalid Twenty command stderr missing unknown command: %s", stderr.String())
+	}
+}
+
 func TestDocsGenerateAndValidateConnectorDocs(t *testing.T) {
 	dir := t.TempDir()
 	cliDir := dir + "/cli"

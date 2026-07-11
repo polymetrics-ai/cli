@@ -1,0 +1,131 @@
+{
+  "phase": "twenty-s6-cli-surface",
+  "issue": 283,
+  "parentIssue": 277,
+  "parentPR": 285,
+  "branch": "feat/283-twenty-cli-surface",
+  "baseBranch": "feat/277-twenty-connector-parity",
+  "baseHead": "62b8b46cde85ae620591194467d3474fda2a1e8a",
+  "status": "review_fix_f5_catalog_green_local_pending_push",
+  "gsdMode": "manual_fallback",
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase twenty-s6-cli-surface --dry-run",
+  "gsdFallbackReason": "scripts/gsd: unknown GSD command: programming-loop",
+  "spawnDecision": "local_critical_path",
+  "verificationPassed": true,
+  "verificationEquivalent": "fmt/vet/test/build/docs/connectorgen/help/website gates passed; make verify skipped because it executes reverse ETL smoke",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "User instructed do not spawn subagents; worker owns isolated branch/cwd and S6 scope."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Initial red validation captured before production edits; Twenty cli_surface missing and dynamic help commands failed."
+    },
+    {
+      "cycle": "implementation",
+      "decision": "local_critical_path",
+      "reason": "One coherent local slice added cli_surface, help routing, docs, generated website data, and tests."
+    },
+    {
+      "cycle": "review-fix-f1",
+      "decision": "local_critical_path",
+      "reason": "Safety wording fix is localized to metadata/generated Twenty docs; no subagents needed."
+    }
+  ],
+  "redEvidence": {
+    "pmBinaryExists": false,
+    "cliSurfaceExists": false,
+    "helpDocsStatus": 0,
+    "helpConnectorsStatus": 0,
+    "helpTwentyStatus": 1,
+    "helpTwentyError": "error: help topic \"twenty\" not found",
+    "twentyStatus": 1,
+    "twentyError": "error: unknown command \"twenty\"; exit status 2",
+    "twentyHelpStatus": 1,
+    "twentyHelpError": "error: help topic \"twenty\" not found",
+    "connectorsBareStatus": 0
+  },
+  "redTestEvidence": {
+    "command": "go test ./internal/cli -run 'TestTwentyConnector' -count=1",
+    "status": 1,
+    "failures": [
+      "help_twenty: Run([help twenty]) code = 1 stderr = error: help topic \"twenty\" not found",
+      "twenty: Run([twenty]) code = 2 stderr = error: unknown command \"twenty\"",
+      "twenty_--help: Run([twenty --help]) code = 1 stderr = error: help topic \"twenty\" not found"
+    ]
+  },
+  "greenEvidence": {
+    "cliSurfaceCommands": 168,
+    "verbCounts": {
+      "list": 28,
+      "get": 28,
+      "create": 28,
+      "update": 28,
+      "batch": 28,
+      "delete": 28
+    },
+    "connectorgenValidate": "findings=0 warnings=0 connectors_checked=548",
+    "focusedTests": "passed",
+    "goVet": "passed",
+    "goBuild": "passed",
+    "goTestAll": "passed",
+    "docsValidate": "passed",
+    "websiteIdempotenceSha256": "f9e24526e3b32d2560bf206e3420b8dab106622b5dfc00d229ac2df16685c861",
+    "gsdWorkflowVerify": "passed against 62b8b46c",
+    "reviewFixF1": "passed focused re-verification; approval wording corrected"
+  },
+  "safety": {
+    "reverseETLExecution": "not_run",
+    "makeVerify": "skipped_reverse_etl_smoke",
+    "liveCredentials": "not_used",
+    "destructiveExternalActions": "not_executed",
+    "newDependencies": "none",
+    "rawHTTP": "not_used",
+    "genericHTTPWriteTool": "not_exposed",
+    "genericJSONWriteFlag": "not_exposed"
+  },
+  "reviewFix": {
+    "finding": "F1",
+    "status": "fixed_catalog_pending_reverify",
+    "problem": "Generated Twenty manual/skill claimed create_<object> actions require no approval, violating reverse ETL safety contract.",
+    "fix": "Updated metadata risk.approval, Twenty MANUAL/SKILL, and docs connector catalog Twenty risk.approval: every create/update/batch/delete requires plan/preview/approval/execute; deletes additionally require typed --confirm destructive.",
+    "files": [
+      "internal/connectors/defs/twenty/metadata.json",
+      "docs/connectors/twenty/MANUAL.md",
+      "docs/connectors/twenty/SKILL.md",
+      "docs/connectors/catalog/all-connectors.json"
+    ],
+    "verification": "metadata jq, connectorgen validate, focused CLI docs tests, docs validate, website idempotence, verify-gsd-workflow passed"
+  },
+  "reviewFix2": {
+    "finding": "F2",
+    "status": "fixed_green_local",
+    "problem": "Connector docs/help catalog artifacts omitted/staled Twenty counts and generated catalog metadata.",
+    "fix": "Updated docs.go/docs/cli counts to 552/548; added Twenty to connector README/catalog markdown; replaced Twenty catalog JSON entry with 28 streams/112 writes; reverified docs validate and website idempotence."
+  },
+  "reviewFix3": {
+    "finding": "claude_local important numeric scalar flags",
+    "status": "fixed_green_local",
+    "fix": "Added cli_surface number flag type and commandrunner float coercion; exposed Twenty create/update number scalar fields as typed flags; regenerated Twenty docs and website data.",
+    "verification": [
+      "connectorgen validate all defs",
+      "focused commandrunner/engine/internal-cli tests",
+      "go build ./cmd/pm",
+      "pm docs validate",
+      "website gen idempotence"
+    ]
+  },
+  "reviewFix4": {
+    "finding": "pm-reviewer blocking create/update examples omit required mutable record field",
+    "status": "fixed_green_local",
+    "fix": "Updated examples with mutable scalar flags; removed examples and added notes where no scalar CLI flags exist; regenerated Twenty docs and website data."
+  },
+  "reviewFix5": {
+    "finding": "pm-verifier generated catalog diff for GitHub counts/metadata",
+    "status": "fixed_green_local",
+    "fix": "Updated docs/connectors/catalog/all-connectors.md/json to match generated catalog output; reran catalog compare and focused gates."
+  }
+}
