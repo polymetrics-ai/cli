@@ -165,6 +165,25 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
     setComposing(true);
   }, [signedIn, slug]);
 
+  // Deep link from /bookmarks: ?b=<id> scrolls to and flashes the saved
+  // passage once its dotted underline has rendered.
+  useEffect(() => {
+    if (bookmarks.length === 0) return;
+    const target = new URLSearchParams(window.location.search).get('b');
+    if (!target || !bookmarks.some((bookmark) => bookmark.id === target)) return;
+    const timer = window.setTimeout(() => {
+      const span = document.querySelector(`[data-annotation-bookmark~="${CSS.escape(target)}"]`);
+      if (!span) return;
+      span.scrollIntoView({
+        block: 'center',
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+      span.classList.add('annotation-flash');
+      window.setTimeout(() => span.classList.remove('annotation-flash'), 2400);
+    }, 300);
+    return () => window.clearTimeout(timer);
+  }, [bookmarks]);
+
   const post = useMemo(() => getBlogPost(slug), [slug]);
 
   const resolutions = useMemo(() => {
