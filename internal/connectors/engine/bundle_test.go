@@ -924,6 +924,59 @@ func TestBundleLoadEmbeddedGitHubCLISurface(t *testing.T) {
 	}
 }
 
+func TestBundleLoadEmbeddedTwentyCLISurfaceCount(t *testing.T) {
+	b, err := Load(defs.FS, "twenty")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, twenty): %v", err)
+	}
+	if b.CLISurface == nil {
+		t.Fatalf("Twenty CLISurface is nil; defs.FS must embed cli_surface.json")
+	}
+	if got, want := len(b.CLISurface.Commands), 168; got != want {
+		t.Fatalf("Twenty command count = %d, want %d", got, want)
+	}
+	verbs := map[string]int{}
+	intents := map[string]int{}
+	writePrefixes := map[string]int{}
+	for _, cmd := range b.CLISurface.Commands {
+		fields := strings.Fields(cmd.Path)
+		if len(fields) == 0 {
+			t.Fatalf("empty Twenty command path: %+v", cmd)
+		}
+		verb := fields[len(fields)-1]
+		verbs[verb]++
+		intents[cmd.Intent+":"+cmd.Availability]++
+		for _, flag := range cmd.Flags {
+			switch flag.Name {
+			case "data", "payload", "raw", "record", "records":
+				t.Fatalf("Twenty command %q exposes generic write flag --%s", cmd.Path, flag.Name)
+			}
+		}
+		if cmd.Availability == "unsupported_api" {
+			t.Fatalf("Twenty command %q uses unsupported_api availability", cmd.Path)
+		}
+		for _, prefix := range []string{"create_", "update_", "delete_"} {
+			if strings.HasPrefix(cmd.Write, prefix) && cmd.Availability == "implemented" {
+				writePrefixes[prefix]++
+			}
+		}
+	}
+	wantVerbs := map[string]int{"list": 28, "get": 28, "create": 28, "update": 28, "batch": 28, "delete": 28}
+	for verb, want := range wantVerbs {
+		if verbs[verb] != want {
+			t.Fatalf("Twenty verb %q count = %d, want %d (all counts: %+v)", verb, verbs[verb], want, verbs)
+		}
+	}
+	if intents["etl:implemented"] != 28 || intents["direct_read:planned"] != 28 || intents["reverse_etl:partial"] != 28 {
+		t.Fatalf("Twenty intent counts = %+v, want 28 etl implemented, 28 direct_read planned, 28 reverse_etl partial", intents)
+	}
+	for prefix, want := range map[string]int{"create_": 28, "update_": 28, "delete_": 28} {
+		if writePrefixes[prefix] != want {
+			t.Fatalf("Twenty %s write count = %d, want %d (all counts: %+v)", prefix, writePrefixes[prefix], want, writePrefixes)
+		}
+	}
+}
+
 func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{

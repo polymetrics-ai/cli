@@ -164,6 +164,20 @@ DESCRIPTION
   connectors. pm does not execute connector container images or accept legacy
   source-/destination-prefixed names.
 
+CONNECTOR COMMAND SURFACES
+  Connectors can expose provider-style command surfaces for common ETL,
+  direct-read, and reverse ETL actions. These surfaces are metadata-backed and
+  do not read credentials when help renders.
+
+  Twenty CRM exposes a 28-object command surface. Use pm help twenty,
+  pm twenty, or pm twenty --help to see commands such as
+  pm twenty companies list --json and pm twenty companies delete --id <id>
+  --preview. List commands execute ETL streams. Create, update, and delete
+  commands build reverse ETL plans/previews from typed scalar flags; destructive
+  delete approval still requires --confirm destructive. Batch commands document
+  the underlying write actions but require reverse ETL records with a records
+  array; S6 does not expose a raw JSON flag.
+
 CATALOG
   The connector catalog is generated from local connector metadata. The current
   runtime catalog has 551 bare-name entries: 547 declarative bundles plus the
@@ -190,6 +204,15 @@ GITHUB AUTHENTICATION
 
   unsupported
     Password auth and SSH keys do not authenticate GitHub REST API requests.
+
+GITHUB CERTIFICATION
+  Full certification passed for the current GitHub connector surface. The
+  certificate accounted for 509 API endpoints: 440 covered and 69 explicitly
+  blocked. It covered 37 catalog streams, 2 implemented direct-read command
+  families, and 231 write actions. The safe create_label write lifecycle passed
+  with read-back verification and cleanup; destructive/admin/binary surfaces are
+  not executed blindly, and binary download surfaces remain safely blocked until
+  a bounded binary executor and destination policy exist.
 
 GITHUB ETL STREAMS
   issues

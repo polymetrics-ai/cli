@@ -1,0 +1,5243 @@
+{
+  "tagline": "Work with Twenty CRM objects from the command line.",
+  "usage": "pm twenty <object> <verb> [flags]",
+  "groups": [
+    {
+      "id": "twenty-objects",
+      "title": "Twenty Objects",
+      "commands": [
+        "attachments",
+        "blocklists",
+        "calendar-channel-event-associations",
+        "calendar-event-participants",
+        "calendar-events",
+        "call-recordings",
+        "companies",
+        "dashboards",
+        "message-campaigns",
+        "message-channel-message-association-message-folders",
+        "message-channel-message-associations",
+        "message-list-members",
+        "message-lists",
+        "message-participants",
+        "message-threads",
+        "messages",
+        "note-targets",
+        "notes",
+        "opportunities",
+        "people",
+        "task-targets",
+        "tasks",
+        "timeline-activities",
+        "workflow-automated-triggers",
+        "workflow-runs",
+        "workflow-versions",
+        "workflows",
+        "workspace-members"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Use a saved Twenty credential by name.",
+      "maps_to": "credential"
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Alias for selecting a saved Twenty connector credential.",
+      "maps_to": "connection"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Limit records returned by implemented list commands.",
+      "maps_to": "limit"
+    },
+    {
+      "name": "preview",
+      "type": "boolean",
+      "summary": "Build a reverse ETL preview for implemented write commands before approval/execution.",
+      "maps_to": "preview"
+    }
+  ],
+  "commands": [
+    {
+      "path": "attachments list",
+      "summary": "List Twenty attachments records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "attachments",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty attachments list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/attachments"
+        }
+      ]
+    },
+    {
+      "path": "attachments get",
+      "summary": "Get one Twenty attachments record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty attachments record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/attachments/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "attachments create",
+      "summary": "Create a Twenty attachments record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_attachments",
+      "risk": "Creates a Twenty attachments record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty attachments record.",
+          "maps_to": "record.name"
+        }
+      ],
+      "examples": [
+        "pm twenty attachments create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/attachments"
+        }
+      ]
+    },
+    {
+      "path": "attachments update",
+      "summary": "Update a Twenty attachments record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_attachments",
+      "risk": "Updates an existing Twenty attachments record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty attachments record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty attachments record.",
+          "maps_to": "record.name"
+        }
+      ],
+      "examples": [
+        "pm twenty attachments update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/attachments/{id}"
+        }
+      ]
+    },
+    {
+      "path": "attachments batch",
+      "summary": "Batch-create Twenty attachments records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_attachments",
+      "risk": "Bulk creates Twenty attachments records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/attachments"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "attachments delete",
+      "summary": "Delete a Twenty attachments record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_attachments",
+      "risk": "Destructively deletes a Twenty attachments record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty attachments record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty attachments delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/attachments/{id}"
+        }
+      ]
+    },
+    {
+      "path": "blocklists list",
+      "summary": "List Twenty blocklists records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "blocklists",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty blocklists list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/blocklists"
+        }
+      ]
+    },
+    {
+      "path": "blocklists get",
+      "summary": "Get one Twenty blocklists record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty blocklists record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/blocklists/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "blocklists create",
+      "summary": "Create a Twenty blocklists record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_blocklists",
+      "risk": "Creates a Twenty blocklists record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Top-level handle field for the Twenty blocklists record.",
+          "maps_to": "record.handle"
+        }
+      ],
+      "examples": [
+        "pm twenty blocklists create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/blocklists"
+        }
+      ]
+    },
+    {
+      "path": "blocklists update",
+      "summary": "Update a Twenty blocklists record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_blocklists",
+      "risk": "Updates an existing Twenty blocklists record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty blocklists record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Top-level handle field for the Twenty blocklists record.",
+          "maps_to": "record.handle"
+        }
+      ],
+      "examples": [
+        "pm twenty blocklists update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/blocklists/{id}"
+        }
+      ]
+    },
+    {
+      "path": "blocklists batch",
+      "summary": "Batch-create Twenty blocklists records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_blocklists",
+      "risk": "Bulk creates Twenty blocklists records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/blocklists"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "blocklists delete",
+      "summary": "Delete a Twenty blocklists record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_blocklists",
+      "risk": "Destructively deletes a Twenty blocklists record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty blocklists record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty blocklists delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/blocklists/{id}"
+        }
+      ]
+    },
+    {
+      "path": "calendar-channel-event-associations list",
+      "summary": "List Twenty calendar channel event associations records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar_channel_event_associations",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-channel-event-associations list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarChannelEventAssociations"
+        }
+      ]
+    },
+    {
+      "path": "calendar-channel-event-associations get",
+      "summary": "Get one Twenty calendar channel event associations record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty calendar channel event associations record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarChannelEventAssociations/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "calendar-channel-event-associations create",
+      "summary": "Create a Twenty calendar channel event associations record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_calendar_channel_event_associations",
+      "risk": "Creates a Twenty calendar channel event associations record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "calendar-channel-id",
+          "type": "string",
+          "summary": "Top-level calendar channel id field for the Twenty calendar channel event associations record.",
+          "maps_to": "record.calendarChannelId"
+        },
+        {
+          "name": "event-external-id",
+          "type": "string",
+          "summary": "Top-level event external id field for the Twenty calendar channel event associations record.",
+          "maps_to": "record.eventExternalId"
+        },
+        {
+          "name": "recurring-event-external-id",
+          "type": "string",
+          "summary": "Top-level recurring event external id field for the Twenty calendar channel event associations record.",
+          "maps_to": "record.recurringEventExternalId"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-channel-event-associations create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/calendarChannelEventAssociations"
+        }
+      ]
+    },
+    {
+      "path": "calendar-channel-event-associations update",
+      "summary": "Update a Twenty calendar channel event associations record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_calendar_channel_event_associations",
+      "risk": "Updates an existing Twenty calendar channel event associations record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty calendar channel event associations record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "calendar-channel-id",
+          "type": "string",
+          "summary": "Top-level calendar channel id field for the Twenty calendar channel event associations record.",
+          "maps_to": "record.calendarChannelId"
+        },
+        {
+          "name": "event-external-id",
+          "type": "string",
+          "summary": "Top-level event external id field for the Twenty calendar channel event associations record.",
+          "maps_to": "record.eventExternalId"
+        },
+        {
+          "name": "recurring-event-external-id",
+          "type": "string",
+          "summary": "Top-level recurring event external id field for the Twenty calendar channel event associations record.",
+          "maps_to": "record.recurringEventExternalId"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-channel-event-associations update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/calendarChannelEventAssociations/{id}"
+        }
+      ]
+    },
+    {
+      "path": "calendar-channel-event-associations batch",
+      "summary": "Batch-create Twenty calendar channel event associations records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_calendar_channel_event_associations",
+      "risk": "Bulk creates Twenty calendar channel event associations records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/calendarChannelEventAssociations"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "calendar-channel-event-associations delete",
+      "summary": "Delete a Twenty calendar channel event associations record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_calendar_channel_event_associations",
+      "risk": "Destructively deletes a Twenty calendar channel event associations record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty calendar channel event associations record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-channel-event-associations delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/calendarChannelEventAssociations/{id}"
+        }
+      ]
+    },
+    {
+      "path": "calendar-event-participants list",
+      "summary": "List Twenty calendar event participants records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar_event_participants",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-event-participants list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarEventParticipants"
+        }
+      ]
+    },
+    {
+      "path": "calendar-event-participants get",
+      "summary": "Get one Twenty calendar event participants record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty calendar event participants record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarEventParticipants/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "calendar-event-participants create",
+      "summary": "Create a Twenty calendar event participants record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_calendar_event_participants",
+      "risk": "Creates a Twenty calendar event participants record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "display-name",
+          "type": "string",
+          "summary": "Top-level display name field for the Twenty calendar event participants record.",
+          "maps_to": "record.displayName"
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Top-level handle field for the Twenty calendar event participants record.",
+          "maps_to": "record.handle"
+        },
+        {
+          "name": "is-organizer",
+          "type": "boolean",
+          "summary": "Top-level is organizer field for the Twenty calendar event participants record.",
+          "maps_to": "record.isOrganizer"
+        },
+        {
+          "name": "response-status",
+          "type": "string",
+          "summary": "Top-level response status field for the Twenty calendar event participants record.",
+          "maps_to": "record.responseStatus"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-event-participants create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/calendarEventParticipants"
+        }
+      ]
+    },
+    {
+      "path": "calendar-event-participants update",
+      "summary": "Update a Twenty calendar event participants record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_calendar_event_participants",
+      "risk": "Updates an existing Twenty calendar event participants record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty calendar event participants record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "display-name",
+          "type": "string",
+          "summary": "Top-level display name field for the Twenty calendar event participants record.",
+          "maps_to": "record.displayName"
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Top-level handle field for the Twenty calendar event participants record.",
+          "maps_to": "record.handle"
+        },
+        {
+          "name": "is-organizer",
+          "type": "boolean",
+          "summary": "Top-level is organizer field for the Twenty calendar event participants record.",
+          "maps_to": "record.isOrganizer"
+        },
+        {
+          "name": "response-status",
+          "type": "string",
+          "summary": "Top-level response status field for the Twenty calendar event participants record.",
+          "maps_to": "record.responseStatus"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-event-participants update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/calendarEventParticipants/{id}"
+        }
+      ]
+    },
+    {
+      "path": "calendar-event-participants batch",
+      "summary": "Batch-create Twenty calendar event participants records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_calendar_event_participants",
+      "risk": "Bulk creates Twenty calendar event participants records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/calendarEventParticipants"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "calendar-event-participants delete",
+      "summary": "Delete a Twenty calendar event participants record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_calendar_event_participants",
+      "risk": "Destructively deletes a Twenty calendar event participants record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty calendar event participants record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-event-participants delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/calendarEventParticipants/{id}"
+        }
+      ]
+    },
+    {
+      "path": "calendar-events list",
+      "summary": "List Twenty calendar events records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calendar_events",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-events list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarEvents"
+        }
+      ]
+    },
+    {
+      "path": "calendar-events get",
+      "summary": "Get one Twenty calendar events record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty calendar events record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/calendarEvents/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "calendar-events create",
+      "summary": "Create a Twenty calendar events record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_calendar_events",
+      "risk": "Creates a Twenty calendar events record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "call-recorder-preference",
+          "type": "string",
+          "summary": "Top-level call recorder preference field for the Twenty calendar events record.",
+          "maps_to": "record.callRecorderPreference"
+        },
+        {
+          "name": "conference-solution",
+          "type": "string",
+          "summary": "Top-level conference solution field for the Twenty calendar events record.",
+          "maps_to": "record.conferenceSolution"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Top-level description field for the Twenty calendar events record.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "ends-at",
+          "type": "string",
+          "summary": "Top-level ends at field for the Twenty calendar events record.",
+          "maps_to": "record.endsAt"
+        },
+        {
+          "name": "external-created-at",
+          "type": "string",
+          "summary": "Top-level external created at field for the Twenty calendar events record.",
+          "maps_to": "record.externalCreatedAt"
+        },
+        {
+          "name": "external-updated-at",
+          "type": "string",
+          "summary": "Top-level external updated at field for the Twenty calendar events record.",
+          "maps_to": "record.externalUpdatedAt"
+        },
+        {
+          "name": "i-cal-uid",
+          "type": "string",
+          "summary": "Top-level i cal uid field for the Twenty calendar events record.",
+          "maps_to": "record.iCalUid"
+        },
+        {
+          "name": "is-canceled",
+          "type": "boolean",
+          "summary": "Top-level is canceled field for the Twenty calendar events record.",
+          "maps_to": "record.isCanceled"
+        },
+        {
+          "name": "is-full-day",
+          "type": "boolean",
+          "summary": "Top-level is full day field for the Twenty calendar events record.",
+          "maps_to": "record.isFullDay"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "summary": "Top-level location field for the Twenty calendar events record.",
+          "maps_to": "record.location"
+        },
+        {
+          "name": "starts-at",
+          "type": "string",
+          "summary": "Top-level starts at field for the Twenty calendar events record.",
+          "maps_to": "record.startsAt"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Top-level title field for the Twenty calendar events record.",
+          "maps_to": "record.title"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-events create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/calendarEvents"
+        }
+      ]
+    },
+    {
+      "path": "calendar-events update",
+      "summary": "Update a Twenty calendar events record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_calendar_events",
+      "risk": "Updates an existing Twenty calendar events record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty calendar events record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "call-recorder-preference",
+          "type": "string",
+          "summary": "Top-level call recorder preference field for the Twenty calendar events record.",
+          "maps_to": "record.callRecorderPreference"
+        },
+        {
+          "name": "conference-solution",
+          "type": "string",
+          "summary": "Top-level conference solution field for the Twenty calendar events record.",
+          "maps_to": "record.conferenceSolution"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "summary": "Top-level description field for the Twenty calendar events record.",
+          "maps_to": "record.description"
+        },
+        {
+          "name": "ends-at",
+          "type": "string",
+          "summary": "Top-level ends at field for the Twenty calendar events record.",
+          "maps_to": "record.endsAt"
+        },
+        {
+          "name": "external-created-at",
+          "type": "string",
+          "summary": "Top-level external created at field for the Twenty calendar events record.",
+          "maps_to": "record.externalCreatedAt"
+        },
+        {
+          "name": "external-updated-at",
+          "type": "string",
+          "summary": "Top-level external updated at field for the Twenty calendar events record.",
+          "maps_to": "record.externalUpdatedAt"
+        },
+        {
+          "name": "i-cal-uid",
+          "type": "string",
+          "summary": "Top-level i cal uid field for the Twenty calendar events record.",
+          "maps_to": "record.iCalUid"
+        },
+        {
+          "name": "is-canceled",
+          "type": "boolean",
+          "summary": "Top-level is canceled field for the Twenty calendar events record.",
+          "maps_to": "record.isCanceled"
+        },
+        {
+          "name": "is-full-day",
+          "type": "boolean",
+          "summary": "Top-level is full day field for the Twenty calendar events record.",
+          "maps_to": "record.isFullDay"
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "summary": "Top-level location field for the Twenty calendar events record.",
+          "maps_to": "record.location"
+        },
+        {
+          "name": "starts-at",
+          "type": "string",
+          "summary": "Top-level starts at field for the Twenty calendar events record.",
+          "maps_to": "record.startsAt"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Top-level title field for the Twenty calendar events record.",
+          "maps_to": "record.title"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-events update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/calendarEvents/{id}"
+        }
+      ]
+    },
+    {
+      "path": "calendar-events batch",
+      "summary": "Batch-create Twenty calendar events records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_calendar_events",
+      "risk": "Bulk creates Twenty calendar events records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/calendarEvents"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "calendar-events delete",
+      "summary": "Delete a Twenty calendar events record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_calendar_events",
+      "risk": "Destructively deletes a Twenty calendar events record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty calendar events record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty calendar-events delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/calendarEvents/{id}"
+        }
+      ]
+    },
+    {
+      "path": "call-recordings list",
+      "summary": "List Twenty call recordings records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "call_recordings",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty call-recordings list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/callRecordings"
+        }
+      ]
+    },
+    {
+      "path": "call-recordings get",
+      "summary": "Get one Twenty call recordings record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty call recordings record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/callRecordings/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "call-recordings create",
+      "summary": "Create a Twenty call recordings record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_call_recordings",
+      "risk": "Creates a Twenty call recordings record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Top-level application id field for the Twenty call recordings record.",
+          "maps_to": "record.applicationId"
+        },
+        {
+          "name": "call-recorder-failure-reason",
+          "type": "string",
+          "summary": "Top-level call recorder failure reason field for the Twenty call recordings record.",
+          "maps_to": "record.callRecorderFailureReason"
+        },
+        {
+          "name": "ended-at",
+          "type": "string",
+          "summary": "Top-level ended at field for the Twenty call recordings record.",
+          "maps_to": "record.endedAt"
+        },
+        {
+          "name": "external-bot-id",
+          "type": "string",
+          "summary": "Top-level external bot id field for the Twenty call recordings record.",
+          "maps_to": "record.externalBotId"
+        },
+        {
+          "name": "external-recording-id",
+          "type": "string",
+          "summary": "Top-level external recording id field for the Twenty call recordings record.",
+          "maps_to": "record.externalRecordingId"
+        },
+        {
+          "name": "recording-request-status",
+          "type": "string",
+          "summary": "Top-level recording request status field for the Twenty call recordings record.",
+          "maps_to": "record.recordingRequestStatus"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "summary": "Top-level started at field for the Twenty call recordings record.",
+          "maps_to": "record.startedAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Top-level status field for the Twenty call recordings record.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "summary": "Top-level summary field for the Twenty call recordings record.",
+          "maps_to": "record.summary"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Top-level title field for the Twenty call recordings record.",
+          "maps_to": "record.title"
+        }
+      ],
+      "examples": [
+        "pm twenty call-recordings create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/callRecordings"
+        }
+      ]
+    },
+    {
+      "path": "call-recordings update",
+      "summary": "Update a Twenty call recordings record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_call_recordings",
+      "risk": "Updates an existing Twenty call recordings record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty call recordings record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "application-id",
+          "type": "string",
+          "summary": "Top-level application id field for the Twenty call recordings record.",
+          "maps_to": "record.applicationId"
+        },
+        {
+          "name": "call-recorder-failure-reason",
+          "type": "string",
+          "summary": "Top-level call recorder failure reason field for the Twenty call recordings record.",
+          "maps_to": "record.callRecorderFailureReason"
+        },
+        {
+          "name": "ended-at",
+          "type": "string",
+          "summary": "Top-level ended at field for the Twenty call recordings record.",
+          "maps_to": "record.endedAt"
+        },
+        {
+          "name": "external-bot-id",
+          "type": "string",
+          "summary": "Top-level external bot id field for the Twenty call recordings record.",
+          "maps_to": "record.externalBotId"
+        },
+        {
+          "name": "external-recording-id",
+          "type": "string",
+          "summary": "Top-level external recording id field for the Twenty call recordings record.",
+          "maps_to": "record.externalRecordingId"
+        },
+        {
+          "name": "recording-request-status",
+          "type": "string",
+          "summary": "Top-level recording request status field for the Twenty call recordings record.",
+          "maps_to": "record.recordingRequestStatus"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "summary": "Top-level started at field for the Twenty call recordings record.",
+          "maps_to": "record.startedAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Top-level status field for the Twenty call recordings record.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "summary": "Top-level summary field for the Twenty call recordings record.",
+          "maps_to": "record.summary"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Top-level title field for the Twenty call recordings record.",
+          "maps_to": "record.title"
+        }
+      ],
+      "examples": [
+        "pm twenty call-recordings update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/callRecordings/{id}"
+        }
+      ]
+    },
+    {
+      "path": "call-recordings batch",
+      "summary": "Batch-create Twenty call recordings records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_call_recordings",
+      "risk": "Bulk creates Twenty call recordings records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/callRecordings"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "call-recordings delete",
+      "summary": "Delete a Twenty call recordings record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_call_recordings",
+      "risk": "Destructively deletes a Twenty call recordings record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty call recordings record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty call-recordings delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/callRecordings/{id}"
+        }
+      ]
+    },
+    {
+      "path": "companies list",
+      "summary": "List Twenty companies records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty companies list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/companies"
+        }
+      ]
+    },
+    {
+      "path": "companies get",
+      "summary": "Get one Twenty companies record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty companies record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/companies/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "companies create",
+      "summary": "Create a Twenty companies record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_companies",
+      "risk": "Creates a Twenty companies record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "summary": "Top-level last contact at field for the Twenty companies record.",
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty companies record.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "pdl-company-type",
+          "type": "string",
+          "summary": "Top-level pdl company type field for the Twenty companies record.",
+          "maps_to": "record.pdlCompanyType"
+        },
+        {
+          "name": "pdl-enrichment-status",
+          "type": "string",
+          "summary": "Top-level pdl enrichment status field for the Twenty companies record.",
+          "maps_to": "record.pdlEnrichmentStatus"
+        },
+        {
+          "name": "pdl-funding-stages",
+          "type": "string_array",
+          "summary": "Top-level pdl funding stages field for the Twenty companies record.",
+          "maps_to": "record.pdlFundingStages"
+        },
+        {
+          "name": "pdl-headline",
+          "type": "string",
+          "summary": "Top-level pdl headline field for the Twenty companies record.",
+          "maps_to": "record.pdlHeadline"
+        },
+        {
+          "name": "pdl-id",
+          "type": "string",
+          "summary": "Top-level pdl id field for the Twenty companies record.",
+          "maps_to": "record.pdlId"
+        },
+        {
+          "name": "pdl-industry",
+          "type": "string",
+          "summary": "Top-level pdl industry field for the Twenty companies record.",
+          "maps_to": "record.pdlIndustry"
+        },
+        {
+          "name": "pdl-industry-detail",
+          "type": "string",
+          "summary": "Top-level pdl industry detail field for the Twenty companies record.",
+          "maps_to": "record.pdlIndustryDetail"
+        },
+        {
+          "name": "pdl-last-enriched-at",
+          "type": "string",
+          "summary": "Top-level pdl last enriched at field for the Twenty companies record.",
+          "maps_to": "record.pdlLastEnrichedAt"
+        },
+        {
+          "name": "pdl-last-funding-date",
+          "type": "string",
+          "summary": "Top-level pdl last funding date field for the Twenty companies record.",
+          "maps_to": "record.pdlLastFundingDate"
+        },
+        {
+          "name": "pdl-latest-funding-stage",
+          "type": "string",
+          "summary": "Top-level pdl latest funding stage field for the Twenty companies record.",
+          "maps_to": "record.pdlLatestFundingStage"
+        },
+        {
+          "name": "pdl-legal-name",
+          "type": "string",
+          "summary": "Top-level pdl legal name field for the Twenty companies record.",
+          "maps_to": "record.pdlLegalName"
+        },
+        {
+          "name": "pdl-linkedin-id",
+          "type": "string",
+          "summary": "Top-level pdl linkedin id field for the Twenty companies record.",
+          "maps_to": "record.pdlLinkedinId"
+        },
+        {
+          "name": "pdl-location-continent",
+          "type": "string",
+          "summary": "Top-level pdl location continent field for the Twenty companies record.",
+          "maps_to": "record.pdlLocationContinent"
+        },
+        {
+          "name": "pdl-location-metro",
+          "type": "string",
+          "summary": "Top-level pdl location metro field for the Twenty companies record.",
+          "maps_to": "record.pdlLocationMetro"
+        },
+        {
+          "name": "pdl-mic-exchange",
+          "type": "string",
+          "summary": "Top-level pdl mic exchange field for the Twenty companies record.",
+          "maps_to": "record.pdlMicExchange"
+        },
+        {
+          "name": "pdl-size-range",
+          "type": "string",
+          "summary": "Top-level pdl size range field for the Twenty companies record.",
+          "maps_to": "record.pdlSizeRange"
+        },
+        {
+          "name": "pdl-summary",
+          "type": "string",
+          "summary": "Top-level pdl summary field for the Twenty companies record.",
+          "maps_to": "record.pdlSummary"
+        },
+        {
+          "name": "pdl-ticker",
+          "type": "string",
+          "summary": "Top-level pdl ticker field for the Twenty companies record.",
+          "maps_to": "record.pdlTicker"
+        }
+      ],
+      "examples": [
+        "pm twenty companies create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/companies"
+        }
+      ]
+    },
+    {
+      "path": "companies update",
+      "summary": "Update a Twenty companies record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_companies",
+      "risk": "Updates an existing Twenty companies record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty companies record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "summary": "Top-level last contact at field for the Twenty companies record.",
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty companies record.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "pdl-company-type",
+          "type": "string",
+          "summary": "Top-level pdl company type field for the Twenty companies record.",
+          "maps_to": "record.pdlCompanyType"
+        },
+        {
+          "name": "pdl-enrichment-status",
+          "type": "string",
+          "summary": "Top-level pdl enrichment status field for the Twenty companies record.",
+          "maps_to": "record.pdlEnrichmentStatus"
+        },
+        {
+          "name": "pdl-funding-stages",
+          "type": "string_array",
+          "summary": "Top-level pdl funding stages field for the Twenty companies record.",
+          "maps_to": "record.pdlFundingStages"
+        },
+        {
+          "name": "pdl-headline",
+          "type": "string",
+          "summary": "Top-level pdl headline field for the Twenty companies record.",
+          "maps_to": "record.pdlHeadline"
+        },
+        {
+          "name": "pdl-id",
+          "type": "string",
+          "summary": "Top-level pdl id field for the Twenty companies record.",
+          "maps_to": "record.pdlId"
+        },
+        {
+          "name": "pdl-industry",
+          "type": "string",
+          "summary": "Top-level pdl industry field for the Twenty companies record.",
+          "maps_to": "record.pdlIndustry"
+        },
+        {
+          "name": "pdl-industry-detail",
+          "type": "string",
+          "summary": "Top-level pdl industry detail field for the Twenty companies record.",
+          "maps_to": "record.pdlIndustryDetail"
+        },
+        {
+          "name": "pdl-last-enriched-at",
+          "type": "string",
+          "summary": "Top-level pdl last enriched at field for the Twenty companies record.",
+          "maps_to": "record.pdlLastEnrichedAt"
+        },
+        {
+          "name": "pdl-last-funding-date",
+          "type": "string",
+          "summary": "Top-level pdl last funding date field for the Twenty companies record.",
+          "maps_to": "record.pdlLastFundingDate"
+        },
+        {
+          "name": "pdl-latest-funding-stage",
+          "type": "string",
+          "summary": "Top-level pdl latest funding stage field for the Twenty companies record.",
+          "maps_to": "record.pdlLatestFundingStage"
+        },
+        {
+          "name": "pdl-legal-name",
+          "type": "string",
+          "summary": "Top-level pdl legal name field for the Twenty companies record.",
+          "maps_to": "record.pdlLegalName"
+        },
+        {
+          "name": "pdl-linkedin-id",
+          "type": "string",
+          "summary": "Top-level pdl linkedin id field for the Twenty companies record.",
+          "maps_to": "record.pdlLinkedinId"
+        },
+        {
+          "name": "pdl-location-continent",
+          "type": "string",
+          "summary": "Top-level pdl location continent field for the Twenty companies record.",
+          "maps_to": "record.pdlLocationContinent"
+        },
+        {
+          "name": "pdl-location-metro",
+          "type": "string",
+          "summary": "Top-level pdl location metro field for the Twenty companies record.",
+          "maps_to": "record.pdlLocationMetro"
+        },
+        {
+          "name": "pdl-mic-exchange",
+          "type": "string",
+          "summary": "Top-level pdl mic exchange field for the Twenty companies record.",
+          "maps_to": "record.pdlMicExchange"
+        },
+        {
+          "name": "pdl-size-range",
+          "type": "string",
+          "summary": "Top-level pdl size range field for the Twenty companies record.",
+          "maps_to": "record.pdlSizeRange"
+        },
+        {
+          "name": "pdl-summary",
+          "type": "string",
+          "summary": "Top-level pdl summary field for the Twenty companies record.",
+          "maps_to": "record.pdlSummary"
+        },
+        {
+          "name": "pdl-ticker",
+          "type": "string",
+          "summary": "Top-level pdl ticker field for the Twenty companies record.",
+          "maps_to": "record.pdlTicker"
+        }
+      ],
+      "examples": [
+        "pm twenty companies update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/companies/{id}"
+        }
+      ]
+    },
+    {
+      "path": "companies batch",
+      "summary": "Batch-create Twenty companies records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_companies",
+      "risk": "Bulk creates Twenty companies records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/companies"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "companies delete",
+      "summary": "Delete a Twenty companies record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_companies",
+      "risk": "Destructively deletes a Twenty companies record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty companies record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty companies delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/companies/{id}"
+        }
+      ]
+    },
+    {
+      "path": "dashboards list",
+      "summary": "List Twenty dashboards records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dashboards",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty dashboards list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/dashboards"
+        }
+      ]
+    },
+    {
+      "path": "dashboards get",
+      "summary": "Get one Twenty dashboards record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty dashboards record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/dashboards/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "dashboards create",
+      "summary": "Create a Twenty dashboards record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_dashboards",
+      "risk": "Creates a Twenty dashboards record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "page-layout-id",
+          "type": "string",
+          "summary": "Top-level page layout id field for the Twenty dashboards record.",
+          "maps_to": "record.pageLayoutId"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Top-level title field for the Twenty dashboards record.",
+          "maps_to": "record.title"
+        }
+      ],
+      "examples": [
+        "pm twenty dashboards create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/dashboards"
+        }
+      ]
+    },
+    {
+      "path": "dashboards update",
+      "summary": "Update a Twenty dashboards record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_dashboards",
+      "risk": "Updates an existing Twenty dashboards record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty dashboards record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "page-layout-id",
+          "type": "string",
+          "summary": "Top-level page layout id field for the Twenty dashboards record.",
+          "maps_to": "record.pageLayoutId"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Top-level title field for the Twenty dashboards record.",
+          "maps_to": "record.title"
+        }
+      ],
+      "examples": [
+        "pm twenty dashboards update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/dashboards/{id}"
+        }
+      ]
+    },
+    {
+      "path": "dashboards batch",
+      "summary": "Batch-create Twenty dashboards records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_dashboards",
+      "risk": "Bulk creates Twenty dashboards records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/dashboards"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "dashboards delete",
+      "summary": "Delete a Twenty dashboards record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_dashboards",
+      "risk": "Destructively deletes a Twenty dashboards record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty dashboards record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty dashboards delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/dashboards/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-campaigns list",
+      "summary": "List Twenty message campaigns records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "message_campaigns",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty message-campaigns list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageCampaigns"
+        }
+      ]
+    },
+    {
+      "path": "message-campaigns get",
+      "summary": "Get one Twenty message campaigns record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message campaigns record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageCampaigns/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "message-campaigns create",
+      "summary": "Create a Twenty message campaigns record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_message_campaigns",
+      "risk": "Creates a Twenty message campaigns record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "body-template",
+          "type": "string",
+          "summary": "Top-level body template field for the Twenty message campaigns record.",
+          "maps_to": "record.bodyTemplate"
+        },
+        {
+          "name": "sent-at",
+          "type": "string",
+          "summary": "Top-level sent at field for the Twenty message campaigns record.",
+          "maps_to": "record.sentAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Top-level status field for the Twenty message campaigns record.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Top-level subject field for the Twenty message campaigns record.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "unsubscribe-topic-id",
+          "type": "string",
+          "summary": "Top-level unsubscribe topic id field for the Twenty message campaigns record.",
+          "maps_to": "record.unsubscribeTopicId"
+        }
+      ],
+      "examples": [
+        "pm twenty message-campaigns create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageCampaigns"
+        }
+      ]
+    },
+    {
+      "path": "message-campaigns update",
+      "summary": "Update a Twenty message campaigns record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_message_campaigns",
+      "risk": "Updates an existing Twenty message campaigns record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message campaigns record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "body-template",
+          "type": "string",
+          "summary": "Top-level body template field for the Twenty message campaigns record.",
+          "maps_to": "record.bodyTemplate"
+        },
+        {
+          "name": "sent-at",
+          "type": "string",
+          "summary": "Top-level sent at field for the Twenty message campaigns record.",
+          "maps_to": "record.sentAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Top-level status field for the Twenty message campaigns record.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Top-level subject field for the Twenty message campaigns record.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "unsubscribe-topic-id",
+          "type": "string",
+          "summary": "Top-level unsubscribe topic id field for the Twenty message campaigns record.",
+          "maps_to": "record.unsubscribeTopicId"
+        }
+      ],
+      "examples": [
+        "pm twenty message-campaigns update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageCampaigns/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-campaigns batch",
+      "summary": "Batch-create Twenty message campaigns records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_message_campaigns",
+      "risk": "Bulk creates Twenty message campaigns records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageCampaigns"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "message-campaigns delete",
+      "summary": "Delete a Twenty message campaigns record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message_campaigns",
+      "risk": "Destructively deletes a Twenty message campaigns record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message campaigns record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty message-campaigns delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageCampaigns/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-channel-message-association-message-folders list",
+      "summary": "List Twenty message channel message association message folders records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "message_channel_message_association_message_folders",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty message-channel-message-association-message-folders list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageChannelMessageAssociationMessageFolders"
+        }
+      ]
+    },
+    {
+      "path": "message-channel-message-association-message-folders get",
+      "summary": "Get one Twenty message channel message association message folders record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message channel message association message folders record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "message-channel-message-association-message-folders create",
+      "summary": "Create a Twenty message channel message association message folders record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_message_channel_message_association_message_folders",
+      "risk": "Creates a Twenty message channel message association message folders record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "message-folder-id",
+          "type": "string",
+          "summary": "Top-level message folder id field for the Twenty message channel message association message folders record.",
+          "maps_to": "record.messageFolderId"
+        }
+      ],
+      "examples": [
+        "pm twenty message-channel-message-association-message-folders create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageChannelMessageAssociationMessageFolders"
+        }
+      ]
+    },
+    {
+      "path": "message-channel-message-association-message-folders update",
+      "summary": "Update a Twenty message channel message association message folders record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_message_channel_message_association_message_folders",
+      "risk": "Updates an existing Twenty message channel message association message folders record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message channel message association message folders record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "message-folder-id",
+          "type": "string",
+          "summary": "Top-level message folder id field for the Twenty message channel message association message folders record.",
+          "maps_to": "record.messageFolderId"
+        }
+      ],
+      "examples": [
+        "pm twenty message-channel-message-association-message-folders update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-channel-message-association-message-folders batch",
+      "summary": "Batch-create Twenty message channel message association message folders records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_message_channel_message_association_message_folders",
+      "risk": "Bulk creates Twenty message channel message association message folders records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageChannelMessageAssociationMessageFolders"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "message-channel-message-association-message-folders delete",
+      "summary": "Delete a Twenty message channel message association message folders record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message_channel_message_association_message_folders",
+      "risk": "Destructively deletes a Twenty message channel message association message folders record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message channel message association message folders record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty message-channel-message-association-message-folders delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageChannelMessageAssociationMessageFolders/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-channel-message-associations list",
+      "summary": "List Twenty message channel message associations records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "message_channel_message_associations",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty message-channel-message-associations list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageChannelMessageAssociations"
+        }
+      ]
+    },
+    {
+      "path": "message-channel-message-associations get",
+      "summary": "Get one Twenty message channel message associations record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message channel message associations record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageChannelMessageAssociations/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "message-channel-message-associations create",
+      "summary": "Create a Twenty message channel message associations record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_message_channel_message_associations",
+      "risk": "Creates a Twenty message channel message associations record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "direction",
+          "type": "string",
+          "summary": "Top-level direction field for the Twenty message channel message associations record.",
+          "maps_to": "record.direction"
+        },
+        {
+          "name": "message-channel-id",
+          "type": "string",
+          "summary": "Top-level message channel id field for the Twenty message channel message associations record.",
+          "maps_to": "record.messageChannelId"
+        },
+        {
+          "name": "message-external-id",
+          "type": "string",
+          "summary": "Top-level message external id field for the Twenty message channel message associations record.",
+          "maps_to": "record.messageExternalId"
+        },
+        {
+          "name": "message-thread-external-id",
+          "type": "string",
+          "summary": "Top-level message thread external id field for the Twenty message channel message associations record.",
+          "maps_to": "record.messageThreadExternalId"
+        }
+      ],
+      "examples": [
+        "pm twenty message-channel-message-associations create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageChannelMessageAssociations"
+        }
+      ]
+    },
+    {
+      "path": "message-channel-message-associations update",
+      "summary": "Update a Twenty message channel message associations record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_message_channel_message_associations",
+      "risk": "Updates an existing Twenty message channel message associations record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message channel message associations record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "direction",
+          "type": "string",
+          "summary": "Top-level direction field for the Twenty message channel message associations record.",
+          "maps_to": "record.direction"
+        },
+        {
+          "name": "message-channel-id",
+          "type": "string",
+          "summary": "Top-level message channel id field for the Twenty message channel message associations record.",
+          "maps_to": "record.messageChannelId"
+        },
+        {
+          "name": "message-external-id",
+          "type": "string",
+          "summary": "Top-level message external id field for the Twenty message channel message associations record.",
+          "maps_to": "record.messageExternalId"
+        },
+        {
+          "name": "message-thread-external-id",
+          "type": "string",
+          "summary": "Top-level message thread external id field for the Twenty message channel message associations record.",
+          "maps_to": "record.messageThreadExternalId"
+        }
+      ],
+      "examples": [
+        "pm twenty message-channel-message-associations update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageChannelMessageAssociations/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-channel-message-associations batch",
+      "summary": "Batch-create Twenty message channel message associations records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_message_channel_message_associations",
+      "risk": "Bulk creates Twenty message channel message associations records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageChannelMessageAssociations"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "message-channel-message-associations delete",
+      "summary": "Delete a Twenty message channel message associations record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message_channel_message_associations",
+      "risk": "Destructively deletes a Twenty message channel message associations record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message channel message associations record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty message-channel-message-associations delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageChannelMessageAssociations/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-list-members list",
+      "summary": "List Twenty message list members records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "message_list_members",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty message-list-members list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageListMembers"
+        }
+      ]
+    },
+    {
+      "path": "message-list-members get",
+      "summary": "Get one Twenty message list members record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message list members record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageListMembers/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "message-list-members create",
+      "summary": "Create a Twenty message list members record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_message_list_members",
+      "risk": "Creates a Twenty message list members record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [],
+      "examples": [
+        "pm twenty message-list-members create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageListMembers"
+        }
+      ]
+    },
+    {
+      "path": "message-list-members update",
+      "summary": "Update a Twenty message list members record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_message_list_members",
+      "risk": "Updates an existing Twenty message list members record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message list members record ID.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty message-list-members update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageListMembers/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-list-members batch",
+      "summary": "Batch-create Twenty message list members records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_message_list_members",
+      "risk": "Bulk creates Twenty message list members records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageListMembers"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "message-list-members delete",
+      "summary": "Delete a Twenty message list members record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message_list_members",
+      "risk": "Destructively deletes a Twenty message list members record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message list members record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty message-list-members delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageListMembers/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-lists list",
+      "summary": "List Twenty message lists records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "message_lists",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty message-lists list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageLists"
+        }
+      ]
+    },
+    {
+      "path": "message-lists get",
+      "summary": "Get one Twenty message lists record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message lists record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageLists/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "message-lists create",
+      "summary": "Create a Twenty message lists record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_message_lists",
+      "risk": "Creates a Twenty message lists record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty message lists record.",
+          "maps_to": "record.name"
+        }
+      ],
+      "examples": [
+        "pm twenty message-lists create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageLists"
+        }
+      ]
+    },
+    {
+      "path": "message-lists update",
+      "summary": "Update a Twenty message lists record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_message_lists",
+      "risk": "Updates an existing Twenty message lists record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message lists record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty message lists record.",
+          "maps_to": "record.name"
+        }
+      ],
+      "examples": [
+        "pm twenty message-lists update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageLists/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-lists batch",
+      "summary": "Batch-create Twenty message lists records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_message_lists",
+      "risk": "Bulk creates Twenty message lists records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageLists"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "message-lists delete",
+      "summary": "Delete a Twenty message lists record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message_lists",
+      "risk": "Destructively deletes a Twenty message lists record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message lists record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty message-lists delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageLists/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-participants list",
+      "summary": "List Twenty message participants records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "message_participants",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty message-participants list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageParticipants"
+        }
+      ]
+    },
+    {
+      "path": "message-participants get",
+      "summary": "Get one Twenty message participants record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message participants record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageParticipants/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "message-participants create",
+      "summary": "Create a Twenty message participants record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_message_participants",
+      "risk": "Creates a Twenty message participants record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "display-name",
+          "type": "string",
+          "summary": "Top-level display name field for the Twenty message participants record.",
+          "maps_to": "record.displayName"
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Top-level handle field for the Twenty message participants record.",
+          "maps_to": "record.handle"
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Top-level role field for the Twenty message participants record.",
+          "maps_to": "record.role"
+        }
+      ],
+      "examples": [
+        "pm twenty message-participants create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageParticipants"
+        }
+      ]
+    },
+    {
+      "path": "message-participants update",
+      "summary": "Update a Twenty message participants record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_message_participants",
+      "risk": "Updates an existing Twenty message participants record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message participants record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "display-name",
+          "type": "string",
+          "summary": "Top-level display name field for the Twenty message participants record.",
+          "maps_to": "record.displayName"
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Top-level handle field for the Twenty message participants record.",
+          "maps_to": "record.handle"
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "summary": "Top-level role field for the Twenty message participants record.",
+          "maps_to": "record.role"
+        }
+      ],
+      "examples": [
+        "pm twenty message-participants update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageParticipants/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-participants batch",
+      "summary": "Batch-create Twenty message participants records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_message_participants",
+      "risk": "Bulk creates Twenty message participants records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageParticipants"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "message-participants delete",
+      "summary": "Delete a Twenty message participants record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message_participants",
+      "risk": "Destructively deletes a Twenty message participants record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message participants record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty message-participants delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageParticipants/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-threads list",
+      "summary": "List Twenty message threads records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "message_threads",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty message-threads list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageThreads"
+        }
+      ]
+    },
+    {
+      "path": "message-threads get",
+      "summary": "Get one Twenty message threads record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message threads record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messageThreads/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "message-threads create",
+      "summary": "Create a Twenty message threads record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_message_threads",
+      "risk": "Creates a Twenty message threads record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Top-level subject field for the Twenty message threads record.",
+          "maps_to": "record.subject"
+        }
+      ],
+      "examples": [
+        "pm twenty message-threads create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messageThreads"
+        }
+      ]
+    },
+    {
+      "path": "message-threads update",
+      "summary": "Update a Twenty message threads record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_message_threads",
+      "risk": "Updates an existing Twenty message threads record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message threads record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Top-level subject field for the Twenty message threads record.",
+          "maps_to": "record.subject"
+        }
+      ],
+      "examples": [
+        "pm twenty message-threads update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messageThreads/{id}"
+        }
+      ]
+    },
+    {
+      "path": "message-threads batch",
+      "summary": "Batch-create Twenty message threads records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_message_threads",
+      "risk": "Bulk creates Twenty message threads records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messageThreads"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "message-threads delete",
+      "summary": "Delete a Twenty message threads record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message_threads",
+      "risk": "Destructively deletes a Twenty message threads record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty message threads record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty message-threads delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messageThreads/{id}"
+        }
+      ]
+    },
+    {
+      "path": "messages list",
+      "summary": "List Twenty messages records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty messages list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messages"
+        }
+      ]
+    },
+    {
+      "path": "messages get",
+      "summary": "Get one Twenty messages record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty messages record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/messages/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "messages create",
+      "summary": "Create a Twenty messages record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_messages",
+      "risk": "Creates a Twenty messages record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "delivery-status",
+          "type": "string",
+          "summary": "Top-level delivery status field for the Twenty messages record.",
+          "maps_to": "record.deliveryStatus"
+        },
+        {
+          "name": "header-message-id",
+          "type": "string",
+          "summary": "Top-level header message id field for the Twenty messages record.",
+          "maps_to": "record.headerMessageId"
+        },
+        {
+          "name": "is-draft",
+          "type": "boolean",
+          "summary": "Top-level is draft field for the Twenty messages record.",
+          "maps_to": "record.isDraft"
+        },
+        {
+          "name": "received-at",
+          "type": "string",
+          "summary": "Top-level received at field for the Twenty messages record.",
+          "maps_to": "record.receivedAt"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Top-level subject field for the Twenty messages record.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Top-level text field for the Twenty messages record.",
+          "maps_to": "record.text"
+        }
+      ],
+      "examples": [
+        "pm twenty messages create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/messages"
+        }
+      ]
+    },
+    {
+      "path": "messages update",
+      "summary": "Update a Twenty messages record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_messages",
+      "risk": "Updates an existing Twenty messages record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty messages record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "delivery-status",
+          "type": "string",
+          "summary": "Top-level delivery status field for the Twenty messages record.",
+          "maps_to": "record.deliveryStatus"
+        },
+        {
+          "name": "header-message-id",
+          "type": "string",
+          "summary": "Top-level header message id field for the Twenty messages record.",
+          "maps_to": "record.headerMessageId"
+        },
+        {
+          "name": "is-draft",
+          "type": "boolean",
+          "summary": "Top-level is draft field for the Twenty messages record.",
+          "maps_to": "record.isDraft"
+        },
+        {
+          "name": "received-at",
+          "type": "string",
+          "summary": "Top-level received at field for the Twenty messages record.",
+          "maps_to": "record.receivedAt"
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Top-level subject field for the Twenty messages record.",
+          "maps_to": "record.subject"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Top-level text field for the Twenty messages record.",
+          "maps_to": "record.text"
+        }
+      ],
+      "examples": [
+        "pm twenty messages update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/messages/{id}"
+        }
+      ]
+    },
+    {
+      "path": "messages batch",
+      "summary": "Batch-create Twenty messages records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_messages",
+      "risk": "Bulk creates Twenty messages records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/messages"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "messages delete",
+      "summary": "Delete a Twenty messages record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_messages",
+      "risk": "Destructively deletes a Twenty messages record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty messages record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty messages delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/messages/{id}"
+        }
+      ]
+    },
+    {
+      "path": "note-targets list",
+      "summary": "List Twenty note targets records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "note_targets",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty note-targets list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/noteTargets"
+        }
+      ]
+    },
+    {
+      "path": "note-targets get",
+      "summary": "Get one Twenty note targets record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty note targets record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/noteTargets/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "note-targets create",
+      "summary": "Create a Twenty note targets record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_note_targets",
+      "risk": "Creates a Twenty note targets record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [],
+      "examples": [
+        "pm twenty note-targets create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/noteTargets"
+        }
+      ]
+    },
+    {
+      "path": "note-targets update",
+      "summary": "Update a Twenty note targets record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_note_targets",
+      "risk": "Updates an existing Twenty note targets record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty note targets record ID.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty note-targets update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/noteTargets/{id}"
+        }
+      ]
+    },
+    {
+      "path": "note-targets batch",
+      "summary": "Batch-create Twenty note targets records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_note_targets",
+      "risk": "Bulk creates Twenty note targets records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/noteTargets"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "note-targets delete",
+      "summary": "Delete a Twenty note targets record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_note_targets",
+      "risk": "Destructively deletes a Twenty note targets record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty note targets record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty note-targets delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/noteTargets/{id}"
+        }
+      ]
+    },
+    {
+      "path": "notes list",
+      "summary": "List Twenty notes records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notes",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty notes list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/notes"
+        }
+      ]
+    },
+    {
+      "path": "notes get",
+      "summary": "Get one Twenty notes record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty notes record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/notes/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "notes create",
+      "summary": "Create a Twenty notes record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_notes",
+      "risk": "Creates a Twenty notes record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "body-v2",
+          "type": "string",
+          "summary": "Top-level body v2 field for the Twenty notes record.",
+          "maps_to": "record.bodyV2"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Top-level title field for the Twenty notes record.",
+          "maps_to": "record.title"
+        }
+      ],
+      "examples": [
+        "pm twenty notes create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/notes"
+        }
+      ]
+    },
+    {
+      "path": "notes update",
+      "summary": "Update a Twenty notes record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_notes",
+      "risk": "Updates an existing Twenty notes record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty notes record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "body-v2",
+          "type": "string",
+          "summary": "Top-level body v2 field for the Twenty notes record.",
+          "maps_to": "record.bodyV2"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Top-level title field for the Twenty notes record.",
+          "maps_to": "record.title"
+        }
+      ],
+      "examples": [
+        "pm twenty notes update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/notes/{id}"
+        }
+      ]
+    },
+    {
+      "path": "notes batch",
+      "summary": "Batch-create Twenty notes records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_notes",
+      "risk": "Bulk creates Twenty notes records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/notes"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "notes delete",
+      "summary": "Delete a Twenty notes record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_notes",
+      "risk": "Destructively deletes a Twenty notes record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty notes record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty notes delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/notes/{id}"
+        }
+      ]
+    },
+    {
+      "path": "opportunities list",
+      "summary": "List Twenty opportunities records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "opportunities",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty opportunities list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/opportunities"
+        }
+      ]
+    },
+    {
+      "path": "opportunities get",
+      "summary": "Get one Twenty opportunities record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty opportunities record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/opportunities/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "opportunities create",
+      "summary": "Create a Twenty opportunities record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_opportunities",
+      "risk": "Creates a Twenty opportunities record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "close-date",
+          "type": "string",
+          "summary": "Top-level close date field for the Twenty opportunities record.",
+          "maps_to": "record.closeDate"
+        },
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "summary": "Top-level last contact at field for the Twenty opportunities record.",
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty opportunities record.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "stage",
+          "type": "string",
+          "summary": "Top-level stage field for the Twenty opportunities record.",
+          "maps_to": "record.stage"
+        }
+      ],
+      "examples": [
+        "pm twenty opportunities create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/opportunities"
+        }
+      ]
+    },
+    {
+      "path": "opportunities update",
+      "summary": "Update a Twenty opportunities record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_opportunities",
+      "risk": "Updates an existing Twenty opportunities record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty opportunities record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "close-date",
+          "type": "string",
+          "summary": "Top-level close date field for the Twenty opportunities record.",
+          "maps_to": "record.closeDate"
+        },
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "summary": "Top-level last contact at field for the Twenty opportunities record.",
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty opportunities record.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "stage",
+          "type": "string",
+          "summary": "Top-level stage field for the Twenty opportunities record.",
+          "maps_to": "record.stage"
+        }
+      ],
+      "examples": [
+        "pm twenty opportunities update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/opportunities/{id}"
+        }
+      ]
+    },
+    {
+      "path": "opportunities batch",
+      "summary": "Batch-create Twenty opportunities records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_opportunities",
+      "risk": "Bulk creates Twenty opportunities records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/opportunities"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "opportunities delete",
+      "summary": "Delete a Twenty opportunities record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_opportunities",
+      "risk": "Destructively deletes a Twenty opportunities record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty opportunities record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty opportunities delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/opportunities/{id}"
+        }
+      ]
+    },
+    {
+      "path": "people list",
+      "summary": "List Twenty people records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "people",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty people list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/people"
+        }
+      ]
+    },
+    {
+      "path": "people get",
+      "summary": "Get one Twenty people record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty people record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/people/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "people create",
+      "summary": "Create a Twenty people record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_people",
+      "risk": "Creates a Twenty people record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "avatar-url",
+          "type": "string",
+          "summary": "Top-level avatar url field for the Twenty people record.",
+          "maps_to": "record.avatarUrl"
+        },
+        {
+          "name": "job-title",
+          "type": "string",
+          "summary": "Top-level job title field for the Twenty people record.",
+          "maps_to": "record.jobTitle"
+        },
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "summary": "Top-level last contact at field for the Twenty people record.",
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "last-inbound-at",
+          "type": "string",
+          "summary": "Top-level last inbound at field for the Twenty people record.",
+          "maps_to": "record.lastInboundAt"
+        },
+        {
+          "name": "last-outbound-at",
+          "type": "string",
+          "summary": "Top-level last outbound at field for the Twenty people record.",
+          "maps_to": "record.lastOutboundAt"
+        },
+        {
+          "name": "pdl-birth-date",
+          "type": "string",
+          "summary": "Top-level pdl birth date field for the Twenty people record.",
+          "maps_to": "record.pdlBirthDate"
+        },
+        {
+          "name": "pdl-enrichment-status",
+          "type": "string",
+          "summary": "Top-level pdl enrichment status field for the Twenty people record.",
+          "maps_to": "record.pdlEnrichmentStatus"
+        },
+        {
+          "name": "pdl-headline",
+          "type": "string",
+          "summary": "Top-level pdl headline field for the Twenty people record.",
+          "maps_to": "record.pdlHeadline"
+        },
+        {
+          "name": "pdl-id",
+          "type": "string",
+          "summary": "Top-level pdl id field for the Twenty people record.",
+          "maps_to": "record.pdlId"
+        },
+        {
+          "name": "pdl-industry",
+          "type": "string",
+          "summary": "Top-level pdl industry field for the Twenty people record.",
+          "maps_to": "record.pdlIndustry"
+        },
+        {
+          "name": "pdl-inferred-salary",
+          "type": "string",
+          "summary": "Top-level pdl inferred salary field for the Twenty people record.",
+          "maps_to": "record.pdlInferredSalary"
+        },
+        {
+          "name": "pdl-job-onet-code",
+          "type": "string",
+          "summary": "Top-level pdl job onet code field for the Twenty people record.",
+          "maps_to": "record.pdlJobOnetCode"
+        },
+        {
+          "name": "pdl-job-role",
+          "type": "string",
+          "summary": "Top-level pdl job role field for the Twenty people record.",
+          "maps_to": "record.pdlJobRole"
+        },
+        {
+          "name": "pdl-job-start-date",
+          "type": "string",
+          "summary": "Top-level pdl job start date field for the Twenty people record.",
+          "maps_to": "record.pdlJobStartDate"
+        },
+        {
+          "name": "pdl-job-summary",
+          "type": "string",
+          "summary": "Top-level pdl job summary field for the Twenty people record.",
+          "maps_to": "record.pdlJobSummary"
+        },
+        {
+          "name": "pdl-job-title-class",
+          "type": "string",
+          "summary": "Top-level pdl job title class field for the Twenty people record.",
+          "maps_to": "record.pdlJobTitleClass"
+        },
+        {
+          "name": "pdl-job-title-sub-role",
+          "type": "string",
+          "summary": "Top-level pdl job title sub role field for the Twenty people record.",
+          "maps_to": "record.pdlJobTitleSubRole"
+        },
+        {
+          "name": "pdl-last-enriched-at",
+          "type": "string",
+          "summary": "Top-level pdl last enriched at field for the Twenty people record.",
+          "maps_to": "record.pdlLastEnrichedAt"
+        },
+        {
+          "name": "pdl-linkedin-username",
+          "type": "string",
+          "summary": "Top-level pdl linkedin username field for the Twenty people record.",
+          "maps_to": "record.pdlLinkedinUsername"
+        },
+        {
+          "name": "pdl-location-metro",
+          "type": "string",
+          "summary": "Top-level pdl location metro field for the Twenty people record.",
+          "maps_to": "record.pdlLocationMetro"
+        },
+        {
+          "name": "pdl-seniority",
+          "type": "string_array",
+          "summary": "Top-level pdl seniority field for the Twenty people record.",
+          "maps_to": "record.pdlSeniority"
+        },
+        {
+          "name": "pdl-sex",
+          "type": "string",
+          "summary": "Top-level pdl sex field for the Twenty people record.",
+          "maps_to": "record.pdlSex"
+        },
+        {
+          "name": "pdl-summary",
+          "type": "string",
+          "summary": "Top-level pdl summary field for the Twenty people record.",
+          "maps_to": "record.pdlSummary"
+        }
+      ],
+      "examples": [
+        "pm twenty people create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/people"
+        }
+      ]
+    },
+    {
+      "path": "people update",
+      "summary": "Update a Twenty people record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_people",
+      "risk": "Updates an existing Twenty people record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty people record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "avatar-url",
+          "type": "string",
+          "summary": "Top-level avatar url field for the Twenty people record.",
+          "maps_to": "record.avatarUrl"
+        },
+        {
+          "name": "job-title",
+          "type": "string",
+          "summary": "Top-level job title field for the Twenty people record.",
+          "maps_to": "record.jobTitle"
+        },
+        {
+          "name": "last-contact-at",
+          "type": "string",
+          "summary": "Top-level last contact at field for the Twenty people record.",
+          "maps_to": "record.lastContactAt"
+        },
+        {
+          "name": "last-inbound-at",
+          "type": "string",
+          "summary": "Top-level last inbound at field for the Twenty people record.",
+          "maps_to": "record.lastInboundAt"
+        },
+        {
+          "name": "last-outbound-at",
+          "type": "string",
+          "summary": "Top-level last outbound at field for the Twenty people record.",
+          "maps_to": "record.lastOutboundAt"
+        },
+        {
+          "name": "pdl-birth-date",
+          "type": "string",
+          "summary": "Top-level pdl birth date field for the Twenty people record.",
+          "maps_to": "record.pdlBirthDate"
+        },
+        {
+          "name": "pdl-enrichment-status",
+          "type": "string",
+          "summary": "Top-level pdl enrichment status field for the Twenty people record.",
+          "maps_to": "record.pdlEnrichmentStatus"
+        },
+        {
+          "name": "pdl-headline",
+          "type": "string",
+          "summary": "Top-level pdl headline field for the Twenty people record.",
+          "maps_to": "record.pdlHeadline"
+        },
+        {
+          "name": "pdl-id",
+          "type": "string",
+          "summary": "Top-level pdl id field for the Twenty people record.",
+          "maps_to": "record.pdlId"
+        },
+        {
+          "name": "pdl-industry",
+          "type": "string",
+          "summary": "Top-level pdl industry field for the Twenty people record.",
+          "maps_to": "record.pdlIndustry"
+        },
+        {
+          "name": "pdl-inferred-salary",
+          "type": "string",
+          "summary": "Top-level pdl inferred salary field for the Twenty people record.",
+          "maps_to": "record.pdlInferredSalary"
+        },
+        {
+          "name": "pdl-job-onet-code",
+          "type": "string",
+          "summary": "Top-level pdl job onet code field for the Twenty people record.",
+          "maps_to": "record.pdlJobOnetCode"
+        },
+        {
+          "name": "pdl-job-role",
+          "type": "string",
+          "summary": "Top-level pdl job role field for the Twenty people record.",
+          "maps_to": "record.pdlJobRole"
+        },
+        {
+          "name": "pdl-job-start-date",
+          "type": "string",
+          "summary": "Top-level pdl job start date field for the Twenty people record.",
+          "maps_to": "record.pdlJobStartDate"
+        },
+        {
+          "name": "pdl-job-summary",
+          "type": "string",
+          "summary": "Top-level pdl job summary field for the Twenty people record.",
+          "maps_to": "record.pdlJobSummary"
+        },
+        {
+          "name": "pdl-job-title-class",
+          "type": "string",
+          "summary": "Top-level pdl job title class field for the Twenty people record.",
+          "maps_to": "record.pdlJobTitleClass"
+        },
+        {
+          "name": "pdl-job-title-sub-role",
+          "type": "string",
+          "summary": "Top-level pdl job title sub role field for the Twenty people record.",
+          "maps_to": "record.pdlJobTitleSubRole"
+        },
+        {
+          "name": "pdl-last-enriched-at",
+          "type": "string",
+          "summary": "Top-level pdl last enriched at field for the Twenty people record.",
+          "maps_to": "record.pdlLastEnrichedAt"
+        },
+        {
+          "name": "pdl-linkedin-username",
+          "type": "string",
+          "summary": "Top-level pdl linkedin username field for the Twenty people record.",
+          "maps_to": "record.pdlLinkedinUsername"
+        },
+        {
+          "name": "pdl-location-metro",
+          "type": "string",
+          "summary": "Top-level pdl location metro field for the Twenty people record.",
+          "maps_to": "record.pdlLocationMetro"
+        },
+        {
+          "name": "pdl-seniority",
+          "type": "string_array",
+          "summary": "Top-level pdl seniority field for the Twenty people record.",
+          "maps_to": "record.pdlSeniority"
+        },
+        {
+          "name": "pdl-sex",
+          "type": "string",
+          "summary": "Top-level pdl sex field for the Twenty people record.",
+          "maps_to": "record.pdlSex"
+        },
+        {
+          "name": "pdl-summary",
+          "type": "string",
+          "summary": "Top-level pdl summary field for the Twenty people record.",
+          "maps_to": "record.pdlSummary"
+        }
+      ],
+      "examples": [
+        "pm twenty people update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/people/{id}"
+        }
+      ]
+    },
+    {
+      "path": "people batch",
+      "summary": "Batch-create Twenty people records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_people",
+      "risk": "Bulk creates Twenty people records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/people"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "people delete",
+      "summary": "Delete a Twenty people record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_people",
+      "risk": "Destructively deletes a Twenty people record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty people record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty people delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/people/{id}"
+        }
+      ]
+    },
+    {
+      "path": "task-targets list",
+      "summary": "List Twenty task targets records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "task_targets",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty task-targets list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/taskTargets"
+        }
+      ]
+    },
+    {
+      "path": "task-targets get",
+      "summary": "Get one Twenty task targets record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty task targets record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/taskTargets/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "task-targets create",
+      "summary": "Create a Twenty task targets record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_task_targets",
+      "risk": "Creates a Twenty task targets record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [],
+      "examples": [
+        "pm twenty task-targets create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/taskTargets"
+        }
+      ]
+    },
+    {
+      "path": "task-targets update",
+      "summary": "Update a Twenty task targets record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_task_targets",
+      "risk": "Updates an existing Twenty task targets record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty task targets record ID.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty task-targets update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/taskTargets/{id}"
+        }
+      ]
+    },
+    {
+      "path": "task-targets batch",
+      "summary": "Batch-create Twenty task targets records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_task_targets",
+      "risk": "Bulk creates Twenty task targets records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/taskTargets"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "task-targets delete",
+      "summary": "Delete a Twenty task targets record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task_targets",
+      "risk": "Destructively deletes a Twenty task targets record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty task targets record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty task-targets delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/taskTargets/{id}"
+        }
+      ]
+    },
+    {
+      "path": "tasks list",
+      "summary": "List Twenty tasks records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tasks",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty tasks list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/tasks"
+        }
+      ]
+    },
+    {
+      "path": "tasks get",
+      "summary": "Get one Twenty tasks record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty tasks record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/tasks/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "tasks create",
+      "summary": "Create a Twenty tasks record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tasks",
+      "risk": "Creates a Twenty tasks record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "body-v2",
+          "type": "string",
+          "summary": "Top-level body v2 field for the Twenty tasks record.",
+          "maps_to": "record.bodyV2"
+        },
+        {
+          "name": "due-at",
+          "type": "string",
+          "summary": "Top-level due at field for the Twenty tasks record.",
+          "maps_to": "record.dueAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Top-level status field for the Twenty tasks record.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Top-level title field for the Twenty tasks record.",
+          "maps_to": "record.title"
+        }
+      ],
+      "examples": [
+        "pm twenty tasks create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/tasks"
+        }
+      ]
+    },
+    {
+      "path": "tasks update",
+      "summary": "Update a Twenty tasks record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_tasks",
+      "risk": "Updates an existing Twenty tasks record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty tasks record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "body-v2",
+          "type": "string",
+          "summary": "Top-level body v2 field for the Twenty tasks record.",
+          "maps_to": "record.bodyV2"
+        },
+        {
+          "name": "due-at",
+          "type": "string",
+          "summary": "Top-level due at field for the Twenty tasks record.",
+          "maps_to": "record.dueAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Top-level status field for the Twenty tasks record.",
+          "maps_to": "record.status"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Top-level title field for the Twenty tasks record.",
+          "maps_to": "record.title"
+        }
+      ],
+      "examples": [
+        "pm twenty tasks update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/tasks/{id}"
+        }
+      ]
+    },
+    {
+      "path": "tasks batch",
+      "summary": "Batch-create Twenty tasks records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_tasks",
+      "risk": "Bulk creates Twenty tasks records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/tasks"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "tasks delete",
+      "summary": "Delete a Twenty tasks record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tasks",
+      "risk": "Destructively deletes a Twenty tasks record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty tasks record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty tasks delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/tasks/{id}"
+        }
+      ]
+    },
+    {
+      "path": "timeline-activities list",
+      "summary": "List Twenty timeline activities records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "timeline_activities",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty timeline-activities list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/timelineActivities"
+        }
+      ]
+    },
+    {
+      "path": "timeline-activities get",
+      "summary": "Get one Twenty timeline activities record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty timeline activities record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/timelineActivities/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "timeline-activities create",
+      "summary": "Create a Twenty timeline activities record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_timeline_activities",
+      "risk": "Creates a Twenty timeline activities record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "happens-at",
+          "type": "string",
+          "summary": "Top-level happens at field for the Twenty timeline activities record.",
+          "maps_to": "record.happensAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty timeline activities record.",
+          "maps_to": "record.name"
+        }
+      ],
+      "examples": [
+        "pm twenty timeline-activities create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/timelineActivities"
+        }
+      ]
+    },
+    {
+      "path": "timeline-activities update",
+      "summary": "Update a Twenty timeline activities record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_timeline_activities",
+      "risk": "Updates an existing Twenty timeline activities record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty timeline activities record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "happens-at",
+          "type": "string",
+          "summary": "Top-level happens at field for the Twenty timeline activities record.",
+          "maps_to": "record.happensAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty timeline activities record.",
+          "maps_to": "record.name"
+        }
+      ],
+      "examples": [
+        "pm twenty timeline-activities update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/timelineActivities/{id}"
+        }
+      ]
+    },
+    {
+      "path": "timeline-activities batch",
+      "summary": "Batch-create Twenty timeline activities records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_timeline_activities",
+      "risk": "Bulk creates Twenty timeline activities records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/timelineActivities"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "timeline-activities delete",
+      "summary": "Delete a Twenty timeline activities record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_timeline_activities",
+      "risk": "Destructively deletes a Twenty timeline activities record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty timeline activities record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty timeline-activities delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/timelineActivities/{id}"
+        }
+      ]
+    },
+    {
+      "path": "workflow-automated-triggers list",
+      "summary": "List Twenty workflow automated triggers records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflow_automated_triggers",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-automated-triggers list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowAutomatedTriggers"
+        }
+      ]
+    },
+    {
+      "path": "workflow-automated-triggers get",
+      "summary": "Get one Twenty workflow automated triggers record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflow automated triggers record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowAutomatedTriggers/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "workflow-automated-triggers create",
+      "summary": "Create a Twenty workflow automated triggers record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_workflow_automated_triggers",
+      "risk": "Creates a Twenty workflow automated triggers record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Top-level type field for the Twenty workflow automated triggers record.",
+          "maps_to": "record.type"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-automated-triggers create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/workflowAutomatedTriggers"
+        }
+      ]
+    },
+    {
+      "path": "workflow-automated-triggers update",
+      "summary": "Update a Twenty workflow automated triggers record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_workflow_automated_triggers",
+      "risk": "Updates an existing Twenty workflow automated triggers record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflow automated triggers record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Top-level type field for the Twenty workflow automated triggers record.",
+          "maps_to": "record.type"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-automated-triggers update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/workflowAutomatedTriggers/{id}"
+        }
+      ]
+    },
+    {
+      "path": "workflow-automated-triggers batch",
+      "summary": "Batch-create Twenty workflow automated triggers records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_workflow_automated_triggers",
+      "risk": "Bulk creates Twenty workflow automated triggers records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/workflowAutomatedTriggers"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "workflow-automated-triggers delete",
+      "summary": "Delete a Twenty workflow automated triggers record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workflow_automated_triggers",
+      "risk": "Destructively deletes a Twenty workflow automated triggers record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflow automated triggers record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-automated-triggers delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/workflowAutomatedTriggers/{id}"
+        }
+      ]
+    },
+    {
+      "path": "workflow-runs list",
+      "summary": "List Twenty workflow runs records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflow_runs",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-runs list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowRuns"
+        }
+      ]
+    },
+    {
+      "path": "workflow-runs get",
+      "summary": "Get one Twenty workflow runs record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflow runs record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowRuns/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "workflow-runs create",
+      "summary": "Create a Twenty workflow runs record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_workflow_runs",
+      "risk": "Creates a Twenty workflow runs record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "ended-at",
+          "type": "string",
+          "summary": "Top-level ended at field for the Twenty workflow runs record.",
+          "maps_to": "record.endedAt"
+        },
+        {
+          "name": "enqueued-at",
+          "type": "string",
+          "summary": "Top-level enqueued at field for the Twenty workflow runs record.",
+          "maps_to": "record.enqueuedAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty workflow runs record.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "summary": "Top-level started at field for the Twenty workflow runs record.",
+          "maps_to": "record.startedAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Top-level status field for the Twenty workflow runs record.",
+          "maps_to": "record.status"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-runs create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/workflowRuns"
+        }
+      ]
+    },
+    {
+      "path": "workflow-runs update",
+      "summary": "Update a Twenty workflow runs record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_workflow_runs",
+      "risk": "Updates an existing Twenty workflow runs record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflow runs record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "ended-at",
+          "type": "string",
+          "summary": "Top-level ended at field for the Twenty workflow runs record.",
+          "maps_to": "record.endedAt"
+        },
+        {
+          "name": "enqueued-at",
+          "type": "string",
+          "summary": "Top-level enqueued at field for the Twenty workflow runs record.",
+          "maps_to": "record.enqueuedAt"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty workflow runs record.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "started-at",
+          "type": "string",
+          "summary": "Top-level started at field for the Twenty workflow runs record.",
+          "maps_to": "record.startedAt"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Top-level status field for the Twenty workflow runs record.",
+          "maps_to": "record.status"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-runs update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/workflowRuns/{id}"
+        }
+      ]
+    },
+    {
+      "path": "workflow-runs batch",
+      "summary": "Batch-create Twenty workflow runs records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_workflow_runs",
+      "risk": "Bulk creates Twenty workflow runs records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/workflowRuns"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "workflow-runs delete",
+      "summary": "Delete a Twenty workflow runs record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workflow_runs",
+      "risk": "Destructively deletes a Twenty workflow runs record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflow runs record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-runs delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/workflowRuns/{id}"
+        }
+      ]
+    },
+    {
+      "path": "workflow-versions list",
+      "summary": "List Twenty workflow versions records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflow_versions",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-versions list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowVersions"
+        }
+      ]
+    },
+    {
+      "path": "workflow-versions get",
+      "summary": "Get one Twenty workflow versions record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflow versions record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflowVersions/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "workflow-versions create",
+      "summary": "Create a Twenty workflow versions record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_workflow_versions",
+      "risk": "Creates a Twenty workflow versions record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty workflow versions record.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Top-level status field for the Twenty workflow versions record.",
+          "maps_to": "record.status"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-versions create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/workflowVersions"
+        }
+      ]
+    },
+    {
+      "path": "workflow-versions update",
+      "summary": "Update a Twenty workflow versions record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_workflow_versions",
+      "risk": "Updates an existing Twenty workflow versions record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflow versions record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty workflow versions record.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Top-level status field for the Twenty workflow versions record.",
+          "maps_to": "record.status"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-versions update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/workflowVersions/{id}"
+        }
+      ]
+    },
+    {
+      "path": "workflow-versions batch",
+      "summary": "Batch-create Twenty workflow versions records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_workflow_versions",
+      "risk": "Bulk creates Twenty workflow versions records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/workflowVersions"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "workflow-versions delete",
+      "summary": "Delete a Twenty workflow versions record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workflow_versions",
+      "risk": "Destructively deletes a Twenty workflow versions record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflow versions record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty workflow-versions delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/workflowVersions/{id}"
+        }
+      ]
+    },
+    {
+      "path": "workflows list",
+      "summary": "List Twenty workflows records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflows",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty workflows list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflows"
+        }
+      ]
+    },
+    {
+      "path": "workflows get",
+      "summary": "Get one Twenty workflows record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflows record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workflows/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "workflows create",
+      "summary": "Create a Twenty workflows record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_workflows",
+      "risk": "Creates a Twenty workflows record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "last-published-version-id",
+          "type": "string",
+          "summary": "Top-level last published version id field for the Twenty workflows record.",
+          "maps_to": "record.lastPublishedVersionId"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty workflows record.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "statuses",
+          "type": "string_array",
+          "summary": "Top-level statuses field for the Twenty workflows record.",
+          "maps_to": "record.statuses"
+        }
+      ],
+      "examples": [
+        "pm twenty workflows create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/workflows"
+        }
+      ]
+    },
+    {
+      "path": "workflows update",
+      "summary": "Update a Twenty workflows record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_workflows",
+      "risk": "Updates an existing Twenty workflows record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflows record ID.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "last-published-version-id",
+          "type": "string",
+          "summary": "Top-level last published version id field for the Twenty workflows record.",
+          "maps_to": "record.lastPublishedVersionId"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Top-level name field for the Twenty workflows record.",
+          "maps_to": "record.name"
+        },
+        {
+          "name": "statuses",
+          "type": "string_array",
+          "summary": "Top-level statuses field for the Twenty workflows record.",
+          "maps_to": "record.statuses"
+        }
+      ],
+      "examples": [
+        "pm twenty workflows update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/workflows/{id}"
+        }
+      ]
+    },
+    {
+      "path": "workflows batch",
+      "summary": "Batch-create Twenty workflows records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_workflows",
+      "risk": "Bulk creates Twenty workflows records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/workflows"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "workflows delete",
+      "summary": "Delete a Twenty workflows record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workflows",
+      "risk": "Destructively deletes a Twenty workflows record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workflows record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty workflows delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/workflows/{id}"
+        }
+      ]
+    },
+    {
+      "path": "workspace-members list",
+      "summary": "List Twenty workspace members records",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workspace_members",
+      "flags": [
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to read for this command.",
+          "maps_to": "limit"
+        }
+      ],
+      "examples": [
+        "pm twenty workspace-members list --limit 25 --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workspaceMembers"
+        }
+      ]
+    },
+    {
+      "path": "workspace-members get",
+      "summary": "Get one Twenty workspace members record by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workspace members record ID.",
+          "maps_to": "path.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/workspaceMembers/{id}"
+        }
+      ],
+      "notes": "Generic JSON direct_read execution and output_policy support are outside S6; this command documents the fixed Twenty get-by-id endpoint but is not executable yet."
+    },
+    {
+      "path": "workspace-members create",
+      "summary": "Create a Twenty workspace members record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_workspace_members",
+      "risk": "Creates a Twenty workspace members record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [],
+      "examples": [
+        "pm twenty workspace-members create --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/workspaceMembers"
+        }
+      ]
+    },
+    {
+      "path": "workspace-members update",
+      "summary": "Update a Twenty workspace members record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_workspace_members",
+      "risk": "Updates an existing Twenty workspace members record through the REST API.",
+      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workspace members record ID.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty workspace-members update --id rec_fixture --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/rest/workspaceMembers/{id}"
+        }
+      ]
+    },
+    {
+      "path": "workspace-members batch",
+      "summary": "Batch-create Twenty workspace members records",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "batch_workspace_members",
+      "risk": "Bulk creates Twenty workspace members records through the REST API.",
+      "approval": "Reverse ETL batch writes require plan, preview, approval, execute.",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/batch/workspaceMembers"
+        }
+      ],
+      "notes": "Execution requires reverse ETL records with a top-level records array. CLI scalar flag coercion for records arrays is deferred; no generic JSON or raw write flag is exposed in S6."
+    },
+    {
+      "path": "workspace-members delete",
+      "summary": "Delete a Twenty workspace members record",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_workspace_members",
+      "risk": "Destructively deletes a Twenty workspace members record through the REST API.",
+      "approval": "Reverse ETL deletes require plan, preview, approval, execute, and typed --confirm destructive.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Twenty workspace members record ID to delete.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm twenty workspace-members delete --id rec_fixture --preview --confirm destructive --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/rest/workspaceMembers/{id}"
+        }
+      ]
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "writes",
+      "summary": "Twenty write commands use reverse ETL plan, preview, approval, execute."
+    },
+    {
+      "name": "direct-read",
+      "summary": "Get-by-id commands are planned until generic JSON direct_read output policies are approved."
+    }
+  ]
+}

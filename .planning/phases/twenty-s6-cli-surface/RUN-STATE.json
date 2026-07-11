@@ -1,0 +1,84 @@
+{
+  "phase": "twenty-s6-cli-surface",
+  "issue": 283,
+  "parentIssue": 277,
+  "parentPR": 285,
+  "branch": "feat/283-twenty-cli-surface",
+  "baseBranch": "feat/277-twenty-connector-parity",
+  "baseHead": "62b8b46cde85ae620591194467d3474fda2a1e8a",
+  "status": "green_local_gates_passed_committed_gsd_verified",
+  "gsdMode": "manual_fallback",
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase twenty-s6-cli-surface --dry-run",
+  "gsdFallbackReason": "scripts/gsd: unknown GSD command: programming-loop",
+  "spawnDecision": "local_critical_path",
+  "verificationPassed": true,
+  "verificationEquivalent": "fmt/vet/test/build/docs/connectorgen/help/website gates passed; make verify skipped because it executes reverse ETL smoke",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "User instructed do not spawn subagents; worker owns isolated branch/cwd and S6 scope."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Initial red validation captured before production edits; Twenty cli_surface missing and dynamic help commands failed."
+    },
+    {
+      "cycle": "implementation",
+      "decision": "local_critical_path",
+      "reason": "One coherent local slice added cli_surface, help routing, docs, generated website data, and tests."
+    }
+  ],
+  "redEvidence": {
+    "pmBinaryExists": false,
+    "cliSurfaceExists": false,
+    "helpDocsStatus": 0,
+    "helpConnectorsStatus": 0,
+    "helpTwentyStatus": 1,
+    "helpTwentyError": "error: help topic \"twenty\" not found",
+    "twentyStatus": 1,
+    "twentyError": "error: unknown command \"twenty\"; exit status 2",
+    "twentyHelpStatus": 1,
+    "twentyHelpError": "error: help topic \"twenty\" not found",
+    "connectorsBareStatus": 0
+  },
+  "redTestEvidence": {
+    "command": "go test ./internal/cli -run 'TestTwentyConnector' -count=1",
+    "status": 1,
+    "failures": [
+      "help_twenty: Run([help twenty]) code = 1 stderr = error: help topic \"twenty\" not found",
+      "twenty: Run([twenty]) code = 2 stderr = error: unknown command \"twenty\"",
+      "twenty_--help: Run([twenty --help]) code = 1 stderr = error: help topic \"twenty\" not found"
+    ]
+  },
+  "greenEvidence": {
+    "cliSurfaceCommands": 168,
+    "verbCounts": {
+      "list": 28,
+      "get": 28,
+      "create": 28,
+      "update": 28,
+      "batch": 28,
+      "delete": 28
+    },
+    "connectorgenValidate": "findings=0 warnings=0 connectors_checked=548",
+    "focusedTests": "passed",
+    "goVet": "passed",
+    "goBuild": "passed",
+    "goTestAll": "passed",
+    "docsValidate": "passed",
+    "websiteIdempotenceSha256": "f9e24526e3b32d2560bf206e3420b8dab106622b5dfc00d229ac2df16685c861",
+    "gsdWorkflowVerify": "passed against 62b8b46c"
+  },
+  "safety": {
+    "reverseETLExecution": "not_run",
+    "makeVerify": "skipped_reverse_etl_smoke",
+    "liveCredentials": "not_used",
+    "destructiveExternalActions": "not_executed",
+    "newDependencies": "none",
+    "rawHTTP": "not_used",
+    "genericHTTPWriteTool": "not_exposed",
+    "genericJSONWriteFlag": "not_exposed"
+  }
+}
