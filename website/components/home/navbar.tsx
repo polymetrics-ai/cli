@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   Bot,
   Cable,
@@ -312,6 +313,10 @@ const innerPanel = 'flex items-center w-full bg-surface-1 pl-3 pr-2.5';
 
 export function SiteNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  // On the blog the audience action is joining the discussion, not
+  // grabbing a demo — the auth slot takes the secondary CTA's place.
+  const pathname = usePathname();
+  const onBlog = pathname?.startsWith('/blog') ?? false;
 
   return (
     <header className="sticky top-0 z-50 h-[60px] bg-surface-1 border-b border-line-structure">
@@ -362,9 +367,11 @@ export function SiteNavbar() {
               <NavBtn href="/docs" variant="primary" kbdKey="L">
                 Get Started
               </NavBtn>
-              <NavBtn href="https://github.com/polymetrics-ai/cli" variant="secondary" kbdKey="G" external>
-                Get Demo
-              </NavBtn>
+              {!onBlog ? (
+                <NavBtn href="https://github.com/polymetrics-ai/cli" variant="secondary" kbdKey="G" external>
+                  Get Demo
+                </NavBtn>
+              ) : null}
             </div>
 
             <UserMenu />

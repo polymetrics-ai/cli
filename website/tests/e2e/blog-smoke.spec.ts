@@ -34,4 +34,19 @@ test.describe('blog UI smoke', () => {
     await page.getByRole('navigation').getByRole('link', { name: 'Blog', exact: true }).click();
     await expect(page).toHaveURL(/\/blog$/);
   });
+
+  test('swaps Get Demo for the auth slot on blog routes only', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+
+    await page.goto('/blog/one-cli-to-rule-them-all');
+    await expect(
+      page
+        .locator('header button[aria-label="Account menu"], header button:has-text("Sign in")')
+        .first(),
+    ).toBeVisible();
+    await expect(page.locator('header').getByRole('link', { name: 'Get Demo' })).toBeHidden();
+
+    await page.goto('/');
+    await expect(page.locator('header').getByRole('link', { name: 'Get Demo' })).toBeVisible();
+  });
 });
