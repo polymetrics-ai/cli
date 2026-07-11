@@ -1,5 +1,5 @@
 {
-  "request": { "method": "GET", "path": "/rest/attachments", "query": { "starting_after": "attachment_fixture_cursor_1" } },
+  "request": { "method": "GET", "path": "/rest/attachments", "query": { "limit": "60", "starting_after": "attachment_fixture_cursor_1" } },
   "response": {
     "status": 200,
     "body": {

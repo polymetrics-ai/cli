@@ -14,196 +14,224 @@
       "name": "attachments",
       "path": "/rest/attachments",
       "records": { "path": "data.attachments" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/attachments.json"
     },
     {
       "name": "blocklists",
       "path": "/rest/blocklists",
       "records": { "path": "data.blocklists" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/blocklists.json"
     },
     {
       "name": "calendar_channel_event_associations",
       "path": "/rest/calendarChannelEventAssociations",
       "records": { "path": "data.calendarChannelEventAssociations" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/calendarChannelEventAssociations.json"
     },
     {
       "name": "calendar_event_participants",
       "path": "/rest/calendarEventParticipants",
       "records": { "path": "data.calendarEventParticipants" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/calendarEventParticipants.json"
     },
     {
       "name": "calendar_events",
       "path": "/rest/calendarEvents",
       "records": { "path": "data.calendarEvents" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/calendarEvents.json"
     },
     {
       "name": "call_recordings",
       "path": "/rest/callRecordings",
       "records": { "path": "data.callRecordings" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/callRecordings.json"
     },
     {
       "name": "companies",
       "path": "/rest/companies",
       "records": { "path": "data.companies" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/companies.json"
     },
     {
       "name": "dashboards",
       "path": "/rest/dashboards",
       "records": { "path": "data.dashboards" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/dashboards.json"
     },
     {
       "name": "message_campaigns",
       "path": "/rest/messageCampaigns",
       "records": { "path": "data.messageCampaigns" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/messageCampaigns.json"
     },
     {
       "name": "message_channel_message_association_message_folders",
       "path": "/rest/messageChannelMessageAssociationMessageFolders",
       "records": { "path": "data.messageChannelMessageAssociationMessageFolders" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/messageChannelMessageAssociationMessageFolders.json"
     },
     {
       "name": "message_channel_message_associations",
       "path": "/rest/messageChannelMessageAssociations",
       "records": { "path": "data.messageChannelMessageAssociations" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/messageChannelMessageAssociations.json"
     },
     {
       "name": "message_list_members",
       "path": "/rest/messageListMembers",
       "records": { "path": "data.messageListMembers" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/messageListMembers.json"
     },
     {
       "name": "message_lists",
       "path": "/rest/messageLists",
       "records": { "path": "data.messageLists" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/messageLists.json"
     },
     {
       "name": "message_participants",
       "path": "/rest/messageParticipants",
       "records": { "path": "data.messageParticipants" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/messageParticipants.json"
     },
     {
       "name": "message_threads",
       "path": "/rest/messageThreads",
       "records": { "path": "data.messageThreads" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/messageThreads.json"
     },
     {
       "name": "messages",
       "path": "/rest/messages",
       "records": { "path": "data.messages" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/messages.json"
     },
     {
       "name": "note_targets",
       "path": "/rest/noteTargets",
       "records": { "path": "data.noteTargets" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/noteTargets.json"
     },
     {
       "name": "notes",
       "path": "/rest/notes",
       "records": { "path": "data.notes" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/notes.json"
     },
     {
       "name": "opportunities",
       "path": "/rest/opportunities",
       "records": { "path": "data.opportunities" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/opportunities.json"
     },
     {
       "name": "people",
       "path": "/rest/people",
       "records": { "path": "data.people" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/people.json"
     },
     {
       "name": "task_targets",
       "path": "/rest/taskTargets",
       "records": { "path": "data.taskTargets" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/taskTargets.json"
     },
     {
       "name": "tasks",
       "path": "/rest/tasks",
       "records": { "path": "data.tasks" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/tasks.json"
     },
     {
       "name": "timeline_activities",
       "path": "/rest/timelineActivities",
       "records": { "path": "data.timelineActivities" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/timelineActivities.json"
     },
     {
       "name": "workflow_automated_triggers",
       "path": "/rest/workflowAutomatedTriggers",
       "records": { "path": "data.workflowAutomatedTriggers" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/workflowAutomatedTriggers.json"
     },
     {
       "name": "workflow_runs",
       "path": "/rest/workflowRuns",
       "records": { "path": "data.workflowRuns" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/workflowRuns.json"
     },
     {
       "name": "workflow_versions",
       "path": "/rest/workflowVersions",
       "records": { "path": "data.workflowVersions" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/workflowVersions.json"
     },
     {
       "name": "workflows",
       "path": "/rest/workflows",
       "records": { "path": "data.workflows" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/workflows.json"
     },
     {
       "name": "workspace_members",
       "path": "/rest/workspaceMembers",
       "records": { "path": "data.workspaceMembers" },
-      "pagination": { "type": "cursor", "cursor_param": "starting_after", "limit_param": "limit", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
+      "query": { "limit": "60" },
+      "pagination": { "type": "cursor", "cursor_param": "starting_after", "token_path": "pageInfo.endCursor", "stop_path": "pageInfo.hasNextPage" },
       "schema": "schemas/workspaceMembers.json"
     }
   ]
