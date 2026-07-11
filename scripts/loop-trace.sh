@@ -12,6 +12,8 @@
 #   scripts/loop-trace.sh latest              # digest the newest session to stdout (no files)
 #   scripts/loop-trace.sh distill [file]      # write digest pair + INDEX line (default: newest)
 #   scripts/loop-trace.sh live                # follow the newest session, one line per event
+#   scripts/loop-trace.sh full [file]         # COMPLETE human transcript (all thinking, all calls)
+#   scripts/loop-trace.sh html [file]         # pi's native full HTML render (open in browser)
 #   scripts/loop-trace.sh turn <n>            # show digests recorded for driver turn n
 set -euo pipefail
 
@@ -167,7 +169,9 @@ def digest(line):
             out.append(f"{t} {c.get('name')}: {(a.get('command') or a.get('path') or a.get('agent') or json.dumps(a))[:110]}")
         elif k=="thinking":
             th=(c.get("thinking") or "").strip()
-            if th: out.append(f"{t} 💭 {th[:90]}")
+            if th:
+                lim=100000 if os.environ.get("LIVE_FULL") else 90
+                out.append(f"{t} 💭 {th[:lim]}")
         elif k=="text" and m.get("role")=="toolResult":
             out.append(f"{t} ← result {len(c.get('text') or '')}B")
     return "\n".join(out) if out else None
@@ -195,10 +199,49 @@ except KeyboardInterrupt: pass
 PY
     ;;
 
+  full)
+    # Complete human-readable markdown: FULL thinking, full tool args, generous results.
+    f="${ARG:-$(newest_session)}"
+    [[ -n "$f" && -f "$f" ]] || { echo "no session found" >&2; exit 1; }
+    python3 - "$f" <<'PY'
+import json,sys
+f=sys.argv[1]
+print(f"# FULL transcript — {f}\n")
+for line in open(f):
+    try: e=json.loads(line)
+    except Exception: continue
+    t=(e.get("timestamp") or "")[11:19]
+    ty=e.get("type")
+    if ty=="session": print(f"**session start** cwd={e.get('cwd')}\n"); continue
+    if ty=="model_change": print(f"**model** {e.get('provider')}/{e.get('modelId')}\n"); continue
+    if ty!="message": continue
+    m=e["message"]; role=m.get("role")
+    for c in (m.get("content") or []):
+        if not isinstance(c,dict): continue
+        k=c.get("type")
+        if k=="thinking":
+            print(f"### {t} 💭 thinking\n\n{(c.get('thinking') or '').strip()}\n")
+        elif k=="text":
+            label="🛠 tool result" if role=="toolResult" else f"💬 {role}"
+            txt=(c.get("text") or "")
+            note="" if len(txt)<=4000 else f"\n\n*(truncated — {len(txt)} chars total; raw session has all of it)*"
+            print(f"### {t} {label}\n\n```\n{txt[:4000]}\n```{note}\n")
+        elif k=="toolCall":
+            print(f"### {t} ▶ {c.get('name')}\n\n```json\n{json.dumps(c.get('arguments') or {},indent=1)[:4000]}\n```\n")
+PY
+    ;;
+
+  html)
+    # pi's native pretty rendering of the complete session (2MB-ish; open in a browser).
+    f="${ARG:-$(newest_session)}"
+    [[ -n "$f" && -f "$f" ]] || { echo "no session found" >&2; exit 1; }
+    mkdir -p "$TRACE_DIR/full" && cd "$TRACE_DIR/full" && pi --export "$f" && echo "open with: open $TRACE_DIR/full/pi-session-*.html"
+    ;;
+
   turn)
     [[ -n "$ARG" ]] || { echo "usage: loop-trace turn <n>" >&2; exit 1; }
     grep -rl "turn-.*" "$TRACE_DIR" 2>/dev/null | head -5
     grep -n "turn $ARG:" "$STATE_DIR/driver.log" | tail -5 ;;
 
-  *) echo "usage: loop-trace.sh sessions|latest|distill [file]|live|turn <n>" >&2; exit 2 ;;
+  *) echo "usage: loop-trace.sh sessions|latest|distill [file]|full [file]|html [file]|live|turn <n>" >&2; exit 2 ;;
 esac
