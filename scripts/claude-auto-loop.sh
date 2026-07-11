@@ -37,6 +37,13 @@ CLAUDE_BIN="${CLAUDE_BIN:-claude}"
 # fully unattended run that also needs bash (gh/make/pi), export
 # CLAUDE_ARGS="--output-format text --dangerously-skip-permissions".
 CLAUDE_ARGS="${CLAUDE_ARGS:---output-format text --permission-mode acceptEdits}"
+# The Shepherd validator turn can run on a different model/CLI than the orchestrator — e.g. Codex
+# via pi for speed and cross-model independence (Codex judging Claude's turns). The -p flag is
+# supplied by the driver, so do NOT include it (or claude-only flags) in VALIDATOR_ARGS:
+#   VALIDATOR_BIN=pi
+#   VALIDATOR_ARGS="--model openai-codex/gpt-5.5 --tools read,bash,edit,write,grep,find,ls --approve"
+VALIDATOR_BIN="${VALIDATOR_BIN:-$CLAUDE_BIN}"
+VALIDATOR_ARGS="${VALIDATOR_ARGS:-$CLAUDE_ARGS}"
 MAX_ITERATIONS="${MAX_ITERATIONS:-300}"
 MAX_REVERTS="${MAX_REVERTS:-6}"
 MAX_NO_VERDICT="${MAX_NO_VERDICT:-3}"          # consecutive no-verdict turns before HALT (footgun guard)
@@ -81,14 +88,15 @@ except Exception: print("")
 PY
 }
 
-run_claude() { # $1=prompt-file $2=extra-inline-text  -> stdout to driver.log
-  local pf="$1" extra="${2:-}" rc=0
+run_agent() { # $1=bin $2=args $3=prompt-file $4=extra-inline-text  -> stdout to driver.log
+  local bin="$1" args="$2" pf="$3" extra="${4:-}" rc=0
   # shellcheck disable=SC2086
-  "$CLAUDE_BIN" -p $CLAUDE_ARGS "$(cat "$pf")
+  "$bin" -p $args "$(cat "$pf")
 
 $extra" >>"$LOG_FILE" 2>&1 || rc=$?
   return $rc
 }
+run_claude() { run_agent "$CLAUDE_BIN" "$CLAUDE_ARGS" "$1" "${2:-}"; }
 
 checkpoint() { # $1=turn — snapshot the run ledger + the worktree HEAD SHA (the fork point).
   local d="$CKPT_DIR/$1"; mkdir -p "$d"
@@ -132,7 +140,7 @@ VALIDATOR CORRECTION (apply first): $correction}" \
     || log "turn $i: orchestrator returned non-zero (validator will assess)"
 
   log "── turn $i: VALIDATOR ──"
-  run_claude "$VAL_PROMPT" "" || log "turn $i: validator returned non-zero"
+  run_agent "$VALIDATOR_BIN" "$VALIDATOR_ARGS" "$VAL_PROMPT" "" || log "turn $i: validator returned non-zero"
 
   verdict="$(json_field "$VERDICT_JSON" verdict)"
   score="$(json_field "$VERDICT_JSON" step_score)"
