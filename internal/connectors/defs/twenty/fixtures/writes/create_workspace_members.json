@@ -1,0 +1,12 @@
+{
+  "record": {
+    "accountOwnerForCompanies": {}
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/workspaceMembers",
+    "body": {
+      "accountOwnerForCompanies": {}
+    }
+  }
+}

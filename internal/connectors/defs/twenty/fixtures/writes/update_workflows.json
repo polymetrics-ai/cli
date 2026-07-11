@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_workflows_fixture_id",
+    "lastPublishedVersionId": "lastPublishedVersionId_fixture_1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/workflows/update_workflows_fixture_id",
+    "body": {
+      "lastPublishedVersionId": "lastPublishedVersionId_fixture_1"
+    }
+  }
+}

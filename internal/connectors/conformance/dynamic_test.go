@@ -1,6 +1,7 @@
 package conformance
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -157,6 +158,56 @@ func TestWriteRequestShape_MismatchFails(t *testing.T) {
 	}
 	if !found {
 		t.Fatalf("expected a write_request_shape:update_widget result, got %+v", results)
+	}
+}
+
+func TestCompareWriteExpectationSupportsExactTopLevelArrayBody(t *testing.T) {
+	got := capturedRequest{
+		Method:      "POST",
+		Path:        "/rest/batch/widgets",
+		BodyPresent: true,
+		Body: []any{
+			map[string]any{"name": "fixture widget"},
+		},
+	}
+	want := writeExpectation{
+		Method:    "POST",
+		Path:      "/rest/batch/widgets",
+		BodyExact: json.RawMessage(`[{"name":"fixture widget"}]`),
+	}
+	if mismatch := compareWriteExpectation(got, want); mismatch != "" {
+		t.Fatalf("compareWriteExpectation exact array mismatch = %q", mismatch)
+	}
+
+	want.BodyExact = json.RawMessage(`{"records":[{"name":"fixture widget"}]}`)
+	if mismatch := compareWriteExpectation(got, want); mismatch == "" {
+		t.Fatalf("compareWriteExpectation accepted wrapper object for exact top-level array")
+	}
+}
+
+func TestCompareWriteExpectationSupportsExplicitNoBody(t *testing.T) {
+	want := writeExpectation{Method: "DELETE", Path: "/rest/widgets/w1", NoBody: true}
+	if mismatch := compareWriteExpectation(capturedRequest{Method: "DELETE", Path: "/rest/widgets/w1"}, want); mismatch != "" {
+		t.Fatalf("compareWriteExpectation no-body mismatch = %q", mismatch)
+	}
+	if mismatch := compareWriteExpectation(capturedRequest{Method: "DELETE", Path: "/rest/widgets/w1", BodyPresent: true, Body: map[string]any{}}, want); mismatch == "" {
+		t.Fatalf("compareWriteExpectation accepted a body when no_body=true")
+	}
+}
+
+func TestCompareWriteExpectationPreservesSubsetBody(t *testing.T) {
+	got := capturedRequest{
+		Method:      "PATCH",
+		Path:        "/rest/widgets/w1",
+		BodyPresent: true,
+		Body: map[string]any{
+			"name":  "fixture widget",
+			"extra": "engine-added field",
+		},
+	}
+	want := writeExpectation{Method: "PATCH", Path: "/rest/widgets/w1", Body: map[string]any{"name": "fixture widget"}}
+	if mismatch := compareWriteExpectation(got, want); mismatch != "" {
+		t.Fatalf("compareWriteExpectation subset body mismatch = %q", mismatch)
 	}
 }
 

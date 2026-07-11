@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_message_channel_message_association_message_folders_fixture_id",
+    "messageFolderId": "messageFolderId_fixture_1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/messageChannelMessageAssociationMessageFolders/update_message_channel_message_association_message_folders_fixture_id",
+    "body": {
+      "messageFolderId": "messageFolderId_fixture_1"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "position": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/messageListMembers",
+    "body": {
+      "position": 1
+    }
+  }
+}

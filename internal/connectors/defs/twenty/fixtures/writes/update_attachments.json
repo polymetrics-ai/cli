@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_attachments_fixture_id",
+    "name": "Fixture name 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/attachments/update_attachments_fixture_id",
+    "body": {
+      "name": "Fixture name 1"
+    }
+  }
+}

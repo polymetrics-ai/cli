@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_workflow_runs_fixture_id",
+    "endedAt": "2026-01-01T00:00:01Z"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/workflowRuns/update_workflow_runs_fixture_id",
+    "body": {
+      "endedAt": "2026-01-01T00:00:01Z"
+    }
+  }
+}

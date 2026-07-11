@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "update_blocklists_fixture_id",
+    "handle": "Fixture handle 1"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/rest/blocklists/update_blocklists_fixture_id",
+    "body": {
+      "handle": "Fixture handle 1"
+    }
+  }
+}
