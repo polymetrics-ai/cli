@@ -4,29 +4,32 @@
   "parent_pr": 285,
   "branch": "feat/284-twenty-fixtures-certify",
   "base_parent_head": "23c2277d827da31e1c1629793c830a129eeb5e7e",
-  "status": "ready_with_documented_certify_and_make_verify_blockers",
+  "starting_head_for_correction": "2d909649899b0c26d0e9822af70232d4af26e89d",
+  "status": "local_corrective_gates_passed_pending_commit_push",
   "gsd": {
     "doctor": "passed",
     "list": "passed",
     "programming_loop": "unavailable: scripts/gsd: unknown GSD command: programming-loop",
-    "fallback": "scripts/gsd prompt gsd-quick \"twenty S7 fixtures docs conformance certify issue #284\""
+    "fallback": "scripts/gsd prompt gsd-quick \"twenty S7 certify correction issue #284\""
   },
   "required_reading": {
     "issue_body": "gh issue view 284 --json number,title,state,body,url,labels",
-    "go_implementation_skill": "missing: .pi/skills/go-implementation/SKILL.md ENOENT"
+    "go_implementation_skill": "missing locally: .pi/skills/go-implementation/SKILL.md ENOENT; fallback read from /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-twenty-run/.pi/skills/go-implementation/SKILL.md"
   },
   "loaded_skills": [
     "gsd-core",
     "caveman",
+    "go-implementation (fallback)",
     "golang-how-to",
     "golang-cli",
     "golang-testing",
     "golang-error-handling",
     "golang-safety",
     "golang-security",
-    "golang-documentation",
     "golang-design-patterns",
-    "golang-structs-interfaces"
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency"
   ],
   "orchestrationDecisions": [
     {
@@ -38,31 +41,60 @@
       "cycle": "verify",
       "decision": "local_critical_path",
       "reason": "run local gates and document certify/make verify blockers without spawning"
+    },
+    {
+      "cycle": "verify-turn59-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "single assigned correction on existing isolated issue branch; no subagent tool in worker context"
+    },
+    {
+      "cycle": "verify-turn59-correction-execute",
+      "decision": "local_critical_path",
+      "reason": "implemented minimal certify harness fix inline in assigned worker worktree"
+    },
+    {
+      "cycle": "verify-turn59-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "ran focused local gates and localhost credential-free certify gates inline"
     }
   ],
-  "redEvidence": "go test ./internal/connectors/conformance -run TestTwentyFixturesCoverAllStreamsAndWrites -count=1 failed with 139 missing/failing fixture checks before generated fixtures",
+  "redEvidence": [
+    "previous S7 fixture coverage red: go test ./internal/connectors/conformance -run TestTwentyFixturesCoverAllStreamsAndWrites -count=1 failed with 139 missing/failing fixture checks before generated fixtures",
+    "2026-07-11 ./pm help connectors certify exited 0 and rendered connector help/manual without credential access",
+    "2026-07-11 non-full localhost certify with placeholder env exited 2; etl_full_refresh_append got Error instead of ETLRun",
+    "2026-07-11 kept-workdir manual etl run exited 1 with JSON error message: record is missing cursor field \"updated_at\"",
+    "2026-07-11 full localhost certify --full --skip write exited 2; current run still blocked by cursor failure before long-path stage",
+    "2026-07-11 focused certify tests initially failed to build: undefined streamSpecsFromInspectEnvelope and missing bounded-name helpers"
+  ],
+  "correctiveChanges": [
+    "stageManualJSON seeds stream specs from connectors inspect manifest.streams before bootstrap connection creation",
+    "safeName bounds stream-derived names with deterministic 8-hex hash suffix",
+    "full-sweep live/capture/incremental table names and capture filenames use bounded helpers"
+  ],
   "greenEvidence": {
-    "json_parse": "passed",
+    "focused_certify_new_tests": "passed: ok polymetrics.ai/internal/connectors/certify 0.525s",
+    "focused_certify_broader": "passed: ok polymetrics.ai/internal/connectors/certify 46.341s",
+    "focused_conformance": "passed: ok polymetrics.ai/internal/connectors/conformance 1.819s",
     "connectorgen_validate_json": "passed: findings=0 warnings=0",
-    "make_connectorgen_validate": "passed: 548 connector(s) checked, 0 findings",
-    "focused_conformance": "passed",
-    "go_vet": "passed",
-    "go_test_all": "passed",
-    "go_build_pm": "passed",
-    "docs_check_no_build": "passed",
-    "website_gen_idempotent": "passed",
-    "diff_check": "passed"
+    "go_vet": "passed: no output",
+    "go_build_pm": "passed: no output",
+    "gofmt": "passed: gofmt -w cmd internal; gofmt -l cmd internal clean",
+    "non_full_certify_localhost": "passed: exit=0 report.passed=true",
+    "full_certify_localhost_skip_write": "passed: exit=0 report.passed=true"
   },
   "certify": {
     "credential_free_localhost_attempted": true,
-    "result": "blocked",
-    "non_full_failure": "exit 2: etl_full_refresh_append missing cursor field updated_at; certify bootstrap connection defaults before catalog discovers Twenty updatedAt",
-    "full_failure": "exit 2: surface/read/sync/flow/schedule passed; etl_full_refresh_overwrite_deduped failed with file name too long for message_channel_message_association_message_folders capture/raw path",
-    "requires_out_of_scope_fix": true
+    "result": "green_after_correction",
+    "non_full_command": "PM_TWENTY_CERT_TOKEN=fixture_token_placeholder ./pm connectors certify twenty --stream attachments --limit 1 --config base_url=http://127.0.0.1:<local-port> --from-env api_key=PM_TWENTY_CERT_TOKEN --json",
+    "non_full_result": "exit 0; report.passed=true",
+    "full_command": "PM_TWENTY_CERT_TOKEN=fixture_token_placeholder ./pm connectors certify twenty --stream attachments --full --skip write --limit 1 --config base_url=http://127.0.0.1:<local-port> --from-env api_key=PM_TWENTY_CERT_TOKEN --json",
+    "full_result": "exit 0; report.passed=true",
+    "correction_scope": "internal/connectors/certify/** plus focused tests"
   },
   "verificationPassed": false,
-  "verificationStatus": "partial_green_certify_blocked_make_verify_not_run",
-  "makeVerify": "not run: depends on smoke-no-build, which executes ./pm reverse run; S7 forbids reverse ETL execution",
+  "correctiveVerificationPassed": true,
+  "verificationStatus": "corrective_gates_green_make_verify_not_run_safety_blocker",
+  "makeVerify": "not run: verify depends on smoke-no-build, which executes ./pm reverse run; correction forbids reverse ETL execution",
   "no_secrets": true,
   "no_live_twenty_api": true,
   "no_reverse_etl_execution": true,

@@ -7,6 +7,7 @@ package certify
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -25,6 +26,7 @@ const (
 	fileCredentialName      = "cert-file"
 	liveConnectionName      = "cert_live"
 	captureConnectionPrefix = "cert_capture_"
+	maxSafeNameLen          = 40
 )
 
 // noDefsBundleReason is recorded on the fixture_conformance stage: wave0 ships
@@ -474,7 +476,28 @@ func safeName(name string) string {
 	if out == "" {
 		return "stream"
 	}
-	return out
+	if len(out) <= maxSafeNameLen {
+		return out
+	}
+	sum := sha256.Sum256([]byte(out))
+	const suffixLen = 9 // underscore + 8 hex chars.
+	return strings.TrimRight(out[:maxSafeNameLen-suffixLen], "_") + fmt.Sprintf("_%x", sum[:4])
+}
+
+func (rc *runContext) liveTableName() string {
+	return "cert_live_" + safeName(rc.streamName())
+}
+
+func (rc *runContext) incrementalTableName() string {
+	return "cert_incremental_" + safeName(rc.streamName())
+}
+
+func (rc *runContext) captureTableName(prefix string) string {
+	return prefix + "_" + safeName(rc.streamName())
+}
+
+func (rc *runContext) captureFileName() string {
+	return "capture_" + safeName(rc.streamName())
 }
 
 // queryRowCount runs `pm query run --table <table> --json` and returns the
@@ -570,7 +593,7 @@ func stageFullSweepConnectionCreate(rc *runContext, rep *Report) error {
 			"--destination", "warehouse:" + warehouseCredentialName,
 			"--stream", stream,
 			"--sync-mode", "full_refresh_append",
-			"--table", "cert_live_" + stream,
+			"--table", rc.liveTableName(),
 			"--json"}
 		if primaryKey := rc.primaryKey(); primaryKey != "" {
 			args = append(args, "--primary-key", primaryKey)
@@ -651,6 +674,9 @@ func stageManualJSON(rc *runContext, rep *Report) error {
 		if hits := ScanForSecrets(res.Stdout, secretValuesFromEnv(rc.opts.SecretEnv)); len(hits) != 0 {
 			return false, cliInfoFrom(res), fmt.Sprintf("manual_json: secret value leaked in connectors inspect output: %v", hits)
 		}
+		if specs := streamSpecsFromInspectEnvelope(res.Envelope); len(specs) > 0 {
+			rc.catalogStreamSpecs = specs
+		}
 		return true, cliInfoFrom(res), ""
 	})
 	return nil
@@ -719,7 +745,7 @@ func stageCatalog(rc *runContext, rep *Report) error {
 			"--destination", "warehouse:" + warehouseCredentialName,
 			"--stream", stream,
 			"--sync-mode", "full_refresh_append",
-			"--table", "cert_live_" + stream,
+			"--table", rc.liveTableName(),
 			"--json"}
 		if primaryKey := rc.primaryKey(); primaryKey != "" {
 			args = append(args, "--primary-key", primaryKey)
@@ -764,6 +790,15 @@ func catalogStreams(env map[string]any) ([]any, int) {
 	}
 	streams, _ := inner["streams"].([]any)
 	return streams, len(streams)
+}
+
+func streamSpecsFromInspectEnvelope(env map[string]any) []streamSpec {
+	manifest, _ := env["manifest"].(map[string]any)
+	if manifest == nil {
+		return nil
+	}
+	streams, _ := manifest["streams"].([]any)
+	return catalogStreamSpecsFromStreams(streams)
 }
 
 func catalogStreamSpecsFromStreams(streams []any) []streamSpec {
@@ -827,7 +862,7 @@ func catalogHasPKAndCursor(streams []any, name string) bool {
 
 func stageFullRefreshAppend(rc *runContext, rep *Report) error {
 	stream := rc.streamName()
-	table := "cert_live_" + stream
+	table := rc.liveTableName()
 	var capturePath string
 
 	stage := recordStage(rc, rep, "etl_full_refresh_append", 2, func() (bool, CLIStageInfo, string) {
@@ -856,7 +891,7 @@ func stageFullRefreshAppend(rc *runContext, rep *Report) error {
 	// The captured JSONL for stages 6/7/10 (capture-replay via the built-in
 	// file connector) is this stage's live output, queried back out via
 	// `pm query run` and stripped of _polymetrics_* bookkeeping fields.
-	capturePath = filepath.Join(rc.root, "capture_"+stream+".jsonl")
+	capturePath = filepath.Join(rc.root, rc.captureFileName()+".jsonl")
 	recordStage(rc, rep, "capture_write", 1, func() (bool, CLIStageInfo, string) {
 		res := rc.run("query", "run", "--table", table, "--json")
 		passed, errMsg := assertKind(rc, "capture_write", res, "QueryResult", 0)
@@ -969,7 +1004,7 @@ func stageFullRefreshOverwrite(rc *runContext, rep *Report) error {
 		skipStage(rc, rep, "etl_full_refresh_overwrite", "skipped: no capture available (etl_full_refresh_append did not produce one)")
 		return nil
 	}
-	table := "cert_overwrite_" + rc.streamName()
+	table := rc.captureTableName("cert_overwrite")
 	mode := "full_refresh_overwrite"
 
 	if ok, errMsg := rc.setupCaptureConnection(rep, mode, table); !ok {
@@ -1029,7 +1064,7 @@ func stageFullRefreshOverwriteDeduped(rc *runContext, rep *Report) error {
 		skipStage(rc, rep, "etl_full_refresh_overwrite_deduped", "skipped: no capture available")
 		return nil
 	}
-	table := "cert_overwrite_deduped_" + rc.streamName()
+	table := rc.captureTableName("cert_overwrite_deduped")
 	mode := "full_refresh_overwrite_deduped"
 
 	if ok, errMsg := rc.setupCaptureConnection(rep, mode, table); !ok {
@@ -1066,7 +1101,7 @@ func stageIncrementalAppend(rc *runContext, rep *Report) error {
 		return nil
 	}
 	stream := rc.streamName()
-	table := "cert_incremental_" + stream
+	table := rc.incrementalTableName()
 	connName := "cert_incremental"
 	if rc.currentStream != "" {
 		connName += "_" + safeName(stream)
@@ -1187,7 +1222,7 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 		skipStage(rc, rep, "etl_incremental_append_deduped", "skipped: no capture available")
 		return nil
 	}
-	table := "cert_incremental_deduped_" + rc.streamName()
+	table := rc.captureTableName("cert_incremental_deduped")
 	mode := "incremental_append_deduped"
 
 	if ok, errMsg := rc.setupCaptureConnection(rep, mode, table); !ok {
@@ -1218,7 +1253,7 @@ func stageIncrementalAppendDeduped(rc *runContext, rep *Report) error {
 // --- stage 11: query_contract ---
 
 func stageQueryContract(rc *runContext, rep *Report) error {
-	table := "cert_live_" + rc.streamName()
+	table := rc.liveTableName()
 	recordStage(rc, rep, "query_contract", 2, func() (bool, CLIStageInfo, string) {
 		res := rc.run("query", "run", "--table", table, "--limit", "1", "--json")
 		passed, errMsg := assertKind(rc, "query_contract", res, "QueryResult", 0)

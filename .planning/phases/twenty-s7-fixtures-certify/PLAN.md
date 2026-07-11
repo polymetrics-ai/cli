@@ -30,5 +30,17 @@ Issue: #284 (`twenty S7: fixtures + docs.md + conformance & certify`). Parent: #
 4. Commit/push slice: commit coherent S7 result and push `origin/feat/284-twenty-fixtures-certify`; do not open PR.
 
 ## Collision rules
-- Touch only `internal/connectors/defs/twenty/fixtures/**`, `internal/connectors/defs/twenty/docs.md`, `internal/connectors/conformance/twenty_test.go`, S7 phase artifacts, and generated website/catalog data if required by generator/idempotency.
-- Do not edit `api_surface.json`, `streams.json`, `writes.json`, `schemas/**`, engine runtime code, CLI code, `go.mod`/`go.sum`, other connectors, `.github/**`, `main`, or parent state files.
+- Original S7 scope touched only `internal/connectors/defs/twenty/fixtures/**`, `internal/connectors/defs/twenty/docs.md`, `internal/connectors/conformance/twenty_test.go`, S7 phase artifacts, and generated website/catalog data if required by generator/idempotency.
+- Correction scope for VERIFY-TURN59 is explicitly narrowed to `internal/connectors/certify/**` focused harness fixes/tests plus these S7 phase artifacts. Do not touch connector defs unless the certify fix proves impossible without it.
+- Do not edit `api_surface.json`, `streams.json`, `writes.json`, `schemas/**`, unrelated CLI/code surfaces, `go.mod`/`go.sum`, other connectors, `.github/**`, `main`, parent PR/roadmap/state files, or coordinator `.planning/auto-loop/**` files.
+
+## Correction plan — 2026-07-11 VERIFY-TURN59
+- Objective: make credential-free localhost `pm connectors certify twenty` green for PR #322 head beyond `2d909649899b0c26d0e9822af70232d4af26e89d`; commit/push only `feat/284-twenty-fixtures-certify`; stop at correction handoff.
+- Red evidence captured before production edits:
+  - `./pm help connectors certify` rendered connector manual/help, exit 0.
+  - Non-full localhost certify with placeholder env exited 2; manual rerun of kept workdir ETL returned `record is missing cursor field "updated_at"`.
+  - Full localhost certify with `--full --skip write` exited 2; current run is still dominated by bootstrap cursor failure before reaching the known long-name raw-path failure.
+- Slice 1 TDD: add focused certify tests for pre-bootstrap stream metadata cursor selection from connector inspect/catalog shape (`updatedAt`, not fallback `updated_at`) and for bounded deterministic certify names/path components for long Twenty stream names.
+- Slice 1 implementation: seed `catalogStreamSpecs` from `connectors inspect --json` before `connection_create`; use bounded filesystem-safe names for full-sweep connection/table/capture artifacts without changing CLI stdout/stderr contracts.
+- Gates: focused new tests; `go test ./internal/connectors/certify -run '<new-or-focused-tests>' -count=1`; conformance Twenty focused tests; `connectorgen validate`; `go vet ./...`; `go build ./cmd/pm`; `gofmt -l cmd internal`; credential-free non-full and `--full --skip write` localhost certify. `make verify` only if safe (otherwise record reverse ETL safety blocker).
+- Execution decision: `local_critical_path` — this Pi worker is already in isolated issue worktree and has no recursive `subagent` tool.
