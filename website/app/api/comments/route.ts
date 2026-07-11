@@ -48,6 +48,7 @@ export async function GET(request: Request) {
       author: comment.author,
       mine: user !== null && comment.userId === user.id,
     })),
+    viewer: { admin: user?.isAdmin ?? false },
   });
 }
 

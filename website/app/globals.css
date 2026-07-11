@@ -1118,3 +1118,12 @@ html.dark,
   .annotation-popover-enter { animation: none; }
   .annotation-pending { animation: none; }
 }
+
+/* Responsive display for the margin rail / notes FAB (same pattern as
+   navbar-desktop-*: Tailwind lg: display variants are unreliable here). */
+.blog-margin-rail { display: none; }
+.blog-notes-fab { display: flex; }
+@media (min-width: 64rem) {
+  .blog-margin-rail { display: block; }
+  .blog-notes-fab { display: none; }
+}
