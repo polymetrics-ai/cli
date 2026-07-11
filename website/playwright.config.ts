@@ -25,6 +25,14 @@ export default defineConfig({
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
         url: baseURL,
+        env: {
+          // Annotation e2e: credentials test provider + local database.
+          // Specs that need them skip gracefully when DATABASE_URL is unset.
+          E2E_TEST_AUTH: '1',
+          BETTER_AUTH_URL: baseURL,
+          BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET ?? 'e2e-only-secret-not-production',
+          ...(process.env.DATABASE_URL ? { DATABASE_URL: process.env.DATABASE_URL } : {}),
+        },
       },
   projects: [
     {
