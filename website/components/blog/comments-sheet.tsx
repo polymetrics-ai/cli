@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { MessageSquare, Trash2 } from 'lucide-react';
+import { ChevronDown, MessageSquare, Reply, Trash2 } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -14,6 +14,8 @@ import { useAnnotations } from '@/components/blog/annotations-provider';
 import { relativeTime } from '@/components/blog/highlight-text';
 import type { CommentDto } from '@/components/blog/annotations-provider';
 import type { BlogSection } from '@/lib/blog';
+
+const REPLY_MAX = 2000;
 
 function DeleteButton({ comment }: { comment: CommentDto }) {
   const { deleteComment } = useAnnotations();
@@ -52,6 +54,91 @@ function DeleteButton({ comment }: { comment: CommentDto }) {
   );
 }
 
+function AuthorRow({ comment, children }: { comment: CommentDto; children?: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      {comment.author.image ? (
+        // eslint-disable-next-line @next/next/no-img-element -- OAuth avatar host varies
+        <img src={comment.author.image} alt="" width={14} height={14} className="h-3.5 w-3.5 border border-line-structure object-cover" />
+      ) : (
+        <span className="flex h-3.5 w-3.5 items-center justify-center border border-line-cta bg-surface-cta-primary font-mono text-[8px] font-bold text-line-cta">
+          {(comment.author.name[0] ?? '?').toUpperCase()}
+        </span>
+      )}
+      <span className="truncate text-[11px] font-medium text-text-secondary">
+        {comment.author.name}
+      </span>
+      <span className="shrink-0 font-mono text-[9px] text-text-disabled">
+        {relativeTime(comment.createdAt)}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+function ReplyComposer({
+  parentId,
+  placeholder,
+  onDone,
+}: {
+  parentId: string;
+  placeholder: string;
+  onDone: () => void;
+}) {
+  const { submitReply } = useAnnotations();
+  const [body, setBody] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  async function submit() {
+    const trimmed = body.trim();
+    if (!trimmed || submitting) return;
+    setSubmitting(true);
+    const ok = await submitReply(parentId, trimmed);
+    setSubmitting(false);
+    if (ok) {
+      setBody('');
+      onDone();
+    }
+  }
+
+  return (
+    <div className="mt-2">
+      <textarea
+        autoFocus
+        value={body}
+        onChange={(event) => setBody(event.target.value.slice(0, REPLY_MAX))}
+        rows={2}
+        placeholder={placeholder}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') onDone();
+          if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+            event.preventDefault();
+            void submit();
+          }
+        }}
+        className="w-full resize-none border border-line-structure bg-surface-bg px-2.5 py-1.5 text-[13px] leading-relaxed text-text-primary outline-none placeholder:text-text-disabled focus:border-line-cta"
+      />
+      <div className="mt-1.5 flex items-center justify-end gap-2">
+        <button
+          type="button"
+          onClick={onDone}
+          className="px-2 py-1 font-square text-[10px] font-semibold uppercase tracking-wider text-text-tertiary transition-colors hover:text-text-primary"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          disabled={!body.trim() || submitting}
+          onClick={() => void submit()}
+          className="border border-line-cta bg-line-cta px-2.5 py-1 font-square text-[10px] font-semibold uppercase tracking-wider text-surface-bg transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-50"
+        >
+          {submitting ? 'Posting…' : 'Post reply'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
   const {
     comments,
@@ -64,11 +151,47 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
     signedIn,
     requestSignIn,
   } = useAnnotations();
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const byId = useMemo(() => new Map(comments.map((c) => [c.id, c])), [comments]);
+
+  /** Root ancestor for any comment (replies may nest arbitrarily deep). */
+  const rootOf = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const comment of comments) {
+      let cursor = comment;
+      let guard = 0;
+      while (cursor.parentId && guard < 100) {
+        const parent = byId.get(cursor.parentId);
+        if (!parent) break;
+        cursor = parent;
+        guard += 1;
+      }
+      map.set(comment.id, cursor.id);
+    }
+    return map;
+  }, [comments, byId]);
+
+  const repliesByRoot = useMemo(() => {
+    const map = new Map<string, CommentDto[]>();
+    for (const comment of comments) {
+      if (!comment.parentId) continue;
+      const root = rootOf.get(comment.id) ?? comment.parentId;
+      const list = map.get(root) ?? [];
+      list.push(comment);
+      map.set(root, list);
+    }
+    for (const list of map.values()) {
+      list.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+    }
+    return map;
+  }, [comments, rootOf]);
 
   const grouped = useMemo(() => {
     const groups = new Map<number, CommentDto[]>();
     for (const comment of comments) {
-      if (comment.pending) continue;
+      if (comment.pending || comment.parentId) continue;
       const resolution = resolutions.get(comment.id);
       const sectionIndex =
         resolution && !resolution.orphaned ? resolution.sectionIndex : -1; // -1 = context changed
@@ -88,6 +211,17 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
         behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
       });
     }, 250);
+  }
+
+  function startReply(id: string, rootId: string) {
+    if (!signedIn) {
+      setSheetOpen(false);
+      requestSignIn();
+      return;
+    }
+    setReplyingTo(id);
+    // Keep the thread open so the new reply is visible once it posts.
+    setExpanded((current) => new Set(current).add(rootId));
   }
 
   const count = comments.filter((c) => !c.pending).length;
@@ -155,42 +289,125 @@ export function CommentsSheet({ sections }: { sections: BlogSection[] }) {
                     : `${String(sectionIndex + 1).padStart(2, '0')} — ${sections[sectionIndex]?.heading ?? ''}`}
                 </p>
                 <div className="mt-3 flex flex-col gap-3">
-                  {list.map((comment) => (
-                    <div key={comment.id} className="corner-box-corners border border-line-structure bg-surface-bg p-3">
-                      <blockquote className="truncate border-l-2 border-surface-cta-primary bg-surface-1 px-2.5 py-1 text-[12px] italic text-text-tertiary">
-                        {comment.anchor.exact}
-                      </blockquote>
-                      <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">
-                        {comment.body}
-                      </p>
-                      <div className="mt-2.5 flex items-center gap-1.5">
-                        {comment.author.image ? (
-                          // eslint-disable-next-line @next/next/no-img-element -- OAuth avatar host varies
-                          <img src={comment.author.image} alt="" width={14} height={14} className="h-3.5 w-3.5 border border-line-structure object-cover" />
-                        ) : (
-                          <span className="flex h-3.5 w-3.5 items-center justify-center border border-line-cta bg-surface-cta-primary font-mono text-[8px] font-bold text-line-cta">
-                            {(comment.author.name[0] ?? '?').toUpperCase()}
-                          </span>
-                        )}
-                        <span className="truncate text-[11px] font-medium text-text-secondary">
-                          {comment.author.name}
-                        </span>
-                        <span className="shrink-0 font-mono text-[9px] text-text-disabled">
-                          {relativeTime(comment.createdAt)}
-                        </span>
-                        {comment.mine || viewerAdmin ? <DeleteButton comment={comment} /> : null}
+                  {list.map((comment) => {
+                    const replies = repliesByRoot.get(comment.id) ?? [];
+                    const visibleReplies = replies.filter((r) => !r.pending);
+                    const isExpanded = expanded.has(comment.id) || replies.some((r) => r.pending);
+                    return (
+                      <div key={comment.id} className="corner-box-corners border border-line-structure bg-surface-bg p-3">
+                        {comment.anchor ? (
+                          <blockquote className="truncate border-l-2 border-surface-cta-primary bg-surface-1 px-2.5 py-1 text-[12px] italic text-text-tertiary">
+                            {comment.anchor.exact}
+                          </blockquote>
+                        ) : null}
+                        <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">
+                          {comment.body}
+                        </p>
+                        <div className="mt-2.5">
+                          <AuthorRow comment={comment}>
+                            {comment.mine || viewerAdmin ? <DeleteButton comment={comment} /> : null}
+                          </AuthorRow>
+                        </div>
+
+                        <div className="mt-2 flex items-center gap-3">
+                          {sectionIndex !== -1 ? (
+                            <button
+                              type="button"
+                              onClick={() => jumpTo(comment)}
+                              className="font-mono text-[10px] uppercase tracking-widest text-line-cta transition-colors hover:text-text-primary"
+                            >
+                              Jump to text →
+                            </button>
+                          ) : null}
+                          <button
+                            type="button"
+                            onClick={() => startReply(comment.id, comment.id)}
+                            className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest text-text-tertiary transition-colors hover:text-text-primary"
+                          >
+                            <Reply className="h-3 w-3" aria-hidden="true" />
+                            Reply
+                          </button>
+                          {visibleReplies.length > 0 ? (
+                            <button
+                              type="button"
+                              aria-expanded={isExpanded}
+                              onClick={() =>
+                                setExpanded((current) => {
+                                  const next = new Set(current);
+                                  if (next.has(comment.id)) next.delete(comment.id);
+                                  else next.add(comment.id);
+                                  return next;
+                                })
+                              }
+                              className="ml-auto flex items-center gap-1 border border-line-structure bg-surface-1 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-line-cta transition-colors hover:bg-surface-2"
+                            >
+                              <ChevronDown
+                                className={`h-3 w-3 transition-transform motion-reduce:transition-none ${isExpanded ? 'rotate-180' : ''}`}
+                                aria-hidden="true"
+                              />
+                              {visibleReplies.length} {visibleReplies.length === 1 ? 'reply' : 'replies'}
+                            </button>
+                          ) : null}
+                        </div>
+
+                        {replyingTo === comment.id ? (
+                          <ReplyComposer
+                            parentId={comment.id}
+                            placeholder={`Reply to ${comment.author.name}…`}
+                            onDone={() => setReplyingTo(null)}
+                          />
+                        ) : null}
+
+                        {isExpanded && replies.length > 0 ? (
+                          <div className="mt-3 flex flex-col gap-2.5 border-l border-line-structure pl-3">
+                            {replies.map((reply) => {
+                              const directParent =
+                                reply.parentId && reply.parentId !== comment.id
+                                  ? byId.get(reply.parentId)
+                                  : null;
+                              return (
+                                <div
+                                  key={reply.id}
+                                  data-reply-id={reply.id}
+                                  className={reply.pending ? 'annotation-pending' : ''}
+                                >
+                                  <p className="text-[13px] leading-relaxed text-text-secondary">
+                                    {directParent ? (
+                                      <span className="mr-1 font-mono text-[11px] text-line-cta">
+                                        @{directParent.author.name}
+                                      </span>
+                                    ) : null}
+                                    {reply.body}
+                                  </p>
+                                  <div className="mt-1.5">
+                                    <AuthorRow comment={reply}>
+                                      <button
+                                        type="button"
+                                        aria-label={`Reply to ${reply.author.name}`}
+                                        onClick={() => startReply(reply.id, comment.id)}
+                                        className="ml-2 flex items-center gap-1 font-mono text-[9px] uppercase tracking-widest text-text-disabled transition-colors hover:text-text-primary"
+                                      >
+                                        <Reply className="h-2.5 w-2.5" aria-hidden="true" />
+                                        Reply
+                                      </button>
+                                      {reply.mine || viewerAdmin ? <DeleteButton comment={reply} /> : null}
+                                    </AuthorRow>
+                                  </div>
+                                  {replyingTo === reply.id ? (
+                                    <ReplyComposer
+                                      parentId={reply.id}
+                                      placeholder={`Reply to ${reply.author.name}…`}
+                                      onDone={() => setReplyingTo(null)}
+                                    />
+                                  ) : null}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : null}
                       </div>
-                      {sectionIndex !== -1 ? (
-                        <button
-                          type="button"
-                          onClick={() => jumpTo(comment)}
-                          className="mt-2 font-mono text-[10px] uppercase tracking-widest text-line-cta transition-colors hover:text-text-primary"
-                        >
-                          Jump to text →
-                        </button>
-                      ) : null}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ))}

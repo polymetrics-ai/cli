@@ -105,4 +105,33 @@ CREATE TABLE IF NOT EXISTS bookmark (
 CREATE INDEX IF NOT EXISTS bookmark_user_idx ON bookmark (user_id, created_at);
 `,
   },
+  {
+    id: 2,
+    name: 'threaded-replies',
+    sql: `
+-- Replies carry no anchor of their own — they inherit the root note's
+-- thread. A row is either a root (anchored) or a reply (parented).
+ALTER TABLE comment ALTER COLUMN section_index DROP NOT NULL;
+ALTER TABLE comment ALTER COLUMN block_type DROP NOT NULL;
+ALTER TABLE comment ALTER COLUMN block_index DROP NOT NULL;
+ALTER TABLE comment ALTER COLUMN exact DROP NOT NULL;
+ALTER TABLE comment ALTER COLUMN prefix DROP NOT NULL;
+ALTER TABLE comment ALTER COLUMN suffix DROP NOT NULL;
+ALTER TABLE comment ALTER COLUMN start_offset DROP NOT NULL;
+
+ALTER TABLE comment
+  ADD CONSTRAINT comment_parent_fk
+  FOREIGN KEY (parent_id) REFERENCES comment (id) ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS comment_parent_idx ON comment (parent_id);
+
+ALTER TABLE comment
+  ADD CONSTRAINT comment_shape CHECK (
+    parent_id IS NOT NULL OR (
+      section_index IS NOT NULL AND block_type IS NOT NULL AND block_index IS NOT NULL
+      AND exact IS NOT NULL AND prefix IS NOT NULL AND suffix IS NOT NULL
+      AND start_offset IS NOT NULL
+    )
+  );
+`,
+  },
 ];

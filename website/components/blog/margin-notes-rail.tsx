@@ -25,6 +25,7 @@ export function MarginNotesRail({ containerRef }: { containerRef: React.RefObjec
   const {
     comments,
     resolutions,
+    replyCounts,
     activeId,
     setActiveId,
     setSheetOpen,
@@ -195,6 +196,12 @@ export function MarginNotesRail({ containerRef }: { containerRef: React.RefObjec
               <span className="mt-1.5 line-clamp-3 block text-[12px] leading-snug text-text-tertiary">
                 {item.comment.body}
               </span>
+              {(replyCounts.get(item.comment.id) ?? 0) > 0 ? (
+                <span className="mt-1.5 flex items-center gap-1 font-mono text-[9px] uppercase tracking-widest text-line-cta">
+                  <MessageSquare className="h-2.5 w-2.5" aria-hidden="true" />
+                  {replyCounts.get(item.comment.id)} {replyCounts.get(item.comment.id) === 1 ? 'reply' : 'replies'}
+                </span>
+              ) : null}
             </button>
           ) : (
             <button
@@ -220,8 +227,8 @@ export function MarginNotesRail({ containerRef }: { containerRef: React.RefObjec
           {orphaned.map((comment) => (
             <div key={comment.id} className="with-stripes mt-2 border border-line-structure p-2">
               <blockquote className="bg-surface-bg px-2 py-1 text-[11px] italic leading-snug text-text-disabled">
-                “{comment.anchor.exact.slice(0, 80)}
-                {comment.anchor.exact.length > 80 ? '…' : ''}”
+                “{(comment.anchor?.exact ?? '').slice(0, 80)}
+                {(comment.anchor?.exact ?? '').length > 80 ? '…' : ''}”
               </blockquote>
               <p className="mt-1 line-clamp-2 px-2 text-[12px] leading-snug text-text-tertiary">
                 {comment.body}

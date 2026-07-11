@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getSessionUser } from '@/lib/auth-session';
 import { isValidAnchorShape, blockText } from '@/lib/annotations/anchor';
 import { checkRateLimit } from '@/lib/annotations/rate-limit';
-import { insertComment, listCommentsBySlug } from '@/lib/db/comments';
+import { getCommentMeta, insertComment, listCommentsBySlug } from '@/lib/db/comments';
 import { getBlogPost } from '@/lib/blog';
 import type { Anchor } from '@/lib/annotations/anchor';
 
@@ -44,6 +44,7 @@ export async function GET(request: Request) {
       id: comment.id,
       body: comment.body,
       anchor: comment.anchor,
+      parentId: comment.parentId,
       createdAt: comment.createdAt,
       author: comment.author,
       mine: user !== null && comment.userId === user.id,
@@ -56,14 +57,16 @@ export async function POST(request: Request) {
   const user = await getSessionUser(request.headers);
   if (!user) return error('sign in to comment', 401);
 
-  let payload: { slug?: unknown; body?: unknown; anchor?: unknown };
+  let payload: { slug?: unknown; body?: unknown; anchor?: unknown; parentId?: unknown };
   try {
     payload = await request.json();
   } catch {
     return error('invalid JSON body', 400);
   }
 
-  if (typeof payload.slug !== 'string') return error('unknown post slug', 400);
+  if (typeof payload.slug !== 'string' || !getBlogPost(payload.slug)) {
+    return error('unknown post slug', 400);
+  }
   if (typeof payload.body !== 'string' || payload.body.trim().length === 0) {
     return error('comment body is required', 400);
   }
@@ -71,8 +74,22 @@ export async function POST(request: Request) {
     return error(`comment body exceeds ${COMMENT_MAX_LENGTH} characters`, 400);
   }
 
-  const anchor = validateAnchor(payload.slug, payload.anchor);
-  if (typeof anchor === 'string') return error(anchor, 400);
+  // A comment is either a reply (parentId, no anchor — it inherits the
+  // root note's thread) or a root note (anchor required).
+  let anchor: Anchor | undefined;
+  let parentId: string | undefined;
+  if (payload.parentId !== undefined) {
+    if (typeof payload.parentId !== 'string') return error('invalid parent comment', 400);
+    const parent = await getCommentMeta(payload.parentId);
+    if (!parent || parent.postSlug !== payload.slug) {
+      return error('parent comment not found on this post', 400);
+    }
+    parentId = payload.parentId;
+  } else {
+    const validated = validateAnchor(payload.slug, payload.anchor);
+    if (typeof validated === 'string') return error(validated, 400);
+    anchor = validated;
+  }
 
   const rate = checkRateLimit('comment:create', user.id);
   if (!rate.allowed) {
@@ -86,6 +103,7 @@ export async function POST(request: Request) {
     userId: user.id,
     body: payload.body.trim(),
     anchor,
+    parentId,
   });
 
   return NextResponse.json(
@@ -94,6 +112,7 @@ export async function POST(request: Request) {
         id: comment.id,
         body: comment.body,
         anchor: comment.anchor,
+        parentId: comment.parentId,
         createdAt: comment.createdAt,
         author: comment.author,
         mine: true,

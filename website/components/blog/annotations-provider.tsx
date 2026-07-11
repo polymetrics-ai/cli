@@ -19,7 +19,9 @@ import { SignInDialog } from '@/components/auth/sign-in-dialog';
 export type CommentDto = {
   id: string;
   body: string;
-  anchor: Anchor;
+  /** Null for replies — they inherit the root note's thread anchor. */
+  anchor: Anchor | null;
+  parentId: string | null;
   createdAt: string;
   author: { name: string; image: string | null };
   mine: boolean;
@@ -46,6 +48,8 @@ type AnnotationsContextValue = {
   comments: CommentDto[];
   bookmarks: BookmarkDto[];
   resolutions: Map<string, Resolution>;
+  /** Total replies (any depth) under each root note. */
+  replyCounts: Map<string, number>;
   loading: boolean;
   draft: Draft | null;
   setDraft: (draft: Draft | null) => void;
@@ -53,6 +57,7 @@ type AnnotationsContextValue = {
   openComposer: () => void;
   closeComposer: () => void;
   submitComment: (body: string) => Promise<boolean>;
+  submitReply: (parentId: string, body: string) => Promise<boolean>;
   deleteComment: (id: string) => Promise<boolean>;
   toggleBookmark: () => Promise<void>;
   isDraftBookmarked: boolean;
@@ -190,13 +195,31 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
     const map = new Map<string, Resolution>();
     if (!post) return map;
     for (const comment of comments) {
-      map.set(comment.id, resolveAnchor(post, comment.anchor));
+      if (comment.anchor) map.set(comment.id, resolveAnchor(post, comment.anchor));
     }
     for (const bookmark of bookmarks) {
       map.set(bookmark.id, resolveAnchor(post, bookmark.anchor));
     }
     return map;
   }, [post, comments, bookmarks]);
+
+  const replyCounts = useMemo(() => {
+    const byId = new Map(comments.map((c) => [c.id, c]));
+    const counts = new Map<string, number>();
+    for (const comment of comments) {
+      if (!comment.parentId || comment.pending) continue;
+      let cursor = comment;
+      let guard = 0;
+      while (cursor.parentId && guard < 100) {
+        const parent = byId.get(cursor.parentId);
+        if (!parent) break;
+        cursor = parent;
+        guard += 1;
+      }
+      counts.set(cursor.id, (counts.get(cursor.id) ?? 0) + 1);
+    }
+    return counts;
+  }, [comments]);
 
   const announce = useCallback((message: string) => {
     setAnnouncement(message);
@@ -224,6 +247,7 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
         id: temporaryId,
         body,
         anchor,
+        parentId: null,
         createdAt: new Date().toISOString(),
         author: { name: session?.user.name ?? 'You', image: session?.user.image ?? null },
         mine: true,
@@ -256,10 +280,57 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
     [draft, slug, session, announce],
   );
 
+  const submitReply = useCallback(
+    async (parentId: string, body: string): Promise<boolean> => {
+      const temporaryId = `pending-reply-${Date.now()}`;
+      const optimistic: CommentDto = {
+        id: temporaryId,
+        body,
+        anchor: null,
+        parentId,
+        createdAt: new Date().toISOString(),
+        author: { name: session?.user.name ?? 'You', image: session?.user.image ?? null },
+        mine: true,
+        pending: true,
+      };
+      setComments((current) => [...current, optimistic]);
+
+      try {
+        const response = await fetch('/api/comments', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ slug, body, parentId }),
+        });
+        if (!response.ok) throw new Error(String(response.status));
+        const { comment } = (await response.json()) as { comment: CommentDto };
+        setComments((current) => current.map((c) => (c.id === temporaryId ? comment : c)));
+        announce('Reply posted');
+        return true;
+      } catch {
+        setComments((current) => current.filter((c) => c.id !== temporaryId));
+        announce('Replying failed — try again');
+        return false;
+      }
+    },
+    [slug, session, announce],
+  );
+
   const deleteComment = useCallback(
     async (id: string): Promise<boolean> => {
       const previous = comments;
-      setComments((current) => current.filter((c) => c.id !== id));
+      // Mirror the database cascade: drop the comment and every descendant.
+      const removed = new Set([id]);
+      let grew = true;
+      while (grew) {
+        grew = false;
+        for (const comment of comments) {
+          if (comment.parentId && removed.has(comment.parentId) && !removed.has(comment.id)) {
+            removed.add(comment.id);
+            grew = true;
+          }
+        }
+      }
+      setComments((current) => current.filter((c) => !removed.has(c.id)));
       const response = await fetch(`/api/comments/${id}`, { method: 'DELETE' });
       if (!response.ok) {
         setComments(previous);
@@ -330,6 +401,7 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
     comments,
     bookmarks,
     resolutions,
+    replyCounts,
     loading,
     draft,
     setDraft,
@@ -337,6 +409,7 @@ export function AnnotationsProvider({ slug, children }: { slug: string; children
     openComposer,
     closeComposer,
     submitComment,
+    submitReply,
     deleteComment,
     toggleBookmark,
     isDraftBookmarked,

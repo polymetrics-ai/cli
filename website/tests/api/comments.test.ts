@@ -145,6 +145,91 @@ describe('POST /api/comments', () => {
   });
 });
 
+describe('replies', () => {
+  async function createRoot(): Promise<string> {
+    mockSession.mockResolvedValue(user(owner));
+    const created = await POST(postRequest({ slug, body: 'root note', anchor: validAnchor() }));
+    expect(created.status).toBe(201);
+    const { comment } = await created.json();
+    return comment.id;
+  }
+
+  it('creates a reply without an anchor (201) and lists it with parentId', async () => {
+    const rootId = await createRoot();
+    mockSession.mockResolvedValue(user(stranger));
+    const created = await POST(postRequest({ slug, body: 'good point', parentId: rootId }));
+    expect(created.status).toBe(201);
+    const { comment } = await created.json();
+    expect(comment.parentId).toBe(rootId);
+    expect(comment.anchor).toBeNull();
+
+    const listed = await GET(getRequest());
+    const { comments } = await listed.json();
+    expect(comments.find((c: { id: string }) => c.id === comment.id).parentId).toBe(rootId);
+  });
+
+  it('allows replying to a reply (nested)', async () => {
+    const rootId = await createRoot();
+    mockSession.mockResolvedValue(user(stranger));
+    const reply = await (await POST(postRequest({ slug, body: 'first', parentId: rootId }))).json();
+    mockSession.mockResolvedValue(user(owner));
+    const nested = await POST(postRequest({ slug, body: 'second', parentId: reply.comment.id }));
+    expect(nested.status).toBe(201);
+    expect((await nested.json()).comment.parentId).toBe(reply.comment.id);
+  });
+
+  it('rejects a reply to an unknown parent with 400', async () => {
+    mockSession.mockResolvedValue(user(owner));
+    const response = await POST(postRequest({ slug, body: 'hi', parentId: randomUUID() }));
+    expect(response.status).toBe(400);
+  });
+
+  it('rejects a reply whose parent lives on another post', async () => {
+    const rootId = await createRoot();
+    mockSession.mockResolvedValue(user(owner));
+    const otherSlug = BLOG_POSTS[1].slug;
+    const response = await POST(postRequest({ slug: otherSlug, body: 'hi', parentId: rootId }));
+    expect(response.status).toBe(400);
+  });
+
+  it('rejects a root comment with neither anchor nor parentId', async () => {
+    mockSession.mockResolvedValue(user(owner));
+    const response = await POST(postRequest({ slug, body: 'floating' }));
+    expect(response.status).toBe(400);
+  });
+
+  it('cascades: deleting the root removes the whole thread', async () => {
+    const rootId = await createRoot();
+    mockSession.mockResolvedValue(user(stranger));
+    const reply = await (await POST(postRequest({ slug, body: 'r1', parentId: rootId }))).json();
+    const nested = await (
+      await POST(postRequest({ slug, body: 'r2', parentId: reply.comment.id }))
+    ).json();
+
+    mockSession.mockResolvedValue(user(owner));
+    const deleted = await DELETE(...deleteRequest(rootId));
+    expect(deleted.status).toBe(204);
+
+    const listed = await GET(getRequest());
+    const { comments } = await listed.json();
+    const ids = comments.map((c: { id: string }) => c.id);
+    expect(ids).not.toContain(rootId);
+    expect(ids).not.toContain(reply.comment.id);
+    expect(ids).not.toContain(nested.comment.id);
+  });
+
+  it('rate limits replies through the same bucket', async () => {
+    const rootId = await createRoot(); // consumes 1 of 5
+    mockSession.mockResolvedValue(user(owner));
+    for (let i = 0; i < 4; i++) {
+      const ok = await POST(postRequest({ slug, body: `reply ${i}`, parentId: rootId }));
+      expect(ok.status).toBe(201);
+    }
+    const blocked = await POST(postRequest({ slug, body: 'over', parentId: rootId }));
+    expect(blocked.status).toBe(429);
+  });
+});
+
 describe('DELETE /api/comments/[id]', () => {
   async function createComment(): Promise<string> {
     mockSession.mockResolvedValue(user(owner));
