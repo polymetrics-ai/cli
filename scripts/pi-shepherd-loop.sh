@@ -59,6 +59,11 @@ MAX_MINUTES="${MAX_MINUTES:-0}"
 COOLDOWN_SECONDS="${COOLDOWN_SECONDS:-5}"
 PI_EXTRA_FLAGS="${PI_EXTRA_FLAGS:-}"
 LOOP_CMD="${LOOP_CMD:-/pm-auto-loop}"
+# Research: default SEARXNG_BASE from the shell's SEARXNG_URL (name mismatch guard) and export.
+SEARXNG_BASE="${SEARXNG_BASE:-${SEARXNG_URL:-}}"; export SEARXNG_BASE
+# Subagent observability: locally-patched pi-sub-agent records child sessions here (opt-in).
+PI_SUBAGENT_SESSION_DIR="${PI_SUBAGENT_SESSION_DIR:-$STATE_DIR/sessions}"; export PI_SUBAGENT_SESSION_DIR
+STALL_MINUTES="${STALL_MINUTES:-20}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATE_DIR="$REPO_ROOT/.planning/auto-loop"
@@ -101,18 +106,31 @@ except Exception: print("")
 PY
 }
 
-run_orchestrator() { # $1=turn-message
-  local msg="$1" rc=0
+run_orchestrator() { # $1=turn-message — with stall watchdog (session mtime + child liveness)
+  local msg="$1" rc=0 pid sess
   # shellcheck disable=SC2086
-  "$PI_BIN" -p --model "$ORCH_MODEL" --tools "$PI_TOOLS" --approve $PI_EXTRA_FLAGS \
-    "$msg" >>"$LOG_FILE" 2>&1 || rc=$?
+  "$PI_BIN" -p --model "$ORCH_MODEL" --tools "$PI_TOOLS" --approve --session-dir "$STATE_DIR/sessions" $PI_EXTRA_FLAGS \
+    "$msg" >>"$LOG_FILE" 2>&1 & pid=$!
+  while kill -0 "$pid" 2>/dev/null; do
+    sleep 60
+    sess="$(ls -t "$STATE_DIR/sessions"/*.jsonl 2>/dev/null | head -1)"
+    if [[ -n "$sess" ]]; then
+      local age=$(( $(date +%s) - $(stat -f %m "$sess" 2>/dev/null || echo 0) ))
+      if (( age > STALL_MINUTES * 60 )) && ! pgrep -P "$pid" >/dev/null 2>&1; then
+        log "STALL GUARD: no session event ${age}s and no live children — killing turn pid $pid"
+        kill -TERM "$pid" 2>/dev/null; sleep 5; kill -KILL "$pid" 2>/dev/null || true
+        return 124
+      fi
+    fi
+  done
+  wait "$pid" 2>/dev/null || rc=$?
   return $rc
 }
 
 run_validator() {
   local rc=0
   # shellcheck disable=SC2086
-  "$VALIDATOR_BIN" -p $VALIDATOR_ARGS "$(cat "$VAL_PROMPT")" >>"$LOG_FILE" 2>&1 || rc=$?
+  "$VALIDATOR_BIN" -p $VALIDATOR_ARGS --session-dir "$STATE_DIR/sessions" "$(cat "$VAL_PROMPT")" >>"$LOG_FILE" 2>&1 || rc=$?
   return $rc
 }
 
@@ -159,6 +177,7 @@ VALIDATOR CORRECTION (apply first): $correction"
 
   log "── turn $i: VALIDATOR ──"
   run_validator || log "turn $i: validator returned non-zero"
+  "$REPO_ROOT/scripts/loop-trace.sh" distill >/dev/null 2>&1 && log "turn $i: trace digest written (see .planning/auto-loop/trace/INDEX.md)" || true
 
   verdict="$(json_field "$VERDICT_JSON" verdict)"
   score="$(json_field "$VERDICT_JSON" step_score)"

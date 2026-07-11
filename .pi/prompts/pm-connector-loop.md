@@ -46,3 +46,9 @@ the audited `searxng` connector.
 When driven by `scripts/pi-shepherd-loop.sh`, the Shepherd supervision contract in
 `.pi/prompts/pm-auto-loop.md` applies verbatim (independent per-turn validation, `VALIDATOR
 CORRECTION` handling, plain-string `RUN.json.terminal`, pre-provisioned env-credential rule).
+
+## One stage per invocation
+
+This alias inherits the pm-auto-loop hard contract: advance EXACTLY ONE stage per driver
+invocation, then STOP and return control so the independent Shepherd validates the turn. Never
+chain execute/verify/review/integrate or roll into the next slice within one invocation.

@@ -30,6 +30,16 @@ Required reading before acting:
 
 ## Every turn, in order
 
+0. **ONE STAGE PER INVOCATION — THIS IS A HARD CONTRACT.** You are driven by
+   `scripts/pi-shepherd-loop.sh`, which re-invokes you once per stage and runs an INDEPENDENT
+   Shepherd validator between your invocations. Advance EXACTLY ONE stage this invocation
+   (one RECONCILE + one stage transition, dispatching at most the subagents that single stage
+   needs), persist state, then END YOUR TURN and return control. Do NOT run the task loop
+   internally, do NOT chain stages (e.g. execute→verify→review→integrate) in one invocation, do NOT
+   proceed to the next slice. Chaining stages silently bypasses the Shepherd — the layer that
+   catches false-green verifications and unauthorized scope changes. The driver re-invokes you for
+   the next stage after the Shepherd's verdict.
+
 1. **RECONCILE FIRST.** Run the reconciler from `pi-autonomous-orchestration-loop.md`: load
    `.planning/auto-loop/RUN.json` and `ORCHESTRATION-STATE.json`, then verify every claimed stage
    against ground truth (PLAN/VERIFICATION/SUMMARY artifacts, `git log`, and `gh issue/pr` state).
@@ -112,3 +122,9 @@ reconciled `RUN.json`/`ORCHESTRATION-STATE.json` and stating the current stage p
   **boundaries** (write scope, hard stops). The Shepherd scores dispatches against these fields.
 - After completing a turn's work, run `scripts/loop-trace.sh distill` so the turn's digest lands
   in the trace store for the validator, the next RECONCILE, and the human.
+
+## End of turn
+
+After advancing ONE stage and persisting `RUN.json`/`ORCHESTRATION-STATE.json`, STOP. Your turn is
+over — the driver checkpoints, the Shepherd validates, and you are re-invoked for the next stage.
+Never continue past a single stage transition even if the next stage looks trivial or ready.
