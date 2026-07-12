@@ -593,7 +593,9 @@ ACTIVE_ROLE_PID=""
 ACTIVE_ROLE_PGID=""
 ACTIVE_ROLE_GROUP_READY=0
 ACTIVE_ROLE_READY_FILE=""
-ACTIVE_ROLE_GO_READY_FILE=""
+ROLE_GO_FD=19
+ACTIVE_ROLE_GO_FIFO=""
+ACTIVE_ROLE_GO_FD_OPEN=0
 ACTIVE_ROLE_OUTPUT_FILE=""
 TURN_DEADLINE_MONO=0
 ACTIVE_SECONDS_BASE=0
@@ -719,11 +721,15 @@ drain_role_group() {
 }
 
 cleanup_role_artifacts() {
+  if (( ACTIVE_ROLE_GO_FD_OPEN == 1 )); then
+    exec 19>&-
+    ACTIVE_ROLE_GO_FD_OPEN=0
+  fi
   [[ -z "$ACTIVE_ROLE_READY_FILE" ]] || rm -f "$ACTIVE_ROLE_READY_FILE" 2>/dev/null || true
-  [[ -z "$ACTIVE_ROLE_GO_READY_FILE" ]] || rm -f "$ACTIVE_ROLE_GO_READY_FILE" 2>/dev/null || true
+  [[ -z "$ACTIVE_ROLE_GO_FIFO" ]] || rm -f "$ACTIVE_ROLE_GO_FIFO" 2>/dev/null || true
   [[ -z "$ACTIVE_ROLE_OUTPUT_FILE" ]] || rm -f "$ACTIVE_ROLE_OUTPUT_FILE" 2>/dev/null || true
   ACTIVE_ROLE_READY_FILE=""
-  ACTIVE_ROLE_GO_READY_FILE=""
+  ACTIVE_ROLE_GO_FIFO=""
   ACTIVE_ROLE_OUTPUT_FILE=""
 }
 
@@ -925,25 +931,59 @@ PY
 }
 
 start_role_group() { # role command [arguments...]
-  local role="$1" ready_file go_ready_file pid pgid go_pid role_state attempt
+  local role="$1" ready_file go_fifo pid pgid attempt remaining
   shift
   ready_file="$STATE_DIR/.role-ready.$TURN_ID.$role"
-  go_ready_file="$STATE_DIR/.role-go-ready.$TURN_ID.$role"
+  go_fifo="$STATE_DIR/.role-go.$TURN_ID.$role"
   ACTIVE_ROLE_READY_FILE="$ready_file"
-  ACTIVE_ROLE_GO_READY_FILE="$go_ready_file"
-  python3 - "$ready_file" "$go_ready_file" "$CONTROL_JSON" "$CONTROL_FENCE" "$TURN_ID" \
-    "$role" "$TURN_TIMEOUT_SECONDS" "$@" >>"$LOG_FILE" 2>&1 <<'PY' &
+  ACTIVE_ROLE_GO_FIFO="$go_fifo"
+  remaining=$((TURN_DEADLINE_MONO - SECONDS))
+  if (( remaining <= 0 )); then
+    controller_emergency TURN_DEADLINE "$role exhausted the persisted turn deadline before startup" halted
+    return 124
+  fi
+  if [[ "${AUTO_LOOP_CONTROL_FD:-}" == "$ROLE_GO_FD" ]]; then
+    controller_emergency ROLE_START_FAILED "role authorization descriptor collides with the controller lock" recovery_required
+    return 126
+  fi
+  # Create the rendezvous with owner-only permissions, open both ends in the controller, and unlink
+  # it before the role exists. The inherited descriptor is then a private, one-use kernel capability:
+  # a pathname preseed can deny startup but cannot manufacture authorization.
+  if ! (umask 077; mkfifo -m 600 "$go_fifo") || [[ ! -p "$go_fifo" || -L "$go_fifo" ]]; then
+    controller_emergency ROLE_START_FAILED "could not create private $role authorization channel" recovery_required
+    return 126
+  fi
+  if ! exec 19<>"$go_fifo"; then
+    controller_emergency ROLE_START_FAILED "could not open private $role authorization channel" recovery_required
+    return 126
+  fi
+  ACTIVE_ROLE_GO_FD_OPEN=1
+  if ! rm -f "$go_fifo"; then
+    controller_emergency ROLE_START_FAILED "could not unlink private $role authorization channel" recovery_required
+    return 126
+  fi
+  ACTIVE_ROLE_GO_FIFO=""
+  python3 - "$ready_file" "$ROLE_GO_FD" "$CONTROL_JSON" "$CONTROL_FENCE" "$TURN_ID" \
+    "$role" "$remaining" "$@" >>"$LOG_FILE" 2>&1 <<'PY' &
 import json
 import os
-import signal
+import select
 import stat
 import sys
 import time
 
-ready, go_ready, control_path, fence_text, expected_turn, role, timeout_raw, command, *arguments = sys.argv[1:]
+ready, go_fd_raw, control_path, fence_text, expected_turn, role, remaining_raw, command, *arguments = sys.argv[1:]
 parent_pid = os.getppid()
-timeout = max(1, int(timeout_raw))
+go_fd = int(go_fd_raw)
+remaining = max(1, int(remaining_raw))
 os.setsid()
+
+try:
+    go_info = os.fstat(go_fd)
+except OSError:
+    raise SystemExit(125)
+if not stat.S_ISFIFO(go_info.st_mode):
+    raise SystemExit(125)
 
 def write_all(fd, payload):
     written = 0
@@ -1003,28 +1043,35 @@ finally:
     os.close(fd)
 
 # Stay inert until the canonical control record contains this exact fence, turn, role, PID, and
-# PGID. Then stop in the kernel. Only the controller, after its bind transaction has returned from
-# directory fsync, sends CONT. A preseeded marker can cause denial only; it cannot resume this role.
-deadline = time.monotonic() + timeout
+# PGID. Authorization also requires GO on the unlinked inherited FIFO. Only the controller can
+# publish that capability, after its bind transaction returns from directory fsync. Use only the
+# remaining shared turn budget so a late validator never receives a fresh per-role timeout.
+deadline = time.monotonic() + remaining
+authorization = bytearray()
 while True:
-    if os.getppid() != parent_pid or time.monotonic() >= deadline:
+    now = time.monotonic()
+    if os.getppid() != parent_pid or now >= deadline:
         raise SystemExit(125)
-    if is_exact_binding(read_control()):
+    if not is_exact_binding(read_control()):
+        time.sleep(min(0.01, max(0.0, deadline - now)))
+        continue
+    readable, _, _ = select.select([go_fd], [], [], min(0.05, max(0.0, deadline - now)))
+    if not readable:
+        continue
+    chunk = os.read(go_fd, 4 - len(authorization))
+    if not chunk:
+        raise SystemExit(125)
+    authorization.extend(chunk)
+    if len(authorization) > 3 or bytes(authorization) not in (b"G", b"GO", b"GO\n"):
+        raise SystemExit(125)
+    if authorization == b"GO\n":
         break
-    time.sleep(0.01)
 
-fd = os.open(go_ready, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-try:
-    write_all(fd, f"{os.getpid()}\n".encode())
-    os.fsync(fd)
-finally:
-    os.close(fd)
-os.kill(os.getpid(), signal.SIGSTOP)
-
-# CONT is only a wake-up. Re-derive authority after resumption so stale/moved state, parent death,
-# or a deadline that elapsed while stopped can never execute the provider.
+# Re-derive every authority predicate after consuming the capability. Stale/moved state, parent
+# death, malformed input, or an elapsed shared deadline must fail before provider execution.
 if os.getppid() != parent_pid or time.monotonic() >= deadline or not is_exact_binding(read_control()):
     raise SystemExit(125)
+os.close(go_fd)
 os.execvp(command, [command, *arguments])
 PY
   pid=$!
@@ -1053,35 +1100,12 @@ PY
     controller_emergency TURN_DEADLINE "$role exhausted the persisted turn deadline before authorization" halted
     return 124
   fi
-  role_state=""
-  for ((attempt=0; attempt<200; attempt++)); do
-    if [[ -s "$go_ready_file" ]]; then
-      role_state="$(ps -o stat= -p "$pid" 2>/dev/null | tr -d '[:space:]' || true)"
-      [[ "$role_state" == T* ]] && break
-    fi
-    leader_process_exited "$pid" && break
-    if (( SECONDS >= TURN_DEADLINE_MONO )); then
-      controller_emergency TURN_DEADLINE "$role exhausted the persisted turn deadline before GO" halted
-      return 124
-    fi
-    sleep 0.01
-  done
-  go_pid="$(cat "$go_ready_file" 2>/dev/null || true)"
-  if [[ ! "$go_pid" =~ ^[0-9]+$ || "$go_pid" -ne "$pid" || "$role_state" != T* ]]; then
-    controller_emergency ROLE_START_FAILED \
-      "could not establish stopped $role GO handshake (marker=${go_pid:-missing}, state=${role_state:-missing})" \
-      recovery_required
+  if ! control_state assert >/dev/null || ! printf 'GO\n' >&19; then
+    controller_emergency ROLE_START_FAILED "could not authorize durably bound $role process group" recovery_required
     return 126
   fi
-  if (( SECONDS >= TURN_DEADLINE_MONO )); then
-    controller_emergency TURN_DEADLINE "$role exhausted the persisted turn deadline before GO" halted
-    return 124
-  fi
-  if ! control_state assert >/dev/null || ! rm -f "$go_ready_file" || ! kill -CONT "$pid" 2>/dev/null; then
-    controller_emergency ROLE_START_FAILED "could not release durably bound $role process group" recovery_required
-    return 126
-  fi
-  ACTIVE_ROLE_GO_READY_FILE=""
+  exec 19>&-
+  ACTIVE_ROLE_GO_FD_OPEN=0
   return 0
 }
 

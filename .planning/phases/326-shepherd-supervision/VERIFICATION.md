@@ -1,6 +1,6 @@
 # Verification: Shepherd Supervision
 
-Status: post-PR stability correction passes local gates; exact-head independent review pending.
+Status: final private-capability correction passes local gates; exact-head independent review pending.
 
 ```bash
 bash -n scripts/pi-shepherd-loop.sh scripts/tests/pi-shepherd-supervision.sh
@@ -42,19 +42,25 @@ phases and later canary gates land.
 
 ## Stability correction result — 2026-07-12
 
-- Filesystem role authorization has been removed. The exact bound role kernel-stops itself and can
-  resume only after the controller's durable bind returns; it revalidates all authority before exec.
+- Filesystem role authorization and the intermediate `SIGSTOP`/`SIGCONT` handshake have both been
+  removed. A mode-0600 FIFO is opened and unlinked before role spawn; the exact bound role can
+  consume its one-use inherited GO capability only after the controller's durable bind returns.
+- The role receives only the remaining shared turn budget and revalidates parent liveness,
+  canonical binding, token shape, and deadline immediately before exec. A late validator cannot
+  receive a fresh full timeout.
 - Leader completion distinguishes explicit zombies from live/uncertain processes and reaps each
   leader at most once.
 - A PID/PGID mismatch never signals the untrusted PID; it retains durable unresolved evidence for
   authenticated recovery.
 - Invalid/duplicate/empty/unknown focused-test filters fail rather than reporting a zero-test green.
-- Current-design repeated evidence: kernel-GO adversarial matrix 20/20, failed-HALT/instant
-  validator 50/50, shared validator deadline 10/10, two full 22-scenario suites, Phase 0 controls,
-  and `make agent-loop-test`.
+- Current-design repeated evidence: focused private-GO/deadline suite, a ten-way parallel risk
+  matrix 10/10, two full 22-scenario suites, Bash syntax, ShellCheck warnings, Phase 0 controls,
+  Go unit/race checks, and the fixed-snapshot `make agent-loop-test` all pass. Earlier
+  failed-HALT/instant-validator 50/50 and shared-validator-deadline 10/10 evidence remains valid.
 - Final `make verify` passes formatting/tidy, vet, all Go tests, build, docs validation, CLI smoke,
   lint, 547 connector definitions, race/control gates, and the expanded 22-scenario harness.
 - The SIGKILL oracle directly validates the inherited canonical lock descriptor and waits for
-  durable binding/process disappearance without acquiring or changing that lock.
+  durable binding/process disappearance without acquiring or changing that lock. The private-GO
+  oracle also sends the formerly exploitable external `SIGCONT` and proves it has no authority.
 
 Pending delivery actions: exact-head independent local review, push, CI, and parent integration.

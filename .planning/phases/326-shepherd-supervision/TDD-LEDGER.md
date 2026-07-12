@@ -149,16 +149,38 @@ RED command/output will be appended after the tests exist and before production 
 - RED deterministically reproduced all control failures: preseed escaped to a paused completed turn,
   controller death never reached a safe pre-GO barrier, and simulated PGID movement killed the
   now-untrusted role PID. Invalid, duplicate, empty, and unknown filters are separately rejected.
-- The filesystem authorization path was removed. An inert role now re-derives its exact durable
-  fence/turn/role/PID/PGID binding, writes a readiness marker, and kernel-stops itself. Only after the
-  controller bind call has returned from directory fsync and the exact PID is observed stopped does
-  the controller send `CONT`; the role revalidates parent liveness, deadline, and binding after
-  resume before `exec`.
+- The filesystem authorization path was removed. The first correction made the role re-derive its
+  exact durable fence/turn/role/PID/PGID binding and kernel-stop itself until the controller sent
+  `CONT` after bind returned from directory fsync. This revision was intentionally held from parent
+  integration until an exact-head adversarial review completed.
 - A PID/PGID mismatch now preserves recovery evidence without signalling either untrusted identity.
   The inherited-lock oracle only validates the descriptor/inode; rejection by a fresh controller
   after the original controller and role leader are proven gone establishes that the untouched
   descendant retained the lock.
-- GREEN evidence on the corrected design: kernel-GO adversarial matrix 20/20, failed-HALT/instant
-  validator 50/50, shared validator deadline 10/10, two complete 22-scenario suites, Phase 0
-  controls, `make agent-loop-test`, and final `make verify`. All provider processes are synthetic
-  and test-owned.
+- GREEN evidence on that intermediate design: kernel-GO adversarial matrix 20/20,
+  failed-HALT/instant validator 50/50, shared validator deadline 10/10, two complete 22-scenario
+  suites, Phase 0 controls, `make agent-loop-test`, and final `make verify`. All provider processes
+  were synthetic and test-owned.
+
+## Final private-capability correction — 2026-07-12
+
+- Exact-head review of `ad8406a8` found two further P1s despite the green intermediate suite. Any
+  same-UID process could send `SIGCONT` to the stopped role, and each newly spawned role calculated
+  its deadline from a fresh full `TURN_TIMEOUT_SECONDS`; a late validator could therefore outlive
+  the one persisted turn deadline. The reviewer dynamically reproduced both before integration.
+- RED now sends an external `SIGCONT` in the durable-bind window and then kills the controller. It
+  requires that the provider never starts and that the inert role disappears. The existing delayed
+  validator case separately proves that orchestrator and validator share one bounded turn budget.
+- GREEN replaces signals and published authorization files with a mode-0600 FIFO that the
+  controller opens and unlinks before spawning the role. The inherited descriptor is a private,
+  one-use kernel capability. The role requires exact canonical binding plus the bounded `GO\n`
+  token, then revalidates parent liveness, shared deadline, and binding immediately before `exec`.
+  A preseeded path can only make startup fail closed.
+- `start_role_group` passes `TURN_DEADLINE_MONO - SECONDS`, never a fresh role timeout. The
+  controller publishes GO only after `control_state bind` has returned from file and directory
+  fsync and a final fence/deadline check succeeds.
+- Final-capability evidence before exact-head review: focused authorization/deadline set passes;
+  the post-bind pre-GO oracle sends the formerly exploitable external `SIGCONT`; ten parallel
+  repetitions of the four-risk matrix pass 10/10; two complete 22-scenario suites pass; Bash
+  syntax, ShellCheck warning, Phase 0, Go unit/race, `make agent-loop-test`, and complete
+  `make verify` gates pass. The production Phase 0 fuse remains closed.

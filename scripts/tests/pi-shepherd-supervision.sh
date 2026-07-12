@@ -4,6 +4,7 @@ set -u
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 REAL_PYTHON_BIN="$(command -v python3)"
 REAL_PS_BIN="$(command -v ps)"
+REAL_MKFIFO_BIN="$(command -v mkfifo)"
 TEST_TMP="$(mktemp -d)"
 failures=0
 executed_tests=0
@@ -47,7 +48,7 @@ cleanup() {
       [[ -n "${nonce:-}" ]] || continue
       kill_owned_process "$pid" "$nonce"
     done <"$pid_file"
-  done < <(find "$TEST_TMP" \( -name child-pids -o -name controller-pids -o -name model-pids \) -type f 2>/dev/null)
+  done < <(find "$TEST_TMP" \( -name child-pids -o -name controller-pids -o -name model-pids -o -name role-pids \) -type f 2>/dev/null)
   if [[ "${KEEP_TEST_TMP:-0}" == "1" ]]; then
     printf 'pi-shepherd-supervision: preserved fixtures at %s\n' "$TEST_TMP" >&2
   else
@@ -121,6 +122,7 @@ prepare_fixture() {
   : >"$root/child-pids"
   : >"$root/model-pids"
   : >"$root/controller-pids"
+  : >"$root/role-pids"
   printf 'shepherd-test-%s-%s-%s\n' "$$" "$RANDOM" "${root##*/}" >"$root/nonce"
 
   cat >"$root/scripts/loop-trace.sh" <<'SH'
@@ -197,17 +199,26 @@ SH
   cat >"$root/bin/python3" <<'SH'
 #!/usr/bin/env bash
 set -u
-if [[ "${2:-}" == *'.role-ready.'* && "${FAKE_PRESEED_ROLE_GO:-0}" == "1" ]]; then
-  printf '%s\n' "$$" >"${3:?missing role go path}"
-  printf 'preseeded\n' >"$PRESEED_PROBE_FILE"
+if [[ "${2:-}" == *'.role-ready.'* ]]; then
+  printf '%s %s\n' "$$" "$REAL_PYTHON_BIN" >>"$ROLE_PID_FILE"
 fi
 if [[ "${2:-}" == *'.role-ready.'* && "${FAKE_LAUNCH_DELAY:-0}" != "0" ]]; then
   printf 'launching\n' >"$LAUNCH_PROBE_FILE"
   /bin/sleep "$FAKE_LAUNCH_DELAY"
 fi
 if [[ "${3:-}" == "bind" && "${FAKE_BIND_DELAY:-0}" != "0" ]]; then
+  printf '%s %s\n' "$$" "$TEST_REPO/bin/python3" >>"$CONTROLLER_PID_FILE"
   printf 'binding\n' >"$BIND_PROBE_FILE"
   /bin/sleep "$FAKE_BIND_DELAY"
+  "$REAL_PYTHON_BIN" "$@"
+  exit $?
+fi
+if [[ "${3:-}" == "assert" && "${FAKE_ASSERT_DELAY:-0}" != "0" ]]; then
+  printf '%s %s\n' "$$" "$TEST_REPO/bin/python3" >>"$CONTROLLER_PID_FILE"
+  printf 'asserting\n' >"$ASSERT_PROBE_FILE"
+  /bin/sleep "$FAKE_ASSERT_DELAY"
+  "$REAL_PYTHON_BIN" "$@"
+  exit $?
 fi
 exec "$REAL_PYTHON_BIN" "$@"
 SH
@@ -221,17 +232,25 @@ if [[ "${1:-}" == "-o" && "${2:-}" == "pgid=" && "${3:-}" == "-p" && \
   printf '%s\n' "$(( ${4:?missing pid} + 100000 ))"
   exit 0
 fi
-if [[ "${1:-}" == "-o" && "${2:-}" == "stat=" && "${3:-}" == "-p" && \
-      "${FAKE_GO_PROBE_DELAY:-0}" != "0" && ! -e "$GO_PROBE_ONCE_FILE" ]] && \
-   find "$TEST_REPO/.planning/auto-loop" -name '.role-go-ready.*' -type f -size +0c -print -quit 2>/dev/null | grep -q .; then
-  printf '%s %s\n' "$$" "$TEST_REPO/bin/ps" >>"$CONTROLLER_PID_FILE"
-  : >"$GO_PROBE_ONCE_FILE"
-  printf 'probing\n' >"$GO_PROBE_FILE"
-  /bin/sleep "$FAKE_GO_PROBE_DELAY"
-fi
 exec "$REAL_PS_BIN" "$@"
 SH
   chmod +x "$root/bin/ps"
+
+  cat >"$root/bin/mkfifo" <<'SH'
+#!/usr/bin/env bash
+set -u
+target=""
+for argument in "$@"; do
+  target="$argument"
+done
+if [[ "${FAKE_PRESEED_ROLE_GO:-0}" == "1" ]]; then
+  printf 'preseeded\n' >"$target"
+  printf 'preseeded\n' >"$PRESEED_PROBE_FILE"
+  exit 1
+fi
+exec "$REAL_MKFIFO_BIN" "$@"
+SH
+  chmod +x "$root/bin/mkfifo"
 
   cat >"$root/bin/pi" <<'SH'
 #!/usr/bin/env bash
@@ -362,6 +381,7 @@ driver_env() {
     "CHILD_PID_FILE=$root/child-pids"
     "MODEL_PID_FILE=$root/model-pids"
     "CONTROLLER_PID_FILE=$root/controller-pids"
+    "ROLE_PID_FILE=$root/role-pids"
     "NATURAL_EXIT_LOG=$root/natural-exits"
     "TEST_NONCE=$(cat "$root/nonce")"
     "TEST_REPO=$root"
@@ -370,19 +390,19 @@ driver_env() {
     "FAKE_MODEL_MISSING=${FAKE_MODEL_MISSING:-0}"
     "FAKE_LAUNCH_DELAY=${FAKE_LAUNCH_DELAY:-0}"
     "FAKE_BIND_DELAY=${FAKE_BIND_DELAY:-0}"
+    "FAKE_ASSERT_DELAY=${FAKE_ASSERT_DELAY:-0}"
     "FAKE_PRESEED_ROLE_GO=${FAKE_PRESEED_ROLE_GO:-0}"
-    "FAKE_GO_PROBE_DELAY=${FAKE_GO_PROBE_DELAY:-0}"
     "DESCENDANT_LOCK_READY_FILE=${DESCENDANT_LOCK_READY_FILE:-}"
     "MODEL_PROBE_FILE=$root/model-probe"
     "MODEL_COMPLETION_FILE=$root/model-completion"
     "LAUNCH_PROBE_FILE=$root/launch-probe"
     "BIND_PROBE_FILE=$root/bind-probe"
+    "ASSERT_PROBE_FILE=$root/assert-probe"
     "PRESEED_PROBE_FILE=$root/preseed-probe"
     "PGID_MISMATCH_ARM_FILE=$root/pgid-mismatch-arm"
-    "GO_PROBE_FILE=$root/go-probe"
-    "GO_PROBE_ONCE_FILE=$root/go-probe-once"
     "REAL_PYTHON_BIN=$REAL_PYTHON_BIN"
     "REAL_PS_BIN=$REAL_PS_BIN"
+    "REAL_MKFIFO_BIN=$REAL_MKFIFO_BIN"
     "MAX_ITERATIONS=${MAX_ITERATIONS:-1}"
     "MAX_TURNS=${MAX_TURNS:-20}"
     "TURN_TIMEOUT_SECONDS=${TURN_TIMEOUT_SECONDS:-30}"
@@ -848,33 +868,42 @@ test_preseeded_role_go_cannot_launch_provider() {
 }
 
 test_controller_sigkill_before_role_go_never_launches_provider() {
-  local root driver leader probe_pid state
+  local root driver leader assert_pid
   root="$(mktemp -d "$TEST_TMP/pre-go-sigkill.XXXXXX")"
   prepare_fixture "$root"
 
   (
-    DRIVER_EXEC=1 FAKE_GO_PROBE_DELAY=5 TURN_TIMEOUT_SECONDS=15 \
+    DRIVER_EXEC=1 FAKE_ASSERT_DELAY=3 TURN_TIMEOUT_SECONDS=15 \
       driver_env "$root" "synthetic pre-go sigkill" >"$root/stdout" 2>"$root/stderr"
   ) &
   driver=$!
   register_controller "$root" "$driver"
-  if ! wait_for_file "$root/go-probe"; then
-    fail "pre-go SIGKILL fixture did not reach the stopped role handshake"
+  if ! wait_for_file "$root/assert-probe"; then
+    fail "pre-go SIGKILL fixture did not reach the post-bind authorization window"
     kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
     wait "$driver" 2>/dev/null || true
     return
   fi
   leader="$(control_field "$root" active_turn.leader_pid)"
-  printf '%s %s\n' "$leader" "$REAL_PYTHON_BIN" >>"$root/controller-pids"
+  # The former SIGSTOP/SIGCONT handshake could be released by any same-UID process. A stray or
+  # hostile CONT must now be irrelevant because only the inherited FIFO capability authorizes.
+  signal_owned_process CONT "$leader" "$REAL_PYTHON_BIN"
+  /bin/sleep 0.1
+  if [[ -s "$root/events" ]]; then
+    fail "external SIGCONT authorized the pre-go role"
+  fi
   signal_owned_process KILL "$driver" "$root/scripts/pi-shepherd-loop.sh"
   wait "$driver" 2>/dev/null || true
-  probe_pid="$(awk '$2 ~ /\/bin\/ps$/ { pid=$1 } END { print pid }' "$root/controller-pids")"
-  kill_owned_process "$probe_pid" "$root/bin/ps"
-  state="$($REAL_PS_BIN -o stat= -p "$leader" 2>/dev/null | tr -d '[:space:]' || true)"
-  if [[ -s "$root/events" || "$state" != T* ]]; then
-    fail "controller SIGKILL released or lost the pre-go role: state=$state control=$(control_snapshot "$root")"
+  assert_pid="$(awk '$2 ~ /\/bin\/python3$/ { pid=$1 } END { print pid }' "$root/controller-pids")"
+  if ! wait_owned_gone "$assert_pid" "$root/bin/python3" 500; then
+    fail "post-bind assertion helper did not terminate after controller SIGKILL"
   fi
-  kill_owned_process "$leader" "$REAL_PYTHON_BIN"
+  if ! wait_owned_gone "$leader" "$REAL_PYTHON_BIN" 500; then
+    fail "private-GO role did not terminate after controller SIGKILL"
+  fi
+  if [[ -s "$root/events" ]] || owned_process_alive "$leader" "$REAL_PYTHON_BIN"; then
+    fail "controller SIGKILL authorized or orphaned the pre-go role: control=$(control_snapshot "$root")"
+  fi
 }
 
 test_signal_drains_group_and_requires_recovery() {
