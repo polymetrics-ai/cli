@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "phase": "326-shepherd-supervision",
+  "status": "planned",
+  "issue": 326,
+  "parent_issue": 323,
+  "branch": "fix/326-shepherd-supervision",
+  "base_commit": "aef7fe862522c065d74a9608be7bc259772bb2bb",
+  "production_fuse": "closed",
+  "verification_passed": false,
+  "next": "add_red_supervision_harness",
+  "human_gate": "parent PR merge to main"
+}
