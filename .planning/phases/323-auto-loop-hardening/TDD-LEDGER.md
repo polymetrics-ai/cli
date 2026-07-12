@@ -19,8 +19,8 @@
   orchestrator executed its issue-first/TDD planning requirements in `PLAN.md`.
 - First orchestration decision: `local_critical_path` to create the parent branch, durable plan,
   draft parent PR, and complete child issue contracts before mutating workers start.
-- Parent issue checkpoint: draft PR #324 and fourteen native sub-issues #325-#338 created. The
-  architecture pass split phases 2, 4, 6, and 7 before coding. This remains a planning-only
+- Parent issue checkpoint: draft PR #324 and fifteen native sub-issues #325-#339 created. The
+  architecture pass split phases 1, 2, 4, 6, and 7 before coding. This remains a planning-only
   checkpoint; Phase 0 red evidence is not yet claimed.
 
 ## Required red/green matrix

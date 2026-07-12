@@ -25,7 +25,7 @@
     {
       "cycle": "issue-roster",
       "decision": "local_critical_path",
-      "reason": "Draft parent PR #324 and fourteen native child issues #325-#338 were created before the first mutating worker dispatch."
+      "reason": "Draft parent PR #324 and fifteen native child issues #325-#339 were created before the first mutating worker dispatch."
     },
     {
       "cycle": "phase-0-dispatch",

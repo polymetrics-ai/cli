@@ -42,9 +42,16 @@
       "decision": "not_spawned_dependency_blocked"
     },
     {
-      "number": 327,
+      "number": 339,
       "status": "planned",
       "dependencies": [326],
+      "write_scope": ["internal/agentloop/controller process/guardian/takeover", "cmd/loopctl", "driver controller adapters"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 327,
+      "status": "planned",
+      "dependencies": [339],
       "write_scope": ["internal/agentloop/state", "agentloop state schemas"],
       "decision": "not_spawned_dependency_blocked"
     },
@@ -121,7 +128,7 @@
     {
       "number": 334,
       "status": "planned",
-      "dependencies": [325, 326, 327, 335, 328, 329, 336, 330, 331, 337, 332, 338, 333],
+      "dependencies": [325, 326, 339, 327, 335, 328, 329, 336, 330, 331, 337, 332, 338, 333],
       "write_scope": ["internal/agentloop/replay", "scripts/tests", "final phase evidence"],
       "decision": "not_spawned_dependency_blocked"
     }
@@ -142,7 +149,7 @@
     {
       "timestamp": "2026-07-12T07:38:49Z",
       "decision": "local_critical_path",
-      "issue_numbers": [325, 326, 327, 335, 328, 329, 336, 330, 331, 337, 332, 338, 333, 334],
+      "issue_numbers": [325, 326, 339, 327, 335, 328, 329, 336, 330, 331, 337, 332, 338, 333, 334],
       "reason": "Create and natively link complete child issue contracts before Phase 0 worker dispatch."
     },
     {
@@ -187,6 +194,18 @@
       "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
     },
     {
+      "number": 339,
+      "url": "https://github.com/polymetrics-ai/cli/issues/339",
+      "branch": "fix/339-controller-takeover",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop/controller process/guardian/takeover", "cmd/loopctl", "driver controller adapters"],
+      "worker_directory": "pending",
+      "verification": "blocked by #326",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
       "number": 327,
       "url": "https://github.com/polymetrics-ai/cli/issues/327",
       "branch": "fix/327-transactional-state",
@@ -195,7 +214,7 @@
       "status": "planned",
       "write_scope": ["internal/agentloop/state", "agentloop state schemas"],
       "worker_directory": "pending",
-      "verification": "blocked by #326",
+      "verification": "blocked by #339",
       "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
     },
     {
@@ -341,5 +360,5 @@
     "quality gate reductions",
     "secret access"
   ],
-  "updated_at": "2026-07-12T07:46:44Z"
+  "updated_at": "2026-07-12T08:05:25Z"
 }
