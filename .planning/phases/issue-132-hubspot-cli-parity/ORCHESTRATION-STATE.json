@@ -1,0 +1,247 @@
+{
+  "parent_issue": {
+    "number": 132,
+    "url": "https://github.com/polymetrics-ai/cli/issues/132",
+    "title": "HubSpot CLI feature parity parent roadmap",
+    "state": "open"
+  },
+  "parent_branch": "feat/132-hubspot-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/221",
+    "base": "main",
+    "head": "feat/132-hubspot-cli-parity",
+    "draft": true,
+    "state": "open"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-api-harness",
+    "status": "waiting_for_workers"
+  },
+  "ready_queue": [
+    {
+      "number": 134,
+      "status": "worker_ready",
+      "dependencies": ["parent_pr_open"],
+      "write_scope": [".planning/phases/issue-134-hubspot-cli-surface-metadata/**", "internal/connectors/defs/hubspot/cli_surface.json", "internal/connectors/defs/hubspot/metadata.json", "internal/connectors/defs/hubspot/spec.json", "internal/connectors/defs/hubspot/streams.json", "internal/connectors/defs/hubspot/docs.md", "cmd/connectorgen/**", "internal/connectors/engine/**"],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 137,
+      "status": "planned",
+      "dependencies": [134],
+      "write_scope": ["internal/connectors/defs/hubspot/api_surface.json", "cmd/connectorgen/**"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 140,
+      "status": "planned",
+      "dependencies": [137],
+      "write_scope": ["internal/connectors/defs/hubspot/writes.json", "internal/connectors/defs/hubspot/fixtures/writes/**", "cmd/**", "internal/**"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 136,
+      "status": "planned",
+      "dependencies": [134, 137],
+      "write_scope": ["internal/connectors/defs/hubspot/streams.json", "internal/connectors/defs/hubspot/schemas/**", "internal/connectors/defs/hubspot/fixtures/streams/**"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 138,
+      "status": "planned",
+      "dependencies": [134, 137],
+      "write_scope": ["internal/connectors/defs/hubspot/cli_surface.json", "internal/connectors/engine/direct_read.go", "internal/connectors/commandrunner/**"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 139,
+      "status": "planned",
+      "dependencies": [137, 138, 140],
+      "write_scope": ["internal/connectors/defs/hubspot/**", "internal/connectors/engine/**"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 135,
+      "status": "planned",
+      "dependencies": [134],
+      "write_scope": ["cmd/**", "internal/connectors/guide.go", "docs/cli/**", "docs/connectors/hubspot/**", "website/**"],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [134],
+      "reason": "parent PR seed and first lane proceed inline; current tool surface has no subagent tool or isolated mutating worker cwd"
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [135, 136, 137, 138, 139, 140],
+      "reason": "no available subagent tool in this Pi API harness; remaining lanes also collide on internal/connectors/defs/hubspot until #134/#137 establish stable files"
+    }
+  ],
+  "subissues": [
+    {
+      "number": 134,
+      "url": "https://github.com/polymetrics-ai/cli/issues/134",
+      "branch": "feat/134-hubspot-cli-surface-metadata",
+      "pr_url": "pending",
+      "worker": "local_critical_path",
+      "status": "worker_ready",
+      "write_scope": "hubspot CLI surface metadata and validator support",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-132-hubspot-cli-parity",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 135,
+      "url": "https://github.com/polymetrics-ai/cli/issues/135",
+      "branch": "feat/135-hubspot-help-renderer",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": "help/docs/website rendering",
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 136,
+      "url": "https://github.com/polymetrics-ai/cli/issues/136",
+      "branch": "feat/136-hubspot-stream-runner",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": "stream-backed commands and HubSpot streams",
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 137,
+      "url": "https://github.com/polymetrics-ai/cli/issues/137",
+      "branch": "feat/137-hubspot-operation-ledger",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": "official operation ledger",
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 138,
+      "url": "https://github.com/polymetrics-ai/cli/issues/138",
+      "branch": "feat/138-hubspot-direct-read",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": "direct-read policies and commands",
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 139,
+      "url": "https://github.com/polymetrics-ai/cli/issues/139",
+      "branch": "feat/139-hubspot-advanced-query-body-engine",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": "advanced body/query/binary engine and HubSpot fixed schemas",
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 140,
+      "url": "https://github.com/polymetrics-ai/cli/issues/140",
+      "branch": "feat/140-hubspot-sensitive-admin-policy",
+      "pr_url": "pending",
+      "worker": "unassigned",
+      "status": "planned",
+      "write_scope": "sensitive/admin/destructive reverse ETL policy",
+      "worker_directory": "pending",
+      "verification": "pending",
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "blocked",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "destructive external actions",
+    "credentialed connector checks",
+    "reverse ETL execution",
+    "binary transfer runtime enablement without explicit destination policy",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-10T00:00:00Z"
+}
