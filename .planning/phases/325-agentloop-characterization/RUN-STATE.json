@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "325-agentloop-characterization",
+  "status": "in_progress",
+  "reason": "Planning artifacts complete; red tests not yet executed.",
+  "details": {
+    "lifecycle": [
+      "load-project-context",
+      "profile-repo",
+      "prepare-design-and-prompts",
+      "prd-coverage-gate",
+      "gsd-plan-phase",
+      "tdd-gate-before-execution",
+      "gsd-execute-phase",
+      "local-verification",
+      "gsd-verify-work",
+      "gsd-gap-loop",
+      "write-phase-summary"
+    ],
+    "agentMode": "parent_spawned_worker",
+    "coveragePassed": true,
+    "tddGatePassed": false,
+    "verificationPassed": false,
+    "verificationMissingRequired": [],
+    "orchestrationDecisions": [
+      {
+        "cycle": "plan",
+        "decision": "local_critical_path",
+        "reason": "Parent already spawned this isolated issue worker; complete the tightly coupled phase contract before test mutation."
+      }
+    ]
+  },
+  "updatedAt": "2026-07-12T08:10:00Z"
+}

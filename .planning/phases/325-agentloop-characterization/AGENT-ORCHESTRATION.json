@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "325-agentloop-characterization",
+  "mode": "parent_spawned_worker",
+  "reason": "Parent issue #323 spawned this issue worker in its own branch and isolated worktree.",
+  "worker": {
+    "issue": 325,
+    "branch": "fix/325-agentloop-characterization",
+    "base": "fix/323-auto-loop-hardening",
+    "worktree": "wt-325-agentloop-characterization"
+  },
+  "innerRoles": [
+    "planner",
+    "backend",
+    "tester",
+    "security",
+    "reliability-observability",
+    "reviewer"
+  ],
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "The parent already consumed a runtime worker slot for this isolated mutation scope; inner roles inspect the same tightly coupled files sequentially and do not justify another mutating worktree."
+    }
+  ],
+  "updatedAt": "2026-07-12T08:10:00Z"
+}
