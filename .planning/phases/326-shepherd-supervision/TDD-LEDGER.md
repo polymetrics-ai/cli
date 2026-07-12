@@ -264,3 +264,11 @@ RED command/output will be appended after the tests exist and before production 
 - Corrected focused evidence: 10/10 consecutive repetitions pass with no natural child completion.
   The complete unfiltered `make agent-loop-test` gate also passes in 9m38s. A new CI Verify run is
   required before delivery is green again.
+
+- The next CI run passed the corrected deadline case, then exposed that the unrelated cross-run
+  fixture discarded its seed run's status and used the generic 30-second scheduling budget. The
+  harness default is now 60 seconds for non-deadline fixtures (deadline tests keep explicit narrow
+  limits), and the seed must prove exit 0, released control state, and a published marker while
+  retaining bounded diagnostics on failure.
+- Corrected cross-run evidence: 10/10 focused repetitions pass, followed by the complete unfiltered
+  `make agent-loop-test` gate in 9m44s with all 44 Shepherd functions green.

@@ -637,7 +637,7 @@ driver_env() {
     "REAL_GIT_BIN=$REAL_GIT_BIN"
     "MAX_ITERATIONS=${MAX_ITERATIONS:-1}"
     "MAX_TURNS=${MAX_TURNS:-20}"
-    "TURN_TIMEOUT_SECONDS=${TURN_TIMEOUT_SECONDS:-30}"
+    "TURN_TIMEOUT_SECONDS=${TURN_TIMEOUT_SECONDS:-60}"
     "TERM_GRACE_SECONDS=${TERM_GRACE_SECONDS:-1}"
     "CONTROL_HEARTBEAT_SECONDS=${CONTROL_HEARTBEAT_SECONDS:-1}"
     "COOLDOWN_SECONDS=0"
@@ -2202,14 +2202,17 @@ test_checkpoint_bundle_aliases_fail_closed() {
 }
 
 test_new_run_cannot_restore_previous_run_checkpoint() {
-  local root first_run_id second_run_id rc=0
+  local root first_run_id second_run_id first_rc=0 rc=0 diagnostic
   root="$(mktemp -d "$TEST_TMP/cross-run-checkpoint.XXXXXX")"
   prepare_fixture "$root"
-  FAKE_MODE=proceed-human-gate driver_env "$root" "synthetic first released run" \
-    >"$root/stdout.1" 2>"$root/stderr.1"
+  FAKE_MODE=proceed-human-gate TURN_TIMEOUT_SECONDS=60 \
+    driver_env "$root" "synthetic first released run" \
+    >"$root/stdout.1" 2>"$root/stderr.1" || first_rc=$?
   first_run_id="$(control_field "$root" run_id)"
-  if ! checkpoint_marker_exists "$root"; then
-    fail "cross-run fixture did not publish its first checkpoint"
+  if [[ "$first_rc" -ne 0 || "$(control_field "$root" phase)" != "released" ]] || \
+     ! checkpoint_marker_exists "$root"; then
+    diagnostic="$(tail -n 20 "$root/stderr.1" 2>/dev/null | tr '\n' '|')"
+    fail "cross-run fixture did not publish its first checkpoint: rc=$first_rc control=$(control_snapshot "$root") stderr=$diagnostic"
     return
   fi
   FAKE_MODE=revert driver_env "$root" "synthetic second run revert" \
