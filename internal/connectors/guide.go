@@ -145,21 +145,24 @@ func commandSurfaceSection(surface *CommandSurface) GuideSection {
 }
 
 func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
-	name := "--" + strings.TrimLeft(flag.Name, "-")
-	parts := []string{name}
+	line := "--" + strings.TrimLeft(flag.Name, "-")
 	if flag.Type != "" {
-		parts[0] += " (" + flag.Type + ")"
+		line += " (" + flag.Type + ")"
 	}
 	if flag.Summary != "" {
-		parts = append(parts, flag.Summary)
+		line += ": " + flag.Summary
 	}
+	extra := []string{}
 	if len(flag.Values) > 0 {
-		parts = append(parts, "values="+strings.Join(flag.Values, "|"))
+		extra = append(extra, "values="+strings.Join(flag.Values, "|"))
 	}
 	if flag.MapsTo != "" {
-		parts = append(parts, "maps_to="+flag.MapsTo)
+		extra = append(extra, "maps_to="+flag.MapsTo)
 	}
-	return strings.Join(parts, ": ")
+	if len(extra) > 0 {
+		line += "; " + strings.Join(extra, " ")
+	}
+	return line
 }
 
 func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
@@ -487,7 +490,11 @@ func streamSection(manifest Manifest) GuideSection {
 	}
 	lines := []string{}
 	for _, stream := range manifest.Streams {
-		lines = append(lines, stream.Name+": "+stream.Description)
+		line := stream.Name + ":"
+		if stream.Description != "" {
+			line += " " + stream.Description
+		}
+		lines = append(lines, line)
 		if len(stream.PrimaryKey) > 0 {
 			lines = append(lines, "  primary key: "+strings.Join(stream.PrimaryKey, ", "))
 		}
@@ -528,7 +535,11 @@ func writeActionSection(manifest Manifest) GuideSection {
 	}
 	lines := []string{}
 	for _, action := range manifest.WriteActions {
-		lines = append(lines, action.Name+": "+action.Description)
+		line := action.Name + ":"
+		if action.Description != "" {
+			line += " " + action.Description
+		}
+		lines = append(lines, line)
 		if action.Method != "" || action.Path != "" {
 			lines = append(lines, "  endpoint: "+strings.TrimSpace(action.Method+" "+action.Path))
 		}

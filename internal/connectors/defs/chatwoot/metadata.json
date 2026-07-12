@@ -1,7 +1,7 @@
 {
   "name": "chatwoot",
   "display_name": "Chatwoot",
-  "description": "Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, and conversation-scoped messages, and writes contact/conversation/message/label mutations through the Chatwoot Application API.",
+  "description": "Reads Chatwoot support conversations, contacts, inboxes, agents, teams, labels, messages, reports, public inbox, and platform metadata; writes typed approved Chatwoot mutations through reverse ETL approval gates; and tracks duplicate/disallowed official Swagger rows as blocked-by-default metadata.",
   "integration_type": "api",
   "docs_url": "https://developers.chatwoot.com/api-reference",
   "release_stage": "alpha",
@@ -17,7 +17,7 @@
     "read_page_size": 15
   },
   "risk": {
-    "read": "external Chatwoot Application API read of conversation, contact, and message data (account-scoped)",
-    "write": "external mutation of Chatwoot contacts, conversations, messages, and labels; agent-visible and customer-visible side effects"
+    "read": "external Chatwoot API reads of account-scoped support data, reports, public inbox resources, and platform metadata through bounded fixed direct-read commands",
+    "write": "external mutation of Chatwoot contacts, conversations, messages, labels, admin configuration, public inbox resources, and platform resources through typed reverse ETL actions; destructive actions require approval and typed confirmation metadata"
   }
 }

@@ -124,7 +124,17 @@ func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record
 	if err != nil {
 		return "", "", fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
 	}
-	return methodOrDefault(action.Method), joinURL(baseURL, relPath), nil
+	return methodOrDefault(action.Method), joinURL(baseURL, writeRequesterPath(baseURL, relPath)), nil
+}
+
+func writeRequesterPath(baseURL, resolvedPath string) string {
+	path := "/" + strings.TrimLeft(resolvedPath, "/")
+	switch {
+	case strings.HasPrefix(path, "/api/"), strings.HasPrefix(path, "/platform/"), strings.HasPrefix(path, "/public/"), strings.HasPrefix(path, "/survey/"):
+		return directReadRequesterPath(baseURL, resolvedPath)
+	default:
+		return resolvedPath
+	}
 }
 
 func joinURL(base, path string) string {
@@ -203,6 +213,7 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	if err != nil {
 		return fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
 	}
+	path = writeRequesterPath(rt.Requester.BaseURL, path)
 	method := methodOrDefault(action.Method)
 
 	switch bodyTypeOf(action) {

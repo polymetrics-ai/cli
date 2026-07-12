@@ -1,0 +1,11 @@
+ok	node >=18	v24.13.1
+ok	repo root	/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity
+ok	official docs	/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity/.gsd/official-docs/README.md
+ok	commands registry	/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity/.gsd/commands.json
+ok	upstream lock	/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity/.gsd/upstream.lock.json
+ok	canonical issue prompt	/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity/.gsd/prompts/issue-122-rebootstrap.md
+ok	pi settings	/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity/.pi/settings.json
+ok	pi extension	/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity/.pi/extensions/gsd/index.ts
+ok	pi skill	/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity/.pi/skills/gsd-core/SKILL.md
+ok	pi prompt	/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-148-chatwoot-cli-parity/.pi/prompts/gsd.md
+ok	commands	69

@@ -1,0 +1,23 @@
+{
+  "issue": 150,
+  "parentIssue": 148,
+  "branch": "feat/150-chatwoot-help-renderer",
+  "base": "feat/148-chatwoot-cli-parity",
+  "status": "merged_to_parent",
+  "decisions": [
+    {
+      "cycle": "gsd-adapter",
+      "decision": "manual_programming_loop_fallback",
+      "reason": "scripts/gsd prompt quick succeeded; scripts/gsd prompt programming-loop is not registered in this adapter."
+    },
+    {
+      "cycle": "scope",
+      "decision": "docs_help_only",
+      "reason": "Issue #150 renders and regenerates docs from cli_surface metadata; runtime command dispatch remains out of scope."
+    }
+  ],
+  "verificationPassed": true,
+  "verificationStatus": "targeted docs/website checks, website typecheck/build, go vet, go test ./..., go build ./cmd/pm, and make verify passed locally",
+  "reviewStatus": "sub_pr_skipped_parent_manual_review_finished",
+  "updated": "2026-07-10"
+}

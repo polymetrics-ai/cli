@@ -1,0 +1,163 @@
+{
+  "phase": "issue-148-chatwoot-cli-parity",
+  "status": "in_progress",
+  "parent_issue": 148,
+  "parent_pr": 223,
+  "parent_pr_url": "https://github.com/polymetrics-ai/cli/pull/223",
+  "parent_branch": "feat/148-chatwoot-cli-parity",
+  "default_branch": "main",
+  "gsd": {
+    "doctor": "pass",
+    "verify_pi": "pass",
+    "list_json": "pass",
+    "programming_loop_command": "unavailable",
+    "manual_fallback": true,
+    "fallback_reason": "scripts/gsd prompt programming-loop is not registered in the repo-local adapter"
+  },
+  "required_skills_loaded": [
+    "gsd-core",
+    "caveman",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-context",
+    "golang-concurrency",
+    "golang-documentation",
+    "golang-lint"
+  ],
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Parent PR was missing and current Pi API tool surface lacks subagent; coordinator created parent seed planning artifacts and handled issue #149 locally."
+    },
+    {
+      "cycle": "parent-pr",
+      "decision": "local_critical_path",
+      "reason": "Committed and pushed parent seed, then opened draft parent PR #223."
+    },
+    {
+      "cycle": "issue-149",
+      "decision": "local_critical_path",
+      "reason": "Implemented Chatwoot CLI surface metadata locally because mutating worker fanout is unavailable in this harness."
+    },
+    {
+      "cycle": "issue-149-full-local-verification",
+      "decision": "not_spawned_review_blocked",
+      "reason": "Full local gates passed on the #149 branch, but sub-PR #227 remote verify and parent PR fallback review coverage are still pending."
+    },
+    {
+      "cycle": "issue-149-integration",
+      "decision": "integrated_parent_review_pending",
+      "reason": "PR #227 remote checks passed and the branch was squash-merged into parent commit 573b89f5cf8952723213cd55bfa19cb5e3165618. CodeRabbit skipped the sub-PR and parent PR #223 skipped automatic review because it is draft, so manual @coderabbitai review was requested on #223."
+    },
+    {
+      "cycle": "issue-150",
+      "decision": "local_critical_path",
+      "reason": "Issue #150 is dependency-unblocked after #149 integration; mutating worker fanout remains unavailable, so the coordinator created #150 GSD/TDD artifacts locally before production edits."
+    },
+    {
+      "cycle": "issue-150-local-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #150 implementation passed targeted docs/website checks, website typecheck/build, go vet ./..., go test ./..., go build ./cmd/pm, and make verify locally."
+    },
+    {
+      "cycle": "issue-150-integration",
+      "decision": "integrated_parent_review_complete",
+      "reason": "PR #240 remote checks passed, was squash-merged into parent commit 80db5020b297f1323f94c0c965f4a80ab6b08eb3, and parent PR #223 manual CodeRabbit review replied Review finished with no inline findings returned by GitHub API."
+    },
+    {
+      "cycle": "issue-152",
+      "decision": "local_critical_path",
+      "reason": "Issue #152 is dependency-unblocked after #149 integration; mutating worker fanout remains unavailable, so the coordinator created #152 GSD/TDD artifacts locally before production edits."
+    },
+    {
+      "cycle": "issue-152-local-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #152 implementation passed targeted operation-ledger checks, go vet ./..., go test ./..., go build ./cmd/pm, and make verify locally."
+    },
+    {
+      "cycle": "issue-152-integration",
+      "decision": "integrated_parent_review_complete",
+      "reason": "PR #244 remote checks passed, was squash-merged into parent commit e9a709fe50dd3832e57ce0a5f8e3b728422e27cb, and parent PR #223 manual CodeRabbit review replied Review finished with no inline findings returned by GitHub API."
+    },
+    {
+      "cycle": "issue-151-targeted-verification",
+      "decision": "sub_pr_pending_full_gates_pending",
+      "reason": "Issue #151 stream runner implementation passed targeted engine/conformance/connectorgen/docs/website checks."
+    },
+    {
+      "cycle": "issue-151-full-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #151 passed gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify."
+    },
+    {
+      "cycle": "issue-151-integration",
+      "decision": "integrated_parent_review_complete",
+      "reason": "PR #246 remote checks passed, was squash-merged into parent commit 8a030090f2c505163a8df9b0bffe01b7fbf35c39, parent PR #223 manual CodeRabbit review replied Review finished with no inline findings returned by GitHub API, and parent PR checks passed after integration."
+    },
+    {
+      "cycle": "issue-153-targeted-verification",
+      "decision": "sub_pr_pending_full_gates_pending",
+      "reason": "Issue #153 direct-read implementation passed targeted engine/commandrunner/CLI/connectorgen/conformance/docs/website checks."
+    },
+    {
+      "cycle": "issue-153-full-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #153 passed gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify."
+    },
+    {
+      "cycle": "issue-153-integration",
+      "decision": "integrated_parent_review_complete",
+      "reason": "PR #249 remote checks passed, was squash-merged into parent commit 6e08e5dcb3dc5bcab80655f830017f0d77ba91cd, parent PR #223 manual CodeRabbit review replied Review finished with no inline findings returned by GitHub API, and parent PR checks passed after integration."
+    },
+    {
+      "cycle": "issue-154-targeted-verification",
+      "decision": "sub_pr_pending_full_gates_pending",
+      "reason": "Issue #154 advanced query/direct-read implementation passed targeted engine/commandrunner/connectorgen/conformance/docs/website checks; full gates and PR remain pending."
+    },
+    {
+      "cycle": "issue-154-full-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #154 passed gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify."
+    },
+    {
+      "cycle": "issue-154-integration",
+      "decision": "integrated_parent_review_pending",
+      "reason": "PR #255 remote checks passed and was squash-merged into parent commit 10f58f0b. CodeRabbit skipped the non-default-base sub-PR, so parent PR #223 fallback review is pending."
+    },
+    {
+      "cycle": "issue-154-parent-review-fix",
+      "decision": "review_fix_pending_push",
+      "reason": "Parent PR fallback CodeRabbit review replied Review finished. Existing actionable findings were dispositioned: valid comment/doc grammar findings fixed; stale cli_surface line reference is no longer applicable to current metadata."
+    },
+    {
+      "cycle": "issue-154-parent-verify-fix",
+      "decision": "remote_verify_fix_pending_push",
+      "reason": "Parent PR verify failed because the Chatwoot guide test still expected the old generated --connection punctuation; updated the test expectation and targeted tests passed."
+    },
+    {
+      "cycle": "issue-155-targeted-verification",
+      "decision": "sub_pr_pending_full_gates_pending",
+      "reason": "Issue #155 sensitive/admin/destructive implementation passed targeted engine/commandrunner/connectorgen/conformance/bundleregistry/docs/website checks."
+    },
+    {
+      "cycle": "issue-155-full-verification",
+      "decision": "sub_pr_pending",
+      "reason": "Issue #155 passed gofmt -w cmd internal, go vet ./..., go test ./..., go build ./cmd/pm, and make verify."
+    },
+    {
+      "cycle": "issue-155-integration",
+      "decision": "parent_review_fallback_pending",
+      "reason": "PR #264 was squash-merged into feat/148-chatwoot-cli-parity as debf010a after remote checks passed. Parent full local gates passed after integration: gofmt, go vet, go test ./..., go build ./cmd/pm, make verify, and connectorgen validate."
+    }
+  ],
+  "verificationPassed": false,
+  "verificationStatus": "#149, #150, #151, #152, #153, #154, and #155 integrated into parent; full parent local gates passed after #155 integration; parent remote checks/review pending",
+  "updated_at": "2026-07-10T00:00:00Z"
+}

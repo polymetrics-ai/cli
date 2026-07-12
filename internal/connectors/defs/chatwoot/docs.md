@@ -1,15 +1,18 @@
 # Overview
 
-Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, and
-conversation-scoped messages, and writes contact/conversation/message/label mutations through the
-Chatwoot Application API.
+Reads Chatwoot support conversations, contacts, inboxes, agents, teams, labels, and
+conversation-scoped messages, and writes approved contact/conversation/message/label mutations
+through the account-scoped Chatwoot Application API. The connector also tracks the full official
+Swagger inventory as blocked-by-default operation metadata so later direct-read, binary/file, and
+sensitive/admin reverse-ETL slices can add typed commands without exposing a raw generic API tool.
 
 Readable streams: `conversations`, `contacts`, `inboxes`, `agents`, `teams`, `labels`, `messages`.
 
 Write actions: `create_contact`, `update_contact`, `create_conversation`, `send_message`,
 `toggle_conversation_status`, `create_label`.
 
-Service API documentation: https://developers.chatwoot.com/api-reference.
+Service API documentation: https://developers.chatwoot.com/api-reference. Official inventory source:
+https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json.
 
 ## Auth setup
 
@@ -26,8 +29,8 @@ Connection fields:
   every request; do not include /api/v1 yourself. Also usable as a base URL override for
   tests/proxies.
 - `start_date` (optional, string); format `date-time`; RFC3339 lower bound for the first incremental
-  sync of conversations, contacts, and messages (e.g. 2026-01-01T00:00:00Z). Ignored once a cursor
-  has been persisted.
+  sync of conversations (e.g. 2026-01-01T00:00:00Z). Contacts use their persisted cursor when one
+  exists. Ignored once a cursor has been persisted.
 
 Secret fields are redacted in logs and write previews: `api_access_token`.
 
@@ -45,7 +48,7 @@ Connection checks call GET `/agents`.
 Default pagination: single request; no pagination.
 
 Pagination by stream: none: `inboxes`, `agents`, `teams`, `labels`; page_number: `conversations`,
-`contacts`, `messages`.
+`contacts`; cursor: `messages`.
 
 Incremental streams use their declared cursor fields and send lower-bound parameters only when a
 lower bound is available.
@@ -60,10 +63,11 @@ lower bound is available.
 - `agents`: GET `/agents` - records path `.`.
 - `teams`: GET `/teams` - records path `.`.
 - `labels`: GET `/labels` - records path `payload`.
-- `messages`: GET `/conversations/{{ fanout.id }}/messages` - records path `payload`; page-number
-  pagination; page parameter `page`; no page-size parameter; starts at 1; page size 25; fan-out; ids
-  from request `/conversations`; id-list records path `data.payload`; id field `id`; id inserted
-  into the request path; stamps `conversation_id`.
+- `messages`: GET `/conversations/{{ fanout.id }}/messages` - records path `payload`; cursor
+  pagination using `after` from the last message `id`; fan-out; ids from request `/conversations`;
+  the parent conversation sweep uses page-number pagination with page parameter `page`, starts at 1,
+  and records ids from `data.payload.id`; id inserted into the request path; stamps
+  `conversation_id`.
 
 ## Write actions & risks
 
@@ -102,7 +106,17 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=15.
-- API coverage includes 7 stream-backed endpoint group(s), 6 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=6, duplicate_of=10, non_data_endpoint=2, out_of_scope=36,
-  requires_elevated_scope=4.
+- The official Swagger inventory currently accounts for 144 operations across 89 paths: GET 62,
+  POST 41, PATCH 21, DELETE 18, PUT 2.
+- Executable coverage in this slice includes 7 stream-backed endpoints, 79 write-backed endpoints,
+  and 53 bounded direct-read endpoints. Only duplicate/disallowed official rows remain
+  blocked-by-default operation metadata: disallowed=4, duplicate=1.
+- Direct-read commands for reports, audit logs, public inbox resources, Platform API lookups, and
+  other search/filter endpoints use fixed command metadata with bounded JSON output and recursive
+  secret-key redaction; they do not expose an arbitrary URL/path or raw HTTP escape hatch.
+- Admin/configuration and destructive operations are covered by named reverse-ETL actions with
+  fixed endpoints, record schemas, risk text, preview/approval gates, and destructive confirmation
+  metadata where required.
+- Message attachment and profile/avatar multipart file-upload variants are not exposed as raw file
+  flags; JSON-compatible typed fields are covered and any future binary upload support must use a
+  dedicated bounded binary/file policy.
