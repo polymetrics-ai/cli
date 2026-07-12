@@ -66,13 +66,20 @@
       "number": 328,
       "status": "planned",
       "dependencies": [335],
-      "write_scope": ["internal/agentloop/gate", "validation contracts"],
+      "write_scope": ["internal/agentloop/gate pure closure compiler", "cmd/loopctl read-only gate lint/compile", "planner and connector closure contracts"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 341,
+      "status": "planned",
+      "dependencies": [328],
+      "write_scope": ["internal/agentloop/gate ticket policy", "ticket contracts", "minimal typed ActiveTicket journal/state seam"],
       "decision": "not_spawned_dependency_blocked"
     },
     {
       "number": 329,
       "status": "planned",
-      "dependencies": [328],
+      "dependencies": [341],
       "write_scope": ["internal/agentloop/worker", "worker contracts"],
       "decision": "not_spawned_dependency_blocked"
     },
@@ -128,7 +135,7 @@
     {
       "number": 334,
       "status": "planned",
-      "dependencies": [325, 326, 339, 327, 335, 328, 329, 336, 330, 331, 337, 332, 338, 333],
+      "dependencies": [325, 326, 339, 327, 335, 328, 341, 329, 336, 330, 331, 337, 332, 338, 333],
       "write_scope": ["internal/agentloop/replay", "scripts/tests", "final phase evidence"],
       "decision": "not_spawned_dependency_blocked"
     }
@@ -169,6 +176,12 @@
       "decision": "spawned",
       "issue_numbers": [326],
       "reason": "Phase 0 code is present on the parent branch and Phase 1A is the only dependency-ready mutation slice; dispatch uses the corrected controller preflight contract."
+    },
+    {
+      "timestamp": "2026-07-12T10:37:39Z",
+      "decision": "contract_split",
+      "issue_numbers": [328, 341, 329],
+      "reason": "Read-only Phase 3 preflight separated deterministic closure compilation from lifecycle-bound ticket authority, natively linked #341, and moved #329 behind the ticket runtime."
     }
   ],
   "subissues": [
@@ -244,13 +257,25 @@
     {
       "number": 328,
       "url": "https://github.com/polymetrics-ai/cli/issues/328",
-      "branch": "fix/328-gate-tickets",
+      "branch": "fix/328-gate-closure",
       "pr_url": null,
       "worker": "pending",
       "status": "planned",
-      "write_scope": ["internal/agentloop/gate", "validation contracts"],
+      "write_scope": ["internal/agentloop/gate pure closure compiler", "cmd/loopctl read-only gate lint/compile", "planner and connector closure contracts"],
       "worker_directory": "pending",
       "verification": "blocked by #335",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 341,
+      "url": "https://github.com/polymetrics-ai/cli/issues/341",
+      "branch": "fix/341-stage-tickets",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop/gate ticket policy", "ticket contracts", "minimal typed ActiveTicket journal/state seam"],
+      "worker_directory": "pending",
+      "verification": "blocked by #328",
       "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
     },
     {
@@ -262,7 +287,7 @@
       "status": "planned",
       "write_scope": ["internal/agentloop/worker", "worker contracts"],
       "worker_directory": "pending",
-      "verification": "blocked by #328",
+      "verification": "blocked by #341",
       "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
     },
     {
