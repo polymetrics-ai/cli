@@ -69,11 +69,15 @@ export function HighlightedBlock({
 
         if (commentIds.length === 0) {
           // Own private bookmark: quiet dotted underline, no background.
+          const bookmarkIds = segment.ids
+            .filter((id) => id.startsWith(BOOKMARK_PREFIX))
+            .map((id) => id.slice(BOOKMARK_PREFIX.length))
+            .join(' ');
           return (
             <span
               key={index}
               className="border-b border-dotted border-[#34d399] decoration-clone"
-              data-annotation-bookmark
+              data-annotation-bookmark={bookmarkIds}
             >
               {segment.text}
             </span>
