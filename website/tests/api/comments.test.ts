@@ -122,6 +122,34 @@ describe('POST /api/comments', () => {
     expect(JSON.stringify(found)).not.toContain('@test.dev');
   });
 
+  it('gates author profile details on opt-in visibility', async () => {
+    mockSession.mockResolvedValue(user(owner));
+    const created = await POST(postRequest({ slug, body: 'profile gating', anchor: validAnchor() }));
+    const { comment } = await created.json();
+
+    // Default: private — no profile payload.
+    let listed = await (await GET(getRequest())).json();
+    let found = listed.comments.find((c: { id: string }) => c.id === comment.id);
+    expect(found.author.profile).toBeNull();
+
+    // Opt in directly at the settings table.
+    await getPool().query(
+      `INSERT INTO profile_settings (user_id, profile_visible, profile_url)
+       VALUES ($1, TRUE, 'https://owner.example')
+       ON CONFLICT (user_id) DO UPDATE SET profile_visible = TRUE, profile_url = 'https://owner.example'`,
+      [owner],
+    );
+    listed = await (await GET(getRequest())).json();
+    found = listed.comments.find((c: { id: string }) => c.id === comment.id);
+    expect(found.author.profile).not.toBeNull();
+    expect(found.author.profile.profileUrl).toBe('https://owner.example');
+    expect(found.author.profile.noteCount).toBeGreaterThan(0);
+    expect(typeof found.author.profile.memberSince).toBe('string');
+    expect(JSON.stringify(listed)).not.toContain('@test.dev');
+
+    await getPool().query('DELETE FROM profile_settings WHERE user_id = $1', [owner]);
+  });
+
   it('marks mine=false for other readers', async () => {
     mockSession.mockResolvedValue(user(owner));
     const created = await POST(postRequest({ slug, body: 'mine flag test', anchor: validAnchor() }));

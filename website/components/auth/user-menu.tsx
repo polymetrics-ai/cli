@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Bookmark, LogOut } from 'lucide-react';
+import { Bookmark, IdCard, LogOut } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SignInDialog } from '@/components/auth/sign-in-dialog';
+import { ProfileSettingsDialog } from '@/components/auth/profile-settings-dialog';
 import { signOut, useSession } from '@/lib/auth-client';
 
 function Avatar({ name, image }: { name: string; image: string | null | undefined }) {
@@ -38,6 +39,7 @@ function Avatar({ name, image }: { name: string; image: string | null | undefine
 export function UserMenu() {
   const { data: session, isPending } = useSession();
   const [signInOpen, setSignInOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   // Reserve the slot while the session loads so the navbar never shifts.
   if (isPending) {
@@ -92,12 +94,20 @@ export function UserMenu() {
         </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer px-2.5 py-2 text-[13px] text-text-secondary focus:bg-surface-bg focus:text-text-primary"
+          onSelect={() => setProfileOpen(true)}
+        >
+          <IdCard className="h-3.5 w-3.5" aria-hidden="true" />
+          Profile
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer px-2.5 py-2 text-[13px] text-text-secondary focus:bg-surface-bg focus:text-text-primary"
           onSelect={() => void signOut()}
         >
           <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
           Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>
+      <ProfileSettingsDialog open={profileOpen} onOpenChange={setProfileOpen} />
     </DropdownMenu>
   );
 }

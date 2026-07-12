@@ -134,4 +134,20 @@ ALTER TABLE comment
   );
 `,
   },
+  {
+    id: 3,
+    name: 'profile-settings',
+    sql: `
+-- Opt-in commenter profiles. Everything defaults to private; the
+-- provider_* columns are derived (GitHub only) at settings-save time.
+CREATE TABLE IF NOT EXISTS profile_settings (
+  user_id TEXT PRIMARY KEY REFERENCES "user" ("id") ON DELETE CASCADE,
+  profile_visible BOOLEAN NOT NULL DEFAULT FALSE,
+  profile_url TEXT,
+  provider_username TEXT,
+  provider_profile_url TEXT,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+`,
+  },
 ];
