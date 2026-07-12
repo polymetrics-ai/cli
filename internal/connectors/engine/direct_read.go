@@ -22,6 +22,9 @@ const (
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
+	directReadPolicyJSONResponse               = "json_response"
+	directReadPolicyTextResponse               = "text_response"
+	directReadPolicyBinaryMetadata             = "binary_metadata"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -79,13 +82,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read response too large: %d bytes exceeds limit %d", len(resp.Body), maxBytes)
 	}
 
-	var body any
-	dec := json.NewDecoder(io.LimitReader(bytes.NewReader(resp.Body), int64(maxBytes)+1))
-	dec.UseNumber()
-	if err := dec.Decode(&body); err != nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("direct read response is not JSON: %w", err)
-	}
-	body, err = applyDirectReadOutputPolicy(req.OutputPolicy, body)
+	body, err := directReadBodyForPolicy(req.OutputPolicy, resp.Body, resp.Header, maxBytes)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
@@ -112,13 +109,42 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
+	case directReadPolicyJSONResponse, directReadPolicyTextResponse, directReadPolicyBinaryMetadata:
+		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
 }
 
+func directReadBodyForPolicy(policy string, raw []byte, header http.Header, maxBytes int) (any, error) {
+	switch policy {
+	case directReadPolicyTextResponse:
+		return map[string]any{
+			"text":         string(raw),
+			"bytes":        len(raw),
+			"content_type": header.Get("Content-Type"),
+		}, nil
+	case directReadPolicyBinaryMetadata:
+		return map[string]any{
+			"bytes":         len(raw),
+			"content_type":  header.Get("Content-Type"),
+			"body_redacted": true,
+		}, nil
+	default:
+		var body any
+		dec := json.NewDecoder(io.LimitReader(bytes.NewReader(raw), int64(maxBytes)+1))
+		dec.UseNumber()
+		if err := dec.Decode(&body); err != nil {
+			return nil, fmt.Errorf("direct read response is not JSON: %w", err)
+		}
+		return applyDirectReadOutputPolicy(policy, body)
+	}
+}
+
 func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 	switch policy {
+	case directReadPolicyJSONResponse:
+		return body, nil
 	case directReadPolicyGitHubContentsFileMetadata:
 		obj, ok := body.(map[string]any)
 		if !ok {

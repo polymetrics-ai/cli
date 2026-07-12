@@ -1,0 +1,107 @@
+{
+  "phase": "issue-165-intercom-cli-surface-metadata",
+  "issue": 165,
+  "parent_issue": 164,
+  "status": "provisionally_integrated_parent_review_pending",
+  "sub_pr": "https://github.com/polymetrics-ai/cli/pull/234",
+  "gsd": {
+    "adapter": "scripts/gsd",
+    "doctor_passed": true,
+    "verify_pi_passed": true,
+    "registered_commands": 69,
+    "requested_programming_loop": "scripts/gsd prompt programming-loop init --phase issue-164-intercom-cli-parity --dry-run",
+    "programming_loop_available": false,
+    "fallback": "manual GSD loop with scripts/gsd prompt quick --full"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "issue-plan",
+      "decision": "local_critical_path",
+      "reason": "Metadata slice is the parent critical path; no subagent tool is available in this Pi session."
+    },
+    {
+      "cycle": "red-green-metadata",
+      "decision": "local_critical_path",
+      "reason": "Executed data-contract test and Intercom metadata refresh inline on sub-issue branch."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Ran focused gates, full Go tests with project timeout, build, and make verify locally."
+    },
+    {
+      "cycle": "pr-open",
+      "decision": "local_critical_path",
+      "reason": "Opened stacked PR #234 against feat/164-intercom-cli-parity for issue #165."
+    },
+    {
+      "cycle": "automated-review-route",
+      "decision": "not_spawned_review_blocked",
+      "reason": "CodeRabbit auto-review skipped PR #234 because the base branch is not the default branch; parent PR fallback coverage is required after integration."
+    },
+    {
+      "cycle": "provisional-integration",
+      "decision": "not_spawned_review_blocked",
+      "reason": "PR #234 squash-merged into parent branch at fded1e72 after CI passed; parent PR #220 review fallback is pending because CodeRabbit skipped the draft parent PR."
+    }
+  ],
+  "tdd": {
+    "red": [
+      {
+        "command": "go test ./cmd/connectorgen -run TestIntercomAPISurfaceOperationLedgerMetrics -count=1",
+        "result": "fail",
+        "evidence": "operation_ledger_version = 0, want 1"
+      }
+    ],
+    "green": [
+      {
+        "command": "go test ./cmd/connectorgen -run TestIntercomAPISurfaceOperationLedgerMetrics -count=1",
+        "result": "pass"
+      },
+      {
+        "command": "go run ./cmd/connectorgen validate internal/connectors/defs",
+        "result": "pass: 547 connector(s) checked, 0 findings"
+      },
+      {
+        "command": "go test ./cmd/connectorgen ./internal/connectors/engine",
+        "result": "pass"
+      },
+      {
+        "command": "go test ./internal/connectors/conformance -run 'TestConformance/intercom' -count=1",
+        "result": "pass"
+      },
+      {
+        "command": "go test ./... -timeout=20m",
+        "result": "pass"
+      },
+      {
+        "command": "go build ./cmd/pm",
+        "result": "pass"
+      },
+      {
+        "command": "make verify",
+        "result": "pass"
+      }
+    ],
+    "refactor": [
+      "api_surface.json switched to operation_ledger_version mode with zero legacy excluded rows",
+      "cli_surface.json added as docs/help metadata only"
+    ]
+  },
+  "automated_review": {
+    "primary_route": "coderabbit_auto",
+    "status": "skipped",
+    "head_sha": "fded1e72da872760d4f2dab8c084dfbfd3522123",
+    "reviewed_range": "none yet; PR #234 skipped non-default-base review and parent PR #220 skipped while draft",
+    "coverage_route": "parent_pr_fallback",
+    "fallback_route": "none",
+    "disposition_summary": "Issue #165 is provisionally integrated into the parent branch. CodeRabbit skip is informational only; parent PR #220 must provide review coverage when ready or an approved fallback must be recorded.",
+    "disposition_url": "https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4928867117"
+  },
+  "verificationPassed": true,
+  "verificationNotes": [
+    "Default go test ./... timed out in internal/connectors/certify due package timeout; focused retry and go test ./... -timeout=20m passed.",
+    "make verify passed with the repository Makefile's go test -timeout 20m ./... gate."
+  ],
+  "updated_at": "2026-07-09T20:46:30Z"
+}

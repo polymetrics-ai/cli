@@ -1,28 +1,29 @@
 {
-  "api": "Intercom REST API (https://api.intercom.io)",
-  "docs": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, companies, conversations, admins, tags); write/mutation endpoints and any additional list resources are out of scope outside this connector's current declared surface",
+  "api": "Intercom REST API 2.14 (https://api.intercom.io)",
+  "docs": "https://raw.githubusercontent.com/intercom/Intercom-OpenAPI/main/descriptions/2.14/api.intercom.io.yaml",
+  "reviewed_at": "2026-07-10",
+  "operation_ledger_version": 1,
+  "scope": "Full CLI parity implementation for issue #164/#166-#171: every official Intercom OpenAPI 2.14 operation is covered by an executable ETL stream, bounded direct read, metadata-only binary/text read policy, or typed reverse-ETL write action. Reverse ETL writes remain approval-gated; destructive/admin actions declare typed confirmation. No raw generic HTTP write or credentialed live check is exposed by this metadata.",
   "endpoints": [
     {
       "method": "GET",
-      "path": "/contacts",
+      "path": "/me",
       "covered_by": {
-        "stream": "contacts"
+        "direct_read": "me view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admins/{admin_id}/away",
+      "covered_by": {
+        "write": "set_away_admin"
       }
     },
     {
       "method": "GET",
-      "path": "/companies",
+      "path": "/admins/activity_logs",
       "covered_by": {
-        "stream": "companies"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/conversations",
-      "covered_by": {
-        "stream": "conversations"
+        "stream": "admin_activity_log"
       }
     },
     {
@@ -34,6 +35,854 @@
     },
     {
       "method": "GET",
+      "path": "/admins/{admin_id}",
+      "covered_by": {
+        "direct_read": "admin view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/content_import_sources",
+      "covered_by": {
+        "stream": "ai_content_import_source"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ai/content_import_sources",
+      "covered_by": {
+        "write": "create_content_import_source"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ai/content_import_sources/{source_id}",
+      "covered_by": {
+        "write": "delete_content_import_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/content_import_sources/{source_id}",
+      "covered_by": {
+        "direct_read": "ai-content-import-source view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/content_import_sources/{source_id}",
+      "covered_by": {
+        "write": "update_content_import_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/external_pages",
+      "covered_by": {
+        "stream": "ai_external_page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ai/external_pages",
+      "covered_by": {
+        "write": "create_external_page"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ai/external_pages/{page_id}",
+      "covered_by": {
+        "write": "delete_external_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/external_pages/{page_id}",
+      "covered_by": {
+        "direct_read": "ai-external-page view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/external_pages/{page_id}",
+      "covered_by": {
+        "write": "update_external_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles",
+      "covered_by": {
+        "stream": "article"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/articles",
+      "covered_by": {
+        "write": "create_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{article_id}",
+      "covered_by": {
+        "direct_read": "article view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/articles/{article_id}",
+      "covered_by": {
+        "write": "update_article"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/articles/{article_id}",
+      "covered_by": {
+        "write": "delete_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/search",
+      "covered_by": {
+        "stream": "article_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/away_status_reasons",
+      "covered_by": {
+        "stream": "away_status_reason"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/reporting_data/enqueue",
+      "covered_by": {
+        "write": "post_export_reporting_data_enqueue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/reporting_data/{job_identifier}",
+      "covered_by": {
+        "direct_read": "export-reporting-data status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/reporting_data/get_datasets",
+      "covered_by": {
+        "stream": "export_reporting_data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/download/reporting_data/{job_identifier}",
+      "covered_by": {
+        "direct_reads": [
+          "download-reporting-data view"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fin/start",
+      "covered_by": {
+        "write": "start_fin_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fin/reply",
+      "covered_by": {
+        "write": "reply_to_fin"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/collections",
+      "covered_by": {
+        "stream": "help_center_collection"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/help_center/collections",
+      "covered_by": {
+        "write": "create_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/collections/{collection_id}",
+      "covered_by": {
+        "direct_read": "help-center-collection view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/help_center/collections/{collection_id}",
+      "covered_by": {
+        "write": "update_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/help_center/collections/{collection_id}",
+      "covered_by": {
+        "write": "delete_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/help_centers/{help_center_id}",
+      "covered_by": {
+        "direct_read": "help-center-help-center view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/help_centers",
+      "covered_by": {
+        "stream": "help_center_help_center"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/internal_articles",
+      "covered_by": {
+        "stream": "internal_article"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/internal_articles",
+      "covered_by": {
+        "write": "create_internal_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/internal_articles/{internal_article_id}",
+      "covered_by": {
+        "direct_read": "internal-article view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/internal_articles/{internal_article_id}",
+      "covered_by": {
+        "write": "update_internal_article"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/internal_articles/{internal_article_id}",
+      "covered_by": {
+        "write": "delete_internal_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/internal_articles/search",
+      "covered_by": {
+        "stream": "internal_article_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ip_allowlist",
+      "covered_by": {
+        "direct_read": "ip-allowlist view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ip_allowlist",
+      "covered_by": {
+        "write": "update_ip_allowlist"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies",
+      "covered_by": {
+        "write": "create_or_update_company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies",
+      "covered_by": {
+        "stream": "companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_id}",
+      "covered_by": {
+        "direct_read": "company view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{company_id}",
+      "covered_by": {
+        "write": "update_company"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/companies/{company_id}",
+      "covered_by": {
+        "write": "delete_company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_id}/contacts",
+      "covered_by": {
+        "direct_read": "company-contact view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_id}/segments",
+      "covered_by": {
+        "direct_read": "company-segment view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/list",
+      "covered_by": {
+        "stream": "company_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/scroll",
+      "covered_by": {
+        "direct_read": "company-scroll view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/companies",
+      "covered_by": {
+        "write": "attach_contact_to_acompany"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/companies",
+      "covered_by": {
+        "direct_read": "contact-company view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/companies/{company_id}",
+      "covered_by": {
+        "write": "detach_contact_from_acompany"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/notes",
+      "covered_by": {
+        "direct_read": "contact-note view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/notes",
+      "covered_by": {
+        "write": "create_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/segments",
+      "covered_by": {
+        "direct_read": "contact-segment view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/subscriptions",
+      "covered_by": {
+        "direct_read": "contact-subscription view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/subscriptions",
+      "covered_by": {
+        "write": "attach_subscription_type_to_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/subscriptions/{subscription_id}",
+      "covered_by": {
+        "write": "detach_subscription_type_to_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/tags",
+      "covered_by": {
+        "direct_read": "contact-tag view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/tags",
+      "covered_by": {
+        "write": "attach_tag_to_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "detach_tag_from_contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "direct_read": "contact view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/merge",
+      "covered_by": {
+        "write": "merge_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/search",
+      "covered_by": {
+        "stream": "contact_search_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/find_by_external_id/{external_id}",
+      "covered_by": {
+        "direct_read": "contact-find-by-external-id view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/archive",
+      "covered_by": {
+        "write": "archive_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/unarchive",
+      "covered_by": {
+        "write": "unarchive_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/block",
+      "covered_by": {
+        "write": "block_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/tags",
+      "covered_by": {
+        "write": "attach_tag_to_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "detach_tag_from_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations",
+      "covered_by": {
+        "stream": "conversations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations",
+      "covered_by": {
+        "write": "create_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "direct_read": "conversation view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "update_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "delete_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/search",
+      "covered_by": {
+        "stream": "conversation_search_search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/reply",
+      "covered_by": {
+        "write": "reply_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/parts",
+      "covered_by": {
+        "write": "manage_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/customers",
+      "covered_by": {
+        "write": "attach_contact_to_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/customers/{contact_id}",
+      "covered_by": {
+        "write": "detach_contact_from_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/redact",
+      "covered_by": {
+        "write": "redact_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/convert",
+      "covered_by": {
+        "write": "convert_conversation_to_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_object_instances/{custom_object_type_identifier}",
+      "covered_by": {
+        "write": "create_custom_object_instances"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_object_instances/{custom_object_type_identifier}",
+      "covered_by": {
+        "direct_read": "custom-object-instance view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_object_instances/{custom_object_type_identifier}",
+      "covered_by": {
+        "write": "delete_custom_object_instances_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}",
+      "covered_by": {
+        "direct_read": "custom-object-instance view_2"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}",
+      "covered_by": {
+        "write": "delete_custom_object_instances_by_external_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_attributes",
+      "covered_by": {
+        "stream": "data_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data_attributes",
+      "covered_by": {
+        "write": "create_data_attribute"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/data_attributes/{data_attribute_id}",
+      "covered_by": {
+        "write": "update_data_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events",
+      "covered_by": {
+        "write": "create_data_event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/summaries",
+      "covered_by": {
+        "write": "data_event_summaries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/content/data",
+      "covered_by": {
+        "write": "create_data_export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/content/data/{job_identifier}",
+      "covered_by": {
+        "direct_read": "export-content view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/cancel/{job_identifier}",
+      "covered_by": {
+        "write": "cancel_data_export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/download/content/data/{job_identifier}",
+      "covered_by": {
+        "direct_reads": [
+          "download-content view"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/status/{job_id}",
+      "covered_by": {
+        "direct_read": "job status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messages",
+      "covered_by": {
+        "write": "create_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/news_items",
+      "covered_by": {
+        "stream": "new_news_item"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/news/news_items",
+      "covered_by": {
+        "write": "create_news_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/news_items/{news_item_id}",
+      "covered_by": {
+        "direct_read": "new-news-item view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/news/news_items/{news_item_id}",
+      "covered_by": {
+        "write": "update_news_item"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/news/news_items/{news_item_id}",
+      "covered_by": {
+        "write": "delete_news_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/newsfeeds/{newsfeed_id}/items",
+      "covered_by": {
+        "direct_read": "new-newsfeed view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/newsfeeds",
+      "covered_by": {
+        "stream": "new_newsfeed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/newsfeeds/{newsfeed_id}",
+      "covered_by": {
+        "direct_read": "new-newsfeed view_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notes/{note_id}",
+      "covered_by": {
+        "direct_read": "note view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments",
+      "covered_by": {
+        "stream": "segment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/{segment_id}",
+      "covered_by": {
+        "direct_read": "segment view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription_types",
+      "covered_by": {
+        "stream": "subscription_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/phone_call_redirects",
+      "covered_by": {
+        "write": "create_phone_switch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls",
+      "covered_by": {
+        "stream": "call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls/{call_id}",
+      "covered_by": {
+        "direct_read": "call view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls/{call_id}/recording",
+      "covered_by": {
+        "direct_reads": [
+          "call-recording recording"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls/{call_id}/transcript",
+      "covered_by": {
+        "direct_reads": [
+          "call-transcript transcript"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calls/search",
+      "covered_by": {
+        "stream": "call_search_search"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/tags",
       "covered_by": {
         "stream": "tags"
@@ -41,42 +890,170 @@
     },
     {
       "method": "POST",
-      "path": "/contacts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/contacts/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/conversations/{id}/reply",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/contacts/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "destructive contact deletion, not a syncable read"
+      "path": "/tags",
+      "covered_by": {
+        "write": "create_tag"
       }
     },
     {
       "method": "GET",
-      "path": "/me",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "identical account-identity info to /admins; check uses /admins instead"
+      "path": "/tags/{tag_id}",
+      "covered_by": {
+        "direct_read": "tag find"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{tag_id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams",
+      "covered_by": {
+        "stream": "team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}",
+      "covered_by": {
+        "direct_read": "team view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_states",
+      "covered_by": {
+        "stream": "ticket_state"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ticket_types/{ticket_type_id}/attributes",
+      "covered_by": {
+        "write": "create_ticket_type_attribute"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ticket_types/{ticket_type_id}/attributes/{attribute_id}",
+      "covered_by": {
+        "write": "update_ticket_type_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_types",
+      "covered_by": {
+        "stream": "ticket_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ticket_types",
+      "covered_by": {
+        "write": "create_ticket_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_types/{ticket_type_id}",
+      "covered_by": {
+        "direct_read": "ticket-type view"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ticket_types/{ticket_type_id}",
+      "covered_by": {
+        "write": "update_ticket_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/reply",
+      "covered_by": {
+        "write": "reply_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/tags",
+      "covered_by": {
+        "write": "attach_tag_to_ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "detach_tag_from_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets",
+      "covered_by": {
+        "write": "create_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/enqueue",
+      "covered_by": {
+        "write": "enqueue_create_ticket"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}",
+      "covered_by": {
+        "write": "update_ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}",
+      "covered_by": {
+        "direct_read": "ticket view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}",
+      "covered_by": {
+        "write": "delete_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/search",
+      "covered_by": {
+        "stream": "ticket_search_search"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/visitors",
+      "covered_by": {
+        "write": "update_visitor"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/visitors",
+      "covered_by": {
+        "direct_read": "visitor view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/visitors/convert",
+      "covered_by": {
+        "write": "convert_visitor"
       }
     }
   ]

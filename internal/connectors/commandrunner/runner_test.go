@@ -688,6 +688,45 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunImplementedIntercomJSONDirectReadCommand(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "contact view",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/contacts/{contact_id}"},
+				},
+				OutputPolicy: "json_response",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "contact-id", Type: "string", MapsTo: "path.contact_id"},
+				},
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"contact", "view"},
+		Flags: map[string][]string{"contact-id": []string{"abc123"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if connector.directReadReq.Path != "/contacts/{contact_id}" {
+		t.Fatalf("direct read path = %q, want contact endpoint", connector.directReadReq.Path)
+	}
+	if connector.directReadReq.PathParams["contact_id"] != "abc123" {
+		t.Fatalf("direct read path param = %q, want abc123", connector.directReadReq.PathParams["contact_id"])
+	}
+	if connector.directReadReq.OutputPolicy != "json_response" {
+		t.Fatalf("direct read output policy = %q, want json_response", connector.directReadReq.OutputPolicy)
+	}
+}
+
 func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 	tests := []struct {
 		name     string

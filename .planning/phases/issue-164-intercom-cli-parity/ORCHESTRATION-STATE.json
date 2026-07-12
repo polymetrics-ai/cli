@@ -1,0 +1,360 @@
+{
+  "parent_issue": {
+    "number": 164,
+    "url": "https://github.com/polymetrics-ai/cli/issues/164",
+    "title": "Intercom: CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/164-intercom-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/220",
+    "base": "main",
+    "head": "feat/164-intercom-cli-parity",
+    "draft": false,
+    "state": "OPEN"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "parent_pr_ready_review_requested"
+  },
+  "ready_queue": [
+    {
+      "number": 165,
+      "status": "provisionally_integrated_parent_review_requested",
+      "dependencies": [],
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "cmd/connectorgen/*intercom*test.go",
+        ".planning/phases/issue-165-intercom-cli-surface-metadata"
+      ],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 168,
+      "status": "provisionally_integrated_parent_review_requested",
+      "dependencies": [
+        165
+      ],
+      "write_scope": [
+        "internal/connectors/defs/intercom/api_surface.json",
+        ".planning/phases/issue-168-intercom-operation-ledger"
+      ],
+      "decision": "local_critical_path_combined"
+    },
+    {
+      "number": 166,
+      "status": "provisionally_integrated_parent_review_requested",
+      "dependencies": [
+        165
+      ],
+      "write_scope": [
+        "docs/cli",
+        "website",
+        "internal/connectors/defs/intercom/cli_surface.json",
+        ".planning/phases/issue-166-intercom-help-renderer"
+      ],
+      "decision": "local_critical_path_combined"
+    },
+    {
+      "number": 167,
+      "status": "provisionally_integrated_parent_review_requested",
+      "dependencies": [
+        165,
+        168
+      ],
+      "write_scope": [
+        "internal/connectors/defs/intercom/streams.json",
+        "internal/connectors/defs/intercom/schemas",
+        "internal/connectors/defs/intercom/fixtures",
+        ".planning/phases/issue-167-intercom-stream-runner"
+      ],
+      "decision": "local_critical_path_combined"
+    },
+    {
+      "number": 169,
+      "status": "provisionally_integrated_parent_review_requested",
+      "dependencies": [
+        165,
+        168
+      ],
+      "write_scope": [
+        "internal/connectors/defs/intercom/cli_surface.json",
+        "internal/connectors/engine/direct_read.go",
+        ".planning/phases/issue-169-intercom-direct-read"
+      ],
+      "decision": "local_critical_path_combined"
+    },
+    {
+      "number": 170,
+      "status": "provisionally_integrated_parent_review_requested",
+      "dependencies": [
+        168,
+        169
+      ],
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        ".planning/phases/issue-170-intercom-advanced-query-binary"
+      ],
+      "decision": "local_critical_path_combined"
+    },
+    {
+      "number": 171,
+      "status": "provisionally_integrated_parent_review_requested",
+      "dependencies": [
+        168,
+        170
+      ],
+      "write_scope": [
+        "internal/connectors/defs/intercom/writes.json",
+        "internal/connectors/defs/intercom/cli_surface.json",
+        ".planning/phases/issue-171-intercom-sensitive-admin-policy"
+      ],
+      "decision": "local_critical_path_combined"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:35:34Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        165
+      ],
+      "reason": "Parent PR is missing and this Pi tool surface has no subagent tool; coordinator will create the planning checkpoint and execute the first metadata slice inline before any production edits."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path_combined",
+      "issue_numbers": [
+        166,
+        167,
+        168,
+        169,
+        170,
+        171
+      ],
+      "reason": "User requested complete implementation. Pi tool surface has no isolated mutating subagent/worktree dispatch in this session, and remaining Intercom lanes collide on internal/connectors/defs/intercom, so coordinator is executing a combined stacked branch with per-issue planning artifacts before production edits."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 165,
+      "url": "https://github.com/polymetrics-ai/cli/issues/165",
+      "branch": "feat/165-intercom-cli-surface-metadata",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/234",
+      "worker": "pi-coordinator-inline",
+      "status": "provisionally_integrated_parent_review_requested",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "cmd/connectorgen/*intercom*test.go",
+        ".planning/phases/issue-165-intercom-cli-surface-metadata"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "focused and broad local gates passed; see issue-165 VERIFICATION.md",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending_manual_review_response",
+        "head_sha": "fded1e72da872760d4f2dab8c084dfbfd3522123",
+        "reviewed_range": "none yet; sub-PR #234 skipped non-default-base review and parent PR #220 skipped while draft",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Issue #165 is provisionally integrated. CodeRabbit skipped PR #234 because the base was non-default and skipped parent PR #220 because it is draft; coverage remains pending until parent PR review or approved fallback.",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4928867117",
+        "parent_pr_review_request": "manual @coderabbitai review requested on PR #220 at https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4933583446 after automatic review was skipped while draft"
+      }
+    },
+    {
+      "number": 166,
+      "url": "https://github.com/polymetrics-ai/cli/issues/166",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
+      "worker": "pi-coordinator-inline",
+      "status": "provisionally_integrated_parent_review_requested",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-166-intercom-help-renderer"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "PR #257 CI passed; local gates passed; squash-merged into parent at 8362291f",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending_manual_review_response",
+        "head_sha": "8362291f0dd296bb2036f86a3a634d113de43a90",
+        "reviewed_range": "none yet; stacked PR #257 skipped because base branch is non-default",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Issues #166-#171 are provisionally integrated. CodeRabbit skipped PR #257 because the base was non-default; coverage remains pending until parent PR #220 review or approved fallback.",
+        "parent_pr_review_request": "manual @coderabbitai review requested on PR #220 at https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4933583446 after automatic review was skipped while draft"
+      }
+    },
+    {
+      "number": 167,
+      "url": "https://github.com/polymetrics-ai/cli/issues/167",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
+      "worker": "pi-coordinator-inline",
+      "status": "provisionally_integrated_parent_review_requested",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-167-intercom-stream-runner"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "PR #257 CI passed; local gates passed; squash-merged into parent at 8362291f",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending_manual_review_response",
+        "head_sha": "8362291f0dd296bb2036f86a3a634d113de43a90",
+        "reviewed_range": "none yet; stacked PR #257 skipped because base branch is non-default",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Issues #166-#171 are provisionally integrated. CodeRabbit skipped PR #257 because the base was non-default; coverage remains pending until parent PR #220 review or approved fallback.",
+        "parent_pr_review_request": "manual @coderabbitai review requested on PR #220 at https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4933583446 after automatic review was skipped while draft"
+      }
+    },
+    {
+      "number": 168,
+      "url": "https://github.com/polymetrics-ai/cli/issues/168",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
+      "worker": "pi-coordinator-inline",
+      "status": "provisionally_integrated_parent_review_requested",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-168-intercom-operation-ledger"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "PR #257 CI passed; local gates passed; squash-merged into parent at 8362291f",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending_manual_review_response",
+        "head_sha": "8362291f0dd296bb2036f86a3a634d113de43a90",
+        "reviewed_range": "none yet; stacked PR #257 skipped because base branch is non-default",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Issues #166-#171 are provisionally integrated. CodeRabbit skipped PR #257 because the base was non-default; coverage remains pending until parent PR #220 review or approved fallback.",
+        "parent_pr_review_request": "manual @coderabbitai review requested on PR #220 at https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4933583446 after automatic review was skipped while draft"
+      }
+    },
+    {
+      "number": 169,
+      "url": "https://github.com/polymetrics-ai/cli/issues/169",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
+      "worker": "pi-coordinator-inline",
+      "status": "provisionally_integrated_parent_review_requested",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-169-intercom-direct-read"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "PR #257 CI passed; local gates passed; squash-merged into parent at 8362291f",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending_manual_review_response",
+        "head_sha": "8362291f0dd296bb2036f86a3a634d113de43a90",
+        "reviewed_range": "none yet; stacked PR #257 skipped because base branch is non-default",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Issues #166-#171 are provisionally integrated. CodeRabbit skipped PR #257 because the base was non-default; coverage remains pending until parent PR #220 review or approved fallback.",
+        "parent_pr_review_request": "manual @coderabbitai review requested on PR #220 at https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4933583446 after automatic review was skipped while draft"
+      }
+    },
+    {
+      "number": 170,
+      "url": "https://github.com/polymetrics-ai/cli/issues/170",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
+      "worker": "pi-coordinator-inline",
+      "status": "provisionally_integrated_parent_review_requested",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-170-intercom-advanced-query-binary"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "PR #257 CI passed; local gates passed; squash-merged into parent at 8362291f",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending_manual_review_response",
+        "head_sha": "8362291f0dd296bb2036f86a3a634d113de43a90",
+        "reviewed_range": "none yet; stacked PR #257 skipped because base branch is non-default",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Issues #166-#171 are provisionally integrated. CodeRabbit skipped PR #257 because the base was non-default; coverage remains pending until parent PR #220 review or approved fallback.",
+        "parent_pr_review_request": "manual @coderabbitai review requested on PR #220 at https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4933583446 after automatic review was skipped while draft"
+      }
+    },
+    {
+      "number": 171,
+      "url": "https://github.com/polymetrics-ai/cli/issues/171",
+      "branch": "feat/166-171-intercom-complete-implementation",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/257",
+      "worker": "pi-coordinator-inline",
+      "status": "provisionally_integrated_parent_review_requested",
+      "write_scope": [
+        "internal/connectors/defs/intercom",
+        "internal/connectors/engine",
+        "internal/connectors/commandrunner",
+        "internal/cli",
+        "docs/cli",
+        "website",
+        ".planning/phases/issue-166-171-intercom-complete-implementation",
+        ".planning/phases/issue-171-intercom-sensitive-admin-policy"
+      ],
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-164-intercom-cli-parity",
+      "verification": "PR #257 CI passed; local gates passed; squash-merged into parent at 8362291f",
+      "automated_review": {
+        "primary_route": "coderabbit_auto",
+        "status": "pending_manual_review_response",
+        "head_sha": "8362291f0dd296bb2036f86a3a634d113de43a90",
+        "reviewed_range": "none yet; stacked PR #257 skipped because base branch is non-default",
+        "coverage_route": "parent_pr_fallback",
+        "fallback_route": "none",
+        "disposition_summary": "Issues #166-#171 are provisionally integrated. CodeRabbit skipped PR #257 because the base was non-default; coverage remains pending until parent PR #220 review or approved fallback.",
+        "parent_pr_review_request": "manual @coderabbitai review requested on PR #220 at https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4933583446 after automatic review was skipped while draft"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "credentialed connector checks",
+    "destructive external actions",
+    "reverse ETL execution",
+    "production deployment",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-10T08:47:00Z"
+}

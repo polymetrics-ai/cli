@@ -1,0 +1,42 @@
+{
+  "phase": "issue-164-intercom-cli-parity",
+  "issue": 164,
+  "status": "parent_review_pending",
+  "gsd": {
+    "adapter": "scripts/gsd",
+    "doctor_passed": true,
+    "verify_pi_passed": true,
+    "registered_commands": 69,
+    "requested_programming_loop": "scripts/gsd prompt programming-loop init --phase issue-164-intercom-cli-parity --dry-run",
+    "programming_loop_available": false,
+    "fallback": "manual GSD loop with scripts/gsd prompt quick --full"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "parent-plan",
+      "decision": "local_critical_path",
+      "reason": "Parent PR is missing and no subagent tool is available in this Pi session; coordinator owns planning seed and issue #165 first slice inline."
+    },
+    {
+      "cycle": "issue-165-sub-pr",
+      "decision": "local_critical_path",
+      "reason": "Issue #165 implemented inline on branch feat/165-intercom-cli-surface-metadata and opened as PR #234 against the parent branch."
+    },
+    {
+      "cycle": "issue-165-review-route",
+      "decision": "not_spawned_review_blocked",
+      "reason": "CodeRabbit skipped PR #234 because the base branch is non-default; parent PR fallback coverage is pending after integration."
+    },
+    {
+      "cycle": "issue-165-provisional-integration",
+      "decision": "not_spawned_review_blocked",
+      "reason": "PR #234 was squash-merged into parent branch at fded1e72 after CI passed; parent PR #220 CodeRabbit skipped because the PR is draft, so review coverage remains pending."
+    }
+  ],
+  "verificationPassed": false,
+  "blockers": [
+    "issue #165 provisionally integrated; parent PR #220 CodeRabbit skipped while draft and fallback coverage remains pending",
+    "parent PR #220 remains draft until sub-issues integrate"
+  ],
+  "updated_at": "2026-07-09T20:46:30Z"
+}

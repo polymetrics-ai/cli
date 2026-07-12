@@ -1,62 +1,21 @@
-# Overview
+# Intercom connector
 
-Reads Intercom contacts, companies, conversations, admins, and tags through the Intercom REST API.
+## Overview
 
-Readable streams: `contacts`, `companies`, `conversations`, `admins`, `tags`.
-
-This connector is read-only; no write actions are declared.
-
-Service API documentation:
-https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes.
+Intercom is implemented as a declarative connector bundle backed by the official Intercom REST API 2.14 OpenAPI description. The bundle accounts for all 149 official operations with executable stream reads, bounded direct reads, bounded text/binary metadata reads, or approval-gated reverse ETL write actions.
 
 ## Auth setup
 
-Connection fields:
-
-- `access_token` (required, secret, string); Intercom access token. Used only for Bearer auth; never
-  logged.
-- `api_version` (optional, string); Optional Intercom-Version header value; when unset, the header
-  is omitted and Intercom uses the account's default API version.
-- `base_url` (optional, string); default `https://api.intercom.io`; format `uri`; Intercom API base
-  URL override for tests or proxies.
-- `page_size` (optional, string); default `50`; Records per page (1-150).
-
-Secret fields are redacted in logs and write previews: `access_token`.
-
-Default configuration values: `base_url=https://api.intercom.io`, `page_size=50`.
-
-Authentication behavior:
-
-- Bearer token authentication using `secrets.access_token`.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/admins`.
+Store the Intercom token as the secret field `access_token` using `pm credentials add intercom-local --connector intercom --from-env access_token=<env-var-name>`. Optional non-secret config includes `base_url`, `api_version`, and `page_size`.
 
 ## Streams notes
 
-Default pagination: cursor pagination; cursor parameter `starting_after`; next token from
-`pages.next.starting_after`.
-
-- `contacts`: GET `/contacts` - records path `data`; query `per_page`=`50`; cursor pagination;
-  cursor parameter `starting_after`; next token from `pages.next.starting_after`.
-- `companies`: GET `/companies` - records path `data`; query `per_page`=`50`; cursor pagination;
-  cursor parameter `starting_after`; next token from `pages.next.starting_after`.
-- `conversations`: GET `/conversations` - records path `data`; query `per_page`=`50`; cursor
-  pagination; cursor parameter `starting_after`; next token from `pages.next.starting_after`.
-- `admins`: GET `/admins` - records path `data`; cursor pagination; cursor parameter
-  `starting_after`; next token from `pages.next.starting_after`.
-- `tags`: GET `/tags` - records path `data`; cursor pagination; cursor parameter `starting_after`;
-  next token from `pages.next.starting_after`.
+Run `pm intercom` to inspect the provider-style command surface. Collection/list/search commands use declared ETL streams with bounded `--limit` handling. Direct object reads use fixed Intercom endpoints and the `json_response`, `text_response`, or `binary_metadata` output policies.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Intercom API read of contact and conversation
-data.
+Reverse ETL write commands create plans first. Live Intercom mutations require plan, preview, approval token, and execute. Destructive/admin actions declare `confirm: destructive`, so approved execution must include the typed confirmation challenge.
 
 ## Known limits
 
-- Batch defaults: read_page_size=50.
-- API coverage includes 5 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  destructive_admin=1, duplicate_of=1, out_of_scope=3.
+No credentialed live Intercom checks are run by static validation. Binary/file endpoints return metadata or bounded text rather than writing arbitrary files. The connector does not expose raw generic HTTP, SQL, shell, or arbitrary GraphQL write surfaces.

@@ -1,0 +1,40 @@
+# TDD Ledger: Intercom CLI Parity Parent Orchestration
+
+## Red / Planning Evidence
+
+- Parent PR lookup:
+  - Command: `gh pr list --head feat/164-intercom-cli-parity --base main --json number,title,state,isDraft,url,headRefName,baseRefName,mergeable,reviewDecision,statusCheckRollup`
+  - Result: `[]`; parent PR is missing and must be created before stacked sub-issue completion.
+- GSD programming-loop attempt:
+  - Command: `scripts/gsd prompt programming-loop init --phase issue-164-intercom-cli-parity --dry-run`
+  - Result: `scripts/gsd: unknown GSD command: programming-loop`; manual GSD fallback recorded.
+
+## Green / Execution Evidence
+
+- Plan checkpoint commit:
+  - Commit: `3afecf62 chore(intercom): plan CLI parity orchestration`
+  - Push: `git push -u origin feat/164-intercom-cli-parity`
+  - Draft parent PR opened: https://github.com/polymetrics-ai/cli/pull/220
+
+- Issue #165 implementation commit:
+  - Commit: `38e8ecbb feat(intercom): refresh CLI surface metadata`
+  - Push: `git push -u origin feat/165-intercom-cli-surface-metadata`
+  - Stacked PR opened: https://github.com/polymetrics-ai/cli/pull/234
+  - Sub-PR CI passed and was squash-merged into parent at `fded1e72`; automated review coverage remains pending because CodeRabbit skipped the non-default base and draft parent PR.
+
+- Combined issues #166-#171 implementation branch:
+  - Branch: `feat/166-171-intercom-complete-implementation`
+  - Plan checkpoint commit: `b2ac74cd chore(intercom): plan complete CLI implementation`
+  - Red-test checkpoint commit: `2299d0ab test(intercom): define complete CLI parity contracts`
+  - Green implementation commit: `bb382e48 feat(intercom): implement complete CLI command parity`.
+  - Stacked PR opened: https://github.com/polymetrics-ai/cli/pull/257; CI passed and the PR was squash-merged into parent at `8362291f`.
+  - CodeRabbit skipped #257 because the base was non-default; parent PR #220 was marked ready for review and `@coderabbitai review` was requested at https://github.com/polymetrics-ai/cli/pull/220#issuecomment-4933583446; review/fallback coverage is still pending.
+  - Coverage: 149/149 official Intercom operations represented as stream, bounded direct read/text/binary metadata, or typed reverse-ETL write command.
+  - Local broad gates passed: `go vet ./...`, `go test ./... -timeout=20m`, `go build ./cmd/pm`, `make verify`.
+
+Each remaining sub-issue must keep per-issue evidence updated through PR/review routing.
+
+## Refactor Evidence
+
+- Query-param default/omit logic extended to absent command query flags so conformance fixtures can execute stream defaults safely.
+- Secret-shaped docs example removed and fixtures realigned to declared records paths.

@@ -129,11 +129,21 @@ func runHelp(args []string, stdout io.Writer) error {
 		topic = args[0]
 	}
 	text, ok := docs[topic]
-	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
+	if ok {
+		fmt.Fprint(stdout, text)
+		return nil
 	}
-	fmt.Fprint(stdout, text)
-	return nil
+	if strings.TrimSpace(topic) != "" {
+		registry := appRegistry()
+		connector, ok := registry.Get(topic)
+		if ok {
+			if surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider); ok && surfaceProvider.CommandSurface() != nil {
+				fmt.Fprint(stdout, renderConnectorCommandHelp(topic, surfaceProvider.CommandSurface(), args[1:]))
+				return nil
+			}
+		}
+	}
+	return fmt.Errorf("help topic %q not found", strings.Join(args, " "))
 }
 
 func isManualCommand(cmd string) bool {
@@ -609,8 +619,11 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	}
 	flags := parseFlags(args)
 	path := flags.values["_"]
+	if isConnectorCommandHelpRequest(path, flags) {
+		return writeConnectorCommandHelp(connectorName, surfaceProvider.CommandSurface(), path, stdout, jsonOut)
+	}
 	if len(path) == 0 {
-		return usageErrorf("missing connector command path")
+		return writeConnectorCommandHelp(connectorName, surfaceProvider.CommandSurface(), nil, stdout, jsonOut)
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError
@@ -622,6 +635,233 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	return withApp(root, func(a *app.App) error {
 		return runConnectorCommand(ctx, a, connectorName, args, stdout, jsonOut)
 	})
+}
+
+func isConnectorCommandHelpRequest(path []string, flags parsedFlags) bool {
+	if len(path) == 0 || flags.first("help") != "" {
+		return true
+	}
+	if len(path) == 1 && (path[0] == "help" || path[0] == "man") {
+		return true
+	}
+	return len(path) > 1 && (path[0] == "help" || path[0] == "man")
+}
+
+func writeConnectorCommandHelp(connectorName string, surface *connectors.CommandSurface, path []string, stdout io.Writer, jsonOut bool) error {
+	manualPath := connectorHelpPath(path)
+	manual := renderConnectorCommandHelp(connectorName, surface, manualPath)
+	if jsonOut {
+		command := connectorName
+		if len(manualPath) > 0 {
+			command += " " + strings.Join(manualPath, " ")
+		}
+		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": command, "manual": manual})
+	}
+	fmt.Fprint(stdout, manual)
+	return nil
+}
+
+func connectorHelpPath(path []string) []string {
+	if len(path) == 0 {
+		return nil
+	}
+	if path[0] == "help" || path[0] == "man" {
+		return path[1:]
+	}
+	return path
+}
+
+func renderConnectorCommandHelp(connectorName string, surface *connectors.CommandSurface, path []string) string {
+	if surface == nil || len(path) == 0 {
+		return renderConnectorNamespaceHelp(connectorName, surface)
+	}
+	commandPath := strings.Join(path, " ")
+	for _, cmd := range surface.Commands {
+		if cmd.Path == commandPath {
+			return renderConnectorCommandDetail(connectorName, surface, cmd)
+		}
+	}
+	return renderConnectorNamespaceHelp(connectorName, surface)
+}
+
+func renderConnectorNamespaceHelp(connectorName string, surface *connectors.CommandSurface) string {
+	var b strings.Builder
+	b.WriteString("NAME\n")
+	b.WriteString(fmt.Sprintf("  pm %s - connector command surface\n\n", connectorName))
+	b.WriteString("SYNOPSIS\n")
+	usage := fmt.Sprintf("pm %s <resource> <action> [flags]", connectorName)
+	if surface != nil && strings.TrimSpace(surface.Usage) != "" {
+		usage = surface.Usage
+	}
+	b.WriteString("  " + usage + "\n")
+	b.WriteString(fmt.Sprintf("  pm %s <resource> <action> --help\n\n", connectorName))
+	b.WriteString("DESCRIPTION\n")
+	if surface != nil && strings.TrimSpace(surface.Tagline) != "" {
+		b.WriteString("  " + surface.Tagline + "\n")
+	} else {
+		b.WriteString("  Provider-style connector commands backed by typed streams, direct reads, and approval-gated reverse ETL writes.\n")
+	}
+	b.WriteString("  Reads require a saved credential or explicit non-secret config. Writes create a reverse ETL plan first; live mutation requires preview, approval token, and any typed confirmation.\n\n")
+	if surface != nil && surface.SourceCLI != nil && surface.SourceCLI.Name != "" {
+		b.WriteString("SOURCE\n")
+		b.WriteString("  " + surface.SourceCLI.Name)
+		if surface.SourceCLI.Reference != "" {
+			b.WriteString(" - " + surface.SourceCLI.Reference)
+		} else if surface.SourceCLI.Docs != "" {
+			b.WriteString(" - " + surface.SourceCLI.Docs)
+		}
+		b.WriteString("\n\n")
+	}
+	if surface != nil && len(surface.GlobalFlags) > 0 {
+		b.WriteString("GLOBAL FLAGS\n")
+		for _, flag := range surface.GlobalFlags {
+			b.WriteString("  " + renderConnectorHelpFlag(flag) + "\n")
+		}
+		b.WriteString("\n")
+	}
+	b.WriteString("COMMANDS\n")
+	if surface == nil || len(surface.Commands) == 0 {
+		b.WriteString("  No connector commands are declared.\n\n")
+	} else {
+		renderConnectorHelpCommands(&b, surface)
+		b.WriteString("\n")
+	}
+	b.WriteString("SAFETY\n")
+	b.WriteString("  Use --json for machine-readable output. Do not pass secrets as flags. Reverse ETL writes require plan, preview, approval, execute; destructive/admin actions also require typed confirmation when declared.\n\n")
+	b.WriteString("EXIT STATUS\n")
+	b.WriteString("  0 success\n  1 runtime error\n  2 usage error\n")
+	return b.String()
+}
+
+func renderConnectorHelpCommands(b *strings.Builder, surface *connectors.CommandSurface) {
+	commandsByPrefix := map[string][]connectors.CommandSurfaceCommand{}
+	for _, cmd := range surface.Commands {
+		prefix := strings.Fields(cmd.Path)
+		key := ""
+		if len(prefix) > 0 {
+			key = prefix[0]
+		}
+		commandsByPrefix[key] = append(commandsByPrefix[key], cmd)
+	}
+	rendered := map[string]bool{}
+	for _, group := range surface.Groups {
+		if group.Title != "" {
+			b.WriteString("  " + group.Title + "\n")
+		}
+		for _, prefix := range group.Commands {
+			for _, cmd := range commandsByPrefix[prefix] {
+				b.WriteString("    " + renderConnectorHelpCommandLine(cmd) + "\n")
+				rendered[cmd.Path] = true
+			}
+		}
+	}
+	for _, cmd := range surface.Commands {
+		if rendered[cmd.Path] {
+			continue
+		}
+		b.WriteString("  " + renderConnectorHelpCommandLine(cmd) + "\n")
+	}
+}
+
+func renderConnectorCommandDetail(connectorName string, surface *connectors.CommandSurface, cmd connectors.CommandSurfaceCommand) string {
+	var b strings.Builder
+	b.WriteString("NAME\n")
+	b.WriteString(fmt.Sprintf("  pm %s %s - %s\n\n", connectorName, cmd.Path, cmd.Summary))
+	b.WriteString("SYNOPSIS\n")
+	b.WriteString(fmt.Sprintf("  pm %s %s [flags]\n\n", connectorName, cmd.Path))
+	b.WriteString("DESCRIPTION\n")
+	b.WriteString("  " + renderConnectorHelpCommandLine(cmd) + "\n\n")
+	if len(cmd.Flags) > 0 {
+		b.WriteString("FLAGS\n")
+		for _, flag := range cmd.Flags {
+			b.WriteString("  " + renderConnectorHelpFlag(flag) + "\n")
+		}
+		b.WriteString("\n")
+	}
+	if surface != nil && len(surface.GlobalFlags) > 0 {
+		b.WriteString("GLOBAL FLAGS\n")
+		for _, flag := range surface.GlobalFlags {
+			b.WriteString("  " + renderConnectorHelpFlag(flag) + "\n")
+		}
+		b.WriteString("\n")
+	}
+	if len(cmd.APISurface) > 0 {
+		b.WriteString("API SURFACE\n")
+		for _, ep := range cmd.APISurface {
+			b.WriteString(fmt.Sprintf("  %s %s\n", ep.Method, ep.Path))
+		}
+		b.WriteString("\n")
+	}
+	if len(cmd.Examples) > 0 {
+		b.WriteString("EXAMPLES\n")
+		for _, example := range cmd.Examples {
+			b.WriteString("  " + example + "\n")
+		}
+		b.WriteString("\n")
+	}
+	b.WriteString("SAFETY\n")
+	if cmd.Intent == "reverse_etl" {
+		b.WriteString("  Reverse ETL writes require plan, preview, approval, execute. This command creates or uses a plan before any live mutation.\n")
+	} else {
+		b.WriteString("  This command is bounded by connector metadata and does not expose a raw generic HTTP escape hatch.\n")
+	}
+	b.WriteString("\nEXIT STATUS\n")
+	b.WriteString("  0 success\n  1 runtime error\n  2 usage error\n")
+	return b.String()
+}
+
+func renderConnectorHelpCommandLine(cmd connectors.CommandSurfaceCommand) string {
+	line := cmd.Path
+	if cmd.Summary != "" {
+		line += " - " + cmd.Summary
+	}
+	meta := []string{}
+	if cmd.Intent != "" {
+		meta = append(meta, cmd.Intent)
+	}
+	if cmd.Availability != "" {
+		meta = append(meta, "availability="+cmd.Availability)
+	}
+	if cmd.Stream != "" {
+		meta = append(meta, "stream="+cmd.Stream)
+	}
+	if cmd.Write != "" {
+		meta = append(meta, "write="+cmd.Write)
+	}
+	if cmd.OutputPolicy != "" {
+		meta = append(meta, "output_policy="+cmd.OutputPolicy)
+	}
+	if len(meta) > 0 {
+		line += " [" + strings.Join(meta, " ") + "]"
+	}
+	if cmd.Approval != "" {
+		line += "; approval: " + cmd.Approval
+	}
+	if cmd.Risk != "" {
+		line += "; risk: " + cmd.Risk
+	}
+	if cmd.Notes != "" {
+		line += "; notes: " + cmd.Notes
+	}
+	return line
+}
+
+func renderConnectorHelpFlag(flag connectors.CommandSurfaceFlag) string {
+	name := "--" + strings.TrimLeft(flag.Name, "-")
+	if flag.Type != "" {
+		name += " (" + flag.Type + ")"
+	}
+	parts := []string{name}
+	if flag.Summary != "" {
+		parts = append(parts, flag.Summary)
+	}
+	if len(flag.Values) > 0 {
+		parts = append(parts, "values="+strings.Join(flag.Values, "|"))
+	}
+	if flag.MapsTo != "" {
+		parts = append(parts, "maps_to="+flag.MapsTo)
+	}
+	return strings.Join(parts, ": ")
 }
 
 func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {

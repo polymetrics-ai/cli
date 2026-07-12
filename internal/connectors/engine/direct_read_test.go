@@ -219,6 +219,87 @@ func TestDirectReadRedactsGitHubFileContent(t *testing.T) {
 	}
 }
 
+func TestDirectReadJSONResponsePolicyReturnsDecodedBody(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/contacts/abc123" {
+			t.Fatalf("path = %s, want contact direct-read path", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"id":"abc123","type":"contact"}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/contacts/{contact_id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/contacts/{contact_id}",
+		PathParams:   map[string]string{"contact_id": "abc123"},
+		OutputPolicy: "json_response",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	if body["id"] != "abc123" || body["type"] != "contact" {
+		t.Fatalf("body = %+v, want contact JSON", body)
+	}
+}
+
+func TestDirectReadTextResponsePolicyReturnsBoundedText(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain")
+		_, _ = w.Write([]byte("hello transcript"))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/calls/{call_id}/transcript"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/calls/{call_id}/transcript",
+		PathParams:   map[string]string{"call_id": "call_123"},
+		OutputPolicy: "text_response",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want metadata map", result.Body)
+	}
+	if body["text"] != "hello transcript" || body["bytes"] != float64(len("hello transcript")) && body["bytes"] != len("hello transcript") {
+		t.Fatalf("body = %+v, want transcript text and byte count", body)
+	}
+}
+
+func TestDirectReadBinaryMetadataPolicyRedactsBody(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/zip")
+		_, _ = w.Write([]byte("PK\x03\x04binary"))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/download/content/data/{job_identifier}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/download/content/data/{job_identifier}",
+		PathParams:   map[string]string{"job_identifier": "job_123"},
+		OutputPolicy: "binary_metadata",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want metadata map", result.Body)
+	}
+	if body["body_redacted"] != true || body["bytes"] == nil || body["content_type"] != "application/zip" {
+		t.Fatalf("body = %+v, want redacted binary metadata", body)
+	}
+	if _, leaked := body["content"]; leaked {
+		t.Fatalf("binary content leaked: %+v", body)
+	}
+}
+
 func TestDirectReadRejectsSensitiveRepositoryPathBeforeNetwork(t *testing.T) {
 	var hits int
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
