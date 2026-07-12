@@ -7,11 +7,11 @@
   },
   "parent_branch": "fix/323-auto-loop-hardening",
   "parent_pr": {
-    "url": "pending",
+    "url": "https://github.com/polymetrics-ai/cli/pull/324",
     "base": "main",
     "head": "fix/323-auto-loop-hardening",
     "draft": true,
-    "state": "PLANNED"
+    "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
@@ -19,22 +19,312 @@
     "runtime": "codex",
     "status": "running"
   },
-  "ready_queue": [],
+  "ready_queue": [
+    {
+      "number": 325,
+      "status": "worker_ready",
+      "dependencies": [],
+      "write_scope": [
+        "internal/agentloop fixture/replay/policy/redaction/safety files",
+        "cmd/loopctl replay and safety commands",
+        "scripts/tests",
+        "loop entrypoint guards",
+        "Makefile agent-loop-test target",
+        ".planning/phases/325-agentloop-characterization"
+      ],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 326,
+      "status": "planned",
+      "dependencies": [325],
+      "write_scope": ["internal/agentloop/controller", "cmd/loopctl"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 327,
+      "status": "planned",
+      "dependencies": [326],
+      "write_scope": ["internal/agentloop/state", "agentloop state schemas"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 335,
+      "status": "planned",
+      "dependencies": [327],
+      "write_scope": ["internal/agentloop contract/authority/terminal", "authority and terminal schemas"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 328,
+      "status": "planned",
+      "dependencies": [335],
+      "write_scope": ["internal/agentloop/gate", "validation contracts"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 329,
+      "status": "planned",
+      "dependencies": [328],
+      "write_scope": ["internal/agentloop/worker", "worker contracts"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 336,
+      "status": "planned",
+      "dependencies": [329],
+      "write_scope": ["internal/agentloop capability/publish", "loop worker capability adapters"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 330,
+      "status": "planned",
+      "dependencies": [336],
+      "write_scope": ["internal/agentloop/validator", "Shepherd adapter"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 331,
+      "status": "planned",
+      "dependencies": [330],
+      "write_scope": ["internal/agentloop/outbox", "guarded GitHub adapter"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 337,
+      "status": "planned",
+      "dependencies": [331],
+      "write_scope": ["internal/agentloop attestation/merge", "required ratification check"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 332,
+      "status": "planned",
+      "dependencies": [337],
+      "write_scope": ["internal/agentloop event/trace/redaction", "trace adapter"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 338,
+      "status": "planned",
+      "dependencies": [332],
+      "write_scope": ["internal/agentloop dispatch/handoff/usage", "selective Pi adapter hardening"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 333,
+      "status": "planned",
+      "dependencies": [338],
+      "write_scope": ["internal/agentloop/watcher", "review and wait policy"],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 334,
+      "status": "planned",
+      "dependencies": [325, 326, 327, 335, 328, 329, 336, 330, 331, 337, 332, 338, 333],
+      "write_scope": ["internal/agentloop/replay", "scripts/tests", "final phase evidence"],
+      "decision": "not_spawned_dependency_blocked"
+    }
+  ],
   "spawn_decisions": [
     {
       "timestamp": "2026-07-12T07:34:11Z",
       "decision": "local_critical_path",
       "issue_numbers": [],
-      "reason": "Parent PR and native child issue contracts must exist before mutating workers become ready."
+      "reason": "Create the isolated parent branch, durable plan, and draft parent PR before worker execution."
     },
     {
       "timestamp": "2026-07-12T07:34:11Z",
       "decision": "read_only_spawned",
       "issue_numbers": [],
-      "reason": "Read-only baseline architecture, characterization, and control-design agents were spawned while the parent scaffold is created."
+      "reason": "Spawn read-only baseline architecture, characterization, and control-design agents."
+    },
+    {
+      "timestamp": "2026-07-12T07:38:49Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [325, 326, 327, 335, 328, 329, 336, 330, 331, 337, 332, 338, 333, 334],
+      "reason": "Create and natively link complete child issue contracts before Phase 0 worker dispatch."
     }
   ],
-  "subissues": [],
+  "subissues": [
+    {
+      "number": 325,
+      "url": "https://github.com/polymetrics-ai/cli/issues/325",
+      "branch": "fix/325-agentloop-characterization",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "worker_ready",
+      "write_scope": ["fixture/replay/policy/redaction/safety core", "cmd/loopctl replay and safety", "scripts/tests", "loop entrypoint guards", "Makefile"],
+      "worker_directory": "pending",
+      "verification": "pending red characterization",
+      "automated_review": {
+        "primary_route": "claude_auto",
+        "status": "pending",
+        "head_sha": "pending",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr",
+        "fallback_route": "none",
+        "disposition_summary": "pending",
+        "disposition_url": "pending"
+      }
+    },
+    {
+      "number": 326,
+      "url": "https://github.com/polymetrics-ai/cli/issues/326",
+      "branch": "fix/326-controller-fencing",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop/controller", "cmd/loopctl"],
+      "worker_directory": "pending",
+      "verification": "blocked by #325",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 327,
+      "url": "https://github.com/polymetrics-ai/cli/issues/327",
+      "branch": "fix/327-transactional-state",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop/state", "agentloop state schemas"],
+      "worker_directory": "pending",
+      "verification": "blocked by #326",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 335,
+      "url": "https://github.com/polymetrics-ai/cli/issues/335",
+      "branch": "fix/335-authority-terminal",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop contract/authority/terminal", "authority and terminal schemas"],
+      "worker_directory": "pending",
+      "verification": "blocked by #327",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 328,
+      "url": "https://github.com/polymetrics-ai/cli/issues/328",
+      "branch": "fix/328-gate-tickets",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop/gate", "validation contracts"],
+      "worker_directory": "pending",
+      "verification": "blocked by #335",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 329,
+      "url": "https://github.com/polymetrics-ai/cli/issues/329",
+      "branch": "fix/329-worker-leases",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop/worker", "worker contracts"],
+      "worker_directory": "pending",
+      "verification": "blocked by #328",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 336,
+      "url": "https://github.com/polymetrics-ai/cli/issues/336",
+      "branch": "fix/336-capability-enforcement",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop capability/publish", "loop worker capability adapters"],
+      "worker_directory": "pending",
+      "verification": "blocked by #329",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 330,
+      "url": "https://github.com/polymetrics-ai/cli/issues/330",
+      "branch": "fix/330-atomic-validation",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop/validator", "Shepherd adapter"],
+      "worker_directory": "pending",
+      "verification": "blocked by #336",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 331,
+      "url": "https://github.com/polymetrics-ai/cli/issues/331",
+      "branch": "fix/331-github-outbox",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop/outbox", "guarded GitHub adapter"],
+      "worker_directory": "pending",
+      "verification": "blocked by #330",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 337,
+      "url": "https://github.com/polymetrics-ai/cli/issues/337",
+      "branch": "fix/337-merge-attestation",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop attestation/merge", "required ratification check"],
+      "worker_directory": "pending",
+      "verification": "blocked by #331",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 332,
+      "url": "https://github.com/polymetrics-ai/cli/issues/332",
+      "branch": "fix/332-typed-trace",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop event/trace/redaction", "trace adapter"],
+      "worker_directory": "pending",
+      "verification": "blocked by #337",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 338,
+      "url": "https://github.com/polymetrics-ai/cli/issues/338",
+      "branch": "fix/338-dispatch-session-contracts",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop dispatch/handoff/usage", "selective Pi adapter hardening"],
+      "worker_directory": "pending",
+      "verification": "blocked by #332",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 333,
+      "url": "https://github.com/polymetrics-ai/cli/issues/333",
+      "branch": "fix/333-deterministic-watchers",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop/watcher", "review and wait policy"],
+      "worker_directory": "pending",
+      "verification": "blocked by #338",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    },
+    {
+      "number": 334,
+      "url": "https://github.com/polymetrics-ai/cli/issues/334",
+      "branch": "fix/334-fault-canary",
+      "pr_url": null,
+      "worker": "pending",
+      "status": "planned",
+      "write_scope": ["internal/agentloop/replay", "scripts/tests", "final phase evidence"],
+      "worker_directory": "pending",
+      "verification": "blocked by all prior phase slices",
+      "automated_review": {"primary_route":"claude_auto","status":"pending","head_sha":"pending","reviewed_range":"pending","coverage_route":"sub_pr","fallback_route":"none","disposition_summary":"pending","disposition_url":"pending"}
+    }
+  ],
   "human_gates": [
     "parent PR merge to main",
     "new dependencies",
@@ -45,5 +335,5 @@
     "quality gate reductions",
     "secret access"
   ],
-  "updated_at": "2026-07-12T07:34:11Z"
+  "updated_at": "2026-07-12T07:45:02Z"
 }

@@ -1,10 +1,11 @@
 # Summary: Autonomous Delivery Control-Plane Hardening
 
-Status: parent scaffold in progress.
+Status: parent PR open; Phase 0 worker preparation in progress.
 
 Issue #323 is the main-based remediation roadmap for the Twenty autonomous-delivery post-mortem.
-The clean parent branch is isolated from PR #285. The next checkpoint is a draft parent PR followed
-by ten native child issues and dependency-ordered test-first implementation.
+The clean parent branch and draft PR #324 are isolated from PR #285. Fourteen native child issues
+now carry the dependency-ordered test-first implementation contracts; phases 2, 4, 6, and 7 are
+split into independently reviewable A/B slices.
 
 No production behavior has changed in this scaffold checkpoint. No parent-to-main merge is
 authorized.

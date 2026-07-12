@@ -3,7 +3,7 @@
   "status": "in_progress",
   "parent_issue": 323,
   "parent_branch": "fix/323-auto-loop-hardening",
-  "parent_pr": null,
+  "parent_pr": 324,
   "gsd": {
     "doctor": "passed_with_node_24_path",
     "adapter_programming_loop": "unavailable_not_in_registry",
@@ -21,6 +21,11 @@
       "cycle": "architecture-recon",
       "decision": "read_only_spawned",
       "reason": "Three read-only subagents inspect baseline architecture, characterization tests, and control-plane design without sharing mutation authority."
+    },
+    {
+      "cycle": "issue-roster",
+      "decision": "local_critical_path",
+      "reason": "Draft parent PR #324 and fourteen native child issues #325-#338 were created before the first mutating worker dispatch."
     }
   ],
   "humanGate": "parent PR merge to main"

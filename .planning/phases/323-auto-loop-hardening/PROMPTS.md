@@ -10,8 +10,9 @@
   Shepherd/driver contracts, required skill routing.
 - Execution decision: `local_critical_path` for parent scaffold and native child issue creation;
   three read-only architecture/test/control-design subagents were then spawned.
-- Downstream artifact: `.planning/phases/323-auto-loop-hardening/PLAN.md`
-- Verification result: parent-scaffold checks pending.
+- Downstream artifacts: `.planning/phases/323-auto-loop-hardening/PLAN.md`, draft PR #324, fourteen
+  native sub-issues #325-#338.
+- Verification result: parent-scaffold JSON/diff checks passed; production verification pending.
 
 Exact worker prompts and compact handoffs will be recorded per child issue. Safety gates, commands,
 test output, and security warnings remain uncompressed.

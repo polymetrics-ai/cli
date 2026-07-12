@@ -3,7 +3,7 @@
 Parent issue: #323
 Incident provenance: #277
 Parent branch: `fix/323-auto-loop-hardening`
-Parent PR: pending creation against `main`
+Parent PR: #324 against `main` (draft)
 
 ## Outcome
 
@@ -16,9 +16,9 @@ green, and automated review coverage is complete.
 
 - The branch starts at `origin/main` commit `cab8f3df`, which contains the original Claude driver
   and Shepherd validator from PR #276.
-- The post-merge loop commits used by the Twenty run (`0087216c` through `2b40ba52` on local branch
+- The seven post-merge loop commits used by the Twenty run (`0087216c` through `2b40ba52` on local branch
   `feat/pi-shepherd-loop`) are evidence/baseline inputs. They are not assumed to be on `main` and
-  must be adopted deliberately by the characterization child issue if still required.
+  must be ported selectively through hardened interfaces; wholesale cherry-pick is forbidden.
 - The Twenty connector branch, PR #285, connector bundles, and dirty run checkout are out of scope.
 - Every mutating child worker receives one issue, one branch from this parent branch, one isolated
   worktree, one bounded write scope, and one handoff.
@@ -39,23 +39,27 @@ green, and automated review coverage is complete.
 
 ## Delivery slices
 
-| Phase | Child outcome | Depends on | Primary write scope |
-|---|---|---|---|
-| 0 | Sanitized characterization/replay harness; irreversible-action kill switch defaults off | parent PR | `scripts/tests/**`, test fixtures, baseline loop adapters, phase artifacts |
-| 1 | Singleton controller generations, leases, process-group ownership, heartbeat, takeover, cleanup, exact session binding, per-turn cap | 0 | `internal/agentloop/controller/**`, `cmd/loopctl/**`, driver adapter |
-| 2 | Versioned CAS state/events/checkpoints, durable RETRY/HALT, signed human decisions, terminal model | 1 | `internal/agentloop/state/**`, state schemas, checkpoint adapter |
-| 3 | Gate-closure compiler and immutable one-stage tickets | 2 | `internal/agentloop/gate/**`, validation contracts |
-| 4 | Worker/worktree leases, production capabilities, quiescence, scope audit | 3 | `internal/agentloop/worker/**`, worker adapter/contracts |
-| 5 | Atomic read-only Shepherd transaction and moved-evidence rejection | 4 | `internal/agentloop/validator/**`, validator prompt/driver |
-| 6 | Transition-bound idempotent GitHub outbox and exact-head merge attestation | 5 | `internal/agentloop/outbox/**`, guarded GitHub adapter/workflow |
-| 7 | Event-derived trace/UI, typed dispatch/HANDOFF, redaction, canonical usage/session IDs | 6 | `internal/agentloop/trace/**`, trace CLI/scripts, schemas/prompts |
-| 8 | No-model CI/worker/human watchers, deterministic review packs, risk budgets | 7 | `internal/agentloop/watcher/**`, review routing, driver policy |
-| 9 | Historical replay, fault injection, shadow execution, merge-disabled canary | 0-8 | replay/fault suites, final phase artifacts only |
+| Slice | Issue / branch | Child outcome | Depends on | Primary write scope |
+|---|---|---|---|---|
+| 0 | #325 / `fix/325-agentloop-characterization` | Sanitized replay oracle and default-deny migration fuse | parent PR #324 | fixture/replay/safety core, `cmd/loopctl`, driver guards, tests |
+| 1 | #326 / `fix/326-controller-fencing` | Controller generations, leases, process ownership, takeover, session binding, turn cap | #325 | `internal/agentloop/controller/**`, `cmd/loopctl/**` |
+| 2A | #327 / `fix/327-transactional-state` | Atomic CAS journal, events, create-only checkpoints, recovery | #326 | state/model/checkpoint core and schemas |
+| 2B | #335 / `fix/335-authority-terminal` | Contract manifest, durable authority/HALT/RETRY, human decisions, terminals | #327 | contract/authority/terminal core and schemas |
+| 3 | #328 / `fix/328-gate-tickets` | Gate-closure compiler and immutable one-stage tickets | #335 | `internal/agentloop/gate/**`, validation contracts |
+| 4A | #329 / `fix/329-worker-leases` | Worker/worktree leases, quiescence, complete scope audit | #328 | worker/scope core and schemas |
+| 4B | #336 / `fix/336-capability-enforcement` | Production mutation guard and controller-only publication | #329 | capability/publish core and worker adapters |
+| 5 | #330 / `fix/330-atomic-validation` | Atomic read-only Shepherd transaction and moved-evidence rejection | #336 | validator core, prompt and adapter |
+| 6A | #331 / `fix/331-github-outbox` | Transition-bound idempotent GitHub outbox | #330 | outbox/closed GitHub adapter and schemas |
+| 6B | #337 / `fix/337-merge-attestation` | Exact-head one-shot attestation and ratification boundary | #331 | attestation/merge guard and required check |
+| 7A | #332 / `fix/332-typed-trace` | Bounded redacted event-derived trace projection | #337 | event/trace/redaction core and wrapper |
+| 7B | #338 / `fix/338-dispatch-session-contracts` | Typed dispatch/HANDOFF, session compaction and usage de-duplication | #332 | dispatch/handoff/usage core and Pi adapter |
+| 8 | #333 / `fix/333-deterministic-watchers` | No-model watchers, deterministic review packs, risk budgets | #338 | watcher/review/budget core and policy |
+| 9 | #334 / `fix/334-fault-canary` | Historical replay, fault injection, shadow execution, merge-disabled canary | all prior | replay/fault suites and final evidence |
 
-Child issue numbers, branch names, worker directories, and PR URLs will be filled after native
-sub-issues are created. Dependency order is intentionally conservative because phases 1-8 share
-control-plane contracts; parallelism is reserved for read-only design/review or demonstrably
-disjoint test work.
+All fourteen issues are native sub-issues of #323. Phases 2, 4, 6, and 7 were split into A/B slices
+after read-only architecture review found their original scopes were not honestly PR-sized.
+Dependency order is intentionally conservative because phases 1-8 share control-plane contracts;
+parallelism is reserved for read-only design/review or demonstrably disjoint test work.
 
 ## TDD and checkpoint policy
 
