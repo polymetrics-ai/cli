@@ -80,7 +80,7 @@ agent-loop-test:
 	go test -race ./internal/agentloop/... -count=1
 	go test ./cmd/loopctl/... -count=1
 	bash scripts/tests/auto-loop-control.sh
-	bash scripts/tests/pi-shepherd-supervision.sh
+	SHEPHERD_REQUIRE_FULL=1 bash scripts/tests/pi-shepherd-supervision.sh
 
 verify: fmt tidy-check vet test build docs-check smoke lint connectorgen-validate agent-loop-test
 

@@ -30,12 +30,15 @@ parked for the separately approved cleanup process.
 
 ## Boundaries
 
-- Production: `scripts/pi-shepherd-loop.sh` and the `agent-loop-test` Make recipe only.
+- Production: `scripts/pi-shepherd-loop.sh`, the `agent-loop-test` Make recipe, and `.gitignore`
+  entries for the worktree identity/recovery anchors only.
 - Tests: `scripts/tests/pi-shepherd-supervision.sh`.
 - Memory: `.planning/phases/326-shepherd-supervision/**`.
 - Bash plus Python standard library only; no dependency or alternate executable.
 - No live enable route, provider call, connector/GitHub mutation, takeover, signed human resume,
   validator transaction, worker capability broker, merge broker, or parent-to-main merge.
+- The run-namespaced checkpoint bundle in this shell is an interim fail-closed safety boundary;
+  #327 remains the owner of the canonical CAS journal and transactional validation/checkpoint model.
 
 ## Checkpoints
 
@@ -43,4 +46,3 @@ parked for the separately approved cleanup process.
 2. Minimal GREEN implementation.
 3. Review fixes and full verification.
 4. Push/open stacked PR only after coherent green evidence.
-

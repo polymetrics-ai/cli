@@ -24,3 +24,5 @@ __pycache__/
 
 # Pi autonomous loop runtime state (durable resume lives on disk; not committed)
 .planning/auto-loop/
+.auto-loop-recovery
+.auto-loop-anchor

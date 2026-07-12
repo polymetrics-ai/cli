@@ -184,3 +184,69 @@ RED command/output will be appended after the tests exist and before production 
   repetitions of the four-risk matrix pass 10/10; two complete 22-scenario suites pass; Bash
   syntax, ShellCheck warning, Phase 0, Go unit/race, `make agent-loop-test`, and complete
   `make verify` gates pass. The production Phase 0 fuse remains closed.
+
+## Deep exact-head RED correction — 2026-07-13
+
+- A post-PR session/oracle audit found additional false-green classes after the earlier green
+  suite: the controller accepted incomplete or low-score verdicts, trusted a valid verdict from a
+  nonzero validator, let the mutable trace script replace the verdict before parsing, published a
+  checkpoint despite invalid `RUN.json` or a missing HEAD, and reused a prior run's global
+  checkpoint namespace.
+- RED: the strict verdict matrix initially produced 15 expected failures across malformed control
+  state, aliased state roots, re-anchored deadlines, unbounded readiness/assert helpers, static FIFO
+  injection, uncertain terminal commits, and trace deadline escape. After those lifecycle fixes,
+  the dedicated verdict/checkpoint RED still failed four assertions: nonzero validator released,
+  trace overwrite released, invalid RUN checkpointed, and missing HEAD checkpointed. A separate
+  fresh-run RED accepted/restored the prior run's ordinal-only checkpoint.
+- Oracle review strengthened the fixtures before GREEN: delayed-begin teardown registers and
+  verifies a TERM-resistant descendant; FIFO flood readiness is published only after successful
+  writes reach `EAGAIN`; malformed REVERT cases are seeded with a real checkpoint; RETRY must be
+  logged as RETRY; checkpoint restore must emit the exact run-bound cleanup record; and symlink and
+  hardlink bundles must remain untrusted and unmodified.
+
+## Deep exact-head GREEN correction — 2026-07-13
+
+- Verdict parsing is one bounded, anchored snapshot with duplicate/nonfinite rejection, the exact
+  six-field schema, finite 1–5 scores, `PROCEED >= 4`, RETRY 2–<4, fail-closed REVERT <2, nonempty
+  control-character-free reason/correction text, null-field semantics, and an exact current-run
+  checkpoint target. A nonzero validator cannot contribute a verdict.
+- Trace distillation now runs before the Shepherd. Nothing mutable runs between validator
+  quiescence and the private snapshot, so the validator judges the full turn and trace cannot
+  rewrite its result afterward.
+- Checkpoints are namespaced by the current `run_id`. Publication validates bounded strict
+  `RUN.json` plus a canonical Git HEAD, creates private no-alias bundle files, fsyncs them, and only
+  then atomically publishes that run's `LAST_GOOD`. Restore consumes the snapshotted target,
+  revalidates the entire no-symlink/no-hardlink bundle, atomically restores RUN and writes a
+  run-bound cleanup record before the turn can complete. Failure enters durable recovery without
+  publishing success.
+- Signal/HALT handling has a reentrancy latch and ignores repeated termination signals while the
+  emergency transition is in flight. The full-gate recipe refuses filtered test execution.
+- Focused GREEN: the 12-function verdict/checkpoint/deadline/oracle matrix passes, spanning 23
+  isolated fixtures and all new RED cases. Bash syntax, ShellCheck warning severity, and scoped
+  diff checks pass. The complete 44-function gate is the next delivery checkpoint.
+
+## Explicit enable blockers retained
+
+- Providers still inherit the worktree lock open-file description and can release it. The trusted
+  guardian/launch broker in #342 must be the sole lock owner before Phase 0 can open.
+- Startup initialization, process probes, and teardown grace are not yet one absolute monotonic
+  end-to-end deadline. #342 owns the bounded guardian/probe/containment closure.
+- The shell snapshot does not claim the canonical validation/event/checkpoint transaction or
+  durable correction replay. #327/#335 own current-turn validation binding, append-only CAS state,
+  and RETRY/REVERT transaction semantics. The Phase 0 first-action fuse remains closed until these
+  dependencies and later canary gates pass.
+
+## Final delivery verification — 2026-07-13
+
+- Five consecutive repetitions of the deterministic expired-bind oracle pass after it was changed
+  to prove entry into the inert bind-delay window before asserting deadline behavior.
+- `make agent-loop-test` passes in 9m09s: Go unit/race/CLI controller tests, Phase 0 controls, and
+  all 44 Shepherd supervision functions. The Make target sets `SHEPHERD_REQUIRE_FULL=1`, so a test
+  filter cannot produce this green result.
+- `make verify` passes in 16m58s: format/tidy, vet, all Go tests, build, connector documentation,
+  smoke, lint, 547 connector definitions, race/control gates, Phase 0 controls, and the full
+  44-function Shepherd suite.
+- Three independent exact-head read-only reviews report no remaining in-scope P0/P1. They
+  independently verified process authorization/oracles, verdict/checkpoint durability, and test
+  discrimination. The #327/#335/#342 deferrals above remain production-enable blockers rather than
+  claims of this closed-fuse issue.
