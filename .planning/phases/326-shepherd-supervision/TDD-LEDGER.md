@@ -26,3 +26,20 @@
 
 RED command/output will be appended after the tests exist and before production changes.
 
+## RED checkpoint — 2026-07-12
+
+- Added `scripts/tests/pi-shepherd-supervision.sh`. It copies the exact launcher body into a
+  temporary fixture and mechanically removes only the Phase 0 guard; production has no enable flag
+  or environment bypass. Fake Pi processes, synthetic local state, and test-owned PIDs are used.
+- `bash -n scripts/tests/pi-shepherd-supervision.sh` -> pass.
+- `bash scripts/tests/pi-shepherd-supervision.sh` -> expected exit 1 with 11 failures:
+  - all 32 concurrent controllers launched an orchestrator; no contender received the required
+    controller-held result;
+  - hard deadline exited 3, started a validator, and wrote no halted/quiescent control state;
+  - leader exit with a live descendant was accepted, validator started, and the child survived;
+  - validator HALT produced no durable control latch;
+  - signal termination left its descendant alive and wrote no recovery state;
+  - the turn cap/ordinal was not persisted for resume.
+- Production files changed before RED: none.
+- Expected-failure integrity: the harness cleaned every recorded test child on exit; no external
+  provider, GitHub mutation, credential, or non-test process was touched.
