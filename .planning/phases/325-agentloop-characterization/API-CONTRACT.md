@@ -16,6 +16,11 @@
 No interface, mutable package global, external adapter, subprocess, network, git, or GitHub API is
 introduced in Phase 0.
 
+Replay accepts only the thirteen canonical incident IDs. It rejects unknown IDs, a canonical ID
+whose facts derive another violation, zero/multiple matched policies, and wrong-resource fact
+splices. Observation values that are emitted in `ReplayResult` are closed enums; caller paths,
+commands, flags, summaries, and arbitrary event values are never reflected into successful output.
+
 ## Stable JSON result fields
 
 Replay result field order:

@@ -23,7 +23,7 @@ Run the GSD Universal Programming Loop using the repo PRD, prompt library, stric
 - Boundaries: issue write scope only; no prompt/validator/controller-phase work, connector changes,
   secrets, live provider/GitHub effects beyond this branch/PR, dependencies, or merges.
 - Downstream artifact: this phase directory and eventual worker handoff.
-- Verification result: pending until all declared commands actually exit 0.
+- Verification result: targeted, race, CLI, shell, aggregate Make, and full `make verify` exited 0.
 
 ## Manual-GSD fallback
 
@@ -34,3 +34,15 @@ Run the GSD Universal Programming Loop using the repo PRD, prompt library, stric
   `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` executed by this live worker.
 - Helper-generated generic visual-design files were removed immediately because they were outside
   issue scope; phase-local artifacts were retained and corrected.
+
+## Adversarial review dispatch
+
+- Objective: independently falsify Phase 0 safety, truth, replay-correlation, output, and scope
+  claims against issue #325 and the completed run post-mortem.
+- Output: prioritized P0/P1 findings with exact fixture/rule/test evidence and final disposition.
+- Tool guidance: read-only inspection and targeted local tests; no GitHub or parent mutation.
+- Boundaries: issue #325 paths only; no implementation by the reviewer and no secret/raw-session
+  ingestion.
+- Result: successive gap reds closed decoy suppression, arbitrary output reflection, non-durable
+  HALT truth, dead-worker fail-open truth, same-head merge race, terminal precedence, and resource
+  splices. Final disposition: APPROVE, no remaining P0/P1.

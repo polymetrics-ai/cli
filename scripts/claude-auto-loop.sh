@@ -31,6 +31,31 @@
 #   SEARXNG_BASE=                             # your self-hosted SearXNG for research (optional)
 set -euo pipefail
 
+# AUTO_LOOP_RUN_ENTRYPOINT: scripts/claude-auto-loop.sh
+case "${1:-}" in
+  help|-h|--help)
+    printf '%s\n' 'Usage: scripts/claude-auto-loop.sh "<problem prompt>" | --resume'
+    exit 0
+    ;;
+esac
+
+AUTO_LOOP_SCRIPT_DIR="${BASH_SOURCE[0]%/*}"
+[[ "$AUTO_LOOP_SCRIPT_DIR" != "${BASH_SOURCE[0]}" ]] || AUTO_LOOP_SCRIPT_DIR="."
+AUTO_LOOP_SAFETY_LIB="$AUTO_LOOP_SCRIPT_DIR/auto-loop-safety.sh"
+if [[ ! -r "$AUTO_LOOP_SAFETY_LIB" ]]; then
+  printf '%s\n' '{"schema_version":"1.0","state":"closed","run_enabled":false,"resume_enabled":false,"code":"AUTO_LOOP_DISABLED_PHASE_0","exit_class":"safety_disabled"}' >&2
+  exit 78
+fi
+# shellcheck source=scripts/auto-loop-safety.sh
+source "$AUTO_LOOP_SAFETY_LIB"
+if auto_loop_safety_guard_driver "scripts/claude-auto-loop.sh" json; then
+  printf '%s\n' 'AUTO_LOOP_GUARD_UNEXPECTED_SUCCESS' >&2
+  exit 78
+else
+  safety_rc=$?
+  exit "$safety_rc"
+fi
+
 CLAUDE_BIN="${CLAUDE_BIN:-claude}"
 # Default includes a permission posture so a headless `claude -p` can actually write its
 # verdict/state files. Without one, every turn produces no verdict and the loop no-ops. For a

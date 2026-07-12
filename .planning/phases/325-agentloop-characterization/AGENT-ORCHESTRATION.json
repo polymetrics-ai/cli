@@ -22,7 +22,17 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "The parent already consumed a runtime worker slot for this isolated mutation scope; inner roles inspect the same tightly coupled files sequentially and do not justify another mutating worktree."
+    },
+    {
+      "cycle": "review",
+      "decision": "read_only_adversarial_delegation",
+      "reason": "Independent review audited tests, security, fixture truth, precedence, output closure, and resource correlation without mutating the worker branch."
+    },
+    {
+      "cycle": "verification",
+      "decision": "local_critical_path",
+      "reason": "The issue worker ran the coupled targeted and full repository gates after all review corrections; final review approved with no P0/P1."
     }
   ],
-  "updatedAt": "2026-07-12T08:10:00Z"
+  "updatedAt": "2026-07-12T09:09:46Z"
 }

@@ -15,6 +15,9 @@ Read-only adversarial review against issue #325, `TEST-PLAN.md`, and the uncommi
 - Required deletion of partial implementation before a second red capture.
 - Required exact three-HALT identity accounting, missing-field/bounds/symlink/duplicate negatives,
   hostile opt-in canaries, and non-echoing errors.
+- On the final implementation, required bounded candidate enumeration, closed output vocabularies,
+  canonical incident-policy binding, source-grounded historical outcomes, wait/terminal precedence,
+  and shared head/integration resource identity.
 
 ## Commands Run
 
@@ -22,16 +25,17 @@ Read-only adversarial review against issue #325, `TEST-PLAN.md`, and the uncommi
 
 ## Findings
 
-- All high-priority findings were incorporated into tests, fixtures, and contracts before green.
+- Every P0/P1 finding was reproduced by a failing test and corrected. Final disposition: APPROVE,
+  no remaining P0/P1.
 
 ## Handoff Summary
 
-Proceed to implementation only after the strengthened red evidence is recorded.
+Proceed with stacked parent review; do not merge from this worker.
 
 ## Verification Evidence
 
-Second red cycle recorded; green and broad verification remain pending.
+All review-gap tests, focused/race/shell gates, and uninterrupted full verification pass.
 
 ## Unresolved Risks
 
-- A final adversarial pass is still required on the implemented diff.
+- Automated review coverage on the opened stacked PR remains a parent routing responsibility.

@@ -2,32 +2,39 @@
 
 ## Rendered Prompt Or Prompt Reference
 
-TBD
+Security role contract, `THREAT-MODEL.md`, and adversarial review dispatch in `PROMPTS.md`.
 
 ## Files Inspected
 
-- TBD
+- Fixture decoder/redaction, replay output, CLI diagnostics, shell helper, driver guard placement,
+  isolated shell harness, and changed-path scope.
 
 ## Actions Taken
 
-- TBD
+- Required descriptor-bound regular-file checks, bounded counts/bytes/strings, symlink rejection,
+  synthetic grammar, output enums, generic diagnostics, and untracked-entrypoint non-reflection.
+- Verified no environment/argument/state enable path and no pre-guard process or persistence.
 
 ## Commands Run
 
-- TBD
+- Sensitive/output canary tests, invalid fixture tests, isolated shell gate, race gate, full verify.
 
 ## Findings
 
-- TBD
+- Decoy and cross-resource splices were initially possible; bounded tuple enumeration and shared
+  resource identity now close them.
+- Caller-controlled incident/observation values were initially output-bearing; closed corpus and
+  ID-to-policy mapping now reject them.
 
 ## Handoff Summary
 
-TBD
+Security review approves Phase 0 with no remaining P0/P1.
 
 ## Verification Evidence
 
-TBD
+Negative tests and full verification pass; no sensitive value or raw session was read or stored.
 
 ## Unresolved Risks
 
-- TBD
+- The source-closed fuse is intentionally unavailable, not an operational authorization system;
+  later enablement remains a separately gated issue.

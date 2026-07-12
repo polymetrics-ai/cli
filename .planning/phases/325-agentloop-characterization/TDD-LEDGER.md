@@ -148,3 +148,45 @@ fixtures, and phase artifacts remained when the following failures were captured
 
 No partial implementation from the rejected first green attempt was present during this gap-red
 capture. Implementation may resume only from this strengthened contract.
+
+## Implementation and adversarial gap reds
+
+The standard-library implementation first reached green, then every blocking review finding was
+converted to a focused failing test before its correction:
+
+- cross-identity/ambiguous fact composition and invalid synthetic ID grammar failed before
+  correlation and grammar enforcement;
+- unknown CLI commands/flags echoed runtime canaries before generic diagnostics;
+- leading wrong-scope decoys suppressed valid ordered/special rules before bounded tuple search;
+- arbitrary Expected values and incident IDs reached replay output before closed enums and
+  incident-to-derived-policy binding;
+- historical truth assertions failed for the non-durable turn-23 HALT, fail-open dead workers,
+  same-head merge-state race, full S3 wait, and turn-26 terminal ledger divergence;
+- final human-ready facts matched an over-broad wait rule before blocked-stage correlation;
+- wrong-resource stale-head and ratification mutations remained classified before resource
+  identity enforcement.
+
+Each gap command exited 1 for the asserted missing behavior, then the corresponding focused test
+and full `internal/agentloop` suite exited 0 after the smallest correction. Tests were not weakened;
+obsolete fixture claims were replaced with source-grounded facts.
+
+## Green checkpoint — 2026-07-12
+
+- `go test ./internal/agentloop/... -count=1` -> exit 0.
+- `go test -race ./internal/agentloop/... -count=1` -> exit 0.
+- `go test ./cmd/loopctl/... -count=1` -> exit 0.
+- `bash scripts/tests/auto-loop-control.sh` -> exit 0, `auto-loop-control: ok`.
+- `make agent-loop-test` -> exit 0.
+- Independent adversarial review -> APPROVE, no remaining P0/P1.
+
+## Refactor and broad verification checkpoint
+
+- `go version && go mod verify` -> Go 1.25.12; all modules verified.
+- `bash -n` over both drivers, helper, and harness plus `jq empty` over all fixtures -> exit 0.
+- `git diff --check` and issue write-scope audit -> exit 0.
+- Uninterrupted `make verify` after the final review fix -> exit 0, including full Go tests,
+  build, docs, smoke, lint (0 issues), connectorgen validation (547 connectors, 0 findings), and
+  the new Phase 0 target.
+
+All seven behavior tasks and the phase-memory task are complete. No partial or interrupted broad
+gate is claimed as verification evidence.
