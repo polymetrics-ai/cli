@@ -2,10 +2,12 @@
 set -u
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+REAL_PYTHON_BIN="$(command -v python3)"
 TEST_TMP="$(mktemp -d)"
 failures=0
 SUITE_PID=$$
 WATCHDOG_PID=""
+SUITE_TIMEOUT_SECONDS="${SUITE_TIMEOUT_SECONDS:-120}"
 
 owned_process_alive() {
   local pid="$1" nonce="$2" command state
@@ -24,6 +26,13 @@ kill_owned_process() {
   fi
 }
 
+signal_owned_process() {
+  local signal="$1" pid="$2" nonce="$3"
+  if owned_process_alive "$pid" "$nonce"; then
+    kill -"$signal" "$pid" 2>/dev/null || true
+  fi
+}
+
 cleanup() {
   local pid_file pid nonce
   if [[ -n "$WATCHDOG_PID" ]]; then
@@ -36,14 +45,18 @@ cleanup() {
       [[ -n "${nonce:-}" ]] || continue
       kill_owned_process "$pid" "$nonce"
     done <"$pid_file"
-  done < <(find "$TEST_TMP" \( -name child-pids -o -name controller-pids \) -type f 2>/dev/null)
-  rm -rf "$TEST_TMP"
+  done < <(find "$TEST_TMP" \( -name child-pids -o -name controller-pids -o -name model-pids \) -type f 2>/dev/null)
+  if [[ "${KEEP_TEST_TMP:-0}" == "1" ]]; then
+    printf 'pi-shepherd-supervision: preserved fixtures at %s\n' "$TEST_TMP" >&2
+  else
+    rm -rf "$TEST_TMP"
+  fi
 }
 trap cleanup EXIT
 trap 'cleanup; exit 124' INT TERM
 
 (
-  /bin/sleep 60
+  /bin/sleep "$SUITE_TIMEOUT_SECONDS"
   kill -TERM "$SUITE_PID" 2>/dev/null || true
 ) &
 WATCHDOG_PID=$!
@@ -51,6 +64,18 @@ WATCHDOG_PID=$!
 fail() {
   printf 'FAIL: %s\n' "$*" >&2
   failures=$((failures + 1))
+}
+
+run_test() {
+  local name="$1" rc=0
+  if ! declare -F "$name" >/dev/null; then
+    fail "missing test function: $name"
+    return
+  fi
+  "$name" || rc=$?
+  if [[ "$rc" -ne 0 ]]; then
+    fail "$name returned unexpected status $rc"
+  fi
 }
 
 copy_launcher_without_phase0_guard() {
@@ -88,11 +113,17 @@ prepare_fixture() {
   printf '{"stage":"PLAN","terminal":null}\n' >"$root/.planning/auto-loop/RUN.json"
   : >"$root/events"
   : >"$root/child-pids"
+  : >"$root/model-pids"
   : >"$root/controller-pids"
   printf 'shepherd-test-%s-%s-%s\n' "$$" "$RANDOM" "${root##*/}" >"$root/nonce"
 
   cat >"$root/scripts/loop-trace.sh" <<'SH'
 #!/usr/bin/env bash
+set -u
+if [[ "${FAKE_MODE:-}" == "halt-latch-failure" ]]; then
+  mv "$TEST_REPO/.planning/auto-loop/CONTROL.json" "$TEST_REPO/.planning/auto-loop/CONTROL.backup"
+  ln -s CONTROL.backup "$TEST_REPO/.planning/auto-loop/CONTROL.json"
+fi
 exit 0
 SH
   chmod +x "$root/scripts/loop-trace.sh"
@@ -108,28 +139,74 @@ SH
 set -u
 nonce="$1"
 duration="$2"
-trap '' TERM
-/bin/sleep "$duration"
+exec "$REAL_PYTHON_BIN" -c '
+import pathlib, signal, sys, time
+signal.signal(signal.SIGTERM, signal.SIG_IGN)
+time.sleep(float(sys.argv[2]))
+if sys.argv[3]:
+    with pathlib.Path(sys.argv[3]).open("a") as handle:
+        handle.write(sys.argv[1] + "\n")
+' "$nonce" "$duration" "${NATURAL_EXIT_LOG:-}"
 SH
   chmod +x "$root/bin/test-child"
+
+  cat >"$root/bin/test-bystander" <<'SH'
+#!/usr/bin/env bash
+set -u
+nonce="$1"
+duration="$2"
+signal_log="$3"
+trap 'printf "%s\n" "$nonce" >>"$signal_log"' TERM
+deadline=$((SECONDS + duration))
+while (( SECONDS < deadline )); do
+  /bin/sleep 0.2 || true
+done
+SH
+  chmod +x "$root/bin/test-bystander"
+
+  cat >"$root/bin/python3" <<'SH'
+#!/usr/bin/env bash
+set -u
+if [[ "${2:-}" == *'.role-ready.'* && "${FAKE_LAUNCH_DELAY:-0}" != "0" ]]; then
+  printf 'launching\n' >"$LAUNCH_PROBE_FILE"
+  /bin/sleep "$FAKE_LAUNCH_DELAY"
+fi
+if [[ "${3:-}" == "bind" && "${FAKE_BIND_DELAY:-0}" != "0" ]]; then
+  printf 'binding\n' >"$BIND_PROBE_FILE"
+  /bin/sleep "$FAKE_BIND_DELAY"
+fi
+exec "$REAL_PYTHON_BIN" "$@"
+SH
+  chmod +x "$root/bin/python3"
 
   cat >"$root/bin/pi" <<'SH'
 #!/usr/bin/env bash
 set -u
 
 if [[ " $* " == *" --offline --list-models "* ]]; then
-  printf '%s\n' \
-    'provider      model          context  max-out  thinking  images' \
-    'openai-codex  gpt-5.6-sol    372K     128K     yes       yes'
+  printf '%s %s\n' "$$" "$TEST_REPO/bin/pi" >>"$MODEL_PID_FILE"
+  if [[ "${FAKE_MODEL_DELAY:-0}" != "0" ]]; then
+    printf 'probing\n' >"$MODEL_PROBE_FILE"
+    /bin/sleep "$FAKE_MODEL_DELAY"
+    printf 'completed\n' >"$MODEL_COMPLETION_FILE"
+  fi
+  printf '%s\n' 'provider      model          context  max-out  thinking  images'
+  if [[ "${FAKE_MODEL_MISSING:-0}" == "1" ]]; then
+    printf '%s\n' 'openai-codex  gpt-5.5        272K     128K     yes       yes'
+  else
+    printf '%s\n' 'openai-codex  gpt-5.6-sol    372K     128K     yes       yes'
+  fi
   exit 0
 fi
 
 model=""
+thinking="default"
 previous=""
 for argument in "$@"; do
   if [[ "$previous" == "--model" ]]; then
     model="$argument"
-    break
+  elif [[ "$previous" == "--thinking" ]]; then
+    thinking="$argument"
   fi
   previous="$argument"
 done
@@ -138,7 +215,8 @@ role="orchestrator"
 if [[ "$model" == "openai-codex/gpt-5.6-sol" ]]; then
   role="validator"
 fi
-printf '%s %s\n' "$role" "$$" >>"$EVENT_LOG"
+role_pgid="$(ps -o pgid= -p "$$" | tr -d '[:space:]')"
+printf '%s %s %s %s %s\n' "$role" "$$" "${model:-default}" "$thinking" "$role_pgid" >>"$EVENT_LOG"
 
 write_verdict() {
   local verdict="$1"
@@ -147,8 +225,22 @@ write_verdict() {
 }
 
 if [[ "$role" == "validator" ]]; then
-  if [[ "$FAKE_MODE" == "halt" ]]; then
+  if [[ "$FAKE_MODE" == "validator-hang" ]]; then
+    child_nonce="$TEST_NONCE-validator-$$"
+    "$TEST_REPO/bin/test-child" "$child_nonce" 10 &
+    child=$!
+    printf '%s %s\n' "$child" "$child_nonce" >>"$CHILD_PID_FILE"
+    wait "$child"
+  elif [[ "$FAKE_MODE" == "halt" || "$FAKE_MODE" == "halt-latch-failure" ]]; then
     write_verdict HALT
+  elif [[ "$FAKE_MODE" == "revert" ]]; then
+    write_verdict REVERT
+  elif [[ "$FAKE_MODE" == "no-verdict" ]]; then
+    : # Deliberately emit nothing; any pre-existing verdict must be retired by the controller.
+  elif [[ "$FAKE_MODE" == "retry-human-gate" ]]; then
+    write_verdict RETRY
+  elif [[ "$FAKE_MODE" == "no-verdict-human-gate" || "$FAKE_MODE" == "no-verdict-budget" ]]; then
+    :
   else
     write_verdict PROCEED
   fi
@@ -156,12 +248,24 @@ if [[ "$role" == "validator" ]]; then
 fi
 
 case "$FAKE_MODE" in
+  retry-human-gate|no-verdict-human-gate)
+    printf '{"stage":"FINALIZE","terminal":"human_gate"}\n' >"$TEST_REPO/.planning/auto-loop/RUN.json"
+    ;;
+  no-verdict-budget)
+    printf '{"stage":"EXECUTE","terminal":"budget"}\n' >"$TEST_REPO/.planning/auto-loop/RUN.json"
+    ;;
+esac
+
+case "$FAKE_MODE" in
+  validator-hang)
+    /bin/sleep 3
+    ;;
   concurrent)
     /bin/sleep 1
     ;;
   hang-tree)
     child_nonce="$TEST_NONCE-role-$$"
-    "$TEST_REPO/bin/test-child" "$child_nonce" 6 &
+    "$TEST_REPO/bin/test-child" "$child_nonce" 8 &
     child=$!
     printf '%s %s\n' "$child" "$child_nonce" >>"$CHILD_PID_FILE"
     trap '' TERM
@@ -191,28 +295,43 @@ SH
 
 driver_env() {
   local root="$1"
+  local -a clean_env
   shift
-  env -i \
-    PATH="$root/bin:$PATH" \
-    HOME="$root/home" \
-    PI_BIN="$root/bin/pi" \
-    VALIDATOR_BIN="$root/bin/pi" \
-    ORCH_MODEL="openai-codex/gpt-5.5" \
-    VALIDATOR_ARGS="" \
-    PI_EXTRA_FLAGS="" \
-    EVENT_LOG="$root/events" \
-    CHILD_PID_FILE="$root/child-pids" \
-    TEST_NONCE="$(cat "$root/nonce")" \
-    TEST_REPO="$root" \
-    FAKE_MODE="${FAKE_MODE:-normal}" \
-    MAX_ITERATIONS="${MAX_ITERATIONS:-1}" \
-    MAX_TURNS="${MAX_TURNS:-20}" \
-    TURN_TIMEOUT_SECONDS="${TURN_TIMEOUT_SECONDS:-2}" \
-    TERM_GRACE_SECONDS="${TERM_GRACE_SECONDS:-1}" \
-    CONTROL_HEARTBEAT_SECONDS="${CONTROL_HEARTBEAT_SECONDS:-1}" \
-    COOLDOWN_SECONDS=0 \
-    STALL_MINUTES=1 \
-    "$root/scripts/pi-shepherd-loop.sh" "$@"
+  clean_env=(
+    "PATH=$root/bin:$PATH"
+    "HOME=$root/home"
+    "PI_BIN=$root/bin/pi"
+    "VALIDATOR_BIN=$root/bin/pi"
+    "VALIDATOR_ARGS="
+    "PI_EXTRA_FLAGS="
+    "EVENT_LOG=$root/events"
+    "CHILD_PID_FILE=$root/child-pids"
+    "MODEL_PID_FILE=$root/model-pids"
+    "NATURAL_EXIT_LOG=$root/natural-exits"
+    "TEST_NONCE=$(cat "$root/nonce")"
+    "TEST_REPO=$root"
+    "FAKE_MODE=${FAKE_MODE:-normal}"
+    "FAKE_MODEL_DELAY=${FAKE_MODEL_DELAY:-0}"
+    "FAKE_MODEL_MISSING=${FAKE_MODEL_MISSING:-0}"
+    "FAKE_LAUNCH_DELAY=${FAKE_LAUNCH_DELAY:-0}"
+    "FAKE_BIND_DELAY=${FAKE_BIND_DELAY:-0}"
+    "MODEL_PROBE_FILE=$root/model-probe"
+    "MODEL_COMPLETION_FILE=$root/model-completion"
+    "LAUNCH_PROBE_FILE=$root/launch-probe"
+    "BIND_PROBE_FILE=$root/bind-probe"
+    "REAL_PYTHON_BIN=$REAL_PYTHON_BIN"
+    "MAX_ITERATIONS=${MAX_ITERATIONS:-1}"
+    "MAX_TURNS=${MAX_TURNS:-20}"
+    "TURN_TIMEOUT_SECONDS=${TURN_TIMEOUT_SECONDS:-30}"
+    "TERM_GRACE_SECONDS=${TERM_GRACE_SECONDS:-1}"
+    "CONTROL_HEARTBEAT_SECONDS=${CONTROL_HEARTBEAT_SECONDS:-1}"
+    "COOLDOWN_SECONDS=0"
+    "STALL_MINUTES=1"
+  )
+  if [[ "${DRIVER_EXEC:-0}" == "1" ]]; then
+    exec /usr/bin/env -i "${clean_env[@]}" "$root/scripts/pi-shepherd-loop.sh" "$@"
+  fi
+  /usr/bin/env -i "${clean_env[@]}" "$root/scripts/pi-shepherd-loop.sh" "$@"
 }
 
 register_controller() {
@@ -223,17 +342,20 @@ register_controller() {
 start_bystander() {
   local root="$1" nonce pid
   nonce="$(cat "$root/nonce")-bystander-$RANDOM"
-  "$root/bin/test-child" "$nonce" 30 >/dev/null 2>&1 &
+  "$root/bin/test-bystander" "$nonce" 30 "$root/bystander-signals" >/dev/null 2>&1 &
   pid=$!
   printf '%s %s\n' "$pid" "$nonce" >>"$root/child-pids"
-  BYSTANDER_IDENTITY="$pid $nonce"
+  BYSTANDER_IDENTITY="$pid $nonce $root/bystander-signals"
 }
 
 assert_bystander_alive() {
-  local identity="$1" context="$2" pid nonce
-  read -r pid nonce <<<"$identity"
+  local identity="$1" context="$2" pid nonce signal_log
+  read -r pid nonce signal_log <<<"$identity"
   if ! owned_process_alive "$pid" "$nonce"; then
     fail "$context killed unrelated bystander $pid"
+  fi
+  if grep -Fxq "$nonce" "$signal_log" 2>/dev/null; then
+    fail "$context signalled unrelated bystander $pid"
   fi
 }
 
@@ -284,10 +406,21 @@ PY
 }
 
 wait_for_file() {
-  local path="$1" attempts="${2:-200}"
+  local path="$1" attempts="${2:-1000}"
   local i
   for ((i=0; i<attempts; i++)); do
     [[ -s "$path" ]] && return 0
+    /bin/sleep 0.01
+  done
+  return 1
+}
+
+wait_for_role_child() {
+  local path="$1" attempts="${2:-1000}" i
+  for ((i=0; i<attempts; i++)); do
+    if [[ -s "$path" ]] && grep -qv 'bystander' "$path"; then
+      return 0
+    fi
     /bin/sleep 0.01
   done
   return 1
@@ -301,14 +434,15 @@ test_concurrent_controllers_have_one_winner() {
 
   for ((i=0; i<32; i++)); do
     (
-      FAKE_MODE=concurrent driver_env "$root" "synthetic concurrent task" \
+      DRIVER_EXEC=1 FAKE_MODE=concurrent TURN_TIMEOUT_SECONDS=10 driver_env "$root" "synthetic concurrent task" \
         >"$root/stdout.$i" 2>"$root/stderr.$i"
     ) &
     pids[$i]=$!
     register_controller "$root" "${pids[$i]}"
   done
 
-  for pid in "${pids[@]}"; do
+  for ((i=0; i<32; i++)); do
+    pid="${pids[$i]}"
     wait "$pid"
     rc=$?
     case "$rc" in
@@ -329,21 +463,31 @@ test_concurrent_controllers_have_one_winner() {
 }
 
 test_hard_deadline_drains_process_tree() {
-  local root child child_nonce rc bystander start end elapsed_fast
+  local root driver child child_nonce rc=0 bystander start end elapsed_fast
   root="$(mktemp -d "$TEST_TMP/deadline.XXXXXX")"
   prepare_fixture "$root"
   start_bystander "$root"
   bystander="$BYSTANDER_IDENTITY"
 
-  start="$(monotonic_now)"
-  FAKE_MODE=hang-tree TURN_TIMEOUT_SECONDS=1 driver_env "$root" "synthetic deadline task" \
-    >"$root/stdout" 2>"$root/stderr"
-  rc=$?
-  end="$(monotonic_now)"
+  (
+    DRIVER_EXEC=1 FAKE_MODE=hang-tree TURN_TIMEOUT_SECONDS=3 \
+      driver_env "$root" "synthetic deadline task" >"$root/stdout" 2>"$root/stderr"
+  ) &
+  driver=$!
+  register_controller "$root" "$driver"
+  if ! wait_for_role_child "$root/child-pids"; then
+    fail "hard deadline test did not start its supervised child"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
   read -r child child_nonce < <(grep -v 'bystander' "$root/child-pids" | tail -n 1)
+  start="$(monotonic_now)"
+  wait "$driver" || rc=$?
+  end="$(monotonic_now)"
   elapsed_fast="$(python3 - "$start" "$end" <<'PY'
 import sys
-print("yes" if float(sys.argv[2]) - float(sys.argv[1]) < 4.0 else "no")
+print("yes" if float(sys.argv[2]) - float(sys.argv[1]) < 6.0 else "no")
 PY
 )"
 
@@ -355,6 +499,9 @@ PY
   fi
   if [[ "$elapsed_fast" != "yes" ]]; then
     fail "hard deadline waited for natural child exit"
+  fi
+  if grep -Fxq "$child_nonce" "$root/natural-exits" 2>/dev/null; then
+    fail "hard deadline allowed its child to exit naturally"
   fi
   if owned_process_alive "$child" "$child_nonce"; then
     fail "hard deadline left descendant $child alive"
@@ -392,6 +539,66 @@ test_leader_exit_with_live_descendant_halts() {
   assert_bystander_alive "$bystander" "orphan teardown"
 }
 
+test_validator_shares_the_hard_turn_deadline() {
+  local root driver child child_nonce rc=0 start end elapsed_fast
+  root="$(mktemp -d "$TEST_TMP/validator-deadline.XXXXXX")"
+  prepare_fixture "$root"
+
+  (
+    DRIVER_EXEC=1 FAKE_MODE=validator-hang TURN_TIMEOUT_SECONDS=5 \
+      driver_env "$root" "synthetic validator deadline" >"$root/stdout" 2>"$root/stderr"
+  ) &
+  driver=$!
+  register_controller "$root" "$driver"
+  if ! wait_for_role_child "$root/child-pids"; then
+    fail "validator deadline test did not start its supervised child"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
+  read -r child child_nonce < <(grep -v 'bystander' "$root/child-pids" | tail -n 1)
+  start="$(monotonic_now)"
+  wait "$driver" || rc=$?
+  end="$(monotonic_now)"
+  elapsed_fast="$(python3 - "$start" "$end" <<'PY'
+import sys
+print("yes" if float(sys.argv[2]) - float(sys.argv[1]) < 4.5 else "no")
+PY
+)"
+
+  if [[ "$rc" -ne 4 || "$elapsed_fast" != "yes" ]] || \
+     [[ "$(event_count "$root" orchestrator)" -ne 1 || "$(event_count "$root" validator)" -ne 1 ]] || \
+     [[ "$(control_field "$root" phase)" != "halted" ]] || \
+     [[ "$(control_field "$root" halt.code)" != "TURN_DEADLINE" ]] || \
+     [[ -f "$root/.planning/auto-loop/checkpoints/LAST_GOOD" ]]; then
+    fail "validator did not share the persisted hard turn deadline"
+  fi
+  if owned_process_alive "$child" "$child_nonce" || \
+     grep -Fxq "$child_nonce" "$root/natural-exits" 2>/dev/null; then
+    fail "validator deadline left or naturally completed its descendant"
+  fi
+}
+
+test_missing_validator_model_fails_before_work() {
+  local root rc=0 model_pid
+  root="$(mktemp -d "$TEST_TMP/model-missing.XXXXXX")"
+  prepare_fixture "$root"
+
+  FAKE_MODEL_MISSING=1 driver_env "$root" "synthetic missing validator model" \
+    >"$root/stdout" 2>"$root/stderr" || rc=$?
+  model_pid="$(awk 'END { print $1 }' "$root/model-pids")"
+  if [[ "$rc" -ne 2 || -s "$root/events" ]] || \
+     [[ -e "$root/.planning/auto-loop/PROMPT.txt" ]] || \
+     [[ "$(control_field "$root" phase)" != "recovery_required" ]] || \
+     [[ "$(control_field "$root" halt.code)" != "VALIDATOR_MODEL_UNAVAILABLE" ]] || \
+     ! grep -q 'FATAL: Shepherd requires openai-codex/gpt-5.6-sol' "$root/stderr"; then
+    fail "missing exact Shepherd model did not fail closed before work"
+  fi
+  if owned_process_alive "$model_pid" "$root/bin/pi"; then
+    fail "missing-model preflight left model discovery alive"
+  fi
+}
+
 test_halt_is_durable_and_blocks_resume() {
   local root rc before after
   root="$(mktemp -d "$TEST_TMP/halt.XXXXXX")"
@@ -416,54 +623,235 @@ test_halt_is_durable_and_blocks_resume() {
      ! grep -q 'HALT_LATCHED' "$root/stderr.2"; then
     fail "halted resume was not rejected before prompt/provider access"
   fi
+
+  FAKE_MODE=normal driver_env "$root" "synthetic fresh start after halt" >"$root/stdout.3" 2>"$root/stderr.3"
+  rc=$?
+  after="$(shasum -a 256 "$root/.planning/auto-loop/CONTROL.json" | awk '{print $1}')"
+  if [[ "$rc" -ne 4 || -s "$root/events" || "$before" != "$after" ]] || \
+     ! grep -q 'HALT_LATCHED' "$root/stderr.3"; then
+    fail "halted fresh start was not rejected before provider access"
+  fi
+}
+
+test_signal_during_startup_is_durable() {
+  local root driver model_pid rc=0 start end elapsed_fast
+  root="$(mktemp -d "$TEST_TMP/startup-signal.XXXXXX")"
+  prepare_fixture "$root"
+
+  (
+    DRIVER_EXEC=1 FAKE_MODEL_DELAY=5 driver_env "$root" "synthetic startup signal" \
+      >"$root/stdout" 2>"$root/stderr"
+  ) &
+  driver=$!
+  register_controller "$root" "$driver"
+  if ! wait_for_file "$root/model-probe"; then
+    fail "startup signal test did not enter validator-model preflight"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
+  model_pid="$(awk 'END { print $1 }' "$root/model-pids")"
+  start="$(monotonic_now)"
+  signal_owned_process TERM "$driver" "$root/scripts/pi-shepherd-loop.sh"
+  wait "$driver" || rc=$?
+  end="$(monotonic_now)"
+  elapsed_fast="$(python3 - "$start" "$end" <<'PY'
+import sys
+print("yes" if float(sys.argv[2]) - float(sys.argv[1]) < 3.0 else "no")
+PY
+)"
+  if [[ "$rc" -ne 4 || "$(control_field "$root" phase)" != "recovery_required" ]] || \
+     [[ "$(control_field "$root" children_quiescent)" != "true" ]] || [[ -s "$root/events" ]] || \
+     [[ "$elapsed_fast" != "yes" || -e "$root/model-completion" ]] || \
+     [[ "$(control_field "$root" halt.code)" != "CONTROLLER_SIGNAL" ]]; then
+    fail "signal during model preflight did not durably enter quiescent recovery"
+  fi
+  if owned_process_alive "$model_pid" "$root/bin/pi"; then
+    fail "signal during model preflight left the model-discovery process alive"
+  fi
+}
+
+test_signal_during_role_startup_does_not_orphan() {
+  local root driver rc=0
+  root="$(mktemp -d "$TEST_TMP/role-start-signal.XXXXXX")"
+  prepare_fixture "$root"
+
+  (
+    DRIVER_EXEC=1 FAKE_LAUNCH_DELAY=5 driver_env "$root" "synthetic role-start signal" \
+      >"$root/stdout" 2>"$root/stderr"
+  ) &
+  driver=$!
+  register_controller "$root" "$driver"
+  if ! wait_for_file "$root/launch-probe"; then
+    fail "role-start signal test did not enter launch-before-bind window"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
+  signal_owned_process TERM "$driver" "$root/scripts/pi-shepherd-loop.sh"
+  wait "$driver" || rc=$?
+  if [[ "$rc" -ne 4 || "$(control_field "$root" phase)" != "recovery_required" ]] || \
+     [[ "$(control_field "$root" children_quiescent)" != "true" ]] || [[ -s "$root/events" ]]; then
+    fail "signal during role startup left unproven authority or launched Pi"
+  fi
+}
+
+test_role_stays_inert_until_durable_bind() {
+  local root driver rc=0
+  root="$(mktemp -d "$TEST_TMP/role-bind-signal.XXXXXX")"
+  prepare_fixture "$root"
+
+  (
+    DRIVER_EXEC=1 FAKE_BIND_DELAY=3 TURN_TIMEOUT_SECONDS=10 \
+      driver_env "$root" "synthetic role-bind signal" >"$root/stdout" 2>"$root/stderr"
+  ) &
+  driver=$!
+  register_controller "$root" "$driver"
+  if ! wait_for_file "$root/bind-probe"; then
+    fail "role-bind test did not enter the pre-bind persistence window"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
+  if [[ -s "$root/events" ]]; then
+    fail "role command executed before its control bind was durable"
+  fi
+  signal_owned_process TERM "$driver" "$root/scripts/pi-shepherd-loop.sh"
+  wait "$driver" || rc=$?
+  if [[ "$rc" -ne 4 || "$(control_field "$root" phase)" != "recovery_required" ]] || \
+     [[ "$(control_field "$root" children_quiescent)" != "true" || -s "$root/events" ]]; then
+    fail "signal during durable role bind launched work or left unproven quiescence"
+  fi
+}
+
+test_role_is_not_authorized_after_deadline() {
+  local root rc=0
+  root="$(mktemp -d "$TEST_TMP/role-bind-deadline.XXXXXX")"
+  prepare_fixture "$root"
+
+  FAKE_BIND_DELAY=3 TURN_TIMEOUT_SECONDS=1 \
+    driver_env "$root" "synthetic expired role bind" >"$root/stdout" 2>"$root/stderr" || rc=$?
+  if [[ "$rc" -ne 4 || -s "$root/events" ]] || \
+     [[ "$(control_field "$root" phase)" != "halted" ]] || \
+     [[ "$(control_field "$root" halt.code)" != "TURN_DEADLINE" ]] || \
+     [[ "$(control_field "$root" children_quiescent)" != "true" ]]; then
+    fail "role was authorized after its persisted turn deadline"
+  fi
 }
 
 test_signal_drains_group_and_requires_recovery() {
-  local root driver child child_nonce phase bystander
+  local root driver child child_nonce phase bystander rc=0
   root="$(mktemp -d "$TEST_TMP/signal.XXXXXX")"
   prepare_fixture "$root"
   start_bystander "$root"
   bystander="$BYSTANDER_IDENTITY"
 
   (
-    FAKE_MODE=signal TURN_TIMEOUT_SECONDS=10 driver_env "$root" "synthetic signal task" \
+    DRIVER_EXEC=1 FAKE_MODE=signal TURN_TIMEOUT_SECONDS=10 driver_env "$root" "synthetic signal task" \
       >"$root/stdout" 2>"$root/stderr"
   ) &
   driver=$!
   register_controller "$root" "$driver"
-  if ! wait_for_file "$root/child-pids"; then
+  if ! wait_for_role_child "$root/child-pids"; then
     fail "signal test did not start descendant"
-    kill -KILL "$driver" 2>/dev/null || true
+    signal_owned_process KILL "$driver" "$root/scripts/pi-shepherd-loop.sh"
     return
   fi
   read -r child child_nonce < <(grep -v 'bystander' "$root/child-pids" | tail -n 1)
-  kill -TERM "$driver" 2>/dev/null || true
-  wait "$driver" 2>/dev/null || true
+  signal_owned_process TERM "$driver" "$root/scripts/pi-shepherd-loop.sh"
+  wait "$driver" 2>/dev/null || rc=$?
   /bin/sleep 0.1
 
   if owned_process_alive "$child" "$child_nonce"; then
     fail "signal left descendant $child alive"
   fi
   phase="$(control_field "$root" phase)"
-  if [[ "$phase" != "recovery_required" && "$phase" != "halted" ]]; then
-    fail "signal persisted phase=$phase, want recovery_required or halted"
+  if [[ "$rc" -ne 4 || "$phase" != "recovery_required" ]] || \
+     [[ "$(control_field "$root" halt.code)" != "CONTROLLER_SIGNAL" ]] || \
+     [[ "$(control_field "$root" children_quiescent)" != "true" ]] || \
+     [[ -n "$(control_field "$root" active_turn.leader_pid)" ]] || \
+     [[ -n "$(control_field "$root" active_turn.process_group_id)" ]] || \
+     [[ "$(event_count "$root" validator)" -ne 0 ]]; then
+    fail "signal persisted phase=$phase, want recovery_required"
   fi
   assert_bystander_alive "$bystander" "signal teardown"
 }
 
+test_sigkill_controller_does_not_admit_replacement() {
+  local root driver child child_nonce leader before rc=0
+  root="$(mktemp -d "$TEST_TMP/sigkill.XXXXXX")"
+  prepare_fixture "$root"
+
+  (
+    DRIVER_EXEC=1 FAKE_MODE=signal TURN_TIMEOUT_SECONDS=10 driver_env "$root" "synthetic sigkill task" \
+      >"$root/stdout.1" 2>"$root/stderr.1"
+  ) &
+  driver=$!
+  register_controller "$root" "$driver"
+  if ! wait_for_role_child "$root/child-pids" || ! wait_for_file "$root/events"; then
+    fail "SIGKILL test did not start fenced role tree"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
+  read -r child child_nonce < <(grep -v 'bystander' "$root/child-pids" | tail -n 1)
+  leader="$(awk '$1 == "orchestrator" { print $2; exit }' "$root/events")"
+  printf '%s %s\n' "$leader" "$root/bin/pi" >>"$root/controller-pids"
+  before="$(event_count "$root" orchestrator)"
+
+  signal_owned_process KILL "$driver" "$root/scripts/pi-shepherd-loop.sh"
+  wait "$driver" 2>/dev/null || true
+  if ! owned_process_alive "$child" "$child_nonce"; then
+    fail "SIGKILL fixture lost its surviving child before replacement check"
+    return
+  fi
+  kill_owned_process "$leader" "$root/bin/pi"
+  if ! owned_process_alive "$child" "$child_nonce"; then
+    fail "SIGKILL fixture lost its descendant when only the role leader was removed"
+    return
+  fi
+
+  FAKE_MODE=normal driver_env "$root" --resume >"$root/stdout.2" 2>"$root/stderr.2" || rc=$?
+  if [[ "$rc" -ne 75 ]] || ! grep -q 'CONTROLLER_HELD' "$root/stderr.2"; then
+    fail "replacement after controller SIGKILL was not rejected by inherited lock"
+  fi
+  if [[ "$(event_count "$root" orchestrator)" -ne "$before" ]]; then
+    fail "replacement launched a second orchestrator after controller SIGKILL"
+  fi
+
+  kill_owned_process "$child" "$child_nonce"
+  /bin/sleep 0.1
+  : >"$root/events"
+  rc=0
+  FAKE_MODE=normal driver_env "$root" --resume >"$root/stdout.3" 2>"$root/stderr.3" || rc=$?
+  if [[ "$rc" -ne 4 || -s "$root/events" ]] || ! grep -q 'RECOVERY_REQUIRED' "$root/stderr.3"; then
+    fail "post-crash quiescence did not require an explicit recovery decision"
+  fi
+}
+
 test_fence_movement_fails_closed() {
-  local root driver child child_nonce rc=0
+  local root driver child child_nonce rc=0 attempt
   root="$(mktemp -d "$TEST_TMP/fence.XXXXXX")"
   prepare_fixture "$root"
 
   (
-    FAKE_MODE=signal TURN_TIMEOUT_SECONDS=10 driver_env "$root" "synthetic fence task" \
+    DRIVER_EXEC=1 FAKE_MODE=signal TURN_TIMEOUT_SECONDS=10 driver_env "$root" "synthetic fence task" \
       >"$root/stdout" 2>"$root/stderr"
   ) &
   driver=$!
   register_controller "$root" "$driver"
   if ! wait_for_file "$root/.planning/auto-loop/CONTROL.json" || ! wait_for_file "$root/child-pids"; then
     fail "fence test did not create active control state"
+    kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
+    wait "$driver" 2>/dev/null || true
+    return
+  fi
+  for ((attempt=0; attempt<200; attempt++)); do
+    [[ "$(control_field "$root" active_turn.active_role)" == "orchestrator" ]] && break
+    /bin/sleep 0.01
+  done
+  if [[ "$(control_field "$root" active_turn.active_role)" != "orchestrator" ]]; then
+    fail "fence test did not durably bind the orchestrator process group"
     kill_owned_process "$driver" "$root/scripts/pi-shepherd-loop.sh"
     wait "$driver" 2>/dev/null || true
     return
@@ -489,10 +877,180 @@ PY
   if owned_process_alive "$child" "$child_nonce"; then
     fail "fence movement left descendant $child alive"
   fi
+  if [[ "$(control_field "$root" children_quiescent)" == "true" ]] || \
+     [[ -z "$(control_field "$root" active_turn.process_group_id)" ]]; then
+    fail "fence movement falsely claimed quiescence or erased recovery handles"
+  fi
+}
+
+test_failed_halt_persistence_never_claims_halted() {
+  local root rc
+  root="$(mktemp -d "$TEST_TMP/halt-persistence.XXXXXX")"
+  prepare_fixture "$root"
+
+  FAKE_MODE=halt-latch-failure driver_env "$root" "synthetic halt persistence failure" \
+    >"$root/stdout" 2>"$root/stderr"
+  rc=$?
+  if [[ "$rc" -ne 4 ]]; then
+    fail "halt persistence failure exit=$rc, want 4"
+  fi
+  if [[ "$(control_field "$root" phase)" == "halted" ]] || \
+     [[ -n "$(control_field "$root" halt.code)" ]]; then
+    fail "failed HALT persistence was falsely finalized as a durable HALT"
+  fi
+}
+
+test_resume_requires_clean_paused_state() {
+  local baseline root case_name rc before after
+  baseline="$(mktemp -d "$TEST_TMP/clean-pause.XXXXXX")"
+  prepare_fixture "$baseline"
+  rc=0
+  FAKE_MODE=normal MAX_TURNS=5 driver_env "$baseline" "synthetic clean pause" \
+    >"$baseline/stdout" 2>"$baseline/stderr" || rc=$?
+  if [[ "$rc" -ne 3 || "$(control_field "$baseline" phase)" != "paused" ]] || \
+     [[ "$(control_field "$baseline" children_quiescent)" != "true" ]] || \
+     [[ -n "$(control_field "$baseline" active_turn.turn_id)" ]] || \
+     [[ -n "$(control_field "$baseline" halt.code)" ]] || \
+     [[ ! -s "$baseline/.planning/auto-loop/PROMPT.txt" ]]; then
+    fail "dirty-resume matrix could not establish a clean paused baseline"
+    return
+  fi
+
+  for case_name in active_turn children halt malformed_limit negative_ordinal boolean_generation; do
+    root="$(mktemp -d "$TEST_TMP/dirty-$case_name.XXXXXX")"
+    prepare_fixture "$root"
+    cp "$baseline/.planning/auto-loop/CONTROL.json" "$root/.planning/auto-loop/CONTROL.json"
+    cp "$baseline/.planning/auto-loop/PROMPT.txt" "$root/.planning/auto-loop/PROMPT.txt"
+    python3 - "$root/.planning/auto-loop/CONTROL.json" "$case_name" <<'PY'
+import json, os, pathlib
+path = pathlib.Path(os.sys.argv[1])
+case_name = os.sys.argv[2]
+value = json.loads(path.read_text())
+if case_name == "active_turn":
+    value["active_turn"] = {"turn_id": "stale"}
+elif case_name == "children":
+    value["children_quiescent"] = False
+elif case_name == "halt":
+    value["halt"] = {"code": "STALE"}
+elif case_name == "malformed_limit":
+    value["limits"]["max_turns"] = "invalid"
+elif case_name == "negative_ordinal":
+    value["turn_ordinal"] = -1
+elif case_name == "boolean_generation":
+    value["generation"] = True
+tmp = path.with_suffix(".dirty")
+tmp.write_text(json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n")
+os.replace(tmp, path)
+PY
+    before="$(shasum -a 256 "$root/.planning/auto-loop/CONTROL.json" | awk '{print $1}')"
+    : >"$root/events"
+    rc=0
+    FAKE_MODE=normal driver_env "$root" --resume >"$root/stdout" 2>"$root/stderr" || rc=$?
+    after="$(shasum -a 256 "$root/.planning/auto-loop/CONTROL.json" | awk '{print $1}')"
+    if [[ "$rc" -eq 0 || -s "$root/events" || "$before" != "$after" ]]; then
+      fail "resume accepted or rewrote isolated dirty-paused invariant $case_name"
+    fi
+  done
+}
+
+test_control_path_aliases_fail_closed() {
+  local root mode rc source inode_source inode_control links
+  for mode in dangling_symlink live_symlink hardlink; do
+    root="$(mktemp -d "$TEST_TMP/control-$mode.XXXXXX")"
+    prepare_fixture "$root"
+    source="$root/.planning/auto-loop/CONTROL.source"
+    case "$mode" in
+      dangling_symlink)
+        ln -s CONTROL.missing "$root/.planning/auto-loop/CONTROL.json"
+        ;;
+      live_symlink)
+        printf '%s\n' '{"active_turn":null,"children_quiescent":true,"control_revision":1,"controller_id":"synthetic-controller","counters":{"active_seconds":0,"no_verdict":0,"reverts":0},"generation":1,"halt":null,"lease":{"expires_at":"2099-01-01T00:00:00Z","heartbeat_at":"2099-01-01T00:00:00Z"},"limits":{"heartbeat_seconds":1,"max_minutes":0,"max_no_verdict":3,"max_reverts":6,"max_turns":20,"term_grace_seconds":1,"turn_timeout_seconds":10},"phase":"released","run_id":"synthetic-run","schema_version":"1.0","turn_ordinal":0,"updated_at":"2099-01-01T00:00:00Z"}' >"$source"
+        ln -s CONTROL.source "$root/.planning/auto-loop/CONTROL.json"
+        ;;
+      hardlink)
+        printf '%s\n' '{"active_turn":null,"children_quiescent":true,"control_revision":1,"controller_id":"synthetic-controller","counters":{"active_seconds":0,"no_verdict":0,"reverts":0},"generation":1,"halt":null,"lease":{"expires_at":"2099-01-01T00:00:00Z","heartbeat_at":"2099-01-01T00:00:00Z"},"limits":{"heartbeat_seconds":1,"max_minutes":0,"max_no_verdict":3,"max_reverts":6,"max_turns":20,"term_grace_seconds":1,"turn_timeout_seconds":10},"phase":"released","run_id":"synthetic-run","schema_version":"1.0","turn_ordinal":0,"updated_at":"2099-01-01T00:00:00Z"}' >"$source"
+        ln "$source" "$root/.planning/auto-loop/CONTROL.json"
+        read -r inode_source _ < <(python3 - "$source" <<'PY'
+import os, sys
+value = os.stat(sys.argv[1])
+print(value.st_ino, value.st_nlink)
+PY
+)
+        ;;
+    esac
+    rc=0
+    FAKE_MODE=normal driver_env "$root" "synthetic unsafe control path" \
+      >"$root/stdout" 2>"$root/stderr" || rc=$?
+    if [[ "$rc" -eq 0 || -s "$root/events" || -e "$root/model-probe" ]]; then
+      fail "$mode control path did not fail before prompt/provider access"
+    fi
+    if [[ "$mode" == *symlink && ! -L "$root/.planning/auto-loop/CONTROL.json" ]]; then
+      fail "$mode control path was replaced instead of rejected"
+    elif [[ "$mode" == "hardlink" ]]; then
+      read -r inode_control links < <(python3 - "$root/.planning/auto-loop/CONTROL.json" <<'PY'
+import os, sys
+value = os.stat(sys.argv[1])
+print(value.st_ino, value.st_nlink)
+PY
+)
+      if [[ "$inode_source" != "$inode_control" || "$links" -ne 2 ]]; then
+        fail "hardlinked control path was replaced or rewritten"
+      fi
+    fi
+  done
+}
+
+test_terminal_requires_shepherd_ratification() {
+  local root rc
+
+  root="$(mktemp -d "$TEST_TMP/unratified-human-gate.XXXXXX")"
+  prepare_fixture "$root"
+  rc=0
+  FAKE_MODE=retry-human-gate driver_env "$root" "synthetic unratified human gate" \
+    >"$root/stdout" 2>"$root/stderr" || rc=$?
+  if [[ "$rc" -ne 3 || "$(control_field "$root" phase)" != "paused" ]] || \
+     grep -q 'DONE: human-ready' "$root/stderr"; then
+    fail "RETRY incorrectly ratified a human-gate terminal"
+  fi
+
+  root="$(mktemp -d "$TEST_TMP/unratified-budget.XXXXXX")"
+  prepare_fixture "$root"
+  rc=0
+  FAKE_MODE=no-verdict-budget driver_env "$root" "synthetic budget stop" \
+    >"$root/stdout" 2>"$root/stderr" || rc=$?
+  if [[ "$rc" -ne 3 || "$(control_field "$root" phase)" != "paused" ]] || \
+     ! grep -q 'STOP: budget ceiling' "$root/stderr"; then
+    fail "budget stop depended on an unavailable validator verdict"
+  fi
+}
+
+test_run_counters_survive_pause_resume() {
+  local root rc active_before active_after
+  root="$(mktemp -d "$TEST_TMP/counters.XXXXXX")"
+  prepare_fixture "$root"
+  FAKE_MODE=revert FAKE_MODEL_DELAY=1 MAX_TURNS=5 driver_env "$root" "synthetic counter task" \
+    >"$root/stdout.1" 2>"$root/stderr.1" || true
+  if [[ "$(control_field "$root" counters.reverts)" != "1" ]] || \
+     [[ "$(control_field "$root" counters.no_verdict)" != "0" ]]; then
+    fail "revert counter was not persisted before pause"
+    return
+  fi
+  active_before="$(control_field "$root" counters.active_seconds)"
+  FAKE_MODE=no-verdict FAKE_MODEL_DELAY=1 MAX_TURNS=5 driver_env "$root" --resume >"$root/stdout.2" 2>"$root/stderr.2"
+  rc=$?
+  if [[ "$rc" -ne 3 || "$(control_field "$root" counters.reverts)" != "1" ]] || \
+     [[ "$(control_field "$root" counters.no_verdict)" != "1" ]]; then
+    fail "run counters reset or drifted across pause/resume"
+  fi
+  active_after="$(control_field "$root" counters.active_seconds)"
+  if [[ ! "$active_before" =~ ^[0-9]+$ || ! "$active_after" =~ ^[0-9]+$ ]] || \
+     (( active_after <= active_before )); then
+    fail "durable active-time counter did not advance across resume"
+  fi
 }
 
 test_turn_limit_survives_pause_resume() {
-  local root first_count rc
+  local root first_count rc orchestrator_pgid validator_pgid
   root="$(mktemp -d "$TEST_TMP/turn-limit.XXXXXX")"
   prepare_fixture "$root"
 
@@ -505,8 +1063,20 @@ test_turn_limit_survives_pause_resume() {
     fail "turn limit did not persist paused ordinal 1"
     return
   fi
+  if ! awk '$1 == "orchestrator" && $3 == "openai-codex/gpt-5.5" && $4 == "default" { found=1 } END { exit !found }' "$root/events"; then
+    fail "orchestrator model policy drifted while updating the Shepherd"
+  fi
+  if ! awk '$1 == "validator" && $3 == "openai-codex/gpt-5.6-sol" && $4 == "high" { found=1 } END { exit !found }' "$root/events"; then
+    fail "Shepherd did not use exact gpt-5.6-sol high policy"
+  fi
+  orchestrator_pgid="$(awk '$1 == "orchestrator" { print $5; exit }' "$root/events")"
+  validator_pgid="$(awk '$1 == "validator" { print $5; exit }' "$root/events")"
+  if [[ -z "$orchestrator_pgid" || -z "$validator_pgid" || "$orchestrator_pgid" == "$validator_pgid" ]] || \
+     ! awk '$1 == "orchestrator" || $1 == "validator" { if ($2 != $5) bad=1; seen[$1]=1 } END { exit bad || !seen["orchestrator"] || !seen["validator"] }' "$root/events"; then
+    fail "orchestrator and Shepherd did not run in distinct self-led process groups"
+  fi
 
-  FAKE_MODE=normal MAX_TURNS=1 driver_env "$root" --resume >"$root/stdout.2" 2>"$root/stderr.2"
+  FAKE_MODE=normal MAX_TURNS=999 driver_env "$root" --resume >"$root/stdout.2" 2>"$root/stderr.2"
   rc=$?
   if [[ "$rc" -ne 3 || "$(event_count "$root" orchestrator)" -ne "$first_count" ]] || \
      [[ "$(control_field "$root" turn_ordinal)" != "1" ]]; then
@@ -514,13 +1084,25 @@ test_turn_limit_survives_pause_resume() {
   fi
 }
 
-test_concurrent_controllers_have_one_winner
-test_hard_deadline_drains_process_tree
-test_leader_exit_with_live_descendant_halts
-test_halt_is_durable_and_blocks_resume
-test_signal_drains_group_and_requires_recovery
-test_fence_movement_fails_closed
-test_turn_limit_survives_pause_resume
+run_test test_concurrent_controllers_have_one_winner
+run_test test_hard_deadline_drains_process_tree
+run_test test_leader_exit_with_live_descendant_halts
+run_test test_validator_shares_the_hard_turn_deadline
+run_test test_missing_validator_model_fails_before_work
+run_test test_halt_is_durable_and_blocks_resume
+run_test test_signal_during_startup_is_durable
+run_test test_signal_during_role_startup_does_not_orphan
+run_test test_role_stays_inert_until_durable_bind
+run_test test_role_is_not_authorized_after_deadline
+run_test test_signal_drains_group_and_requires_recovery
+run_test test_sigkill_controller_does_not_admit_replacement
+run_test test_fence_movement_fails_closed
+run_test test_failed_halt_persistence_never_claims_halted
+run_test test_resume_requires_clean_paused_state
+run_test test_control_path_aliases_fail_closed
+run_test test_terminal_requires_shepherd_ratification
+run_test test_run_counters_survive_pause_resume
+run_test test_turn_limit_survives_pause_resume
 
 if (( failures > 0 )); then
   printf 'pi-shepherd-supervision: %d failure(s)\n' "$failures" >&2

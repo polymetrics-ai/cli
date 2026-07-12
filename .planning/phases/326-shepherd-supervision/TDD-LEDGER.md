@@ -56,3 +56,63 @@ RED command/output will be appended after the tests exist and before production 
   including 32/32 controller launches, natural deadline completion, live orphan, missing durable
   HALT/recovery, absent active fence, and reset turn cap. Bystanders survive, and only nonce-bound
   test processes are eligible for cleanup.
+
+## GREEN implementation — 2026-07-12
+
+- The existing `scripts/pi-shepherd-loop.sh` now retains one nonblocking `flock` across its lock
+  acquisition re-exec and registered descendants. Thirty-two concurrent starts produce one winner
+  and 31 typed `CONTROLLER_HELD` exits without launching a second provider.
+- One atomic, size-bounded, no-symlink `CONTROL.json` stores the exact controller epoch fence,
+  lifecycle phase, lease, active turn/role PID+PGID, independent role session IDs, durable limits,
+  monotonic turn ordinal, and restart-persistent revert/no-verdict/active-time counters.
+- Orchestrator and validator roles launch in distinct process groups behind a ready handshake. The
+  controller applies one persisted hard deadline, bounded TERM/KILL drainage, heartbeat/fence
+  checks, leader-exit orphan detection, and quiescence proof before moving to the next role.
+- HALT/recovery is latched before teardown. Failed persistence or failed drainage cannot be
+  finalized as halted/quiescent, and the last process handles remain available when quiescence is
+  uncertain. Fresh start and resume both reject halted/recovery/dirty active state before prompt or
+  provider access.
+- Only the Shepherd validator defaults to `openai-codex/gpt-5.6-sol --thinking high`; the
+  orchestrator remains `openai-codex/gpt-5.5` and worker configuration is unchanged. Default model
+  availability is checked after fenced authority and startup-safe traps but before mutable work.
+- The production Phase 0 first-action fuse remains first, closed, and has no enable bypass. Tests
+  remove only its unique sentinel-delimited block from an isolated temporary copy.
+
+## Independent review corrections — 2026-07-12
+
+- An adversarial implementation review found six P1 lifecycle gaps: signal windows before full
+  traps and before role binding, false quiescence after failed teardown, ignored HALT-latch
+  failure, incomplete paused-state validation, and counters that reset on resume. Each received a
+  production fix plus a deterministic regression test before final verification.
+- The final 19-scenario suite additionally covers bounded TERM during validator-model discovery,
+  launch-before-bind, bind-before-authorization, deadline-before-authorization, a shared remaining
+  orchestrator/validator deadline, descendant-only inherited-lock fencing after controller and role
+  leader SIGKILL, failed HALT persistence, and fence movement after durable role binding.
+- State tests separately reject each dirty paused invariant, malformed/negative/boolean persisted
+  numerics, dangling and live control symlinks, and hardlinks without rewriting bytes or launching
+  work. Result tests retire stale verdicts and require Shepherd PROCEED before `human_gate`/`done`,
+  while `budget` and `blocked` remain unconditional safety stops.
+- Final test review found that lock-acquisition re-exec could re-export an internally generated
+  validator default and misclassify it as a caller override. The default is now deliberately
+  non-exported across re-exec, so only genuinely caller-supplied `VALIDATOR_ARGS` skips the exact
+  default-model preflight.
+- Same-epoch rollback detection is intentionally not claimed by this controller-epoch fence. A
+  stale same-fence snapshot can only be eliminated by the per-transition predecessor/version
+  contract owned by #327; it remains an enable blocker behind the closed Phase 0 fuse.
+- Authenticated recovery/takeover after controller SIGKILL and OS containment of
+  setsid/double-fork escapees are intentionally not claimed here. They remain dependency-ordered
+  work for #339 and #342; the closed Phase 0 fuse prevents live autonomous use in the interim.
+
+## Focused GREEN evidence — 2026-07-12
+
+- `bash -n scripts/pi-shepherd-loop.sh scripts/tests/pi-shepherd-supervision.sh` -> pass.
+- `shellcheck --severity=warning scripts/pi-shepherd-loop.sh scripts/tests/pi-shepherd-supervision.sh` -> pass.
+- `bash scripts/tests/pi-shepherd-supervision.sh` -> `pi-shepherd-supervision: ok`.
+- `bash scripts/tests/auto-loop-control.sh` -> `auto-loop-control: ok`.
+- `make agent-loop-test` -> pass, including Go unit/race/CLI gates and both shell harnesses.
+- Two independent final read-only reviews found no remaining in-scope P0/P1 blocker. They classify
+  same-epoch rollback (#327) and daemon-escape containment (#342) as later enable blockers, not as
+  claims or regressions of this closed-fuse #326 slice.
+- Final `make verify` -> pass: formatting/tidy, vet, all Go tests, build, connector-doc validation,
+  smoke flow, lint, 547 connector definitions, Go race/control gates, Phase 0 controls, and the
+  19-scenario Shepherd supervision harness.
