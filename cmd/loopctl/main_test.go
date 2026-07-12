@@ -95,6 +95,22 @@ func TestRunSafetyCommands(t *testing.T) {
 			t.Fatalf("stderr = %q, want typed denial", stderr.String())
 		}
 	})
+
+	for _, command := range []string{"enable", "open", "run", "resume"} {
+		command := command
+		t.Run("reject "+command, func(t *testing.T) {
+			t.Parallel()
+			var stdout bytes.Buffer
+			var stderr bytes.Buffer
+			code := run([]string{"safety", command, "--json"}, &stdout, &stderr)
+			if code != 64 {
+				t.Fatalf("exit code = %d, want 64", code)
+			}
+			if stdout.Len() != 0 {
+				t.Fatalf("stdout = %q, want empty", stdout.String())
+			}
+		})
+	}
 }
 
 func TestRunReplay(t *testing.T) {
@@ -107,7 +123,7 @@ func TestRunReplay(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("exit code = %d, want 0; stderr=%q", code, stderr.String())
 	}
-	if !strings.Contains(stdout.String(), `"violation_code":"WORKER_LIVENESS_LOST"`) {
+	if !strings.Contains(stdout.String(), `"violation_code":"WORKER_COMPLETION_UNPROVEN"`) {
 		t.Fatalf("stdout = %q, want replay result", stdout.String())
 	}
 
@@ -123,5 +139,16 @@ func TestRunReplay(t *testing.T) {
 	}
 	if !strings.Contains(stderr.String(), "FIXTURE_UNKNOWN_FIELD") {
 		t.Fatalf("bad fixture stderr = %q, want validation code", stderr.String())
+	}
+
+	pathCanary := strings.Join([]string{"synthetic", "private", "path"}, "-")
+	stdout.Reset()
+	stderr.Reset()
+	code = run([]string{"replay", filepath.Join(t.TempDir(), pathCanary+".json"), "--json"}, &stdout, &stderr)
+	if code != 65 {
+		t.Fatalf("missing fixture exit code = %d, want 65", code)
+	}
+	if strings.Contains(stderr.String(), pathCanary) {
+		t.Fatalf("stderr echoed caller path: %q", stderr.String())
 	}
 }

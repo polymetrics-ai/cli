@@ -3,10 +3,15 @@
 ## Fixture and replay tests
 
 - Table-drive all thirteen fixture files and expected violation/decision/exit triples.
-- Assert fixtures use complete equal bindings at fixture and event level, synthetic identities,
-  contiguous sequences, known event kinds, and legacy fail-open versus required fail-closed
-  expectations.
-- Assert replay is derived from event order and rejects an intentionally mismatched expectation.
+- Assert fixtures use complete synthetic bindings at fixture and event level, contiguous sequences,
+  stable run/generation/controller identity, and neutral typed facts with complete
+  resource/owner/before/after values. Multi-turn incidents retain distinct turn/attempt bindings.
+- Assert observed decisions/outcomes are separate from required policy and preserve correct
+  HALT/RETRY records rather than forcing observed != required.
+- Mutate artifact/head/owner/actor/order/binding/HALT/worker facts and prove replay changes or
+  rejects the incident instead of echoing an expected label.
+- Assert dead-worker evidence distinguishes phantom dispatch from executed-without-handoff and
+  false-green evidence includes a missing required artifact plus later repo-gate failure.
 - Assert directory replay is filename-sorted and repeated marshaling is byte-identical.
 - Reject unknown fields, trailing JSON, incomplete/mismatched/non-synthetic identity, non-monotonic
   sequence, unknown event kind, `.jsonl`, oversize input, raw command/prompt/session path, and a
@@ -17,7 +22,7 @@
 - Assert closed status is independent of environment and has no mutating method or command.
 - Assert only the two marked driver paths are tracked and untracked guard requests fail closed.
 - Assert loopctl help/bare behavior, status, entrypoints, guard-driver, replay, malformed fixture,
-  and unknown-command exit/stdout/stderr behavior.
+  unknown-command behavior, negative enable/open/run/resume commands, and non-echoing errors.
 
 ## Shell characterization
 
@@ -26,8 +31,10 @@
 - Red baseline: current run/resume reaches the stubs and writes loop state.
 - Green requirement: run and resume exit 78, marker is absent, and no loop state directory is
   created; help exits 0 and also creates no state.
-- Compare wrappers marked `AUTO_LOOP_RUN_ENTRYPOINT` to safety inventory so a future wrapper cannot
-  silently bypass enumeration.
+- Discover wrapper candidates independently from filename and semantic signals; require every
+  candidate to be inventoried and guarded.
+- Run drivers under `env -i`, a stub-only PATH, isolated config/home, unwritable state, unreadable
+  resume input, and hostile enable-like environment/flag canaries. No external tool may run.
 
 ## Broader gates
 
